@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: human review required
-class HATFLDD(AbstractUnconstrainedMinimisation, strict=True):
+class HATFLDD(AbstractUnconstrainedMinimisation):
     """An exponential fitting test problem from the OPTIMA user manual.
 
     Source:
@@ -56,7 +56,7 @@ class HATFLDD(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HATFLDE(AbstractUnconstrainedMinimisation, strict=True):
+class HATFLDE(AbstractUnconstrainedMinimisation):
     """An exponential fitting test problem from the OPTIMA user manual.
 
     Source:
@@ -153,7 +153,7 @@ class HATFLDE(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HATFLDFL(AbstractUnconstrainedMinimisation, strict=True):
+class HATFLDFL(AbstractUnconstrainedMinimisation):
     """Fletcher's variation of a test problem (HATFLDF) from the OPTIMA user manual.
 
     Monotonic paths to the solution from the initial point move to infinity and back.
@@ -208,7 +208,7 @@ class HATFLDFL(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HATFLDFLS(AbstractUnconstrainedMinimisation, strict=True):
+class HATFLDFLS(AbstractUnconstrainedMinimisation):
     """A test problem from the OPTIMA user manual.
 
     Least-squares version of HATFLDF.
@@ -260,7 +260,7 @@ class HATFLDFLS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HATFLDGLS(AbstractUnconstrainedMinimisation, strict=True):
+class HATFLDGLS(AbstractUnconstrainedMinimisation):
     """A test problem from the OPTIMA user manual.
 
     Least-squares version of HATFLDG.

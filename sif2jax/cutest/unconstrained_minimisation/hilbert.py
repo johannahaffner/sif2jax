@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: human review required
-class HILBERTA(AbstractUnconstrainedMinimisation, strict=True):
+class HILBERTA(AbstractUnconstrainedMinimisation):
     """Hilbert matrix problem.
 
     Unconstrained quadratic minimization problem using a Hilbert matrix.
@@ -64,7 +64,7 @@ class HILBERTA(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HILBERTB(AbstractUnconstrainedMinimisation, strict=True):
+class HILBERTB(AbstractUnconstrainedMinimisation):
     """Perturbed Hilbert matrix problem.
 
     Unconstrained quadratic minimization problem using a Hilbert matrix

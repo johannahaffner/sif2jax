@@ -4,7 +4,7 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class ECKERLE4LS(AbstractUnconstrainedMinimisation, strict=True):
+class ECKERLE4LS(AbstractUnconstrainedMinimisation):
     """ECKERLE4LS - Nonlinear Least-Squares problem (NIST dataset).
 
     This problem involves a nonlinear least squares fit to a Gaussian peak function,

@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Needs verification against another CUTEst interface
-class HIMMELBG(AbstractUnconstrainedMinimisation, strict=True):
+class HIMMELBG(AbstractUnconstrainedMinimisation):
     """The HIMMELBG function.
 
     A 2-variable problem by Himmelblau.
@@ -40,7 +40,7 @@ class HIMMELBG(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HIMMELBB(AbstractUnconstrainedMinimisation, strict=True):
+class HIMMELBB(AbstractUnconstrainedMinimisation):
     """The HIMMELBB function.
 
     A 2-variable problem by Himmelblau.
@@ -75,7 +75,7 @@ class HIMMELBB(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HIMMELBCLS(AbstractUnconstrainedMinimisation, strict=True):
+class HIMMELBCLS(AbstractUnconstrainedMinimisation):
     """Himmelblau's nonlinear least-squares problem.
 
     A 2-variable problem with 2 residuals.
@@ -118,7 +118,7 @@ class HIMMELBCLS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HIMMELBF(AbstractUnconstrainedMinimisation, strict=True):
+class HIMMELBF(AbstractUnconstrainedMinimisation):
     """Himmelblau's HIMMELBF function.
 
     A 4-variable least squares data fitting problem.
@@ -168,7 +168,7 @@ class HIMMELBF(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HIMMELBH(AbstractUnconstrainedMinimisation, strict=True):
+class HIMMELBH(AbstractUnconstrainedMinimisation):
     """Himmelblau's HIMMELBH function.
 
     A 2-variable problem.

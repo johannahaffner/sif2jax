@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class INTEQNELS(AbstractUnconstrainedMinimisation, strict=True):
+class INTEQNELS(AbstractUnconstrainedMinimisation):
     """The discrete integral problem (INTEGREQ) in least-squares form.
 
     Source: Problem 29 in

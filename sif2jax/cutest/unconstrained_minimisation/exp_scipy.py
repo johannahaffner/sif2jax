@@ -6,7 +6,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class EXP2(AbstractUnconstrainedMinimisation, strict=True):
+class EXP2(AbstractUnconstrainedMinimisation):
     """The EXP2 function.
 
     SCIPY global optimization benchmark example Exp2
@@ -58,7 +58,7 @@ class EXP2(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class EXP2B(AbstractUnconstrainedMinimisation, strict=True):
+class EXP2B(AbstractUnconstrainedMinimisation):
     """The EXP2B function.
 
     SCIPY global optimization benchmark example Exp2
@@ -113,7 +113,7 @@ class EXP2B(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class EXP2NE(AbstractUnconstrainedMinimisation, strict=True):
+class EXP2NE(AbstractUnconstrainedMinimisation):
     """The EXP2NE function.
 
     SCIPY global optimization benchmark example Exp2

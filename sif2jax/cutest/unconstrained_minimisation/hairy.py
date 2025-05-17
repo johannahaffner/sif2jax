@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: human review required
-class HAIRY(AbstractUnconstrainedMinimisation, strict=True):
+class HAIRY(AbstractUnconstrainedMinimisation):
     """A hairy problem in two variables.
 
     The surface defined by this function has a large number of relatively
@@ -74,7 +74,7 @@ class HAIRY(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class LOGHAIRY(AbstractUnconstrainedMinimisation, strict=True):
+class LOGHAIRY(AbstractUnconstrainedMinimisation):
     """A more difficult variant of the HAIRY problem in two variables.
 
     It is defined by a logarithmic transformation of the HAIRY surface,

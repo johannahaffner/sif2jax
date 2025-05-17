@@ -6,7 +6,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BIGGS6(AbstractUnconstrainedMinimisation, strict=True):
+class BIGGS6(AbstractUnconstrainedMinimisation):
     """Biggs EXP problem in 6 variables.
 
     Source: Problem 21 in

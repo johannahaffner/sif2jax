@@ -5,9 +5,9 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: This problem currently does not run. It should be debugged.
-# TODO: This implementation requires human review and verification against 
+# TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class FMINSURF(AbstractUnconstrainedMinimisation, strict=True):
+class FMINSURF(AbstractUnconstrainedMinimisation):
     """The FMINSURF function.
 
     The free boundary minimum surface problem.
@@ -141,9 +141,9 @@ class FMINSURF(AbstractUnconstrainedMinimisation, strict=True):
         return None
 
 
-# TODO: This implementation requires human review and verification against 
+# TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class FMINSRF2(AbstractUnconstrainedMinimisation, strict=True):
+class FMINSRF2(AbstractUnconstrainedMinimisation):
     """The FMINSRF2 function.
 
     The free boundary minimum surface problem.

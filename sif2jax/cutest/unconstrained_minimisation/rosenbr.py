@@ -3,7 +3,7 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class ROSENBR(AbstractUnconstrainedMinimisation, strict=True):
+class ROSENBR(AbstractUnconstrainedMinimisation):
     """The Rosenbrock "banana valley" problem from the CUTEST collection of benchmark
     problems.
 

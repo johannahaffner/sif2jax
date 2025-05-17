@@ -3,7 +3,7 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class EDENSCH(AbstractUnconstrainedMinimisation, strict=True):
+class EDENSCH(AbstractUnconstrainedMinimisation):
     """Extended Dennis and Schnabel problem.
 
     This problem involves a sum of quartic terms for each variable

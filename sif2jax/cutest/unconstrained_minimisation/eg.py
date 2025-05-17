@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class EG1(AbstractUnconstrainedMinimisation, strict=True):
+class EG1(AbstractUnconstrainedMinimisation):
     """The EG1 function.
 
     A simple nonlinear problem given as an example in Section 1.2.3 of
@@ -55,7 +55,7 @@ class EG1(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class EG2(AbstractUnconstrainedMinimisation, strict=True):
+class EG2(AbstractUnconstrainedMinimisation):
     """The EG2 function.
 
     A simple nonlinear problem given as an example in Section 1.2.4 of

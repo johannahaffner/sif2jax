@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: needs human review
-class TENFOLDTRLS(AbstractUnconstrainedMinimisation, strict=True):
+class TENFOLDTRLS(AbstractUnconstrainedMinimisation):
     """The 10FOLDTRLS function.
 
     The ten-fold triangular system whose root at zero has multiplicity 10.

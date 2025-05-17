@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class LUKSAN11LS(AbstractUnconstrainedMinimisation, strict=True):
+class LUKSAN11LS(AbstractUnconstrainedMinimisation):
     """Problem 11 (chained serpentine) in the Luksan collection.
 
     From the paper:
@@ -73,7 +73,7 @@ class LUKSAN11LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class LUKSAN12LS(AbstractUnconstrainedMinimisation, strict=True):
+class LUKSAN12LS(AbstractUnconstrainedMinimisation):
     """Problem 12 (chained modified barrier) in the Luksan collection.
 
     From the paper:
@@ -139,7 +139,7 @@ class LUKSAN12LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class LUKSAN13LS(AbstractUnconstrainedMinimisation, strict=True):
+class LUKSAN13LS(AbstractUnconstrainedMinimisation):
     """Problem 13 (chained singular) in the Luksan collection.
 
     From the paper:
@@ -198,7 +198,7 @@ class LUKSAN13LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class LUKSAN14LS(AbstractUnconstrainedMinimisation, strict=True):
+class LUKSAN14LS(AbstractUnconstrainedMinimisation):
     """Problem 14 (chained Wood) in the Luksan collection.
 
     From the paper:
@@ -293,7 +293,7 @@ class LUKSAN14LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class LUKSAN15LS(AbstractUnconstrainedMinimisation, strict=True):
+class LUKSAN15LS(AbstractUnconstrainedMinimisation):
     """Problem 15 (chained Powell singular) in the Luksan collection.
 
     From the paper:
@@ -363,7 +363,7 @@ class LUKSAN15LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # Placeholder for remaining LUKSAN problems
-class LUKSAN16LS(AbstractUnconstrainedMinimisation, strict=True):
+class LUKSAN16LS(AbstractUnconstrainedMinimisation):
     """Problem 16 (chained Rosenbrock) in the Luksan collection."""
 
     n: int = 100  # Default dimension
@@ -384,7 +384,7 @@ class LUKSAN16LS(AbstractUnconstrainedMinimisation, strict=True):
         return jnp.array(0.0)
 
 
-class LUKSAN17LS(AbstractUnconstrainedMinimisation, strict=True):
+class LUKSAN17LS(AbstractUnconstrainedMinimisation):
     """Problem 17 (chained Cragg and Levy) in the Luksan collection."""
 
     n: int = 100  # Default dimension
@@ -405,7 +405,7 @@ class LUKSAN17LS(AbstractUnconstrainedMinimisation, strict=True):
         return jnp.array(0.0)
 
 
-class LUKSAN21LS(AbstractUnconstrainedMinimisation, strict=True):
+class LUKSAN21LS(AbstractUnconstrainedMinimisation):
     """Problem 21 (chained Broyden tridiagonal) in the Luksan collection."""
 
     n: int = 100  # Default dimension
@@ -426,7 +426,7 @@ class LUKSAN21LS(AbstractUnconstrainedMinimisation, strict=True):
         return jnp.array(0.0)
 
 
-class LUKSAN22LS(AbstractUnconstrainedMinimisation, strict=True):
+class LUKSAN22LS(AbstractUnconstrainedMinimisation):
     """Problem 22 (chained Broyden banded) in the Luksan collection."""
 
     n: int = 100  # Default dimension

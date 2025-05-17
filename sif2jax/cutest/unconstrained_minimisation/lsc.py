@@ -1,11 +1,14 @@
+import abc
+
 import jax.numpy as jnp
+from jaxtyping import Array
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # A base class for both LSC problems
 # TODO: Human review needed to verify the implementation matches the problem definition
-class _LSCBase(AbstractUnconstrainedMinimisation, strict=True):
+class _AbstractLSC(AbstractUnconstrainedMinimisation):
     """Fit a circle to a set of 2D points.
 
     Source: Problem from the SciPy cookbook
@@ -28,6 +31,10 @@ class _LSCBase(AbstractUnconstrainedMinimisation, strict=True):
         if self.y0_id not in self.valid_ids:
             raise ValueError(f"y0_id must be one of {self.valid_ids}")
 
+    @abc.abstractmethod
+    def _data(self) -> tuple[Array, Array]:
+        """Abstract method to be implemented by subclasses to provide data points."""
+
     def objective(self, y, args):
         """Compute the objective function value.
 
@@ -38,8 +45,9 @@ class _LSCBase(AbstractUnconstrainedMinimisation, strict=True):
         x, y_center, r = y
 
         # Calculate the squared distances from each point to the center
-        dx = self.x_points - x
-        dy = self.y_points - y_center
+        x_points, y_points = self._data()
+        dx = x_points - x
+        dy = y_points - y_center
 
         # Calculate the distances (Euclidean norm)
         distances = jnp.sqrt(dx**2 + dy**2)
@@ -64,7 +72,7 @@ class _LSCBase(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class LSC1LS(_LSCBase, strict=True):
+class LSC1LS(_AbstractLSC):
     """Fit a circle to a set of 2D points: case 1, data points surround the circle.
 
     Source: Problem from the SciPy cookbook
@@ -74,9 +82,12 @@ class LSC1LS(_LSCBase, strict=True):
     Classification: SUR2-MN-3-0
     """
 
-    # Data points from the SIF file (lines 33-44)
-    x_points: jnp.ndarray = jnp.array([9.0, 35.0, -13.0, 10.0, 23.0, 0.0])
-    y_points: jnp.ndarray = jnp.array([34.0, 10.0, 6.0, -14.0, 27.0, -10.0])
+    def _data(self):
+        """Data points from the SIF file."""
+        # Data points from the SIF file (lines 33-44)
+        x = jnp.array([9.0, 35.0, -13.0, 10.0, 23.0, 0.0])
+        y = jnp.array([34.0, 10.0, 6.0, -14.0, 27.0, -10.0])
+        return x, y
 
     def y0(self):
         """Get the starting point based on the y0_id."""
@@ -91,7 +102,7 @@ class LSC1LS(_LSCBase, strict=True):
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class LSC2LS(_LSCBase, strict=True):
+class LSC2LS(_AbstractLSC):
     """Fit a circle to a set of 2D points: case 2, data points in a small arc.
 
     Source: Problem from the SciPy cookbook
@@ -101,9 +112,11 @@ class LSC2LS(_LSCBase, strict=True):
     Classification: SUR2-MN-3-0
     """
 
-    # Data points from the SIF file (lines 33-44)
-    x_points: jnp.ndarray = jnp.array([36.0, 36.0, 19.0, 18.0, 33.0, 26.0])
-    y_points: jnp.ndarray = jnp.array([14.0, 10.0, 28.0, 31.0, 18.0, 26.0])
+    def _data(self):
+        # Data points from the SIF file
+        x = jnp.array([36.0, 36.0, 19.0, 18.0, 33.0, 26.0])
+        y = jnp.array([14.0, 10.0, 28.0, 31.0, 18.0, 26.0])
+        return x, y
 
     def y0(self):
         """Get the starting point based on the y0_id."""

@@ -7,7 +7,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 # Perhaps this is just longer than the context window it has?
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class GAUSS1LS(AbstractUnconstrainedMinimisation, strict=True):
+class GAUSS1LS(AbstractUnconstrainedMinimisation):
     """The GAUSS1LS function.
 
     NIST Data fitting problem GAUSS1.
@@ -331,7 +331,7 @@ class GAUSS1LS(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class GAUSS2LS(AbstractUnconstrainedMinimisation, strict=True):
+class GAUSS2LS(AbstractUnconstrainedMinimisation):
     """The GAUSS2LS function.
 
     NIST Data fitting problem GAUSS2.
@@ -382,7 +382,7 @@ class GAUSS2LS(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class GAUSS3LS(AbstractUnconstrainedMinimisation, strict=True):
+class GAUSS3LS(AbstractUnconstrainedMinimisation):
     """The GAUSS3LS function.
 
     NIST Data fitting problem GAUSS3.

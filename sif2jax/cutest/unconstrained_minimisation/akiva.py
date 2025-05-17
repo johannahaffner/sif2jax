@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: needs human review
-class AKIVA(AbstractUnconstrainedMinimisation, strict=True):
+class AKIVA(AbstractUnconstrainedMinimisation):
     """The AKIVA function.
 
     Find the set of elemental and structural coefficients of a hierarchical
@@ -90,7 +90,7 @@ class AKIVA(AbstractUnconstrainedMinimisation, strict=True):
             log_likelihood += jnp.log(prob)
 
         # Return negative log likelihood for minimization
-        return -log_likelihood
+        return jnp.array(-log_likelihood)
 
     def y0(self):
         # Initial values from SIF file (both start at 0.0)

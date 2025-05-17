@@ -3,7 +3,7 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class EGGCRATE(AbstractUnconstrainedMinimisation, strict=True):
+class EGGCRATE(AbstractUnconstrainedMinimisation):
     """EGGCRATE function.
 
     A simple unconstrained nonlinear least squares problem with a periodic

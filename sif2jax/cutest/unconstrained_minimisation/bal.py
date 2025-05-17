@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: It appears that Claude simplified the original problem, needs HUMAN REVIEW
 # TODO: needs human review
-class BA_L1LS(AbstractUnconstrainedMinimisation, strict=True):
+class BA_L1LS(AbstractUnconstrainedMinimisation):
     """BA-L1LS function.
 
     Bundle Adjustment problem from reconstructive geometry in which
@@ -121,7 +121,7 @@ class BA_L1LS(AbstractUnconstrainedMinimisation, strict=True):
 
             total_error += residual_x**2 + residual_y**2
 
-        return total_error
+        return jnp.array(total_error)
 
     def y0(self):
         # Initial guess from the SIF file (simplified)
@@ -205,7 +205,7 @@ class BA_L1LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: needs human review
-class BA_L16LS(AbstractUnconstrainedMinimisation, strict=True):
+class BA_L16LS(AbstractUnconstrainedMinimisation):
     """BA-L16LS function.
 
     Bundle Adjustment problem from reconstructive geometry in which
@@ -276,7 +276,7 @@ class BA_L16LS(AbstractUnconstrainedMinimisation, strict=True):
 
             total_error += residual_x**2 + residual_y**2
 
-        return total_error
+        return jnp.array(total_error)
 
     def y0(self):
         # Simplified initial guess for a much smaller problem
@@ -301,7 +301,7 @@ class BA_L16LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: needs human review
-class BA_L1SPLS(AbstractUnconstrainedMinimisation, strict=True):
+class BA_L1SPLS(AbstractUnconstrainedMinimisation):
     """BA-L1SPLS function.
 
     A small undetermined set of quadratic equations from a
@@ -449,7 +449,7 @@ class BA_L1SPLS(AbstractUnconstrainedMinimisation, strict=True):
         )
 
         # Total residual (sum of squared residuals)
-        return (
+        return jnp.array(
             c1_residual**2
             + c2_residual**2
             + c3_residual**2
@@ -473,7 +473,7 @@ class BA_L1SPLS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: needs human review
-class BA_L21LS(AbstractUnconstrainedMinimisation, strict=True):
+class BA_L21LS(AbstractUnconstrainedMinimisation):
     """BA-L21LS function.
 
     Bundle Adjustment problem from reconstructive geometry in which
@@ -579,7 +579,7 @@ class BA_L21LS(AbstractUnconstrainedMinimisation, strict=True):
 
             total_error += residual_x**2 + residual_y**2
 
-        return total_error
+        return jnp.array(total_error)
 
     def y0(self):
         # Simplified initial guess for a much smaller problem
@@ -604,7 +604,7 @@ class BA_L21LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: needs human review
-class BA_L49LS(AbstractUnconstrainedMinimisation, strict=True):
+class BA_L49LS(AbstractUnconstrainedMinimisation):
     """BA-L49LS function.
 
     Bundle Adjustment problem from reconstructive geometry in which
@@ -705,7 +705,7 @@ class BA_L49LS(AbstractUnconstrainedMinimisation, strict=True):
 
             total_error += residual_x**2 + residual_y**2
 
-        return total_error
+        return jnp.array(total_error)
 
     def y0(self):
         # Simplified initial guess for a much smaller problem
@@ -730,7 +730,7 @@ class BA_L49LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: needs human review
-class BA_L52LS(AbstractUnconstrainedMinimisation, strict=True):
+class BA_L52LS(AbstractUnconstrainedMinimisation):
     """BA-L52LS function.
 
     Bundle Adjustment problem from reconstructive geometry in which
@@ -831,7 +831,7 @@ class BA_L52LS(AbstractUnconstrainedMinimisation, strict=True):
 
             total_error += residual_x**2 + residual_y**2
 
-        return total_error
+        return jnp.array(total_error)
 
     def y0(self):
         # Simplified initial guess for a much smaller problem
@@ -856,7 +856,7 @@ class BA_L52LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: needs human review
-class BA_L73LS(AbstractUnconstrainedMinimisation, strict=True):
+class BA_L73LS(AbstractUnconstrainedMinimisation):
     """BA-L73LS function.
 
     Bundle Adjustment problem from reconstructive geometry in which
@@ -957,7 +957,7 @@ class BA_L73LS(AbstractUnconstrainedMinimisation, strict=True):
 
             total_error += residual_x**2 + residual_y**2
 
-        return total_error
+        return jnp.array(total_error)
 
     def y0(self):
         # Simplified initial guess for a much smaller problem

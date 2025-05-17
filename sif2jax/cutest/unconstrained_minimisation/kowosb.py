@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class KOWOSB(AbstractUnconstrainedMinimisation, strict=True):
+class KOWOSB(AbstractUnconstrainedMinimisation):
     """A problem arising in the analysis of kinetic data for an enzyme reaction.
 
     Known as the Kowalik and Osborne problem in 4 variables.

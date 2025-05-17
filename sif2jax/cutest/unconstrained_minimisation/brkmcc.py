@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BRKMCC(AbstractUnconstrainedMinimisation, strict=True):
+class BRKMCC(AbstractUnconstrainedMinimisation):
     """BRKMCC function.
 
     Source: Problem 85 (p.35) in

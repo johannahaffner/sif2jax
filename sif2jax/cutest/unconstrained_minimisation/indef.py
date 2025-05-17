@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class INDEF(AbstractUnconstrainedMinimisation, strict=True):
+class INDEF(AbstractUnconstrainedMinimisation):
     """A nonconvex problem which has an indefinite Hessian at the starting point.
 
     The parameter ALPHA controls the indefiniteness.
@@ -62,7 +62,7 @@ class INDEF(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class INDEFM(AbstractUnconstrainedMinimisation, strict=True):
+class INDEFM(AbstractUnconstrainedMinimisation):
     """Modified INDEF problem with indefinite Hessian at the starting point.
 
     Modified version by Luksan et al. The parameter ALPHA controls the indefiniteness.

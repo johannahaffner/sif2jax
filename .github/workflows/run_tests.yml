@@ -52,7 +52,7 @@ jobs:
         echo "MYARCH=pc64.lnx.gfo" >> $GITHUB_ENV
         echo "TERM=xterm" >> $GITHUB_ENV  # Fix for tput error
     
-    - name: Install CUTEst
+    - name: Install CUTEst with GALAHAD
       run: |
         # Set environment variables
         export ARCHDEFS=$ARCHDEFS
@@ -62,48 +62,52 @@ jobs:
         export GALAHAD=$GALAHAD
         export MYARCH=$MYARCH
         export TERM=xterm  # Fix for tput error
+        export PATH=$ARCHDEFS/bin:$PATH
         
         # Install ARCHDefs 
         cd $ARCHDEFS
         ./install_optrove
         
-        # Print the ARCHDefs content to verify
-        echo "=== ARCHDefs content after installation ==="
-        ls -la
+        # Install GALAHAD first (select option 1 for everything)
+        cd $GALAHAD
+        echo -e "1\n" | ./install_optrove
         
-        # Install SIFDecode with explicitly specified architecture
+        # Install SIFDecode (with automatic input for prompts)
         cd $SIFDECODE
-        export PATH=$ARCHDEFS/bin:$PATH
-        ./install_optrove -l -a $MYARCH
+        export PATH=$ARCHDEFS/bin:$GALAHAD/bin:$PATH
+        echo -e "6\n1\n" | ./install_optrove
         
-        # Install CUTEst with explicitly specified architecture
+        # Install CUTEst
         cd $CUTEST
-        export PATH=$ARCHDEFS/bin:$SIFDECODE/bin:$PATH
-        ./install_optrove -l -a $MYARCH
+        export PATH=$ARCHDEFS/bin:$SIFDECODE/bin:$GALAHAD/bin:$PATH
+        echo -e "6\n1\n" | ./install_optrove
         
         # Set paths for the rest of the workflow
         echo "$CUTEST/bin" >> $GITHUB_PATH
         echo "$SIFDECODE/bin" >> $GITHUB_PATH
+        echo "$GALAHAD/bin" >> $GITHUB_PATH
         echo "$ARCHDEFS/bin" >> $GITHUB_PATH
-        echo "LD_LIBRARY_PATH=$CUTEST/objects/$MYARCH/double:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=$CUTEST/objects/$MYARCH/double:$GALAHAD/objects/$MYARCH/double:$LD_LIBRARY_PATH" >> $GITHUB_ENV
     
     - name: Install pycutest
       run: |
-        # Install pycutest directly using pip
         python -m pip install --upgrade pip
         python -m pip install pytest
         
-        # Use environment variables for pycutest installation
+        # Set environment variables for pycutest
         export ARCHDEFS=$ARCHDEFS
         export SIFDECODE=$SIFDECODE
         export MASTSIF=$MASTSIF
         export CUTEST=$CUTEST
+        export GALAHAD=$GALAHAD
         export MYARCH=$MYARCH
+        export PATH=$CUTEST/bin:$SIFDECODE/bin:$GALAHAD/bin:$ARCHDEFS/bin:$PATH
+        export LD_LIBRARY_PATH=$CUTEST/objects/$MYARCH/double:$GALAHAD/objects/$MYARCH/double:$LD_LIBRARY_PATH
         
-        # Try installing pycutest with pip
+        # Install pycutest
         python -m pip install pycutest
         
-        # Install your package if needed
+        # Install your package
         python -m pip install -e .
     
     - name: Verify installation
@@ -112,8 +116,9 @@ jobs:
         echo "=== CUTEst directories ==="
         ls -la $CUTEST/bin || echo "CUTEst bin directory not found"
         ls -la $SIFDECODE/bin || echo "SIFDecode bin directory not found"
+        ls -la $GALAHAD/bin || echo "GALAHAD bin directory not found"
         
-        # Check if pycutest can be imported
+        # Check if we can import pycutest
         python -c "import pycutest; print('CUTEst successfully installed')"
     
     - name: Run tests

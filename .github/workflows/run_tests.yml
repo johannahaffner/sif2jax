@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: johannahaffner/pycutest:latest
+      image: johannahaffner/pycutest:v0.2
       
     steps:
       - name: Checkout code

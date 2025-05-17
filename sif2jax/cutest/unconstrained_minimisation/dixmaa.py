@@ -27,10 +27,6 @@ class DIXMAANA1(AbstractUnconstrainedMinimisation):
 
     n: int = 3000  # Default dimension
 
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
     def objective(self, y, args):
         del args
         n = y.shape[0]
@@ -127,7 +123,7 @@ class DIXMAANE1(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
@@ -215,10 +211,10 @@ class DIXMAANF(AbstractUnconstrainedMinimisation):
         # i_vals not used directly
         # i_over_n not used directly
 
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -226,7 +222,7 @@ class DIXMAANF(AbstractUnconstrainedMinimisation):
             ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
         )
 
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
+        # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
@@ -238,7 +234,7 @@ class DIXMAANF(AbstractUnconstrainedMinimisation):
             ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
         )
 
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
+        # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
@@ -312,10 +308,10 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
         # i_vals not used directly
         # i_over_n not used directly
 
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -323,7 +319,7 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
             ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
         )
 
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
+        # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
@@ -335,7 +331,7 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
             ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
         )
 
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
+        # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
@@ -369,7 +365,8 @@ class DIXMAANH(AbstractUnconstrainedMinimisation):
 
     This is a variable-dimension unconstrained optimization problem from the
     Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights and significantly increased parameter values.
+    with non-trivial powers of (i/n) in the weights and significantly increased 
+    parameter values.
 
     Source:
     L.C.W. Dixon and Z. Maany,
@@ -383,10 +380,6 @@ class DIXMAANH(AbstractUnconstrainedMinimisation):
     """
 
     n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
 
     def objective(self, y, args):
         del args
@@ -409,10 +402,10 @@ class DIXMAANH(AbstractUnconstrainedMinimisation):
         # i_vals not used directly
         # i_over_n not used directly
 
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -420,7 +413,7 @@ class DIXMAANH(AbstractUnconstrainedMinimisation):
             ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
         )
 
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
+        # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
@@ -432,7 +425,7 @@ class DIXMAANH(AbstractUnconstrainedMinimisation):
             ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
         )
 
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
+        # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
@@ -548,389 +541,6 @@ class DIXMAANB(AbstractUnconstrainedMinimisation):
 
 
 # TODO: human review required
-class DIXMAANE1(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version E1).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It's a variant of DIXMAANE with beta=0, so elements/groups
-    of type 2 are removed.
-
-    The objective function includes quadratic terms, quartic terms, and bilinear terms
-    with non-trivial powers of (i/n) in the weights.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        # Beta is zero for DIXMAANE1
-        gamma = 0.125
-        delta = 0.125
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        # k2 not used since beta=0
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANF(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version F).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        beta = 0.0625
-        gamma = 0.0625
-        delta = 0.0625
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 0  # Power for group 2
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
-        # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
-        )
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term2 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANG(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version G).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights and increased parameter values.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        beta = 0.125
-        gamma = 0.125
-        delta = 0.125
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 0  # Power for group 2
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
-        # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
-        )
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term2 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANH(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version H).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights and significantly increased parameter values.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        beta = 0.26
-        gamma = 0.26
-        delta = 0.26
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 0  # Power for group 2
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
-        # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
-        )
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term2 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
 class DIXMAANC(AbstractUnconstrainedMinimisation):
     """Dixon-Maany test problem (version C).
 
@@ -954,10 +564,6 @@ class DIXMAANC(AbstractUnconstrainedMinimisation):
 
     n: int = 3000  # Default dimension
 
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
     def objective(self, y, args):
         del args
         n = y.shape[0]
@@ -980,9 +586,9 @@ class DIXMAANC(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -990,7 +596,7 @@ class DIXMAANC(AbstractUnconstrainedMinimisation):
             ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
         )
 
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
+        # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
@@ -1029,388 +635,6 @@ class DIXMAANC(AbstractUnconstrainedMinimisation):
         # At the origin, all terms are zero
         return jnp.array(0.0)
 
-
-# TODO: human review required
-class DIXMAANE1(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version E1).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It's a variant of DIXMAANE with beta=0, so elements/groups
-    of type 2 are removed.
-
-    The objective function includes quadratic terms, quartic terms, and bilinear terms
-    with non-trivial powers of (i/n) in the weights.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        # Beta is zero for DIXMAANE1
-        gamma = 0.125
-        delta = 0.125
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        # k2 not used since beta=0
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANF(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version F).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        beta = 0.0625
-        gamma = 0.0625
-        delta = 0.0625
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 0  # Power for group 2
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
-        # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
-        )
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term2 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANG(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version G).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights and increased parameter values.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        beta = 0.125
-        gamma = 0.125
-        delta = 0.125
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 0  # Power for group 2
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
-        # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
-        )
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term2 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANH(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version H).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights and significantly increased parameter values.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        beta = 0.26
-        gamma = 0.26
-        delta = 0.26
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 0  # Power for group 2
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
-        # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
-        )
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term2 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
 
 
 # TODO: human review required
@@ -1437,10 +661,6 @@ class DIXMAAND(AbstractUnconstrainedMinimisation):
 
     n: int = 3000  # Default dimension
 
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
     def objective(self, y, args):
         del args
         n = y.shape[0]
@@ -1463,9 +683,9 @@ class DIXMAAND(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -1473,7 +693,7 @@ class DIXMAAND(AbstractUnconstrainedMinimisation):
             ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
         )
 
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
+        # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
@@ -1511,390 +731,7 @@ class DIXMAAND(AbstractUnconstrainedMinimisation):
     def expected_objective_value(self):
         # At the origin, all terms are zero
         return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANE1(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version E1).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It's a variant of DIXMAANE with beta=0, so elements/groups
-    of type 2 are removed.
-
-    The objective function includes quadratic terms, quartic terms, and bilinear terms
-    with non-trivial powers of (i/n) in the weights.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        # Beta is zero for DIXMAANE1
-        gamma = 0.125
-        delta = 0.125
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        # k2 not used since beta=0
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANF(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version F).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        beta = 0.0625
-        gamma = 0.0625
-        delta = 0.0625
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 0  # Power for group 2
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
-        # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
-        )
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term2 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANG(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version G).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights and increased parameter values.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        beta = 0.125
-        gamma = 0.125
-        delta = 0.125
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 0  # Power for group 2
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
-        # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
-        )
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term2 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
-
-# TODO: human review required
-class DIXMAANH(AbstractUnconstrainedMinimisation):
-    """Dixon-Maany test problem (version H).
-
-    This is a variable-dimension unconstrained optimization problem from the
-    Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights and significantly increased parameter values.
-
-    Source:
-    L.C.W. Dixon and Z. Maany,
-    "A family of test problems with sparse Hessians for unconstrained optimization",
-    TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
-
-    SIF input: Ph. Toint, Dec 1989.
-    correction by Ph. Shott, January 1995.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
-    def objective(self, y, args):
-        del args
-        n = y.shape[0]
-        m = n // 3
-
-        # Problem parameters
-        alpha = 1.0
-        beta = 0.26
-        gamma = 0.26
-        delta = 0.26
-
-        # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 0  # Power for group 2
-        k3 = 0  # Power for group 3
-        k4 = 1  # Power for group 4
-
-        # Indices for each variable
-        # i_vals not used directly
-        # i_over_n not used directly
-
-        # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
-
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
-        # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
-        )
-
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
-        # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
-        )
-
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
-        # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
-
-        return term1 + term2 + term3 + term4
-
-    def y0(self):
-        # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
-
-    def args(self):
-        return None
-
-    def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
-
-    def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
-
+    
 
 # TODO: human review required
 class DIXMAANI1(AbstractUnconstrainedMinimisation):
@@ -1920,10 +757,6 @@ class DIXMAANI1(AbstractUnconstrainedMinimisation):
 
     n: int = 3000  # Default dimension
 
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
     def objective(self, y, args):
         del args
         n = y.shape[0]
@@ -1946,7 +779,7 @@ class DIXMAANI1(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
@@ -2009,10 +842,6 @@ class DIXMAANJ(AbstractUnconstrainedMinimisation):
 
     n: int = 3000  # Default dimension
 
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
     def objective(self, y, args):
         del args
         n = y.shape[0]
@@ -2035,9 +864,9 @@ class DIXMAANJ(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -2132,9 +961,9 @@ class DIXMAANK(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -2188,7 +1017,8 @@ class DIXMAANL(AbstractUnconstrainedMinimisation):
 
     This is a variable-dimension unconstrained optimization problem from the
     Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with higher powers of (i/n) in the weights and significantly increased parameter values.
+    with higher powers of (i/n) in the weights and significantly increased 
+    parameter values.
 
     Source:
     L.C.W. Dixon and Z. Maany,
@@ -2202,10 +1032,6 @@ class DIXMAANL(AbstractUnconstrainedMinimisation):
     """
 
     n: int = 3000  # Default dimension
-
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
 
     def objective(self, y, args):
         del args
@@ -2229,9 +1055,9 @@ class DIXMAANL(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1

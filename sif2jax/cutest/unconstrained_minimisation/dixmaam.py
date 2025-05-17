@@ -38,13 +38,13 @@ class DIXMAANM1(AbstractUnconstrainedMinimisation):
 
         # Problem parameters
         alpha = 1.0
-        beta = 0.0  # Beta is zero for DIXMAANM1
+        #beta = 0.0  # Beta is zero for DIXMAANM1
         gamma = 0.125
         delta = 0.125
 
         # Powers for each group
         k1 = 2  # Power for group 1
-        k2 = 0  # Not used since beta=0
+        #k2 = 0  # Not used since beta=0
         k3 = 1  # Power for group 3
         k4 = 2  # Power for group 4
 
@@ -144,7 +144,7 @@ class DIXMAANN(AbstractUnconstrainedMinimisation):
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -152,7 +152,7 @@ class DIXMAANN(AbstractUnconstrainedMinimisation):
             ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
         )
 
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
+        # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
@@ -241,7 +241,7 @@ class DIXMAANO(AbstractUnconstrainedMinimisation):
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -249,7 +249,7 @@ class DIXMAANO(AbstractUnconstrainedMinimisation):
             ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
         )
 
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
+        # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
@@ -261,7 +261,7 @@ class DIXMAANO(AbstractUnconstrainedMinimisation):
             ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
         )
 
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
+        # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
@@ -295,7 +295,8 @@ class DIXMAANP(AbstractUnconstrainedMinimisation):
 
     This is a variable-dimension unconstrained optimization problem from the
     Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with higher powers of (i/n) in the weights and significantly increased parameter values.
+    with higher powers of (i/n) in the weights and significantly increased parameter 
+    values.
 
     Source:
     L.C.W. Dixon and Z. Maany,
@@ -338,7 +339,7 @@ class DIXMAANP(AbstractUnconstrainedMinimisation):
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum((i_over_n**k1) * (y**2))
 
-        # Compute the second term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
@@ -346,7 +347,7 @@ class DIXMAANP(AbstractUnconstrainedMinimisation):
             ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
         )
 
-        # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
+        # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
@@ -358,7 +359,7 @@ class DIXMAANP(AbstractUnconstrainedMinimisation):
             ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
         )
 
-        # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
+        # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m

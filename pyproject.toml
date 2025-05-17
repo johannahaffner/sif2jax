@@ -4,8 +4,8 @@ requires = ["hatchling"]
 
 [project]
 authors = [
-  {email = "johanna.haffner@bsse.ethz.ch", name = "Johanna Haffner"}
-  {email = "john_viljoen@berkeley.edu", name = "John Viljoen"}
+  {email = "johanna.haffner@bsse.ethz.ch", name = "Johanna Haffner"},
+  {email = "john_viljoen@berkeley.edu", name = "John Viljoen"},
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",

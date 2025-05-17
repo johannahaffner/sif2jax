@@ -6,7 +6,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BROWNAL(AbstractUnconstrainedMinimisation, strict=True):
+class BROWNAL(AbstractUnconstrainedMinimisation):
     """Brown almost linear least squares problem.
 
     This problem is a sum of n least-squares groups, the last one of
@@ -73,7 +73,7 @@ class BROWNAL(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BROWNBS(AbstractUnconstrainedMinimisation, strict=True):
+class BROWNBS(AbstractUnconstrainedMinimisation):
     """Brown and Dennis function.
 
     Source: Problem 16 in
@@ -127,7 +127,7 @@ class BROWNBS(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BROWNDEN(AbstractUnconstrainedMinimisation, strict=True):
+class BROWNDEN(AbstractUnconstrainedMinimisation):
     """Brown badly scaled function.
 
     Source: Problem 4 in

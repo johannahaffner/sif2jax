@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class LIARWHD(AbstractUnconstrainedMinimisation, strict=True):
+class LIARWHD(AbstractUnconstrainedMinimisation):
     """Simplified version of the NONDIA problem.
 
     Source:

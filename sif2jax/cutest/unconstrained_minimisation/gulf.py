@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: human review required
-class GULF(AbstractUnconstrainedMinimisation, strict=True):
+class GULF(AbstractUnconstrainedMinimisation):
     """The Gulf RD test problem in 3 variables.
 
     This function is a nonlinear least squares with 99 groups. Each

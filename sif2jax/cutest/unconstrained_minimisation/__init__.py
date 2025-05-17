@@ -69,9 +69,6 @@ from .himmelblau import (
     HIMMELBH as HIMMELBH,
 )
 from .humps import HUMPS as HUMPS
-from .problem import (
-    AbstractUnconstrainedMinimisation as AbstractUnconstrainedMinimisation,
-)
 from .rosenbr import ROSENBR as ROSENBR
 
 

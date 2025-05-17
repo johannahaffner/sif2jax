@@ -2,7 +2,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Placeholder class. Needs human implementation due to size/complexity.
-class _LRBase(AbstractUnconstrainedMinimisation, strict=True):
+class _LRBase(AbstractUnconstrainedMinimisation):
     """Base class for regularized logistic regression problems from LIBSVM collection.
 
     The problem is to minimize the cross-entropy function for binary classification
@@ -53,7 +53,7 @@ class _LRBase(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: Placeholder class. Needs human implementation due to size/complexity.
-class LRA9A(_LRBase, strict=True):
+class LRA9A(_LRBase):
     """Regularized logistic regression on the a9a dataset from LIBSVM.
 
     Original SIF file: 15MB with 32561 samples and 123 features.
@@ -63,7 +63,7 @@ class LRA9A(_LRBase, strict=True):
 
 
 # TODO: Placeholder class. Needs human implementation due to size/complexity.
-class LRCOVTYPE(_LRBase, strict=True):
+class LRCOVTYPE(_LRBase):
     """Regularized logistic regression on the covtype dataset from LIBSVM.
 
     Original SIF file: 235MB, extremely large dataset.
@@ -73,7 +73,7 @@ class LRCOVTYPE(_LRBase, strict=True):
 
 
 # TODO: Placeholder class. Needs human implementation due to size/complexity.
-class LRIJCNN1(_LRBase, strict=True):
+class LRIJCNN1(_LRBase):
     """Regularized logistic regression on the ijcnn1 dataset from LIBSVM.
 
     Original SIF file: 22MB, large dataset.
@@ -83,7 +83,7 @@ class LRIJCNN1(_LRBase, strict=True):
 
 
 # TODO: Placeholder class. Needs human implementation due to size/complexity.
-class LRW1A(_LRBase, strict=True):
+class LRW1A(_LRBase):
     """Regularized logistic regression on the w1a dataset from LIBSVM.
 
     Original SIF file: 975KB with 2477 samples and 300 features.
@@ -93,7 +93,7 @@ class LRW1A(_LRBase, strict=True):
 
 
 # TODO: Placeholder class. Needs human implementation due to size/complexity.
-class LRW8A(_LRBase, strict=True):
+class LRW8A(_LRBase):
     """Regularized logistic regression on the w8a dataset from LIBSVM.
 
     Original SIF file: 20MB, large dataset.

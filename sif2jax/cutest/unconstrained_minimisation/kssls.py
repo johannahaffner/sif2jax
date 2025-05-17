@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class KSSLS(AbstractUnconstrainedMinimisation, strict=True):
+class KSSLS(AbstractUnconstrainedMinimisation):
     """KSS system with a zero root having exponential multiplicity by dimension.
 
     This is a least-squares version of KSS.

@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Needs verification against another CUTEst interface
-class ENGVAL1(AbstractUnconstrainedMinimisation, strict=True):
+class ENGVAL1(AbstractUnconstrainedMinimisation):
     """The ENGVAL1 function.
 
     This problem is a sum of 2n-2 groups, n-1 of which contain 2 nonlinear elements.
@@ -45,7 +45,7 @@ class ENGVAL1(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: Needs verification against another CUTEst interface
-class ENGVAL2(AbstractUnconstrainedMinimisation, strict=True):
+class ENGVAL2(AbstractUnconstrainedMinimisation):
     """The ENGVAL2 problem.
 
     Source: problem 15 in

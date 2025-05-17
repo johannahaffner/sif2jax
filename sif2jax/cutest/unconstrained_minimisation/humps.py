@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: human review required
-class HUMPS(AbstractUnconstrainedMinimisation, strict=True):
+class HUMPS(AbstractUnconstrainedMinimisation):
     """The HUMPS function.
 
     A two-dimensional function with many humps.

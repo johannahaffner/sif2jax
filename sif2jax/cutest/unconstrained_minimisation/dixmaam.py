@@ -38,13 +38,13 @@ class DIXMAANM1(AbstractUnconstrainedMinimisation):
 
         # Problem parameters
         alpha = 1.0
-        #beta = 0.0  # Beta is zero for DIXMAANM1
+        # beta = 0.0  # Beta is zero for DIXMAANM1
         gamma = 0.125
         delta = 0.125
 
         # Powers for each group
         k1 = 2  # Power for group 1
-        #k2 = 0  # Not used since beta=0
+        # k2 = 0  # Not used since beta=0
         k3 = 1  # Power for group 3
         k4 = 2  # Power for group 4
 
@@ -295,7 +295,7 @@ class DIXMAANP(AbstractUnconstrainedMinimisation):
 
     This is a variable-dimension unconstrained optimization problem from the
     Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with higher powers of (i/n) in the weights and significantly increased parameter 
+    with higher powers of (i/n) in the weights and significantly increased parameter
     values.
 
     Source:

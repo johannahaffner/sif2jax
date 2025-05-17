@@ -123,7 +123,7 @@ class DIXMAANE1(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
@@ -212,7 +212,7 @@ class DIXMAANF(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
@@ -309,7 +309,7 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
@@ -365,7 +365,7 @@ class DIXMAANH(AbstractUnconstrainedMinimisation):
 
     This is a variable-dimension unconstrained optimization problem from the
     Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with non-trivial powers of (i/n) in the weights and significantly increased 
+    with non-trivial powers of (i/n) in the weights and significantly increased
     parameter values.
 
     Source:
@@ -403,7 +403,7 @@ class DIXMAANH(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
@@ -586,7 +586,7 @@ class DIXMAANC(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
@@ -634,7 +634,6 @@ class DIXMAANC(AbstractUnconstrainedMinimisation):
     def expected_objective_value(self):
         # At the origin, all terms are zero
         return jnp.array(0.0)
-
 
 
 # TODO: human review required
@@ -683,7 +682,7 @@ class DIXMAAND(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
@@ -731,7 +730,7 @@ class DIXMAAND(AbstractUnconstrainedMinimisation):
     def expected_objective_value(self):
         # At the origin, all terms are zero
         return jnp.array(0.0)
-    
+
 
 # TODO: human review required
 class DIXMAANI1(AbstractUnconstrainedMinimisation):
@@ -779,7 +778,7 @@ class DIXMAANI1(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
@@ -864,7 +863,7 @@ class DIXMAANJ(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
@@ -961,7 +960,7 @@ class DIXMAANK(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1
@@ -1017,7 +1016,7 @@ class DIXMAANL(AbstractUnconstrainedMinimisation):
 
     This is a variable-dimension unconstrained optimization problem from the
     Dixon-Maany family. It includes quadratic, sin, quartic, and bilinear terms
-    with higher powers of (i/n) in the weights and significantly increased 
+    with higher powers of (i/n) in the weights and significantly increased
     parameter values.
 
     Source:
@@ -1055,7 +1054,7 @@ class DIXMAANL(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n+1)/n)**k1) * (y**2))
+        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
         # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
         # for i from 1 to n-1

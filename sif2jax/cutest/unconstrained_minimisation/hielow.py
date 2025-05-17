@@ -2,7 +2,7 @@
 TODO: This implementation requires human review and may need substantial rework.
 
 This file implements a simplified approximation of the HIELOW problem from CUTEst.
-The actual implementation requires access to a FORTRAN subroutine named "HIELOW" 
+The actual implementation requires access to a FORTRAN subroutine named "HIELOW"
 which is called in the SIF file but not included in it. The SIF file contains:
 
 ```fortran
@@ -18,7 +18,7 @@ The HIELOW problem models a hierarchical logit function for transportation choic
   - Tram
 
 The coefficients represent:
-- BET1, BET2: Elemental coefficients affecting utility functions 
+- BET1, BET2: Elemental coefficients affecting utility functions
   (related to time and cost)
 - THE1: A structural coefficient for the hierarchical model's nesting structure
 
@@ -34,7 +34,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: human review required - this is a simplified approximation
 # as the original FORTRAN implementation is not available
-class HIELOW(AbstractUnconstrainedMinimisation, strict=True):
+class HIELOW(AbstractUnconstrainedMinimisation):
     """Hierarchical logit model for modal choice prediction.
 
     This problem involves finding the parameters of a hierarchical logit

@@ -3,7 +3,7 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class DQRTIC(AbstractUnconstrainedMinimisation, strict=True):
+class DQRTIC(AbstractUnconstrainedMinimisation):
     """The DQRTIC function.
 
     Variable dimension diagonal quartic problem.

@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class JENSMP(AbstractUnconstrainedMinimisation, strict=True):
+class JENSMP(AbstractUnconstrainedMinimisation):
     """The Jennrich and Sampson problem.
 
     This function is a nonlinear least squares with m groups (default 10).

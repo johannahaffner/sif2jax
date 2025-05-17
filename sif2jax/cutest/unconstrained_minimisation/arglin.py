@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: needs human review
-class ARGLINA(AbstractUnconstrainedMinimisation, strict=True):
+class ARGLINA(AbstractUnconstrainedMinimisation):
     """ARGLINA function.
 
     Variable dimension full rank linear problem.
@@ -68,7 +68,7 @@ class ARGLINA(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: needs human review
-class ARGLINB(AbstractUnconstrainedMinimisation, strict=True):
+class ARGLINB(AbstractUnconstrainedMinimisation):
     """ARGLINB function.
 
     Variable dimension rank one linear problem.
@@ -126,7 +126,7 @@ class ARGLINB(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: needs human review
-class ARGLINC(AbstractUnconstrainedMinimisation, strict=True):
+class ARGLINC(AbstractUnconstrainedMinimisation):
     """ARGLINC function.
 
     Variable dimension rank one linear problem, with zero rows and columns.

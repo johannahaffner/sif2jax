@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BEALE(AbstractUnconstrainedMinimisation, strict=True):
+class BEALE(AbstractUnconstrainedMinimisation):
     """Beale function in 2 variables.
 
     Source: Problem 5 in

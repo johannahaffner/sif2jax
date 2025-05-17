@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO needs human review
-class GAUSSIAN(AbstractUnconstrainedMinimisation, strict=True):
+class GAUSSIAN(AbstractUnconstrainedMinimisation):
     """The GAUSSIAN function.
 
     More's gaussian problem in 3 variables. This is a nonlinear least-squares

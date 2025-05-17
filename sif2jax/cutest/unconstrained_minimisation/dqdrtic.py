@@ -4,7 +4,7 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class DQDRTIC(AbstractUnconstrainedMinimisation, strict=True):
+class DQDRTIC(AbstractUnconstrainedMinimisation):
     """A simple diagonal quadratic optimization test problem.
 
     This problem is a sum of N-2 squared terms, where each term involves three variables
@@ -54,7 +54,7 @@ class DQDRTIC(AbstractUnconstrainedMinimisation, strict=True):
         return jnp.array(0.0)
 
 
-class DQRTIC(AbstractUnconstrainedMinimisation, strict=True):
+class DQRTIC(AbstractUnconstrainedMinimisation):
     """DQRTIC function - A diagonal quartic optimization test problem.
 
     This problem is a sum of quartic terms, where each term is of the form (x_i - i)^4.

@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class FLETCHBV(AbstractUnconstrainedMinimisation, strict=True):
+class FLETCHBV(AbstractUnconstrainedMinimisation):
     """The FLETCHBV function.
 
     Another Boundary Value problem.
@@ -61,7 +61,7 @@ class FLETCHBV(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class FLETBV3M(AbstractUnconstrainedMinimisation, strict=True):
+class FLETBV3M(AbstractUnconstrainedMinimisation):
     """The FLETBV3M function.
 
     Variant of FLETCBV3, another boundary value problem, by Luksan et al
@@ -127,7 +127,7 @@ class FLETBV3M(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class FLETCBV2(AbstractUnconstrainedMinimisation, strict=True):
+class FLETCBV2(AbstractUnconstrainedMinimisation):
     """The FLETCBV2 function.
 
     Another Boundary Value problem.
@@ -194,7 +194,7 @@ class FLETCBV2(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class FLETCHCR(AbstractUnconstrainedMinimisation, strict=True):
+class FLETCHCR(AbstractUnconstrainedMinimisation):
     """The FLETCHCR function.
 
     The chained Rosenbrock function as given by Fletcher.
@@ -235,7 +235,7 @@ class FLETCHCR(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: this has not yet been compared against another interface to CUTEst
-class FLETCBV3(AbstractUnconstrainedMinimisation, strict=True):
+class FLETCBV3(AbstractUnconstrainedMinimisation):
     """The FLETCBV3 function.
 
     A boundary value problem from Fletcher (1992).

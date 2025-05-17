@@ -2,7 +2,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: proper implementation required
-class HYDC20LS(AbstractUnconstrainedMinimisation, strict=True):
+class HYDC20LS(AbstractUnconstrainedMinimisation):
     """The hydrocarbon-20 problem by Fletcher (least-squares version).
 
     Source: Problem 2b in
@@ -33,7 +33,7 @@ class HYDC20LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: proper implementation required
-class HYDCAR6LS(AbstractUnconstrainedMinimisation, strict=True):
+class HYDCAR6LS(AbstractUnconstrainedMinimisation):
     """The hydrocarbon-6 problem by Fletcher (least-squares version).
 
     Source: Problem 2a in

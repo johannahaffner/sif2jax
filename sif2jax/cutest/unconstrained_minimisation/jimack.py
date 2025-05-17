@@ -2,7 +2,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: This problem needs human implementation due to its complexity
-class JIMACK(AbstractUnconstrainedMinimisation, strict=True):
+class JIMACK(AbstractUnconstrainedMinimisation):
     """A complex 3D finite element problem from nonlinear elasticity.
 
     Source: Parallel optimization for a finite element problem

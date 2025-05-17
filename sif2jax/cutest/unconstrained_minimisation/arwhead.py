@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: This problem still has to be verified against another CUTEst interface.
-class ARWHEAD(AbstractUnconstrainedMinimisation, strict=True):
+class ARWHEAD(AbstractUnconstrainedMinimisation):
     """The ARWHEAD function.
 
     A quartic problem whose Hessian is an arrow-head (downwards) with diagonal central

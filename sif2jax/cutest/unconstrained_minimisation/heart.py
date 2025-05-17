@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: human review required
-class HEART6LS(AbstractUnconstrainedMinimisation, strict=True):
+class HEART6LS(AbstractUnconstrainedMinimisation):
     """Dipole model of the heart (6 x 6 version, least squares).
 
     Source:
@@ -76,7 +76,7 @@ class HEART6LS(AbstractUnconstrainedMinimisation, strict=True):
 
 
 # TODO: human review required
-class HEART8LS(AbstractUnconstrainedMinimisation, strict=True):
+class HEART8LS(AbstractUnconstrainedMinimisation):
     """Dipole model of the heart (8 x 8 version, least squares).
 
     Source:

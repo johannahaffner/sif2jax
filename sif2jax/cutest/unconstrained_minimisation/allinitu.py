@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: needs human review
-class ALLINITU(AbstractUnconstrainedMinimisation, strict=True):
+class ALLINITU(AbstractUnconstrainedMinimisation):
     """The ALLINITU function.
 
     A problem with "all in it". Intended to verify that changes to LANCELOT are safe.

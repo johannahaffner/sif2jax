@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class JUDGE(AbstractUnconstrainedMinimisation, strict=True):
+class JUDGE(AbstractUnconstrainedMinimisation):
     """SCIPY global optimization benchmark example Judge.
 
     Fit: y = x_1 + a_i * x_2 + b_i^2 * x_2 + e

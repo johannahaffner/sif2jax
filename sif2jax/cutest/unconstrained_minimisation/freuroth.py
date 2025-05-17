@@ -4,9 +4,9 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: This implementation requires human review and verification against 
+# TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class FREUROTH(AbstractUnconstrainedMinimisation, strict=True):
+class FREUROTH(AbstractUnconstrainedMinimisation):
     """The FREUROTH function.
 
     The Freudentstein and Roth test problem.
@@ -28,7 +28,7 @@ class FREUROTH(AbstractUnconstrainedMinimisation, strict=True):
     def __post_init__(self):
         if self.n not in self.supported_dims:
             raise ValueError(
-                f"Unsupported dimension: {self.n}. " 
+                f"Unsupported dimension: {self.n}. "
                 f"Supported dimensions are: {self.supported_dims}."
             )
 
@@ -117,9 +117,9 @@ class FREUROTH(AbstractUnconstrainedMinimisation, strict=True):
             raise ValueError(f"No expected objective value for dimension {self.n}")
 
 
-# TODO: This implementation requires human review and verification against 
+# TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class FREURONE(AbstractUnconstrainedMinimisation, strict=True):
+class FREURONE(AbstractUnconstrainedMinimisation):
     """The FREURONE function.
 
     The Freudentstein and Roth test problem. This is a nonlinear equation

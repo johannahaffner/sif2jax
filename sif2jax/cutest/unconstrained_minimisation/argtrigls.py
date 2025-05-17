@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: needs human review
-class ARGTRIGLS(AbstractUnconstrainedMinimisation, strict=True):
+class ARGTRIGLS(AbstractUnconstrainedMinimisation):
     """ARGTRIGLS function.
 
     Variable dimension trigonometric problem in least-squares form.

@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class ELATVIDU(AbstractUnconstrainedMinimisation, strict=True):
+class ELATVIDU(AbstractUnconstrainedMinimisation):
     """The ELATVIDU (El-Attar-Vidyasagar-Dutta) function.
 
     SCIPY global optimization benchmark example ElAttarVidyasagarDutta

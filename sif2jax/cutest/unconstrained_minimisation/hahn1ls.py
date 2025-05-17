@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: human review required
-class HAHN1LS(AbstractUnconstrainedMinimisation, strict=True):
+class HAHN1LS(AbstractUnconstrainedMinimisation):
     """NIST Data fitting problem HAHN1.
 
     Fit: y = (b1 + b2*x + b3*x**2 + b4*x**3) /

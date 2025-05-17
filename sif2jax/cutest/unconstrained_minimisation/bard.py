@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BARD(AbstractUnconstrainedMinimisation, strict=True):
+class BARD(AbstractUnconstrainedMinimisation):
     """Bard function in 3 variables.
 
     This function is a nonlinear least squares problem with 15 groups. Each

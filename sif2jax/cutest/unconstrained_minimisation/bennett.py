@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BENNETT5LS(AbstractUnconstrainedMinimisation, strict=True):
+class BENNETT5LS(AbstractUnconstrainedMinimisation):
     """NIST Data fitting problem BENNETT5.
 
     Fit: y = b1 * (b2+x)**(-1/b3) + e

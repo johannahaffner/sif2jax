@@ -5,7 +5,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: Human review needed to verify the implementation matches the problem definition
-class KIRBY2LS(AbstractUnconstrainedMinimisation, strict=True):
+class KIRBY2LS(AbstractUnconstrainedMinimisation):
     """NIST Data fitting problem KIRBY2.
 
     Fit: y = (b1 + b2*x + b3*x**2) / (1 + b4*x + b5*x**2) + e

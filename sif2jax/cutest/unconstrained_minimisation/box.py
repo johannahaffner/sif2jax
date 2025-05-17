@@ -6,7 +6,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BOX(AbstractUnconstrainedMinimisation, strict=True):
+class BOX(AbstractUnconstrainedMinimisation):
     """A quartic function with a non-trivial sparsity pattern.
 
     Source: N. Gould, private communication.
@@ -65,7 +65,7 @@ class BOX(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BOX3(AbstractUnconstrainedMinimisation, strict=True):
+class BOX3(AbstractUnconstrainedMinimisation):
     """Box problem in 3 variables.
 
     This function is a nonlinear least squares with 10 groups. Each
@@ -130,7 +130,7 @@ class BOX3(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BOXBODLS(AbstractUnconstrainedMinimisation, strict=True):
+class BOXBODLS(AbstractUnconstrainedMinimisation):
     """NIST Data fitting problem BOXBOD.
 
     Fit: y = b1*(1-exp[-b2*x]) + e
@@ -184,7 +184,7 @@ class BOXBODLS(AbstractUnconstrainedMinimisation, strict=True):
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BOXPOWER(AbstractUnconstrainedMinimisation, strict=True):
+class BOXPOWER(AbstractUnconstrainedMinimisation):
     """Function with a "box-shaped" singular Hessian.
 
     Source: Nick Gould, June 2013

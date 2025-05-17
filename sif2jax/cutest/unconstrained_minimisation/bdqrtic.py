@@ -1,11 +1,11 @@
 import jax.numpy as jnp
 
-from .problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
-class BDQRTIC(AbstractUnconstrainedMinimisation, strict=True):
+class BDQRTIC(AbstractUnconstrainedMinimisation):
     """BDQRTIC function.
 
     This problem is quartic and has a banded Hessian with bandwidth = 9.

@@ -4,7 +4,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: human review required
-class HELIX(AbstractUnconstrainedMinimisation, strict=True):
+class HELIX(AbstractUnconstrainedMinimisation):
     """The helix problem.
 
     This test function involves the computation of the arctangent function

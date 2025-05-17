@@ -1,11 +1,11 @@
-name: Run tests
+name: CUTEst Tests
 
 on:
   pull_request:
     branches: [ main ]
   push:
     branches: [ main ]
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:
 
 jobs:
   test:
@@ -25,50 +25,82 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y gfortran liblapack-dev
     
+    - name: Setup CUTEst directories
+      run: |
+        # Create base directory
+        mkdir -p cutest_build
+        cd cutest_build
+        
+        # Clone the necessary repositories
+        git clone https://github.com/ralna/ARCHDefs ./archdefs
+        git clone https://github.com/ralna/SIFDecode ./sifdecode
+        git clone https://github.com/ralna/CUTEst ./cutest
+        
+        # Create the mastsif directory and get problems
+        mkdir -p ./mastsif
+        git clone https://github.com/ralna/SIFDecode ./tmp_sif
+        cp ./tmp_sif/sif/*.SIF ./mastsif/ || true
+        rm -rf ./tmp_sif
+        
+        # Set environment variables
+        echo "ARCHDEFS=$PWD/archdefs" >> $GITHUB_ENV
+        echo "SIFDECODE=$PWD/sifdecode" >> $GITHUB_ENV
+        echo "MASTSIF=$PWD/mastsif" >> $GITHUB_ENV
+        echo "CUTEST=$PWD/cutest" >> $GITHUB_ENV
+        echo "MYARCH=pc64.lnx.gfo" >> $GITHUB_ENV
+    
     - name: Install CUTEst
       run: |
-        # Create installation directory
-        mkdir -p ~/cutest_install
-        cd ~/cutest_install
+        # Set environment variables (needed again inside this step)
+        export ARCHDEFS=$ARCHDEFS
+        export SIFDECODE=$SIFDECODE
+        export MASTSIF=$MASTSIF
+        export CUTEST=$CUTEST
+        export MYARCH=$MYARCH
         
-        # Set environment variables for CUTEst
-        export ARCHDEFS=$PWD/archdefs
-        export SIFDECODE=$PWD/sifdecode
-        export MASTSIF=$PWD/mastsif
-        export CUTEST=$PWD/cutest
-        export MYARCH=pc64.lnx.gfo
+        # Build and install
+        cd $ARCHDEFS
+        ./install_optrove
         
-        # Create directories
-        mkdir -p $ARCHDEFS $SIFDECODE $MASTSIF $CUTEST
+        cd $SIFDECODE
+        ./install_optrove -s
         
-        # Download and install CUTEst
-        curl -fsSL https://raw.githubusercontent.com/jfowkes/pycutest/master/.install_cutest.sh > install_cutest.sh
-        chmod +x install_cutest.sh
-        ./install_cutest.sh
-    
-    - name: Set CUTEst environment
-      run: |
-        echo "ARCHDEFS=~/cutest_install/archdefs" >> $GITHUB_ENV
-        echo "SIFDECODE=~/cutest_install/sifdecode" >> $GITHUB_ENV
-        echo "MASTSIF=~/cutest_install/mastsif" >> $GITHUB_ENV
-        echo "CUTEST=~/cutest_install/cutest" >> $GITHUB_ENV
-        echo "MYARCH=pc64.lnx.gfo" >> $GITHUB_ENV
-        echo "LD_LIBRARY_PATH=~/cutest_install/cutest/objects/pc64.lnx.gfo/double:$LD_LIBRARY_PATH" >> $GITHUB_ENV
-        echo "$HOME/cutest_install/cutest/bin:$HOME/cutest_install/sifdecode/bin" >> $GITHUB_PATH
+        cd $CUTEST
+        ./install_optrove -s
+        
+        # Add to PATH and LD_LIBRARY_PATH
+        echo "$CUTEST/bin" >> $GITHUB_PATH
+        echo "$SIFDECODE/bin" >> $GITHUB_PATH
+        echo "$CUTEST/objects/$MYARCH/double" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=$CUTEST/objects/$MYARCH/double:$LD_LIBRARY_PATH" >> $GITHUB_ENV
     
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         python -m pip install pytest
+        
+        # Install pycutest with proper environment variables
+        export ARCHDEFS=$ARCHDEFS
+        export SIFDECODE=$SIFDECODE
+        export MASTSIF=$MASTSIF
+        export CUTEST=$CUTEST
+        export MYARCH=$MYARCH
         python -m pip install pycutest
         
         # Install your package dependencies (modify as needed)
         python -m pip install -e .
     
+    - name: Verify installation
+      run: |
+        # List installed directories to verify
+        echo "=== CUTEst directories ==="
+        ls -la $CUTEST/bin || echo "CUTEst bin directory not found"
+        ls -la $SIFDECODE/bin || echo "SIFDecode bin directory not found"
+        
+        # Check if we can import pycutest
+        python -c "import pycutest; print('CUTEst successfully installed')"
+    
     - name: Run tests
       run: |
-        # Verify CUTEst is accessible
-        python -c "import pycutest; print('CUTEst successfully installed')"
-        
-        # Run your actual tests (modify as needed)
+        # Run your tests that use CUTEst (modify as needed)
         python -m pytest tests/

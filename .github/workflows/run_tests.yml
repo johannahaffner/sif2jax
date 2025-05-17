@@ -1,127 +1,23 @@
-name: CUTEst Tests
+name: Run tests
 
 on:
-  pull_request:
-    branches: [ main ]
   push:
     branches: [ main ]
-  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+    container:
+      image: johannahaffner/pycutest:v0.1
+      
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y gfortran liblapack-dev
-    
-    - name: Setup directories
-      run: |
-        # Create base directory
-        mkdir -p cutest_build
-        cd cutest_build
+      - name: Checkout code
+        uses: actions/checkout@v3
         
-        # Clone the necessary repositories
-        git clone https://github.com/ralna/ARCHDefs ./archdefs
-        git clone https://github.com/ralna/SIFDecode ./sifdecode
-        git clone https://github.com/ralna/CUTEst ./cutest
-        git clone https://github.com/ralna/GALAHAD ./galahad
-        
-        # Create the mastsif directory and get problems
-        mkdir -p ./mastsif
-        git clone https://github.com/ralna/SIFDecode ./tmp_sif
-        cp ./tmp_sif/sif/*.SIF ./mastsif/ || true
-        rm -rf ./tmp_sif
-        
-        # Set environment variables
-        echo "ARCHDEFS=$PWD/archdefs" >> $GITHUB_ENV
-        echo "SIFDECODE=$PWD/sifdecode" >> $GITHUB_ENV
-        echo "MASTSIF=$PWD/mastsif" >> $GITHUB_ENV
-        echo "CUTEST=$PWD/cutest" >> $GITHUB_ENV
-        echo "GALAHAD=$PWD/galahad" >> $GITHUB_ENV
-        echo "MYARCH=pc64.lnx.gfo" >> $GITHUB_ENV
-        echo "TERM=xterm" >> $GITHUB_ENV  # Fix for tput error
-    
-    - name: Install CUTEst with GALAHAD
-      run: |
-        # Set environment variables
-        export ARCHDEFS=$ARCHDEFS
-        export SIFDECODE=$SIFDECODE
-        export MASTSIF=$MASTSIF
-        export CUTEST=$CUTEST
-        export GALAHAD=$GALAHAD
-        export MYARCH=$MYARCH
-        export TERM=xterm  # Fix for tput error
-        export PATH=$ARCHDEFS/bin:$PATH
-        
-        # Install ARCHDefs 
-        cd $ARCHDEFS
-        ./install_optrove
-        
-        # Install GALAHAD first (select option 1 for everything)
-        cd $GALAHAD
-        echo -e "1\n" | ./install_optrove
-        
-        # Install SIFDecode (with automatic input for prompts)
-        cd $SIFDECODE
-        export PATH=$ARCHDEFS/bin:$GALAHAD/bin:$PATH
-        echo -e "6\n1\n" | ./install_optrove
-        
-        # Install CUTEst
-        cd $CUTEST
-        export PATH=$ARCHDEFS/bin:$SIFDECODE/bin:$GALAHAD/bin:$PATH
-        echo -e "6\n1\n" | ./install_optrove
-        
-        # Set paths for the rest of the workflow
-        echo "$CUTEST/bin" >> $GITHUB_PATH
-        echo "$SIFDECODE/bin" >> $GITHUB_PATH
-        echo "$GALAHAD/bin" >> $GITHUB_PATH
-        echo "$ARCHDEFS/bin" >> $GITHUB_PATH
-        echo "LD_LIBRARY_PATH=$CUTEST/objects/$MYARCH/double:$GALAHAD/objects/$MYARCH/double:$LD_LIBRARY_PATH" >> $GITHUB_ENV
-    
-    - name: Install pycutest
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install pytest
-        
-        # Set environment variables for pycutest
-        export ARCHDEFS=$ARCHDEFS
-        export SIFDECODE=$SIFDECODE
-        export MASTSIF=$MASTSIF
-        export CUTEST=$CUTEST
-        export GALAHAD=$GALAHAD
-        export MYARCH=$MYARCH
-        export PATH=$CUTEST/bin:$SIFDECODE/bin:$GALAHAD/bin:$ARCHDEFS/bin:$PATH
-        export LD_LIBRARY_PATH=$CUTEST/objects/$MYARCH/double:$GALAHAD/objects/$MYARCH/double:$LD_LIBRARY_PATH
-        
-        # Install pycutest
-        python -m pip install pycutest
-        
-        # Install your package
-        python -m pip install -e .
-    
-    - name: Verify installation
-      run: |
-        # List directories to verify installation
-        echo "=== CUTEst directories ==="
-        ls -la $CUTEST/bin || echo "CUTEst bin directory not found"
-        ls -la $SIFDECODE/bin || echo "SIFDecode bin directory not found"
-        ls -la $GALAHAD/bin || echo "GALAHAD bin directory not found"
-        
-        # Check if we can import pycutest
-        python -c "import pycutest; print('CUTEst successfully installed')"
-    
-    - name: Run tests
-      run: |
-        # Run your tests (uncomment when ready)
-        # python -m pytest tests/
+      - name: Run your tests
+        run: |
+          # Your commands here
+          # For example:
+          python -c "import pycutest; print('pycutest is working!')"

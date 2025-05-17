@@ -28,7 +28,8 @@ class FREUROTH(AbstractUnconstrainedMinimisation, strict=True):
     def __post_init__(self):
         if self.n not in self.supported_dims:
             raise ValueError(
-                f"Unsupported dimension: {self.n}. Supported dimensions are: {self.supported_dims}"
+                f"Unsupported dimension: {self.n}. " 
+                f"Supported dimensions are: {self.supported_dims}."
             )
 
     def objective(self, y, args):
@@ -142,7 +143,8 @@ class FREURONE(AbstractUnconstrainedMinimisation, strict=True):
     def __post_init__(self):
         if self.n not in self.supported_dims:
             raise ValueError(
-                f"Unsupported dimension: {self.n}. Supported dimensions are: {self.supported_dims}"
+                f"Unsupported dimension: {self.n}. "
+                f"Supported dimensions are: {self.supported_dims}."
             )
 
     def objective(self, y, args):
@@ -167,7 +169,7 @@ class FREURONE(AbstractUnconstrainedMinimisation, strict=True):
             element_result = (coeff + xcelv) * elv2
 
             # Residual r_i = x_i - 2*x_{i+1} + element_result - 13
-            # In the nonlinear equation version, we don't square the residuals in the element
+            # In the nonlinear equation version, we don't square the residuals
             residual = xi - 2.0 * xi_plus_1 + element_result - 13.0
             return residual
 
@@ -186,7 +188,7 @@ class FREURONE(AbstractUnconstrainedMinimisation, strict=True):
             element_result = (coeff + xcelv) * elv2
 
             # Residual s_i = x_i - 14*x_{i+1} + element_result - 29
-            # In the nonlinear equation version, we don't square the residuals in the element
+            # In the nonlinear equation version, we don't square the residuals
             residual = xi - 14.0 * xi_plus_1 + element_result - 29.0
             return residual
 

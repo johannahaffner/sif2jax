@@ -20,4 +20,4 @@ jobs:
         run: |
           # Your commands here
           # For example:
-          python -c "import pycutest; print('pycutest is working!')"
+          python3 -c "import pycutest; print('pycutest is working!')"

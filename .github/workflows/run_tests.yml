@@ -25,7 +25,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y gfortran liblapack-dev
     
-    - name: Setup CUTEst directories
+    - name: Setup directories
       run: |
         # Create base directory
         mkdir -p cutest_build
@@ -35,6 +35,7 @@ jobs:
         git clone https://github.com/ralna/ARCHDefs ./archdefs
         git clone https://github.com/ralna/SIFDecode ./sifdecode
         git clone https://github.com/ralna/CUTEst ./cutest
+        git clone https://github.com/ralna/GALAHAD ./galahad
         
         # Create the mastsif directory and get problems
         mkdir -p ./mastsif
@@ -47,60 +48,75 @@ jobs:
         echo "SIFDECODE=$PWD/sifdecode" >> $GITHUB_ENV
         echo "MASTSIF=$PWD/mastsif" >> $GITHUB_ENV
         echo "CUTEST=$PWD/cutest" >> $GITHUB_ENV
+        echo "GALAHAD=$PWD/galahad" >> $GITHUB_ENV
         echo "MYARCH=pc64.lnx.gfo" >> $GITHUB_ENV
+        echo "TERM=xterm" >> $GITHUB_ENV  # Fix for tput error
     
     - name: Install CUTEst
       run: |
-        # Set environment variables (needed again inside this step)
+        # Set environment variables
         export ARCHDEFS=$ARCHDEFS
         export SIFDECODE=$SIFDECODE
         export MASTSIF=$MASTSIF
         export CUTEST=$CUTEST
+        export GALAHAD=$GALAHAD
         export MYARCH=$MYARCH
+        export TERM=xterm  # Fix for tput error
         
-        # Build and install
+        # Install ARCHDefs 
         cd $ARCHDEFS
         ./install_optrove
         
+        # Print the ARCHDefs content to verify
+        echo "=== ARCHDefs content after installation ==="
+        ls -la
+        
+        # Install SIFDecode with explicitly specified architecture
         cd $SIFDECODE
-        ./install_optrove -s
+        export PATH=$ARCHDEFS/bin:$PATH
+        ./install_optrove -l -a $MYARCH
         
+        # Install CUTEst with explicitly specified architecture
         cd $CUTEST
-        ./install_optrove -s
+        export PATH=$ARCHDEFS/bin:$SIFDECODE/bin:$PATH
+        ./install_optrove -l -a $MYARCH
         
-        # Add to PATH and LD_LIBRARY_PATH
+        # Set paths for the rest of the workflow
         echo "$CUTEST/bin" >> $GITHUB_PATH
         echo "$SIFDECODE/bin" >> $GITHUB_PATH
-        echo "$CUTEST/objects/$MYARCH/double" >> $GITHUB_ENV
+        echo "$ARCHDEFS/bin" >> $GITHUB_PATH
         echo "LD_LIBRARY_PATH=$CUTEST/objects/$MYARCH/double:$LD_LIBRARY_PATH" >> $GITHUB_ENV
     
-    - name: Install Python dependencies
+    - name: Install pycutest
       run: |
+        # Install pycutest directly using pip
         python -m pip install --upgrade pip
         python -m pip install pytest
         
-        # Install pycutest with proper environment variables
+        # Use environment variables for pycutest installation
         export ARCHDEFS=$ARCHDEFS
         export SIFDECODE=$SIFDECODE
         export MASTSIF=$MASTSIF
         export CUTEST=$CUTEST
         export MYARCH=$MYARCH
+        
+        # Try installing pycutest with pip
         python -m pip install pycutest
         
-        # Install your package dependencies (modify as needed)
+        # Install your package if needed
         python -m pip install -e .
     
     - name: Verify installation
       run: |
-        # List installed directories to verify
+        # List directories to verify installation
         echo "=== CUTEst directories ==="
         ls -la $CUTEST/bin || echo "CUTEst bin directory not found"
         ls -la $SIFDECODE/bin || echo "SIFDecode bin directory not found"
         
-        # Check if we can import pycutest
+        # Check if pycutest can be imported
         python -c "import pycutest; print('CUTEst successfully installed')"
     
     - name: Run tests
       run: |
-        # Run your tests that use CUTEst (modify as needed)
-        python -m pytest tests/
+        # Run your tests (uncomment when ready)
+        # python -m pytest tests/

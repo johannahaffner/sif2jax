@@ -34,14 +34,10 @@ RUN /bin/bash -c ./install_cutest.sh
 RUN cd $SIFDECODE/src ; make -f $SIFDECODE/makefiles/$MYARCH test
 RUN cd $CUTEST/src ; make -f $CUTEST/makefiles/$MYARCH test
 
-RUN echo '#!/bin/bash\necho "CUTEst environment is ready for PyCUTEst installation."\nexec "$@"' > /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 # Final stage
 FROM base AS final
 WORKDIR /opt/cutest
 COPY --from=build /opt/cutest /opt/cutest
-COPY --from=build /entrypoint.sh /entrypoint.sh
 
 # Now add python test-time dependencies on top
 RUN python3 -m venv /opt/venv
@@ -51,6 +47,10 @@ RUN mkdir -p pycutest_cache
 ENV PYCUTEST_CACHE=/opt/cutest/pycutest_cache
 RUN pip install pycutest
 RUN pip install pytest
+RUN pip install jax
+RUN pip install jaxtyping
+RUN pip install equinox
+RUN pip install optimistix
+RUN pip install beartype
 
-ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/bin/bash"]

@@ -31,6 +31,13 @@ These hooks use ruff to format and lint the code, and pyright to make sure types
 
 Now make your changes. Make sure to include additional tests if necessary.
 
+To run tests locally, you can either use the container available on DockerHub at
+johannahaffner/pycutest:latest or install pycutest locally, which will require an
+installation of CUTEst libraries written in Fortran. Reliable instructions for 
+installation on Linux and Mac are available on the landing page of the pycutest
+repository on Github ([here](https://github.com/jfowkes/pycutest)).
+You can also build a container from the Dockerfile and run the tests from in there.
+
 Next verify the tests all pass:
 
 ```bash

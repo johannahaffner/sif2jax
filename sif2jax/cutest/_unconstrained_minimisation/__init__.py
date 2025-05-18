@@ -72,7 +72,7 @@ from .humps import HUMPS as HUMPS
 from .rosenbr import ROSENBR as ROSENBR
 
 
-problems = (
+unconstrained_minimisation_problems = (
     ARWHEAD(n=100),
     ARWHEAD(n=500),
     ARWHEAD(n=1000),

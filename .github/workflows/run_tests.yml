@@ -9,15 +9,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container:
-      image: johannahaffner/pycutest:latest
-      
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        
-      - name: Run your tests
+      - uses: actions/checkout@v3
+      - name: Test with pre-built image
         run: |
-          # Your commands here
-          # For example:
-          pytest
+          docker run --rm -v ${{ github.workspace }}:/workspace \
+            johannahaffner/pycutest:latest \
+            bash -c "pip install -e . && pytest"

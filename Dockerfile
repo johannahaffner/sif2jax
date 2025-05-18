@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install build-essential -y
 RUN apt-get update && apt-get install curl -y
 RUN apt-get update && apt-get install gfortran -y
 RUN apt-get update && apt-get install git -y
+RUN apt-get update && apt-get install python3-dev -y
 RUN apt-get update && apt-get install python3-venv -y
 
 # Build

@@ -83,9 +83,7 @@ class HILBERTB(AbstractUnconstrainedMinimisation):
     Classification: QUR2-AN-V-0
     """
 
-    n: int = (
-        10  # Other suggested values in SIF: 5, 50, should work for any positive integer
-    )
+    n: int = 10  # Other suggested values in SIF: 5, 50, should work for n >= 1
 
     def objective(self, y, args):
         del args

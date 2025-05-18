@@ -39,6 +39,13 @@ FROM base AS final
 WORKDIR /opt/cutest
 COPY --from=build /opt/cutest /opt/cutest
 
+## Set the same environment variables as above - these are needed for pycutest to work correctly
+ENV ARCHDEFS=/opt/cutest/archdefs
+ENV SIFDECODE=/opt/cutest/sifdecode
+ENV CUTEST=/opt/cutest/cutest
+ENV MASTSIF=/opt/cutest/mastsif
+ENV MYARCH=pc64.lnx.gfo
+
 # Now add python test-time dependencies on top
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
@@ -46,6 +53,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN mkdir -p pycutest_cache
 ENV PYCUTEST_CACHE=/opt/cutest/pycutest_cache
 RUN pip install pycutest
+
 RUN pip install pytest
 RUN pip install jax
 RUN pip install jaxtyping

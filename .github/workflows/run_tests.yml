@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: johannahaffner/pycutest:v0.2
+      image: johannahaffner/pycutest:latest
       
     steps:
       - name: Checkout code
@@ -21,3 +21,4 @@ jobs:
           # Your commands here
           # For example:
           python3 -c "import pycutest; print('pycutest is working!')"
+          pytest

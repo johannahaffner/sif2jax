@@ -31,11 +31,8 @@ These hooks use ruff to format and lint the code, and pyright to make sure types
 
 Now make your changes. Make sure to include additional tests if necessary.
 
-To run tests locally, you can either use the container available on DockerHub at
-johannahaffner/pycutest:latest or install pycutest locally, which will require an
-installation of CUTEst libraries written in Fortran. Reliable instructions for 
-installation on Linux and Mac are available on the landing page of the pycutest
-repository on Github ([here](https://github.com/jfowkes/pycutest)).
+To run tests locally, you can either use the container available on DockerHub at johannahaffner/pycutest:latest or install pycutest locally, which will require an installation of CUTEst libraries written in Fortran. 
+Reliable instructions for installation on Linux and Mac are available on the landing page of the pycutest repository on Github ([here](https://github.com/jfowkes/pycutest)).
 You can also build a container from the Dockerfile and run the tests from in there.
 
 The following instructions are for the first approach, which just requires loading the pre-existing container from Docker Hub. 
@@ -70,12 +67,8 @@ You can then see your local copy of the documentation by navigating to `localhos
 
 ## Contributor License Agreement
 
-Contributions to this project must be accompanied by a Contributor License
-Agreement (CLA). You (or your employer) retain the copyright to your
-contribution; this simply gives us permission to use and redistribute your
-contributions as part of the project. Head over to <https://cla.developers.google.com/> 
+Contributions to this project must be accompanied by a Contributor License Agreement (CLA). 
+You (or your employer) retain the copyright to your contribution; this simply gives us permission to use and redistribute your contributions as part of the project. Head over to <https://cla.developers.google.com/> 
 to see your current agreements on file or to sign a new one.
 
-You generally only need to submit a CLA once, so if you've already submitted one
-(even if it was for a different project), you probably don't need to do it
-again.
+You generally only need to submit a CLA once, so if you've already submitted one (even if it was for a different project), you probably don't need to do it again.

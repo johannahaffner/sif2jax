@@ -29,11 +29,11 @@ class CURLY20(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
-    n: int  # Number of dimensions. Options listed in SIF file: 100, 1000, 10000
+    n: int  # Number of dimensions. Options listed in SIF file: 100, 1000
     k: int  # Semi-bandwidth.
     mask: Array
 
-    def __init__(self, n: int = 1000, k: int = 20):
+    def __init__(self, n: int = 10000, k: int = 20):
         def create_mask(n, k):
             row_indices = jnp.arange(n)[:, None]
             col_indices = jnp.arange(n)[None, :]
@@ -80,7 +80,7 @@ class CURLY10(CURLY20):
     Classification: OUR2-AN-V-0
     """
 
-    def __init__(self, n: int = 1000, k: int = 10):
+    def __init__(self, n: int = 10000, k: int = 10):
         super().__init__(n=n, k=k)
 
 
@@ -96,5 +96,5 @@ class CURLY30(CURLY20):
     Classification: OUR2-AN-V-0
     """
 
-    def __init__(self, n: int = 1000, k: int = 30):
+    def __init__(self, n: int = 10000, k: int = 30):
         super().__init__(n=n, k=k)

@@ -16,9 +16,19 @@ class JUDGE(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-2-0
     """
 
-    def __init__(self):
-        # Data values from the problem definition
-        self.a_values = jnp.array(
+    def objective(self, y, args):
+        """Compute the objective function value.
+
+        For each data point i, the residual is:
+        x_1 + a_i * x_2 + (b_i^2) * x_2 - y_i
+
+        The objective is the sum of squares of these residuals.
+        """
+        x1, x2 = y
+
+        # Calculate the predicted values using the model
+        # y_pred = x_1 + a_i * x_2 + (b_i^2) * x_2
+        a_values = jnp.array(
             [
                 0.286,
                 0.973,
@@ -42,8 +52,7 @@ class JUDGE(AbstractUnconstrainedMinimisation):
                 0.889,
             ]
         )
-
-        self.b_values = jnp.array(
+        b_values = jnp.array(
             [
                 0.645,
                 0.585,
@@ -67,8 +76,7 @@ class JUDGE(AbstractUnconstrainedMinimisation):
                 0.704,
             ]
         )
-
-        self.y_values = jnp.array(
+        y_values = jnp.array(
             [
                 4.284,
                 4.149,
@@ -93,23 +101,11 @@ class JUDGE(AbstractUnconstrainedMinimisation):
             ]
         )
 
-    def objective(self, y, args):
-        """Compute the objective function value.
-
-        For each data point i, the residual is:
-        x_1 + a_i * x_2 + (b_i^2) * x_2 - y_i
-
-        The objective is the sum of squares of these residuals.
-        """
-        x1, x2 = y
-
-        # Calculate the predicted values using the model
-        # y_pred = x_1 + a_i * x_2 + (b_i^2) * x_2
-        b_squared = self.b_values**2
-        y_pred = x1 + (self.a_values + b_squared) * x2
+        b_squared = b_values**2
+        y_pred = x1 + (a_values + b_squared) * x2
 
         # Calculate the residuals
-        residuals = y_pred - self.y_values
+        residuals = y_pred - y_values
 
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)

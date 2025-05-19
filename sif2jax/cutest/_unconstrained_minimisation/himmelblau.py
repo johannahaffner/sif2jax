@@ -59,7 +59,7 @@ class HIMMELBB(AbstractUnconstrainedMinimisation):
         x1, x2 = y
         term1 = x1 * x2 * (1 - x1)
         term2 = 1 - x2 - (x1 * (1 - x1) ** 5)
-        return term1 * term2
+        return (term1 * term2) ** 2
 
     def y0(self):
         return jnp.array([-1.2, 1.0])
@@ -117,7 +117,6 @@ class HIMMELBCLS(AbstractUnconstrainedMinimisation):
         return jnp.array(0.0)
 
 
-# TODO: human review required
 class HIMMELBF(AbstractUnconstrainedMinimisation):
     """Himmelblau's HIMMELBF function.
 
@@ -152,7 +151,10 @@ class HIMMELBF(AbstractUnconstrainedMinimisation):
         residuals = jnp.array([residual_fn(a, b) for a, b in zip(a_values, b_values)])
 
         # Return the sum of squared residuals
-        return jnp.sum(residuals**2)
+        # Scale the residuals: 10e4 is a scaling factor - GROUPS section mentions 10e-4,
+        # but pycutest uses 10e4 and this AMPL implementation agrees:
+        # https://vanderbei.princeton.edu/ampl/nlmodels/cute/himmelbf.mod
+        return 10e4 * jnp.sum(residuals**2)
 
     def y0(self):
         return jnp.array([2.7, 90.0, 1500.0, 10.0])

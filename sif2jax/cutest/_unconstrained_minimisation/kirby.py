@@ -31,9 +31,22 @@ class KIRBY2LS(AbstractUnconstrainedMinimisation):
         if self.y0_id not in self.valid_ids:
             raise ValueError(f"y0_id must be one of {self.valid_ids}")
 
-    def __init__(self):
-        # Data values from the problem definition
-        self.x_values = jnp.array(
+    def model(self, x, params):
+        """Compute the model function: (b1 + b2*x + b3*x^2) / (1 + b4*x + b5*x^2)"""
+        b1, b2, b3, b4, b5 = params
+        numerator = b1 + b2 * x + b3 * x**2
+        denominator = 1.0 + b4 * x + b5 * x**2
+        return numerator / denominator
+
+    def objective(self, y, args):
+        """Compute the objective function value.
+
+        The model is: y = (b1 + b2*x + b3*x^2) / (1 + b4*x + b5*x^2) + e
+
+        The objective is the sum of squares of the residuals.
+        """
+        # Calculate the predicted values using the model
+        x_values = jnp.array(
             [
                 9.65,
                 10.74,
@@ -188,8 +201,10 @@ class KIRBY2LS(AbstractUnconstrainedMinimisation):
                 371.3,
             ]
         )
+        y_pred = jax.vmap(lambda x: self.model(x, y))(x_values)
 
-        self.y_values = jnp.array(
+        # Calculate the residuals
+        y_values = jnp.array(
             [
                 0.0082,
                 0.0112,
@@ -344,39 +359,19 @@ class KIRBY2LS(AbstractUnconstrainedMinimisation):
                 92.2,
             ]
         )
-
-        # Starting points from the SIF file
-        self.start_points = [
-            jnp.array([2.0, -0.1, 0.003, -0.001, 0.00001]),  # START1
-            jnp.array([1.5, -0.15, 0.0025, -0.0015, 0.00002]),  # START2
-        ]
-
-    def model(self, x, params):
-        """Compute the model function: (b1 + b2*x + b3*x^2) / (1 + b4*x + b5*x^2)"""
-        b1, b2, b3, b4, b5 = params
-        numerator = b1 + b2 * x + b3 * x**2
-        denominator = 1.0 + b4 * x + b5 * x**2
-        return numerator / denominator
-
-    def objective(self, y, args):
-        """Compute the objective function value.
-
-        The model is: y = (b1 + b2*x + b3*x^2) / (1 + b4*x + b5*x^2) + e
-
-        The objective is the sum of squares of the residuals.
-        """
-        # Calculate the predicted values using the model
-        y_pred = jax.vmap(lambda x: self.model(x, y))(self.x_values)
-
-        # Calculate the residuals
-        residuals = y_pred - self.y_values
+        residuals = y_pred - y_values
 
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)
 
     def y0(self):
         """Initial point based on the y0_id parameter."""
-        return self.start_points[self.y0_id]
+        if self.y0_id == 0:
+            return jnp.array([2.0, -0.1, 0.003, -0.001, 0.00001])  # START1
+        elif self.y0_id == 1:
+            return jnp.array([1.5, -0.15, 0.0025, -0.0015, 0.00002])  # START2
+        else:
+            assert False, "Invalid y0_id"
 
     def args(self):
         """No additional arguments needed."""

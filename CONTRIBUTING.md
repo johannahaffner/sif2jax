@@ -38,11 +38,12 @@ installation on Linux and Mac are available on the landing page of the pycutest
 repository on Github ([here](https://github.com/jfowkes/pycutest)).
 You can also build a container from the Dockerfile and run the tests from in there.
 
-Next verify the tests all pass:
+The following instructions are for the first approach, which just requires loading the pre-existing container from Docker Hub. 
+This happens inside `run_tests.sh`, which then creates an editable install of your current version of `sif2jax` and runs the tests on that.
 
 ```bash
-pip install pytest
-pytest
+chmod +x run_tests.sh
+./run_tests.sh
 ```
 
 Then push your changes back to your fork of the repository:

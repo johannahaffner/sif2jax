@@ -15,6 +15,8 @@ class BOX(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
+    n: int
+
     def __init__(self, n=10000):
         """Initialize the BOX problem.
 
@@ -191,6 +193,9 @@ class BOXPOWER(AbstractUnconstrainedMinimisation):
 
     Classification: OUR2-AN-V-0
     """
+
+    n: int
+    p: int
 
     def __init__(self, n=10000, p=9):
         """Initialize the BOXPOWER problem.

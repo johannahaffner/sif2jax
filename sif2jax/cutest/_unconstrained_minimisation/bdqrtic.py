@@ -20,6 +20,8 @@ class BDQRTIC(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    n: int
+
     def __init__(self, n=100):
         """Initialize the BDQRTIC problem.
 

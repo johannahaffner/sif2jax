@@ -1,0 +1,122 @@
+# References for Unconstrained Minimisation Problems
+
+## Problem: akiva.py
+- Ben-Akiva and Lerman, "Discrete Choice Analysis", MIT Press, 1985.
+
+## Problem: argtrigls.py
+- J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+## Problem: bard.py
+- J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+- Buckley#16
+
+## Problem: beale.py
+- J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+## Problem: bennett.py
+- Bennett, L., L. Swartzendruber, H. Brown, NIST (1994). Superconductivity Magnetization Modeling.
+
+## Problem: biggs.py
+- A.R. Buckley, "Test functions for unconstrained minimization", TR 1989CS-3, Mathematics, statistics and computing centre, Dalhousie University, Halifax (CDN), 1989.
+
+## Problem: box.py
+- N. Gould, private communication.
+- J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+- Buckley#BOX663
+- Box, G. P., W. G. Hunter, and J. S. Hunter (1978). Statistics for Experimenters, New York, NY: Wiley, pp. 483-487.
+
+## Problem: broydn.py
+- J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+- Toint#17
+- Buckley#78
+- Ph.L. Toint, "Some numerical results using a sparse matrix updating formula in unconstrained optimization", Mathematics of Computation, vol. 32(114), pp. 839-852, 1978.
+- Buckley#84
+- Buckley#73
+- Toint#18
+
+## Problem: chwirut.py
+- Chwirut, D., NIST (197?). Ultrasonic Reference Block Study.
+
+## Problem: cosine.py
+- N. Gould, private communication.
+
+## Problem: curly.py
+- Nick Gould, September 1997.
+
+## Problem: dixon3dq.py
+- A.R. Buckley, "Test functions for unconstrained minimization", TR 1989CS-3, Mathematics, statistics and computing centre, Dalhousie University, Halifax (CDN), 1989.
+
+## Problem: dixmaa.py
+- L.C.W. Dixon and Z. Maany, "A family of test problems with sparse Hessians for unconstrained optimization", TR 206, Numerical Optimization Centre, Hatfield Polytechnic, 1988.
+
+## Problem: eckerle4ls.py
+- Problem 7 from NIST nonlinear least squares test set http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml
+
+## Problem: elatvidu.py
+- Problem from the SCIPY benchmark set https://github.com/scipy/scipy/tree/master/benchmarks/benchmarks/go_benchmark_functions
+
+## Problem: engval.py
+- Ph.L. Toint, "Test problems for partially separable optimization and results for the routine PSPMIN", Report 83/4, Department of Mathematics, FUNDP (Namur, B), 1983.
+- A.R. Buckley, "Test functions for unconstrained minimization", TR 1989CS-3, Mathematics, statistics and computing centre, Dalhousie University, Halifax (CDN), 1989.
+
+## Problem: errinros.py
+- L. Luksan, C. Matonoha and J. Vlcek, "Modified CUTE problems for sparse unconstrained optimization", Technical Report 1081, Institute of Computer Science, Academy of Science of the Czech Republic
+
+## Problem: fletch.py
+- R. Fletcher, "An optimal positive definite update for sparse Hessian matrices" Numerical Analysis report NA/145, University of Dundee, 1992.
+- L. Luksan, C. Matonoha and J. Vlcek, "Modified CUTE problems for sparse unconstrained optimization", Technical Report 1081, Institute of Computer Science, Academy of Science of the Czech Republic.
+
+## Problem: gauss.py
+- Rust, B., NIST (1996).
+
+## Problem: gaussian.py
+- J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+- Buckley#28
+
+## Problem: genhumps.py
+- Ph. Toint, private communication, 1997.
+
+## Problem: genrose.py
+- S. Nash, "Newton-type minimization via the Lanczos process", SIAM J. Num. Anal. 21, 1984, 770-788.
+
+## Problem: hahn1ls.py
+- Hahn, T., NIST (197?). Copper Thermal Expansion Study.
+
+## Problem: heart.py
+- J. E. Dennis, Jr., D. M. Gay, P. A. Vu, "A New Nonlinear Equations Test Problem". Tech. Rep. 83-16, Dept. of Math. Sci., Rice Univ., Houston, TX June 1983, revised May 1985.
+
+## Problem: helix.py
+- J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+## Problem: himmelblau.py
+- D.H. Himmelblau, "Applied nonlinear programming", McGraw-Hill, New-York, 1972.
+- W. Hock and K. Schittkowski, "Test examples for nonlinear programming codes", Lecture Notes in Economics and Mathematical Systems 187, Springer Verlag, Berlin, 1981.
+
+## Problem: kirby.py
+- Kirby, R., NIST (197?). Scanning electron microscope line width standards.
+
+## Problem: kowosb.py
+- J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+## Problem: lanczos.py
+- Lanczos, C. (1956). Applied Analysis. Englewood Cliffs, NJ: Prentice Hall, pp. 272-280.
+
+## Problem: rosenbr.py
+- J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+## Frequently Cited Papers
+
+1. J.J. More', B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+   - Referenced in: argtrigls.py, beale.py, bard.py, broydn.py, box.py, gaussian.py, helix.py, kowosb.py, rosenbr.py
+
+2. A.R. Buckley, "Test functions for unconstrained minimization", TR 1989CS-3, Mathematics, statistics and computing centre, Dalhousie University, Halifax (CDN), 1989.
+   - Referenced in: dixon3dq.py, engval.py, biggs.py
+
+3. L. Luksan, C. Matonoha and J. Vlcek, "Modified CUTE problems for sparse unconstrained optimization", Technical Report 1081, Institute of Computer Science, Academy of Science of the Czech Republic.
+   - Referenced in: fletch.py, errinros.py
+
+4. Nick Gould (private communications)
+   - Referenced in: cosine.py, box.py 
+
+5. NIST test problems
+   - Referenced in: chwirut.py, bennett.py, gauss.py, hahn1ls.py, kirby.py, eckerle4ls.py

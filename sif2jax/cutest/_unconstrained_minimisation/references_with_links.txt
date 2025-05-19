@@ -1,0 +1,99 @@
+# References for Unconstrained Minimisation Problems with Links
+
+## Academic Papers
+
+1. J.J. Moré, B.S. Garbow and K.E. Hillstrom, "Testing Unconstrained Optimization Software", ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+   - DOI: [10.1145/355934.355936](https://doi.org/10.1145/355934.355936)
+   - URL: [https://dlnext.acm.org/doi/abs/10.1145/355934.355936](https://dlnext.acm.org/doi/abs/10.1145/355934.355936)
+   - Referenced in: argtrigls.py, beale.py, bard.py, broydn.py, box.py, gaussian.py, helix.py, kowosb.py, rosenbr.py
+
+2. S. Nash, "Newton-type minimization via the Lanczos process", SIAM J. Num. Anal. 21, 1984, 770-788.
+   - DOI: [10.1137/0721052](https://doi.org/10.1137/0721052)
+   - URL: [https://epubs.siam.org/doi/abs/10.1137/0721052](https://epubs.siam.org/doi/abs/10.1137/0721052)
+   - Referenced in: genrose.py
+
+3. Ph.L. Toint, "Some numerical results using a sparse matrix updating formula in unconstrained optimization", Mathematics of Computation, vol. 32(114), pp. 839-851, 1978.
+   - DOI: [10.1090/S0025-5718-1978-0483452-7](https://doi.org/10.1090/S0025-5718-1978-0483452-7)
+   - URL: [https://www.ams.org/journals/mcom/1978-32-143/S0025-5718-1978-0483452-7/](https://www.ams.org/journals/mcom/1978-32-143/S0025-5718-1978-0483452-7/)
+   - Referenced in: broydn.py
+
+4. Ph.L. Toint, "Test problems for partially separable optimization and results for the routine PSPMIN", Report 83/4, Department of Mathematics, FUNDP (Namur, B), 1983.
+   - Referenced in: engval.py
+
+5. R. Fletcher, "An optimal positive definite update for sparse Hessian matrices" Numerical Analysis report NA/145, University of Dundee, 1992.
+   - Published version: "An Optimal Positive Definite Update for Sparse Hessian Matrices", SIAM Journal on Optimization, Vol. 5, No. 1, pp. 192-218, 1995
+   - DOI: [10.1137/0805010](https://doi.org/10.1137/0805010)
+   - URL: [https://epubs.siam.org/doi/10.1137/0805010](https://epubs.siam.org/doi/10.1137/0805010)
+   - Referenced in: fletch.py
+
+6. L. Luksan, C. Matonoha and J. Vlcek, "Modified CUTE problems for sparse unconstrained optimization", Technical Report 1081, Institute of Computer Science, Academy of Science of the Czech Republic, 2010.
+   - URL: [https://www.researchgate.net/publication/325314531_Modified_CUTE_Problems_for_Sparse_Unconstrained_Optimization](https://www.researchgate.net/publication/325314531_Modified_CUTE_Problems_for_Sparse_Unconstrained_Optimization)
+   - Referenced in: fletch.py, errinros.py
+
+7. L.C.W. Dixon and Z. Maany, "A family of test problems with sparse Hessians for unconstrained optimization", TR 206, Numerical Optimization Centre, Hatfield Polytechnic (now University of Hertfordshire), 1988.
+   - Referenced in: dixmaa.py
+
+8. J. E. Dennis, Jr., D. M. Gay, P. A. Vu, "A New Nonlinear Equations Test Problem", Tech. Rep. 83-16, Dept. of Math. Sci., Rice Univ., Houston, TX June 1983, revised May 1985.
+   - URL: [https://scholarship.rice.edu/bitstream/handle/1911/101557/TR83-16.pdf](https://scholarship.rice.edu/bitstream/handle/1911/101557/TR83-16.pdf)
+   - Referenced in: heart.py
+
+9. Lanczos, C. (1956). Applied Analysis. Englewood Cliffs, NJ: Prentice Hall, pp. 272-280.
+   - Referenced in: lanczos.py
+
+10. A.R. Buckley, "Test functions for unconstrained minimization", TR 1989CS-3, Mathematics, statistics and computing centre, Dalhousie University, Halifax (CDN), 1989.
+    - Referenced in: dixon3dq.py, engval.py, biggs.py
+
+## Books
+
+1. D.H. Himmelblau, "Applied nonlinear programming", McGraw-Hill, New-York, 1972.
+   - ISBN-10: 0070289212
+   - ISBN-13: 978-0070289215
+   - Referenced in: himmelblau.py
+
+2. Ben-Akiva and Lerman, "Discrete Choice Analysis", MIT Press, 1985.
+   - URL: [https://mitpress.mit.edu/9780262536400/discrete-choice-analysis/](https://mitpress.mit.edu/9780262536400/discrete-choice-analysis/)
+   - Referenced in: akiva.py
+
+3. W. Hock and K. Schittkowski, "Test examples for nonlinear programming codes", Lecture Notes in Economics and Mathematical Systems 187, Springer Verlag, Berlin, 1981.
+   - DOI: [10.1007/978-3-642-48320-2](https://doi.org/10.1007/978-3-642-48320-2)
+   - URL: [https://link.springer.com/book/10.1007/978-3-642-48320-2](https://link.springer.com/book/10.1007/978-3-642-48320-2)
+   - Referenced in: himmelblau.py
+
+4. Box, G. E. P., W. G. Hunter, and J. S. Hunter, "Statistics for Experimenters: An Introduction to Design, Data Analysis and Model Building", Wiley-Interscience, New York, 1978, pp. 483-487.
+   - ISBN-10: 0471093157
+   - ISBN-13: 978-0471093152
+   - URL: [https://www.amazon.com/Statistics-Experimenters-Introduction-Analysis-Building/dp/0471093157](https://www.amazon.com/Statistics-Experimenters-Introduction-Analysis-Building/dp/0471093157)
+   - Referenced in: box.py
+
+## Other Sources and Private Communications
+
+1. Nick Gould, private communication, September 1997.
+   - Referenced in: curly.py, cosine.py, box.py
+
+2. Ph. Toint, private communication, 1997.
+   - Referenced in: genhumps.py
+
+## NIST References
+
+1. Bennett, L., L. Swartzendruber, H. Brown, NIST (1994). Superconductivity Magnetization Modeling.
+   - Referenced in: bennett.py
+
+2. Chwirut, D., NIST (197?). Ultrasonic Reference Block Study.
+   - Referenced in: chwirut.py
+
+3. Hahn, T., NIST (197?). Copper Thermal Expansion Study.
+   - Referenced in: hahn1ls.py
+
+4. Kirby, R., NIST (197?). Scanning electron microscope line width standards.
+   - Referenced in: kirby.py
+
+5. Rust, B., NIST (1996).
+   - Referenced in: gauss.py
+
+6. Problem 7 from NIST nonlinear least squares test set http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml
+   - Referenced in: eckerle4ls.py
+
+## Other Sources
+
+1. Problem from the SCIPY benchmark set https://github.com/scipy/scipy/tree/master/benchmarks/benchmarks/go_benchmark_functions
+   - Referenced in: elatvidu.py

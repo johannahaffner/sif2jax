@@ -21,28 +21,6 @@ class KOWOSB(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-4-0
     """
 
-    # Observed response values
-    y_values: jnp.ndarray = jnp.array(
-        [
-            0.1957,
-            0.1947,
-            0.1735,
-            0.1600,
-            0.0844,
-            0.0627,
-            0.0456,
-            0.0342,
-            0.0323,
-            0.0235,
-            0.0246,
-        ]
-    )
-
-    # Independent variable values (u)
-    u_values: jnp.ndarray = jnp.array(
-        [4.0, 2.0, 1.0, 0.5, 0.25, 0.167, 0.125, 0.1, 0.0833, 0.0714, 0.0624]
-    )
-
     def model(self, u, params):
         """Compute the model function: (v1 * (u^2 + u*v2)) / (u^2 + u*v3 + v4)"""
         v1, v2, v3, v4 = params
@@ -58,11 +36,30 @@ class KOWOSB(AbstractUnconstrainedMinimisation):
 
         The objective is the sum of squares of these residuals.
         """
+        del args
         # Calculate the predicted values using the model
-        y_pred = jax.vmap(lambda u: self.model(u, y))(self.u_values)
+        u_values = jnp.array(
+            [4.0, 2.0, 1.0, 0.5, 0.25, 0.167, 0.125, 0.1, 0.0833, 0.0714, 0.0624]
+        )
+        y_pred = jax.vmap(lambda u: self.model(u, y))(u_values)
 
         # Calculate the residuals
-        residuals = y_pred - self.y_values
+        y_values = jnp.array(
+            [
+                0.1957,
+                0.1947,
+                0.1735,
+                0.1600,
+                0.0844,
+                0.0627,
+                0.0456,
+                0.0342,
+                0.0323,
+                0.0235,
+                0.0246,
+            ]
+        )
+        residuals = y_pred - y_values
 
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)

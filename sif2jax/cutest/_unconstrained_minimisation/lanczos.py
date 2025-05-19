@@ -29,36 +29,6 @@ class _AbstractLanczos(AbstractUnconstrainedMinimisation):
     # Starting point ID (0 or 1)
     y0_id: int = 0
 
-    # Independent variable values (x) - same for all Lanczos problems
-    x_values: jnp.ndarray = jnp.array(
-        [
-            0.00,
-            0.05,
-            0.10,
-            0.15,
-            0.20,
-            0.25,
-            0.30,
-            0.35,
-            0.40,
-            0.45,
-            0.50,
-            0.55,
-            0.60,
-            0.65,
-            0.70,
-            0.75,
-            0.80,
-            0.85,
-            0.90,
-            0.95,
-            1.00,
-            1.05,
-            1.10,
-            1.15,
-        ]
-    )
-
     # The y_values will be defined in the derived classes
 
     def __check_init__(self):
@@ -84,7 +54,35 @@ class _AbstractLanczos(AbstractUnconstrainedMinimisation):
         The objective is the sum of squares of residuals between the model and the data.
         """
         # Calculate the predicted values using the model
-        y_pred = jax.vmap(lambda x: self.model(x, y))(self.x_values)
+        x_values = jnp.array(
+            [
+                0.00,
+                0.05,
+                0.10,
+                0.15,
+                0.20,
+                0.25,
+                0.30,
+                0.35,
+                0.40,
+                0.45,
+                0.50,
+                0.55,
+                0.60,
+                0.65,
+                0.70,
+                0.75,
+                0.80,
+                0.85,
+                0.90,
+                0.95,
+                1.00,
+                1.05,
+                1.10,
+                1.15,
+            ]
+        )
+        y_pred = jax.vmap(lambda x: self.model(x, y))(x_values)
 
         # Calculate the residuals
         y_values = self._data()
@@ -124,7 +122,35 @@ class LANCZOS1LS(_AbstractLanczos):
         """Initialize y_values based on the exact model."""
         # The y values are artificially created with known parameter values
         exact_params = jnp.array([0.0951, 1.0, 0.8607, 3.0, 1.5576, 5.0])
-        y = jax.vmap(lambda x: self.model(x, exact_params))(self.x_values)
+        x_values = jnp.array(
+            [
+                0.00,
+                0.05,
+                0.10,
+                0.15,
+                0.20,
+                0.25,
+                0.30,
+                0.35,
+                0.40,
+                0.45,
+                0.50,
+                0.55,
+                0.60,
+                0.65,
+                0.70,
+                0.75,
+                0.80,
+                0.85,
+                0.90,
+                0.95,
+                1.00,
+                1.05,
+                1.10,
+                1.15,
+            ]
+        )
+        y = jax.vmap(lambda x: self.model(x, exact_params))(x_values)
         return y
 
     def expected_result(self):

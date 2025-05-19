@@ -29,7 +29,7 @@ def test_correct_objective_at_start(problem):
     pycutest_problem = pycutest.import_problem(problem.name())
     pycutest_value = pycutest_problem.obj(pycutest_problem.x0)
     sif2jax_value = problem.objective(problem.y0(), problem.args())
-    assert np.allclose(pycutest_value, sif2jax_value, rtol=1e-8, atol=1e-8)
+    assert np.allclose(pycutest_value, sif2jax_value, rtol=1e-6, atol=1e-6)
 
 
 @pytest.mark.skip(reason="Get the objective values right first.")

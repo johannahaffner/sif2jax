@@ -14,46 +14,41 @@ import jax.numpy as jnp
 import pytest
 import equinox as eqx
 
-def tree_numeric_allclose(tree1, tree2, *, rtol=1e-5, atol=1e-8):
-    """
-    Compare two pytrees of the *same structure*.
+from scipy.optimize import OptimizeResult
 
-    • Numeric leaves (ndarrays, JAX arrays, NumPy scalars, Python floats / ints)
-      are compared with jnp.allclose.
-    • All other leaf types are ignored (treated as equal).
+def opt_result_diff(result, result_ref, rtol=1e-5, atol=1e-8):
 
-    Returns
-    -------
-    bool
-        True  → every comparable numeric leaf is close enough.
-        False → at least one numeric leaf differs beyond tolerance.
+    comparison = {
+        "both success"  : result.success == result_ref.success,
+        "both status"   : result.status == result_ref.status,
+        "both fun"      : np.allclose(result.fun, result_ref.fun, rtol=rtol, atol=atol),
+        "both x"        : np.allclose(result.x, result_ref.x, rtol=rtol, atol=atol),
+        "both nit"      : result.nit == result_ref.nit,
+        "both g"        : np.allclose(result.info["g"], result_ref.info["g"], rtol=rtol, atol=atol),
+        "both mult_g"   : np.allclose(result.info["mult_g"], result_ref.info["mult_g"], rtol=rtol, atol=atol),
+        "both mult_x_L" : np.allclose(result.info["mult_x_L"], result_ref.info["mult_x_L"], rtol=rtol, atol=atol),
+        "both mult_x_U" : np.allclose(result.info["mult_x_U"], result_ref.info["mult_x_U"], rtol=rtol, atol=atol),
+        "both nfev"     : result.nfev == result_ref.nfev,
+        "both njev"     : result.njev == result_ref.njev,
+        "both message"  : result.message == result_ref.message,
+    }
 
-    Raises
-    ------
-    ValueError
-        If the two pytrees do not share the same treedef.
-    """
-
-    flat1, treedef1 = jax.tree_util.tree_flatten(tree1)
-    flat2, treedef2 = jax.tree_util.tree_flatten(tree2)
-
-    if treedef1 != treedef2:
-        raise ValueError("Pytrees have different structures and cannot be compared")
-
-    def _is_numeric(x):
-        return (
-            isinstance(x, (jnp.ndarray, np.ndarray))
-            or np.isscalar(x)
-            or isinstance(x, (int, float, complex))
-        )
-
-    def _leaf_close(a, b):
-        if _is_numeric(a) and _is_numeric(b):
-            return bool(jnp.allclose(a, b, rtol=rtol, atol=atol))
-        # non‑numeric → ignore
-        return True
-
-    return all(_leaf_close(a, b) for a, b in zip(flat1, flat2))
+    output = ""
+    for key, value in comparison.items():
+        if value == False:
+            test_name = key.split(" ")[1] 
+            output += f"{test_name} test is False, therefore pycutest and our implementation had different result {test_name} values\n"
+            if test_name not in result.info.keys(): # ["g, mult_g", "mult_x_L", "mult_x_U"]:
+                output += f"pycutest {test_name}: {getattr(result_ref, test_name)}\n"
+                output += f"ours {test_name}: {getattr(result, test_name)}\n"
+            else:
+                output += f"pycutest {test_name}: {result_ref.info[test_name]}\n"
+                output += f"ours {test_name}: {result.info[test_name]}\n"
+    
+    # see if all tests passed
+    tests_passed = all(value == True for value in comparison.values())
+    
+    return tests_passed, output
 
 @pytest.mark.parametrize("problem", sif2jax.problems)
 def e2e_dense_ipopt_test(problem):
@@ -101,7 +96,8 @@ def e2e_dense_ipopt_test(problem):
         )
 
         # assert that all numerical values in both scipy results objects are equal
-        assert tree_numeric_allclose(result, result_ref)
+        tests_passed, output = opt_result_diff(result, result_ref)
+        assert tests_passed, output
 
         if result.success is False and i > 0:
             print(f"Highest tol with successful optimization in {maxiter} iterations: {10**(-i+1)}")

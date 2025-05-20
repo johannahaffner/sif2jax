@@ -10,11 +10,9 @@ import cyipopt
 import sif2jax
 import jax
 jax.config.update("jax_enable_x64", True)  # ESSENTIAL
-import jax.numpy as jnp
 import pytest
-import equinox as eqx
-
-from scipy.optimize import OptimizeResult
+import io # for capturing stdout
+from wurlitzer import pipes  # pip install wurlitzer
 
 def opt_result_diff(result, result_ref, rtol=1e-5, atol=1e-8):
 
@@ -78,26 +76,30 @@ def e2e_dense_ipopt_test(problem):
     for i in range(maxtol_coeff):
         tol = 10**(-i)
         print(f"Running cyipopt with tol = {tol}")
-        result = cyipopt.minimize_ipopt(
-            fun=obj, 
-            x0=p.y0(), 
-            jac=obj_grad, 
-            hess=obj_hess, 
-            tol=tol, 
-            options={'disp': 5, 'maxiter': maxiter}
-        )
-        result_ref = cyipopt.minimize_ipopt(
-            fun=obj_ref, 
-            x0=p_ref.x0, 
-            jac=obj_grad_ref, 
-            hess=obj_hess_ref, 
-            tol=tol, 
-            options={'disp': 5, 'maxiter': maxiter}
-        )
+        buf = io.StringIO()
+        with pipes(stdout=buf, stderr=buf):
+            result = cyipopt.minimize_ipopt(
+                fun=obj, 
+                x0=p.y0(), 
+                jac=obj_grad, 
+                hess=obj_hess, 
+                tol=tol, 
+                options={'disp': 5, 'maxiter': maxiter}
+            )
+            result_ref = cyipopt.minimize_ipopt(
+                fun=obj_ref, 
+                x0=p_ref.x0, 
+                jac=obj_grad_ref, 
+                hess=obj_hess_ref, 
+                tol=tol, 
+                options={'disp': 5, 'maxiter': maxiter}
+            )
+        ipopt_stdout = buf.getvalue()
 
         # assert that all numerical values in both scipy results objects are equal
         tests_passed, output = opt_result_diff(result, result_ref)
-        assert tests_passed, output
+        assert tests_passed, output + "\n\n\n below is our problems IPOPT output followed by pycutest problems output\n\n\n" + ipopt_stdout
+
 
         if result.success is False and i > 0:
             print(f"Highest tol with successful optimization in {maxiter} iterations: {10**(-i+1)}")
@@ -134,25 +136,29 @@ if __name__ == "__main__":
     for i in range(maxtol_coeff):
         tol = 10**(-i)
         print(f"Running cyipopt with tol = {tol}")
-        result = cyipopt.minimize_ipopt(
-            fun=obj, 
-            x0=p.y0(), 
-            jac=obj_grad, 
-            hess=obj_hess, 
-            tol=tol, 
-            options={'disp': 5, 'maxiter': maxiter}
-        )
-        result_ref = cyipopt.minimize_ipopt(
-            fun=obj_ref, 
-            x0=p_ref.x0, 
-            jac=obj_grad_ref, 
-            hess=obj_hess_ref, 
-            tol=tol, 
-            options={'disp': 5, 'maxiter': maxiter}
-        )
+        buf = io.StringIO()
+        with pipes(stdout=buf, stderr=buf):
+            result = cyipopt.minimize_ipopt(
+                fun=obj, 
+                x0=p.y0(), 
+                jac=obj_grad, 
+                hess=obj_hess, 
+                tol=tol, 
+                options={'disp': 5, 'maxiter': maxiter}
+            )
+            result_ref = cyipopt.minimize_ipopt(
+                fun=obj_ref, 
+                x0=p_ref.x0, 
+                jac=obj_grad_ref, 
+                hess=obj_hess_ref, 
+                tol=tol, 
+                options={'disp': 5, 'maxiter': maxiter}
+            )
+        ipopt_stdout = buf.getvalue()
 
         # assert that all numerical values in both scipy results objects are equal
-        assert tree_numeric_allclose(result, result_ref)
+        tests_passed, output = opt_result_diff(result, result_ref)
+        assert tests_passed, output + "\n\n\n below is our problems IPOPT output followed by pycutest problems output\n\n\n" + ipopt_stdout
 
         if result.success is False and i > 0:
             print(f"Highest tol with successful optimization in {maxiter} iterations: {10**(-i+1)}")

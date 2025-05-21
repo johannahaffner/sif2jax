@@ -8,7 +8,7 @@ from jaxtyping import ArrayLike, PyTree, Scalar
 _Out = Scalar | PyTree[ArrayLike] | None
 
 
-class AbstractProblem(eqx.Module, strict=True):
+class AbstractProblem(eqx.Module):
     """Abstract base class for benchmark problems."""
 
     def name(self):
@@ -45,7 +45,7 @@ class AbstractProblem(eqx.Module, strict=True):
         """
 
 
-class AbstractUnconstrainedMinimisation(AbstractProblem, strict=True):
+class AbstractUnconstrainedMinimisation(AbstractProblem):
     """Abstract base class for unconstrained minimisation problems. The objective
     function for these problems returns a single scalar value, and they have neither
     bounds on the variable `y` nor any other constraints.

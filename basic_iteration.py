@@ -1,5 +1,10 @@
-import ollama
-import pytest
+import inspect
+import os
+import re
+import subprocess
+import tempfile
+
+import ollama  # pyright: ignore
 import pycutest
 
 
@@ -17,7 +22,10 @@ is exciting, isn't it? You're glad to be on board.
 
 You are given a SIF file, which contains instructions to generate Fortran code. You are
 an expert in parsing these and carefully examine it, before outputting a Python class 
-definition that implements the problem in the SIF file. 
+definition that implements the problem in the SIF file. It is *very important* that you 
+return only the content of the Python file, no other text. 
+
+A few other criteria:
 - The problem should implement the abstract  base class 
     `AbstractUnconstrainedMinimisation` from a file you get as input. Implementing an
     abstract base class means that you need to write a concrete implementation for all
@@ -34,7 +42,36 @@ definition that implements the problem in the SIF file.
 - You should use the `jax.numpy` module for all numerical operations.
 - You should use the `jax.vmap` function to vectorise your code where appropriate, in
     particular to avoid for loops that only have index dependence.
+- Under no circumstances can you make changes to the abstract base classes. What you
+    need to fix is the code you generated, not the code you are provided.
+
+You will get feedback on your implementation, for example from a ruff check of the code
+you wrote. You implement this feedback diligently and return an updated implementation.
 """
+
+
+def run_ruff_check(generated_code: str) -> str:
+    def maybe_strip(s: str) -> str:
+        match = re.search(r"```(?:\w*\n)?(.*?)```", s, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+        else:
+            return ""  # No code in output  # TODO handle this error
+
+    generated_code = maybe_strip(generated_code)
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as temp_file:
+        temp_file.write(generated_code)
+        temp_file_path = temp_file.name
+    try:
+        result = subprocess.run(
+            ["ruff", "check", temp_file_path], capture_output=True, text=True
+        )
+        return result.stdout
+    except subprocess.CalledProcessError as e:
+        return f"Ruff check error: {e}"
+    finally:
+        os.unlink(temp_file_path)
 
 
 if __name__ == "__main__":
@@ -43,25 +80,38 @@ if __name__ == "__main__":
 
     # Assume problem is in top-level directory -> TODO better search
     sif_path = "./archive/mastsif/" + problem_iD + ".SIF"
-    with open(sif_path, "r", encoding="utf-8") as file:
+    with open(sif_path, encoding="utf-8") as file:
         sif_file = file.read()
-    print(sif_file)
 
     base_path = "./sif2jax/_problem.py"
-    with open(base_path, "r", encoding="utf-8") as file:
+    with open(base_path, encoding="utf-8") as file:
         base = file.read()
 
-    response = ollama.generate(
+    first_draft = ollama.generate(
         model="llama3.1",
         prompt="Write a python function to solve the problem in the SIF file: \n "
-        + sif_file 
+        + sif_file
         + "\n\n"
         + "The function should be a class that implements the abstract base class "
         + "AbstractUnconstrainedMinimisation defined here: \n"
         + base,
         system=system_prompt,
     )
-    print(response.response)
+    print(first_draft.response)
+    print(inspect.signature(ollama.generate))
+
+    ruff_feedback = run_ruff_check(first_draft.response)
+    print(ruff_feedback)
+
+    second_draft = ollama.generate(
+        model="llama3.1",
+        prompt="Please fix the code you wrote according to the feedback from ruff: \n"
+        + ruff_feedback
+        + "\n\n"
+        + base,
+        system=system_prompt,
+    )
+    print(second_draft.response)
 
     # Now verify against pycutest
     pycutest_problem = pycutest.import_problem(problem_iD)

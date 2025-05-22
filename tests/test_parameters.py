@@ -39,3 +39,14 @@ def test_correct_gradient_at_start(problem):
     pycutest_gradient = pycutest_problem.grad(pycutest_problem.x0)
     sif2jax_gradient = jax.grad(problem.objective)(problem.y0(), problem.args())
     assert np.allclose(pycutest_gradient, sif2jax_gradient, rtol=1e-8, atol=1e-8)
+
+
+@pytest.mark.skip(reason="Get the objective gradient values right first.")
+@pytest.mark.parametrize("problem", sif2jax.problems)
+def test_correct_hessian_at_start(problem):
+    pycutest_problem = pycutest.import_problem(problem.name())
+    pycutest_hessian = pycutest_problem.ihess(pycutest_problem.x0)
+    sif2jax_hessian = jax.hessian(problem.objective)(problem.y0(), problem.args())
+    assert np.allclose(pycutest_hessian, sif2jax_hessian, rtol=1e-8, atol=1e-8)
+
+

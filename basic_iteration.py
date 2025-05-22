@@ -79,16 +79,17 @@ if __name__ == "__main__":
     problem_iD = input("Enter a SIF iD: ")
 
     # Assume problem is in top-level directory -> TODO better search
-    sif_path = "./archive/mastsif/" + problem_iD + ".SIF"
-    with open(sif_path, encoding="utf-8") as file:
+    sif_path = os.getenv('MASTSIF') + problem_iD + ".SIF"
+    # sif_path = "./archive/mastsif/" + problem_iD + ".SIF"
+    with open(sif_path, "r", encoding="utf-8") as file:
         sif_file = file.read()
+    print(sif_file)
 
-    base_path = "./sif2jax/_problem.py"
-    with open(base_path, encoding="utf-8") as file:
+    base_path = "/home/john/Documents/sif2jax/sif2jax/_problem.py"
+    with open(base_path, "r", encoding="utf-8") as file:
         base = file.read()
-
     first_draft = ollama.generate(
-        model="llama3.1",
+        model="deepseek-r1:70b",
         prompt="Write a python function to solve the problem in the SIF file: \n "
         + sif_file
         + "\n\n"
@@ -104,7 +105,7 @@ if __name__ == "__main__":
     print(ruff_feedback)
 
     second_draft = ollama.generate(
-        model="llama3.1",
+        model="deepseek-r1:70b",
         prompt="Please fix the code you wrote according to the feedback from ruff: \n"
         + ruff_feedback
         + "\n\n"

@@ -87,11 +87,11 @@ class ERRINROS(AbstractUnconstrainedMinimisation):
         alphas = alphas[: self.n]
 
         # First sum: sum {i in 2..N} (x[i-1]-16*alpha[i]^2*x[i]^2)^2
-        # In 0-based indexing: i from 1 to n-1
+        # In 0-based indexing: i from 1 to n-1, but alphas need correct indexing
         def compute_first_term(i):
             alpha_i = alphas[
-                i
-            ]  # alphas[i] corresponds to alpha[i+1] in AMPL (1-indexed)
+                i + 1
+            ]  # alphas[i+1] corresponds to alpha[i+2] in AMPL (1-indexed)
             return (y[i] - 16.0 * alpha_i**2 * y[i + 1] ** 2) ** 2
 
         indices = jnp.arange(0, self.n - 1)
@@ -149,25 +149,33 @@ class ERRINRSM(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # Define the function to compute each term for a pair of variables
-        def compute_term(i):
-            # Alpha values are determined by sin(i) * 1.5
-            alpha_i = jnp.sin(float(i)) * 1.5
+        # ERRINRSM formulation from SIF file:
+        # For each i from 2 to N:
+        #   Group SQ(I) = X(I-1) - AI * X(I)^2, where AI = 16 * (sin(i) * 1.5)^2
+        #   Group B(I) = X(I) - 1.0
+        # Objective = sum_{i=2}^N [SQ(I)^2 + B(I)^2]
+        #           = sum_{i=2}^N [(X(I-1) - AI * X(I)^2)^2 + (X(I) - 1)^2]
 
-            # Each term in the objective is of the form:
-            # 16 * alpha_i^2 * (x_i - x_{i-1}^2)^2
-            scale = 16.0 * alpha_i * alpha_i
-            term = scale * (y[i] - y[i - 1] ** 2) ** 2
-            return term
+        total = 0.0
 
-        # Create array of indices (2 to n)
-        indices = jnp.arange(1, self.n)
+        # Loop from i=2 to N (1 to n-1 in 0-based indexing)
+        for i in range(1, self.n):
+            # Alpha value: sin(i) * 1.5 where i is 1-based (i+1 in our 0-based loop)
+            alpha_i = jnp.sin(float(i + 1)) * 1.5
+            # AI = 16 * alpha_i^2 = 16 * (sin(i) * 1.5)^2
+            ai = 16.0 * alpha_i**2
 
-        # Compute all terms using vmap
-        terms = jax.vmap(compute_term)(indices)
+            # First term: (X(I-1) - AI * X(I)^2)^2
+            # In 0-based indexing: (y[i-1] - ai * y[i]^2)^2
+            sq_term = (y[i - 1] - ai * y[i] ** 2) ** 2
 
-        # Sum all terms
-        return jnp.sum(terms)
+            # Second term: (X(I) - 1)^2
+            # In 0-based indexing: (y[i] - 1)^2
+            b_term = (y[i] - 1.0) ** 2
+
+            total += sq_term + b_term
+
+        return jnp.array(total)
 
     def y0(self):
         # Initial values from SIF file (all -1.0)

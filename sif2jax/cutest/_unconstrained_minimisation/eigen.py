@@ -3,7 +3,6 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: requires human review
 class EIGEN(AbstractUnconstrainedMinimisation):
     """Base class for EIGEN problems.
 
@@ -29,38 +28,61 @@ class EIGEN(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # y contains the elements of Q and D packed together
-        # First n² elements are Q in column-major order
-        # Last n elements are the diagonal of D
-        q_flat = y[: self.n * self.n]
-        d_diag = y[self.n * self.n :]
+        # y contains the variables as ordered in SIF file:
+        # First n elements are eigenvalues D(J)
+        # Then n² elements are Q(I,J) matrix in the order defined by SIF loops
+        d_diag = y[: self.n]
+        q_vars = y[self.n :]
 
-        # Reshape Q to a matrix
-        q = q_flat.reshape((self.n, self.n), order="F")
-
-        # Create diagonal matrix D
-        d = jnp.diag(d_diag)
+        # Need to reconstruct Q matrix from SIF variable ordering
+        # SIF defines Q(I,J) with nested loops: for J=1 to N, for I=1 to N
+        q = q_vars.reshape((self.n, self.n), order="F")
 
         # Get the target matrix A
         a = self._matrix()
 
-        # Calculate QᵀDQ
-        qdq = q.T @ d @ q
+        # Eigenvalue equations: E(I,J) = sum_K Q(K,I) * Q(K,J) * D(K) - A(I,J)
+        # Vectorized: QᵀDQ where D is diagonal
+        qtdq = q.T @ jnp.diag(d_diag) @ q
 
-        # Calculate residuals
-        residuals = qdq - a
+        # Orthogonality equations: O(I,J) = sum_K Q(K,I) * Q(K,J) - delta_IJ
+        # Vectorized: QᵀQ - I
+        qtq = q.T @ q
 
-        # Return sum of squared residuals
-        return jnp.sum(residuals**2)
+        total_obj = 0.0
+
+        # Only sum over upper triangular part (I <= J) as per SIF loops
+        for j in range(self.n):  # J = 1 to N
+            for i in range(j + 1):  # I = 1 to J
+                # Eigenvalue equation residual
+                e_ij = qtdq[i, j] - a[i, j]
+                total_obj += e_ij**2
+
+                # Orthogonality equation residual
+                o_ij = qtq[i, j]
+                if i == j:
+                    o_ij -= 1.0  # Diagonal elements should be 1
+                # Off-diagonal elements should be 0, so no subtraction needed
+                total_obj += o_ij**2
+
+        return jnp.array(total_obj)
 
     def y0(self):
-        # Initialize with identity matrix for Q and diagonal of D set to 1.0
-        # Based on AMPL model: Q diagonal elements are 1.0, rest are 0
-        # D diagonal elements are all 1.0
-        q_flat = jnp.eye(self.n).flatten(order="F")  # Flatten in column-major order
-        d_diag = jnp.ones(self.n)  # All diagonal elements are 1.0
+        # Starting values as specified in SIF file:
+        # - All variables default to 0.0
+        # - D(J) eigenvalues are set to 1.0
+        # - Q(J,J) diagonal elements are set to 1.0
 
-        return jnp.concatenate([q_flat, d_diag])
+        # Order matches SIF: first D(J), then Q(I,J)
+        # Initialize D eigenvalues to 1.0
+        d_diag = jnp.ones(self.n)
+
+        # Initialize Q matrix elements to 0, then set diagonal to 1
+        q_matrix = jnp.zeros((self.n, self.n))
+        q_matrix = q_matrix.at[jnp.diag_indices(self.n)].set(1.0)
+        q_flat = q_matrix.flatten(order="F")  # Flatten in column-major order
+
+        return jnp.concatenate([d_diag, q_flat])
 
     def args(self):
         return None
@@ -72,96 +94,3 @@ class EIGEN(AbstractUnconstrainedMinimisation):
     def expected_objective_value(self):
         # These problems should have a minimum of 0.0
         return jnp.array(0.0)
-
-
-# TODO: requires human review
-class EIGENALS(EIGEN):
-    """EIGENALS - Eigenvalues of matrix A.
-
-    Find eigenvalues and eigenvectors of a diagonal matrix A
-    where the diagonal elements are 1, 2, ..., n.
-
-    Source: Problem 57 in
-    T.F. Coleman and P.A. Liao,
-    "An efficient trust region method for unconstrained discrete-time
-    optimal control problems",
-    Computational Optimization and Applications 4(1), pp.47-66, 1995.
-
-    SIF input: Nick Gould, Dec 1995.
-
-    Classification: SUR2-AN-V-0
-    """
-
-    def _matrix(self):
-        # Matrix A is diagonal with entries 1, 2, ..., n
-        return jnp.diag(jnp.arange(1, self.n + 1))
-
-
-# TODO: requires human review
-class EIGENBLS(EIGEN):
-    """EIGENBLS - Eigenvalues of matrix B.
-
-    Find eigenvalues and eigenvectors of a tridiagonal matrix B
-    with 2 on the main diagonal and -1 on the off-diagonals.
-
-    Source: Problem 57 in
-    T.F. Coleman and P.A. Liao,
-    "An efficient trust region method for unconstrained discrete-time
-    optimal control problems",
-    Computational Optimization and Applications 4(1), pp.47-66, 1995.
-
-    SIF input: Nick Gould, Dec 1995.
-
-    Classification: SUR2-AN-V-0
-    """
-
-    def _matrix(self):
-        # Matrix B is tridiagonal with 2 on diagonal and -1 on off-diagonals
-        diag = jnp.full(self.n, 2.0)
-        off_diag = jnp.full(self.n - 1, -1.0)
-
-        # Create the tridiagonal matrix
-        matrix = jnp.diag(diag) + jnp.diag(off_diag, k=1) + jnp.diag(off_diag, k=-1)
-
-        return matrix
-
-
-# TODO: requires human review
-class EIGENCLS(EIGEN):
-    """EIGENCLS - Eigenvalues of matrix C.
-
-    Find eigenvalues and eigenvectors of a Wilkinson tridiagonal matrix C
-    of size 2m+1, where m is a parameter.
-
-    Source: Problem 57 in
-    T.F. Coleman and P.A. Liao,
-    "An efficient trust region method for unconstrained discrete-time
-    optimal control problems",
-    Computational Optimization and Applications 4(1), pp.47-66, 1995.
-
-    SIF input: Nick Gould, Dec 1995.
-
-    Classification: SUR2-AN-V-0
-    """
-
-    m: int = 25  # Half dimension minus 1
-    n: int = 51  # Override base class n with 2*m+1
-
-    def _matrix(self):
-        # Matrix C is a Wilkinson tridiagonal matrix of size 2m+1
-        # Diagonal entries are abs(i-m-1) for i=1...2m+1
-        # Off-diagonal entries are 1
-
-        # Create the diagonal
-        indices = jnp.arange(1, self.n + 1)
-        diag_values = jnp.abs(indices - self.m - 1)
-
-        # Create the off-diagonals
-        off_diag = jnp.ones(self.n - 1)
-
-        # Create the tridiagonal matrix
-        matrix = (
-            jnp.diag(diag_values) + jnp.diag(off_diag, k=1) + jnp.diag(off_diag, k=-1)
-        )
-
-        return matrix

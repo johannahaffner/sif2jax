@@ -94,12 +94,15 @@ class HIMMELBCLS(AbstractUnconstrainedMinimisation):
         del args
         x1, x2 = y
 
-        # The residuals are the difference between x1^2 and 7, and x2^2 and 11
-        r1 = x1**2 - 7
-        r2 = x2**2 - 11
+        # From SIF file:
+        # G1 = X2 + X1² - 11.0
+        # G2 = X1 + X2² - 7.0
+        # Objective = G1² + G2²
+        g1 = x2 + x1**2 - 11.0
+        g2 = x1 + x2**2 - 7.0
 
         # Return the sum of squares
-        return r1**2 + r2**2
+        return g1**2 + g2**2
 
     def y0(self):
         return jnp.array([1.0, 1.0])
@@ -151,10 +154,8 @@ class HIMMELBF(AbstractUnconstrainedMinimisation):
         residuals = jnp.array([residual_fn(a, b) for a, b in zip(a_values, b_values)])
 
         # Return the sum of squared residuals
-        # Scale the residuals: 10e4 is a scaling factor - GROUPS section mentions 10e-4,
-        # but pycutest uses 10e4 and this AMPL implementation agrees:
-        # https://vanderbei.princeton.edu/ampl/nlmodels/cute/himmelbf.mod
-        return 10e4 * jnp.sum(residuals**2)
+        # Scale the residuals: correct scaling is 1e4 (not 10e4 which is 10*1e4)
+        return 1e4 * jnp.sum(residuals**2)
 
     def y0(self):
         return jnp.array([2.7, 90.0, 1500.0, 10.0])

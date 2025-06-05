@@ -51,15 +51,15 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
 
             # First sum: ∑_{j=0}^i t_j(x_j + t_j + 1)³
             first_mask = all_j <= i
-            first_sum = jnp.sum(
-                jnp.where(first_mask, t_j * (x_j + t_j + 1.0) ** 3, 0.0)
-            )
+            first_values = jnp.where(first_mask, t_j * (x_j + t_j + 1.0) ** 3, 0.0)
+            first_sum = jnp.sum(jnp.asarray(first_values))
 
             # Second sum: ∑_{j=i+1}^{n-1} (1-t_j)(x_j + t_j + 1)³
             second_mask = all_j > i
-            second_sum = jnp.sum(
-                jnp.where(second_mask, (1.0 - t_j) * (x_j + t_j + 1.0) ** 3, 0.0)
+            second_values = jnp.where(
+                second_mask, (1.0 - t_j) * (x_j + t_j + 1.0) ** 3, 0.0
             )
+            second_sum = jnp.sum(jnp.asarray(second_values))
 
             # Compute f_i(x)
             integral_part = h * ((1.0 - t_i) * first_sum + t_i * second_sum) / 2.0

@@ -9,7 +9,7 @@ class DIXON3DQ(AbstractUnconstrainedMinimisation):
 
     This is a variable-dimension quadratic problem that involves a
     tridiagonal structure in the objective function. The objective is of the form:
-    (x_1)^2 + sum_{i=2}^{n-1} (x_i - x_{i+1})^2 + (x_n)^2
+    (x_1 - 1)^2 + sum_{i=2}^{n-1} (x_i - x_{i+1})^2 + (x_n - 1)^2
 
     Source: problem 156 (p. 51) in
     A.R. Buckley,
@@ -31,16 +31,16 @@ class DIXON3DQ(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # First term: x_1^2
-        term1 = y[0] ** 2
+        # First term: (x_1 - 1)^2
+        term1 = (y[0] - 1.0) ** 2
 
         # Middle terms: sum_{i=2}^{n-1} (x_i - x_{i+1})^2
         indices1 = jnp.arange(1, self.n - 1)
         indices2 = indices1 + 1
         term2 = jnp.sum((y[indices1] - y[indices2]) ** 2)
 
-        # Last term: x_n^2
-        term3 = y[-1] ** 2
+        # Last term: (x_n - 1)^2
+        term3 = (y[-1] - 1.0) ** 2
 
         return term1 + term2 + term3
 
@@ -52,9 +52,9 @@ class DIXON3DQ(AbstractUnconstrainedMinimisation):
         return None
 
     def expected_result(self):
-        # The minimum is at the origin
-        return jnp.zeros(self.n)
+        # The minimum is at x_i = 1 for all i
+        return jnp.ones(self.n)
 
     def expected_objective_value(self):
-        # At the origin, all terms are zero
+        # At x_i = 1 for all i, all terms are zero
         return jnp.array(0.0)

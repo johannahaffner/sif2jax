@@ -8,12 +8,11 @@ from ..._problem import AbstractUnconstrainedMinimisation
 class EXTROSNB(AbstractUnconstrainedMinimisation):
     """Extended Rosenbrock function (nonseparable version).
 
-    This is an extension of the classic Rosenbrock function to n dimensions.
-    The function is characterized by a curved narrow valley, which makes it
-    challenging for many optimization algorithms.
+    This is a scaled variant of the Rosenbrock function.
+    The function is characterized by a curved narrow valley.
 
     The objective function is:
-    f(x) = sum_{i=0}^{n-2} [100(x_{i+1} - x_i^2)^2 + (1 - x_i)^2]
+    f(x) = (x_1 + 1)^2 + 100 * sum_{i=2}^{n} (x_i - x_{i-1}^2)^2
 
     Source: problem 21 in
     J.J. Moré, B.S. Garbow and K.E. Hillstrom,
@@ -30,22 +29,24 @@ class EXTROSNB(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # Define the function to compute the Rosenbrock term for a given index
-        def rosenbrock_term(i):
-            # 100(y_{i+1} - y_i^2)^2 + (1 - y_i)^2
-            term1 = 100.0 * (y[i + 1] - y[i] ** 2) ** 2
-            term2 = (1.0 - y[i]) ** 2
+        # From SIF file:
+        # SQ1 = (X1 + 1.0)²
+        # SQ(I) = 0.01 × (X(I) - X(I-1)²)² for I=2..N
 
-            return term1 + term2
+        # First term: (X1 + 1.0)²
+        term1 = (y[0] + 1.0) ** 2
 
-        # Create an array of indices (0 to n-2)
-        indices = jnp.arange(0, self.n - 1)
+        # Remaining terms: 100 × (X(I) - X(I-1)²)² for I=2..N
+        # (i.e., i=1..n-1 in 0-based)
+        # The 0.01 scale in SIF becomes 100 in the final objective after L2 squaring
+        def scaled_term(i):
+            # i ranges from 1 to n-1 (0-based), corresponding to SIF I=2..N
+            return 100.0 * (y[i] - y[i - 1] ** 2) ** 2
 
-        # Compute all terms using vmap
-        terms = jax.vmap(rosenbrock_term)(indices)
+        indices = jnp.arange(1, self.n)
+        term2 = jnp.sum(jax.vmap(scaled_term)(indices))
 
-        # Sum all terms
-        return jnp.sum(terms)
+        return term1 + term2
 
     def y0(self):
         # Starting point from the SIF file: all variables = -1.0

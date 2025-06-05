@@ -5,7 +5,6 @@ from jaxtyping import Array, Float, PyTree, Scalar
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO human review
 class MANCINO(AbstractUnconstrainedMinimisation):
     """Mancino's function with variable dimension.
 
@@ -26,12 +25,9 @@ class MANCINO(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
-    n: int = 100
-    alpha: int = 5
-    beta: float = 14.0
-    gamma: int = 3
+    n: int = 100  # Can also be tested with 60 as in FOSSEE implementation
 
-    def objective(self, y: Float[Array, " n"], args: PyTree) -> Scalar:
+    def objective(self, y: Float[Array, "..."], args: PyTree) -> Scalar:
         """Compute the objective function for the Mancino problem based on AMPL."""
         n = self.n
 
@@ -41,25 +37,21 @@ class MANCINO(AbstractUnconstrainedMinimisation):
         # and v[i,j] = sqrt(x[i]^2 + i/j)
 
         def compute_alpha_i(i):
-            i_float = i.astype(jnp.float32)
+            i_float = i.astype(jnp.float64)
             i_int = i.astype(jnp.int32)
             x_i = y[i_int - 1]  # Convert to 0-indexed
 
-            # First term: 1400*x[i] (directly from AMPL, not parameterized)
+            # First term: 1400*x[i] (directly from AMPL)
             linear_term = 1400.0 * x_i
 
             # Second term: (i-50)^3
             cubic_term = (i_float - 50.0) ** 3
 
-            # Third term: sum over all j
-            all_j = jnp.arange(1, n + 1, dtype=jnp.float32)
+            # Third term: sum over all j from 1 to N
+            all_j = jnp.arange(1, n + 1, dtype=jnp.float64)
 
             def compute_v_term(j):
-                # Check if j != i (exclude diagonal elements like in SIF)
-                # SIF processes j from 1 to i-1, then i+1 to N
-                i_equals_j = jnp.isclose(i_float, j)
-
-                # v[i,j] = sqrt(x[i]^2 + i/j)
+                # v[i,j] = sqrt(x[i]^2 + i/j) - this includes ALL j, including j=i
                 v_ij = jnp.sqrt(x_i**2 + i_float / j)
 
                 # Compute sin(log(v[i,j]))^5 + cos(log(v[i,j]))^5
@@ -69,10 +61,7 @@ class MANCINO(AbstractUnconstrainedMinimisation):
                 sin_pow5 = jnp.power(sin_val, 5)
                 cos_pow5 = jnp.power(cos_val, 5)
 
-                term_value = v_ij * (sin_pow5 + cos_pow5)
-
-                # Return 0 if i == j, otherwise return the computed value
-                return jnp.where(i_equals_j, 0.0, term_value)
+                return v_ij * (sin_pow5 + cos_pow5)
 
             sum_term = jnp.sum(jax.vmap(compute_v_term)(all_j))
 
@@ -84,43 +73,25 @@ class MANCINO(AbstractUnconstrainedMinimisation):
         indices = jnp.arange(1, n + 1)
         alphas = jax.vmap(compute_alpha_i)(indices)
 
-        # EMPIRICAL FIX: Apply scaling factor to match pycutest reference
-        #
-        # ISSUE: Our implementation produces objective values
-        # ~88x smaller than pycutest.
-        # The scaling factor of 88.141075 was determined empirically
-        # by comparing with pycutest
-        # for N=100. This suggests there may be a missing normalization
-        # factor in either:
-        # 1. Our interpretation of the AMPL/SIF formulation, or
-        # 2. A difference in problem parameterization between implementations
-        #
-        # The factor is close to N-12 = 88 for N=100, which might indicate a theoretical
-        # relationship, but this needs further investigation against
-        # the original reference:
-        # E. Spedicato, "Computational experience with quasi-Newton algorithms for
-        # minimization problems of moderate size", Report N-175, CISE, Milano, 1975.
-        #
-        # TODO: Investigate theoretical justification for this scaling factor
-        scaling_factor = 88.141075  # EMPIRICAL - needs theoretical validation
-        return scaling_factor * jnp.sum(alphas**2)
+        # Return sum of squares without any scaling
+        return jnp.sum(alphas**2)
 
-    def y0(self) -> Float[Array, " n"]:
+    def y0(self) -> Float[Array, "n"]:
         """Initial guess for the Mancino problem based on AMPL file."""
         n = self.n
-        # alpha is 5 in the class, matching sin^5 and cos^5 in AMPL
 
         # AMPL initialization: x[i] := -8.710996D-4*((i-50)^3 + sum {...})
         coefficient = -8.710996e-4
 
         # Function to compute the sum term for each i
         def compute_sum_for_i(i):
-            i_float = i.astype(jnp.float32)
+            i_float = i.astype(jnp.float64)
 
             # Sum over all j from 1 to N (including j=i, as per AMPL)
-            all_j = jnp.arange(1, n + 1, dtype=jnp.float32)
+            all_j = jnp.arange(1, n + 1, dtype=jnp.float64)
 
             def term_i_j(j):
+                # AMPL: sqrt(i/j)*((sin(log(sqrt(i/j))))^5 + (cos(log(sqrt(i/j))))^5)
                 i_over_j = i_float / j
                 sqrt_i_over_j = jnp.sqrt(i_over_j)
                 log_val = jnp.log(sqrt_i_over_j)
@@ -139,7 +110,7 @@ class MANCINO(AbstractUnconstrainedMinimisation):
         indices = jnp.arange(1, n + 1)
 
         def compute_x_i(i):
-            i_float = i.astype(jnp.float32)
+            i_float = i.astype(jnp.float64)
             # AMPL: (i-50)^3 + sum{...}
             cubic_term = (i_float - 50.0) ** 3
             sum_term = compute_sum_for_i(i)

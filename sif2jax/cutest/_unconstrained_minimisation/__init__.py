@@ -30,7 +30,8 @@ from .ceri import (
     CERI651ELS as CERI651ELS,
 )
 from .chainwoo import CHAINWOO as CHAINWOO
-from .chnrosnb import CHNROSNB as CHNROSNB, CHNRSNBM as CHNRSNBM
+from .chnrosnb import CHNROSNB as CHNROSNB
+from .chnrsnbm import CHNRSNBM as CHNRSNBM
 from .chwirut import CHWIRUT1LS as CHWIRUT1LS, CHWIRUT2LS as CHWIRUT2LS
 from .cliff import CLIFF as CLIFF
 from .clusterls import CLUSTERLS as CLUSTERLS
@@ -76,7 +77,9 @@ from .eckerle4ls import ECKERLE4LS as ECKERLE4LS
 from .edensch import EDENSCH as EDENSCH
 from .eg import EG2 as EG2
 from .eggcrate import EGGCRATE as EGGCRATE
-from .eigen import EIGENALS as EIGENALS, EIGENBLS as EIGENBLS, EIGENCLS as EIGENCLS
+from .eigenals import EIGENALS as EIGENALS
+from .eigenbls import EIGENBLS as EIGENBLS
+from .eigencls import EIGENCLS as EIGENCLS
 from .elatvidu import ELATVIDU as ELATVIDU
 from .engval import ENGVAL1 as ENGVAL1, ENGVAL2 as ENGVAL2
 from .ensols import ENSOLS as ENSOLS

@@ -36,7 +36,7 @@ You can check any work against the original Fortran implementations. For this pu
 Without this container, you cannot run any tests. 
 Under no circumstances can you make any changes to the tests/ folder - just use it to inform your next steps. 
 
-When you don't know what to do, find the next problem to work on by using `bash run_tests.sh --exit-first` and start fixing the first problem for which the tests fail.
+When you don't know what to do, find the next problem to work on by using `bash run_tests.sh -x` and start fixing the first problem for which the tests fail.
 When you make any change to a file, please run the tests again. You can run problem-specific tests with `bash run_tests.sh --test-case "PROBLEM"`. 
 
 Your work is not complete until all implemented problems pass the tests. If you can't fix the issues in a problem after several attempts, it is ok to flag the problem class as requiring human review, but please give it a serious attempt before that.

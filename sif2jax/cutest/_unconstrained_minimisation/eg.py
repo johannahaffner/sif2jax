@@ -87,9 +87,8 @@ class EG2(AbstractUnconstrainedMinimisation):
         return f1 + f2
 
     def y0(self):
-        # Initial guess - not specified in the problem,
-        # using all ones as a reasonable starting point
-        return jnp.ones(self.n)
+        # Initial guess: all zeros (from PyCUTEst)
+        return jnp.zeros(self.n)
 
     def args(self):
         return None

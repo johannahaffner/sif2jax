@@ -78,7 +78,7 @@ from .elatvidu import ELATVIDU as ELATVIDU
 from .engval import ENGVAL1 as ENGVAL1, ENGVAL2 as ENGVAL2
 from .ensols import ENSOLS as ENSOLS
 from .errinros import ERRINROS as ERRINROS, ERRINRSM as ERRINRSM
-from .exp_scipy import EXP2 as EXP2, EXP2B as EXP2B, EXP2NE as EXP2NE
+from .exp_scipy import EXP2 as EXP2, EXP2B as EXP2B
 from .expfit import EXPFIT as EXPFIT
 from .extrosnb import EXTROSNB as EXTROSNB
 from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
@@ -128,10 +128,7 @@ from .kowosb import KOWOSB as KOWOSB
 from .kssls import KSSLS as KSSLS
 from .lanczos import LANCZOS1LS as LANCZOS1LS, LANCZOS2LS as LANCZOS2LS
 from .liarwhd import LIARWHD as LIARWHD
-
-# from .lr import LR as LR
 from .lsc import LSC1LS as LSC1LS, LSC2LS as LSC2LS
-from .luksan import LUKSAN11LS as LUKSAN11LS, LUKSAN12LS as LUKSAN12LS
 from .mancino import MANCINO as MANCINO
 from .rosenbr import ROSENBR as ROSENBR
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
@@ -228,7 +225,6 @@ unconstrained_minimisation_problems = (
     ERRINRSM(),
     EXP2(),
     EXP2B(),
-    EXP2NE(),
     EXPFIT(),
     EXTROSNB(),
     FBRAIN3LS(),
@@ -286,8 +282,6 @@ unconstrained_minimisation_problems = (
     # LR(),
     LSC1LS(),
     LSC2LS(),
-    LUKSAN11LS(),
-    LUKSAN12LS(),
     MANCINO(),
     ROSENBR(),
     TENFOLDTRLS(),

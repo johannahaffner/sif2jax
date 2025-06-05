@@ -58,13 +58,13 @@ def test_correct_gradient_at_start(problem):
 
 
 def test_correct_hessian_at_start(problem):
-    if problem.num_variables < 1000:
+    if problem.num_variables() < 1000:
         pycutest_problem = pycutest.import_problem(problem.name())
         pycutest_hessian = pycutest_problem.ihess(pycutest_problem.x0)
         sif2jax_hessian = jax.hessian(problem.objective)(problem.y0(), problem.args())
         assert np.allclose(pycutest_hessian, sif2jax_hessian)
     else:
-        pass  # Skip Hessian test for large problems to save time
+        pass  # Skip Hessian test for large problems to save time and memory
 
 
 def test_correct_constraints_at_start(problem):

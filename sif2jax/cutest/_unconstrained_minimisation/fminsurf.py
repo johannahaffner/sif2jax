@@ -134,8 +134,12 @@ class FMINSURF(AbstractUnconstrainedMinimisation):
         return None
 
 
-# TODO: This implementation requires human review and verification against
-# another CUTEst interface
+# TODO: Human review needed
+# Attempts made: [fixed boundary condition setup from SIF file analysis]
+# Suspected issues: [starting point indexing/flattening still doesn't match
+# PyCUTEst exactly]
+# Additional resources needed: [detailed comparison of boundary setup with
+# reference implementation]
 class FMINSRF2(AbstractUnconstrainedMinimisation):
     """The FMINSRF2 function.
 
@@ -233,26 +237,31 @@ class FMINSRF2(AbstractUnconstrainedMinimisation):
         wtoe = self.slopej / (p - 1)
         ston = self.slopei / (p - 1)
 
-        # Set values on boundaries
+        # Set values on boundaries following SIF file exactly
 
         # Function to create the boundary values as specified in the SIF file
         def create_boundary_vals():
             # Initialize with zeros
             vals = jnp.zeros((p, p))
 
-            # Bottom edge (j=0)
-            j_vals = jnp.arange(p)
-            vals = vals.at[0, :].set(h00 + wtoe * j_vals)
+            # Following SIF convention: X(I,J) where I=1..P, J=1..P
+            # Converting to 0-based: X[I-1,J-1]
 
-            # Top edge (j=p-1)
-            vals = vals.at[p - 1, :].set(h00 + self.slopei + wtoe * j_vals)
+            # Lower and upper edges (SIF lines 122-130)
+            j_vals = jnp.arange(p)  # J=1..P becomes j=0..p-1
+            # X(1,J) = TL = (J-1)*WTOE + H00
+            vals = vals.at[0, :].set((j_vals) * wtoe + h00)
+            # X(P,J) = TU = (J-1)*WTOE + H10
+            h10 = h00 + self.slopei
+            vals = vals.at[p - 1, :].set((j_vals) * wtoe + h10)
 
-            # Left edge (i=0, already set by bottom and top edges)
-            i_vals = jnp.arange(1, p - 1)
-            vals = vals.at[i_vals, 0].set(h00 + ston * i_vals)
-
-            # Right edge (i=p-1, already set by bottom and top edges)
-            vals = vals.at[i_vals, p - 1].set(h00 + self.slopej + ston * i_vals)
+            # Left and right edges (SIF lines 134-142)
+            i_vals = jnp.arange(1, p - 1)  # I=2..P-1 becomes i=1..p-2
+            # X(I,1) = TR = (I-1)*STON + H00
+            vals = vals.at[i_vals, 0].set((i_vals) * ston + h00)
+            # X(I,P) = TL = (I-1)*STON + H01
+            h01 = h00 + self.slopej
+            vals = vals.at[i_vals, p - 1].set((i_vals) * ston + h01)
 
             return vals
 

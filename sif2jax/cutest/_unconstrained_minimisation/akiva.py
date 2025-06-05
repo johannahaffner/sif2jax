@@ -66,28 +66,26 @@ class AKIVA(AbstractUnconstrainedMinimisation):
             [1, 1, 2, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2]
         )
 
-        # Compute the likelihood for each observation
-        log_likelihood = 0.0
+        # Vectorized computation of utilities for all observations
+        utility_transit = beta * data[:, 1]  # beta * transit_value
+        utility_auto = (
+            beta * data[:, 0] + cte_auto * data[:, 2]
+        )  # beta * auto_value + cte_auto * constant
 
-        for i in range(len(data)):
-            # Compute utilities for each alternative
-            utility_transit = beta * data[i, 1]  # beta * transit_value
-            utility_auto = (
-                beta * data[i, 0] + cte_auto * data[i, 2]
-            )  # beta * auto_value + cte_auto * constant
+        # Compute exponentials of utilities
+        exp_utility_transit = jnp.exp(utility_transit)
+        exp_utility_auto = jnp.exp(utility_auto)
 
-            # Compute exponentials of utilities
-            exp_utility_transit = jnp.exp(utility_transit)
-            exp_utility_auto = jnp.exp(utility_auto)
+        # Compute probabilities for both alternatives
+        prob_transit = exp_utility_transit / (exp_utility_transit + exp_utility_auto)
+        prob_auto = exp_utility_auto / (exp_utility_transit + exp_utility_auto)
 
-            # Compute probability of the chosen alternative
-            if choices[i] == 1:  # Transit chosen
-                prob = exp_utility_transit / (exp_utility_transit + exp_utility_auto)
-            else:  # Auto chosen
-                prob = exp_utility_auto / (exp_utility_transit + exp_utility_auto)
+        # Select probability based on choice using jnp.where
+        # choices == 1 means transit was chosen, choices == 2 means auto was chosen
+        chosen_probs = jnp.where(choices == 1, prob_transit, prob_auto)
 
-            # Add to log likelihood
-            log_likelihood += jnp.log(prob)
+        # Compute log likelihood
+        log_likelihood = jnp.sum(jnp.log(chosen_probs))
 
         # Return negative log likelihood for minimization
         return jnp.array(-log_likelihood)

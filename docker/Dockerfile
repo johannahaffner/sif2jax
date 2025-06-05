@@ -1,12 +1,14 @@
 # Base
 FROM ubuntu:latest AS base
 
-RUN apt-get update && apt-get install build-essential -y
-RUN apt-get update && apt-get install curl -y
-RUN apt-get update && apt-get install gfortran -y
-RUN apt-get update && apt-get install git -y
-RUN apt-get update && apt-get install python3-dev -y
-RUN apt-get update && apt-get install python3-venv -y
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    gfortran \
+    git \
+    python3-dev \
+    python3-venv \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Build
 # Create a simple script that outputs architecture information
@@ -14,10 +16,10 @@ FROM base AS build
 WORKDIR /opt/cutest
 
 # Clone the repositories and create a cache folder
-RUN git clone https://github.com/ralna/ARCHDefs.git ./archdefs
-RUN git clone https://github.com/ralna/SIFDecode.git ./sifdecode
-RUN git clone https://github.com/ralna/CUTEst.git ./cutest
-RUN git clone https://bitbucket.org/optrove/sif.git ./mastsif
+RUN git clone --depth 1 https://github.com/ralna/ARCHDefs.git ./archdefs && \
+    git clone --depth 1 https://github.com/ralna/SIFDecode.git ./sifdecode && \
+    git clone --depth 1 https://github.com/ralna/CUTEst.git ./cutest && \
+    git clone --depth 1 https://bitbucket.org/optrove/sif.git ./mastsif
 
 # Set environment variables
 ENV ARCHDEFS=/opt/cutest/archdefs
@@ -47,19 +49,19 @@ ENV CUTEST=/opt/cutest/cutest
 ENV MASTSIF=/opt/cutest/mastsif
 ENV MYARCH=pc64.lnx.gfo
 
-# Now add python test-time dependencies on top
+RUN mkdir -p pycutest_cache
+ENV PYCUTEST_CACHE=/opt/cutest/pycutest_cache
+
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-RUN mkdir -p pycutest_cache
-ENV PYCUTEST_CACHE=/opt/cutest/pycutest_cache
-RUN pip install pycutest
+# Install jax everything with pip and uv
+RUN pip install uv
+RUN uv pip install jax jaxtyping equinox optimistix beartype hatchling pytest pycutest
+RUN uv cache clean && pip cache purge
 
-RUN pip install pytest
-RUN pip install jax
-RUN pip install jaxtyping
-RUN pip install equinox
-RUN pip install optimistix
-RUN pip install beartype
+# Pre-cache the CUTEst problems to speed up our test runs
+#COPY cache_pycutest.py .
+#RUN python3 cache_pycutest.py
 
 CMD ["/bin/bash"]

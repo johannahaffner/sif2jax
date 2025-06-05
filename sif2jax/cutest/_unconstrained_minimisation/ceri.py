@@ -5,8 +5,12 @@ import jax.scipy.special as jss
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: This implementation requires human review and verification against
-# another CUTEst interface
+# TODO: Human review needed
+# Attempts made: [reviewed implementation for numerical stability]
+# Suspected issues: [NaN values in gradients/hessians due to numerical instability in
+# erfc/exp computations, possibly from very small error values causing large weights]
+# Additional resources needed: [numerical analysis expert review, reference
+# implementation comparison]
 class CERI651ALS(AbstractUnconstrainedMinimisation):
     """ISIS Data fitting problem CERI651A given as an inconsistent set of
     nonlinear equations.

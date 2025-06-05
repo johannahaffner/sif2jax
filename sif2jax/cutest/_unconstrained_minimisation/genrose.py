@@ -35,7 +35,7 @@ class GENROSE(AbstractUnconstrainedMinimisation):
         result = 1.0
 
         # Compute the quadratic terms (x_i - 1)^2 for i=2,...,n
-        quadratic_terms = 0.01 * jnp.sum((y[1:] - 1.0) ** 2)
+        quadratic_terms = jnp.sum((y[1:] - 1.0) ** 2)
 
         # Compute the main Rosenbrock terms: (x_i - x_{i-1}^2)^2 for i=2,...,n
         def rosenbrock_term(i):
@@ -49,7 +49,7 @@ class GENROSE(AbstractUnconstrainedMinimisation):
         return result + quadratic_terms + rosenbrock_sum
 
     def y0(self):
-        # Starting point from the SIF file: x_i = i/(n+1)
+        # Starting point: x_i = i/(n+1) for i=1,...,n
         indices = jnp.arange(1, self.n + 1)
         return indices / (self.n + 1)
 

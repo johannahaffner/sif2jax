@@ -1,3 +1,5 @@
+from typing import override
+
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
@@ -23,6 +25,10 @@ class TENFOLDTRLS(AbstractUnconstrainedMinimisation):
     """
 
     n: int = 1000  # Problem dimension, SIF file suggests 4, 10, 100, or 1000
+
+    @override
+    def name(self):
+        return "10FOLDTRLS"
 
     def objective(self, y, args):
         del args

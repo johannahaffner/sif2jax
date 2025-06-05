@@ -25,23 +25,20 @@ class BEALE(AbstractUnconstrainedMinimisation):
         del args
         x1, x2 = y
 
-        # Constants from the SIF file
-        a = 1.5
-        b = 2.25
-        c = 2.625
+        # Beale function from AMPL:
+        # (-1.5+x[1]*(1.0-x[2]))^2 + (-2.25+x[1]*(1.0-x[2]^2))^2 +
+        # (-2.625+x[1]*(1.0-x[2]^3))^2
 
-        # Three terms from the SIF file
-        # First term: (x1 * (1 - x2^1))^2
-        term1 = (x1 * (1.0 - x2)) ** 2
+        # First term: (-1.5 + x1*(1-x2))^2
+        term1 = (-1.5 + x1 * (1.0 - x2)) ** 2
 
-        # Second term: (x1 * (1 - x2^2))^2
-        term2 = (x1 * (1.0 - x2**2)) ** 2
+        # Second term: (-2.25 + x1*(1-x2^2))^2
+        term2 = (-2.25 + x1 * (1.0 - x2**2)) ** 2
 
-        # Third term: (x1 * (1 - x2^3))^2
-        term3 = (x1 * (1.0 - x2**3)) ** 2
+        # Third term: (-2.625 + x1*(1-x2^3))^2
+        term3 = (-2.625 + x1 * (1.0 - x2**3)) ** 2
 
-        # Combining terms with their coefficients
-        return (a - term1) ** 2 + (b - term2) ** 2 + (c - term3) ** 2
+        return term1 + term2 + term3
 
     def y0(self):
         # Initial values from SIF file (all 1.0)

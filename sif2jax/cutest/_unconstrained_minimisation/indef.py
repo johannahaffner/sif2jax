@@ -21,11 +21,11 @@ class INDEF(AbstractUnconstrainedMinimisation):
         """Compute the objective function value.
 
         The objective consists of:
-        1. Sum of squares of all variables
+        1. Linear sum of all variables
         2. ALPHA * Sum of cosines of linear combinations of variables
         """
-        # Extract the individual L2 terms (sum of squares)
-        l2_sum = jnp.sum(y**2)
+        # Linear sum of all variables (not squared)
+        linear_sum = jnp.sum(y)
 
         # Calculate the COS terms for indices 2 to n-1
         # Each COS term is: ALPHA * cos(2*x_i - x_1 - x_n)
@@ -38,7 +38,7 @@ class INDEF(AbstractUnconstrainedMinimisation):
             # Sum up alpha * cos(arg) for each argument
             cos_sum = jnp.sum(self.alpha * jnp.cos(cos_args))
 
-        return l2_sum + cos_sum
+        return linear_sum + cos_sum
 
     def y0(self):
         """Initial point with x_i = i/(n+1)."""

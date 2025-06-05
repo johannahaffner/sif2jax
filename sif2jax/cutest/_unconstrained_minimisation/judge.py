@@ -101,8 +101,8 @@ class JUDGE(AbstractUnconstrainedMinimisation):
             ]
         )
 
-        b_squared = b_values**2
-        y_pred = x1 + (a_values + b_squared) * x2
+        # Calculate predicted values: x1 + a_i * x2 + b_i^2 * x2
+        y_pred = x1 + a_values * x2 + (b_values**2) * x2
 
         # Calculate the residuals
         residuals = y_pred - y_values

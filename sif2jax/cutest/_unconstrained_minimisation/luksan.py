@@ -20,7 +20,7 @@ class LUKSAN11LS(AbstractUnconstrainedMinimisation):
     """
 
     # Variable dimension
-    n: int = 99  # Default dimension from the SIF file
+    n: int = 100  # Default dimension to match pycutest
 
     def objective(self, y, args):
         """Compute the objective function for the chained serpentine problem.

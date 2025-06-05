@@ -23,7 +23,11 @@ class ERRINROS(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # Alpha values from the SIF file
+        # From AMPL model:
+        # sum {i in 2..N} (x[i-1]-16*alpha[i]^2*x[i]^2)^2 + sum {i in 2..N} (x[i]-1.0)^2
+        # Converting to 0-based indexing: i from 1 to N-1
+
+        # Alpha values from the AMPL file
         alphas = jnp.array(
             [
                 1.25,
@@ -82,23 +86,22 @@ class ERRINROS(AbstractUnconstrainedMinimisation):
         # Use correct number of alpha values based on problem dimension
         alphas = alphas[: self.n]
 
-        # Define the function to compute each term for a pair of variables
-        def compute_term(i):
-            # Each term in the objective is of the form:
-            # 16 * alpha_i^2 * (x_i - x_{i-1}^2)^2
-            alpha_i = alphas[i - 1]  # Alpha is 1-indexed in the SIF
-            scale = 16.0 * alpha_i * alpha_i
-            term = scale * (y[i] - y[i - 1] ** 2) ** 2
-            return term
+        # First sum: sum {i in 2..N} (x[i-1]-16*alpha[i]^2*x[i]^2)^2
+        # In 0-based indexing: i from 1 to n-1
+        def compute_first_term(i):
+            alpha_i = alphas[
+                i
+            ]  # alphas[i] corresponds to alpha[i+1] in AMPL (1-indexed)
+            return (y[i] - 16.0 * alpha_i**2 * y[i + 1] ** 2) ** 2
 
-        # Create array of indices (2 to n)
-        indices = jnp.arange(1, self.n)
+        indices = jnp.arange(0, self.n - 1)
+        first_terms = jax.vmap(compute_first_term)(indices)
 
-        # Compute all terms using vmap
-        terms = jax.vmap(compute_term)(indices)
+        # Second sum: sum {i in 2..N} (x[i]-1.0)^2
+        # In 0-based indexing: i from 1 to n-1
+        second_terms = (y[1:] - 1.0) ** 2
 
-        # Sum all terms
-        return jnp.sum(terms)
+        return jnp.sum(first_terms) + jnp.sum(second_terms)
 
     def y0(self):
         # Initial values from SIF file (all -1.0)

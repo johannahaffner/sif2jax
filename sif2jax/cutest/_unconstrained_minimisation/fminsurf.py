@@ -54,79 +54,72 @@ class FMINSURF(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
         p = self.p
-        p_1 = p - 1
 
         # Reshape the variables into a 2D grid
         x = y.reshape((p, p))
 
-        # Calculate the objective function components
+        # From AMPL file - the objective is:
+        # sum {i in 1..p-1, j in 1..p-1}
+        # sqrt(0.5*(p-1)^2*((x[i,j]-x[i+1,j+1])^2+(x[i+1,j]-x[i,j+1])^2)+1.0)/scale +
+        # (sum {j in 1..p, i in 1..p} x[i,j])^2/p^4
+        # where scale = (p-1)^2
 
-        # First part: sum of sqrt(1 + 0.5 * (p-1)^2 * (a_ij + b_ij)) / (p-1)^2
-        # for each little square in the grid
+        # First part: sum of area elements (vectorized)
+        scale = (p - 1) ** 2
 
-        # Vectorized computation of a_ij and b_ij for all little squares
-        def compute_area_element(i, j):
-            # a_ij = x_ij - x_{i+1,j+1}
-            a_ij = x[i, j] - x[i + 1, j + 1]
-            # b_ij = x_{i+1,j} - x_{i,j+1}
-            b_ij = x[i + 1, j] - x[i, j + 1]
+        # Vectorized computation of all a_ij and b_ij
+        a_vals = x[:-1, :-1] - x[1:, 1:]  # x[i,j] - x[i+1,j+1]
+        b_vals = x[1:, :-1] - x[:-1, 1:]  # x[i+1,j] - x[i,j+1]
 
-            # Compute square root term
-            param = 0.5 * (p_1**2)
-            area = jnp.sqrt(1.0 + param * (a_ij**2 + b_ij**2)) / (p_1**2)
-            return area
-
-        # Use vmap to compute all area elements
-        i_indices, j_indices = jnp.meshgrid(
-            jnp.arange(p_1), jnp.arange(p_1), indexing="ij"
-        )
-        i_indices = i_indices.flatten()
-        j_indices = j_indices.flatten()
-
-        compute_area_vectorized = jax.vmap(compute_area_element)
-        area_elements = compute_area_vectorized(i_indices, j_indices)
+        # Compute all area elements at once
+        area_elements = jnp.sqrt(0.5 * scale * (a_vals**2 + b_vals**2) + 1.0) / scale
         area_sum = jnp.sum(area_elements)
 
-        # Second part: penalize average distance from zero
-        avg_height = jnp.sum(x) / (p**4)
+        # Second part: (sum of all x values)^2 / p^4
+        total_sum = jnp.sum(x)
+        penalty = (total_sum**2) / (p**4)
 
-        return area_sum + avg_height**2
+        return area_sum + penalty
 
     def y0(self):
         # Initialize with zeros, then set boundary values
         p = self.p
         x = jnp.zeros((p, p))
 
-        # Constants from SIF file
+        # Constants from AMPL file
         h00 = self.h00
         wtoe = self.slopej / (p - 1)
         ston = self.slopei / (p - 1)
+        h01 = h00 + self.slopej
+        h10 = h00 + self.slopei
 
-        # Set values on boundaries
+        # From AMPL file (converting 1-based to 0-based indexing correctly):
+        # let {j in 1..p} x[1,j] := (j-1)*wtoe+h00;
+        # -> x[0,j-1] := (j-1)*wtoe+h00
+        # let {j in 1..p} x[p,j] := (j-1)*wtoe+h10;
+        # -> x[p-1,j-1] := (j-1)*wtoe+h10
+        # let {i in 2..p-1} x[i,p] := (i-1)*ston+h00;
+        # -> x[i-1,p-1] := (i-1)*ston+h00
+        # let {i in 2..p-1} x[i,1] := (i-1)*ston+h01;
+        # -> x[i-1,0] := (i-1)*ston+h01
 
-        # Function to create the boundary values as specified in the SIF file
-        def create_boundary_vals():
-            # Initialize with zeros
-            vals = jnp.zeros((p, p))
+        # Bottom edge (i=1 in AMPL = i=0 in 0-based): x[0,j] := (j-1)*wtoe+h00
+        j_vals = jnp.arange(p)
+        x = x.at[0, :].set((j_vals) * wtoe + h00)
 
-            # Bottom edge (j=0)
-            j_vals = jnp.arange(p)
-            vals = vals.at[0, :].set(h00 + wtoe * j_vals)
+        # Top edge (i=p in AMPL = i=p-1 in 0-based): x[p-1,j] := (j-1)*wtoe+h10
+        x = x.at[p - 1, :].set((j_vals) * wtoe + h10)
 
-            # Top edge (j=p-1)
-            vals = vals.at[p - 1, :].set(h00 + self.slopei + wtoe * j_vals)
+        # Left edge (j=1 in AMPL = j=0 in 0-based):
+        # x[i,0] := (i-1)*ston+h01 for i=2..p-1
+        i_vals = jnp.arange(1, p - 1)
+        x = x.at[i_vals, 0].set((i_vals) * ston + h01)
 
-            # Left edge (i=0, already set by bottom and top edges)
-            i_vals = jnp.arange(1, p - 1)
-            vals = vals.at[i_vals, 0].set(h00 + ston * i_vals)
+        # Right edge (j=p in AMPL = j=p-1 in 0-based):
+        # x[i,p-1] := (i-1)*ston+h00 for i=2..p-1
+        x = x.at[i_vals, p - 1].set((i_vals) * ston + h00)
 
-            # Right edge (i=p-1, already set by bottom and top edges)
-            vals = vals.at[i_vals, p - 1].set(h00 + self.slopej + ston * i_vals)
-
-            return vals
-
-        # Create and set boundary values
-        x = create_boundary_vals()
+        # Interior points: 0.0 (already initialized)
 
         # Flatten the 2D grid to 1D vector
         return x.flatten()

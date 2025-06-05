@@ -28,24 +28,17 @@ class ARGTRIGLS(AbstractUnconstrainedMinimisation):
         del args
         n = self.n
 
-        # Compute the residuals for each equation
-        residuals = jnp.zeros(n)
+        # Based on AMPL model argtrig.mod, converted to least squares
+        # Each residual: i*(cos(x[i])+sin(x[i])) + sum {j in 1..N} cos(x[j]) - (N+i)
+        # Note: AMPL uses 1-based indexing
 
-        for i in range(n):
-            # Each residual g_i combines:
-            # 1. n terms of cosine elements
-            # 2. sincos element scaled by i
+        # Compute sum of cosines for all variables
+        sum_cos = jnp.sum(jnp.cos(y))
 
-            # Compute sum of cosines for all variables
-            sum_cos = jnp.sum(jnp.cos(y))
-
-            # Compute sincos term for variable i
-            sincos_i = (jnp.cos(y[i]) + jnp.sin(y[i])) * (i + 1)
-
-            # Total residual is sincos_i + sum_cos
-            # Note: constant term n+i is handled in the SIF file
-            # but doesn't affect optimization
-            residuals = residuals.at[i].set(sincos_i + sum_cos)
+        # Compute residuals vectorized
+        i_values = jnp.arange(1, n + 1)  # 1-based indices
+        sincos_terms = i_values * (jnp.cos(y) + jnp.sin(y))
+        residuals = sincos_terms + sum_cos - (n + i_values)
 
         # Sum of squares of residuals
         return jnp.sum(residuals**2)

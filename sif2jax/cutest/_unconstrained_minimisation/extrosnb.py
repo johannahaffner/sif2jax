@@ -25,7 +25,7 @@ class EXTROSNB(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
-    n: int = 100  # Default dimension (5, 10, 100, or 1000)
+    n: int = 1000  # Default dimension (other suggested dimensions: 5, 10, 100)
 
     def objective(self, y, args):
         del args

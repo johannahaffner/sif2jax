@@ -31,8 +31,8 @@ class CUBE(AbstractUnconstrainedMinimisation):
         # First term: (x_1 - 1)^2
         term1 = (y[0] - 1.0) ** 2
 
-        # Second term: 0.01 * (x_2 - x_1^3)^2
-        term2 = 0.01 * (y[1] - y[0] ** 3) ** 2
+        # Second term: 100 * (x_2 - x_1^3)^2
+        term2 = 100.0 * (y[1] - y[0] ** 3) ** 2
 
         return term1 + term2
 

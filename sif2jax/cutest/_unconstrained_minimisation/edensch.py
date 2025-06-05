@@ -25,24 +25,25 @@ class EDENSCH(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # The objective function for EDENSCH consists of two sums:
-        # 1. Sum of (x_i + 2)^4 terms for all variables
-        # 2. Sum of 4(x_i * x_{i+1})^2 terms for adjacent pairs
+        # From AMPL model:
+        # sum {i in 1..N-1} ( (x[i]-2)^4 + (x[i]*x[i+1]-2*x[i+1])^2 +
+        # (x[i+1]+1)^2 ) + 16
+        # Converting to 0-based indexing: i from 0 to n-2
 
-        # Compute the quartic terms: sum((x_i + 2)^4)
-        quartic_terms = (y + 2.0) ** 4
-        quartic_sum = jnp.sum(quartic_terms)
+        # Vectorized computation for i = 0 to n-2
+        x_i = y[:-1]  # x[0] to x[n-2]
+        x_i_plus_1 = y[1:]  # x[1] to x[n-1]
 
-        # Compute the quadratic interaction terms: sum(4(x_i * x_{i+1})^2)
-        # For variables 0 to n-2, multiply each with the next variable
-        products = y[:-1] * y[1:]
-        quadratic_terms = 4.0 * products**2
-        quadratic_sum = jnp.sum(quadratic_terms)
+        term1 = (x_i - 2.0) ** 4
+        term2 = (x_i * x_i_plus_1 - 2.0 * x_i_plus_1) ** 2
+        term3 = (x_i_plus_1 + 1.0) ** 2
 
-        return quartic_sum + quadratic_sum
+        result = jnp.sum(term1 + term2 + term3) + 16.0
+
+        return result
 
     def y0(self):
-        # Starting point from the SIF file: all variables = 8.0
+        # Starting point from SIF file: all variables = 8.0
         return jnp.full(self.n, 8.0)
 
     def args(self):

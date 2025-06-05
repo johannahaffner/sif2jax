@@ -23,16 +23,7 @@ class BROWNAL(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
-    n: int
-
-    def __init__(self, n=200):
-        """Initialize the BROWNAL problem.
-
-        Args:
-            n: Dimension of the problem. Original value is 10,
-               other values are 100, 200, and 1000.
-        """
-        self.n = n
+    n: int = 200  # Other suggested dimensions are 10, 100, and 1000
 
     def objective(self, y, args):
         del args
@@ -76,55 +67,55 @@ class BROWNAL(AbstractUnconstrainedMinimisation):
 # TODO: This implementation requires human review and verification against
 # another CUTEst interface
 class BROWNBS(AbstractUnconstrainedMinimisation):
-    """Brown and Dennis function.
+    """Brown badly scaled function.
 
-    Source: Problem 16 in
+    Brown badly scaled problem in 2 variables.
+    This problem is a sum of n-1 sets of 3 groups, one of them involving
+    a nonlinear element and all being of the least square type.
+    Its Hessian matrix is tridiagonal.
+
+    Source: Problem 4 in
     J.J. More', B.S. Garbow and K.E. Hillstrom,
     "Testing Unconstrained Optimization Software",
     ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
 
-    See also Buckley#17
+    See also Buckley#25
     SIF input: Ph. Toint, Dec 1989.
 
-    Classification: SUR2-AN-4-0
+    Classification: SUR2-AN-2-0
     """
 
-    n: int = 4  # Problem has 4 variables
-    m: int = 20  # Number of data points
+    n: int = 2  # Problem has 2 variables
 
     def objective(self, y, args):
         del args
-        x1, x2, x3, x4 = y
+        x1, x2 = y
 
-        # Define grid points
-        t_values = jnp.array([i / 5 for i in range(1, self.m + 1)])
+        # From SIF file structure for n=2:
+        # Group A(1): x1 with constant 1000000.0 -> (x1 - 1000000.0)^2
+        # Group B(1): x2 with constant 0.000002 -> (x2 - 0.000002)^2
+        # Group C(1): x1*x2 with constant 2.0 -> (x1*x2 - 2.0)^2
 
-        # Define the residual function
-        def compute_residual(t):
-            term1 = (x1 + t * x2 - jnp.exp(t)) ** 2
-            term2 = (x3 + x4 * jnp.sin(t) - jnp.cos(t)) ** 2
-            return term1 + term2
+        term_a = (x1 - 1000000.0) ** 2
+        term_b = (x2 - 0.000002) ** 2
+        term_c = (x1 * x2 - 2.0) ** 2
 
-        # Compute all residuals using vmap
-        residuals = jax.vmap(compute_residual)(t_values)
-
-        return jnp.sum(residuals)
+        return term_a + term_b + term_c
 
     def y0(self):
-        # Initial values from literature
-        return jnp.array([25.0, 5.0, -5.0, -1.0])
+        # Initial values from SIF file (all 1.0)
+        return jnp.array([1.0, 1.0])
 
     def args(self):
         return None
 
     def expected_result(self):
-        # The solution is approximately
-        # (x1,x2,x3,x4) = (-11.59..., 13.20..., -0.40..., 0.24...)
-        return jnp.array([-11.594, 13.203, -0.4034, 0.2367])
+        # The optimal solution for this badly scaled problem
+        return None
 
     def expected_objective_value(self):
-        # The optimal objective value is approximately 85822.2
-        return jnp.array(85822.2)
+        # The optimal objective value bound is 0.0
+        return jnp.array(0.0)
 
 
 # TODO: This implementation requires human review and verification against

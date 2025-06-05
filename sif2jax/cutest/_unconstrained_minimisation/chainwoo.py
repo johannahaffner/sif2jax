@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
@@ -34,49 +33,47 @@ class CHAINWOO(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # Extract the number of sets
+        # Based on AMPL model in chainwoo.mod
+        # sum {i in 1..ns} (
+        # 100*(x[2*i]-x[2*i-1]^2)^2 +
+        # (1.0-x[2*i-1])^2 +
+        # 90*(x[2*i+2]-x[2*i+1]^2)^2 +
+        # (1.0-x[2*i+1])^2 +
+        # 10*(x[2*i]+x[2*i+2]-2.0)^2 +
+        # (x[2*i]-x[2*i+2])^2/10
+        # )
+
         ns = self.ns
 
-        # Define function to compute terms for a single set i
-        def compute_set_terms(i):
-            # Compute indices for this set
-            # j starts at 4 and increases by 2 for each set
-            j = 4 + 2 * i
+        # Vectorized computation
+        # For i in 1..ns, we have indices:
+        # x[2*i-1] (1-based) = y[2*i-2] (0-based)
+        # x[2*i]   (1-based) = y[2*i-1] (0-based)
+        # x[2*i+1] (1-based) = y[2*i]   (0-based)
+        # x[2*i+2] (1-based) = y[2*i+1] (0-based)
 
-            # Indices for the variables in this set
-            j_3 = j - 3
-            j_2 = j - 2
-            j_1 = j - 1
+        # Create index arrays
+        idx_2i_minus_1 = 2 * jnp.arange(ns)  # 0, 2, 4, ...
+        idx_2i = 2 * jnp.arange(ns) + 1  # 1, 3, 5, ...
+        idx_2i_plus_1 = 2 * jnp.arange(ns) + 2  # 2, 4, 6, ...
+        idx_2i_plus_2 = 2 * jnp.arange(ns) + 3  # 3, 5, 7, ...
 
-            # Group A(i): 0.01 * (x_{j-2} - x_{j-3}^2)^2
-            a_i = 0.01 * (y[j_2 - 1] - y[j_3 - 1] ** 2) ** 2
+        # Get the variable values
+        x_2i_minus_1 = y[idx_2i_minus_1]
+        x_2i = y[idx_2i]
+        x_2i_plus_1 = y[idx_2i_plus_1]
+        x_2i_plus_2 = y[idx_2i_plus_2]
 
-            # Group B(i): -1.0 - x_{j-3}
-            b_i = (-1.0 - y[j_3 - 1]) ** 2
+        # Compute all terms
+        term1 = 100.0 * (x_2i - x_2i_minus_1**2) ** 2
+        term2 = (1.0 - x_2i_minus_1) ** 2
+        term3 = 90.0 * (x_2i_plus_2 - x_2i_plus_1**2) ** 2
+        term4 = (1.0 - x_2i_plus_1) ** 2
+        term5 = 10.0 * (x_2i + x_2i_plus_2 - 2.0) ** 2
+        term6 = (x_2i - x_2i_plus_2) ** 2 / 10.0
 
-            # Group C(i): (1/90) * (x_j - x_{j-1}^2)^2
-            c_i = (1.0 / 90.0) * (y[j - 1] - y[j_1 - 1] ** 2) ** 2
-
-            # Group D(i): -1.0 - x_{j-1}
-            d_i = (-1.0 - y[j_1 - 1]) ** 2
-
-            # Group E(i): 0.1 * (x_{j-2} + x_j - 2.0)^2
-            e_i = 0.1 * (y[j_2 - 1] + y[j - 1] - 2.0) ** 2
-
-            # Group F(i): 10.0 * (x_{j-2} - x_j)^2
-            f_i = 10.0 * (y[j_2 - 1] - y[j - 1]) ** 2
-
-            # Return all terms for this set
-            return jnp.array([a_i, b_i, c_i, d_i, e_i, f_i])
-
-        # Create array of set indices
-        set_indices = jnp.arange(ns)
-
-        # Compute terms for all sets using vmap
-        all_terms = jax.vmap(compute_set_terms)(set_indices)
-
-        # Flatten and sum all terms
-        return jnp.sum(all_terms)
+        # Sum all terms plus constant
+        return 1.0 + jnp.sum(term1 + term2 + term3 + term4 + term5 + term6)
 
     def y0(self):
         # Initial values from SIF file

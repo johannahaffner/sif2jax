@@ -20,16 +20,7 @@ class BDQRTIC(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
-    n: int
-
-    def __init__(self, n=100):
-        """Initialize the BDQRTIC problem.
-
-        Args:
-            n: Dimension of the problem. In the original paper, values of
-               100, 500, 1000, and 5000 were used. Default is 100.
-        """
-        self.n = n
+    n: int = 5000  # Other suggested values are 100, 500, and 1000
 
     def objective(self, y, args):
         del args

@@ -28,27 +28,25 @@ class ARGLINA(AbstractUnconstrainedMinimisation):
         n = self.n
         m = self.m
 
-        # Compute the residuals for each equation
-        residuals = jnp.zeros(m)
+        # Based on the AMPL model in arglina.mod
+        # First n residuals: for i in 1..N
+        # (sum{j in 1..i-1} -2*x[j]/M) + x[i]*(1-2/M) +
+        # (sum {j in i+1..N} -2*x[j]/M) - 1
 
-        # First n residuals (one per variable)
-        for i in range(n):
-            # For each equation i (i < n), calculate:
-            # g_i = sum_j (-2/m) * x_j for j != i, and (1-2/m) * x_i for j == i
-            g_i = 0.0
-            for j in range(n):
-                if j == i:
-                    g_i += (1.0 - 2.0 / m) * y[j]
-                else:
-                    g_i += (-2.0 / m) * y[j]
-            residuals = residuals.at[i].set(g_i)
+        # Sum of all x values scaled by -2/m
+        total_sum = jnp.sum(y) * (-2.0 / m)
 
-        # Remaining m-n residuals
-        for i in range(n, m):
-            # For each equation i (i >= n), calculate:
-            # g_i = sum_j (-2/m) * x_j for all j
-            g_i = jnp.sum((-2.0 / m) * y)
-            residuals = residuals.at[i].set(g_i)
+        # First n residuals
+        # Each residual i = total_sum + y[i] * (1 - (-2/m)) - 1
+        # = total_sum + y[i] * (1 + 2/m) - 1
+        # = total_sum + y[i] - 1
+        first_n_residuals = total_sum + y - 1.0
+
+        # Remaining m-n residuals: all equal to total_sum - 1
+        remaining_residuals = jnp.full(m - n, total_sum - 1.0)
+
+        # Combine all residuals
+        residuals = jnp.concatenate([first_n_residuals, remaining_residuals])
 
         # Sum of squares of residuals
         return jnp.sum(residuals**2)
@@ -92,16 +90,15 @@ class ARGLINB(AbstractUnconstrainedMinimisation):
         n = self.n
         m = self.m
 
-        # Compute the residuals for each equation
-        residuals = jnp.zeros(m)
+        # Based on AMPL model: each residual g_i = sum_j (i*j) * x_j - 1.0
+        # This can be computed as a matrix-vector product
+        # Create matrix A where A[i,j] = i*j (using 1-based indices)
+        i_indices = jnp.arange(1, m + 1)[:, None]  # Shape (m, 1)
+        j_indices = jnp.arange(1, n + 1)[None, :]  # Shape (1, n)
+        A = i_indices * j_indices  # Shape (m, n)
 
-        # Each residual g_i is a weighted sum of all variables
-        # g_i = sum_j (i*j) * x_j
-        for i in range(m):
-            g_i = 0.0
-            for j in range(n):
-                g_i += ((i + 1) * (j + 1)) * y[j]
-            residuals = residuals.at[i].set(g_i)
+        # Compute residuals as A @ y - 1
+        residuals = A @ y - 1.0
 
         # Sum of squares of residuals
         return jnp.sum(residuals**2)
@@ -150,21 +147,28 @@ class ARGLINC(AbstractUnconstrainedMinimisation):
         n = self.n
         m = self.m
 
-        # Compute the residuals for each equation
-        residuals = jnp.zeros(m)
+        # Based on AMPL model: 2 + sum {i in 2..M-1}
+        # (sum {j in 2..N-1} x[j]*j*(i-1) - 1.0)^2
+        # Note: AMPL uses 1-based indexing
 
-        # First residual g_1 = 0
-        # Last residual g_m = 0
-        # For residuals g_i (1 < i < m), compute:
-        # g_i = sum_j ((i-1)*(j)) * x_j for 1 < j < n
-        for i in range(1, m - 1):
-            g_i = 0.0
-            for j in range(1, n - 1):
-                g_i += ((i) * (j)) * y[j]
-            residuals = residuals.at[i].set(g_i)
+        # Middle residuals: for i from 2 to M-1 (AMPL), which is 1 to M-2 (0-based)
+        # g_i = sum_j x[j]*j*(i-1) - 1.0 for j from 2 to N-1 (AMPL),
+        # which is 1 to N-2 (0-based)
 
-        # Sum of squares of residuals
-        return jnp.sum(residuals**2)
+        # i-1 where i ranges from 2 to M-1 means (i-1) ranges from 1 to M-2
+        i_values = jnp.arange(1, m - 1)[:, None]  # Shape (m-2, 1), values 1 to m-2
+        # j ranges from 2 to N-1 in AMPL (1-based), so j values are 2 to N-1
+        j_values = jnp.arange(2, n)[None, :]  # Shape (1, n-2), values 2 to n-1
+        A = i_values * j_values  # Shape (m-2, n-2)
+
+        # Extract x[j] for j from 2 to N-1 (AMPL), which is indices 1 to n-2 (0-based)
+        y_middle = y[1 : n - 1]
+
+        # Compute middle residuals
+        middle_residuals = A @ y_middle - 1.0
+
+        # Sum of squares plus the constant term
+        return 2.0 + jnp.sum(middle_residuals**2)
 
     def y0(self):
         # Initial value of 1.0 as specified in the SIF file

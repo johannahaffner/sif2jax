@@ -27,36 +27,36 @@ class DEVGLA1(AbstractUnconstrainedMinimisation):
         del args
         x1, x2, x3, x4 = y
 
-        # Generate time points t from 0.1 to 2.4 with step 0.1
-        t_values = jnp.arange(1, 25) * 0.1
+        # Generate time points t from 0.0 to 2.3 with step 0.1 (24 points total)
+        t_values = jnp.arange(0, 24) * 0.1
 
-        # Compute the true data points
+        # Compute the true data points (computed from SIF file with exact parameters)
         true_values = jnp.array(
             [
-                60.137,
-                61.0928,
-                62.4274,
-                64.2380,
-                66.6387,
-                69.6393,
-                73.3182,
-                77.7407,
-                82.9391,
-                89.0088,
-                95.9844,
-                104.011,
-                113.212,
-                123.722,
-                135.682,
-                149.243,
-                164.568,
-                181.838,
-                201.251,
-                223.028,
-                247.403,
-                274.637,
-                304.997,
-                338.774,
+                59.052474,
+                54.425184,
+                44.044493,
+                28.575487,
+                9.236288,
+                -12.287936,
+                -33.983363,
+                -53.687835,
+                -69.297789,
+                -78.982793,
+                -81.386703,
+                -75.794406,
+                -62.245213,
+                -41.578070,
+                -15.399602,
+                14.026818,
+                43.965014,
+                71.449307,
+                93.566643,
+                107.751833,
+                112.067181,
+                105.437460,
+                87.813812,
+                60.245495,
             ]
         )
 
@@ -122,28 +122,28 @@ class DEVGLA2(AbstractUnconstrainedMinimisation):
         del args
         x1, x2, x3, x4, x5 = y
 
-        # Generate time points t from 0.1 to 1.6 with step 0.1
-        t_values = jnp.arange(1, 17) * 0.1
+        # Generate time points t from 0.0 to 1.5 with step 0.1 (16 points total)
+        t_values = jnp.arange(0, 16) * 0.1
 
-        # Compute the true data points
+        # Compute the true data points (computed from SIF file with exact parameters)
         true_values = jnp.array(
             [
-                53.81,
-                53.8196,
-                53.8184,
-                53.7896,
-                53.7134,
-                53.5765,
-                53.3557,
-                53.0372,
-                52.6090,
-                52.0546,
-                51.3607,
-                50.5049,
-                49.4693,
-                48.2468,
-                46.8394,
-                45.2522,
+                0.000000,
+                25.652980,
+                40.985849,
+                45.968797,
+                44.800863,
+                40.224285,
+                33.489336,
+                25.171629,
+                15.612834,
+                5.094175,
+                -6.103169,
+                -17.680274,
+                -29.318700,
+                -40.685106,
+                -51.438706,
+                -61.240116,
             ]
         )
 

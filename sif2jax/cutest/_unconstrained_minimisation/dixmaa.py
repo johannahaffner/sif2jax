@@ -55,7 +55,12 @@ class DIXMAANA1(AbstractUnconstrainedMinimisation):
         indices2 = indices1 + 2 * m
         term4 = delta * jnp.sum(y[indices1] * y[indices2])
 
-        return term1 + term3 + term4
+        # Add the constant term from GA group
+        # In SIF format, CONSTANTS section subtracts the value from the group
+        # So GA - (-1.0) = GA + 1.0
+        constant = 1.0
+
+        return term1 + term3 + term4 + constant
 
     def y0(self):
         # Initial value is 2.0 for all variables
@@ -129,25 +134,24 @@ class DIXMAANE1(AbstractUnconstrainedMinimisation):
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
+        # Since we know n = 3m, indices2 will be in bounds for all i from 0 to 2m-1
         term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
+            ((indices1 + 1) / n) ** k3 * (y[indices1] ** 2) * (y[indices2] ** 4)
         )
 
         # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
+        # Since we know n = 3m, indices2 will be exactly at the boundary
+        term4 = delta * jnp.sum(((indices1 + 1) / n) ** k4 * y[indices1] * y[indices2])
 
-        return term1 + term3 + term4
+        # Add the constant term from GA group
+        # In SIF format, CONSTANTS section subtracts the value from the group
+        # So GA - (-1.0) = GA + 1.0
+        constant = 1.0
+
+        return term1 + term3 + term4 + constant
 
     def y0(self):
         # Initial value is 2.0 for all variables
@@ -214,37 +218,39 @@ class DIXMAANF(AbstractUnconstrainedMinimisation):
         # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
-        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2):
+        # sum(beta * (i/n)^k2 * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
         term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
+            ((indices1 + 1) / n) ** k2
+            * y[indices1] ** 2
+            * (y[indices2] + y[indices2] ** 2) ** 2
         )
 
         # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
+        # Since we know n = 3m, indices2 will be in bounds for all i from 0 to 2m-1
         term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
+            ((indices1 + 1) / n) ** k3 * (y[indices1] ** 2) * (y[indices2] ** 4)
         )
 
         # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
+        # Since we know n = 3m, indices2 will be exactly at the boundary
+        term4 = delta * jnp.sum(((indices1 + 1) / n) ** k4 * y[indices1] * y[indices2])
 
-        return term1 + term2 + term3 + term4
+        # Add the constant term from GA group
+        # In SIF format, CONSTANTS section subtracts the value from the group
+        # So GA - (-1.0) = GA + 1.0
+        constant = 1.0
+
+        return term1 + term2 + term3 + term4 + constant
 
     def y0(self):
         # Initial value is 2.0 for all variables
@@ -311,37 +317,39 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
         # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
-        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2):
+        # sum(beta * (i/n)^k2 * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
         term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
+            ((indices1 + 1) / n) ** k2
+            * y[indices1] ** 2
+            * (y[indices2] + y[indices2] ** 2) ** 2
         )
 
         # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
+        # Since we know n = 3m, indices2 will be in bounds for all i from 0 to 2m-1
         term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
+            ((indices1 + 1) / n) ** k3 * (y[indices1] ** 2) * (y[indices2] ** 4)
         )
 
         # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
+        # Since we know n = 3m, indices2 will be exactly at the boundary
+        term4 = delta * jnp.sum(((indices1 + 1) / n) ** k4 * y[indices1] * y[indices2])
 
-        return term1 + term2 + term3 + term4
+        # Add the constant term from GA group
+        # In SIF format, CONSTANTS section subtracts the value from the group
+        # So GA - (-1.0) = GA + 1.0
+        constant = 1.0
+
+        return term1 + term2 + term3 + term4 + constant
 
     def y0(self):
         # Initial value is 2.0 for all variables
@@ -405,37 +413,39 @@ class DIXMAANH(AbstractUnconstrainedMinimisation):
         # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
-        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2):
+        # sum(beta * (i/n)^k2 * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
         term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
+            ((indices1 + 1) / n) ** k2
+            * y[indices1] ** 2
+            * (y[indices2] + y[indices2] ** 2) ** 2
         )
 
         # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
+        # Since we know n = 3m, indices2 will be in bounds for all i from 0 to 2m-1
         term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
+            ((indices1 + 1) / n) ** k3 * (y[indices1] ** 2) * (y[indices2] ** 4)
         )
 
         # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
+        # Since we know n = 3m, indices2 will be exactly at the boundary
+        term4 = delta * jnp.sum(((indices1 + 1) / n) ** k4 * y[indices1] * y[indices2])
 
-        return term1 + term2 + term3 + term4
+        # Add the constant term from GA group
+        # In SIF format, CONSTANTS section subtracts the value from the group
+        # So GA - (-1.0) = GA + 1.0
+        constant = 1.0
+
+        return term1 + term2 + term3 + term4 + constant
 
     def y0(self):
         # Initial value is 2.0 for all variables
@@ -498,31 +508,32 @@ class DIXMAANB(AbstractUnconstrainedMinimisation):
         # Compute the first term (type 1): sum(alpha * (x_i)^2)
         term1 = alpha * jnp.sum(y**2)
 
-        # Compute the second term (type 2): sum(beta * sin(x_i) * sin(x_{i+1})
+        # Compute the second term (type 2): sum(beta * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
-        term2 = beta * jnp.sum(jnp.sin(y[indices1]) * jnp.sin(y[indices2]))
+        term2 = beta * jnp.sum(y[indices1] ** 2 * (y[indices2] + y[indices2] ** 2) ** 2)
 
         # Compute the third term (type 3): sum(gamma * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        term3 = gamma * jnp.sum(
-            (y[indices1[valid_indices]] ** 2) * (y[indices2[valid_indices]] ** 4)
-        )
+        # Since we know n = 3m, indices2 will be in bounds for all i from 0 to 2m-1
+        term3 = gamma * jnp.sum((y[indices1] ** 2) * (y[indices2] ** 4))
 
         # Compute the fourth term (type 4): sum(delta * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        term4 = delta * jnp.sum(y[indices1[valid_indices]] * y[indices2[valid_indices]])
+        # Since we know n = 3m, indices2 will be exactly at the boundary
+        term4 = delta * jnp.sum(y[indices1] * y[indices2])
 
-        return term1 + term2 + term3 + term4
+        # Add the constant term from GA group
+        # In SIF format, CONSTANTS section subtracts the value from the group
+        # So GA - (-1.0) = GA + 1.0
+        constant = 1.0
+
+        return term1 + term2 + term3 + term4 + constant
 
     def y0(self):
         # Initial value is 2.0 for all variables
@@ -571,15 +582,15 @@ class DIXMAANC(AbstractUnconstrainedMinimisation):
 
         # Problem parameters
         alpha = 1.0
-        beta = 0.0625
-        gamma = 0.0625
-        delta = 0.0625
+        beta = 0.125
+        gamma = 0.125
+        delta = 0.125
 
         # Powers for each group
-        k1 = 1  # Power for group 1
-        k2 = 1  # Power for group 2
-        k3 = 1  # Power for group 3
-        k4 = 1  # Power for group 4
+        k1 = 0  # Power for group 1
+        k2 = 0  # Power for group 2
+        k3 = 0  # Power for group 3
+        k4 = 0  # Power for group 4
 
         # Indices for each variable
         # i_vals not used directly
@@ -588,37 +599,39 @@ class DIXMAANC(AbstractUnconstrainedMinimisation):
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
-        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2):
+        # sum(beta * (i/n)^k2 * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
         term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
+            ((indices1 + 1) / n) ** k2
+            * y[indices1] ** 2
+            * (y[indices2] + y[indices2] ** 2) ** 2
         )
 
         # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
+        # Since we know n = 3m, indices2 will be in bounds for all i from 0 to 2m-1
         term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
+            ((indices1 + 1) / n) ** k3 * (y[indices1] ** 2) * (y[indices2] ** 4)
         )
 
         # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
+        # Since we know n = 3m, indices2 will be exactly at the boundary
+        term4 = delta * jnp.sum(((indices1 + 1) / n) ** k4 * y[indices1] * y[indices2])
 
-        return term1 + term2 + term3 + term4
+        # Add the constant term from GA group
+        # In SIF format, CONSTANTS section subtracts the value from the group
+        # So GA - (-1.0) = GA + 1.0
+        constant = 1.0
+
+        return term1 + term2 + term3 + term4 + constant
 
     def y0(self):
         # Initial value is 2.0 for all variables
@@ -667,15 +680,15 @@ class DIXMAAND(AbstractUnconstrainedMinimisation):
 
         # Problem parameters
         alpha = 1.0
-        beta = 0.0625
-        gamma = 0.0625
-        delta = 0.0625
+        beta = 0.26
+        gamma = 0.26
+        delta = 0.26
 
         # Powers for each group
-        k1 = 2  # Power for group 1
-        k2 = 2  # Power for group 2
-        k3 = 2  # Power for group 3
-        k4 = 2  # Power for group 4
+        k1 = 0  # Power for group 1
+        k2 = 0  # Power for group 2
+        k3 = 0  # Power for group 3
+        k4 = 0  # Power for group 4
 
         # Indices for each variable
         # i_vals not used directly
@@ -684,37 +697,39 @@ class DIXMAAND(AbstractUnconstrainedMinimisation):
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
-        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2):
+        # sum(beta * (i/n)^k2 * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
         term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
+            ((indices1 + 1) / n) ** k2
+            * y[indices1] ** 2
+            * (y[indices2] + y[indices2] ** 2) ** 2
         )
 
         # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
         indices1 = jnp.arange(2 * m)
         indices2 = indices1 + m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
+        # Since we know n = 3m, indices2 will be in bounds for all i from 0 to 2m-1
         term3 = gamma * jnp.sum(
-            ((valid_i1 + 1) / n) ** k3 * (y[valid_i1] ** 2) * (y[valid_i2] ** 4)
+            ((indices1 + 1) / n) ** k3 * (y[indices1] ** 2) * (y[indices2] ** 4)
         )
 
         # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
-        # Ensure we don't go out of bounds
-        valid_indices = indices2 < n
-        valid_i1 = indices1[valid_indices]
-        valid_i2 = indices2[valid_indices]
-        term4 = delta * jnp.sum(((valid_i1 + 1) / n) ** k4 * y[valid_i1] * y[valid_i2])
+        # Since we know n = 3m, indices2 will be exactly at the boundary
+        term4 = delta * jnp.sum(((indices1 + 1) / n) ** k4 * y[indices1] * y[indices2])
 
-        return term1 + term2 + term3 + term4
+        # Add the constant term from GA group
+        # In SIF format, CONSTANTS section subtracts the value from the group
+        # So GA - (-1.0) = GA + 1.0
+        constant = 1.0
+
+        return term1 + term2 + term3 + term4 + constant
 
     def y0(self):
         # Initial value is 2.0 for all variables
@@ -865,12 +880,15 @@ class DIXMAANJ(AbstractUnconstrainedMinimisation):
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
-        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2):
+        # sum(beta * (i/n)^k2 * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
         term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
+            ((indices1 + 1) / n) ** k2
+            * y[indices1] ** 2
+            * (y[indices2] + y[indices2] ** 2) ** 2
         )
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
@@ -962,12 +980,15 @@ class DIXMAANK(AbstractUnconstrainedMinimisation):
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
-        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2):
+        # sum(beta * (i/n)^k2 * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
         term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
+            ((indices1 + 1) / n) ** k2
+            * y[indices1] ** 2
+            * (y[indices2] + y[indices2] ** 2) ** 2
         )
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
@@ -1056,12 +1077,15 @@ class DIXMAANL(AbstractUnconstrainedMinimisation):
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
 
-        # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * sin(x_i) * sin(x_{i+1})
+        # Compute the 2nd term (type 2):
+        # sum(beta * (i/n)^k2 * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
         # for i from 1 to n-1
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
         term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2 * jnp.sin(y[indices1]) * jnp.sin(y[indices2])
+            ((indices1 + 1) / n) ** k2
+            * y[indices1] ** 2
+            * (y[indices2] + y[indices2] ** 2) ** 2
         )
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)

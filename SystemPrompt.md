@@ -6,13 +6,24 @@ This is a crucial bottleneck that needs fixing!
 
 Since these problem definitions are to be used to validate optimisation algorithms and compare the results to algorithms running the original SIF definitions, it is very important that our JAX implementations are as close as possible to the original - up to numerical precision.
 
+## ⚠️ CRITICAL: Testing Requirements
+
+**ALWAYS use the provided bash script for testing.** Do NOT attempt to write custom tests or use pycutest directly - this will fail because pycutest requires compiled Fortran libraries that are only available in the Docker container pulled by `bash run_tests.sh`.
+
+The testing workflow is:
+1. Make any change to a file
+2. Run `bash run_tests.sh --test-case "PROBLEM"`
+3. Fix issues based on test results
+4. Repeat until tests pass
+
+Never skip this step - your JAX implementation must match the original Fortran to numerical precision.
+
 ## Tipps and Tricks
 
 To verify problems, it is frequently helpful to check the AMPL definitions, since these are often more concise and easier to read. 
 Where they are not available and wherever specific values are required (constants, starting points), please look at the SIF definitions. 
 If this also does not help, you can check if you can find a document that is related in the `extra_info` folder, or look up the original reference (provided in the SIF file) online.
-There is also a paper in the `extra_info` folder that describes the group-separable structure of the SIF files, this might be helpful to understand the SIF definitions and I suggest you read it in before working on this.
-There are also six screenshots, if you cannot open the PDF.
+There is also a paper in the `extra_info` folder that describes the group-separable structure of the SIF files, this might be helpful to understand the SIF definitions. You can find screenshots of the relevant sections in `extra_info/s2mpj/`.
 
 ## Porting problems
 
@@ -26,7 +37,7 @@ When porting problems, please consider the following:
 5. Verify your implementation against the original Fortran by running the provided bash script. Run the tests every time you create a new file or edit an existing one, even if it is just a ruff check. (More below.)
 6. Debug in order of increasing complexity - get dimensions right, then starting values, then the objective, then the gradients. 
 7. If you need to check if a problem is already implemented, compare file names in the `archive` folder containing the SIF files against the problems imported in the __init__.py files of the `sif2jax` folder.
-8. Add at least twenty problems to your To-Do list. Don't stop after five! We have lots to do.
+8. **Work continuously without stopping for summaries.** Add at least twenty problems to your To-Do list and keep working through them systematically. Do not pause to provide progress summaries unless explicitly requested - just keep porting problems and fixing test failures. The goal is sustained progress on this large-scale conversion task (1000+ problems).
 9. Run ruff format and ruff check on your work. Ruff is installed in the working directory.
 10. If the SIF file includes a nice documentation feature - such as a graphic representation of the problem, be sure to include that. Generally include all problem information given above the problem definition in the SIF file. 
 
@@ -39,7 +50,16 @@ Under no circumstances can you make any changes to the tests/ folder - just use 
 When you don't know what to do, find the next problem to work on by using `bash run_tests.sh -x` and start fixing the first problem for which the tests fail.
 When you make any change to a file, please run the tests again. You can run problem-specific tests with `bash run_tests.sh --test-case "PROBLEM"`. 
 
-Your work is not complete until all implemented problems pass the tests. If you can't fix the issues in a problem after several attempts, it is ok to flag the problem class as requiring human review, but please give it a serious attempt before that.
+Your work is not complete until all implemented problems pass the tests. If you cannot resolve test failures after 5 genuine attempts with different approaches, flag the problem for human review with a comment like:
+
+```python
+# TODO: Human review needed
+# Attempts made: [brief list of what was tried]
+# Suspected issues: [your best guess at the problem]
+# Additional resources needed: [e.g., "Primary literature PDF", "Clarification on constraint X", etc.]
+```
+
+Document your specific blockers so I can provide targeted help.
 
 ## Finally
 

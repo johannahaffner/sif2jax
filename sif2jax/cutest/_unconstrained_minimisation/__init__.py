@@ -13,7 +13,9 @@ from .beale import BEALE as BEALE
 from .biggs import BIGGS6 as BIGGS6
 from .box import BOX as BOX, BOX3 as BOX3, BOXBODLS as BOXBODLS, BOXPOWER as BOXPOWER
 from .brkmcc import BRKMCC as BRKMCC
-from .brown import BROWNAL as BROWNAL, BROWNBS as BROWNBS, BROWNDEN as BROWNDEN
+from .brownal import BROWNAL as BROWNAL
+from .brownbs import BROWNBS as BROWNBS
+from .brownden import BROWNDEN as BROWNDEN
 from .broydn import (
     BROYDN3DLS as BROYDN3DLS,
     BROYDN7D as BROYDN7D,
@@ -48,7 +50,8 @@ from .denschn import (
     DENSCHNE as DENSCHNE,
     DENSCHNF as DENSCHNF,
 )
-from .devgla import DEVGLA1 as DEVGLA1, DEVGLA2 as DEVGLA2
+from .devgla1 import DEVGLA1 as DEVGLA1
+from .devgla2 import DEVGLA2 as DEVGLA2
 from .dixmaana1 import DIXMAANA1 as DIXMAANA1
 from .dixmaanb import DIXMAANB as DIXMAANB
 from .dixmaanc import DIXMAANC as DIXMAANC

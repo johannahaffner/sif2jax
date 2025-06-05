@@ -49,28 +49,22 @@ from .denschn import (
     DENSCHNF as DENSCHNF,
 )
 from .devgla import DEVGLA1 as DEVGLA1, DEVGLA2 as DEVGLA2
-from .dixmaa import (
-    DIXMAANA1 as DIXMAANA1,
-    DIXMAANB as DIXMAANB,
-    DIXMAANC as DIXMAANC,
-    DIXMAAND as DIXMAAND,
-    DIXMAANE1 as DIXMAANE1,
-    DIXMAANF as DIXMAANF,
-    DIXMAANG as DIXMAANG,
-    DIXMAANH as DIXMAANH,
-)
-from .dixmaai import (
-    DIXMAANI1 as DIXMAANI1,
-    DIXMAANJ as DIXMAANJ,
-    DIXMAANK as DIXMAANK,
-    DIXMAANL as DIXMAANL,
-)
-from .dixmaam import (
-    DIXMAANM1 as DIXMAANM1,
-    DIXMAANN as DIXMAANN,
-    DIXMAANO as DIXMAANO,
-    DIXMAANP as DIXMAANP,
-)
+from .dixmaana1 import DIXMAANA1 as DIXMAANA1
+from .dixmaanb import DIXMAANB as DIXMAANB
+from .dixmaanc import DIXMAANC as DIXMAANC
+from .dixmaand import DIXMAAND as DIXMAAND
+from .dixmaane1 import DIXMAANE1 as DIXMAANE1
+from .dixmaanf import DIXMAANF as DIXMAANF
+from .dixmaang import DIXMAANG as DIXMAANG
+from .dixmaanh import DIXMAANH as DIXMAANH
+from .dixmaani1 import DIXMAANI1 as DIXMAANI1
+from .dixmaanj import DIXMAANJ as DIXMAANJ
+from .dixmaank import DIXMAANK as DIXMAANK
+from .dixmaanl import DIXMAANL as DIXMAANL
+from .dixmaanm1 import DIXMAANM1 as DIXMAANM1
+from .dixmaann import DIXMAANN as DIXMAANN
+from .dixmaano import DIXMAANO as DIXMAANO
+from .dixmaanp import DIXMAANP as DIXMAANP
 from .dixon3dq import DIXON3DQ as DIXON3DQ
 from .djtl import DJTL as DJTL
 from .dqdrtic import DQDRTIC as DQDRTIC

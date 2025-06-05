@@ -7,7 +7,7 @@ from ..._problem import AbstractUnconstrainedMinimisation
 class JUDGE(AbstractUnconstrainedMinimisation):
     """SCIPY global optimization benchmark example Judge.
 
-    Fit: y = x_1 + a_i * x_2 + b_i^2 * x_2 + e
+    Fit: y = x_1 + a_i * x_2 + b_i * x_2^2 + e
 
     Source: Problem from the SCIPY benchmark set
     https://github.com/scipy/scipy/tree/master/benchmarks/benchmarks/go_benchmark_functions
@@ -20,7 +20,7 @@ class JUDGE(AbstractUnconstrainedMinimisation):
         """Compute the objective function value.
 
         For each data point i, the residual is:
-        x_1 + a_i * x_2 + (b_i^2) * x_2 - y_i
+        x_1 + a_i * x_2 + b_i * x_2^2 - y_i
 
         The objective is the sum of squares of these residuals.
         """
@@ -101,8 +101,8 @@ class JUDGE(AbstractUnconstrainedMinimisation):
             ]
         )
 
-        # Calculate predicted values: x1 + a_i * x2 + b_i^2 * x2
-        y_pred = x1 + a_values * x2 + (b_values**2) * x2
+        # Calculate predicted values: x1 + a_i * x2 + b_i * x2^2
+        y_pred = x1 + a_values * x2 + b_values * (x2**2)
 
         # Calculate the residuals
         residuals = y_pred - y_values

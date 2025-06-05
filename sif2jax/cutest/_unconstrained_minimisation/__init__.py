@@ -110,7 +110,8 @@ from .hatfld import (
 from .heart import HEART6LS as HEART6LS, HEART8LS as HEART8LS
 from .helix import HELIX as HELIX
 from .hielow import HIELOW as HIELOW
-from .hilbert import HILBERTA as HILBERTA, HILBERTB as HILBERTB
+from .hilberta import HILBERTA as HILBERTA
+from .hilbertb import HILBERTB as HILBERTB
 from .himmelblau import (
     HIMMELBB as HIMMELBB,
     HIMMELBCLS as HIMMELBCLS,

@@ -4,14 +4,22 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: Human review needed to verify the implementation matches the problem definition
 class INTEQNELS(AbstractUnconstrainedMinimisation):
-    """The discrete integral problem (INTEGREQ) in least-squares form.
+    """The discrete integral equation function in least-squares form.
 
-    Source: Problem 29 in
-    J.J. More', B.S. Garbow and K.E. Hillstrom,
+    This is problem 29 from:
+    J.J. Moré, B.S. Garbow and K.E. Hillstrom,
     "Testing Unconstrained Optimization Software",
     ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+    The problem discretizes an integral equation. The function f_i(x) is defined as:
+    f_i(x) = x_i + h[(1-t_i)∑_{j=0}^i t_j(x_j + t_j + 1)³
+        + t_i ∑_{j=i+1}^{n-1} (1-t_j)(x_j + t_j + 1)³]/2
+
+    where h = 1/(n-1), t_i = ih for i = 0, ..., n-1.
+    The objective is the sum of squares: ∑_{i=0}^{n-1} f_i(x)².
+
+    Initial point: x_i = t_i(t_i - 1) for i = 0, ..., n-1.
 
     SIF input: Ph. Toint, Feb 1990.
     Modification to remove fixed variables: Nick Gould, Oct 2015.
@@ -21,69 +29,65 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
     n: int = 502  # Default value to match pycutest
 
     def objective(self, y, args):
-        """Compute the objective function value.
-
-        This problem involves a system of integral equations discretized on N+2 points.
-        The objective is the sum of squares of differences between the right-hand side
-        and the left-hand side of the discretized integral equation.
-        """
+        """Compute the objective function value as sum of squares of f_i(x)."""
         n = self.n
-        h = 1.0 / (n + 1)
-        half_h = 0.5 * h
+        h = 1.0 / (n - 1)  # Match the starting point indexing
 
-        # Create full variable array with fixed boundary values
-        # (x[0] and x[n+1] are fixed at 0)
-        x_full = jnp.zeros(n + 2)
-        x_full = x_full.at[1:-1].set(y)  # Insert free variables
+        # t_i = ih for i = 0, 1, ..., n-1 (to match starting point)
+        t = jnp.arange(n) * h
 
-        # Precompute t values (grid points)
-        t = jnp.arange(n + 2) * h
+        # y represents x_0, x_1, ..., x_{n-1}
+        x = y
 
-        # Define the cube term function
-        def cube_term_fn(j):
-            return (x_full[j] + 1.0 + t[j]) ** 3
+        def compute_f_i(i):
+            """Compute f_i(x) for the i-th equation (0-indexed)."""
+            t_i = t[i]
+            x_i = x[i]
 
-        # Vectorize the cube term computation
-        cube_terms = jax.vmap(cube_term_fn)(jnp.arange(1, n + 1))
+            # Use masking for both sums to avoid dynamic arange
+            all_j = jnp.arange(n)
+            t_j = t[all_j]
+            x_j = x[all_j]
 
-        # Define the computation for a single residual at point i
-        def residual_fn(i):
-            ti = t[i]
+            # First sum: ∑_{j=0}^i t_j(x_j + t_j + 1)³
+            first_mask = all_j <= i
+            first_sum = jnp.sum(
+                jnp.where(first_mask, t_j * (x_j + t_j + 1.0) ** 3, 0.0)
+            )
 
-            # Precompute all indices and use boolean masking to avoid dynamic arange
-            all_indices = jnp.arange(1, n + 1)
+            # Second sum: ∑_{j=i+1}^{n-1} (1-t_j)(x_j + t_j + 1)³
+            second_mask = all_j > i
+            second_sum = jnp.sum(
+                jnp.where(second_mask, (1.0 - t_j) * (x_j + t_j + 1.0) ** 3, 0.0)
+            )
 
-            # Boolean masks for lower and upper parts
-            lower_mask = all_indices < i
-            upper_mask = all_indices > i
+            # Compute f_i(x)
+            integral_part = h * ((1.0 - t_i) * first_sum + t_i * second_sum) / 2.0
+            f_i = x_i + integral_part
 
-            # Compute weights for all points
-            tj_vals = t[all_indices]
-            lower_weights = jnp.where(lower_mask, (1.0 - ti) * half_h * tj_vals, 0.0)
-            upper_weights = jnp.where(upper_mask, ti * half_h * (1.0 - tj_vals), 0.0)
+            return f_i
 
-            # Compute weighted sums
-            lower_sum = jnp.sum(lower_weights * cube_terms)
-            upper_sum = jnp.sum(upper_weights * cube_terms)
+        # Compute all f_i values and sum their squares
+        i_values = jnp.arange(n)
+        f_values = jax.vmap(compute_f_i)(i_values)
 
-            # Compute residual
-            return x_full[i] - lower_sum - upper_sum
-
-        # Compute all residuals
-        residuals = jax.vmap(residual_fn)(jnp.arange(1, n + 1))
-
-        return jnp.sum(residuals**2)
+        return jnp.sum(f_values**2)
 
     def y0(self):
-        """Initial point: x_i = t_i * (t_i - 1) for i=0,...,n+1
-        (excluding boundaries)."""
+        """Initial point: ξ_i = t_i(t_i - 1) where t_i = ih.
+
+        From the reference: x_0 = (ξ_i) where ξ_i = t_j(t_j - 1).
+
+        Based on PyCUTEst output, it seems to use i = 0, 1, ..., n-1 with h = 1/(n-1).
+        This gives t_i = ih and ξ_i = t_i(t_i - 1) starting with ξ_0 = 0.
+        """
         n = self.n
-        h = 1.0 / (n + 1)
-        # Include boundary points for calculation, then exclude them
-        t_all = jnp.arange(n + 2) * h
-        x_all = t_all * (t_all - 1.0)
-        # Return only the interior points (excluding x[0] and x[n+1])
-        return x_all[1:-1]
+        h = 1.0 / (n - 1)  # This matches PyCUTEst behavior
+        # For i = 0, 1, 2, ..., n-1, compute t_i = i*h and ξ_i = t_i*(t_i - 1)
+        i_vals = jnp.arange(n)
+        t_vals = i_vals * h
+        xi_vals = t_vals * (t_vals - 1.0)
+        return xi_vals
 
     def args(self):
         """No additional arguments needed."""

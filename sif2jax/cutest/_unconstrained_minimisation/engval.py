@@ -25,9 +25,13 @@ class ENGVAL1(AbstractUnconstrainedMinimisation):
 
     def objective(self, y, args):
         del args
+        # From AMPL model: sum {i in 1..N-1} (x[i]^2+x[i+1]^2)^2 +
+        # sum {i in 1..N-1} (-4*x[i]+3.0)
+        # Converting to 0-based indexing: i from 0 to N-2
+
         y2 = y**2
         nonlinear = jnp.sum((y2[:-1] + y2[1:]) ** 2)
-        linear = jnp.sum(-4 * y[:-1] - 3)
+        linear = jnp.sum(-4 * y[:-1] + 3.0)  # Fixed: +3.0 not -3
 
         return nonlinear + linear
 
@@ -64,24 +68,20 @@ class ENGVAL2(AbstractUnconstrainedMinimisation):
 
         x1, x2, x3 = y
 
-        # Group G1: (x1^2 + x2^2 + x3^2)^2
-        g1 = (x1**2 + x2**2 + x3**2) ** 2
+        # From AMPL model:
+        # (x[1]^2+x[2]^2+x[3]^2-1)^2
+        # + (x[1]^2+x[2]^2+(x[3]-2)^2-1)^2
+        # + (x[1]+x[2]+x[3]-1)^2
+        # + (x[1]+x[2]-x[3]+1)^2
+        # + (3*x[2]^2+x[1]^3+(5*x[3]-x[1]+1)^2-36)^2
 
-        # Group G2: (x1^2 + x2^2 + (x3-2)^2)^2
-        g2 = (x1**2 + x2**2 + (x3 - 2) ** 2) ** 2
+        g1 = (x1**2 + x2**2 + x3**2 - 1) ** 2
+        g2 = (x1**2 + x2**2 + (x3 - 2) ** 2 - 1) ** 2
+        g3 = (x1 + x2 + x3 - 1) ** 2
+        g4 = (x1 + x2 - x3 + 1) ** 2
+        g5 = (3 * x2**2 + x1**3 + (5 * x3 - x1 + 1) ** 2 - 36) ** 2
 
-        # Group G3: (x1 + x2 + x3)^2
-        g3 = (x1 + x2 + x3) ** 2
-
-        # Group G4: (x1 + x2 - x3)^2
-        g4 = (x1 + x2 - x3) ** 2
-
-        # Group G5: 36 * (3*x2^2 + (x1^3 + (5*x3-x1+1)^2)^2)
-        elt_term = (5 * x3 - x1 + 1) ** 2 + x1**3
-        g5 = 36 * (3 * x2**2 + elt_term**2)
-
-        # Combining all groups with their coefficients
-        return g1 + g2 + g3 - g4 + g5
+        return g1 + g2 + g3 + g4 + g5
 
     def y0(self):
         # Starting point from the file

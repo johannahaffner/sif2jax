@@ -50,8 +50,8 @@ class KSSLS(AbstractUnconstrainedMinimisation):
         return jnp.sum(residuals**2)
 
     def y0(self):
-        """Initial point with all variables set to 1000."""
-        return jnp.ones(self.n) * 1000.0
+        """Initial point with all variables set to 1."""
+        return jnp.ones(self.n)
 
     def args(self):
         """No additional arguments needed."""

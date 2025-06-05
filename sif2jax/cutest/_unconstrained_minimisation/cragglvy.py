@@ -24,7 +24,7 @@ class CRAGGLVY(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AY-V-0
     """
 
-    m: int = 249  # Number of group sets (default 249, n=500)
+    m: int = 2499  # Number of group sets (default 2499, n=5000)
     # Other suggested values: 1, 4, 24, 49, 249, 499, 2499
     n: int = 0  # Number of variables (will be set in __init__)
 
@@ -40,22 +40,26 @@ class CRAGGLVY(AbstractUnconstrainedMinimisation):
 
         # Define function to compute the terms for each set i
         def compute_set_terms(i):
-            # Convert to 0-based indexing (SIF uses 1-based)
-            # Compute indices for 2i, 2i-1, 2i+1, 2i+2
-            i2 = 2 * i
-            i2_minus_1 = i2 - 1
-            i2_plus_1 = i2 + 1
-            i2_plus_2 = i2 + 2
+            # Convert from 1-based AMPL indices to 0-based Python indices
+            # For i in 1..m (AMPL), we have i in 0..m-1 (Python)
+            # x[2*i-1] (AMPL) = y[2*i] (Python) for i starting at 0
+            # x[2*i] (AMPL) = y[2*i+1] (Python)
+            # x[2*i+1] (AMPL) = y[2*i+2] (Python)
+            # x[2*i+2] (AMPL) = y[2*i+3] (Python)
+            i2_minus_1 = 2 * i  # x[2*i-1] in AMPL
+            i2 = 2 * i + 1  # x[2*i] in AMPL
+            i2_plus_1 = 2 * i + 2  # x[2*i+1] in AMPL
+            i2_plus_2 = 2 * i + 3  # x[2*i+2] in AMPL
 
             # Group A(i) = (exp(x_{2i-1}) - x_{2i})^4
             a_i = (jnp.exp(y[i2_minus_1]) - y[i2]) ** 4
 
-            # Group B(i) = (0.01 + (x_{2i} - x_{2i+1}))^6
-            b_i = (0.01 + y[i2] - y[i2_plus_1]) ** 6
+            # Group B(i) = 100*(x_{2i} - x_{2i+1})^6
+            b_i = 100.0 * (y[i2] - y[i2_plus_1]) ** 6
 
-            # Group C(i) = (x_{2i+1} - x_{2i+2} - tan(x_{2i+1} - x_{2i+2}))^4
+            # Group C(i) = (tan(x_{2i+1} - x_{2i+2}) + x_{2i+1} - x_{2i+2})^4
             c_arg = y[i2_plus_1] - y[i2_plus_2]
-            c_i = (c_arg - jnp.tan(c_arg)) ** 4
+            c_i = (jnp.tan(c_arg) + c_arg) ** 4
 
             # Group D(i) = (x_{2i-1})^8
             d_i = y[i2_minus_1] ** 8

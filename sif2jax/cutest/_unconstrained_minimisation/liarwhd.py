@@ -23,15 +23,19 @@ class LIARWHD(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         """Compute the objective function value.
 
-        The objective consists of the sum of squared terms of the form:
-        [0.25 * (-x_1 + x_i^2)]^2 for i = 1, 2, ..., n
+        The objective consists of two parts from AMPL:
+        1. sum {i in 1..N} 4*(-x[1]+x[i]^2)^2
+        2. sum {i in 1..N} (x[i]-1.0)^2
         """
-        # Calculate the terms: 0.25 * (-x_1 + x_i^2)
         x1 = y[0]
-        terms = 0.25 * (-x1 + y**2)
 
-        # Return the sum of squared terms
-        return jnp.sum(terms**2)
+        # First term: 4*(-x[1]+x[i]^2)^2 for all i
+        first_terms = 4.0 * (-x1 + y**2) ** 2
+
+        # Second term: (x[i]-1.0)^2 for all i
+        second_terms = (y - 1.0) ** 2
+
+        return jnp.sum(first_terms) + jnp.sum(second_terms)
 
     def y0(self):
         """Initial point with all variables set to 4.0."""

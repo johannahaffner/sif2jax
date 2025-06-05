@@ -36,7 +36,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-V-0
     """
 
-    p: int = 8  # Number of molecules (default 8, can be 100, 1000, 10000, 100000)
+    p: int = 10000  # Number of molecules (default 10000, can be 8, 100, 1000, 100000)
     n: int = 0  # Number of variables (will be set in __init__)
 
     def __init__(self):

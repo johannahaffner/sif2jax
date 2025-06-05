@@ -60,8 +60,8 @@ class COOLHANSLS(AbstractUnconstrainedMinimisation):
     def y0(self):
         # Initial values not explicitly specified in the SIF file,
         # but lines 95-98 suggest X(1,:) and X(3,:) might be fixed at 0
-        # We'll use a small random initialization
-        return 0.01 * jnp.ones(self.n)
+        # Default initialization is 0.0 for all variables
+        return jnp.zeros(self.n)
 
     def args(self):
         return None

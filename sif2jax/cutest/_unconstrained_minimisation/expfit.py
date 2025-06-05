@@ -28,28 +28,30 @@ class EXPFIT(AbstractUnconstrainedMinimisation):
         # Extract variables
         alpha, beta = y
 
+        # From AMPL model: sum {i in 1..p} (alpha*exp(i*h*beta)-i*h)^2
+        # where p=10, h=0.25
+
         # Define the data points
-        # x values: i * 0.25 for i = 1,...,10
-        x_values = jnp.arange(1, 11) * 0.25
+        p = 10
+        h = 0.25
 
-        # Define a function to compute a single residual given an x value
-        def compute_residual(x):
-            # Model: alpha * exp(beta * x)
-            model_value = alpha * jnp.exp(beta * x)
+        def compute_residual(i):
+            # i is 1-indexed in AMPL
+            # Residual: (alpha*exp(i*h*beta) - i*h)^2
+            model_value = alpha * jnp.exp(i * h * beta)
+            target_value = i * h
+            return (model_value - target_value) ** 2
 
-            # Target values aren't explicitly given in the SIF file
-            # The objective is the sum of squared model values
-            return model_value
-
-        # Compute residuals for all data points
-        residuals = jax.vmap(compute_residual)(x_values)
+        # Compute residuals for all data points (i = 1 to 10)
+        indices = jnp.arange(1, p + 1)
+        residuals = jax.vmap(compute_residual)(indices)
 
         # Sum of squared residuals
-        return jnp.sum(jnp.square(residuals))
+        return jnp.sum(residuals)
 
     def y0(self):
-        # Starting point from the SIF file: alpha = 2.5, beta = 0.25
-        return jnp.array([2.5, 0.25])
+        # AMPL model has no initial values specified, so variables start at 0.0
+        return jnp.array([0.0, 0.0])
 
     def args(self):
         return None

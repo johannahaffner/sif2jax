@@ -55,21 +55,16 @@ class BARD(AbstractUnconstrainedMinimisation):
 
         # Calculate u, v, w values for each group
         u_values = i_values
-
-        # The SIF file splits the calculation into two parts: i=1..8 and i=9..15
-        # For i=1..8, v = 16-i and w = i
-        # For i=9..15, v = 16-i and w = 16-i
         v_values = 16.0 - i_values
 
-        # Create w_values based on conditions in SIF file
-        condition = i_values <= 8
-        w_values = jnp.where(condition, i_values, 16.0 - i_values)
+        # w[i] = min(u[i], v[i]) = min(i, 16-i)
+        w_values = jnp.minimum(u_values, v_values)
 
         # Calculate denominators: v*x2 + w*x3
         denominators = v_values * x2 + w_values * x3
 
-        # Calculate each residual: y_i - (u_i / denominator_i)
-        residuals = constants - (u_values / denominators)
+        # Calculate each residual: y_i - (x1 + u_i / denominator_i)
+        residuals = constants - (x1 + u_values / denominators)
 
         # Sum of squared residuals
         return jnp.sum(residuals**2)

@@ -6,11 +6,6 @@ from .arwhead import ARWHEAD as ARWHEAD
 from .bal import (
     BA_L1LS as BA_L1LS,
     BA_L1SPLS as BA_L1SPLS,
-    BA_L16LS as BA_L16LS,
-    BA_L21LS as BA_L21LS,
-    BA_L49LS as BA_L49LS,
-    BA_L52LS as BA_L52LS,
-    BA_L73LS as BA_L73LS,
 )
 from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
@@ -54,7 +49,6 @@ from .denschn import (
     DENSCHNF as DENSCHNF,
 )
 from .devgla import DEVGLA1 as DEVGLA1, DEVGLA2 as DEVGLA2
-from .diamon import DIAMON2DLS as DIAMON2DLS, DIAMON3DLS as DIAMON3DLS
 from .dixmaa import (
     DIXMAANA1 as DIXMAANA1,
     DIXMAANB as DIXMAANB,
@@ -79,14 +73,6 @@ from .dixmaam import (
 )
 from .dixon3dq import DIXON3DQ as DIXON3DQ
 from .djtl import DJTL as DJTL
-from .dmn import (
-    DMN15102LS as DMN15102LS,
-    DMN15103LS as DMN15103LS,
-    DMN15332LS as DMN15332LS,
-    DMN15333LS as DMN15333LS,
-    DMN37142LS as DMN37142LS,
-    DMN37143LS as DMN37143LS,
-)
 from .dqdrtic import DQDRTIC as DQDRTIC
 from .dqrtic import DQRTIC as DQRTIC
 from .eckerle4ls import ECKERLE4LS as ECKERLE4LS
@@ -102,7 +88,13 @@ from .exp_scipy import EXP2 as EXP2, EXP2B as EXP2B, EXP2NE as EXP2NE
 from .expfit import EXPFIT as EXPFIT
 from .extrosnb import EXTROSNB as EXTROSNB
 from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
-from .fletch import FLETCBV3 as FLETCBV3
+from .fletch import (
+    FLETBV3M as FLETBV3M,
+    FLETCBV2 as FLETCBV2,
+    FLETCBV3 as FLETCBV3,
+    FLETCHBV as FLETCHBV,
+    FLETCHCR as FLETCHCR,
+)
 from .fminsurf import FMINSRF2 as FMINSRF2, FMINSURF as FMINSURF
 from .freuroth import FREURONE as FREURONE, FREUROTH as FREUROTH
 from .gauss import GAUSS1LS as GAUSS1LS, GAUSS2LS as GAUSS2LS, GAUSS3LS as GAUSS3LS
@@ -133,11 +125,9 @@ from .himmelblau import (
     HIMMELBH as HIMMELBH,
 )
 from .humps import HUMPS as HUMPS
-from .hydc import HYDC20LS as HYDC20LS, HYDCAR6LS as HYDCAR6LS
 from .indef import INDEF as INDEF
 from .inteqnels import INTEQNELS as INTEQNELS
 from .jensmp import JENSMP as JENSMP
-from .jimack import JIMACK as JIMACK
 from .judge import JUDGE as JUDGE
 from .kirby import KIRBY2LS as KIRBY2LS
 from .kowosb import KOWOSB as KOWOSB
@@ -162,12 +152,7 @@ unconstrained_minimisation_problems = (
     ARGTRIGLS(),
     ARWHEAD(),
     BA_L1LS(),
-    BA_L16LS(),
     BA_L1SPLS(),
-    BA_L21LS(),
-    BA_L49LS(),
-    BA_L52LS(),
-    BA_L73LS(),
     BARD(),
     BDQRTIC(),
     BEALE(),
@@ -214,8 +199,6 @@ unconstrained_minimisation_problems = (
     DENSCHNF(),
     DEVGLA1(),
     DEVGLA2(),
-    DIAMON2DLS(),
-    DIAMON3DLS(),
     DIXMAANA1(),
     DIXMAANB(),
     DIXMAANC(),
@@ -234,12 +217,6 @@ unconstrained_minimisation_problems = (
     DIXMAANP(),
     DIXON3DQ(),
     DJTL(),
-    DMN15102LS(),
-    DMN15103LS(),
-    DMN15332LS(),
-    DMN15333LS(),
-    DMN37142LS(),
-    DMN37143LS(),
     DQDRTIC(),
     DQRTIC(),
     ECKERLE4LS(),
@@ -261,6 +238,11 @@ unconstrained_minimisation_problems = (
     EXPFIT(),
     EXTROSNB(),
     FBRAIN3LS(),
+    # FLETCH family problems
+    FLETCHBV(),
+    FLETBV3M(),
+    FLETCBV2(),
+    FLETCHCR(),
     # Not varying the scale term in the FLETCBV3 problem
     FLETCBV3(n=5000, extra_term=1),
     FLETCBV3(n=5000, extra_term=0),
@@ -297,12 +279,9 @@ unconstrained_minimisation_problems = (
     HIMMELBG(),
     HIMMELBH(),
     HUMPS(),
-    HYDC20LS(),
-    HYDCAR6LS(),
     INDEF(),
     INTEQNELS(),
     JENSMP(),
-    JIMACK(),
     JUDGE(),
     KIRBY2LS(),
     KOWOSB(),

@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
@@ -90,23 +89,28 @@ class CHNROSNB(AbstractUnconstrainedMinimisation):
         # based on problem dimension
         alphas = alphas[: self.n]
 
-        # Define the function to compute each term for a pair of variables
-        def compute_term(i):
-            # Each term in the objective is of the form:
-            # 16 * alpha_i^2 * (x_i - x_{i-1}^2)^2
-            alpha_i = alphas[i - 1]  # Alpha is 1-indexed in the SIF
-            scale = 16.0 * alpha_i * alpha_i
-            term = scale * (y[i] - y[i - 1] ** 2) ** 2
-            return term
+        # Based on AMPL model in chnrosnb.mod
+        # sum {i in 2..n} (
+        # (x[i-1]-x[i]^2)^2*16*alph[i]^2 +
+        # (x[i]-1.0)^2
+        # )
 
-        # Create array of indices (2 to n)
-        indices = jnp.arange(1, self.n)
+        # Vectorized computation for i in 2..n (0-based: 1..n-1)
+        i_indices = jnp.arange(1, self.n)  # 1 to n-1
 
-        # Compute all terms using vmap
-        terms = jax.vmap(compute_term)(indices)
+        # Get corresponding alpha values
+        alpha_vals = alphas[i_indices]  # alphas[1] to alphas[n-1]
+
+        # Get x[i-1] and x[i] values
+        x_i_minus_1 = y[i_indices - 1]  # y[0] to y[n-2]
+        x_i = y[i_indices]  # y[1] to y[n-1]
+
+        # Compute terms
+        term1 = 16.0 * alpha_vals**2 * (x_i_minus_1 - x_i**2) ** 2
+        term2 = (x_i - 1.0) ** 2
 
         # Sum all terms
-        return jnp.sum(terms)
+        return jnp.sum(term1 + term2)
 
     def y0(self):
         # Initial values from SIF file (all -1.0)
@@ -158,25 +162,24 @@ class CHNRSNBM(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # Define the function to compute each term for a pair of variables
-        def compute_term(i):
-            # Alpha values are determined by sin(i) * 1.5
-            alpha_i = jnp.sin(float(i)) * 1.5
+        # Same formula as CHNROSNB but with alpha values from sin function
+        # Vectorized computation for i in 2..n (0-based: 1..n-1)
+        i_indices = jnp.arange(1, self.n)  # 1 to n-1
 
-            # Each term in the objective is of the form:
-            # 16 * alpha_i^2 * (x_i - x_{i-1}^2)^2
-            scale = 16.0 * alpha_i * alpha_i
-            term = scale * (y[i] - y[i - 1] ** 2) ** 2
-            return term
+        # Alpha values are determined by sin(i) * 1.5
+        # i_indices represents i=2..n in 1-based AMPL notation
+        alpha_vals = jnp.sin((i_indices + 1).astype(float)) * 1.5
 
-        # Create array of indices (2 to n)
-        indices = jnp.arange(1, self.n)
+        # Get x[i-1] and x[i] values
+        x_i_minus_1 = y[i_indices - 1]  # y[0] to y[n-2]
+        x_i = y[i_indices]  # y[1] to y[n-1]
 
-        # Compute all terms using vmap
-        terms = jax.vmap(compute_term)(indices)
+        # Compute terms
+        term1 = 16.0 * alpha_vals**2 * (x_i_minus_1 - x_i**2) ** 2
+        term2 = (x_i - 1.0) ** 2
 
         # Sum all terms
-        return jnp.sum(terms)
+        return jnp.sum(term1 + term2)
 
     def y0(self):
         # Initial values from SIF file (all -1.0)

@@ -23,9 +23,11 @@ class ARWHEAD(AbstractUnconstrainedMinimisation):
 
     def objective(self, y, args):
         del args
+        # Based on AMPL model in arwhead.mod
+        # sum {i in 1..N-1} (-4*x[i]+3.0) + sum {i in 1..N-1} (x[i]^2+x[N]^2)^2
         yn = y[-1]
-        f1 = -4 * y[:-1] ** 2 + 3
-        f2 = (y[:-1] ** 2 + yn**2) ** 2
+        f1 = -4 * y[:-1] + 3  # First sum: -4*x[i] + 3 (not squared!)
+        f2 = (y[:-1] ** 2 + yn**2) ** 2  # Second sum: (x[i]^2 + x[N]^2)^2
         return jnp.sum(f1 + f2)
 
     def y0(self):

@@ -18,7 +18,7 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
-    n: int = 500  # Other suggested values: 10, 50, 100
+    n: int = 502  # Default value to match pycutest
 
     def objective(self, y, args):
         """Compute the objective function value.
@@ -50,26 +50,21 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
         def residual_fn(i):
             ti = t[i]
 
-            # Define the lower part weight function (for j=1 to i)
-            def lower_weight_fn(j):
-                tj = t[j]
-                return (1.0 - ti) * half_h * tj
+            # Precompute all indices and use boolean masking to avoid dynamic arange
+            all_indices = jnp.arange(1, n + 1)
 
-            # Define the upper part weight function (for j=i+1 to n)
-            def upper_weight_fn(j):
-                tj = t[j]
-                return ti * half_h * (1.0 - tj)
+            # Boolean masks for lower and upper parts
+            lower_mask = all_indices < i
+            upper_mask = all_indices > i
 
-            # Apply weights to the cube terms using vectorized operations
-            lower_indices = jnp.arange(1, i + 1)
-            upper_indices = jnp.arange(i + 1, n + 1)
+            # Compute weights for all points
+            tj_vals = t[all_indices]
+            lower_weights = jnp.where(lower_mask, (1.0 - ti) * half_h * tj_vals, 0.0)
+            upper_weights = jnp.where(upper_mask, ti * half_h * (1.0 - tj_vals), 0.0)
 
-            # Compute weighted sums using vmap
-            lower_weights = jax.vmap(lower_weight_fn)(lower_indices)
-            upper_weights = jax.vmap(upper_weight_fn)(upper_indices)
-
-            lower_sum = jnp.sum(lower_weights * cube_terms[lower_indices - 1])
-            upper_sum = jnp.sum(upper_weights * cube_terms[upper_indices - 1])
+            # Compute weighted sums
+            lower_sum = jnp.sum(lower_weights * cube_terms)
+            upper_sum = jnp.sum(upper_weights * cube_terms)
 
             # Compute residual
             return x_full[i] - lower_sum - upper_sum
@@ -80,11 +75,15 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
         return jnp.sum(residuals**2)
 
     def y0(self):
-        """Initial point: x_i = t_i * (t_i - 1) for i=1,...,n."""
+        """Initial point: x_i = t_i * (t_i - 1) for i=0,...,n+1
+        (excluding boundaries)."""
         n = self.n
         h = 1.0 / (n + 1)
-        t = jnp.arange(1, n + 1) * h
-        return t * (t - 1.0)
+        # Include boundary points for calculation, then exclude them
+        t_all = jnp.arange(n + 2) * h
+        x_all = t_all * (t_all - 1.0)
+        # Return only the interior points (excluding x[0] and x[n+1])
+        return x_all[1:-1]
 
     def args(self):
         """No additional arguments needed."""

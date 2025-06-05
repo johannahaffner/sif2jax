@@ -38,13 +38,13 @@ class GULF(AbstractUnconstrainedMinimisation):
         # y_i - x2 term
         y_minus_v2 = y_i - x2
 
-        # Calculate |y_i - v_2|^v_3 / v_1
-        a_i = jnp.power(jnp.abs(y_minus_v2), x3) / x1
+        # Calculate |y_i - v_2|^v_3 / (-v_1) as in AMPL
+        a_i = jnp.power(jnp.abs(y_minus_v2), x3) / (-x1)
 
-        # Compute exp(-a_i) which are the residuals for each group
-        residuals = jnp.exp(-a_i)
+        # Compute exp(a_i) - t_i as the residuals (corrected formula from AMPL)
+        residuals = jnp.exp(a_i) - t_values
 
-        # Sum of squares of residuals (as per the L2 group type in SIF file)
+        # Sum of squares of residuals
         return jnp.sum(residuals**2)
 
     def y0(self):

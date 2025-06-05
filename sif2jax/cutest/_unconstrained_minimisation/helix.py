@@ -27,15 +27,16 @@ class HELIX(AbstractUnconstrainedMinimisation):
         # Extract variables
         x1, x2, x3 = y
 
-        # Compute theta (arctangent) in a stable way
-        theta = jnp.arctan2(x2, x1)
+        # Compute theta as in AMPL: normalized by 2π
+        # Handle the conditional logic from AMPL
+        raw_theta = jnp.where(
+            x1 > 0,
+            jnp.arctan(x2 / x1) / (2.0 * jnp.pi),
+            jnp.where(x1 < 0, jnp.arctan(x2 / x1) / (2.0 * jnp.pi) + 0.5, 0.0),
+        )
 
-        # Ensure theta is in [0, 2π) range
-        # In JAX we need to handle this carefully with modular arithmetic
-        theta = jnp.where(theta < 0, theta + 2.0 * jnp.pi, theta)
-
-        # Compute the residuals
-        r1 = 10.0 * (theta - 2.0 * jnp.pi * x3)
+        # Compute the residuals as in AMPL
+        r1 = 10.0 * (x3 - 10.0 * raw_theta)
         r2 = 10.0 * (jnp.sqrt(x1**2 + x2**2) - 1.0)
         r3 = x3
 

@@ -54,9 +54,11 @@ class EIGEN(AbstractUnconstrainedMinimisation):
         return jnp.sum(residuals**2)
 
     def y0(self):
-        # Initialize with identity matrix for Q and zeros for diagonal of D
+        # Initialize with identity matrix for Q and diagonal of D set to 1.0
+        # Based on AMPL model: Q diagonal elements are 1.0, rest are 0
+        # D diagonal elements are all 1.0
         q_flat = jnp.eye(self.n).flatten(order="F")  # Flatten in column-major order
-        d_diag = jnp.zeros(self.n)
+        d_diag = jnp.ones(self.n)  # All diagonal elements are 1.0
 
         return jnp.concatenate([q_flat, d_diag])
 

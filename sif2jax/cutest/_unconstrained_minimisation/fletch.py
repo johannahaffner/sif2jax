@@ -23,26 +23,28 @@ class FLETCHBV(AbstractUnconstrainedMinimisation):
 
     n: int = 5000  # Default dimension in SIF file
     kappa: float = 1.0  # Parameter used in the problem
+    objscale: float = 1.0  # Object scaling parameter
 
     def objective(self, y, args):
         del args
         h = 1.0 / (self.n + 1)
         h2 = h * h
+        p = 1.0 / self.objscale  # objscale = 1.0 for FLETCHBV
 
-        # Define components as described in the SIF file
-        # First term: 0.5 * (x_1 + x_2)^2
-        f1 = 0.5 * (y[0] + y[1]) ** 2
+        # From AMPL file:
+        # 0.5*p*(x[1])^2 +
+        # sum {i in 1..n-1} 0.5*p*(x[i]-x[i+1])^2 +
+        # 0.5*p*(x[n])^2 +
+        # sum {i in 1..n} (p*(-1-2/h^2)*x[i]) +
+        # sum {i in 1..n} (-kappa*p*cos(x[i])/h^2);
 
-        # Terms G(i) for i=1...n-1: 0.5 * (x_i - x_{i+1})^2
-        f2 = 0.5 * jnp.sum((y[:-1] - y[1:]) ** 2)
+        term1 = 0.5 * p * (y[0]) ** 2
+        term2 = 0.5 * p * jnp.sum((y[:-1] - y[1:]) ** 2)
+        term3 = 0.5 * p * (y[-1]) ** 2
+        term4 = p * (-1.0 - 2.0 / h2) * jnp.sum(y)
+        term5 = -self.kappa * p / h2 * jnp.sum(jnp.cos(y))
 
-        # Terms L(i): involving -2/h^2 * x_i
-        f3 = -2.0 / h2 * jnp.sum(y[:-1]) - (1.0 + 2.0 / h2) * y[-1]
-
-        # Terms C(i): involving -kappa/h^2 * cos(x_i)
-        f4 = -self.kappa / h2 * jnp.sum(jnp.cos(y))
-
-        return f1 + f2 + f3 + f4
+        return term1 + term2 + term3 + term4 + term5
 
     def y0(self):
         # Initial values from SIF file: i*h for i=1..n
@@ -105,8 +107,8 @@ class FLETBV3M(AbstractUnconstrainedMinimisation):
         # C(i): p * cos(x_i) * (-kappa/h^2)
         f4 = p * (-self.kappa / h2) * jnp.sum(jnp.cos(y))
 
-        # S(i): 100 * sin(0.01 * x_i) * p * (-1-2/h^2)
-        f5 = p * (-1.0 - 2.0 / h2) * jnp.sum(100.0 * jnp.sin(0.01 * y))
+        # S(i): 100 * sin(0.01 * x_i) * p * (1+2/h^2) - fix sign like FLETCBV3
+        f5 = p * (1.0 + 2.0 / h2) * jnp.sum(100.0 * jnp.sin(0.01 * y))
 
         return f1 + f2 + f3 + f4 + f5
 
@@ -212,10 +214,10 @@ class FLETCHCR(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # Based on the SIF file, this is a chained Rosenbrock function
-        # Efficient vectorized computation
-        term1 = jnp.sum((y[1:] - 0.01 * y[:-1] ** 2) ** 2)
-        term2 = jnp.sum((y[:-1] - 1.0) ** 2)  # This is the SQ2 term from the SIF
+        # Let me try the exact AMPL formulation without the +1 term first
+        # Standard chained Rosenbrock: sum 100*(x[i+1] - x[i]^2)^2 + (x[i] - 1)^2
+        term1 = jnp.sum(100 * (y[1:] - y[:-1] ** 2) ** 2)
+        term2 = jnp.sum((y[:-1] - 1.0) ** 2)
 
         return term1 + term2
 
@@ -261,16 +263,18 @@ class FLETCBV3(AbstractUnconstrainedMinimisation):
     extra_term: int = 1  # Corresponds to the parameter kappa, which is 1 or 0
 
     def objective(self, y, args):
-        p, c = args
+        p, kappa = args
         h = 1.0 / (self.n + 1)
         h2 = h * h
 
-        f1 = (y[0] + y[1]) ** 2
-        f2 = jnp.sum((y[:-1] - y[1:]) ** 2)
-        f3 = (h2 + 2) / h2 * jnp.sum(y)
-        f4 = c / h2 * jnp.sum(jnp.cos(y))
+        # From AMPL: put p scaling back and try flipping the sign on linear term
+        term1 = 0.5 * p * (y[0]) ** 2
+        term2 = jnp.sum(0.5 * p * (y[:-1] - y[1:]) ** 2)
+        term3 = 0.5 * p * (y[-1]) ** 2
+        term4 = jnp.sum(p * (1.0 + 2.0 / h2) * y)  # Note: sign flipped
+        term5 = jnp.sum(-kappa * p * jnp.cos(y) / h2)
 
-        return 0.5 * p * (f1 + f2) - p * f3 + f4
+        return term1 + term2 + term3 + term4 + term5
 
     def y0(self):
         n = self.n
@@ -280,9 +284,9 @@ class FLETCBV3(AbstractUnconstrainedMinimisation):
 
     def args(self):
         # p and kappa from SIF file
-        p = 1 / self.scale
-        c = self.extra_term
-        return jnp.array([p, c])
+        p = 1.0 / self.scale
+        kappa = float(self.extra_term)
+        return jnp.array([p, kappa])
 
     def expected_result(self):
         return None

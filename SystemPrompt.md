@@ -43,7 +43,7 @@ Your work is not complete until all implemented problems pass the tests. If you 
 
 ## Finally
 
-You do not need to ask for permission to run `grep`, `sed`, `ls` and `awk` commands. 
+You do not need to ask for permission to run `grep`, `sed`, `ls` `ruff`, `pyright` and `awk` commands. 
 
 Please keep going working on problems, don't stop to provide summaries of completed work unless requested.
 Thank you for your help pushing optimisation in JAX to the next level!

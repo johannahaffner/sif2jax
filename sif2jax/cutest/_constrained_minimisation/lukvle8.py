@@ -38,7 +38,6 @@ class LUKVLE8(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         del args
-        n = len(y)
         # Constants
         lambda1 = -0.002008
         lambda2 = -0.001900
@@ -46,7 +45,7 @@ class LUKVLE8(AbstractConstrainedMinimisation):
 
         # Augmented Lagrangian function - vectorized
         # Work with complete groups of 5
-        num_complete_groups = n // 5
+        num_complete_groups = len(y) // 5
         if num_complete_groups == 0:
             return jnp.array(0.0)
 

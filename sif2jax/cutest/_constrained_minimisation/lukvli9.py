@@ -86,92 +86,96 @@ class LUKVLI9(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         n = len(y)
-        # Six inequality constraints
-        constraints = []
+        if n < 4:
+            return None, jnp.array([])
+
+        # Build all six constraints using JAX operations
+        # We'll use jnp.where to handle conditional elements
 
         # c_1: 4(x_1 - x_2^2) + x_2 - x_3^2 + x_3 - x_4^2 ≤ 0
-        if n >= 4:
-            c1 = 4 * (y[0] - y[1] ** 2) + y[1] - y[2] ** 2 + y[2] - y[3] ** 2
-            constraints.append(c1)
+        c1 = 4 * (y[0] - y[1] ** 2) + y[1] - y[2] ** 2 + y[2] - y[3] ** 2
 
-        # c_2: 8x_2(x_2^2 - x_1) - 2(1 - x_2) + 4(x_2 - x_3^2) + x_1^2 + x_3 - x_4^2
-        # + x_4 - x_5^2 ≤ 0
-        if n >= 5:
-            c2 = (
-                8 * y[1] * (y[1] ** 2 - y[0])
-                - 2 * (1 - y[1])
-                + 4 * (y[1] - y[2] ** 2)
-                + y[0] ** 2
-                + y[2]
-                - y[3] ** 2
-                + y[3]
-                - y[4] ** 2
-            )
-            constraints.append(c2)
+        # c_2: Complex constraint
+        c2 = jnp.where(
+            n >= 5,
+            8 * y[1] * (y[1] ** 2 - y[0])
+            - 2 * (1 - y[1])
+            + 4 * (y[1] - y[2] ** 2)
+            + y[0] ** 2
+            + y[2]
+            - y[3] ** 2
+            + y[3]
+            - y[4] ** 2,
+            0.0,
+        )
 
-        # c_3: 8x_3(x_3^2 - x_2) - 2(1 - x_3) + 4(x_3 - x_4^2) + x_2^2 - x_1 + x_4
-        # - x_5^2 + x_1^2 + x_5 - x_6^2 ≤ 0
-        if n >= 6:
-            c3 = (
-                8 * y[2] * (y[2] ** 2 - y[1])
-                - 2 * (1 - y[2])
-                + 4 * (y[2] - y[3] ** 2)
-                + y[1] ** 2
-                - y[0]
-                + y[3]
-                - y[4] ** 2
-                + y[0] ** 2
-                + y[4]
-                - y[5] ** 2
-            )
-            constraints.append(c3)
+        # c_3: Complex constraint
+        c3 = jnp.where(
+            n >= 6,
+            8 * y[2] * (y[2] ** 2 - y[1])
+            - 2 * (1 - y[2])
+            + 4 * (y[2] - y[3] ** 2)
+            + y[1] ** 2
+            - y[0]
+            + y[3]
+            - y[4] ** 2
+            + y[0] ** 2
+            + y[4]
+            - y[5] ** 2,
+            0.0,
+        )
 
-        # c_4: Complex constraint with many terms
-        if n >= 6:
-            c4 = (
-                8 * y[n - 3] * (y[n - 3] ** 2 - y[n - 4])
-                - 2 * (1 - y[n - 3])
-                + 4 * (y[n - 3] - y[n - 1] ** 2)
-                + y[n - 4] ** 2
-                - (y[n - 5] if n > 5 else 0)
-                + y[n - 2]
-                - y[n - 1] ** 2
-                + (y[n - 5] ** 2 if n > 5 else 0)
-                + y[n - 1]
-                - (y[n - 6] if n > 6 else 0)
-            )
-            constraints.append(c4)
+        # c_4: Complex constraint with conditional terms
+        # Use jnp.where for conditional indexing
+        y_n_minus_5 = jnp.where(n > 5, y[n - 5], 0.0)
+        y_n_minus_5_sq = jnp.where(n > 5, y[n - 5] ** 2, 0.0)
+        y_n_minus_6 = jnp.where(n > 6, y[n - 6], 0.0)
+
+        c4 = jnp.where(
+            n >= 6,
+            8 * y[n - 3] * (y[n - 3] ** 2 - y[n - 4])
+            - 2 * (1 - y[n - 3])
+            + 4 * (y[n - 3] - y[n - 1] ** 2)
+            + y[n - 4] ** 2
+            - y_n_minus_5
+            + y[n - 2]
+            - y[n - 1] ** 2
+            + y_n_minus_5_sq
+            + y[n - 1]
+            - y_n_minus_6,
+            0.0,
+        )
 
         # c_5: Another complex constraint
-        if n >= 4:
-            # Note: There seems to be a typo in the original with x_{k-2} and x_{k-3}
-            # Assuming it should be x_{n-2} and x_{n-3}
-            c5 = (
-                8 * y[n - 2] * (y[n - 2] ** 2 - y[n - 3])
-                - 2 * (1 - y[n - 2])
-                + 4 * (y[n - 2] - y[n - 1] ** 2)
-                + y[n - 3] ** 2
-                - (y[n - 4] if n > 4 else 0)
-                + y[n - 1]
-                + (y[n - 3] ** 2 - (y[n - 4] if n > 4 else 0))
-            )
-            constraints.append(c5)
-
-        # c_6: 8x_n(x_n^2 - x_{n-1}) + 2x_n + x_{n-1}^2 + x_{n-2}^2 - x_{n-2}
-        # - x_{n-3} ≤ 0
-        # Note: Paper shows -2(1-x_n) but SIF file has +2x_n (no RHS constant)
-        if n >= 4:
-            c6 = (
-                8 * y[n - 1] * (y[n - 1] ** 2 - y[n - 2])
-                + 2 * y[n - 1]
-                + y[n - 2] ** 2
-                + y[n - 3] ** 2
-                - y[n - 3]
-                - y[n - 4]
-            )
-            constraints.append(c6)
-
-        inequality_constraints = (
-            jnp.array(constraints) if constraints else jnp.array([])
+        y_n_minus_4 = jnp.where(n > 4, y[n - 4], 0.0)
+        c5 = (
+            8 * y[n - 2] * (y[n - 2] ** 2 - y[n - 3])
+            - 2 * (1 - y[n - 2])
+            + 4 * (y[n - 2] - y[n - 1] ** 2)
+            + y[n - 3] ** 2
+            - y_n_minus_4
+            + y[n - 1]
+            + (y[n - 3] ** 2 - y_n_minus_4)
         )
+
+        # c_6: Final constraint
+        c6 = (
+            8 * y[n - 1] * (y[n - 1] ** 2 - y[n - 2])
+            + 2 * y[n - 1]
+            + y[n - 2] ** 2
+            + y[n - 3] ** 2
+            - y[n - 3]
+            - y[n - 4]
+        )
+
+        # Stack all constraints
+        # Only include constraints that are valid for the given n
+        constraints = [c1]
+        if n >= 5:
+            constraints.append(c2)
+        if n >= 6:
+            constraints.extend([c3, c4])
+        constraints.extend([c5, c6])
+
+        inequality_constraints = jnp.array(constraints)
         return None, inequality_constraints

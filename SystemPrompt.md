@@ -40,6 +40,7 @@ When porting problems, please consider the following:
 8. **Work continuously without stopping for summaries.** Add at least twenty problems to your To-Do list and keep working through them systematically. Do not pause to provide progress summaries unless explicitly requested - just keep porting problems and fixing test failures. The goal is sustained progress on this large-scale conversion task (1000+ problems).
 9. Run ruff format and ruff check on your work. Ruff is installed in the working directory.
 10. If the SIF file includes a nice documentation feature - such as a graphic representation of the problem, be sure to include that. Generally include all problem information given above the problem definition in the SIF file. 
+11. Classification numbers should match the numbers given in the SIF file. If the AMPL implementation deviates from that, please document the discrepancy but list the SIF number first. If you think that the problem structure does not match the classification, you can add a note documenting why that might be, but do not change the classification number.
 
 ## Testing
 
@@ -48,7 +49,8 @@ Without this container, you cannot run any tests.
 Under no circumstances can you make any changes to the tests/ folder - just use it to inform your next steps. 
 
 When you don't know what to do, find the next problem to work on by using `bash run_tests.sh -x` and start fixing the first problem for which the tests fail.
-When you make any change to a file, please run the tests again. You can run problem-specific tests with `bash run_tests.sh --test-case "PROBLEM"`. 
+When you make any change to a file, please run the tests again. You can run problem-specific tests with `bash run_tests.sh --test-case "PROBLEM1,PROBLEM2"`. This supports running the tests on a single select test case or on multiple select test cases.
+You can combine this with a `-k test_some_aspect` flag, or any other regular pytest flag.
 
 Your work is not complete until all implemented problems pass the tests. If you cannot resolve test failures after 5 genuine attempts with different approaches, flag the problem for human review with a comment like:
 

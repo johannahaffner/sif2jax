@@ -1,3 +1,16 @@
+from .bt1 import BT1 as BT1
+from .bt2 import BT2 as BT2
+from .bt3 import BT3 as BT3
+from .bt4 import BT4 as BT4
+from .bt5 import BT5 as BT5
+from .bt6 import BT6 as BT6
+from .bt7 import BT7 as BT7
+from .bt8 import BT8 as BT8
+from .bt9 import BT9 as BT9
+from .bt10 import BT10 as BT10
+from .bt11 import BT11 as BT11
+from .bt12 import BT12 as BT12
+from .bt13 import BT13 as BT13
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
 from .hs8 import HS8 as HS8
@@ -165,4 +178,17 @@ constrained_minimisation_problems = (
     HS117(),
     HS118(),
     HS119(),
+    BT1(),
+    BT2(),
+    BT3(),
+    BT4(),
+    BT5(),
+    BT6(),
+    BT7(),
+    BT8(),
+    BT9(),
+    BT10(),
+    BT11(),
+    BT12(),
+    BT13(),
 )

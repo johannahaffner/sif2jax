@@ -15,18 +15,22 @@ def pytest_generate_tests(metafunc):
 
 def get_test_cases(requested):
     if requested is not None:
-        try:
-            test_case = sif2jax.cutest.get_problem(requested)
-            assert (
-                test_case is not None
-            ), (
-                f"Test case '{requested}' not found in sif2jax.cutest problems."
-            )  # TODO: why was the double catch (assert / Exception) needed here?
-        except Exception as e:
-            raise RuntimeError(
-                f"Test case '{requested}' not found in sif2jax.cutest problems."
-            ) from e
-        return (test_case,)
+        # Split by comma and strip whitespace
+        test_case_names = [name.strip() for name in requested.split(",")]
+        test_cases = []
+
+        for name in test_case_names:
+            try:
+                test_case = sif2jax.cutest.get_problem(name)
+                assert (
+                    test_case is not None
+                ), f"Test case '{name}' not found in sif2jax.cutest problems."
+                test_cases.append(test_case)
+            except Exception as e:
+                raise RuntimeError(
+                    f"Test case '{name}' not found in sif2jax.cutest problems."
+                ) from e
+        return tuple(test_cases)
     else:
         return sif2jax.problems
 

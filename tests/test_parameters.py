@@ -3,7 +3,6 @@ import jax.flatten_util as jfu
 import jax.numpy as jnp
 import numpy as np
 import pycutest  # pyright: ignore[reportMissingImports]  - test runs in container
-import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
 
 
@@ -18,10 +17,15 @@ def get_test_cases(requested):
     if requested is not None:
         try:
             test_case = sif2jax.cutest.get_problem(requested)
-        except KeyError:
-            raise ValueError(
+            assert (
+                test_case is not None
+            ), (
                 f"Test case '{requested}' not found in sif2jax.cutest problems."
-            )
+            )  # TODO: why was the double catch (assert / Exception) needed here?
+        except Exception as e:
+            raise RuntimeError(
+                f"Test case '{requested}' not found in sif2jax.cutest problems."
+            ) from e
         return (test_case,)
     else:
         return sif2jax.problems
@@ -67,6 +71,37 @@ def test_correct_hessian_at_start(problem):
         pass  # Skip Hessian test for large problems to save time and memory
 
 
+def test_correct_constraint_dimensions(problem):
+    num_equalities, num_inequalities, _ = problem.num_constraints()
+    pycutest_problem = pycutest.import_problem(problem.name())
+
+    if pycutest_problem.m == 0:
+        assert num_equalities == 0
+        assert num_inequalities == 0
+    else:
+        pycutest_constraints = pycutest_problem.cons(pycutest_problem.x0)
+        assert pycutest_constraints is not None
+
+        pycutest_equalities = pycutest_constraints[pycutest_problem.is_eq_cons]  # pyright: ignore
+        pycutest_equalities = jnp.array(pycutest_equalities).squeeze()
+        assert pycutest_equalities.size == num_equalities
+
+        pycutest_inequalities = pycutest_constraints[~pycutest_problem.is_eq_cons]  # pyright: ignore
+        pycutest_inequalities = jnp.array(pycutest_inequalities).squeeze()
+        assert pycutest_inequalities.size == num_inequalities
+
+
+def test_correct_number_of_finite_bounds(problem):
+    _, _, num_finite_bounds = problem.num_constraints()
+    pycutest_problem = pycutest.import_problem(problem.name())
+
+    # Pycutest defaults unconstrained variables to -1e20 and 1e20
+    pycutest_finite_lower = jnp.sum(jnp.asarray(pycutest_problem.bl > -1e20))
+    pycutest_finite_upper = jnp.sum(jnp.asarray(pycutest_problem.bu < 1e20))
+
+    assert num_finite_bounds == pycutest_finite_lower + pycutest_finite_upper
+
+
 def test_correct_constraints_at_start(problem):
     if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
         pycutest_problem = pycutest.import_problem(problem.name())
@@ -93,7 +128,6 @@ def test_correct_constraints_at_start(problem):
 # test correct constraint jacobian at start
 
 
-@pytest.mark.skip(reason="can slow down tests for expensive problems, needs fix.")
 def test_compilation(problem):
     try:
         compiled = jax.jit(problem.objective)

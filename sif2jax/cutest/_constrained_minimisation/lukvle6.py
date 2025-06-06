@@ -35,31 +35,28 @@ class LUKVLE6(AbstractConstrainedMinimisation):
         del args
         n = len(y)
         p = 7.0 / 3.0
-        # Generalized Broyden banded function - vectorized
 
         # Main terms: (2 + 5x_i^2)x_i + 1
         main_terms = (2 + 5 * y**2) * y + 1
 
-        # For the banded sum, we need to compute a sliding window sum
-        # Each element i needs sum of x_j(1 + x_j) for j in [max(0, i-5), min(n-1, i+1)]
-        # This is a convolution-like operation
-
         # Pre-compute x_j(1 + x_j) for all elements
         x_terms = y * (1 + y)
 
-        # Compute window sums directly using vectorized operations
-        window_sums = jnp.zeros(n)
-        for offset in range(-5, 2):  # -5, -4, -3, -2, -1, 0, 1
-            # Determine valid indices for this offset
-            if offset < 0:
-                # Can add y[i+offset]^2 to position i for i >= -offset
-                window_sums = window_sums.at[-offset:].add(x_terms[: n + offset])
-            elif offset > 0:
-                # Can add y[i+offset]^2 to position i for i < n-offset
-                window_sums = window_sums.at[: n - offset].add(x_terms[offset:])
-            else:
-                # offset == 0, add all elements
-                window_sums = window_sums + x_terms
+        # Efficient computation of window sums using cumulative sum
+        # Each element i needs sum of x_j(1 + x_j) for j in [max(0, i-5), min(n-1, i+1)]
+        # We can use cumulative sum and subtract to get window sums
+
+        # Pad x_terms for easier indexing
+        padded_x_terms = jnp.pad(x_terms, (6, 1), mode="constant")
+
+        # Compute cumulative sum
+        cumsum = jnp.cumsum(padded_x_terms)
+
+        # For each position i, we want sum from (i-5) to (i+1) inclusive
+        # In padded array, position i corresponds to i+6
+        # We want sum from (i+6-5) to (i+6+1) = sum from (i+1) to (i+7)
+        # This is cumsum[i+7] - cumsum[i]
+        window_sums = cumsum[7 : n + 7] - cumsum[:n]
 
         # Combine terms
         all_terms = main_terms + window_sums

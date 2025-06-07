@@ -93,6 +93,42 @@ from .hs116 import HS116 as HS116
 from .hs117 import HS117 as HS117
 from .hs118 import HS118 as HS118
 from .hs119 import HS119 as HS119
+from .lukvle1 import LUKVLE1 as LUKVLE1
+from .lukvle2 import LUKVLE2 as LUKVLE2
+from .lukvle3 import LUKVLE3 as LUKVLE3
+from .lukvle4 import LUKVLE4 as LUKVLE4
+from .lukvle5 import LUKVLE5 as LUKVLE5
+from .lukvle6 import LUKVLE6 as LUKVLE6
+from .lukvle7 import LUKVLE7 as LUKVLE7
+from .lukvle8 import LUKVLE8 as LUKVLE8
+from .lukvle9 import LUKVLE9 as LUKVLE9
+from .lukvle10 import LUKVLE10 as LUKVLE10
+from .lukvle11 import LUKVLE11 as LUKVLE11
+from .lukvle12 import LUKVLE12 as LUKVLE12
+from .lukvle13 import LUKVLE13 as LUKVLE13
+from .lukvle14 import LUKVLE14 as LUKVLE14
+from .lukvle15 import LUKVLE15 as LUKVLE15
+from .lukvle16 import LUKVLE16 as LUKVLE16
+from .lukvle17 import LUKVLE17 as LUKVLE17
+from .lukvle18 import LUKVLE18 as LUKVLE18
+from .lukvli1 import LUKVLI1 as LUKVLI1
+from .lukvli2 import LUKVLI2 as LUKVLI2
+from .lukvli3 import LUKVLI3 as LUKVLI3
+from .lukvli4 import LUKVLI4 as LUKVLI4
+from .lukvli5 import LUKVLI5 as LUKVLI5
+from .lukvli6 import LUKVLI6 as LUKVLI6
+from .lukvli7 import LUKVLI7 as LUKVLI7
+from .lukvli8 import LUKVLI8 as LUKVLI8
+from .lukvli9 import LUKVLI9 as LUKVLI9
+from .lukvli10 import LUKVLI10 as LUKVLI10
+from .lukvli11 import LUKVLI11 as LUKVLI11
+from .lukvli12 import LUKVLI12 as LUKVLI12
+from .lukvli13 import LUKVLI13 as LUKVLI13
+from .lukvli14 import LUKVLI14 as LUKVLI14
+from .lukvli15 import LUKVLI15 as LUKVLI15
+from .lukvli16 import LUKVLI16 as LUKVLI16
+from .lukvli17 import LUKVLI17 as LUKVLI17
+from .lukvli18 import LUKVLI18 as LUKVLI18
 
 
 constrained_minimisation_problems = (
@@ -191,4 +227,40 @@ constrained_minimisation_problems = (
     BT11(),
     BT12(),
     BT13(),
+    LUKVLE1(),
+    LUKVLE2(),
+    LUKVLE3(),
+    LUKVLE4(),
+    LUKVLE5(),
+    LUKVLE6(),
+    LUKVLE7(),
+    LUKVLE8(),
+    LUKVLE9(),
+    LUKVLE10(),
+    LUKVLE11(),
+    LUKVLE12(),
+    LUKVLE13(),
+    LUKVLE14(),
+    LUKVLE15(),
+    LUKVLE16(),
+    LUKVLE17(),
+    LUKVLE18(),
+    LUKVLI1(),
+    LUKVLI2(),
+    LUKVLI3(),
+    LUKVLI4(),
+    LUKVLI5(),
+    LUKVLI6(),
+    LUKVLI7(),
+    LUKVLI8(),
+    LUKVLI9(),
+    LUKVLI10(),
+    LUKVLI11(),
+    LUKVLI12(),
+    LUKVLI13(),
+    LUKVLI14(),
+    LUKVLI15(),
+    LUKVLI16(),
+    LUKVLI17(),
+    LUKVLI18(),
 )

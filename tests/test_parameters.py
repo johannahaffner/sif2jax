@@ -138,12 +138,13 @@ def test_compilation(problem):
         _ = compiled(problem.y0(), problem.args())
     except Exception as e:
         raise RuntimeError(f"Compilation failed for {problem.name()}") from e
+    jax.clear_caches()
 
 
 def test_vmap(problem):
     try:
-        compiled = jax.vmap(problem.objective, in_axes=(0, None))
+        vmapped = jax.vmap(problem.objective, in_axes=(0, None))
         y0 = problem.y0()
-        _ = compiled(jnp.array([y0, y0, y0]), problem.args())
+        _ = vmapped(jnp.array([y0, y0, y0]), problem.args())
     except Exception as e:
         raise RuntimeError(f"Vmap failed for {problem.name}") from e

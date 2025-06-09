@@ -46,7 +46,7 @@ When porting problems, please consider the following:
 
 You can check any work against the original Fortran implementations. For this purpose, please run `bash run_tests.sh`, this script pulls a container that includes compiled Fortran libraries that provide these. 
 Without this container, you cannot run any tests. 
-Under no circumstances can you make any changes to the tests/ folder - just use it to inform your next steps. 
+Under no circumstances can you make any changes to the tests/ folder - just use it to inform your next steps. Never make edits to run_tests.sh.
 
 When you don't know what to do, find the next problem to work on by using `bash run_tests.sh -x` and start fixing the first problem for which the tests fail.
 When you make any change to a file, please run the tests again. You can run problem-specific tests with `bash run_tests.sh --test-case "PROBLEM1,PROBLEM2"`. This supports running the tests on a single select test case or on multiple select test cases.

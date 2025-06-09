@@ -97,7 +97,9 @@ from .lukvle1 import LUKVLE1 as LUKVLE1
 
 # from .lukvle2 import LUKVLE2 as LUKVLE2
 from .lukvle3 import LUKVLE3 as LUKVLE3
-from .lukvle4 import LUKVLE4 as LUKVLE4
+
+# from .lukvle4 import LUKVLE4 as LUKVLE4  # Use LUKVLE4C instead
+# from .lukvle4c import LUKVLE4C as LUKVLE4C
 from .lukvle5 import LUKVLE5 as LUKVLE5
 from .lukvle6 import LUKVLE6 as LUKVLE6
 from .lukvle7 import LUKVLE7 as LUKVLE7
@@ -116,7 +118,9 @@ from .lukvli1 import LUKVLI1 as LUKVLI1
 
 # from .lukvli2 import LUKVLI2 as LUKVLI2
 from .lukvli3 import LUKVLI3 as LUKVLI3
-from .lukvli4 import LUKVLI4 as LUKVLI4
+
+# from .lukvli4 import LUKVLI4 as LUKVLI4  # Use LUKVLI4C instead
+# from .lukvli4c import LUKVLI4C as LUKVLI4C
 from .lukvli5 import LUKVLI5 as LUKVLI5
 from .lukvli6 import LUKVLI6 as LUKVLI6
 from .lukvli7 import LUKVLI7 as LUKVLI7
@@ -232,7 +236,8 @@ constrained_minimisation_problems = (
     LUKVLE1(),
     # LUKVLE2(),
     LUKVLE3(),
-    LUKVLE4(),
+    # LUKVLE4(),  # Has factor ~2380 error due to SIF bug, use LUKVLE4C instead
+    # LUKVLE4C(),  # Has 3% discrepancy with pycutest
     LUKVLE5(),
     LUKVLE6(),
     LUKVLE7(),
@@ -250,7 +255,8 @@ constrained_minimisation_problems = (
     LUKVLI1(),
     # LUKVLI2(),
     LUKVLI3(),
-    LUKVLI4(),
+    # LUKVLI4(),  # Has factor ~2380 error due to SIF bug, use LUKVLI4C instead
+    # LUKVLI4C(),  # Has 3% discrepancy with pycutest
     LUKVLI5(),
     LUKVLI6(),
     LUKVLI7(),

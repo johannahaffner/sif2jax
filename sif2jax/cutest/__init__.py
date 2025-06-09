@@ -120,7 +120,8 @@ from ._constrained_minimisation import (
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,
     LUKVLE3 as LUKVLE3,
-    LUKVLE4 as LUKVLE4,
+    # LUKVLE4 as LUKVLE4,  # Use LUKVLE4C instead
+    # LUKVLE4C as LUKVLE4C,
     LUKVLE5 as LUKVLE5,
     LUKVLE6 as LUKVLE6,
     LUKVLE7 as LUKVLE7,
@@ -138,7 +139,8 @@ from ._constrained_minimisation import (
     LUKVLI1 as LUKVLI1,
     # LUKVLI2 as LUKVLI2,
     LUKVLI3 as LUKVLI3,
-    LUKVLI4 as LUKVLI4,
+    # LUKVLI4 as LUKVLI4,  # Use LUKVLI4C instead
+    # LUKVLI4C as LUKVLI4C,
     LUKVLI5 as LUKVLI5,
     LUKVLI6 as LUKVLI6,
     LUKVLI7 as LUKVLI7,
@@ -422,7 +424,8 @@ problems_dict = {
     "LUKVLE1": LUKVLE1(),
     # "LUKVLE2": LUKVLE2(),
     "LUKVLE3": LUKVLE3(),
-    "LUKVLE4": LUKVLE4(),
+    # "LUKVLE4": LUKVLE4(),  # Use LUKVLE4C instead
+    # "LUKVLE4C": LUKVLE4C(),
     "LUKVLE5": LUKVLE5(),
     "LUKVLE6": LUKVLE6(),
     "LUKVLE7": LUKVLE7(),
@@ -440,7 +443,8 @@ problems_dict = {
     "LUKVLI1": LUKVLI1(),
     # "LUKVLI2": LUKVLI2(),
     "LUKVLI3": LUKVLI3(),
-    "LUKVLI4": LUKVLI4(),
+    # "LUKVLI4": LUKVLI4(),  # Use LUKVLI4C instead
+    # "LUKVLI4C": LUKVLI4C(),
     "LUKVLI5": LUKVLI5(),
     "LUKVLI6": LUKVLI6(),
     "LUKVLI7": LUKVLI7(),

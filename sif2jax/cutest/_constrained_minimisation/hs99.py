@@ -28,6 +28,7 @@ class HS99(AbstractConstrainedMinimisation):
 
     Classification: GGR-P1-3
     Note: This is a simplified implementation of the complex recursive problem.
+    TODO: Needs human review - complex recursive formulation requires implementation
     """
 
     def objective(self, y, args):

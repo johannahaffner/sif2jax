@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class HS110(AbstractConstrainedMinimisation):
+class HS110(AbstractBoundedMinimisation):
     """Problem 110 from the Hock-Schittkowski test collection.
 
     A 10-variable problem with logarithmic objective function and simple bounds.
@@ -71,7 +71,3 @@ class HS110(AbstractConstrainedMinimisation):
             [9.999, 9.999, 9.999, 9.999, 9.999, 9.999, 9.999, 9.999, 9.999, 9.999]
         )
         return (lower, upper)
-
-    def constraint(self, y):
-        # No constraints beyond bounds
-        return None, None

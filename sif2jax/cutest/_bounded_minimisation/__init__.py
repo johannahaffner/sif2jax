@@ -17,6 +17,7 @@ from .hs36 import HS36 as HS36
 from .hs37 import HS37 as HS37
 from .hs38 import HS38 as HS38
 from .hs45 import HS45 as HS45
+from .hs110 import HS110 as HS110
 
 
 bounded_minimisation_problems = (
@@ -39,4 +40,5 @@ bounded_minimisation_problems = (
     HS37(),
     HS38(),
     HS45(),
+    HS110(),
 )

@@ -11,7 +11,7 @@ class HS116(AbstractConstrainedMinimisation):
     f(x) = x₁₁ + x₁₂ + x₁₃
 
     Subject to:
-        Fifteen inequality constraints involving bilinear and quadratic terms
+        Fourteen inequality constraints involving bilinear and quadratic terms
         Variable bounds from Appendix A
 
     Source: problem 116 in
@@ -100,26 +100,28 @@ class HS116(AbstractConstrainedMinimisation):
     def constraint(self, y):
         x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13 = y
 
-        # Fifteen inequality constraints from the PDF
+        # Fourteen inequality constraints from the SIF file
+        # Note: The objective bounds 50 ≤ f(x) ≤ 250 are handled as a
+        # ranged constraint C4 in the SIF file, represented as a single
+        # constraint in pycutest
         ineq1 = x3 - x2
         ineq2 = x2 - x1
         ineq3 = 1 - 0.002 * x7 + 0.002 * x8
 
-        # Objective bounds constraint: 50 ≤ f(x) ≤ 250
+        # Objective lower bound (C4 in SIF): f(x) ≥ 50
         f_val = self.objective(y, self.args())
-        ineq4 = f_val - 50.0  # f(x) - 50 ≥ 0
-        ineq5 = 250.0 - f_val  # 250 - f(x) ≥ 0
+        ineq4 = f_val - 50.0
 
-        ineq6 = x13 - 1.262626 * x10 + 1.231059 * x3 * x10
-        ineq7 = x5 - 0.03475 * x2 - 0.975 * x2 * x5 + 0.00975 * x2**2
-        ineq8 = x6 - 0.03475 * x3 - 0.975 * x3 * x6 + 0.00975 * x3**2
-        ineq9 = x5 * x7 - x1 * x8 - x4 * x7 + x4 * x8
-        ineq10 = 1 - 0.002 * (x2 * x9 + x5 * x8 - x1 * x8 - x6 * x9) - x5 - x6
-        ineq11 = x2 * x9 - x3 * x10 - x6 * x9 - 500 * x2 + 500 * x6 + x2 * x10
-        ineq12 = x2 - 0.9 - 0.002 * (x2 * x10 - x3 * x10)
-        ineq13 = x4 - 0.03475 * x1 - 0.975 * x1 * x4 + 0.00975 * x1**2
-        ineq14 = x11 - 1.262626 * x8 + 1.231059 * x1 * x8
-        ineq15 = x12 - 1.262626 * x9 + 1.231059 * x2 * x9
+        ineq5 = x13 - 1.262626 * x10 + 1.231059 * x3 * x10
+        ineq6 = x5 - 0.03475 * x2 - 0.975 * x2 * x5 + 0.00975 * x2**2
+        ineq7 = x6 - 0.03475 * x3 - 0.975 * x3 * x6 + 0.00975 * x3**2
+        ineq8 = x5 * x7 - x1 * x8 - x4 * x7 + x4 * x8
+        ineq9 = 1 - 0.002 * (x2 * x9 + x5 * x8 - x1 * x8 - x6 * x9) - x5 - x6
+        ineq10 = x2 * x9 - x3 * x10 - x6 * x9 - 500 * x2 + 500 * x6 + x2 * x10
+        ineq11 = x2 - 0.9 - 0.002 * (x2 * x10 - x3 * x10)
+        ineq12 = x4 - 0.03475 * x1 - 0.975 * x1 * x4 + 0.00975 * x1**2
+        ineq13 = x11 - 1.262626 * x8 + 1.231059 * x1 * x8
+        ineq14 = x12 - 1.262626 * x9 + 1.231059 * x2 * x9
 
         inequality_constraints = jnp.array(
             [
@@ -137,7 +139,6 @@ class HS116(AbstractConstrainedMinimisation):
                 ineq12,
                 ineq13,
                 ineq14,
-                ineq15,
             ]
         )
         return None, inequality_constraints

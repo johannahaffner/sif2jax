@@ -19,6 +19,7 @@ from ._bounded_minimisation import (
     HS37 as HS37,
     HS38 as HS38,
     HS45 as HS45,
+    HS110 as HS110,
 )
 from ._constrained_minimisation import (
     BT1 as BT1,
@@ -97,7 +98,7 @@ from ._constrained_minimisation import (
     HS81 as HS81,
     HS83 as HS83,
     HS93 as HS93,
-    HS99 as HS99,
+    # HS99 as HS99,  # TODO: Needs human review - complex recursive formulation
     HS100 as HS100,
     HS101 as HS101,
     HS102 as HS102,
@@ -108,7 +109,6 @@ from ._constrained_minimisation import (
     HS107 as HS107,
     HS108 as HS108,
     HS109 as HS109,
-    HS110 as HS110,
     HS111 as HS111,
     HS112 as HS112,
     HS113 as HS113,
@@ -388,7 +388,7 @@ problems_dict = {
     "HS81": HS81(),
     "HS83": HS83(),
     "HS93": HS93(),
-    "HS99": HS99(),
+    # "HS99": HS99(),  # TODO: Needs human review - complex recursive formulation
     "HS100": HS100(),
     "HS101": HS101(),
     "HS102": HS102(),

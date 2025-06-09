@@ -73,7 +73,8 @@ from .hs80 import HS80 as HS80
 from .hs81 import HS81 as HS81
 from .hs83 import HS83 as HS83
 from .hs93 import HS93 as HS93
-from .hs99 import HS99 as HS99
+
+# from .hs99 import HS99 as HS99  # TODO: Needs human review - complex recursion
 from .hs100 import HS100 as HS100
 from .hs101 import HS101 as HS101
 from .hs102 import HS102 as HS102
@@ -84,7 +85,6 @@ from .hs106 import HS106 as HS106
 from .hs107 import HS107 as HS107
 from .hs108 import HS108 as HS108
 from .hs109 import HS109 as HS109
-from .hs110 import HS110 as HS110
 from .hs111 import HS111 as HS111
 from .hs112 import HS112 as HS112
 from .hs113 import HS113 as HS113
@@ -202,7 +202,7 @@ constrained_minimisation_problems = (
     HS81(),
     HS83(),
     HS93(),
-    HS99(),
+    # HS99(),  # TODO: Needs human review - complex recursive formulation
     HS100(),
     HS101(),
     HS102(),
@@ -213,7 +213,6 @@ constrained_minimisation_problems = (
     HS107(),
     HS108(),
     HS109(),
-    HS110(),
     HS111(),
     HS112(),
     HS113(),

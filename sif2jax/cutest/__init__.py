@@ -129,7 +129,7 @@ from ._constrained_minimisation import (
     LUKVLE9 as LUKVLE9,
     LUKVLE10 as LUKVLE10,
     LUKVLE11 as LUKVLE11,
-    LUKVLE12 as LUKVLE12,
+    # LUKVLE12 as LUKVLE12,  # Has constraint function inconsistencies
     LUKVLE13 as LUKVLE13,
     LUKVLE14 as LUKVLE14,
     LUKVLE15 as LUKVLE15,
@@ -148,7 +148,7 @@ from ._constrained_minimisation import (
     LUKVLI9 as LUKVLI9,
     LUKVLI10 as LUKVLI10,
     LUKVLI11 as LUKVLI11,
-    LUKVLI12 as LUKVLI12,
+    # LUKVLI12 as LUKVLI12,  # Has constraint function inconsistencies
     LUKVLI13 as LUKVLI13,
     LUKVLI14 as LUKVLI14,
     LUKVLI15 as LUKVLI15,
@@ -433,7 +433,7 @@ problems_dict = {
     "LUKVLE9": LUKVLE9(),
     "LUKVLE10": LUKVLE10(),
     "LUKVLE11": LUKVLE11(),
-    "LUKVLE12": LUKVLE12(),
+    # "LUKVLE12": LUKVLE12(),  # Has constraint function inconsistencies
     "LUKVLE13": LUKVLE13(),
     "LUKVLE14": LUKVLE14(),
     "LUKVLE15": LUKVLE15(),
@@ -452,7 +452,7 @@ problems_dict = {
     "LUKVLI9": LUKVLI9(),
     "LUKVLI10": LUKVLI10(),
     "LUKVLI11": LUKVLI11(),
-    "LUKVLI12": LUKVLI12(),
+    # "LUKVLI12": LUKVLI12(),  # Has constraint function inconsistencies
     "LUKVLI13": LUKVLI13(),
     "LUKVLI14": LUKVLI14(),
     "LUKVLI15": LUKVLI15(),

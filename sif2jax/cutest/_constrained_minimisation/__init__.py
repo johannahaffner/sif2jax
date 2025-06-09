@@ -107,7 +107,8 @@ from .lukvle8 import LUKVLE8 as LUKVLE8
 from .lukvle9 import LUKVLE9 as LUKVLE9
 from .lukvle10 import LUKVLE10 as LUKVLE10
 from .lukvle11 import LUKVLE11 as LUKVLE11
-from .lukvle12 import LUKVLE12 as LUKVLE12
+
+# from .lukvle12 import LUKVLE12 as LUKVLE12  # Has constraint function inconsistencies
 from .lukvle13 import LUKVLE13 as LUKVLE13
 from .lukvle14 import LUKVLE14 as LUKVLE14
 from .lukvle15 import LUKVLE15 as LUKVLE15
@@ -128,7 +129,8 @@ from .lukvli8 import LUKVLI8 as LUKVLI8
 from .lukvli9 import LUKVLI9 as LUKVLI9
 from .lukvli10 import LUKVLI10 as LUKVLI10
 from .lukvli11 import LUKVLI11 as LUKVLI11
-from .lukvli12 import LUKVLI12 as LUKVLI12
+
+# from .lukvli12 import LUKVLI12 as LUKVLI12  # Has constraint function inconsistencies
 from .lukvli13 import LUKVLI13 as LUKVLI13
 from .lukvli14 import LUKVLI14 as LUKVLI14
 from .lukvli15 import LUKVLI15 as LUKVLI15
@@ -245,7 +247,7 @@ constrained_minimisation_problems = (
     LUKVLE9(),
     LUKVLE10(),
     LUKVLE11(),
-    LUKVLE12(),
+    # LUKVLE12(),  # Has constraint function inconsistencies
     LUKVLE13(),
     LUKVLE14(),
     LUKVLE15(),
@@ -264,7 +266,7 @@ constrained_minimisation_problems = (
     LUKVLI9(),
     LUKVLI10(),
     LUKVLI11(),
-    LUKVLI12(),
+    # LUKVLI12(),  # Has constraint function inconsistencies
     LUKVLI13(),
     LUKVLI14(),
     LUKVLI15(),

@@ -4,7 +4,6 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: This implementation requires verification against another CUTEst interface
 class COATING(AbstractUnconstrainedMinimisation):
     """The MINPACK 2 Coating Thickness Standardization problem.
 
@@ -172,7 +171,7 @@ class COATING(AbstractUnconstrainedMinimisation):
             ]
         )
 
-        # Y data (lines 172-298 in the SIF file)
+        # Y data (Y1 through Y126 from the SIF file)
         y_data = jnp.array(
             [
                 9.3636,
@@ -312,8 +311,6 @@ class COATING(AbstractUnconstrainedMinimisation):
             # Adjust for 0-based indexing
             i_1 = i  # First quarter index
             i_2 = i + m4  # Second quarter index
-            i_3 = i + 2 * m4  # Third quarter index
-            i_4 = i + 3 * m4  # Fourth quarter index
 
             # Get the corresponding data
             eta1 = eta1_data[i]
@@ -323,30 +320,32 @@ class COATING(AbstractUnconstrainedMinimisation):
             i_p8 = i + 8  # IP8 in SIF
             i2_p8 = i + m4 + 8  # I2P8 in SIF
 
-            # First quarter residual (lines 307-316)
+            # First quarter residual (F(I) group)
+            # Linear terms + element contributions
             f_i1 = (
-                y[0]
-                + y[1] * eta1
-                + y[2] * eta2
-                + y[3] * eta1 * eta2
-                + y[1] * y[i_p8] * eta2
-                + y[2] * y[i2_p8] * eta1
-                + y[3] * y[i_p8]
-                + y[3] * y[i2_p8]
-                + y[3] * y[i_p8] * y[i2_p8]
+                y[0]  # X1
+                + y[1] * eta1  # X2 * ETA1
+                + y[2] * eta2  # X3 * ETA2
+                + y[3] * eta1 * eta2  # X4 * ETA1 * ETA2
+                + y[1] * y[i_p8]  # EA(I): X2 * X(IP8)
+                + y[2] * y[i2_p8]  # EB(I): X3 * X(I2P8)
+                + y[3] * y[i_p8] * eta2  # EC(I): X4 * X(IP8) * ETA2
+                + y[3] * y[i2_p8] * eta1  # ED(I): X4 * X(I2P8) * ETA1
+                + y[3] * y[i_p8] * y[i2_p8]  # EE(I): X4 * X(IP8) * X(I2P8)
             )
 
-            # Second quarter residual (lines 318-321)
+            # Second quarter residual (F(I2) group)
+            # Linear terms + element contributions
             f_i2 = (
-                y[4]
-                + y[5] * eta1
-                + y[6] * eta2
-                + y[7] * eta1 * eta2
-                + y[5] * y[i_p8] * eta2
-                + y[6] * y[i2_p8] * eta1
-                + y[7] * y[i_p8]
-                + y[7] * y[i2_p8]
-                + y[7] * y[i_p8] * y[i2_p8]
+                y[4]  # X5
+                + y[5] * eta1  # X6 * ETA1
+                + y[6] * eta2  # X7 * ETA2
+                + y[7] * eta1 * eta2  # X8 * ETA1 * ETA2
+                + y[5] * y[i_p8]  # EA(I2): X6 * X(IP8)
+                + y[6] * y[i2_p8]  # EB(I2): X7 * X(I2P8)
+                + y[7] * y[i_p8] * eta2  # EC(I2): X8 * X(IP8) * ETA2
+                + y[7] * y[i2_p8] * eta1  # ED(I2): X8 * X(I2P8) * ETA1
+                + y[7] * y[i_p8] * y[i2_p8]  # EE(I2): X8 * X(IP8) * X(I2P8)
             )
 
             # Third quarter residual (lines 323-326)
@@ -356,10 +355,12 @@ class COATING(AbstractUnconstrainedMinimisation):
             f_i4 = y[i2_p8] * scale2
 
             # Compute residuals
+            # F(I) and F(I2) have Y data constants to subtract
             r_i1 = f_i1 - y_data[i_1]
             r_i2 = f_i2 - y_data[i_2]
-            r_i3 = f_i3 - y_data[i_3]
-            r_i4 = f_i4 - y_data[i_4]
+            # F(I3) and F(I4) have no constants - they're just the function values
+            r_i3 = f_i3
+            r_i4 = f_i4
 
             return jnp.array([r_i1, r_i2, r_i3, r_i4])
 

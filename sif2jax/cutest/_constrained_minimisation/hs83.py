@@ -23,7 +23,6 @@ class HS83(AbstractConstrainedMinimisation):
     Verlag, Heidelberg, 1981.
 
     Classification: QQR-P1-4
-    Note: Simplified implementation - actual aᵢ values would come from Appendix A
     """
 
     def objective(self, y, args):
@@ -50,13 +49,34 @@ class HS83(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         x1, x2, x3, x4, x5 = y
-        # Simplified inequality constraints (needs actual aᵢ values from Appendix A)
-        # Using placeholder values based on feasible region
-        ineq1 = 92 - (x1 + x2 * x5 + x1 * x4 - x4 * x5)
-        ineq2 = -(x1 + x2 * x5 + x1 * x4 - x4 * x5)
-        ineq3 = 20 - (x2 * x5 + x1 * x2 + x3**2 - 90)
-        ineq4 = -(x2 * x5 + x1 * x2 + x3**2 - 90)
-        ineq5 = 5 - (x3 * x5 + x1 * x3 + x3 * x4 - 20)
-        ineq6 = -(x3 * x5 + x1 * x3 + x3 * x4 - 20)
-        inequality_constraints = jnp.array([ineq1, ineq2, ineq3, ineq4, ineq5, ineq6])
+
+        # Parameters from SIF file
+        a1 = 85.334407
+        a2 = 0.0056858
+        a3 = 0.0006262
+        a4 = 0.0022053
+        a5 = 80.51249
+        a6 = 0.0071317
+        a7 = 0.0029955
+        a8 = 0.0021813
+        a9 = 9.300961
+        a10 = 0.0047026
+        a11 = 0.0012547
+        a12 = 0.0019085
+
+        # Three ranged constraints from SIF file
+        # pycutest returns ranged constraints shifted by negative of constants
+        # C1: 0 <= -a1 + a2*x2*x5 + a3*x1*x4 - a4*x3*x5 <= 92
+        # pycutest returns: (raw expression) - (-a1) = raw + a1
+        c1 = a2 * x2 * x5 + a3 * x1 * x4 - a4 * x3 * x5 + a1
+
+        # C2: 0 <= -(a5-90) + a6*x2*x5 + a7*x1*x2 + a8*x3^2 <= 20
+        # pycutest returns: raw - (-(a5-90)) = raw + (a5-90)
+        c2 = a6 * x2 * x5 + a7 * x1 * x2 + a8 * x3**2 + (a5 - 90)
+
+        # C3: 0 <= -(a9-20) + a10*x3*x5 + a11*x1*x3 + a12*x3*x4 <= 5
+        # pycutest returns: raw - (-(a9-20)) = raw + (a9-20)
+        c3 = a10 * x3 * x5 + a11 * x1 * x3 + a12 * x3 * x4 + (a9 - 20)
+
+        inequality_constraints = jnp.array([c1, c2, c3])
         return None, inequality_constraints

@@ -3,5 +3,5 @@ dist/
 .devcontainer
 archive
 .claude
-extra_info  # Contains PDF files with problem statements, some are paywalled
+extra_info_local  # Contains PDF files with problem statements, some are paywalled
 S2MPJ

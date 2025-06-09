@@ -29,14 +29,25 @@ class EIGEN(AbstractUnconstrainedMinimisation):
         del args
 
         # y contains the variables as ordered in SIF file:
-        # First n elements are eigenvalues D(J)
-        # Then n² elements are Q(I,J) matrix in the order defined by SIF loops
-        d_diag = y[: self.n]
-        q_vars = y[self.n :]
+        # For each J from 1 to N:
+        #   - D(J) (eigenvalue)
+        #   - Q(1,J), Q(2,J), ..., Q(N,J) (J-th column of Q)
+        # So the ordering is interleaved: D(1), Q(:,1), D(2), Q(:,2), etc.
 
-        # Need to reconstruct Q matrix from SIF variable ordering
-        # SIF defines Q(I,J) with nested loops: for J=1 to N, for I=1 to N
-        q = q_vars.reshape((self.n, self.n), order="F")
+        # Extract D and Q from the interleaved ordering
+        d_diag = jnp.zeros(self.n)
+        q = jnp.zeros((self.n, self.n))
+
+        idx = 0
+        for j in range(self.n):
+            # Extract D(j+1)
+            d_diag = d_diag.at[j].set(y[idx])
+            idx += 1
+
+            # Extract Q(:,j+1) - the (j+1)-th column of Q
+            for i in range(self.n):
+                q = q.at[i, j].set(y[idx])
+                idx += 1
 
         # Get the target matrix A
         a = self._matrix()
@@ -73,16 +84,24 @@ class EIGEN(AbstractUnconstrainedMinimisation):
         # - D(J) eigenvalues are set to 1.0
         # - Q(J,J) diagonal elements are set to 1.0
 
-        # Order matches SIF: first D(J), then Q(I,J)
-        # Initialize D eigenvalues to 1.0
-        d_diag = jnp.ones(self.n)
+        # Build the interleaved ordering: D(1), Q(:,1), D(2), Q(:,2), etc.
+        total_vars = self.n + self.n * self.n  # n eigenvalues + n² matrix elements
+        y = jnp.zeros(total_vars)
 
-        # Initialize Q matrix elements to 0, then set diagonal to 1
-        q_matrix = jnp.zeros((self.n, self.n))
-        q_matrix = q_matrix.at[jnp.diag_indices(self.n)].set(1.0)
-        q_flat = q_matrix.flatten(order="F")  # Flatten in column-major order
+        idx = 0
+        for j in range(self.n):
+            # Set D(j+1) = 1.0
+            y = y.at[idx].set(1.0)
+            idx += 1
 
-        return jnp.concatenate([d_diag, q_flat])
+            # Set Q(:,j+1) with Q(j+1,j+1) = 1.0 and rest = 0.0
+            for i in range(self.n):
+                if i == j:
+                    y = y.at[idx].set(1.0)  # Q(j+1,j+1) = 1.0
+                # else: keep 0.0 (default)
+                idx += 1
+
+        return y
 
     def args(self):
         return None

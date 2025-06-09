@@ -94,7 +94,8 @@ from .hs117 import HS117 as HS117
 from .hs118 import HS118 as HS118
 from .hs119 import HS119 as HS119
 from .lukvle1 import LUKVLE1 as LUKVLE1
-from .lukvle2 import LUKVLE2 as LUKVLE2
+
+# from .lukvle2 import LUKVLE2 as LUKVLE2
 from .lukvle3 import LUKVLE3 as LUKVLE3
 from .lukvle4 import LUKVLE4 as LUKVLE4
 from .lukvle5 import LUKVLE5 as LUKVLE5
@@ -112,7 +113,8 @@ from .lukvle16 import LUKVLE16 as LUKVLE16
 from .lukvle17 import LUKVLE17 as LUKVLE17
 from .lukvle18 import LUKVLE18 as LUKVLE18
 from .lukvli1 import LUKVLI1 as LUKVLI1
-from .lukvli2 import LUKVLI2 as LUKVLI2
+
+# from .lukvli2 import LUKVLI2 as LUKVLI2
 from .lukvli3 import LUKVLI3 as LUKVLI3
 from .lukvli4 import LUKVLI4 as LUKVLI4
 from .lukvli5 import LUKVLI5 as LUKVLI5
@@ -228,7 +230,7 @@ constrained_minimisation_problems = (
     BT12(),
     BT13(),
     LUKVLE1(),
-    LUKVLE2(),
+    # LUKVLE2(),
     LUKVLE3(),
     LUKVLE4(),
     LUKVLE5(),
@@ -246,7 +248,7 @@ constrained_minimisation_problems = (
     LUKVLE17(),
     LUKVLE18(),
     LUKVLI1(),
-    LUKVLI2(),
+    # LUKVLI2(),
     LUKVLI3(),
     LUKVLI4(),
     LUKVLI5(),

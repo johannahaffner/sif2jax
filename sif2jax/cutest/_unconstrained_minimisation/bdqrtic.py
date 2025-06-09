@@ -3,8 +3,6 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: This implementation requires human review and verification against
-# another CUTEst interface
 class BDQRTIC(AbstractUnconstrainedMinimisation):
     """BDQRTIC function.
 
@@ -26,28 +24,25 @@ class BDQRTIC(AbstractUnconstrainedMinimisation):
         del args
         n = self.n
 
-        # Sum of squares for groups 1 to n-4
-        residuals = []
+        # Vectorized implementation for efficiency
+        # For each i from 1 to n-4 (0 to n-5 in 0-based indexing)
+        i = jnp.arange(n - 4)
 
-        for i in range(n - 4):
-            # From the SIF file, each group has contributions from:
-            # x[i], x[i+1], x[i+2], x[i+3], and x[n-1]
-            # with coefficients 1.0, 2.0, 3.0, 4.0, and 5.0 respectively
-            term1 = (
-                y[i] ** 2
-                + 2 * y[i + 1]
-                + 3 * y[i + 2]
-                + 4 * y[i + 3]
-                + 5 * y[n - 1]
-                - 3.0
-            )
+        # First part: (-4*x[i] + 3.0)^2 for each group
+        # From L(I) group with coefficient -4.0 and constant -3.0
+        part1 = (-4 * y[i] + 3.0) ** 2
 
-            # The term (x[i] - 3.0) mentioned in constants section (line 54)
-            term2 = y[i] - 4.0
+        # Second part: (x[i]^2 + 2*x[i+1]^2 + 3*x[i+2]^2 + 4*x[i+3]^2 + 5*x[N]^2)^2
+        # From G(I) group with squared elements
+        part2 = (
+            y[i] ** 2
+            + 2 * y[i + 1] ** 2
+            + 3 * y[i + 2] ** 2
+            + 4 * y[i + 3] ** 2
+            + 5 * y[n - 1] ** 2
+        ) ** 2
 
-            residuals.append(term1**2 + term2**2)
-
-        return jnp.sum(jnp.array(residuals))
+        return jnp.sum(part1 + part2)
 
     def y0(self):
         # Initial values from SIF file (all 1.0)

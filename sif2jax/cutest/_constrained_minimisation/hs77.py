@@ -11,7 +11,7 @@ class HS77(AbstractConstrainedMinimisation):
     f(x) = (x₁ - 1)² + (x₁ - x₂)² + (x₃ - 1)² + (x₄ - 1)⁴ + (x₅ - 1)⁶
 
     Subject to:
-        x₁²*x₄ + sin(x₄ - x₅) - 2/√2 = 0
+        x₁²*x₄ + sin(x₄ - x₅) - 2√2 = 0
         x₂ + x₃⁴*x₄² - 8 - √2 = 0
 
     Source: problem 77 in
@@ -22,7 +22,7 @@ class HS77(AbstractConstrainedMinimisation):
 
     Also cited: Betts [8], Miele e.al. [42,44,45]
 
-    Classification: PGR-P1-3
+    Classification: OOR2-AY-5-2
     """
 
     def objective(self, y, args):
@@ -54,8 +54,10 @@ class HS77(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         x1, x2, x3, x4, x5 = y
-        # Equality constraints
-        eq1 = x1**2 * x4 + jnp.sin(x4 - x5) - 2 / jnp.sqrt(2)
+        # Equality constraints from SIF file
+        # CON1: x1²*x4 + sin(x4 - x5) = 2√2
+        # CON2: x2 + x3⁴*x4² = √2 + 8
+        eq1 = x1**2 * x4 + jnp.sin(x4 - x5) - 2 * jnp.sqrt(2)
         eq2 = x2 + x3**4 * x4**2 - 8 - jnp.sqrt(2)
         equality_constraints = jnp.array([eq1, eq2])
         return equality_constraints, None

@@ -107,7 +107,7 @@ class HS109(AbstractConstrainedMinimisation):
             - 200 * a
         )
 
-        eq6 = (
+        eq6 = -(
             x5 * x7 * jnp.cos(x4 - 0.25)
             + x6 * x7 * jnp.cos(x4 - x3 - 0.25)
             - 2 * c * x7**2

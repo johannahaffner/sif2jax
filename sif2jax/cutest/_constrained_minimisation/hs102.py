@@ -67,21 +67,23 @@ class HS102(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5, x6, x7 = y
 
         # Four inequality constraints from the AMPL formulation
-        ineq1 = (
+        # Note: pycutest uses the convention g(x) ≤ 0, so we negate our
+        # g(x) ≥ 0 constraints
+        ineq1 = -(
             1
             - 0.5 * x1**0.5 * x7 / (x3 * x6**2)
             - 0.7 * x1**3 * x2 * x6 * x7**0.5 / x3**2
             - 0.2 * x3 * x6 ** (2 / 3) * x7 ** (0.25) / (x2 * x4**0.5)
         )
 
-        ineq2 = (
+        ineq2 = -(
             1
             - 1.3 * x2 * x6 / (x1**0.5 * x3 * x5)
             - 0.8 * x3 * x6**2 / (x4 * x5)
             - 3.1 * x2**0.5 * x6 ** (1 / 3) / (x1 * x4**2 * x5)
         )
 
-        ineq3 = (
+        ineq3 = -(
             1
             - 2 * x1 * x5 * x7 ** (1 / 3) / (x3**1.5 * x6)
             - 0.1 * x2 * x5 / (x3**0.5 * x6 * x7**0.5)
@@ -89,7 +91,7 @@ class HS102(AbstractConstrainedMinimisation):
             - 0.65 * x3 * x5 * x7 / (x2**2 * x6)
         )
 
-        ineq4 = (
+        ineq4 = -(
             1
             - 0.2 * x2 * x5**0.5 * x7 ** (1 / 3) / (x1**2 * x4)
             - 0.3 * x1**0.5 * x2**2 * x3 * x4 ** (1 / 3) * x7**0.25 / x5 ** (2 / 3)
@@ -97,12 +99,11 @@ class HS102(AbstractConstrainedMinimisation):
             - 0.5 * x4 * x7**0.5 / x3**2
         )
 
-        # Objective bounds constraint: 100 ≤ f(x) ≤ 3000
+        # Objective bound constraint
+        # Note: The problem has bounds 100 ≤ f(x) ≤ 3000
+        # But pycutest from SIF file only includes the upper bound as a constraint
         f_val = self.objective(y, self.args())
-        obj_lower = f_val - 100.0  # f(x) - 100 ≥ 0
-        obj_upper = 3000.0 - f_val  # 3000 - f(x) ≥ 0
+        obj_constraint = f_val - 3000.0  # f(x) - 3000 ≤ 0
 
-        inequality_constraints = jnp.array(
-            [ineq1, ineq2, ineq3, ineq4, obj_lower, obj_upper]
-        )
+        inequality_constraints = jnp.array([ineq1, ineq2, ineq3, ineq4, obj_constraint])
         return None, inequality_constraints

@@ -71,20 +71,20 @@ class HS104(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5, x6, x7, x8 = y
 
         # Four inequality constraints from the AMPL formulation
-        ineq1 = 1 - 0.0588 * x5 * x7 - 0.1 * x1
+        # Note: pycutest uses the convention g(x) ≤ 0, so we negate our
+        # g(x) ≥ 0 constraints
+        ineq1 = -(1 - 0.0588 * x5 * x7 - 0.1 * x1)
 
-        ineq2 = 1 - 0.0588 * x6 * x8 - 0.1 * x1 - 0.1 * x2
+        ineq2 = -(1 - 0.0588 * x6 * x8 - 0.1 * x1 - 0.1 * x2)
 
-        ineq3 = 1 - 4 * x3 / x5 - 2 / (x3**0.71 * x5) - 0.0588 * x7 / x3**1.3
+        ineq3 = -(1 - 4 * x3 / x5 - 2 / (x3**0.71 * x5) - 0.0588 * x7 / x3**1.3)
 
-        ineq4 = 1 - 4 * x4 / x6 - 2 / (x4**0.71 * x6) - 0.0588 * x8 / x4**1.3
+        ineq4 = -(1 - 4 * x4 / x6 - 2 / (x4**0.71 * x6) - 0.0588 * x8 / x4**1.3)
 
-        # Objective bounds constraint: 0.1 ≤ f(x) ≤ 4.2
+        # Objective bounds constraint: 1 ≤ f(x) ≤ 4.2
+        # Note: pycutest from SIF file only includes the lower bound as a constraint
         f_val = self.objective(y, self.args())
-        obj_lower = f_val - 0.1  # f(x) - 0.1 ≥ 0
-        obj_upper = 4.2 - f_val  # 4.2 - f(x) ≥ 0
+        obj_constraint = f_val - 1.0  # f(x) - 1 ≥ 0
 
-        inequality_constraints = jnp.array(
-            [ineq1, ineq2, ineq3, ineq4, obj_lower, obj_upper]
-        )
+        inequality_constraints = jnp.array([ineq1, ineq2, ineq3, ineq4, obj_constraint])
         return None, inequality_constraints

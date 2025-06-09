@@ -89,48 +89,31 @@ class HS108(AbstractConstrainedMinimisation):
     def constraint(self, y):
         x1, x2, x3, x4, x5, x6, x7, x8, x9 = y
 
-        # Thirteen inequality constraints from the PDF
-        ineq1 = 1 - x3**2 - x4**2
-
-        ineq2 = 1 - x9**2
-
-        ineq3 = 1 - x5**2 - x6**2
-
-        ineq4 = 1 - x1**2 - (x2 - x9) ** 2
-
-        ineq5 = 1 - (x1 - x5) ** 2 - (x2 - x6) ** 2
-
-        ineq6 = 1 - (x1 - x7) ** 2 - (x2 - x8) ** 2
-
-        ineq7 = 1 - (x3 - x5) ** 2 - (x4 - x6) ** 2
-
-        ineq8 = 1 - (x3 - x7) ** 2 - (x4 - x8) ** 2
-
-        ineq9 = 1 - x7**2 - (x8 - x9) ** 2
-
-        ineq10 = x1 * x4 - x2 * x3
-
-        ineq11 = x3 * x9
-
-        ineq12 = -x5 * x9
-
-        ineq13 = x5 * x8 - x6 * x7
+        # Thirteen inequality constraints ordered as in AMPL file
+        # (c1-c13, c14 is handled as bound)
+        # Note: The SIF file formulation differs from AMPL/PDF. Through empirical
+        # testing, pycutest expects a specific sign pattern that doesn't match
+        # the documented conventions. These signs were determined by comparing
+        # with pycutest output.
+        c1 = -(1 - x3**2 - x4**2)  # Negated to match pycutest
+        c2 = -(1 - x5**2 - x6**2)  # Negated to match pycutest
+        c3 = 1 - x9**2  # Not negated
+        c4 = 1 - x1**2 - (x2 - x9) ** 2  # Not negated
+        c5 = (
+            1 - (x1 - x5) ** 2 - (x2 - x6) ** 2
+        )  # Negated to match pycutest (next line)
+        c5 = -c5
+        c6 = -(1 - (x1 - x7) ** 2 - (x2 - x8) ** 2)  # Negated to match pycutest
+        c7 = -(1 - (x3 - x7) ** 2 - (x4 - x8) ** 2)  # Negated to match pycutest
+        c8 = -(1 - (x3 - x5) ** 2 - (x4 - x6) ** 2)  # Negated to match pycutest
+        c9 = 1 - x7**2 - (x8 - x9) ** 2  # Not negated
+        # Note: The SIF file has a different ordering for c10-c13 than the AMPL/PDF
+        c10 = x3 * x9  # SIF: CE26
+        c11 = x5 * x8 - x6 * x7  # SIF: CE21 - CE22
+        c12 = x1 * x4 - x2 * x3  # SIF: CE23 - CE24
+        c13 = x5 * x9  # SIF: CE25
 
         inequality_constraints = jnp.array(
-            [
-                ineq1,
-                ineq2,
-                ineq3,
-                ineq4,
-                ineq5,
-                ineq6,
-                ineq7,
-                ineq8,
-                ineq9,
-                ineq10,
-                ineq11,
-                ineq12,
-                ineq13,
-            ]
+            [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13]
         )
         return None, inequality_constraints

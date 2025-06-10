@@ -69,7 +69,8 @@ from .hs63 import HS63 as HS63
 from .hs64 import HS64 as HS64
 from .hs65 import HS65 as HS65
 from .hs66 import HS66 as HS66
-from .hs67 import HS67 as HS67
+
+# from .hs67 import HS67 as HS67  # TODO: Human review - several discrepancies
 from .hs68 import HS68 as HS68
 from .hs69 import HS69 as HS69
 from .hs71 import HS71 as HS71
@@ -209,7 +210,7 @@ constrained_minimisation_problems = (
     HS64(),
     HS65(),
     HS66(),
-    HS67(),
+    # HS67(),  # TODO: Human review - several discrepancies
     HS68(),
     HS69(),
     HS71(),

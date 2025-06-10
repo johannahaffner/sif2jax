@@ -3,6 +3,20 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made:
+# 1. Removed negative sign from objective function (line 38) that was wrapping
+#    the entire expression
+# 2. Verified constraint formulations match the problem description
+# 3. Confirmed bounds and starting point match problem specification
+# Suspected issues:
+# - Objective function value differs by factor of ~11 from pycutest
+# - Gradient and Hessian also show significant discrepancies
+# - Possible different problem formulation in pycutest vs original HS collection
+# Additional resources needed:
+# - Original Himmelblau [29] reference to verify exact formulation
+# - SIF file for HS59 to compare against pycutest implementation
+# - Clarification on whether pycutest uses a scaled or transformed version
 class HS59(AbstractConstrainedMinimisation):
     """Problem 59 from the Hock-Schittkowski test collection.
 
@@ -35,7 +49,7 @@ class HS59(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         x1, x2 = y
-        return -(
+        return (
             -75.196
             + 3.8112 * x1
             + 0.0020567 * x1**3

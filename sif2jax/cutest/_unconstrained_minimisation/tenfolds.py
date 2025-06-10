@@ -1,4 +1,4 @@
-from typing import override
+from typing_extensions import override
 
 import jax.numpy as jnp
 

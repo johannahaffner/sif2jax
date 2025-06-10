@@ -34,49 +34,34 @@ class EIGEN(AbstractUnconstrainedMinimisation):
         #   - Q(1,J), Q(2,J), ..., Q(N,J) (J-th column of Q)
         # So the ordering is interleaved: D(1), Q(:,1), D(2), Q(:,2), etc.
 
-        # Extract D and Q from the interleaved ordering
-        d_diag = jnp.zeros(self.n)
-        q = jnp.zeros((self.n, self.n))
-
-        idx = 0
-        for j in range(self.n):
-            # Extract D(j+1)
-            d_diag = d_diag.at[j].set(y[idx])
-            idx += 1
-
-            # Extract Q(:,j+1) - the (j+1)-th column of Q
-            for i in range(self.n):
-                q = q.at[i, j].set(y[idx])
-                idx += 1
+        # Efficient extraction using reshape and slicing
+        # Create indices for D values and Q columns
+        y_reshaped = y.reshape(self.n, self.n + 1)
+        d_diag = y_reshaped[:, 0]  # First element of each group is D(j)
+        q = y_reshaped[:, 1:].T  # Rest are Q(:,j), need to transpose
 
         # Get the target matrix A
         a = self._matrix()
 
-        # Eigenvalue equations: E(I,J) = sum_K Q(K,I) * Q(K,J) * D(K) - A(I,J)
-        # Vectorized: QᵀDQ where D is diagonal
-        qtdq = q.T @ jnp.diag(d_diag) @ q
+        # Eigenvalue equations: QᵀDQ - A
+        # More efficient: Q.T @ (d_diag[:, None] * Q)
+        qtdq = q.T @ (d_diag[:, None] * q)
+        e_residual = qtdq - a
 
-        # Orthogonality equations: O(I,J) = sum_K Q(K,I) * Q(K,J) - delta_IJ
-        # Vectorized: QᵀQ - I
+        # Orthogonality equations: QᵀQ - I
         qtq = q.T @ q
+        o_residual = qtq - jnp.eye(self.n)
 
-        total_obj = 0.0
+        # Only sum over upper triangular part (I <= J) as per SIF
+        # Create upper triangular mask
+        triu_mask = jnp.triu(jnp.ones((self.n, self.n), dtype=bool))
 
-        # Only sum over upper triangular part (I <= J) as per SIF loops
-        for j in range(self.n):  # J = 1 to N
-            for i in range(j + 1):  # I = 1 to J
-                # Eigenvalue equation residual
-                e_ij = qtdq[i, j] - a[i, j]
-                total_obj += e_ij**2
+        # Compute objective: sum of squared residuals for upper triangular part
+        total_obj = jnp.sum(e_residual**2 * triu_mask) + jnp.sum(
+            o_residual**2 * triu_mask
+        )
 
-                # Orthogonality equation residual
-                o_ij = qtq[i, j]
-                if i == j:
-                    o_ij -= 1.0  # Diagonal elements should be 1
-                # Off-diagonal elements should be 0, so no subtraction needed
-                total_obj += o_ij**2
-
-        return jnp.array(total_obj)
+        return total_obj
 
     def y0(self):
         # Starting values as specified in SIF file:
@@ -85,23 +70,18 @@ class EIGEN(AbstractUnconstrainedMinimisation):
         # - Q(J,J) diagonal elements are set to 1.0
 
         # Build the interleaved ordering: D(1), Q(:,1), D(2), Q(:,2), etc.
-        total_vars = self.n + self.n * self.n  # n eigenvalues + n² matrix elements
-        y = jnp.zeros(total_vars)
+        # More efficient using reshape
+        y_reshaped = jnp.zeros((self.n, self.n + 1))
 
-        idx = 0
+        # Set D values to 1.0
+        y_reshaped = y_reshaped.at[:, 0].set(1.0)
+
+        # Set Q diagonal to 1.0 (identity matrix)
+        # Q is stored column-wise, so Q(j,j) is at position j in column j
         for j in range(self.n):
-            # Set D(j+1) = 1.0
-            y = y.at[idx].set(1.0)
-            idx += 1
+            y_reshaped = y_reshaped.at[j, j + 1].set(1.0)
 
-            # Set Q(:,j+1) with Q(j+1,j+1) = 1.0 and rest = 0.0
-            for i in range(self.n):
-                if i == j:
-                    y = y.at[idx].set(1.0)  # Q(j+1,j+1) = 1.0
-                # else: keep 0.0 (default)
-                idx += 1
-
-        return y
+        return y_reshaped.ravel()
 
     def args(self):
         return None

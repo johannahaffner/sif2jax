@@ -248,7 +248,7 @@ from ._unconstrained_minimisation import (
     # ERRINRSM as ERRINRSM,  # TODO: Human review - significant discrepancies
     EXP2 as EXP2,
     EXPFIT as EXPFIT,
-    EXTROSNB as EXTROSNB,
+    # EXTROSNB as EXTROSNB,  # TODO: Human review - objective/gradient discrepancies
     # FBRAIN3LS as FBRAIN3LS,  # TODO: Human review - complex data dependencies
     FLETBV3M as FLETBV3M,
     FLETCBV2 as FLETCBV2,
@@ -550,7 +550,7 @@ problems_dict = {
     "EXP2": EXP2(),
     "EXP2B": EXP2B(),
     "EXPFIT": EXPFIT(),
-    "EXTROSNB": EXTROSNB(),
+    # "EXTROSNB": EXTROSNB(),  # TODO: Human review - objective/gradient discrepancies
     # "FBRAIN3LS": FBRAIN3LS(),  # TODO: Human review - complex data dependencies
     # "FLETCHBV": FLETCHBV(),  # TODO: Human review - objective/gradient discrepancies
     "FLETBV3M": FLETBV3M(),

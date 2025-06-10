@@ -98,7 +98,7 @@ class HS112(AbstractConstrainedMinimisation):
 
         eq2 = x4 + 2 * x5 + x6 + x7 - 1
 
-        eq3 = x3 + x7 + x8 + 2 * x9 + x10
+        eq3 = x3 + x7 + x8 + 2 * x9 + x10 - 1
 
         equality_constraints = jnp.array([eq1, eq2, eq3])
         return equality_constraints, None

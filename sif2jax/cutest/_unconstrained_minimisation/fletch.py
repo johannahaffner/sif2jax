@@ -258,7 +258,7 @@ class FLETCBV3(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
-    n: int = 5000
+    n: int = 5000  # Default dimension in SIF file
     scale: float = 1e8  # Called OBJSCALE in the SIF file
     extra_term: int = 1  # Corresponds to the parameter kappa, which is 1 or 0
 

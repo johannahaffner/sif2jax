@@ -30,18 +30,18 @@ class EXTROSNB(AbstractUnconstrainedMinimisation):
         del args
 
         # From SIF file:
-        # SQ1 = (X1 + 1.0)²
-        # SQ(I) = 0.01 × (X(I) - X(I-1)²)² for I=2..N
+        # Group SQ1 = (X1 + 1.0) with L2 group type → (X1 + 1.0)²
+        # Group SQ(I) = X(I) + ELA(I) with scale 0.01 and L2 group type
+        # where ELA(I) = -X(I-1)² from ETYPE element
+        # So SQ(I) = 0.01 × (X(I) - X(I-1)²)² for I=2..N
 
         # First term: (X1 + 1.0)²
         term1 = (y[0] + 1.0) ** 2
 
-        # Remaining terms: 100 × (X(I) - X(I-1)²)² for I=2..N
-        # (i.e., i=1..n-1 in 0-based)
-        # The 0.01 scale in SIF becomes 100 in the final objective after L2 squaring
+        # Remaining terms: 0.01 × (X(I) - X(I-1)²)² for I=2..N
         def scaled_term(i):
             # i ranges from 1 to n-1 (0-based), corresponding to SIF I=2..N
-            return 100.0 * (y[i] - y[i - 1] ** 2) ** 2
+            return 0.01 * (y[i] - y[i - 1] ** 2) ** 2
 
         indices = jnp.arange(1, self.n)
         term2 = jnp.sum(jax.vmap(scaled_term)(indices))

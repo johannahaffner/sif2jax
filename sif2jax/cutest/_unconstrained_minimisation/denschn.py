@@ -23,9 +23,15 @@ class DENSCHNA(AbstractUnconstrainedMinimisation):
         x1, x2 = y
 
         # From AMPL model: x[1]^4 + (x[1]+x[2])^2 + (-1.0+exp(x[2]))^2
-        term1 = x1**4
-        term2 = (x1 + x2) ** 2
-        term3 = (-1.0 + jnp.exp(x2)) ** 2
+        # Compute powers and exponential once
+        x1_sq = x1 * x1
+        x1_4 = x1_sq * x1_sq
+        exp_x2 = jnp.exp(x2)
+        x1_plus_x2 = x1 + x2
+
+        term1 = x1_4
+        term2 = x1_plus_x2 * x1_plus_x2
+        term3 = (-1.0 + exp_x2) ** 2
 
         return term1 + term2 + term3
 

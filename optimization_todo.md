@@ -7,14 +7,14 @@
 - **ENGVAL1** - Successfully optimized, now within threshold - Replaced for loops with vectorized operations
 - **HELIX** - Successfully optimized, now within threshold (was 5.10x obj slowdown) - Simplified trigonometric computations
 - **JENSMP** - Successfully optimized, now within threshold (was 5.04x combined slowdown) - Vectorized sum operations
+- **HS56** - Successfully optimized, now within threshold (was 9.74x obj slowdown) - Precomputed sin values and squares in constraint function
+- **ENGVAL2** - Successfully optimized, now within threshold (was 8.65x obj slowdown) - Added more common subexpression elimination
+- **DENSCHNA** - Successfully optimized, now within threshold (was 5.47x combined slowdown) - Precomputed powers and exponential
+- **CHNROSNB** - Successfully optimized, now within threshold (was 4.16x combined slowdown) - Removed index arrays, precomputed squares
 
 ## Problems Slower Than pycutest (Sorted by Priority)
 
 ### Critical Issues (>4x slowdown in any metric)
-1. **HS56** - 9.74x obj slowdown - Check for inefficient sin operations
-2. **ENGVAL2** - 8.65x obj slowdown - Review implementation
-3. **DENSCHNA** - 5.47x combined slowdown - Investigate combined computation
-4. **CHNROSNB** - 4.16x combined slowdown - Check chain rule complexity
 7. **HILBERTB** - 4.07x grad slowdown - Matrix operations inefficiency
 8. **HS11** - 4.05x obj slowdown - Small problem with division
 9. **HS65** - 4.03x obj slowdown - Review implementation

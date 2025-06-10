@@ -96,17 +96,19 @@ class CHNROSNB(AbstractUnconstrainedMinimisation):
         # )
 
         # Vectorized computation for i in 2..n (0-based: 1..n-1)
-        i_indices = jnp.arange(1, self.n)  # 1 to n-1
-
         # Get corresponding alpha values
-        alpha_vals = alphas[i_indices]  # alphas[1] to alphas[n-1]
+        alpha_vals = alphas[1 : self.n]  # alphas[1] to alphas[n-1]
 
         # Get x[i-1] and x[i] values
-        x_i_minus_1 = y[i_indices - 1]  # y[0] to y[n-2]
-        x_i = y[i_indices]  # y[1] to y[n-1]
+        x_i_minus_1 = y[:-1]  # y[0] to y[n-2]
+        x_i = y[1:]  # y[1] to y[n-1]
 
-        # Compute terms
-        term1 = 16.0 * alpha_vals**2 * (x_i_minus_1 - x_i**2) ** 2
+        # Compute terms more efficiently
+        x_i_sq = x_i * x_i
+        diff = x_i_minus_1 - x_i_sq
+        alpha_sq = alpha_vals * alpha_vals
+
+        term1 = 16.0 * alpha_sq * (diff * diff)
         term2 = (x_i - 1.0) ** 2
 
         # Sum all terms

@@ -64,10 +64,14 @@ class HS56(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         x1, x2, x3, x4, x5, x6, x7 = y
+        # Precompute sin values and their squares
+        sin_vals = jnp.sin(y[3:])  # sin(x4), sin(x5), sin(x6), sin(x7)
+        sin_sq = sin_vals**2
+
         # Equality constraints
-        eq1 = x1 - 4.2 * jnp.sin(x4) ** 2
-        eq2 = x2 - 4.2 * jnp.sin(x5) ** 2
-        eq3 = x3 - 4.2 * jnp.sin(x6) ** 2
-        eq4 = x1 + 2 * x2 + 2 * x3 - 7.2 * jnp.sin(x7) ** 2
+        eq1 = x1 - 4.2 * sin_sq[0]
+        eq2 = x2 - 4.2 * sin_sq[1]
+        eq3 = x3 - 4.2 * sin_sq[2]
+        eq4 = x1 + 2 * x2 + 2 * x3 - 7.2 * sin_sq[3]
         equality_constraints = jnp.array([eq1, eq2, eq3, eq4])
         return equality_constraints, None

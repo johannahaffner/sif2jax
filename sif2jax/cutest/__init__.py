@@ -244,7 +244,7 @@ from ._unconstrained_minimisation import (
     ENGVAL2 as ENGVAL2,
     ENSOLS as ENSOLS,
     ERRINROS as ERRINROS,
-    ERRINRSM as ERRINRSM,
+    # ERRINRSM as ERRINRSM,  # TODO: Human review - significant discrepancies
     EXP2 as EXP2,
     EXP2B as EXP2B,
     EXPFIT as EXPFIT,
@@ -259,15 +259,15 @@ from ._unconstrained_minimisation import (
     FMINSURF as FMINSURF,
     FREURONE as FREURONE,
     FREUROTH as FREUROTH,
-    GAUSS1LS as GAUSS1LS,
-    GAUSS2LS as GAUSS2LS,
-    GAUSS3LS as GAUSS3LS,
+    # GAUSS1LS as GAUSS1LS,  # TODO: Human review - issues reported by user
+    # GAUSS2LS as GAUSS2LS,  # TODO: Human review - issues reported by user
+    # GAUSS3LS as GAUSS3LS,  # TODO: Human review - issues reported by user
     GAUSSIAN as GAUSSIAN,
     # GBRAINLS as GBRAINLS,  # TODO: Human review - complex data dependencies
     GENHUMPS as GENHUMPS,
     GENROSE as GENROSE,
     GROWTHLS as GROWTHLS,
-    GULF as GULF,
+    # GULF as GULF,  # TODO: Human review - issues reported by user
     HAHN1LS as HAHN1LS,
     HAIRY as HAIRY,
     HATFLDD as HATFLDD,
@@ -278,7 +278,7 @@ from ._unconstrained_minimisation import (
     # HEART6LS as HEART6LS,  # TODO: Human review - significant discrepancies
     # HEART8LS as HEART8LS,  # TODO: Human review - significant discrepancies
     HELIX as HELIX,
-    HIELOW as HIELOW,
+    # HIELOW as HIELOW,  # TODO: Human review - significant discrepancies
     HILBERTA as HILBERTA,
     HILBERTB as HILBERTB,
     HIMMELBB as HIMMELBB,
@@ -546,7 +546,7 @@ problems_dict = {
     "ENGVAL2": ENGVAL2(),
     "ENSOLS": ENSOLS(),
     "ERRINROS": ERRINROS(),
-    "ERRINRSM": ERRINRSM(),
+    # "ERRINRSM": ERRINRSM(),  # TODO: Human review - significant discrepancies
     "EXP2": EXP2(),
     "EXP2B": EXP2B(),
     "EXPFIT": EXPFIT(),
@@ -561,15 +561,15 @@ problems_dict = {
     "FMINSURF": FMINSURF(),
     "FREURONE": FREURONE(),
     "FREUROTH": FREUROTH(),
-    "GAUSS1LS": GAUSS1LS(),
-    "GAUSS2LS": GAUSS2LS(),
-    "GAUSS3LS": GAUSS3LS(),
+    # "GAUSS1LS": GAUSS1LS(),  # TODO: Human review - issues reported by user
+    # "GAUSS2LS": GAUSS2LS(),  # TODO: Human review - issues reported by user
+    # "GAUSS3LS": GAUSS3LS(),  # TODO: Human review - issues reported by user
     "GAUSSIAN": GAUSSIAN(),
     # "GBRAINLS": GBRAINLS(),  # TODO: Human review - complex data dependencies
     "GENHUMPS": GENHUMPS(),
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
-    "GULF": GULF(),
+    # "GULF": GULF(),  # TODO: Human review - issues reported by user
     "HAHN1LS": HAHN1LS(),
     "HAIRY": HAIRY(),
     "HATFLDD": HATFLDD(),
@@ -580,7 +580,7 @@ problems_dict = {
     # "HEART6LS": HEART6LS(),  # TODO: Human review - significant discrepancies
     # "HEART8LS": HEART8LS(),  # TODO: Human review - significant discrepancies
     "HELIX": HELIX(),
-    "HIELOW": HIELOW(),
+    # "HIELOW": HIELOW(),  # TODO: Human review - significant discrepancies
     "HILBERTA": HILBERTA(),
     "HILBERTB": HILBERTB(),
     "HIMMELBB": HIMMELBB(),

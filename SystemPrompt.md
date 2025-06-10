@@ -41,6 +41,7 @@ When porting problems, please consider the following:
 9. Run ruff format and ruff check on your work. Ruff is installed in the working directory.
 10. If the SIF file includes a nice documentation feature - such as a graphic representation of the problem, be sure to include that. Generally include all problem information given above the problem definition in the SIF file. 
 11. Classification numbers should match the numbers given in the SIF file. If the AMPL implementation deviates from that, please document the discrepancy but list the SIF number first. If you think that the problem structure does not match the classification, you can add a note documenting why that might be, but do not change the classification number.
+12. Do not ever hard-code a data type.
 
 ## Testing
 

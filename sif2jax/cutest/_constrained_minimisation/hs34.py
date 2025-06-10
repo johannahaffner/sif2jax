@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractConstrainedMinimisation
 
 
-class HS34(AbstractBoundedMinimisation):
+class HS34(AbstractConstrainedMinimisation):
     """Problem 34 from the Hock-Schittkowski test collection.
 
     A 3-variable linear function with two inequality constraints and bounds.

@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractConstrainedMinimisation
 
 
-class HS35(AbstractBoundedMinimisation):
+class HS35(AbstractConstrainedMinimisation):
     """Problem 35 (Beale's problem) from the Hock-Schittkowski test collection.
 
     A 3-variable quadratic function with one inequality constraint and bounds.
@@ -56,5 +56,5 @@ class HS35(AbstractBoundedMinimisation):
     def constraint(self, y):
         x1, x2, x3 = y
         # Inequality constraint: 3 - x₁ - x₂ - 2x₃ ≥ 0
-        inequality_constraint = 3.0 - x1 - x2 - 2.0 * x3
+        inequality_constraint = jnp.array([3.0 - x1 - x2 - 2.0 * x3])
         return None, inequality_constraint

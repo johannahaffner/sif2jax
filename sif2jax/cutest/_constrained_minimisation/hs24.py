@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractConstrainedMinimisation
 
 
-class HS24(AbstractBoundedMinimisation):
+class HS24(AbstractConstrainedMinimisation):
     """Problem 24 from the Hock-Schittkowski test collection.
 
     A 2-variable nonlinear function with three inequality constraints and bounds.

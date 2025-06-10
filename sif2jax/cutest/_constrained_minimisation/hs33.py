@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractConstrainedMinimisation
 
 
-class HS33(AbstractBoundedMinimisation):
+class HS33(AbstractConstrainedMinimisation):
     """Problem 33 from the Hock-Schittkowski test collection.
 
     A 3-variable polynomial function with two inequality constraints and bounds.

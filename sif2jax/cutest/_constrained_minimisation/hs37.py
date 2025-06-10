@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractConstrainedMinimisation
 
 
-class HS37(AbstractBoundedMinimisation):
+class HS37(AbstractConstrainedMinimisation):
     """Problem 37 from the Hock-Schittkowski test collection.
 
     A 3-variable nonlinear function with two inequality constraints and bounds.

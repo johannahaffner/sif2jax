@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractConstrainedMinimisation
 
 
-class HS32(AbstractBoundedMinimisation):
+class HS32(AbstractConstrainedMinimisation):
     """Problem 32 from the Hock-Schittkowski test collection.
 
     A 3-variable quadratic function with one equality and one inequality
@@ -48,7 +48,7 @@ class HS32(AbstractBoundedMinimisation):
     def constraint(self, y):
         x1, x2, x3 = y
         # Equality constraint: 1 - x₁ - x₂ - x₃ = 0
-        equality_constraint = 1.0 - x1 - x2 - x3
+        equality_constraint = jnp.array([1.0 - x1 - x2 - x3])
         # Inequality constraint: 6x₂ + 4x₃ - x₁³ - 3 ≥ 0
-        inequality_constraint = 6.0 * x2 + 4.0 * x3 - x1**3 - 3.0
+        inequality_constraint = jnp.array([6.0 * x2 + 4.0 * x3 - x1**3 - 3.0])
         return equality_constraint, inequality_constraint

@@ -27,10 +27,19 @@ from .hs18 import HS18 as HS18
 from .hs19 import HS19 as HS19
 from .hs20 import HS20 as HS20
 from .hs22 import HS22 as HS22
+from .hs24 import HS24 as HS24
 from .hs26 import HS26 as HS26
 from .hs27 import HS27 as HS27
 from .hs28 import HS28 as HS28
 from .hs29 import HS29 as HS29
+from .hs30 import HS30 as HS30
+from .hs31 import HS31 as HS31
+from .hs32 import HS32 as HS32
+from .hs33 import HS33 as HS33
+from .hs34 import HS34 as HS34
+from .hs35 import HS35 as HS35
+from .hs36 import HS36 as HS36
+from .hs37 import HS37 as HS37
 from .hs39 import HS39 as HS39
 from .hs40 import HS40 as HS40
 from .hs41 import HS41 as HS41
@@ -156,10 +165,19 @@ constrained_minimisation_problems = (
     HS19(),
     HS20(),
     HS22(),
+    HS24(),
     HS26(),
     HS27(),
     HS28(),
     HS29(),
+    HS30(),
+    HS31(),
+    HS32(),
+    HS33(),
+    HS34(),
+    HS35(),
+    HS36(),
+    HS37(),
     HS39(),
     HS40(),
     HS41(),

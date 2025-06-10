@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractConstrainedMinimisation
 
 
-class HS36(AbstractBoundedMinimisation):
+class HS36(AbstractConstrainedMinimisation):
     """Problem 36 from the Hock-Schittkowski test collection.
 
     A 3-variable nonlinear function with one inequality constraint and bounds.
@@ -48,5 +48,5 @@ class HS36(AbstractBoundedMinimisation):
     def constraint(self, y):
         x1, x2, x3 = y
         # Inequality constraint: 72 - x₁ - 2x₂ - 2x₃ ≥ 0
-        inequality_constraint = 72.0 - x1 - 2.0 * x2 - 2.0 * x3
+        inequality_constraint = jnp.array([72.0 - x1 - 2.0 * x2 - 2.0 * x3])
         return None, inequality_constraint

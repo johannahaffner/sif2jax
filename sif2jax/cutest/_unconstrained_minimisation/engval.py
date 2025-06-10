@@ -68,18 +68,18 @@ class ENGVAL2(AbstractUnconstrainedMinimisation):
 
         x1, x2, x3 = y
 
-        # From AMPL model:
-        # (x[1]^2+x[2]^2+x[3]^2-1)^2
-        # + (x[1]^2+x[2]^2+(x[3]-2)^2-1)^2
-        # + (x[1]+x[2]+x[3]-1)^2
-        # + (x[1]+x[2]-x[3]+1)^2
-        # + (3*x[2]^2+x[1]^3+(5*x[3]-x[1]+1)^2-36)^2
+        # Precompute common terms to avoid redundant calculations
+        x1_sq = x1**2
+        x2_sq = x2**2
+        x3_sq = x3**2
+        x1_plus_x2 = x1 + x2
 
-        g1 = (x1**2 + x2**2 + x3**2 - 1) ** 2
-        g2 = (x1**2 + x2**2 + (x3 - 2) ** 2 - 1) ** 2
-        g3 = (x1 + x2 + x3 - 1) ** 2
-        g4 = (x1 + x2 - x3 + 1) ** 2
-        g5 = (3 * x2**2 + x1**3 + (5 * x3 - x1 + 1) ** 2 - 36) ** 2
+        # From AMPL model:
+        g1 = (x1_sq + x2_sq + x3_sq - 1) ** 2
+        g2 = (x1_sq + x2_sq + (x3 - 2) ** 2 - 1) ** 2
+        g3 = (x1_plus_x2 + x3 - 1) ** 2
+        g4 = (x1_plus_x2 - x3 + 1) ** 2
+        g5 = (3 * x2_sq + x1**3 + (5 * x3 - x1 + 1) ** 2 - 36) ** 2
 
         return g1 + g2 + g3 + g4 + g5
 

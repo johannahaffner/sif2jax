@@ -42,7 +42,7 @@ class CHNRSNBM(AbstractUnconstrainedMinimisation):
         # Alpha values are determined by sin(i) + 1.5
         # i_indices is [1, 2, ..., n-1], representing i=2..n in 1-based AMPL notation
         # So we need sin(2), sin(3), ..., sin(n), which is sin(i_indices + 1)
-        alpha_vals = jnp.sin((i_indices + 1).astype(float)) + 1.5
+        alpha_vals = jnp.sin(i_indices + 1) + 1.5
 
         # Get x[i-1] and x[i] values
         x_i_minus_1 = y[i_indices - 1]  # y[0] to y[n-2]

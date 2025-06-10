@@ -34,8 +34,9 @@ class JENSMP(AbstractUnconstrainedMinimisation):
 
         # Define the residual function for a single group i
         def residual_fn(i):
-            i_float = jnp.float32(i + 1)  # Convert to float and adjust for 1-indexing
-            return jnp.exp(i_float * x1) + jnp.exp(i_float * x2) - (2.0 + 2.0 * i_float)
+            # Adjust for 1-indexing
+            i_val = i + 1
+            return jnp.exp(i_val * x1) + jnp.exp(i_val * x2) - (2 + 2 * i_val)
 
         # Compute all residuals using vmap
         residuals = jax.vmap(residual_fn)(jnp.arange(self.m))

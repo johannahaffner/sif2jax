@@ -1,14 +1,20 @@
 # JAX Optimization TODO List
 
+## Optimization Results
+
+### Recently Optimized (2025-01-10)
+- **CHNRSNBM** - Improved but still 6.19x obj slowdown (was not in original list) - Used vmap for vectorization
+- **ENGVAL1** - Successfully optimized, now within threshold - Replaced for loops with vectorized operations
+- **HELIX** - Successfully optimized, now within threshold (was 5.10x obj slowdown) - Simplified trigonometric computations
+- **JENSMP** - Successfully optimized, now within threshold (was 5.04x combined slowdown) - Vectorized sum operations
+
 ## Problems Slower Than pycutest (Sorted by Priority)
 
 ### Critical Issues (>4x slowdown in any metric)
 1. **HS56** - 9.74x obj slowdown - Check for inefficient sin operations
 2. **ENGVAL2** - 8.65x obj slowdown - Review implementation
 3. **DENSCHNA** - 5.47x combined slowdown - Investigate combined computation
-4. **HELIX** - 5.10x obj slowdown - Complex trigonometric operations
-5. **JENSMP** - 5.04x combined slowdown - Small problem overhead
-6. **CHNROSNB** - 4.16x combined slowdown - Check chain rule complexity
+4. **CHNROSNB** - 4.16x combined slowdown - Check chain rule complexity
 7. **HILBERTB** - 4.07x grad slowdown - Matrix operations inefficiency
 8. **HS11** - 4.05x obj slowdown - Small problem with division
 9. **HS65** - 4.03x obj slowdown - Review implementation
@@ -56,7 +62,6 @@
    - Avoid redundant computations
 
 4. **General Optimizations**:
-   - Profile with JAX's profiler to identify bottlenecks
    - Check for unnecessary array copies
    - Ensure proper use of JAX's vectorization
    - Review indexing operations for efficiency

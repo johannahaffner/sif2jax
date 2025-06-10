@@ -27,13 +27,11 @@ class HELIX(AbstractUnconstrainedMinimisation):
         # Extract variables
         x1, x2, x3 = y
 
-        # Compute theta as in AMPL: normalized by 2π
-        # Handle the conditional logic from AMPL
-        raw_theta = jnp.where(
-            x1 > 0,
-            jnp.arctan(x2 / x1) / (2.0 * jnp.pi),
-            jnp.where(x1 < 0, jnp.arctan(x2 / x1) / (2.0 * jnp.pi) + 0.5, 0.0),
-        )
+        # Compute theta using arctan2 which handles all quadrants correctly
+        # arctan2 returns values in [-π, π], we need [0, 1] normalized by 2π
+        raw_theta = jnp.arctan2(x2, x1) / (2.0 * jnp.pi)
+        # Shift negative values to positive range [0, 1]
+        raw_theta = jnp.where(raw_theta < 0, raw_theta + 1.0, raw_theta)
 
         # Compute the residuals as in AMPL
         r1 = 10.0 * (x3 - 10.0 * raw_theta)

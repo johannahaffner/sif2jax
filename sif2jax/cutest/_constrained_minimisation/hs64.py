@@ -11,7 +11,7 @@ class HS64(AbstractConstrainedMinimisation):
     f(x) = 5*x₁ + 50000/x₁ + 20*x₂ + 72000/x₂ + 10*x₃ + 144000/x₃
 
     Subject to:
-        1 - 4/x₁ - 32/x₂ - 120/x₃ ≥ 0
+        4/x₁ + 32/x₂ + 120/x₃ ≤ 1
         1.E-5 ≤ xᵢ, i=1,2,3
 
     Source: problem 64 in
@@ -22,7 +22,7 @@ class HS64(AbstractConstrainedMinimisation):
 
     Also cited: Best [7]
 
-    Classification: PPR-P1-2
+    Classification: OOR2-AN-3-1
     """
 
     def objective(self, y, args):
@@ -49,7 +49,9 @@ class HS64(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         x1, x2, x3 = y
-        # Inequality constraint (g(x) ≥ 0)
-        ineq1 = 1 - 4 / x1 - 32 / x2 - 120 / x3
+        # Inequality constraint from SIF file
+        # L type: 4/x1 + 32/x2 + 120/x3 ≤ 1
+        # pycutest returns LHS - RHS
+        ineq1 = 4 / x1 + 32 / x2 + 120 / x3 - 1
         inequality_constraints = jnp.array([ineq1])
         return None, inequality_constraints

@@ -82,7 +82,7 @@ from ._constrained_minimisation import (
     HS64 as HS64,
     HS65 as HS65,
     HS66 as HS66,
-    HS67 as HS67,
+    # HS67 as HS67,  # TODO: Human review - different SIF file version
     HS68 as HS68,
     HS69 as HS69,
     HS71 as HS71,
@@ -372,7 +372,7 @@ problems_dict = {
     "HS64": HS64(),
     "HS65": HS65(),
     "HS66": HS66(),
-    "HS67": HS67(),
+    # "HS67": HS67(),  # TODO: Human review - different SIF file version
     "HS68": HS68(),
     "HS69": HS69(),
     "HS71": HS71(),

@@ -32,11 +32,12 @@ class HS56(AbstractConstrainedMinimisation):
         return -x1 * x2 * x3
 
     def y0(self):
-        # Starting point: x₀ = (1, 1, 1, a, a, a, b)
-        # where a = arcsin√(1/4.2), b = arcsin√(5/7.2)
-        a = jnp.arcsin(jnp.sqrt(1.0 / 4.2))
-        b = jnp.arcsin(jnp.sqrt(5.0 / 7.2))
-        return jnp.array([1.0, 1.0, 1.0, a, a, a, b])
+        # Starting point from SIF file
+        # Note: There's a typo mentioned in the SIF file about decimal points
+        # The values below match what pycutest uses
+        return jnp.array(
+            [1.0, 1.0, 1.0, 0.50973968, 0.50973968, 0.50973968, 0.98511078]
+        )
 
     def args(self):
         return None

@@ -12,9 +12,9 @@ class HS76(AbstractConstrainedMinimisation):
     f(x) = x₁² + 0.5*x₂² + x₃² + 0.5*x₄² - x₁*x₃ + x₃*x₄ - x₁ - 3*x₂ + x₃ - x₄
 
     Subject to:
-        5 - x₁ - 2*x₂ - x₃ - x₄ ≥ 0
-        4 - 3*x₁ - x₂ - 2*x₃ + x₄ ≥ 0
-        x₂ + 4*x₃ - 1.5 ≥ 0
+        x₁ + 2*x₂ + x₃ + x₄ ≤ 5
+        3*x₁ + x₂ + 2*x₃ - x₄ ≤ 4
+        x₂ + 4*x₃ ≥ 1.5
         0 ≤ xᵢ, i=1,...,4
 
     Source: problem 76 in
@@ -63,9 +63,12 @@ class HS76(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         x1, x2, x3, x4 = y
-        # Inequality constraints (g(x) ≥ 0)
-        ineq1 = 5 - x1 - 2 * x2 - x3 - x4
-        ineq2 = 4 - 3 * x1 - x2 - 2 * x3 + x4
+        # Inequality constraints following PyCUTEst convention: LHS - RHS
+        # C1: x1 + 2*x2 + x3 + x4 <= 5
+        ineq1 = x1 + 2 * x2 + x3 + x4 - 5
+        # C2: 3*x1 + x2 + 2*x3 - x4 <= 4
+        ineq2 = 3 * x1 + x2 + 2 * x3 - x4 - 4
+        # C3: x2 + 4*x3 >= 1.5
         ineq3 = x2 + 4 * x3 - 1.5
         inequality_constraints = jnp.array([ineq1, ineq2, ineq3])
         return None, inequality_constraints

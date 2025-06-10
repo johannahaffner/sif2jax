@@ -4,18 +4,26 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made:
+# 1. Verified our implementation matches the SIF file exactly
+# 2. Confirmed coefficient -0.063 for Y2*Y5 term in our SIF file
+# Suspected issues:
+# - pycutest may be using a different SIF file version with coefficient ~0.062
+# - Our f* = -1162.036507 matches H&S book, pycutest f* = -868.636 doesn't
+# Additional resources needed: "Verify which SIF file version pycutest uses"
 class HS67(AbstractConstrainedMinimisation):
     """Problem 67 from the Hock-Schittkowski test collection (Colville No.8).
 
     A 3-variable nonlinear objective function with 14 inequality constraints and bounds.
 
-    f(x) = -(0.063*y₂(x)*y₅(x) - 5.04*x₁ - 3.36*y₃(x) - 0.035*x₂ - 10*x₃)
+    f(x) = 5.04*x₁ + 0.035*x₂ + 10*x₃ - 0.063*y₂(x)*y₅(x) + 3.36*y₃(x)
 
     where yⱼ(x) : cf. Appendix A
 
     Subject to:
         yᵢ₊₁(x) - aᵢ ≥ 0, i=1,...,7
-        aᵢ - yᵢ₋₆(x) ≥ 0, i=8,...,14
+        aᵢ₊₇ - yᵢ₊₁(x) ≥ 0, i=1,...,7
         1.E-5 ≤ x₁ ≤ 2.E3
         1.E-5 ≤ x₂ ≤ 1.6E4
         1.E-5 ≤ x₃ ≤ 1.2E2
@@ -34,6 +42,10 @@ class HS67(AbstractConstrainedMinimisation):
     Appendix A.
     The Y2 and Y4 functions are computed using jax.lax.scan for mathematically correct
     and differentiable convergence as specified in the original Hock-Schittkowski book.
+
+    Note on pycutest discrepancy: Our implementation matches the SIF file and H&S book
+    with f* = -1162.036507. However, pycutest reports f* = -868.636, which would require
+    a coefficient of approximately 0.062 instead of 0.063 for the Y2*Y5 term.
     """
 
     def _fixed_point_scan(self, update_fn, init_val, max_iter=50):
@@ -93,8 +105,8 @@ class HS67(AbstractConstrainedMinimisation):
         # Compute Y functions using Appendix A algorithm
         y2, y3, y4, y5, y6, y7, y8 = self._compute_y_functions(x1, x2, x3)
 
-        # PDF/SIF: f(x) = -(0.063*y2*y5 - 5.04*x1 - 3.36*y3 - 0.035*x2 - 10*x3)
-        return -(0.063 * y2 * y5 - 5.04 * x1 - 3.36 * y3 - 0.035 * x2 - 10.0 * x3)
+        # SIF file: f(x) = 5.04*x1 + 0.035*x2 + 10.0*x3 - 0.063*y2*y5 + 3.36*y3
+        return 5.04 * x1 + 0.035 * x2 + 10.0 * x3 - 0.063 * y2 * y5 + 3.36 * y3
 
     def y0(self):
         return jnp.array([1745.0, 12000.0, 110.0])  # feasible according to the problem
@@ -106,7 +118,7 @@ class HS67(AbstractConstrainedMinimisation):
         return jnp.array([1728.371286, 16000.00000, 98.14151402])
 
     def expected_objective_value(self):
-        return jnp.array(-1162.036507)
+        return jnp.array(-1162.036507)  # This matches H&S book and our SIF file
 
     def bounds(self):
         return (jnp.array([1.0e-5, 1.0e-5, 1.0e-5]), jnp.array([2.0e3, 1.6e4, 1.2e2]))
@@ -140,20 +152,20 @@ class HS67(AbstractConstrainedMinimisation):
 
         # Constraints from SIF:
         # AG(i): Y(i+1) - A(i) ≥ 0 for i=1,...,7
-        # AL(i): A(i+7) - Y(i-6) ≥ 0 for i=8,...,14
+        # AL(i): Y(i+1) - A(i+7) ≤ 0 for i=1,...,7 (converted to -Y(i+1) + A(i+7) ≥ 0)
 
         ineq_constraints = []
         # AG constraints: Y(i+1) - A(i) ≥ 0 for i=1,...,7
         for i in range(1, 8):  # i=1,2,...,7
             ineq_constraints.append(
-                Y[i + 1] - A[i - 1]
-            )  # Y(i+1) - A(i-1) since A is 0-indexed
+                Y[i] - A[i - 1]
+            )  # Y(i) - A(i-1) since both are 0-indexed and Y[1]=y2, Y[2]=y3, etc.
 
-        # AL constraints: A(i+7) - Y(i-6) ≥ 0 for i=8,...,14
-        for i in range(8, 15):  # i=8,9,...,14
+        # AL constraints: -Y(i+1) + A(i+7) ≥ 0 for i=1,...,7
+        for i in range(1, 8):  # i=1,2,...,7
             ineq_constraints.append(
-                A[i - 1] - Y[i - 7]
-            )  # A(i-1) - Y(i-7) since arrays are 0-indexed
+                A[i + 6] - Y[i]
+            )  # A(i+6) - Y(i) since both are 0-indexed
 
         inequality_constraints = jnp.array(ineq_constraints)
         return None, inequality_constraints

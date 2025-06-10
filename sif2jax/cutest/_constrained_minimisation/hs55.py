@@ -18,7 +18,12 @@ class HS55(AbstractConstrainedMinimisation):
         x₁ + x₄ - 1 = 0
         x₂ + x₅ - 2 = 0
         x₃ + x₆ - 2 = 0
-        0 ≤ xᵢ ≤ 1, i=1,...,6
+        0 ≤ x₁ ≤ 1
+        0 ≤ x₂
+        0 ≤ x₃
+        0 ≤ x₄ ≤ 1
+        0 ≤ x₅
+        0 ≤ x₆
 
     Source: problem 55 in
     W. Hock and K. Schittkowski,
@@ -28,7 +33,7 @@ class HS55(AbstractConstrainedMinimisation):
 
     Also cited: Hsia [33]
 
-    Classification: GLR-T1-3
+    Classification: OLR2-AN-6-6
     """
 
     def objective(self, y, args):
@@ -49,7 +54,8 @@ class HS55(AbstractConstrainedMinimisation):
 
     def bounds(self):
         lower = jnp.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-        upper = jnp.array([1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
+        # From SIF file: only X1 and X4 have upper bounds of 1.0
+        upper = jnp.array([1.0, jnp.inf, jnp.inf, 1.0, jnp.inf, jnp.inf])
         return lower, upper
 
     def constraint(self, y):

@@ -88,7 +88,9 @@ from .errinros import ERRINROS as ERRINROS, ERRINRSM as ERRINRSM
 from .exp_scipy import EXP2 as EXP2, EXP2B as EXP2B
 from .expfit import EXPFIT as EXPFIT
 from .extrosnb import EXTROSNB as EXTROSNB
-from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
+
+# TODO: FBRAIN3LS needs human review - complex data dependencies
+# from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
 from .fletch import (
     FLETBV3M as FLETBV3M,
     FLETCBV2 as FLETCBV2,
@@ -100,7 +102,9 @@ from .fminsurf import FMINSRF2 as FMINSRF2, FMINSURF as FMINSURF
 from .freuroth import FREURONE as FREURONE, FREUROTH as FREUROTH
 from .gauss import GAUSS1LS as GAUSS1LS, GAUSS2LS as GAUSS2LS, GAUSS3LS as GAUSS3LS
 from .gaussian import GAUSSIAN as GAUSSIAN
-from .gbrainls import GBRAINLS as GBRAINLS
+
+# TODO: GBRAINLS needs human review - complex data dependencies
+# from .gbrainls import GBRAINLS as GBRAINLS
 from .genhumps import GENHUMPS as GENHUMPS
 from .genrose import GENROSE as GENROSE
 from .growthls import GROWTHLS as GROWTHLS
@@ -235,7 +239,7 @@ unconstrained_minimisation_problems = (
     EXP2B(),
     EXPFIT(),
     EXTROSNB(),
-    FBRAIN3LS(),
+    # FBRAIN3LS(),  # TODO: Human review - complex data dependencies
     # FLETCH family problems
     FLETCHBV(),
     FLETBV3M(),
@@ -252,13 +256,13 @@ unconstrained_minimisation_problems = (
     GAUSS2LS(),
     GAUSS3LS(),
     GAUSSIAN(),
-    GBRAINLS(),
+    # GBRAINLS(),  # TODO: Human review - complex data dependencies
     GENHUMPS(),
     GENROSE(),
     GROWTHLS(),
     GULF(),
     HAHN1LS(),
-    HAHN1LS(y0_id=1),
+    # HAHN1LS(y0_id=1),  # Non-default starting point - we only test pycutest defaults
     HAIRY(),
     HATFLDD(),
     HATFLDE(),

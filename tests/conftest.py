@@ -16,3 +16,9 @@ def pytest_addoption(parser):
             "Separate multiple test cases with a comma, don't add white space."
         ),
     )
+    parser.addoption(
+        "--runtime-threshold",
+        action="store",
+        default=None,
+        help="Runtime ratio threshold for JAX/pycutest comparison (default: 5.0)",
+    )

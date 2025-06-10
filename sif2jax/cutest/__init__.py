@@ -257,7 +257,7 @@ from ._unconstrained_minimisation import (
     FLETCHCR as FLETCHCR,
     FMINSRF2 as FMINSRF2,
     FMINSURF as FMINSURF,
-    FREURONE as FREURONE,
+    # FREURONE as FREURONE,  # TODO: Human review - miscategorized (constrained)
     FREUROTH as FREUROTH,
     # GAUSS1LS as GAUSS1LS,  # TODO: Human review - issues reported by user
     # GAUSS2LS as GAUSS2LS,  # TODO: Human review - issues reported by user
@@ -559,7 +559,7 @@ problems_dict = {
     "FLETCBV3": FLETCBV3(),
     "FMINSRF2": FMINSRF2(),
     "FMINSURF": FMINSURF(),
-    "FREURONE": FREURONE(),
+    # "FREURONE": FREURONE(),  # TODO: Human review - miscategorized (constrained)
     "FREUROTH": FREUROTH(),
     # "GAUSS1LS": GAUSS1LS(),  # TODO: Human review - issues reported by user
     # "GAUSS2LS": GAUSS2LS(),  # TODO: Human review - issues reported by user

@@ -111,7 +111,10 @@ from .fletch import (
     FLETCHCR as FLETCHCR,
 )
 from .fminsurf import FMINSRF2 as FMINSRF2, FMINSURF as FMINSURF
-from .freuroth import FREURONE as FREURONE, FREUROTH as FREUROTH
+
+# TODO: FREURONE needs human review - miscategorized (should be constrained)
+# from .freuroth import FREURONE as FREURONE
+from .freuroth import FREUROTH as FREUROTH
 
 # TODO: GAUSS family needs human review - issues reported by user
 # from .gauss import GAUSS1LS as GAUSS1LS, GAUSS2LS as GAUSS2LS, GAUSS3LS as GAUSS3LS
@@ -274,7 +277,7 @@ unconstrained_minimisation_problems = (
     #    FMINSURF(),  # TODO: has a bug
     #    FMINSRF2(),  # TODO: has a bug
     FREUROTH(),
-    FREURONE(),
+    # FREURONE(),  # TODO: Human review - miscategorized (should be constrained)
     # GAUSS1LS(),  # TODO: Human review - issues reported by user
     # GAUSS2LS(),  # TODO: Human review - issues reported by user
     # GAUSS3LS(),  # TODO: Human review - issues reported by user

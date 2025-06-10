@@ -26,7 +26,7 @@ import sif2jax
 benchmark_problems = sif2jax.bounded_minimisation_problems
 
 @pytest.mark.benchmark
-@pytest.mark.parametrize("problem", sif2jax.bounded_minimisation_problems)
+@pytest.mark.parametrize("problem", sif2jax.unconstrained_minimisation_problems)
 def test_lbfgs(benchmark, problem):
     ...
 ```

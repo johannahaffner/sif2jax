@@ -35,7 +35,7 @@ name = "sif2jax"
 readme = "README.md"
 requires-python = ">=3.10"
 urls = {repository = "https://github.com/johannahaffner/sif2jax"}
-version = "0.0.2"
+version = "0.0.3"
 
 [project.optional-dependencies]
 docs = [

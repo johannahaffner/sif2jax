@@ -1,23 +1,22 @@
 import jax
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-# TODO: This implementation requires human review and verification against
-# another CUTEst interface
-class EXP2(AbstractUnconstrainedMinimisation):
-    """The EXP2 function.
+class EXP2B(AbstractBoundedMinimisation):
+    """The EXP2B function.
 
     SCIPY global optimization benchmark example Exp2
     Fit: y = e^{-i/10 x_1} - 5e^{-i/10 x_2} - e^{-i/10} + 5e^{-i} + e
+    Version with box-constrained feasible region: 0 <= x <= 20
 
     Source: Problem from the SCIPY benchmark set
     https://github.com/scipy/scipy/tree/master/benchmarks/benchmarks/go_benchmark_functions
 
-    SIF input: Nick Gould
+    SIF input: Nick Gould, July 2021
 
-    Classification: SUR2-MN-2-0
+    Classification: SBR2-MN-2-0
     """
 
     n: int = 2  # Problem has 2 variables
@@ -47,6 +46,12 @@ class EXP2(AbstractUnconstrainedMinimisation):
     def y0(self):
         # Initial values from SIF file
         return jnp.array([1.0, 5.0])
+
+    def bounds(self):
+        # Box constraints: 0 <= x <= 20
+        lower = jnp.zeros(self.n)
+        upper = jnp.full(self.n, 20.0)
+        return lower, upper
 
     def args(self):
         return None

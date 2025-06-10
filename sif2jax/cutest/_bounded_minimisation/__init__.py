@@ -1,3 +1,4 @@
+from .exp2b import EXP2B as EXP2B
 from .hs1 import HS1 as HS1
 from .hs2 import HS2 as HS2
 from .hs3 import HS3 as HS3
@@ -10,6 +11,7 @@ from .hs110 import HS110 as HS110
 
 
 bounded_minimisation_problems = (
+    EXP2B(),
     HS1(),
     HS2(),
     HS3(),

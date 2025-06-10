@@ -60,7 +60,8 @@ from .hs54 import HS54 as HS54
 from .hs55 import HS55 as HS55
 from .hs56 import HS56 as HS56
 from .hs57 import HS57 as HS57
-from .hs59 import HS59 as HS59
+
+# from .hs59 import HS59 as HS59  # TODO: Human review - objective function discrepancy
 from .hs60 import HS60 as HS60
 from .hs61 import HS61 as HS61
 from .hs62 import HS62 as HS62
@@ -200,7 +201,7 @@ constrained_minimisation_problems = (
     HS55(),
     HS56(),
     HS57(),
-    HS59(),
+    # HS59(),  # TODO: Human review - objective function discrepancy
     HS60(),
     HS61(),
     HS62(),

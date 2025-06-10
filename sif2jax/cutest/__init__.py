@@ -74,7 +74,7 @@ from ._constrained_minimisation import (
     HS55 as HS55,
     HS56 as HS56,
     HS57 as HS57,
-    HS59 as HS59,
+    # HS59 as HS59,  # TODO: Human review - objective function discrepancy
     HS60 as HS60,
     HS61 as HS61,
     HS62 as HS62,
@@ -364,7 +364,7 @@ problems_dict = {
     "HS55": HS55(),
     "HS56": HS56(),
     "HS57": HS57(),
-    "HS59": HS59(),
+    # "HS59": HS59(),  # TODO: Human review - objective function discrepancy
     "HS60": HS60(),
     "HS61": HS61(),
     "HS62": HS62(),

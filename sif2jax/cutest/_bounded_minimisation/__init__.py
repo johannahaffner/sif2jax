@@ -3,8 +3,6 @@ from .hs2 import HS2 as HS2
 from .hs3 import HS3 as HS3
 from .hs4 import HS4 as HS4
 from .hs5 import HS5 as HS5
-from .hs21 import HS21 as HS21
-from .hs23 import HS23 as HS23
 from .hs25 import HS25 as HS25
 from .hs38 import HS38 as HS38
 from .hs45 import HS45 as HS45
@@ -17,8 +15,6 @@ bounded_minimisation_problems = (
     HS3(),
     HS4(),
     HS5(),
-    HS21(),
-    HS23(),
     HS25(),
     HS38(),
     HS45(),

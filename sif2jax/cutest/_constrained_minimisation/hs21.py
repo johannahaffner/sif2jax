@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractConstrainedMinimisation
 
 
-class HS21(AbstractBoundedMinimisation):
+class HS21(AbstractConstrainedMinimisation):
     """Problem 21 from the Hock-Schittkowski test collection.
 
     A 2-variable quadratic function with inequality constraint and bounds.
@@ -47,5 +47,5 @@ class HS21(AbstractBoundedMinimisation):
     def constraint(self, y):
         x1, x2 = y
         # Inequality constraint: 10x₁ - x₂ - 10 ≥ 0
-        inequality_constraint = 10 * x1 - x2 - 10
+        inequality_constraint = jnp.array([10 * x1 - x2 - 10])
         return None, inequality_constraint

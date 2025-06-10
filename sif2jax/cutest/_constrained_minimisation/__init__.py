@@ -26,7 +26,9 @@ from .hs17 import HS17 as HS17
 from .hs18 import HS18 as HS18
 from .hs19 import HS19 as HS19
 from .hs20 import HS20 as HS20
+from .hs21 import HS21 as HS21
 from .hs22 import HS22 as HS22
+from .hs23 import HS23 as HS23
 from .hs24 import HS24 as HS24
 from .hs26 import HS26 as HS26
 from .hs27 import HS27 as HS27
@@ -164,7 +166,9 @@ constrained_minimisation_problems = (
     HS18(),
     HS19(),
     HS20(),
+    HS21(),
     HS22(),
+    HS23(),
     HS24(),
     HS26(),
     HS27(),

@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractConstrainedMinimisation
 
 
-class HS23(AbstractBoundedMinimisation):
+class HS23(AbstractConstrainedMinimisation):
     """Problem 23 from the Hock-Schittkowski test collection.
 
     A 2-variable quadratic function with five inequality constraints and bounds.

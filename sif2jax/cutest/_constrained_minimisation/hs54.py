@@ -34,9 +34,9 @@ class HS54(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         x1, x2, x3, x4, x5, x6 = y
-        # Based on SIF file structure which was working
+        # Based on SIF file structure
         rho = 0.2
-        factor = 1 - rho**2  # = 0.96
+        factor = 1.0 / (1 - rho**2)  # = 1/0.96 = 1.04166...
         mu = jnp.array([1.0e4, 1.0, 2.0e6, 1.0e1, 1.0e-3, 1.0e8])
         sigma = jnp.array([8.0e3, 1.0, 7.0e6, 5.0e1, 5.0e-2, 5.0e8])
 

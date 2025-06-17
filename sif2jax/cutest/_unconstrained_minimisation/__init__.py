@@ -97,7 +97,8 @@ from .eigenals import EIGENALS as EIGENALS
 from .eigenbls import EIGENBLS as EIGENBLS
 from .eigencls import EIGENCLS as EIGENCLS
 from .elatvidu import ELATVIDU as ELATVIDU
-from .engval import ENGVAL1 as ENGVAL1, ENGVAL2 as ENGVAL2
+from .engval1 import ENGVAL1 as ENGVAL1
+from .engval2 import ENGVAL2 as ENGVAL2
 
 # TODO: ENSOLS needs human review - significant discrepancies
 # from .ensols import ENSOLS as ENSOLS
@@ -112,14 +113,13 @@ from .expfit import EXPFIT as EXPFIT
 # from .extrosnb import EXTROSNB as EXTROSNB
 # TODO: FBRAIN3LS needs human review - complex data dependencies
 # from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
-from .fletch import (
-    FLETBV3M as FLETBV3M,
-    FLETCBV2 as FLETCBV2,
-    FLETCBV3 as FLETCBV3,
-    # FLETCHBV as FLETCHBV,  # TODO: Human review - objective/gradient discrepancies
-    FLETCHCR as FLETCHCR,
-)
+from .fletbv3m import FLETBV3M as FLETBV3M
+from .fletcbv2 import FLETCBV2 as FLETCBV2
+from .fletcbv3 import FLETCBV3 as FLETCBV3
+from .fletchcr import FLETCHCR as FLETCHCR
 
+# TODO: Human review - objective/gradient discrepancies
+# from .fletchbv import FLETCHBV as FLETCHBV
 # TODO: FMINSURF and FMINSRF2 have bugs - starting value/gradient discrepancies
 # from .fminsurf import FMINSRF2 as FMINSRF2, FMINSURF as FMINSURF
 # TODO: FREURONE needs human review - miscategorized (should be constrained)
@@ -142,13 +142,12 @@ from .hahn1ls import HAHN1LS as HAHN1LS
 from .hairy import HAIRY as HAIRY
 
 # TODO: HATFLD family needs human review - discrepancies in HATFLDGLS
-# from .hatfld import (
-#     HATFLDD as HATFLDD,
-#     HATFLDE as HATFLDE,
-#     HATFLDFL as HATFLDFL,
-#     HATFLDFLS as HATFLDFLS,
-#     HATFLDGLS as HATFLDGLS,
-# )
+from .hatfldd import HATFLDD as HATFLDD
+from .hatflde import HATFLDE as HATFLDE
+from .hatfldfl import HATFLDFL as HATFLDFL
+from .hatfldfls import HATFLDFLS as HATFLDFLS
+from .hatfldgls import HATFLDGLS as HATFLDGLS
+
 # TODO: HEART problems need human review - significant discrepancies
 # from .heart import HEART6LS as HEART6LS, HEART8LS as HEART8LS
 from .helix import HELIX as HELIX
@@ -157,13 +156,13 @@ from .helix import HELIX as HELIX
 # from .hielow import HIELOW as HIELOW
 from .hilberta import HILBERTA as HILBERTA
 from .hilbertb import HILBERTB as HILBERTB
-from .himmelblau import (
-    # HIMMELBB as HIMMELBB,  # TODO: Human review - Hessian discrepancies
-    HIMMELBCLS as HIMMELBCLS,
-    # HIMMELBF as HIMMELBF,  # TODO: Human review - Hessian discrepancies
-    HIMMELBG as HIMMELBG,
-    HIMMELBH as HIMMELBH,
-)
+from .himmelbcls import HIMMELBCLS as HIMMELBCLS
+from .himmelbg import HIMMELBG as HIMMELBG
+from .himmelbh import HIMMELBH as HIMMELBH
+
+# TODO: Human review - Hessian discrepancies
+# from .himmelbb import HIMMELBB as HIMMELBB
+# from .himmelbf import HIMMELBF as HIMMELBF
 from .humps import HUMPS as HUMPS
 from .indef import INDEF as INDEF
 from .indefm import INDEFM as INDEFM
@@ -175,10 +174,12 @@ from .kowosb import KOWOSB as KOWOSB
 
 # TODO: KSSLS needs human review - significant objective/gradient discrepancies
 # from .kssls import KSSLS as KSSLS
-from .lanczos import LANCZOS1LS as LANCZOS1LS, LANCZOS2LS as LANCZOS2LS
+from .lanczos1ls import LANCZOS1LS as LANCZOS1LS
+from .lanczos2ls import LANCZOS2LS as LANCZOS2LS
 from .liarwhd import LIARWHD as LIARWHD
 from .loghairy import LOGHAIRY as LOGHAIRY
-from .lsc import LSC1LS as LSC1LS, LSC2LS as LSC2LS
+from .lsc1ls import LSC1LS as LSC1LS
+from .lsc2ls import LSC2LS as LSC2LS
 
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO

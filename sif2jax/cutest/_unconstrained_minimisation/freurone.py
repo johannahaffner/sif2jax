@@ -4,12 +4,11 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: This implementation requires human review and verification against
-# another CUTEst interface
-class FREUROTH(AbstractUnconstrainedMinimisation):
-    """The FREUROTH function.
+class FREURONE(AbstractUnconstrainedMinimisation):
+    """The FREURONE function.
 
-    The Freudentstein and Roth test problem.
+    The Freudentstein and Roth test problem. This is a nonlinear equation
+    version of problem FREUROTH.
 
     Source: problem 2 in
     J.J. More', B.S. Garbow and K.E. Hillstrom,
@@ -18,11 +17,12 @@ class FREUROTH(AbstractUnconstrainedMinimisation):
 
     See also Toint#33, Buckley#24
     SIF input: Ph. Toint, Dec 1989.
+    Modification as a set of nonlinear equations: Nick Gould, Oct 2015.
 
-    Classification: SUR2-AN-V-0
+    Classification: NOR2-AN-V-V
     """
 
-    n: int = 5000  # Default dimension in SIF file
+    n: int = 2  # Default dimension in SIF file
     supported_dims = [2, 10, 50, 100, 500, 1000, 5000]
 
     def __post_init__(self):
@@ -54,6 +54,7 @@ class FREUROTH(AbstractUnconstrainedMinimisation):
             element_result = (coeff + xcelv) * elv2
 
             # Residual r_i = x_i - 2*x_{i+1} + element_result - 13
+            # In the nonlinear equation version, we don't square the residuals
             residual = xi - 2.0 * xi_plus_1 + element_result - 13.0
             return residual
 
@@ -72,6 +73,7 @@ class FREUROTH(AbstractUnconstrainedMinimisation):
             element_result = (coeff + xcelv) * elv2
 
             # Residual s_i = x_i - 14*x_{i+1} + element_result - 29
+            # In the nonlinear equation version, we don't square the residuals
             residual = xi - 14.0 * xi_plus_1 + element_result - 29.0
             return residual
 
@@ -80,8 +82,11 @@ class FREUROTH(AbstractUnconstrainedMinimisation):
         r_residuals = jax.vmap(compute_residual_r)(indices)
         s_residuals = jax.vmap(compute_residual_s)(indices)
 
-        # Sum of squared residuals (least squares objective)
-        return jnp.sum(r_residuals**2 + s_residuals**2)
+        # Combine all residuals into a single vector
+        all_residuals = jnp.concatenate([r_residuals, s_residuals])
+
+        # Sum of squared residuals (nonlinear equations formulation)
+        return jnp.sum(all_residuals**2)
 
     def y0(self):
         # Starting point from SIF file: x1=0.5, x2=-2.0, rest are zeros

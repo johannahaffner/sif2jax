@@ -1,3 +1,4 @@
+import equinox as eqx
 import jax.numpy as jnp
 from jaxtyping import Array
 
@@ -5,10 +6,10 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 # TODO: this should still be compared against another CUTEst interface
-class CURLY20(AbstractUnconstrainedMinimisation):
-    """The CURLY 20 function.
+class CURLYBase(AbstractUnconstrainedMinimisation):
+    """Base class for CURLY functions.
 
-    A banded function with semi-bandwidth 20 and
+    A banded function with semi-bandwidth k and
     negative curvature near the starting point.
 
     Note J. Haffner --------------------------------------------------------------------
@@ -29,9 +30,9 @@ class CURLY20(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
-    n: int  # Number of dimensions. Options listed in SIF file: 100, 1000
-    k: int  # Semi-bandwidth.
-    mask: Array
+    n: int = 10000  # Number of dimensions. Options listed in SIF file: 100, 1000
+    k: int = 20  # Semi-bandwidth.
+    mask: Array = eqx.field(init=False)  # Will be initialized in __init__
 
     def __init__(self, n: int = 10000, k: int = 20):
         def create_mask(n, k):
@@ -65,36 +66,3 @@ class CURLY20(AbstractUnconstrainedMinimisation):
 
     def expected_objective_value(self):
         return None
-
-
-# Create minimal subclasses for the different semi-bandwidths to conform with SIF names
-class CURLY10(CURLY20):
-    """The CURLY 10 function.
-
-    A banded function with semi-bandwidth 10 and
-    negative curvature near the starting point.
-
-    Source: Nick Gould.
-
-    SIF input: Nick Gould, September 1997.
-    Classification: OUR2-AN-V-0
-    """
-
-    def __init__(self, n: int = 10000, k: int = 10):
-        super().__init__(n=n, k=k)
-
-
-class CURLY30(CURLY20):
-    """The CURLY 30 function.
-
-    A banded function with semi-bandwidth 30 and
-    negative curvature near the starting point.
-
-    Source: Nick Gould.
-    SIF input: Nick Gould, September 1997.
-
-    Classification: OUR2-AN-V-0
-    """
-
-    def __init__(self, n: int = 10000, k: int = 30):
-        super().__init__(n=n, k=k)

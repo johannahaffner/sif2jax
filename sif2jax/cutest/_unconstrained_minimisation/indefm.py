@@ -1,11 +1,11 @@
 """
 INDEFM problem.
 
-Variant of INDEF, a nonconvex problem which has an indefinite Hessian 
+Variant of INDEF, a nonconvex problem which has an indefinite Hessian
 at the starting point, by Luksan et al
 
 Source: problem 37 in
-L. Luksan, C. Matonoha and J. Vlcek  
+L. Luksan, C. Matonoha and J. Vlcek
 Modified CUTE problems for sparse unconstrained optimization
 Technical Report 1081
 Institute of Computer Science

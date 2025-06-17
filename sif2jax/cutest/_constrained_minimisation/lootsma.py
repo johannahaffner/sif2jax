@@ -4,13 +4,13 @@ LOOTSMA problem.
 An example by F. A. Lootsma in "Constrained optimization via penalty functions"
 Philips Res. Repts., Vol. 23, pp. 408-423, 1968.
 
-N.B. Many current methods fail to find a feasible point when 
+N.B. Many current methods fail to find a feasible point when
 started from the given starting values
 
 Source:
 a contribution to fullfill the LANCELOT academic licence agreement.
 
-SIF input: Li-zhi Liao, Dept. of Mathematics, 
+SIF input: Li-zhi Liao, Dept. of Mathematics,
            Hong Kong Baptist College, May 1994.
 
 classification OQR2-AN-3-2

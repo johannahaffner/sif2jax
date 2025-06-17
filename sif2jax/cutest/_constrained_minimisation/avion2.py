@@ -3,6 +3,13 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Fixed E7 group formulation (added missing SO and SS terms),
+# fixed constraint signs (E23, E24, E25)
+# Suspected issues: Gradient test shows systematic factor of ~1.573 (close to π/2)
+# difference for variables used in E16
+# Additional resources needed: Clarification on GROUP TYPE implementation or
+# element scaling factors
 class AVION2(AbstractConstrainedMinimisation):
     """Dassault France avion (airplane design) problem.
 
@@ -50,9 +57,9 @@ class AVION2(AbstractConstrainedMinimisation):
         e6 = ca - el2
         obj = obj + e6 * e6
 
-        # E7: (AM)^2 + 0.01 * EL3 (12: EF / LF)
+        # E7: (-2*AM + SO + SS)^2 + 0.01 * EL3 (12: EF / LF)
         el3 = ef / lf
-        e7 = am + 0.01 * el3
+        e7 = -2.0 * am + so + ss + 0.01 * el3
         obj = obj + e7 * e7
 
         # E8: AM^2 - 0.25 * EL4 (12/1: SO * CB^2 / CA)
@@ -187,24 +194,21 @@ class AVION2(AbstractConstrainedMinimisation):
         # E22: IMPCAN - 120.0 * NG = 0
         constraints.append(impcan - 120.0 * ng)
 
-        # E23: IMPSNA - 300.0 * NS + 400.0 = 0
-        constraints.append(impsna - 300.0 * ns + 400.0)
+        # E23: IMPSNA - 300.0 * NS - 400.0 = 0
+        constraints.append(impsna - 300.0 * ns - 400.0)
 
-        # E24: MC - MV + 95*NP + 70*NG + 660*NM + 0.5*QI + 380.0 = 0
+        # E24: MC - MV + 95*NP + 70*NG + 660*NM + 0.5*QI - 380.0 = 0
         constraints.append(
-            mc - mv + 95.0 * np + 70.0 * ng + 660.0 * nm + 0.5 * qi + 380.0
+            mc - mv + 95.0 * np + 70.0 * ng + 660.0 * nm + 0.5 * qi - 380.0
         )
 
-        # E25: MZ - IMPTRAIN + IMPNMOT + IMPPET + IMPPIL + IMPCAN + IMPSNA - 290.0 = 0
+        # E25: MZ - IMPTRAIN + IMPNMOT + IMPPET + IMPPIL + IMPCAN + IMPSNA + 290.0 = 0
         constraints.append(
-            mz - imptrain + impnmot + imppet + imppil + impcan + impsna - 290.0
+            mz - imptrain + impnmot + imppet + imppil + impcan + impsna + 290.0
         )
 
+        # All constraints are equalities
         return jnp.array(constraints), None
-
-    def equality_constraints(self):
-        """All constraints are equalities."""
-        return jnp.ones(15, dtype=bool)
 
     def y0(self):
         """Initial guess for variables."""

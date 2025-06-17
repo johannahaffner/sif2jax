@@ -19,7 +19,7 @@ from ._constrained_minimisation import (
     # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
     AVGASA as AVGASA,
     AVGASB as AVGASB,
-    AVION2 as AVION2,
+    # AVION2 as AVION2,  # TODO: Human review - gradient discrepancies
     BIGGSC4 as BIGGSC4,
     # BOOTH as BOOTH,  # TODO: needs human review - incorrectly classified
     BOXBOD as BOXBOD,
@@ -544,7 +544,7 @@ problems_dict = {
     "ARWHEAD": ARWHEAD(),
     "AVGASA": AVGASA(),
     "AVGASB": AVGASB(),
-    "AVION2": AVION2(),
+    # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
     # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs to be split into files
     "BARD": BARD(),

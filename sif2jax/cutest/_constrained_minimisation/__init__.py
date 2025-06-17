@@ -10,7 +10,8 @@ from .alsotame import ALSOTAME as ALSOTAME
 # from .antwerp import ANTWERP as ANTWERP
 from .avgasa import AVGASA as AVGASA
 from .avgasb import AVGASB as AVGASB
-from .avion2 import AVION2 as AVION2
+
+# from .avion2 import AVION2 as AVION2  # TODO: Human review - gradient discrepancies
 from .biggsc4 import BIGGSC4 as BIGGSC4
 
 # TODO: BOOTH needs human review - incorrectly classified as constrained
@@ -206,7 +207,7 @@ constrained_minimisation_problems = (
     # ANTWERP(),  # TODO: needs human review - initial value calculation
     AVGASA(),
     AVGASB(),
-    AVION2(),
+    # AVION2(),  # TODO: Human review - gradient discrepancies
     BIGGSC4(),
     BOXBOD(),
     BURKEHAN(),

@@ -1,5 +1,9 @@
+# TODO: ACOPP14 needs human review - complex AC OPF formulation
+# from .acopp14 import ACOPP14 as ACOPP14
+from .airport import AIRPORT as AIRPORT
 from .allinita import ALLINITA as ALLINITA
 from .alsotame import ALSOTAME as ALSOTAME
+from .antwerp import ANTWERP as ANTWERP
 from .biggsc4 import BIGGSC4 as BIGGSC4
 from .bt1 import BT1 as BT1
 from .bt2 import BT2 as BT2
@@ -170,8 +174,11 @@ from .sipow2 import SIPOW2 as SIPOW2
 
 
 constrained_minimisation_problems = (
+    # ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
+    AIRPORT(),
     ALLINITA(),
     ALSOTAME(),
+    ANTWERP(),
     BIGGSC4(),
     BURKEHAN(),
     BYRDSPHR(),

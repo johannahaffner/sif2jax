@@ -1,4 +1,6 @@
 from ._bounded_minimisation import (
+    AVGASA as AVGASA,
+    AVGASB as AVGASB,
     bounded_minimisation_problems as bounded_minimisation_problems,
     EXP2B as EXP2B,
     HS1 as HS1,
@@ -12,8 +14,11 @@ from ._bounded_minimisation import (
     HS110 as HS110,
 )
 from ._constrained_minimisation import (
+    # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
+    AIRPORT as AIRPORT,
     ALLINITA as ALLINITA,
     ALSOTAME as ALSOTAME,
+    ANTWERP as ANTWERP,
     BIGGSC4 as BIGGSC4,
     BT1 as BT1,
     BT2 as BT2,
@@ -336,8 +341,11 @@ from ._unconstrained_minimisation import (
 
 
 problems_dict = {
+    # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
+    "AIRPORT": AIRPORT(),
     "ALLINITA": ALLINITA(),
     "ALSOTAME": ALSOTAME(),
+    "ANTWERP": ANTWERP(),
     "BIGGSC4": BIGGSC4(),
     "BURKEHAN": BURKEHAN(),
     "BYRDSPHR": BYRDSPHR(),
@@ -512,6 +520,8 @@ problems_dict = {
     "ARGLINC": ARGLINC(),
     "ARGTRIGLS": ARGTRIGLS(),
     "ARWHEAD": ARWHEAD(),
+    "AVGASA": AVGASA(),
+    "AVGASB": AVGASB(),
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
     # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs to be split into files
     "BARD": BARD(),

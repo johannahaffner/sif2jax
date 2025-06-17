@@ -1,3 +1,4 @@
+import jax
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
@@ -32,21 +33,29 @@ class CVXQP1(AbstractConstrainedMinimisation):
 
         # The objective is a sum of quadratic terms
         # For each i from 1 to n:
-        # OBJ(i) = 0.5 * i * (x[i] + x[mod(2i-1, n)] + x[mod(3i-1, n)])^2
+        # OBJ(i) = 0.5 * i * (x[i] + x[mod(2i-1,n)+1] + x[mod(3i-1,n)+1])^2
 
-        obj = 0.0
-        for i in range(n):
+        def compute_term(i):
             # Positions (0-indexed)
             i1 = i
-            i2 = (2 * (i + 1) - 1 - 1) % n  # mod(2i-1, n) in 0-indexed
-            i3 = (3 * (i + 1) - 1 - 1) % n  # mod(3i-1, n) in 0-indexed
+
+            # For mod(2i-1, n) + 1 in SIF notation:
+            # i is 0-indexed here, so (i+1) is 1-indexed
+            i2 = (2 * (i + 1) - 1) % n  # This gives 0-indexed position
+
+            # For mod(3i-1, n) + 1 in SIF notation:
+            i3 = (3 * (i + 1) - 1) % n  # This gives 0-indexed position
 
             alpha = x[i1] + x[i2] + x[i3]
-            p = float(i + 1)  # P parameter is i (1-indexed)
+            p = i + 1.0  # P parameter is i (1-indexed)
 
-            obj += 0.5 * p * alpha * alpha
+            return 0.5 * p * alpha * alpha
 
-        return jnp.array(obj)
+        # Use vmap to vectorize over all indices
+        terms = jax.vmap(compute_term)(jnp.arange(n))
+        obj = jnp.sum(terms)
+
+        return obj
 
     def constraint(self, y):
         """Compute the constraints."""
@@ -56,19 +65,25 @@ class CVXQP1(AbstractConstrainedMinimisation):
 
         # Linear equality constraints
         # For each i from 1 to m:
-        # CON(i) = x[i] + 2*x[mod(4i-1, n)] + 3*x[mod(5i-1, n)] = 6
+        # CON(i) = x[i] + 2*x[mod(4i-1,n)+1] + 3*x[mod(5i-1,n)+1] = 6
 
-        constraints = []
-        for i in range(m):
+        def compute_constraint(i):
             # Positions (0-indexed)
             i1 = i
-            i2 = (4 * (i + 1) - 1 - 1) % n  # mod(4i-1, n) in 0-indexed
-            i3 = (5 * (i + 1) - 1 - 1) % n  # mod(5i-1, n) in 0-indexed
+
+            # For mod(4i-1, n) + 1 in SIF notation:
+            i2 = (4 * (i + 1) - 1) % n  # This gives 0-indexed position
+
+            # For mod(5i-1, n) + 1 in SIF notation:
+            i3 = (5 * (i + 1) - 1) % n  # This gives 0-indexed position
 
             c = x[i1] + 2.0 * x[i2] + 3.0 * x[i3] - 6.0
-            constraints.append(c)
+            return c
 
-        return jnp.array(constraints), None
+        # Use vmap to vectorize over all constraint indices
+        constraints = jax.vmap(compute_constraint)(jnp.arange(m))
+
+        return constraints, None
 
     def equality_constraints(self):
         """All constraints are equalities."""

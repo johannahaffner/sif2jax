@@ -56,7 +56,7 @@ When you make any change to a file, please run the tests again. You can run prob
 Running tests in batches like that is the way to go here - the full test suite runs in the CI and takes much longer.
 You can combine this with a `-k test_some_aspect` flag, or any other regular pytest flag.
 
-Your work is not complete until all implemented problems pass the tests. If you cannot resolve test failures after 5 genuine attempts with different approaches, flag the problem for human review with a comment like:
+Your work is not complete until all implemented problems pass the tests accessible through the provided bash script. (Tests that you write yourself do not count, sorry.) If you cannot resolve test failures after 5 genuine attempts with different approaches, flag the problem for human review with a comment like:
 
 ```python
 # TODO: Human review needed

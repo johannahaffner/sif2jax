@@ -5,6 +5,12 @@ from ..._problem import AbstractConstrainedMinimisation
 
 # TODO: Human review needed - problem structure doesn't match pycutest
 # The objective/constraint split needs to be reconsidered
+# TODO: Human review needed - ANTWERP
+# Attempts made:
+# 1. Fixed constraint formulation (AGE2/AGE3 now correctly use N2/N3)
+# 2. Initial value calculation follows SIF file formulas
+# Suspected issues: Initial probability calculations may differ from pycutest defaults
+# Additional resources needed: Understanding of pycutest initial value handling
 class ANTWERP(AbstractConstrainedMinimisation):
     """Synthetic population estimation problem for Antwerp.
 
@@ -187,11 +193,11 @@ class ANTWERP(AbstractConstrainedMinimisation):
         # Equality constraints
         eq_constraints = []
 
-        # AGE2: NC2 + NA2 = 0
-        eq_constraints.append(nc2 + na2)
+        # AGE2: NC2 + NA2 = N2
+        eq_constraints.append(nc2 + na2 - self.n2)
 
-        # AGE3: NC3 + NA3 = 0
-        eq_constraints.append(nc3 + na3)
+        # AGE3: NC3 + NA3 = N3
+        eq_constraints.append(nc3 + na3 - self.n3)
 
         # PSF: P1F + P2F + P3F + P4F + P5F = 1
         eq_constraints.append(p1f + p2f + p3f + p4f + p5f - 1.0)

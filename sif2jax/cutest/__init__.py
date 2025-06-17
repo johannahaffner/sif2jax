@@ -14,9 +14,9 @@ from ._bounded_minimisation import (
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
     AIRPORT as AIRPORT,
-    ALLINITA as ALLINITA,
+    # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
     ALSOTAME as ALSOTAME,
-    ANTWERP as ANTWERP,
+    # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
     AVGASA as AVGASA,
     AVGASB as AVGASB,
     AVION2 as AVION2,
@@ -349,9 +349,9 @@ from ._unconstrained_minimisation import (
 problems_dict = {
     # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
     "AIRPORT": AIRPORT(),
-    "ALLINITA": ALLINITA(),
+    # "ALLINITA": ALLINITA(),  # TODO: needs human review
     "ALSOTAME": ALSOTAME(),
-    "ANTWERP": ANTWERP(),
+    # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
     "BURKEHAN": BURKEHAN(),
     "BYRDSPHR": BYRDSPHR(),

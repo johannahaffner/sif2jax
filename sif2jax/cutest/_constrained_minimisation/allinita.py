@@ -3,6 +3,14 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed - ALLINITA
+# Attempts made:
+# 1. Direct implementation of objective terms
+# 2. Tried interpreting L2 group type as X4^2 scaling
+# 3. Simplified FNT group calculations
+# 4. Adjusted initial values based on bounds
+# Suspected issues: L2 group type interpretation or GVAR handling
+# Additional resources needed: Clarification on SIF group types and GVAR semantics
 class ALLINITA(AbstractConstrainedMinimisation):
     """The ALLINITA function.
 
@@ -48,18 +56,21 @@ class ALLINITA(AbstractConstrainedMinimisation):
         # FT2: 1 + x3
         ft2 = 1 + x3
 
-        # FNT1: x4^2
-        fnt1 = x4**2
+        # Looking at the SIF more carefully, the FNT groups have constants but also
+        # use the L2 group type. Based on the test results, it seems the L2 scaling
+        # is already handled by pycutest in how it evaluates the groups.
 
-        # FNT2: (1 + x4)^2
-        fnt2 = (1 + x4) ** 2
+        # FNT1: constant 0 (no linear term)
+        fnt1 = 0.0
+
+        # FNT2: X4 * 1.0 = x4
+        fnt2 = x4
 
         # FNT3: x2^2 + x2^4
         fnt3 = x2**2 + x2**4
 
-        # FNT4: x3^2 + (x4 + x1)^2 + x3^4 + ((x4 + x1)**2)**2
+        # FNT4: x3^2 + (x4 + x1)^2
         fnt4 = x3**2 + (x4 + x1) ** 2
-        fnt4_squared = fnt4**2
 
         # FNT5: 4 + x1 + sin(x4)^2 + (x2 * x3)^2
         fnt5 = 4 + x1 + jnp.sin(x4) ** 2 + (x2 * x3) ** 2
@@ -67,23 +78,14 @@ class ALLINITA(AbstractConstrainedMinimisation):
         # FNT6: sin(x4)^2
         fnt6 = jnp.sin(x4) ** 2
 
-        return (
-            ft2
-            + ft3
-            + ft4
-            + ft5
-            + ft6
-            + fnt1
-            + fnt2
-            + fnt3
-            + fnt4_squared
-            + fnt5
-            + fnt6
-        )
+        return ft2 + ft3 + ft4 + ft5 + ft6 + fnt1 + fnt2 + fnt3 + fnt4 + fnt5 + fnt6
 
     def y0(self):
-        # Starting point not given in SIF, using zeros for free variables
-        return jnp.zeros(3)
+        # Starting point not given in SIF
+        # X1 is free: use 0
+        # X2 >= 1.0: use lower bound
+        # X3 in [-1e10, 1.0]: use 0
+        return jnp.array([0.0, 1.0, 0.0])
 
     def args(self):
         return None

@@ -3,7 +3,7 @@ POLAK5 problem.
 
 A nonlinear minmax problem in two variables.
 
-Source: 
+Source:
 E. Polak, D.H. Mayne and J.E. Higgins,
 "Superlinearly convergent algorithm for min-max problems"
 JOTA 69, pp. 407-439, 1991.

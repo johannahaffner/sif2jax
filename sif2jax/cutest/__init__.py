@@ -21,6 +21,8 @@ from ._constrained_minimisation import (
     AVGASB as AVGASB,
     AVION2 as AVION2,
     BIGGSC4 as BIGGSC4,
+    # BOOTH as BOOTH,  # TODO: needs human review - incorrectly classified
+    BOXBOD as BOXBOD,
     BT1 as BT1,
     BT2 as BT2,
     BT3 as BT3,
@@ -41,11 +43,17 @@ from ._constrained_minimisation import (
     CB3 as CB3,
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
+    CHANDHEQ as CHANDHEQ,
+    CLUSTER as CLUSTER,
+    CONCON as CONCON,
     constrained_minimisation_problems as constrained_minimisation_problems,
-    CRESC4 as CRESC4,
+    COOLHANS as COOLHANS,
+    # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
     CSFI1 as CSFI1,
     CSFI2 as CSFI2,
     CVXQP1 as CVXQP1,
+    # DALLASS as DALLASS,  # TODO: needs complex element implementations
+    DANIWOOD as DANIWOOD,
     DECONVC as DECONVC,
     HS6 as HS6,
     HS7 as HS7,
@@ -193,7 +201,7 @@ from ._unconstrained_minimisation import (
     ARGLINC as ARGLINC,
     ARGTRIGLS as ARGTRIGLS,
     ARWHEAD as ARWHEAD,
-    BA_L1LS as BA_L1LS,  # TODO: BA_L family needs human review
+    # BA_L1LS as BA_L1LS,  # TODO: BA_L family needs human review - removed from imports
     BA_L1SPLS as BA_L1SPLS,  # TODO: BA_L family needs human review
     BARD as BARD,
     BDQRTIC as BDQRTIC,
@@ -201,6 +209,7 @@ from ._unconstrained_minimisation import (
     BIGGS6 as BIGGS6,
     BOX as BOX,
     BOX3 as BOX3,
+    # BOXBOD as BOXBOD,  # Moved to constrained formulation
     BOXBODLS as BOXBODLS,
     # BOXPOWER as BOXPOWER,  # TODO: Human review - minor gradient discrepancy
     # BRKMCC as BRKMCC,  # TODO: Human review - significant discrepancies
@@ -217,13 +226,18 @@ from ._unconstrained_minimisation import (
     # CERI651DLS as CERI651DLS,  # TODO: Human review - numerical instability
     # CERI651ELS as CERI651ELS,  # TODO: Human review - numerical instability
     CHAINWOO as CHAINWOO,
+    # CHANDHEQ as CHANDHEQ,  # Moved to constrained formulation
     CHNROSNB as CHNROSNB,
     CHNRSNBM as CHNRSNBM,
+    # CHWIRUT1 as CHWIRUT1,  # TODO: needs external data file
     CHWIRUT1LS as CHWIRUT1LS,
+    # CHWIRUT2 as CHWIRUT2,  # TODO: needs implementation with 54 data points
     CHWIRUT2LS as CHWIRUT2LS,
     CLIFF as CLIFF,
+    # CLUSTER as CLUSTER,  # Moved to constrained formulation
     CLUSTERLS as CLUSTERLS,
     COATING as COATING,
+    # COOLHANS as COOLHANS,  # Moved to constrained formulation
     COOLHANSLS as COOLHANSLS,
     COSINE as COSINE,
     CRAGGLVY as CRAGGLVY,
@@ -232,6 +246,7 @@ from ._unconstrained_minimisation import (
     CURLY20 as CURLY20,
     CURLY30 as CURLY30,
     # CYCLOOCFLS as CYCLOOCFLS,  # TODO: Human review - times out with default p=10000
+    # DANIWOOD as DANIWOOD,  # Moved to constrained formulation
     DANIWOODLS as DANIWOODLS,
     DENSCHNA as DENSCHNA,
     DENSCHNB as DENSCHNB,
@@ -353,6 +368,7 @@ problems_dict = {
     "ALSOTAME": ALSOTAME(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
+    # "BOOTH": BOOTH(),  # TODO: needs human review - incorrectly classified
     "BURKEHAN": BURKEHAN(),
     "BYRDSPHR": BYRDSPHR(),
     "CANTILVR": CANTILVR(),
@@ -537,6 +553,7 @@ problems_dict = {
     "BIGGS6": BIGGS6(),
     "BOX": BOX(),
     "BOX3": BOX3(),
+    "BOXBOD": BOXBOD(),
     "BOXBODLS": BOXBODLS(),
     # "BOXPOWER": BOXPOWER(),  # TODO: Human review - minor gradient discrepancy
     # "BRKMCC": BRKMCC(),  # TODO: Human review - significant discrepancies
@@ -553,22 +570,33 @@ problems_dict = {
     # "CERI651DLS": CERI651DLS(),  # TODO: Human review - numerical instability
     # "CERI651ELS": CERI651ELS(),  # TODO: Human review - numerical instability
     "CHAINWOO": CHAINWOO(),
+    "CHANDHEQ": CHANDHEQ(),
     "CHNROSNB": CHNROSNB(),
     "CHNRSNBM": CHNRSNBM(),
     "CHWIRUT1LS": CHWIRUT1LS(),
     "CHWIRUT2LS": CHWIRUT2LS(),
     "CLIFF": CLIFF(),
+    "CLUSTER": CLUSTER(),
     "CLUSTERLS": CLUSTERLS(),
     "COATING": COATING(),
+    "CONCON": CONCON(),
+    "COOLHANS": COOLHANS(),
     "COOLHANSLS": COOLHANSLS(),
     "COSINE": COSINE(),
     "CRAGGLVY": CRAGGLVY(),
+    # "CRESC4": CRESC4(),  # TODO: Human review - complex crescent area formula
+    "CSFI1": CSFI1(),
+    "CSFI2": CSFI2(),
     "CUBE": CUBE(),
     "CURLY10": CURLY10(),
     "CURLY20": CURLY20(),
     "CURLY30": CURLY30(),
+    "CVXQP1": CVXQP1(),
     # "CYCLOOCFLS": CYCLOOCFLS(),  # TODO: Human review - times out with default p=10000
+    # "DALLASS": DALLASS(),  # TODO: needs complex element implementations
+    "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
+    "DECONVC": DECONVC(),
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),

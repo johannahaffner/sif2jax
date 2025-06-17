@@ -7,7 +7,7 @@ from .argtrigls import ARGTRIGLS as ARGTRIGLS
 from .arwhead import ARWHEAD as ARWHEAD
 
 # TODO: BA_L family needs human review
-from .ba_l1ls import BA_L1LS as BA_L1LS
+# from .ba_l1ls import BA_L1LS as BA_L1LS  # TODO: BA_L family needs human review
 from .ba_l1spls import BA_L1SPLS as BA_L1SPLS
 from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
@@ -42,7 +42,13 @@ from .broydn7d import BROYDN7D as BROYDN7D
 from .chainwoo import CHAINWOO as CHAINWOO
 from .chnrosnb import CHNROSNB as CHNROSNB
 from .chnrsnbm import CHNRSNBM as CHNRSNBM
+
+# TODO: CHWIRUT1 needs external data file with 214 data points
+# from .chwirut1 import CHWIRUT1 as CHWIRUT1
 from .chwirut1ls import CHWIRUT1LS as CHWIRUT1LS
+
+# TODO: CHWIRUT2 needs implementation with 54 data points
+# from .chwirut2 import CHWIRUT2 as CHWIRUT2
 from .chwirut2ls import CHWIRUT2LS as CHWIRUT2LS
 from .cliff import CLIFF as CLIFF
 from .clusterls import CLUSTERLS as CLUSTERLS
@@ -210,7 +216,7 @@ unconstrained_minimisation_problems = (
     ARGLINC(),
     ARGTRIGLS(),
     ARWHEAD(),
-    BA_L1LS(),  # TODO: BA_L family needs human review
+    # BA_L1LS(),  # TODO: BA_L family needs human review
     BA_L1SPLS(),  # TODO: BA_L family needs human review
     BARD(),
     BDQRTIC(),

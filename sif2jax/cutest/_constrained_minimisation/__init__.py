@@ -12,6 +12,10 @@ from .avgasa import AVGASA as AVGASA
 from .avgasb import AVGASB as AVGASB
 from .avion2 import AVION2 as AVION2
 from .biggsc4 import BIGGSC4 as BIGGSC4
+
+# TODO: BOOTH needs human review - incorrectly classified as constrained
+# from .booth import BOOTH as BOOTH
+from .boxbod import BOXBOD as BOXBOD
 from .bt1 import BT1 as BT1
 from .bt2 import BT2 as BT2
 from .bt3 import BT3 as BT3
@@ -32,10 +36,19 @@ from .cb2 import CB2 as CB2
 from .cb3 import CB3 as CB3
 from .chaconn1 import CHACONN1 as CHACONN1
 from .chaconn2 import CHACONN2 as CHACONN2
-from .cresc4 import CRESC4 as CRESC4
+from .chandheq import CHANDHEQ as CHANDHEQ
+from .cluster import CLUSTER as CLUSTER
+from .concon import CONCON as CONCON
+from .coolhans import COOLHANS as COOLHANS
+
+# from .cresc4 import CRESC4 as CRESC4  # TODO: Human review - complex crescent area
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
 from .cvxqp1 import CVXQP1 as CVXQP1
+
+# TODO: DALLASS needs complex element implementations
+# from .dallass import DALLASS as DALLASS
+from .daniwood import DANIWOOD as DANIWOOD
 from .deconvc import DECONVC as DECONVC
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
@@ -195,6 +208,7 @@ constrained_minimisation_problems = (
     AVGASB(),
     AVION2(),
     BIGGSC4(),
+    BOXBOD(),
     BURKEHAN(),
     BYRDSPHR(),
     CANTILVR(),
@@ -202,10 +216,15 @@ constrained_minimisation_problems = (
     CB3(),
     CHACONN1(),
     CHACONN2(),
-    CRESC4(),
+    CHANDHEQ(),
+    CLUSTER(),
+    CONCON(),
+    COOLHANS(),
+    # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
     CSFI2(),
     CVXQP1(),
+    DANIWOOD(),
     DECONVC(),
     HS6(),
     HS7(),

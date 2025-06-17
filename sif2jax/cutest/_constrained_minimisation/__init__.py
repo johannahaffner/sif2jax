@@ -4,6 +4,8 @@ from .airport import AIRPORT as AIRPORT
 from .allinita import ALLINITA as ALLINITA
 from .alsotame import ALSOTAME as ALSOTAME
 from .antwerp import ANTWERP as ANTWERP
+from .avgasa import AVGASA as AVGASA
+from .avgasb import AVGASB as AVGASB
 from .avion2 import AVION2 as AVION2
 from .biggsc4 import BIGGSC4 as BIGGSC4
 from .bt1 import BT1 as BT1
@@ -185,6 +187,8 @@ constrained_minimisation_problems = (
     ALLINITA(),
     ALSOTAME(),
     ANTWERP(),
+    AVGASA(),
+    AVGASB(),
     AVION2(),
     BIGGSC4(),
     BURKEHAN(),

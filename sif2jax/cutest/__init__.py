@@ -1,6 +1,4 @@
 from ._bounded_minimisation import (
-    AVGASA as AVGASA,
-    AVGASB as AVGASB,
     bounded_minimisation_problems as bounded_minimisation_problems,
     EXP2B as EXP2B,
     HS1 as HS1,
@@ -19,6 +17,8 @@ from ._constrained_minimisation import (
     ALLINITA as ALLINITA,
     ALSOTAME as ALSOTAME,
     ANTWERP as ANTWERP,
+    AVGASA as AVGASA,
+    AVGASB as AVGASB,
     AVION2 as AVION2,
     BIGGSC4 as BIGGSC4,
     BT1 as BT1,

@@ -234,9 +234,9 @@ class ANTWERP(AbstractConstrainedMinimisation):
         sp2m = self.m2m / (self.m1m + self.m2m + self.m3m)
         sp3m = self.m3m / (self.m1m + self.m2m + self.m3m)
 
-        snf = jnp.clip(self.m1f + self.m2f + self.m3f, 0.0, 10000.0)
-        snw = jnp.clip(self.m1w + self.m2w + self.m3w, 0.0, 10000.0)
-        snm = jnp.clip(self.m1m + self.m2m + self.m3m, 0.0, 10000.0)
+        snf = self.m1f + self.m2f + self.m3f
+        snw = self.m1w + self.m2w + self.m3w
+        snm = self.m1m + self.m2m + self.m3m
 
         return jnp.array(
             [
@@ -353,3 +353,8 @@ class ANTWERP(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         """Expected optimal objective value (not provided in SIF)."""
         return None
+
+    def equality_constraints(self):
+        """Mark which constraints are equalities."""
+        # First 8 are equalities, last 2 are inequalities
+        return jnp.array([True, True, True, True, True, True, True, True, False, False])

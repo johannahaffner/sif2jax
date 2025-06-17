@@ -1,14 +1,14 @@
 from .akiva import AKIVA as AKIVA
 from .allinitu import ALLINITU as ALLINITU
-from .arglin import ARGLINA as ARGLINA, ARGLINB as ARGLINB, ARGLINC as ARGLINC
+from .arglina import ARGLINA as ARGLINA
+from .arglinb import ARGLINB as ARGLINB
+from .arglinc import ARGLINC as ARGLINC
 from .argtrigls import ARGTRIGLS as ARGTRIGLS
 from .arwhead import ARWHEAD as ARWHEAD
 
-# TODO: BA_L family needs to be split into separate files and human review
-# from .bal import (
-#     BA_L1LS as BA_L1LS,
-#     BA_L1SPLS as BA_L1SPLS,
-# )
+# TODO: BA_L family needs human review
+from .ba_l1ls import BA_L1LS as BA_L1LS
+from .ba_l1spls import BA_L1SPLS as BA_L1SPLS
 from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
@@ -42,7 +42,8 @@ from .broydn7d import BROYDN7D as BROYDN7D
 from .chainwoo import CHAINWOO as CHAINWOO
 from .chnrosnb import CHNROSNB as CHNROSNB
 from .chnrsnbm import CHNRSNBM as CHNRSNBM
-from .chwirut import CHWIRUT1LS as CHWIRUT1LS, CHWIRUT2LS as CHWIRUT2LS
+from .chwirut1ls import CHWIRUT1LS as CHWIRUT1LS
+from .chwirut2ls import CHWIRUT2LS as CHWIRUT2LS
 from .cliff import CLIFF as CLIFF
 from .clusterls import CLUSTERLS as CLUSTERLS
 from .coating import COATING as COATING
@@ -50,19 +51,19 @@ from .coolhansls import COOLHANSLS as COOLHANSLS
 from .cosine import COSINE as COSINE
 from .cragglvy import CRAGGLVY as CRAGGLVY
 from .cube import CUBE as CUBE
-from .curly import CURLY10 as CURLY10, CURLY20 as CURLY20, CURLY30 as CURLY30
+from .curly10 import CURLY10 as CURLY10
+from .curly20 import CURLY20 as CURLY20
+from .curly30 import CURLY30 as CURLY30
 
 # TODO: CYCLOOCFLS needs optimization - times out with default p=10000 (30k vars)
 # from .cycloocfls import CYCLOOCFLS as CYCLOOCFLS
 from .daniwoodls import DANIWOODLS as DANIWOODLS
-from .denschn import (
-    DENSCHNA as DENSCHNA,
-    DENSCHNB as DENSCHNB,
-    DENSCHNC as DENSCHNC,
-    DENSCHND as DENSCHND,
-    DENSCHNE as DENSCHNE,
-    DENSCHNF as DENSCHNF,
-)
+from .denschna import DENSCHNA as DENSCHNA
+from .denschnb import DENSCHNB as DENSCHNB
+from .denschnc import DENSCHNC as DENSCHNC
+from .denschnd import DENSCHND as DENSCHND
+from .denschne import DENSCHNE as DENSCHNE
+from .denschnf import DENSCHNF as DENSCHNF
 from .devgla1 import DEVGLA1 as DEVGLA1
 from .devgla2 import DEVGLA2 as DEVGLA2
 from .dixmaana1 import DIXMAANA1 as DIXMAANA1
@@ -89,7 +90,8 @@ from .dqrtic import DQRTIC as DQRTIC
 # TODO: ECKERLE4LS needs human review - significant discrepancies
 # from .eckerle4ls import ECKERLE4LS as ECKERLE4LS
 from .edensch import EDENSCH as EDENSCH
-from .eg import EG2 as EG2
+from .eg1 import EG1 as EG1
+from .eg2 import EG2 as EG2
 from .eggcrate import EGGCRATE as EGGCRATE
 from .eigenals import EIGENALS as EIGENALS
 from .eigenbls import EIGENBLS as EIGENBLS
@@ -207,8 +209,8 @@ unconstrained_minimisation_problems = (
     ARGLINC(),
     ARGTRIGLS(),
     ARWHEAD(),
-    # BA_L1LS(),  # TODO: BA_L family needs to be split into separate files
-    # BA_L1SPLS(),  # TODO: BA_L family needs to be split into separate files
+    BA_L1LS(),  # TODO: BA_L family needs human review
+    BA_L1SPLS(),  # TODO: BA_L family needs human review
     BARD(),
     BDQRTIC(),
     BEALE(),

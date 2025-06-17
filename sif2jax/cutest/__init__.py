@@ -182,8 +182,8 @@ from ._unconstrained_minimisation import (
     ARGLINC as ARGLINC,
     ARGTRIGLS as ARGTRIGLS,
     ARWHEAD as ARWHEAD,
-    # BA_L1LS as BA_L1LS,  # TODO: BA_L family needs to be split into separate files
-    # BA_L1SPLS as BA_L1SPLS,  # TODO: BA_L family needs to be split into separate files
+    BA_L1LS as BA_L1LS,  # TODO: BA_L family needs human review
+    BA_L1SPLS as BA_L1SPLS,  # TODO: BA_L family needs human review
     BARD as BARD,
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,

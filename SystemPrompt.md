@@ -43,7 +43,7 @@ When porting problems, please consider the following:
 11. Classification numbers should match the numbers given in the SIF file. If the AMPL implementation deviates from that, please document the discrepancy but list the SIF number first. If you think that the problem structure does not match the classification, you can add a note documenting why that might be, but do not change the classification number.
 12. Do not ever hard-code a data type.
 13. Each problem should get its own file, avoid putting several problems into the same file. If you want to factor out common functionality, then prefer importing the base class into the file in which the concrete problem is implemented.
-14. Declare all dataclass fields - we're inheriting from Equinox.Module. 
+14. Declare all dataclass fields - we're inheriting from Equinox.Module through the abstract base class `Problem`. 
 
 ## Testing
 

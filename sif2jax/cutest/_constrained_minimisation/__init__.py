@@ -4,6 +4,7 @@ from .airport import AIRPORT as AIRPORT
 from .allinita import ALLINITA as ALLINITA
 from .alsotame import ALSOTAME as ALSOTAME
 from .antwerp import ANTWERP as ANTWERP
+from .avion2 import AVION2 as AVION2
 from .biggsc4 import BIGGSC4 as BIGGSC4
 from .bt1 import BT1 as BT1
 from .bt2 import BT2 as BT2
@@ -25,6 +26,11 @@ from .cb2 import CB2 as CB2
 from .cb3 import CB3 as CB3
 from .chaconn1 import CHACONN1 as CHACONN1
 from .chaconn2 import CHACONN2 as CHACONN2
+from .cresc4 import CRESC4 as CRESC4
+from .csfi1 import CSFI1 as CSFI1
+from .csfi2 import CSFI2 as CSFI2
+from .cvxqp1 import CVXQP1 as CVXQP1
+from .deconvc import DECONVC as DECONVC
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
 from .hs8 import HS8 as HS8
@@ -179,6 +185,7 @@ constrained_minimisation_problems = (
     ALLINITA(),
     ALSOTAME(),
     ANTWERP(),
+    AVION2(),
     BIGGSC4(),
     BURKEHAN(),
     BYRDSPHR(),
@@ -187,6 +194,11 @@ constrained_minimisation_problems = (
     CB3(),
     CHACONN1(),
     CHACONN2(),
+    CRESC4(),
+    CSFI1(),
+    CSFI2(),
+    CVXQP1(),
+    DECONVC(),
     HS6(),
     HS7(),
     HS8(),

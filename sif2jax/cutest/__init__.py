@@ -19,6 +19,7 @@ from ._constrained_minimisation import (
     ALLINITA as ALLINITA,
     ALSOTAME as ALSOTAME,
     ANTWERP as ANTWERP,
+    AVION2 as AVION2,
     BIGGSC4 as BIGGSC4,
     BT1 as BT1,
     BT2 as BT2,
@@ -41,6 +42,11 @@ from ._constrained_minimisation import (
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
     constrained_minimisation_problems as constrained_minimisation_problems,
+    CRESC4 as CRESC4,
+    CSFI1 as CSFI1,
+    CSFI2 as CSFI2,
+    CVXQP1 as CVXQP1,
+    DECONVC as DECONVC,
     HS6 as HS6,
     HS7 as HS7,
     HS8 as HS8,
@@ -522,6 +528,7 @@ problems_dict = {
     "ARWHEAD": ARWHEAD(),
     "AVGASA": AVGASA(),
     "AVGASB": AVGASB(),
+    "AVION2": AVION2(),
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
     # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs to be split into files
     "BARD": BARD(),

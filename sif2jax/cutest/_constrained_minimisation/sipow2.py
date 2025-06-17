@@ -3,7 +3,7 @@ SIPOW2 problem.
 
 This is a discretization of a semi-infinite programming problem, of
 minimizing the variable x_2 within a circle of radius 1. The circle
-is replaced by a discrete set of equally-spaced supporting tangents.   
+is replaced by a discrete set of equally-spaced supporting tangents.
 The symmetry in SIPOW1.SIF is imposed by replacing those constraints
 by an alternative set.
 

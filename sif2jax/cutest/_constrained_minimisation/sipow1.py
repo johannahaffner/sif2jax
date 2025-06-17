@@ -3,7 +3,7 @@ SIPOW1 problem.
 
 This is a discretization of a semi-infinite programming problem, of
 minimizing the variable x_2 within a circle of radius 1. The circle
-is replaced by a discrete set of equally-spaced supporting tangents.   
+is replaced by a discrete set of equally-spaced supporting tangents.
 
 Source: problem 1 in
 M. J. D. Powell,

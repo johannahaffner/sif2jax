@@ -21,11 +21,6 @@ class CSFI2(AbstractConstrainedMinimisation):
         """Number of variables."""
         return 5
 
-    @property
-    def m(self):
-        """Number of constraints."""
-        return 5
-
     def objective(self, y, args):
         """Compute the objective (LEN to minimize length)."""
         del args
@@ -37,14 +32,12 @@ class CSFI2(AbstractConstrainedMinimisation):
         return len_
 
     def constraint(self, y):
-        """Compute the constraints."""
+        """Compute the constraints separated into equalities and inequalities."""
         # Extract variables
         thick, wid, len_, tph, ipm = y
 
         # Parameters
         maxaspr = 2.0
-        minarea = 200.0
-        maxarea = 250.0
 
         # CMPLQ element: 117.3708920187793427 * V1 / (V2 * V3)
         cmplq_const = 117.3708920187793427
@@ -59,29 +52,28 @@ class CSFI2(AbstractConstrainedMinimisation):
         # PROD element: V1 * V2
         e4 = thick * wid
 
-        # Constraints:
-        # 1. CIPM: IPM - E1 = 0
-        c1 = ipm - e1
+        # Equality constraints:
+        # 1. CIPM: E1 - IPM = 0
+        c1 = e1 - ipm
 
-        # 2. CLEN: LEN - E2 = 0
-        c2 = len_ - e2
+        # 2. CLEN: E2 - LEN = 0
+        c2 = e2 - len_
 
-        # 3. WOT: E3 <= MAXASPR
+        # Inequality constraints:
+        # 3. WOT: E3 <= MAXASPR means E3 - MAXASPR <= 0
         c3 = e3 - maxaspr
 
-        # 4. TTW: MINAREA <= E4 <= MAXAREA (converted to two inequalities)
-        # E4 <= MAXAREA
-        c4 = e4 - maxarea
+        # 4. TTW: MINAREA <= E4 <= MAXAREA
+        # pycutest returns E4 - MINAREA for the lower bound check
+        # but we just return E4 and handle bounds separately
+        minarea = 200.0
+        c4 = e4 - minarea
 
-        # E4 >= MINAREA (which becomes -E4 + MINAREA <= 0)
-        c5 = minarea - e4
+        # Return equalities and inequalities separately
+        equalities = jnp.array([c1, c2])
+        inequalities = jnp.array([c3, c4])
 
-        # Return all constraints
-        return jnp.array([c1, c2, c3, c4, c5]), None
-
-    def equality_constraints(self):
-        """First two constraints are equalities, rest are inequalities."""
-        return jnp.array([True, True, False, False, False])
+        return equalities, inequalities
 
     def y0(self):
         """Initial guess."""
@@ -112,3 +104,18 @@ class CSFI2(AbstractConstrainedMinimisation):
         """Expected optimal objective value."""
         # From OBJECT BOUND section
         return jnp.array(55.0)
+
+    def inequality_constraint_bounds(self):
+        """Bounds for the inequality constraints."""
+        # Parameters
+        minarea = 200.0
+        maxarea = 250.0
+
+        # Inequality constraint bounds:
+        # c3 (WOT): already in standard form (>= 0)
+        # c4 (TTW): minarea <= E4 <= maxarea
+
+        lower = jnp.array([0.0, minarea])
+        upper = jnp.array([jnp.inf, maxarea])
+
+        return lower, upper

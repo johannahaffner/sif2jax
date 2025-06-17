@@ -3,7 +3,10 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
-# TODO: CRESC4 needs human review - complex crescent area formula with arccos
+# TODO: Human review needed
+# Attempts made: Separated constraints, fixed constraint signs
+# Suspected issues: Complex crescent area formula (SC element) with arccos
+# Additional resources needed: Full SC element type or simplified formula
 class CRESC4(AbstractConstrainedMinimisation):
     """CRESC4 problem - finding crescent of smallest area containing 4 points.
 
@@ -61,7 +64,7 @@ class CRESC4(AbstractConstrainedMinimisation):
         return obj
 
     def constraint(self, y):
-        """Compute the constraints."""
+        """Compute the constraints separated into equalities and inequalities."""
         # Extract variables
         v1, w1, d, a, t, r = y
 
@@ -87,19 +90,16 @@ class CRESC4(AbstractConstrainedMinimisation):
             xi = x_data[i]
             yi = y_data[i]
 
-            # Inside circle 2 (inequality <= 0)
+            # Inside circle 2 (inequality <= 0, convert to >= 0)
             dist2_sq = (xi - v2) ** 2 + (yi - w2) ** 2
-            constraints.append(dist2_sq - r2**2)
+            constraints.append(r2**2 - dist2_sq)
 
-            # Outside circle 1 (inequality >= 0, so we use -constraint <= 0)
+            # Outside circle 1 (inequality >= 0)
             dist1_sq = (xi - v1) ** 2 + (yi - w1) ** 2
-            constraints.append(r1**2 - dist1_sq)
+            constraints.append(dist1_sq - r1**2)
 
-        return jnp.array(constraints), None
-
-    def equality_constraints(self):
-        """All constraints are inequalities."""
-        return jnp.zeros(8, dtype=bool)
+        # All constraints are inequalities, no equalities
+        return None, jnp.array(constraints)
 
     def y0(self):
         """Initial guess."""

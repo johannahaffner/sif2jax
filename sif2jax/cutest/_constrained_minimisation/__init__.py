@@ -1,3 +1,6 @@
+from .allinita import ALLINITA as ALLINITA
+from .alsotame import ALSOTAME as ALSOTAME
+from .biggsc4 import BIGGSC4 as BIGGSC4
 from .bt1 import BT1 as BT1
 from .bt2 import BT2 as BT2
 from .bt3 import BT3 as BT3
@@ -11,6 +14,13 @@ from .bt10 import BT10 as BT10
 from .bt11 import BT11 as BT11
 from .bt12 import BT12 as BT12
 from .bt13 import BT13 as BT13
+from .burkehan import BURKEHAN as BURKEHAN
+from .byrdsphr import BYRDSPHR as BYRDSPHR
+from .cantilvr import CANTILVR as CANTILVR
+from .cb2 import CB2 as CB2
+from .cb3 import CB3 as CB3
+from .chaconn1 import CHACONN1 as CHACONN1
+from .chaconn2 import CHACONN2 as CHACONN2
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
 from .hs8 import HS8 as HS8
@@ -106,6 +116,7 @@ from .hs116 import HS116 as HS116
 from .hs117 import HS117 as HS117
 from .hs118 import HS118 as HS118
 from .hs119 import HS119 as HS119
+from .lootsma import LOOTSMA as LOOTSMA
 from .lukvle1 import LUKVLE1 as LUKVLE1
 
 # from .lukvle2 import LUKVLE2 as LUKVLE2
@@ -150,9 +161,25 @@ from .lukvli15 import LUKVLI15 as LUKVLI15
 from .lukvli16 import LUKVLI16 as LUKVLI16
 from .lukvli17 import LUKVLI17 as LUKVLI17
 from .lukvli18 import LUKVLI18 as LUKVLI18
+from .maratos import MARATOS as MARATOS
+from .pentagon import PENTAGON as PENTAGON
+from .polak1 import POLAK1 as POLAK1
+from .polak5 import POLAK5 as POLAK5
+from .sipow1 import SIPOW1 as SIPOW1
+from .sipow2 import SIPOW2 as SIPOW2
 
 
 constrained_minimisation_problems = (
+    ALLINITA(),
+    ALSOTAME(),
+    BIGGSC4(),
+    BURKEHAN(),
+    BYRDSPHR(),
+    CANTILVR(),
+    CB2(),
+    CB3(),
+    CHACONN1(),
+    CHACONN2(),
     HS6(),
     HS7(),
     HS8(),
@@ -245,6 +272,13 @@ constrained_minimisation_problems = (
     HS117(),
     HS118(),
     HS119(),
+    LOOTSMA(),
+    MARATOS(),
+    PENTAGON(),
+    POLAK1(),
+    POLAK5(),
+    SIPOW1(),
+    SIPOW2(),
     BT1(),
     BT2(),
     BT3(),

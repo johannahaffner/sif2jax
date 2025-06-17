@@ -12,6 +12,9 @@ from ._bounded_minimisation import (
     HS110 as HS110,
 )
 from ._constrained_minimisation import (
+    ALLINITA as ALLINITA,
+    ALSOTAME as ALSOTAME,
+    BIGGSC4 as BIGGSC4,
     BT1 as BT1,
     BT2 as BT2,
     BT3 as BT3,
@@ -25,6 +28,13 @@ from ._constrained_minimisation import (
     BT11 as BT11,
     BT12 as BT12,
     BT13 as BT13,
+    BURKEHAN as BURKEHAN,
+    BYRDSPHR as BYRDSPHR,
+    CANTILVR as CANTILVR,
+    CB2 as CB2,
+    CB3 as CB3,
+    CHACONN1 as CHACONN1,
+    CHACONN2 as CHACONN2,
     constrained_minimisation_problems as constrained_minimisation_problems,
     HS6 as HS6,
     HS7 as HS7,
@@ -118,6 +128,7 @@ from ._constrained_minimisation import (
     HS117 as HS117,
     HS118 as HS118,
     HS119 as HS119,
+    LOOTSMA as LOOTSMA,
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,
     LUKVLE3 as LUKVLE3,
@@ -156,6 +167,12 @@ from ._constrained_minimisation import (
     LUKVLI16 as LUKVLI16,
     LUKVLI17 as LUKVLI17,
     LUKVLI18 as LUKVLI18,
+    MARATOS as MARATOS,
+    PENTAGON as PENTAGON,
+    POLAK1 as POLAK1,
+    POLAK5 as POLAK5,
+    SIPOW1 as SIPOW1,
+    SIPOW2 as SIPOW2,
 )
 from ._unconstrained_minimisation import (
     AKIVA as AKIVA,
@@ -288,6 +305,7 @@ from ._unconstrained_minimisation import (
     HIMMELBH as HIMMELBH,
     HUMPS as HUMPS,
     INDEF as INDEF,
+    INDEFM as INDEFM,
     INTEQNELS as INTEQNELS,
     JENSMP as JENSMP,
     JUDGE as JUDGE,
@@ -297,9 +315,20 @@ from ._unconstrained_minimisation import (
     LANCZOS1LS as LANCZOS1LS,
     LANCZOS2LS as LANCZOS2LS,
     LIARWHD as LIARWHD,
+    LOGHAIRY as LOGHAIRY,
     LSC1LS as LSC1LS,
     LSC2LS as LSC2LS,
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
+    # MEXHAT as MEXHAT,  # TODO: Human review - complex scaling issues
+    # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
+    NONCVXU2 as NONCVXU2,
+    NONCVXUN as NONCVXUN,
+    NONDQUAR as NONDQUAR,
+    NONMSQRT as NONMSQRT,
+    # PENALTY1 as PENALTY1,  # TODO: Human review - minor numerical precision issues
+    # PENALTY2 as PENALTY2,  # TODO: Human review - SCALE factor issue
+    POWER as POWER,
+    # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     ROSENBR as ROSENBR,
     TENFOLDTRLS as TENFOLDTRLS,
     unconstrained_minimisation_problems as unconstrained_minimisation_problems,
@@ -307,6 +336,16 @@ from ._unconstrained_minimisation import (
 
 
 problems_dict = {
+    "ALLINITA": ALLINITA(),
+    "ALSOTAME": ALSOTAME(),
+    "BIGGSC4": BIGGSC4(),
+    "BURKEHAN": BURKEHAN(),
+    "BYRDSPHR": BYRDSPHR(),
+    "CANTILVR": CANTILVR(),
+    "CB2": CB2(),
+    "CB3": CB3(),
+    "CHACONN1": CHACONN1(),
+    "CHACONN2": CHACONN2(),
     "HS1": HS1(),
     "HS2": HS2(),
     "HS3": HS3(),
@@ -408,6 +447,13 @@ problems_dict = {
     "HS117": HS117(),
     "HS118": HS118(),
     "HS119": HS119(),
+    "LOOTSMA": LOOTSMA(),
+    "MARATOS": MARATOS(),
+    "PENTAGON": PENTAGON(),
+    "POLAK1": POLAK1(),
+    "POLAK5": POLAK5(),
+    "SIPOW1": SIPOW1(),
+    "SIPOW2": SIPOW2(),
     "BT1": BT1(),
     "BT2": BT2(),
     "BT3": BT3(),
@@ -590,6 +636,7 @@ problems_dict = {
     "HIMMELBH": HIMMELBH(),
     "HUMPS": HUMPS(),
     "INDEF": INDEF(),
+    "INDEFM": INDEFM(),
     "INTEQNELS": INTEQNELS(),
     "JENSMP": JENSMP(),
     "JUDGE": JUDGE(),
@@ -599,9 +646,20 @@ problems_dict = {
     "LANCZOS1LS": LANCZOS1LS(),
     "LANCZOS2LS": LANCZOS2LS(),
     "LIARWHD": LIARWHD(),
+    "LOGHAIRY": LOGHAIRY(),
     "LSC1LS": LSC1LS(),
     "LSC2LS": LSC2LS(),
     # "MANCINO": MANCINO(),  # TODO: Human review - significant discrepancies in all
+    # "MEXHAT": MEXHAT(),  # TODO: Human review - complex scaling issues
+    # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
+    "NONCVXU2": NONCVXU2(),
+    "NONCVXUN": NONCVXUN(),
+    "NONDQUAR": NONDQUAR(),
+    "NONMSQRT": NONMSQRT(),
+    # "PENALTY1": PENALTY1(),  # TODO: Human review - minor numerical precision issues
+    # "PENALTY2": PENALTY2(),  # TODO: Human review - SCALE factor issue
+    "POWER": POWER(),
+    # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "ROSENBR": ROSENBR(),
     "TENFOLDTRLS": TENFOLDTRLS(),
 }

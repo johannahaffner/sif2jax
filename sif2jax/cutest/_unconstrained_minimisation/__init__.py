@@ -164,6 +164,7 @@ from .himmelblau import (
 )
 from .humps import HUMPS as HUMPS
 from .indef import INDEF as INDEF
+from .indefm import INDEFM as INDEFM
 from .inteqnels import INTEQNELS as INTEQNELS
 from .jensmp import JENSMP as JENSMP
 from .judge import JUDGE as JUDGE
@@ -174,10 +175,26 @@ from .kowosb import KOWOSB as KOWOSB
 # from .kssls import KSSLS as KSSLS
 from .lanczos import LANCZOS1LS as LANCZOS1LS, LANCZOS2LS as LANCZOS2LS
 from .liarwhd import LIARWHD as LIARWHD
+from .loghairy import LOGHAIRY as LOGHAIRY
 from .lsc import LSC1LS as LSC1LS, LSC2LS as LSC2LS
 
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
+# from .mexhat import MEXHAT as MEXHAT  # TODO: Human review - complex scaling issues
+# from .nondia import NONDIA as NONDIA  # TODO: Human review - SCALE factor issue
+from .noncvxu2 import NONCVXU2 as NONCVXU2
+from .noncvxun import NONCVXUN as NONCVXUN
+from .nondquar import NONDQUAR as NONDQUAR
+from .nonmsqrt import NONMSQRT as NONMSQRT
+
+# TODO: Human review - minor numerical precision issues
+# from .penalty1 import PENALTY1 as PENALTY1
+# TODO: Human review - SCALE factor issue
+# from .penalty2 import PENALTY2 as PENALTY2
+from .power import POWER as POWER
+
+# TODO: Human review - objective off by factor of 4.15
+# from .powellsg import POWELLSG as POWELLSG
 from .rosenbr import ROSENBR as ROSENBR
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
 
@@ -316,6 +333,7 @@ unconstrained_minimisation_problems = (
     HIMMELBH(),
     HUMPS(),
     INDEF(),
+    INDEFM(),
     INTEQNELS(),
     JENSMP(),
     JUDGE(),
@@ -325,10 +343,21 @@ unconstrained_minimisation_problems = (
     LANCZOS1LS(),
     LANCZOS2LS(),
     LIARWHD(),
+    LOGHAIRY(),
     # LR(),
     LSC1LS(),
     LSC2LS(),
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
+    # MEXHAT(),  # TODO: Human review - complex scaling issues
+    # NONDIA(),  # TODO: Human review - SCALE factor issue
+    NONCVXU2(),
+    NONCVXUN(),
+    NONDQUAR(),
+    NONMSQRT(),
+    # PENALTY1(),  # TODO: Human review - minor numerical precision issues
+    # PENALTY2(),  # TODO: Human review - SCALE factor issue
+    POWER(),
+    # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
     TENFOLDTRLS(),
 )

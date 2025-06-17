@@ -20,7 +20,7 @@ Never skip this step - your JAX implementation must match the original Fortran t
 
 ## Tipps and Tricks
 
-To verify problems, it is frequently helpful to check the AMPL definitions, since these are often more concise and easier to read. 
+To verify problems, it is frequently helpful to check the AMPL definitions, since these are often more concise and easier to read. You can find them here: https://github.com/ampl/global-optimization/tree/master/cute - files will have all lowercase names, and a suffix .mod.
 Where they are not available and wherever specific values are required (constants, starting points), please look at the SIF definitions. 
 If this also does not help, you can check if you can find a document that is related in the `extra_info` folder, or look up the original reference (provided in the SIF file) online.
 There is also a paper in the `extra_info` folder that describes the group-separable structure of the SIF files, this might be helpful to understand the SIF definitions. You can find screenshots of the relevant sections in `extra_info/s2mpj/`.
@@ -42,6 +42,7 @@ When porting problems, please consider the following:
 10. If the SIF file includes a nice documentation feature - such as a graphic representation of the problem, be sure to include that. Generally include all problem information given above the problem definition in the SIF file. 
 11. Classification numbers should match the numbers given in the SIF file. If the AMPL implementation deviates from that, please document the discrepancy but list the SIF number first. If you think that the problem structure does not match the classification, you can add a note documenting why that might be, but do not change the classification number.
 12. Do not ever hard-code a data type.
+13. Each problem should get its own file, avoid putting several problems into the same file. If you want to factor out common functionality, then prefer importing the base class into the file in which the concrete problem is implemented.
 
 ## Testing
 
@@ -51,6 +52,7 @@ Under no circumstances can you make any changes to the tests/ folder - just use 
 
 When you don't know what to do, find the next problem to work on by using `bash run_tests.sh -x` and start fixing the first problem for which the tests fail.
 When you make any change to a file, please run the tests again. You can run problem-specific tests with `bash run_tests.sh --test-case "PROBLEM1,PROBLEM2"`. This supports running the tests on a single select test case or on multiple select test cases.
+Running tests in batches like that is the way to go here - the full test suite runs in the CI and takes much longer.
 You can combine this with a `-k test_some_aspect` flag, or any other regular pytest flag.
 
 Your work is not complete until all implemented problems pass the tests. If you cannot resolve test failures after 5 genuine attempts with different approaches, flag the problem for human review with a comment like:
@@ -71,3 +73,5 @@ Put a recurring task on your To-Do list - for every twenty work items you have c
 
 Please keep going working on problems, don't stop to provide summaries of completed work unless requested.
 Thank you for your help pushing optimisation in JAX to the next level!
+
+Do not stop to ask if it is ok to `rm` a file. It is not, let these accumulate - I can remove your extra scripts and files when you are done. Avoid interrupting your work for questions like these.

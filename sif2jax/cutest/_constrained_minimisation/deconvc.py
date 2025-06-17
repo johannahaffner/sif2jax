@@ -1,3 +1,4 @@
+import jax
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
@@ -13,16 +14,21 @@ class DECONVC(AbstractConstrainedMinimisation):
     SIF input: Ph. Toint, Nov 1996.
 
     Classification: SQR2-MN-61-1
+
+    # TODO: Human review needed
+    # Attempts made: Fixed dimension mismatch, adjusted bounds, handled fixed variables
+    # Suspected issues: Gradient/Hessian discrepancy - indexing issue with C variables
+    # Additional resources needed: Clarification on fixed variables C(-LGSG:0)
     """
 
     @property
     def n(self):
         """Number of variables."""
-        # Variables are C(-LGSG:LGTR) and SG(1:LGSG)
-        # Total: (LGTR - (-LGSG) + 1) + LGSG = LGTR + 2*LGSG + 1
+        # Variables are C(1:LGTR) and SG(1:LGSG)
+        # C(-LGSG:0) are fixed to 0 and not included
         lgtr = 40
         lgsg = 11
-        return lgtr + 2 * lgsg + 1  # 40 + 22 + 1 = 63
+        return lgtr + lgsg  # 40 + 11 = 51
 
     @property
     def m(self):
@@ -37,9 +43,10 @@ class DECONVC(AbstractConstrainedMinimisation):
         lgsg = 11
 
         # Extract variables
-        # C goes from index -LGSG to LGTR, so indices 0 to LGTR+LGSG
-        c = y[: lgtr + lgsg + 1]  # 52 values
-        sg = y[lgtr + lgsg + 1 :]  # 11 values
+        # C(1:LGTR) are the first 40 variables
+        c_positive = y[:lgtr]  # 40 values
+        # SG(1:LGSG) are the next 11 variables
+        sg = y[lgtr:]  # 11 values
 
         # Data values TR
         tr = jnp.array(
@@ -87,33 +94,50 @@ class DECONVC(AbstractConstrainedMinimisation):
             ]
         )
 
-        # Compute residuals R(K) for K = 1 to LGTR
-        obj = 0.0
-        for k in range(lgtr):  # k = 0 to 39 (represents K = 1 to 40)
-            # R(K) = (sum of SG(I) * C(K-I+1) for I = 1 to LGSG - TR(K))^2
-            rk = -tr[k]
-            for i in range(lgsg):  # i = 0 to 10 (represents I = 1 to 11)
-                k_minus_i_plus_1 = k - i  # This is K-I+1 in 0-indexed
-                # C index needs adjustment: C goes from -LGSG to LGTR
-                # In our array, index 0 corresponds to C(-LGSG)
-                # So C(K-I+1) is at index K-I+1+LGSG
-                c_idx = k_minus_i_plus_1 + lgsg
-                if 0 <= c_idx < len(c):
-                    # Only include if IDX > 0 (i.e., K-I+1 > 0)
-                    if k_minus_i_plus_1 >= 0:
-                        rk += sg[i] * c[c_idx]
+        # Create full C array
+        # C(-LGSG:0) = 0 (fixed), C(1:LGTR) = c_positive
+        # In array indexing: c[0:lgsg+1] = 0, c[lgsg+1:lgsg+1+lgtr] = c_positive
+        c_full = jnp.concatenate([jnp.zeros(lgsg + 1), c_positive])
 
-            obj += rk * rk
+        # Compute residuals using proper indexing
+        # R(K) = sum(SG(I) * C(K-I+1) for I=1 to LGSG) - TR(K)
+        # where K=1..LGTR (1-indexed) maps to k=0..lgtr-1 (0-indexed)
+        # and I=1..LGSG (1-indexed) maps to i=0..lgsg-1 (0-indexed)
 
-        return jnp.array(obj)
+        def compute_residual(k):
+            # For SIF: sum over I=1 to LGSG of SG(I)*C(K-I+1)
+            # In 0-indexed: sum over i=0 to lgsg-1 of sg[i]*C(k-i+1)
+            # C(k-i+1) in SIF maps to c_full[k-i+1+lgsg] in our array
+
+            # Use dynamic slicing to get the relevant part of c_full
+            # We need C(k-i+1) for i=0 to lgsg-1
+            # Which is C(k+1), C(k), ..., C(k-lgsg+2)
+            # In c_full indexing: c_full[k+1+lgsg], c_full[k+lgsg], ...,
+            # c_full[k-lgsg+2+lgsg] = c_full[k+lgsg+1], c_full[k+lgsg], ..., c_full[k+2]
+            # So we need to slice from k+2 for lgsg elements and reverse
+            start = k + 2
+            # Use lax.dynamic_slice for gradient-friendly indexing
+            c_slice = jax.lax.dynamic_slice(c_full, (start,), (lgsg,))
+            # Reverse the slice to get the right order
+            c_slice_rev = c_slice[::-1]
+
+            # Compute dot product
+            return jnp.dot(sg, c_slice_rev) - tr[k]
+
+        # Vectorize over all k values
+        residuals = jax.vmap(compute_residual)(jnp.arange(lgtr))
+
+        # Sum of squares
+        obj = jnp.sum(residuals * residuals)
+
+        return obj
 
     def constraint(self, y):
         """Compute the energy constraint."""
         lgtr = 40
-        lgsg = 11
 
-        # Extract SG variables
-        sg = y[lgtr + lgsg + 1 :]
+        # Extract SG variables (last 11 variables)
+        sg = y[lgtr:]
 
         # Energy constraint: sum(SG(I)^2) = PIC
         pic = 12.35
@@ -128,10 +152,9 @@ class DECONVC(AbstractConstrainedMinimisation):
     def y0(self):
         """Initial guess."""
         lgtr = 40
-        lgsg = 11
 
-        # Initial C values (all zeros as given)
-        c_init = jnp.zeros(lgtr + lgsg + 1)
+        # Initial C values for C(1:40) (all zeros as given)
+        c_init = jnp.zeros(lgtr)
 
         # Initial SG values
         sg_init = jnp.array(
@@ -146,19 +169,9 @@ class DECONVC(AbstractConstrainedMinimisation):
 
     def bounds(self):
         """Variable bounds."""
-        lgtr = 40
-        lgsg = 11
-        n_total = lgtr + 2 * lgsg + 1
-
-        # Default bounds
-        lower = jnp.full(n_total, -jnp.inf)
-        upper = jnp.full(n_total, jnp.inf)
-
-        # C(K) for K = -LGSG to 0 are fixed at 0
-        # These are indices 0 to LGSG in our array
-        for i in range(lgsg + 1):
-            lower = lower.at[i].set(0.0)
-            upper = upper.at[i].set(0.0)
+        # From pycutest behavior, all variables have lower bound 0
+        lower = jnp.zeros(self.n)
+        upper = jnp.full(self.n, jnp.inf)
 
         return lower, upper
 

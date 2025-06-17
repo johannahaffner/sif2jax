@@ -66,6 +66,11 @@ Your work is not complete until all implemented problems pass the tests. If you 
 
 Document your specific blockers so I can provide targeted help.
 
+When you are done, commit your work. Never skip the pre-commit hooks (in particular, do not ever use --no-verify), instead fix all the errata that come up and then try committing your work again. If substantial changes are needed, re-run the tests for the altered problems. 
+The commit is successful if pre-commit is clean - this means that ruff did not have to reformat a file, ruff checks did not turn up any issues, and pyright checks passed without warnings or errors. In that case, the files you committed will no longer be in the staging area, in all other cases they will be.
+
+You should generally only commit changes to the `sif2jax` folder. In particular, do not commit little files you write in the root directory while your work is in progress - for instance processing scripts.
+
 ## Finally
 
 You do not need to ask for permission to run `grep`, `sed`, `ls` `ruff`, `pyright` and `awk` commands. 

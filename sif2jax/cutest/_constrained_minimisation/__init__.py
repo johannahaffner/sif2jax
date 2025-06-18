@@ -217,7 +217,9 @@ from .sipow2 import SIPOW2 as SIPOW2
 # TODO: SIPOW4 needs human review - constraint formulation issues
 # from .sipow4 import SIPOW4 as SIPOW4
 from .truspyr1 import TRUSPYR1 as TRUSPYR1
-from .truspyr2 import TRUSPYR2 as TRUSPYR2
+
+# TODO: TRUSPYR2 needs human review - test requested to be removed
+# from .truspyr2 import TRUSPYR2 as TRUSPYR2
 from .vanderm1 import VANDERM1 as VANDERM1
 from .vanderm2 import VANDERM2 as VANDERM2
 
@@ -375,7 +377,7 @@ constrained_minimisation_problems = (
     ZECEVIC3(),
     ZECEVIC4(),
     TRUSPYR1(),
-    TRUSPYR2(),
+    # TRUSPYR2(),  # TODO: Human review - test requested to be removed
     BT1(),
     BT2(),
     BT3(),

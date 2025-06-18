@@ -8,6 +8,13 @@ class HS84(AbstractConstrainedMinimisation):
 
     TODO: Human review needed - objective value has ~2% discrepancy with pycutest.
 
+    Challenges encountered:
+    - Understanding MA(i) notation in SIF files (means minus A(i))
+    - Objective uses MA(2) through MA(6) which negates those coefficients
+    - The problem has range constraints (0 <= g(x) <= r) that pycutest handles specially
+    - Even after fixing signs, ~2% discrepancy remains - could be numerical precision
+    - Product elements E(i) = X(1) * X(i+1) are used in objective and constraints
+
     Source: problem 84 in
     W. Hock and K. Schittkowski,
     "Test examples for nonlinear programming codes",

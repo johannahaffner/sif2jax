@@ -8,6 +8,13 @@ class HS70(AbstractConstrainedMinimisation):
 
     This problem arises in water flow routing.
 
+    TODO: Human review needed - test failures. The implementation follows the SIF file
+    but tests fail. Challenges include:
+    - Complex Y1 and Y2 function definitions with multiple terms
+    - Y1 uses (1-x3) while Y2 uses x3 in different places
+    - The functions involve intricate combinations of power, exponential and other terms
+    - Constraint involves a product element (x3*x4)
+
     Source: problem 70 incorrectly stated in
     W. Hock and K. Schittkowski,
     "Test examples for nonlinear programming codes",

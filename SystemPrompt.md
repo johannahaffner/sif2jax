@@ -75,7 +75,7 @@ You should generally only commit changes to the `sif2jax` folder. In particular,
 
 ## Finally
 
-You do not need to ask for permission to run `grep`, `sed`, `ls` `ruff`, `pyright` and `awk` commands. 
+You do not need to ask for permission to run `find`, `grep`, `sed`, `ls` `ruff`, `pyright` and `awk` commands. 
 Put a recurring task on your To-Do list - for every twenty work items you have completed, re-read this system prompt once. (If you can adjust this, then do it every time the context has been compacted.)
 
 Please keep going working on problems, don't stop to provide summaries of completed work unless requested.

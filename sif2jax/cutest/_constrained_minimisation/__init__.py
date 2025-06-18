@@ -202,6 +202,9 @@ from .pentagon import PENTAGON as PENTAGON
 from .polak1 import POLAK1 as POLAK1
 from .polak2 import POLAK2 as POLAK2
 from .polak5 import POLAK5 as POLAK5
+from .powellbs import POWELLBS as POWELLBS
+from .powellse import POWELLSE as POWELLSE
+from .powellsq import POWELLSQ as POWELLSQ
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 from .sipow3 import SIPOW3 as SIPOW3
@@ -343,6 +346,9 @@ constrained_minimisation_problems = (
     POLAK1(),
     POLAK2(),
     POLAK5(),
+    POWELLBS(),
+    POWELLSE(),
+    POWELLSQ(),
     SIPOW1(),
     SIPOW2(),
     SIPOW3(),

@@ -197,6 +197,9 @@ from ._constrained_minimisation import (
     POLAK1 as POLAK1,
     POLAK2 as POLAK2,
     POLAK5 as POLAK5,
+    POWELLBS as POWELLBS,
+    POWELLSE as POWELLSE,
+    POWELLSQ as POWELLSQ,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
     SIPOW3 as SIPOW3,
@@ -369,9 +372,6 @@ from ._unconstrained_minimisation import (
     NONCVXUN as NONCVXUN,
     NONDQUAR as NONDQUAR,
     NONMSQRT as NONMSQRT,
-    POWELLBS as POWELLBS,
-    POWELLSE as POWELLSE,
-    POWELLSQ as POWELLSQ,
     # PENALTY1 as PENALTY1,  # TODO: Human review - minor numerical precision issues
     # PENALTY2 as PENALTY2,  # TODO: Human review - SCALE factor issue
     POWER as POWER,

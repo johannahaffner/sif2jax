@@ -195,9 +195,6 @@ from .noncvxu2 import NONCVXU2 as NONCVXU2
 from .noncvxun import NONCVXUN as NONCVXUN
 from .nondquar import NONDQUAR as NONDQUAR
 from .nonmsqrt import NONMSQRT as NONMSQRT
-from .powellbs import POWELLBS as POWELLBS
-from .powellse import POWELLSE as POWELLSE
-from .powellsq import POWELLSQ as POWELLSQ
 
 # TODO: Human review - minor numerical precision issues
 # from .penalty1 import PENALTY1 as PENALTY1
@@ -379,9 +376,6 @@ unconstrained_minimisation_problems = (
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
     TENFOLDTRLS(),
-    POWELLBS(),
-    POWELLSE(),
-    POWELLSQ(),
     WAYSEA1(),
     WAYSEA2(),
     TRIGON1(),

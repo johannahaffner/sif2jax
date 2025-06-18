@@ -30,9 +30,9 @@ class VANDERM1(AbstractConstrainedMinimisation):
     @property
     def m(self):
         """Number of constraints."""
-        # n equality constraints (Vandermonde equations)
-        # n-1 inequality constraints (monotonicity)
-        return self.n + self.n - 1
+        # Only n-1 inequality constraints (monotonicity)
+        # The Vandermonde equations are part of the objective (L2 group type)
+        return self.n - 1
 
     def objective(self, y, args):
         """Compute the objective (constant zero)."""

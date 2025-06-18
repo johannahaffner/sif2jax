@@ -195,6 +195,9 @@ from .noncvxu2 import NONCVXU2 as NONCVXU2
 from .noncvxun import NONCVXUN as NONCVXUN
 from .nondquar import NONDQUAR as NONDQUAR
 from .nonmsqrt import NONMSQRT as NONMSQRT
+from .powellbs import POWELLBS as POWELLBS
+from .powellse import POWELLSE as POWELLSE
+from .powellsq import POWELLSQ as POWELLSQ
 
 # TODO: Human review - minor numerical precision issues
 # from .penalty1 import PENALTY1 as PENALTY1
@@ -206,6 +209,13 @@ from .power import POWER as POWER
 # from .powellsg import POWELLSG as POWELLSG
 from .rosenbr import ROSENBR as ROSENBR
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
+from .tointgor import TOINTGOR as TOINTGOR
+from .tointgss import TOINTGSS as TOINTGSS
+from .tointpsp import TOINTPSP as TOINTPSP
+from .trigon1 import TRIGON1 as TRIGON1
+from .trigon2 import TRIGON2 as TRIGON2
+from .waysea1 import WAYSEA1 as WAYSEA1
+from .waysea2 import WAYSEA2 as WAYSEA2
 
 
 unconstrained_minimisation_problems = (
@@ -369,4 +379,14 @@ unconstrained_minimisation_problems = (
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
     TENFOLDTRLS(),
+    POWELLBS(),
+    POWELLSE(),
+    POWELLSQ(),
+    WAYSEA1(),
+    WAYSEA2(),
+    TRIGON1(),
+    TRIGON2(),
+    TOINTGOR(),
+    TOINTGSS(),
+    TOINTPSP(),
 )

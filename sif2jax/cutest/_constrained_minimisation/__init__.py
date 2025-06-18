@@ -113,6 +113,7 @@ from .hs66 import HS66 as HS66
 # from .hs67 import HS67 as HS67  # TODO: Human review - several discrepancies
 from .hs68 import HS68 as HS68
 from .hs69 import HS69 as HS69
+from .hs70 import HS70 as HS70
 from .hs71 import HS71 as HS71
 from .hs72 import HS72 as HS72
 from .hs73 import HS73 as HS73
@@ -125,6 +126,7 @@ from .hs79 import HS79 as HS79
 from .hs80 import HS80 as HS80
 from .hs81 import HS81 as HS81
 from .hs83 import HS83 as HS83
+from .hs84 import HS84 as HS84
 from .hs93 import HS93 as HS93
 
 # from .hs99 import HS99 as HS99  # TODO: Needs human review - complex recursion
@@ -191,12 +193,28 @@ from .lukvli15 import LUKVLI15 as LUKVLI15
 from .lukvli16 import LUKVLI16 as LUKVLI16
 from .lukvli17 import LUKVLI17 as LUKVLI17
 from .lukvli18 import LUKVLI18 as LUKVLI18
+from .makela1 import MAKELA1 as MAKELA1
+from .makela2 import MAKELA2 as MAKELA2
+from .makela3 import MAKELA3 as MAKELA3
+from .makela4 import MAKELA4 as MAKELA4
 from .maratos import MARATOS as MARATOS
 from .pentagon import PENTAGON as PENTAGON
 from .polak1 import POLAK1 as POLAK1
+from .polak2 import POLAK2 as POLAK2
 from .polak5 import POLAK5 as POLAK5
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
+from .sipow3 import SIPOW3 as SIPOW3
+from .sipow4 import SIPOW4 as SIPOW4
+from .truspyr1 import TRUSPYR1 as TRUSPYR1
+from .truspyr2 import TRUSPYR2 as TRUSPYR2
+from .vanderm1 import VANDERM1 as VANDERM1
+from .vanderm2 import VANDERM2 as VANDERM2
+from .vanderm3 import VANDERM3 as VANDERM3
+from .vanderm4 import VANDERM4 as VANDERM4
+from .zecevic2 import ZECEVIC2 as ZECEVIC2
+from .zecevic3 import ZECEVIC3 as ZECEVIC3
+from .zecevic4 import ZECEVIC4 as ZECEVIC4
 
 
 constrained_minimisation_problems = (
@@ -323,9 +341,27 @@ constrained_minimisation_problems = (
     MARATOS(),
     PENTAGON(),
     POLAK1(),
+    POLAK2(),
     POLAK5(),
     SIPOW1(),
     SIPOW2(),
+    SIPOW3(),
+    SIPOW4(),
+    VANDERM1(),
+    VANDERM2(),
+    VANDERM3(),
+    VANDERM4(),
+    MAKELA1(),
+    MAKELA2(),
+    MAKELA3(),
+    MAKELA4(),
+    HS70(),
+    HS84(),
+    ZECEVIC2(),
+    ZECEVIC3(),
+    ZECEVIC4(),
+    TRUSPYR1(),
+    TRUSPYR2(),
     BT1(),
     BT2(),
     BT3(),

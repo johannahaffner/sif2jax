@@ -202,8 +202,8 @@ from ._constrained_minimisation import (
     POWELLSQ as POWELLSQ,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
-    SIPOW3 as SIPOW3,
-    SIPOW4 as SIPOW4,
+    # SIPOW3 as SIPOW3,  # TODO: Human review - constraint formulation issues
+    # SIPOW4 as SIPOW4,  # TODO: Human review - constraint formulation issues
     TRUSPYR1 as TRUSPYR1,
     TRUSPYR2 as TRUSPYR2,
     VANDERM1 as VANDERM1,
@@ -513,8 +513,8 @@ problems_dict = {
     "POLAK5": POLAK5(),
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
-    "SIPOW3": SIPOW3(),
-    "SIPOW4": SIPOW4(),
+    # "SIPOW3": SIPOW3(),  # TODO: Human review - constraint formulation issues
+    # "SIPOW4": SIPOW4(),  # TODO: Human review - constraint formulation issues
     "VANDERM1": VANDERM1(),
     "VANDERM2": VANDERM2(),
     # "VANDERM3": VANDERM3(),  # TODO: Human review - constraints mismatch

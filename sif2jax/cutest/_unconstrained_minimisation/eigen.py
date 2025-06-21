@@ -64,7 +64,8 @@ class EIGEN(AbstractUnconstrainedMinimisation):
         # Use where to avoid boolean multiplication issues
         e_squared = jnp.where(triu_mask, e_residual**2, 0.0)
         o_squared = jnp.where(triu_mask, o_residual**2, 0.0)
-        total_obj = jnp.sum(e_squared) + jnp.sum(o_squared)
+        # Cast to ensure pyright understands these are arrays
+        total_obj = jnp.sum(jnp.asarray(e_squared)) + jnp.sum(jnp.asarray(o_squared))
 
         return total_obj
 

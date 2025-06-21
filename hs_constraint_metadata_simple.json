@@ -1,0 +1,1773 @@
+{
+  "HS10": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS100": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "G"
+      ],
+      [
+        "C4",
+        "G"
+      ]
+    ]
+  },
+  "HS101": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L"
+    ],
+    "raw_constraints": [
+      [
+        "CONSTR(I)",
+        "L"
+      ]
+    ]
+  },
+  "HS102": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L"
+    ],
+    "raw_constraints": [
+      [
+        "CONSTR(I)",
+        "L"
+      ]
+    ]
+  },
+  "HS103": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L"
+    ],
+    "raw_constraints": [
+      [
+        "CONSTR(I)",
+        "L"
+      ]
+    ]
+  },
+  "HS104": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L",
+      "L",
+      "L",
+      "L",
+      "R"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "L"
+      ],
+      [
+        "C2",
+        "L"
+      ],
+      [
+        "C3",
+        "L"
+      ],
+      [
+        "C4",
+        "L"
+      ],
+      [
+        "C5",
+        "G"
+      ]
+    ]
+  },
+  "HS105": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ]
+    ]
+  },
+  "HS106": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "G"
+      ],
+      [
+        "C4",
+        "G"
+      ],
+      [
+        "C5",
+        "G"
+      ],
+      [
+        "C6",
+        "G"
+      ]
+    ]
+  },
+  "HS107": {
+    "equality_count": 6,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ],
+      [
+        "C2",
+        "E"
+      ],
+      [
+        "C3",
+        "E"
+      ],
+      [
+        "C4",
+        "E"
+      ],
+      [
+        "C5",
+        "E"
+      ],
+      [
+        "C6",
+        "E"
+      ]
+    ]
+  },
+  "HS108": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "G",
+      "G",
+      "G",
+      "L"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "L"
+      ],
+      [
+        "C2",
+        "L"
+      ],
+      [
+        "C3",
+        "L"
+      ],
+      [
+        "C4",
+        "L"
+      ],
+      [
+        "C5",
+        "L"
+      ],
+      [
+        "C6",
+        "L"
+      ],
+      [
+        "C7",
+        "L"
+      ],
+      [
+        "C8",
+        "L"
+      ],
+      [
+        "C9",
+        "L"
+      ],
+      [
+        "C10",
+        "G"
+      ],
+      [
+        "C11",
+        "G"
+      ],
+      [
+        "C12",
+        "G"
+      ],
+      [
+        "C13",
+        "L"
+      ]
+    ]
+  },
+  "HS109": {
+    "equality_count": 2,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "G"
+      ],
+      [
+        "C4",
+        "G"
+      ],
+      [
+        "C7",
+        "E"
+      ],
+      [
+        "C10",
+        "E"
+      ]
+    ]
+  },
+  "HS11": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS111": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ],
+      [
+        "CON3",
+        "E"
+      ]
+    ]
+  },
+  "HS112": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ],
+      [
+        "CON3",
+        "E"
+      ]
+    ]
+  },
+  "HS113": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "G"
+      ],
+      [
+        "C4",
+        "G"
+      ],
+      [
+        "C5",
+        "G"
+      ],
+      [
+        "C6",
+        "G"
+      ],
+      [
+        "C7",
+        "G"
+      ],
+      [
+        "C8",
+        "G"
+      ]
+    ]
+  },
+  "HS114": {
+    "equality_count": 3,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "G"
+      ],
+      [
+        "C4",
+        "G"
+      ],
+      [
+        "C5",
+        "G"
+      ],
+      [
+        "C6",
+        "G"
+      ],
+      [
+        "C7",
+        "G"
+      ],
+      [
+        "C8",
+        "G"
+      ],
+      [
+        "C9",
+        "E"
+      ],
+      [
+        "C10",
+        "E"
+      ],
+      [
+        "C11",
+        "E"
+      ]
+    ]
+  },
+  "HS116": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "R",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "G"
+      ],
+      [
+        "C4",
+        "G"
+      ],
+      [
+        "C5",
+        "G"
+      ],
+      [
+        "C6",
+        "G"
+      ],
+      [
+        "C7",
+        "G"
+      ],
+      [
+        "C8",
+        "G"
+      ],
+      [
+        "C9",
+        "G"
+      ],
+      [
+        "C10",
+        "G"
+      ],
+      [
+        "C11",
+        "G"
+      ],
+      [
+        "C12",
+        "G"
+      ],
+      [
+        "C13",
+        "G"
+      ],
+      [
+        "C14",
+        "G"
+      ]
+    ]
+  },
+  "HS117": {
+    "equality_count": 0,
+    "inequality_types": [],
+    "raw_constraints": []
+  },
+  "HS118": {
+    "equality_count": 0,
+    "inequality_types": [
+      "R",
+      "R",
+      "R",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "A(K)",
+        "G"
+      ],
+      [
+        "B(K)",
+        "G"
+      ],
+      [
+        "C(K)",
+        "G"
+      ],
+      [
+        "D1",
+        "G"
+      ],
+      [
+        "D2",
+        "G"
+      ],
+      [
+        "D3",
+        "G"
+      ],
+      [
+        "D4",
+        "G"
+      ],
+      [
+        "D5",
+        "G"
+      ]
+    ]
+  },
+  "HS119": {
+    "equality_count": 0,
+    "inequality_types": [],
+    "raw_constraints": []
+  },
+  "HS12": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS13": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS14": {
+    "equality_count": 1,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "E"
+      ]
+    ]
+  },
+  "HS15": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS16": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS17": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS18": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS19": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS20": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ],
+      [
+        "CON3",
+        "G"
+      ]
+    ]
+  },
+  "HS21": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS22": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS23": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ],
+      [
+        "CON3",
+        "G"
+      ],
+      [
+        "CON4",
+        "G"
+      ],
+      [
+        "CON5",
+        "G"
+      ]
+    ]
+  },
+  "HS24": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ],
+      [
+        "CON3",
+        "G"
+      ]
+    ]
+  },
+  "HS26": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ]
+    ]
+  },
+  "HS27": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ]
+    ]
+  },
+  "HS28": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ]
+    ]
+  },
+  "HS29": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS30": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS31": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CONSTR",
+        "G"
+      ]
+    ]
+  },
+  "HS32": {
+    "equality_count": 1,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "E"
+      ]
+    ]
+  },
+  "HS33": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS34": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS35": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS36": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS37": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS39": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ]
+    ]
+  },
+  "HS40": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ],
+      [
+        "CON3",
+        "E"
+      ]
+    ]
+  },
+  "HS41": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ]
+    ]
+  },
+  "HS42": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ]
+    ]
+  },
+  "HS43": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ],
+      [
+        "CON3",
+        "G"
+      ]
+    ]
+  },
+  "HS44": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ],
+      [
+        "CON3",
+        "G"
+      ],
+      [
+        "CON4",
+        "G"
+      ],
+      [
+        "CON5",
+        "G"
+      ],
+      [
+        "CON6",
+        "G"
+      ]
+    ]
+  },
+  "HS46": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ]
+    ]
+  },
+  "HS47": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ],
+      [
+        "CON3",
+        "E"
+      ]
+    ]
+  },
+  "HS48": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ]
+    ]
+  },
+  "HS49": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ]
+    ]
+  },
+  "HS50": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON(I)",
+        "E"
+      ]
+    ]
+  },
+  "HS51": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ],
+      [
+        "CON3",
+        "E"
+      ]
+    ]
+  },
+  "HS52": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ],
+      [
+        "CON3",
+        "E"
+      ]
+    ]
+  },
+  "HS53": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ],
+      [
+        "CON3",
+        "E"
+      ]
+    ]
+  },
+  "HS54": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ]
+    ]
+  },
+  "HS55": {
+    "equality_count": 6,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ],
+      [
+        "CON3",
+        "E"
+      ],
+      [
+        "CON4",
+        "E"
+      ],
+      [
+        "CON5",
+        "E"
+      ],
+      [
+        "CON6",
+        "E"
+      ]
+    ]
+  },
+  "HS56": {
+    "equality_count": 4,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON(1)",
+        "E"
+      ],
+      [
+        "CON(2)",
+        "E"
+      ],
+      [
+        "CON(3)",
+        "E"
+      ],
+      [
+        "CON(4)",
+        "E"
+      ]
+    ]
+  },
+  "HS57": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ]
+    ]
+  },
+  "HS59": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ],
+      [
+        "CON3",
+        "G"
+      ]
+    ]
+  },
+  "HS6": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "G2",
+        "E"
+      ]
+    ]
+  },
+  "HS60": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ]
+    ]
+  },
+  "HS61": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ],
+      [
+        "C2",
+        "E"
+      ]
+    ]
+  },
+  "HS62": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ]
+    ]
+  },
+  "HS63": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ],
+      [
+        "C2",
+        "E"
+      ]
+    ]
+  },
+  "HS64": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L"
+    ],
+    "raw_constraints": [
+      [
+        "CONSTR",
+        "L"
+      ]
+    ]
+  },
+  "HS65": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ]
+    ]
+  },
+  "HS66": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ]
+    ]
+  },
+  "HS67": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "L"
+    ],
+    "raw_constraints": [
+      [
+        "AG(I)",
+        "G"
+      ],
+      [
+        "AL(I)",
+        "L"
+      ]
+    ]
+  },
+  "HS68": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ],
+      [
+        "C2",
+        "E"
+      ]
+    ]
+  },
+  "HS69": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ],
+      [
+        "C2",
+        "E"
+      ]
+    ]
+  },
+  "HS7": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ]
+    ]
+  },
+  "HS70": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ]
+    ]
+  },
+  "HS71": {
+    "equality_count": 1,
+    "inequality_types": [
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "E"
+      ]
+    ]
+  },
+  "HS72": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "CON1",
+        "G"
+      ],
+      [
+        "CON2",
+        "G"
+      ]
+    ]
+  },
+  "HS73": {
+    "equality_count": 1,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "E"
+      ]
+    ]
+  },
+  "HS74": {
+    "equality_count": 3,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "E"
+      ],
+      [
+        "C4",
+        "E"
+      ],
+      [
+        "C5",
+        "E"
+      ]
+    ]
+  },
+  "HS75": {
+    "equality_count": 3,
+    "inequality_types": [
+      "G",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "E"
+      ],
+      [
+        "C4",
+        "E"
+      ],
+      [
+        "C5",
+        "E"
+      ]
+    ]
+  },
+  "HS76": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L",
+      "L",
+      "G"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "L"
+      ],
+      [
+        "C2",
+        "L"
+      ],
+      [
+        "C3",
+        "G"
+      ]
+    ]
+  },
+  "HS77": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ]
+    ]
+  },
+  "HS78": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ],
+      [
+        "C2",
+        "E"
+      ],
+      [
+        "C3",
+        "E"
+      ]
+    ]
+  },
+  "HS79": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ],
+      [
+        "C2",
+        "E"
+      ],
+      [
+        "C3",
+        "E"
+      ]
+    ]
+  },
+  "HS8": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ],
+      [
+        "CON2",
+        "E"
+      ]
+    ]
+  },
+  "HS80": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ],
+      [
+        "C2",
+        "E"
+      ],
+      [
+        "C3",
+        "E"
+      ]
+    ]
+  },
+  "HS81": {
+    "equality_count": 3,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "C1",
+        "E"
+      ],
+      [
+        "C2",
+        "E"
+      ],
+      [
+        "C3",
+        "E"
+      ]
+    ]
+  },
+  "HS83": {
+    "equality_count": 0,
+    "inequality_types": [
+      "R",
+      "R",
+      "R"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "G"
+      ],
+      [
+        "C3",
+        "G"
+      ]
+    ]
+  },
+  "HS84": {
+    "equality_count": 0,
+    "inequality_types": [],
+    "raw_constraints": []
+  },
+  "HS9": {
+    "equality_count": 1,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "CON1",
+        "E"
+      ]
+    ]
+  },
+  "HS93": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "L"
+    ],
+    "raw_constraints": [
+      [
+        "C1",
+        "G"
+      ],
+      [
+        "C2",
+        "L"
+      ]
+    ]
+  },
+  "HS99": {
+    "equality_count": 2,
+    "inequality_types": [],
+    "raw_constraints": [
+      [
+        "Q8E",
+        "E"
+      ],
+      [
+        "S8E",
+        "E"
+      ]
+    ]
+  }
+}

@@ -19,8 +19,8 @@ _ConstraintOut = (
 class AbstractProblem(eqx.Module):
     """Abstract base class for benchmark problems."""
 
-    y0_iD: int = 0
-    provided_y0s: frozenset = frozenset({0})
+    y0_iD: eqx.AbstractVar[int]
+    provided_y0s: eqx.AbstractVar[frozenset]
 
     def __check_init__(self):
         if self.y0_iD not in self.provided_y0s:

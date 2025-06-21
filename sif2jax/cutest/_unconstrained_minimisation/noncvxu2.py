@@ -1,19 +1,22 @@
-"""
-NONCVXU2 problem.
-
-A nonconvex unconstrained function with a unique minimum value
-
-SIF input: Nick Gould, April 1996
-
-classification OUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class NONCVXU2(AbstractUnconstrainedMinimisation):
+    """
+    NONCVXU2 problem.
+
+    A nonconvex unconstrained function with a unique minimum value
+
+    SIF input: Nick Gould, April 1996
+
+    classification OUR2-AN-V-0
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     n: int = 5000
 
     def objective(self, y, args):
@@ -48,7 +51,7 @@ class NONCVXU2(AbstractUnconstrainedMinimisation):
     def y0(self):
         # Starting point: X(I) = I for default start
         # START2 has all variables at 0.6318
-        return jnp.arange(1.0, self.n + 1.0)
+        return inexact_asarray(jnp.arange(1.0, self.n + 1.0))
 
     def args(self):
         return None

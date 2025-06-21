@@ -19,6 +19,9 @@ class HIMMELBG(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-2-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
         x1, x2 = y

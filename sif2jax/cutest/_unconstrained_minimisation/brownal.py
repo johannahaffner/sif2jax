@@ -22,6 +22,9 @@ class BROWNAL(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 200  # Other suggested dimensions are 10, 100, and 1000
 
     def objective(self, y, args):

@@ -24,6 +24,9 @@ class HS8(AbstractConstrainedMinimisation):
     Classification: CQR-T1-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del y, args
         return jnp.array(-1.0)

@@ -19,6 +19,9 @@ class TOINTGSS(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AY-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     _n: int = 5000
 
     @property

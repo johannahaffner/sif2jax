@@ -37,6 +37,8 @@ def pytest_generate_tests(metafunc):
 
 
 class TestProblem:
+    """Test class for CUTEst problems."""
+
     @pytest.fixture(scope="class")
     def pycutest_problem(self, problem):
         """Load pycutest problem once per problem per class."""
@@ -119,6 +121,13 @@ class TestProblem:
             assert np.allclose(pycutest_inequalities, sif2jax_inequalities)
         else:
             pytest.skip("Problem has no constraints")
+
+    def test_correct_options(self, problem, pycutest_problem):
+        print(pycutest_problem.sifOptions)
+        print(pycutest_problem.sifParams)
+        print(problem.y0_iD)
+        print(problem.provided_y0s)
+        pass
 
     @pytest.mark.skip(
         reason="Seems to be a likely culprint in memory failure in CI. FIX"

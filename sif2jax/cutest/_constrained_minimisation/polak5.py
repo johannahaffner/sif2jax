@@ -1,24 +1,27 @@
-"""
-POLAK5 problem.
-
-A nonlinear minmax problem in two variables.
-
-Source:
-E. Polak, D.H. Mayne and J.E. Higgins,
-"Superlinearly convergent algorithm for min-max problems"
-JOTA 69, pp. 407-439, 1991.
-
-SIF input: Ph. Toint, Nov 1993.
-
-classification  LOR2-AN-3-2
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class POLAK5(AbstractConstrainedMinimisation):
+    """
+    POLAK5 problem.
+
+    A nonlinear minmax problem in two variables.
+
+    Source:
+    E. Polak, D.H. Mayne and J.E. Higgins,
+    "Superlinearly convergent algorithm for min-max problems"
+    JOTA 69, pp. 407-439, 1991.
+
+    SIF input: Ph. Toint, Nov 1993.
+
+    classification  LOR2-AN-3-2
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
         x1, x2, u = y

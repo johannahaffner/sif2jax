@@ -1,35 +1,34 @@
-"""
-MEXHAT problem.
-
-The mexican hat problem with penalty parameter 0.00001
-
-Source:
-A.A. Brown and M. Bartholomew-Biggs,
-"Some effective methods for unconstrained optimization based on
-the solution of ordinary differential equations",
-Technical Report 178, Numerical Optimization Centre, Hatfield
-Polytechnic, (Hatfield, UK), 1987.
-
-SIF input: Ph. Toint, June 1990.
-
-classification OUR2-AN-2-0
-
-TODO: Human review needed
-Attempts made: Multiple interpretations of SIF scaling and group types
-Suspected issues: Incorrect interpretation of how INVP scaling interacts with
-L2 group type
-Additional resources needed: Clarification on SIF group scaling semantics
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class MEXHAT(AbstractUnconstrainedMinimisation):
-    def __init__(self, n: int = 2):
-        del n
-        super().__init__()
+    """
+    MEXHAT problem.
+
+    The mexican hat problem with penalty parameter 0.00001
+
+    Source:
+    A.A. Brown and M. Bartholomew-Biggs,
+    "Some effective methods for unconstrained optimization based on
+    the solution of ordinary differential equations",
+    Technical Report 178, Numerical Optimization Centre, Hatfield
+    Polytechnic, (Hatfield, UK), 1987.
+
+    SIF input: Ph. Toint, June 1990.
+
+    classification OUR2-AN-2-0
+
+    TODO: Human review needed
+    Attempts made: Multiple interpretations of SIF scaling and group types
+    Suspected issues: Incorrect interpretation of how INVP scaling interacts with
+    L2 group type
+    Additional resources needed: Clarification on SIF group scaling semantics
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args

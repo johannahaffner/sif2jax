@@ -22,6 +22,9 @@ class BT13(AbstractConstrainedMinimisation):
     Note: A lower bound of 0.0 on x5 has been added to make the problem bounded below.
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
         x1, x2, x3, x4, x5 = y

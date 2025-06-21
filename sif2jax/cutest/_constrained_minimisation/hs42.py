@@ -25,6 +25,9 @@ class HS42(AbstractConstrainedMinimisation):
     Classification: QQR-T1-10
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3, x4 = y
         return (x1 - 1) ** 2 + (x2 - 2) ** 2 + (x3 - 3) ** 2 + (x4 - 4) ** 2

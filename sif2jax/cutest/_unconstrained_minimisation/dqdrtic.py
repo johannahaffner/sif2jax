@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -21,6 +22,9 @@ class DQDRTIC(AbstractUnconstrainedMinimisation):
     Classification: QUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 5000  # Default dimension (other options: 10, 50, 100, 500, 1000)
 
     def objective(self, y, args):
@@ -40,7 +44,7 @@ class DQDRTIC(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Starting point from the SIF file: all variables = 3.0
-        return jnp.full(self.n, 3.0)
+        return inexact_asarray(jnp.full(self.n, 3.0))
 
     def args(self):
         return None

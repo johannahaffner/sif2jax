@@ -25,6 +25,9 @@ class HS93(AbstractConstrainedMinimisation):
     Classification: PGR-P1-5
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3, x4, x5, x6 = y
         return (

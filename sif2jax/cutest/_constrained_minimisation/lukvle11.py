@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -34,6 +35,9 @@ class LUKVLE11(AbstractConstrainedMinimisation):
     Classification: OOR2-AY-V-V
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 9998  # Default dimension, must be divisible by 3
 
     def objective(self, y, args):
@@ -48,7 +52,7 @@ class LUKVLE11(AbstractConstrainedMinimisation):
             return jnp.array(0.0)
 
         # Create indices for the start of each group
-        group_starts = jnp.arange(num_groups) * 3
+        group_starts = inexact_asarray(jnp.arange(num_groups)) * 3
 
         # Extract the 5 elements for each group
         # We need to ensure we don't go out of bounds

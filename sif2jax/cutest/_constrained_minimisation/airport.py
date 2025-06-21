@@ -27,6 +27,9 @@ class AIRPORT(AbstractConstrainedMinimisation):
     Classification: SQR2-MN-84-42
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n_airports: int = 42
     cx: Array = eqx.field(init=False)
     cy: Array = eqx.field(init=False)

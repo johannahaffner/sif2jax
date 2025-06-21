@@ -25,6 +25,9 @@ class BT12(AbstractConstrainedMinimisation):
     Classification: QQR2-AN-5-3
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     y0_id: int = 3  # Default to solution from paper as per SIF
     provided_y0s: frozenset = frozenset({0, 1, 2, 3})
 

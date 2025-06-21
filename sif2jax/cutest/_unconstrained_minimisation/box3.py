@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -22,6 +23,9 @@ class BOX3(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-AN-3-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 3  # Problem has 3 variables
     m: int = 10  # Number of data points
@@ -54,7 +58,7 @@ class BOX3(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file
-        return jnp.array([0.0, 10.0, 1.0])
+        return inexact_asarray(jnp.array([0.0, 10.0, 1.0]))
 
     def args(self):
         return None

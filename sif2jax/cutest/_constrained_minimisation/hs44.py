@@ -31,6 +31,9 @@ class HS44(AbstractConstrainedMinimisation):
     Classification: QLR-T1-4
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3, x4 = y
         return x1 - x2 - x3 - x1 * x3 + x1 * x4 + x2 * x3 - x2 * x4

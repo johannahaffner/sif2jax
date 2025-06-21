@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -35,6 +36,9 @@ class LUKVLI18(AbstractConstrainedMinimisation):
     Classification: OOR2-AY-V-V
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 9997  # Default dimension, (n-1) must be divisible by 4
 
     def objective(self, y, args):
@@ -69,7 +73,7 @@ class LUKVLI18(AbstractConstrainedMinimisation):
 
     def y0(self):
         # Starting point: x_i = 2 for all i
-        return jnp.full(self.n, 2.0)
+        return inexact_asarray(jnp.full(self.n, 2.0))
 
     def args(self):
         return None

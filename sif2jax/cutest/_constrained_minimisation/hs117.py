@@ -27,6 +27,9 @@ class HS117(AbstractConstrainedMinimisation):
     Classification: PQR-P1-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         # Coefficients from AMPL formulation
         b = jnp.array([-40, -2, -0.25, -4, -4, -1, -40, -60, 5, 1])

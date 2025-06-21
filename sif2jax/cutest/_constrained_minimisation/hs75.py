@@ -33,6 +33,9 @@ class HS75(AbstractConstrainedMinimisation):
     Classification: PGR-P1-(1,2)
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3, x4 = y
         return 3 * x1 + 1.0e-6 * x1**3 + 2 * x2 + (2.0 / 3.0) * 1.0e-6 * x2**3

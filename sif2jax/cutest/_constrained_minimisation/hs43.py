@@ -27,6 +27,9 @@ class HS43(AbstractConstrainedMinimisation):
     Classification: QQR-T1-11
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3, x4 = y
         return x1**2 + x2**2 + 2 * x3**2 + x4**2 - 5 * x1 - 5 * x2 - 21 * x3 + 7 * x4

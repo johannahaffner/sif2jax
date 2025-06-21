@@ -2,6 +2,7 @@ import equinox as eqx
 import jax.numpy as jnp
 from jaxtyping import Array
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -30,6 +31,9 @@ class CURLYBase(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 10000  # Number of dimensions. Options listed in SIF file: 100, 1000
     k: int = 20  # Semi-bandwidth.
     mask: Array = eqx.field(init=False)  # Will be initialized in __init__
@@ -50,12 +54,13 @@ class CURLYBase(AbstractUnconstrainedMinimisation):
 
     def objective(self, y, args):
         del args
-        q = self.mask @ y
+        q = self.mask.astype(y.dtype) @ y
         result = q * (q * (q**2 - 20) - 0.1)
         return jnp.sum(result)
 
     def y0(self):
-        i = jnp.arange(1, self.n + 1)
+        # Use float to ensure proper dtype promotion
+        i = inexact_asarray(jnp.arange(1, self.n + 1))
         return 0.0001 * i / (self.n + 1)
 
     def args(self):

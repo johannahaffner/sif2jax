@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -17,6 +18,9 @@ class CHANDHEQ(AbstractConstrainedMinimisation):
 
     Classification: NOR2-RN-V-V
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     # Problem parameters
     N: int = 100  # Number of discretization points
@@ -89,7 +93,7 @@ class CHANDHEQ(AbstractConstrainedMinimisation):
     def y0(self):
         """Initial guess."""
         # All components set to 1.0
-        return jnp.ones(self.N)
+        return inexact_asarray(jnp.ones(self.N))
 
     def bounds(self):
         """Variable bounds."""

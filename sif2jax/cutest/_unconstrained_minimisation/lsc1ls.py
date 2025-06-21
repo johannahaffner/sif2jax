@@ -14,6 +14,9 @@ class LSC1LS(_AbstractLSC):
     Classification: SUR2-MN-3-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def _data(self):
         """Data points from the SIF file."""
         # Data points from the SIF file (lines 33-44)

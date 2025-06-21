@@ -1,23 +1,26 @@
-"""
-NONMSQRT problem.
-
-The "non-matrix square root problem" obtained from an error in
-writing a correct matrix square root problem B by Nocedal and Liu.
-
-Source:
-Ph. Toint
-
-SIF input: Ph. Toint, Dec 1989.
-
-classification SUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class NONMSQRT(AbstractUnconstrainedMinimisation):
+    """
+    NONMSQRT problem.
+
+    The "non-matrix square root problem" obtained from an error in
+    writing a correct matrix square root problem B by Nocedal and Liu.
+
+    Source:
+    Ph. Toint
+
+    SIF input: Ph. Toint, Dec 1989.
+
+    classification SUR2-AN-V-0
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     p: int = 70
 
     def objective(self, y, args):
@@ -66,7 +69,7 @@ class NONMSQRT(AbstractUnconstrainedMinimisation):
         X_start = B - 0.8 * sk2
 
         # Flatten to 1D array
-        return X_start.flatten()
+        return inexact_asarray(X_start.flatten())
 
     def args(self):
         return None

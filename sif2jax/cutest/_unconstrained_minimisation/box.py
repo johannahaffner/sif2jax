@@ -14,6 +14,9 @@ class BOX(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 10000  # Other suggested values are 10, 100, 1000, and 100000
 
     def objective(self, y, args):

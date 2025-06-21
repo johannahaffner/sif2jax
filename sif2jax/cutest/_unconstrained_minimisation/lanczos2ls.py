@@ -10,6 +10,9 @@ class LANCZOS2LS(_AbstractLanczos):
     In LANCZOS2, the y values are provided directly in the SIF file.
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Dependent variable values (y) - specific to LANCZOS2
     def _data(self):
         y = jnp.array(

@@ -20,6 +20,9 @@ class CLUSTERLS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-2-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 2  # Number of variables
 
     def objective(self, y, args):

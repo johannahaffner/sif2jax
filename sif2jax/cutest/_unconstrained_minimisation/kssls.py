@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class KSSLS(AbstractUnconstrainedMinimisation):
     Least-squares version of KSS.SIF, Nick Gould, Jan 2020.
     Classification: SUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     # Problem dimension
     n: int = 1000  # Other suggested values: 4, 10, 100
@@ -54,7 +58,7 @@ class KSSLS(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         """Initial point with all variables set to 1000 (from SIF file)."""
-        return jnp.full(self.n, 1000.0)
+        return inexact_asarray(jnp.full(self.n, 1000.0))
 
     def args(self):
         """No additional arguments needed."""

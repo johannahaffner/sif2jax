@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -27,6 +28,9 @@ class CHAINWOO(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 4000  # Dimension of the problem (2*ns + 2)
     ns: int = 1999  # Number of sets (default 1999, which gives n=4000)
 
@@ -53,10 +57,10 @@ class CHAINWOO(AbstractUnconstrainedMinimisation):
         # x[2*i+2] (1-based) = y[2*i+1] (0-based)
 
         # Create index arrays
-        idx_2i_minus_1 = 2 * jnp.arange(ns)  # 0, 2, 4, ...
-        idx_2i = 2 * jnp.arange(ns) + 1  # 1, 3, 5, ...
-        idx_2i_plus_1 = 2 * jnp.arange(ns) + 2  # 2, 4, 6, ...
-        idx_2i_plus_2 = 2 * jnp.arange(ns) + 3  # 3, 5, 7, ...
+        idx_2i_minus_1 = 2 * inexact_asarray(jnp.arange(ns))  # 0, 2, 4, ...
+        idx_2i = 2 * inexact_asarray(jnp.arange(ns)) * 1  # 1, 3, 5, ...
+        idx_2i_plus_1 = 2 * inexact_asarray(jnp.arange(ns)) * 2  # 2, 4, 6, ...
+        idx_2i_plus_2 = 2 * inexact_asarray(jnp.arange(ns)) * 3  # 3, 5, 7, ...
 
         # Get the variable values
         x_2i_minus_1 = y[idx_2i_minus_1]
@@ -85,7 +89,7 @@ class CHAINWOO(AbstractUnconstrainedMinimisation):
         y_init = y_init.at[2].set(-3.0)  # X3
         y_init = y_init.at[3].set(-1.0)  # X4
 
-        return y_init
+        return inexact_asarray(y_init)
 
     def args(self):
         return None

@@ -25,6 +25,9 @@ class HS110(AbstractBoundedMinimisation):
     Classification: GBR-P1-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         # Sum of log terms using vectorized operations
         log_sum = jnp.sum((jnp.log(y - 2)) ** 2 + (jnp.log(10 - y)) ** 2)

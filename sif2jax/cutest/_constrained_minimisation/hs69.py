@@ -30,6 +30,9 @@ class HS69(AbstractConstrainedMinimisation):
     Classification: GGR-P1-(1,2)
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def _normal_cdf(self, x):
         """Standard normal cumulative distribution function."""
         return 0.5 * (1 + jsp.special.erf(x / jnp.sqrt(2)))

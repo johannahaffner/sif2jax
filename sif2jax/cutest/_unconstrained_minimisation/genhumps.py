@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -19,6 +20,9 @@ class GENHUMPS(AbstractUnconstrainedMinimisation):
 
     Classification: OUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 5000  # Default dimension (5, 10, 100, 500, 1000, 5000)
     zeta: float = 20.0  # Density of humps parameter
@@ -54,7 +58,7 @@ class GENHUMPS(AbstractUnconstrainedMinimisation):
         # all variables = -506.2, except first = -506.0
         y_init = jnp.full(self.n, -506.2)
         y_init = y_init.at[0].set(-506.0)
-        return y_init
+        return inexact_asarray(y_init)
 
     def args(self):
         return None

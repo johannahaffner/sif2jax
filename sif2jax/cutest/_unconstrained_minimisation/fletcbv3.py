@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -25,6 +26,9 @@ class FLETCBV3(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 5000  # Default dimension in SIF file
     scale: float = 1e8  # Called OBJSCALE in the SIF file
     extra_term: int = 1  # Corresponds to the parameter kappa, which is 1 or 0
@@ -47,7 +51,7 @@ class FLETCBV3(AbstractUnconstrainedMinimisation):
         n = self.n
         h = 1.0 / (self.n + 1)
         # Starting point according to SIF file: i*h for i=1..n
-        return jnp.arange(1, n + 1) * h
+        return inexact_asarray(jnp.arange(1, n + 1)) * h
 
     def args(self):
         # p and kappa from SIF file

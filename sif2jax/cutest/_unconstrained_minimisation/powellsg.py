@@ -1,33 +1,35 @@
-"""
-POWELLSG problem.
-
-The extended Powell singular problem.
-This problem is a sum of n/4 sets of four terms, each of which is
-assigned its own group.
-
-Source:  Problem 13 in
-J.J. More', B.S. Garbow and K.E. Hillstrom,
-"Testing Unconstrained Optimization Software",
-ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
-
-See also Toint#19, Buckley#34 (p.85)
-
-SIF input: Ph. Toint, Dec 1989.
-
-classification OUR2-AN-V-0
-
-TODO: Human review needed
-Attempts made: Standard interpretation of SCALE factor
-Suspected issues: Possible misinterpretation of SCALE semantics or group definitions
-The objective value is off by a factor of ~4.15
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class POWELLSG(AbstractUnconstrainedMinimisation):
+    """
+    POWELLSG problem.
+
+    The extended Powell singular problem.
+    This problem is a sum of n/4 sets of four terms, each of which is
+    assigned its own group.
+
+    Source:  Problem 13 in
+    J.J. More', B.S. Garbow and K.E. Hillstrom,
+    "Testing Unconstrained Optimization Software",
+    ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+    See also Toint#19, Buckley#34 (p.85)
+
+    SIF input: Ph. Toint, Dec 1989.
+
+    classification OUR2-AN-V-0
+
+    TODO: Human review needed
+    Attempts made: Standard interpretation of SCALE factor
+    Suspected issues: Possible misinterpretation of SCALE semantics or group definitions
+    The objective value is off by a factor of ~4.15
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     n: int = 5000
 
     def __check_init__(self):

@@ -28,6 +28,9 @@ class HS66(AbstractConstrainedMinimisation):
     Classification: LGR-P1-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3 = y
         return 0.2 * x3 - 0.8 * x1

@@ -23,6 +23,9 @@ class BT8(AbstractConstrainedMinimisation):
     Classification: QQR2-AN-5-2
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     y0_id: int = 0
     provided_y0s: frozenset = frozenset({0, 1})
 

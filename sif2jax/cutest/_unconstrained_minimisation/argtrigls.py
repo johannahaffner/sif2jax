@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -22,6 +23,9 @@ class ARGTRIGLS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 200  # SIF file suggests 10, 50, 100, or 200
 
     def objective(self, y, args):
@@ -36,7 +40,7 @@ class ARGTRIGLS(AbstractUnconstrainedMinimisation):
         sum_cos = jnp.sum(jnp.cos(y))
 
         # Compute residuals vectorized
-        i_values = jnp.arange(1, n + 1)  # 1-based indices
+        i_values = inexact_asarray(jnp.arange(1, n + 1))  # 1-based indices
         sincos_terms = i_values * (jnp.cos(y) + jnp.sin(y))
         residuals = sincos_terms + sum_cos - (n + i_values)
 
@@ -45,7 +49,7 @@ class ARGTRIGLS(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial value of 1/n as specified in the SIF file
-        return jnp.ones(self.n) / self.n
+        return inexact_asarray(jnp.ones(self.n) / self.n)
 
     def args(self):
         return None

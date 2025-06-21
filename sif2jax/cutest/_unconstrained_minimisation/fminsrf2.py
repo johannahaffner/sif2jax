@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -41,6 +42,9 @@ class FMINSRF2(AbstractUnconstrainedMinimisation):
     SIF input: Ph. Toint, November 1991.
     Classification: OUR2-MY-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     p: int = 75  # Number of points on one side of the unit square
     h00: float = 1.0  # Boundary condition parameters
@@ -133,13 +137,13 @@ class FMINSRF2(AbstractUnconstrainedMinimisation):
             h01 = h00 + self.slopej
             vals = vals.at[i_vals, p - 1].set((i_vals) * ston + h01)
 
-            return vals
+            return inexact_asarray(vals)
 
         # Create and set boundary values
         x = create_boundary_vals()
 
         # Flatten the 2D grid to 1D vector
-        return x.flatten()
+        return inexact_asarray(x.flatten())
 
     def args(self):
         return None

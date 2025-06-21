@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -22,6 +23,9 @@ class BROWNDEN(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-AN-4-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 4  # Problem has 4 variables
     m: int = 20  # Number of groups
@@ -55,7 +59,7 @@ class BROWNDEN(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file
-        return jnp.array([25.0, 5.0, -5.0, -1.0])
+        return inexact_asarray(jnp.array([25.0, 5.0, -5.0, -1.0]))
 
     def args(self):
         return None

@@ -30,6 +30,9 @@ class HS57(AbstractConstrainedMinimisation):
     Classification: SQR-P1-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2 = y
 

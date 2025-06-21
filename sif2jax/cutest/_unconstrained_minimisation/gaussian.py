@@ -24,6 +24,9 @@ class GAUSSIAN(AbstractUnconstrainedMinimisation):
     group has a nonlinear element.
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Number of variables
     n: int = 3
 

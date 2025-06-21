@@ -14,6 +14,9 @@ class INDEF(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 5000  # Other suggested values: 10, 50, 100, 1000
     alpha: float = 0.5  # Other suggested values: 1.0, 10.0, 100.0, 1000.0
 

@@ -23,6 +23,9 @@ class HS29(AbstractConstrainedMinimisation):
     Classification: PQR-T1-7
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3 = y
         return -x1 * x2 * x3

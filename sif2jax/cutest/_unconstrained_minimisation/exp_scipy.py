@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -19,6 +20,9 @@ class EXP2(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-MN-2-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 2  # Problem has 2 variables
 
@@ -46,7 +50,7 @@ class EXP2(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file
-        return jnp.array([1.0, 5.0])
+        return inexact_asarray(jnp.array([1.0, 5.0]))
 
     def args(self):
         return None

@@ -22,6 +22,9 @@ class BOXBOD(AbstractConstrainedMinimisation):
     Classification: NOR2-MN-2-6
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Data values
     x_data = jnp.array([1.0, 2.0, 3.0, 5.0, 7.0, 10.0])
     y_data = jnp.array([109.0, 149.0, 149.0, 191.0, 213.0, 224.0])

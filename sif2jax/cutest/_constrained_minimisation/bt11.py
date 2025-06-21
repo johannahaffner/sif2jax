@@ -25,6 +25,9 @@ class BT11(AbstractConstrainedMinimisation):
     Classification: OOR2-AY-5-3
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     y0_id: int = 0
     provided_y0s: frozenset = frozenset({0, 1, 2})
 

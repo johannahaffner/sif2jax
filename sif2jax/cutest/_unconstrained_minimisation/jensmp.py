@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -19,6 +20,9 @@ class JENSMP(AbstractUnconstrainedMinimisation):
     SIF input: Ph. Toint, Dec 1989.
     Classification: SUR2-AN-2-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     m: int = 10  # Number of groups in the least-squares problem
 
@@ -46,7 +50,7 @@ class JENSMP(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         """Initial point (0.3, 0.4)."""
-        return jnp.array([0.3, 0.4])
+        return inexact_asarray(jnp.array([0.3, 0.4]))
 
     def args(self):
         """No additional arguments needed."""

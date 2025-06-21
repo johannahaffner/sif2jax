@@ -21,6 +21,9 @@ class BENNETT5LS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-3-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 3  # Problem has 3 variables
     m: int = 154  # Number of data points
 

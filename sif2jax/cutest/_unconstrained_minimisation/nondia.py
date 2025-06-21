@@ -1,32 +1,35 @@
-"""
-NONDIA problem.
-
-The Shanno nondiagonal extension of Rosenbrock function.
-
-Source:
-D. Shanno,
-" On Variable Metric Methods for Sparse Hessians II: the New
-Method",
-MIS Tech report 27, University of Arizona (Tucson, UK), 1978.
-
-See also Buckley #37 (p. 76) and Toint #15.
-
-SIF input: Ph. Toint, Dec 1989.
-
-classification SUR2-AN-V-0
-
-TODO: Human review needed
-Attempts made: Multiple interpretations of SCALE factor in SIF
-Suspected issues: Incorrect understanding of how SCALE interacts with group coefficients
-The objective/gradient values are off by a factor of ~10,000
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class NONDIA(AbstractUnconstrainedMinimisation):
+    """
+    NONDIA problem.
+
+    The Shanno nondiagonal extension of Rosenbrock function.
+
+    Source:
+    D. Shanno,
+    " On Variable Metric Methods for Sparse Hessians II: the New
+    Method",
+    MIS Tech report 27, University of Arizona (Tucson, UK), 1978.
+
+    See also Buckley #37 (p. 76) and Toint #15.
+
+    SIF input: Ph. Toint, Dec 1989.
+
+    classification SUR2-AN-V-0
+
+    TODO: Human review needed
+    Attempts made: Multiple interpretations of SCALE factor in SIF
+    Suspected issues: Incorrect understanding of how SCALE interacts with group
+                      coefficients
+    The objective/gradient values are off by a factor of ~10,000
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     n: int = 5000
 
     def objective(self, y, args):

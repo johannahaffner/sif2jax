@@ -23,6 +23,9 @@ class BT2(AbstractConstrainedMinimisation):
     Classification: QQR2-AY-3-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     y0_id: int = 1  # Default to second starting point as per AMPL
     provided_y0s: frozenset = frozenset({0, 1, 2})
 

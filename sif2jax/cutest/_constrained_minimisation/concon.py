@@ -12,6 +12,9 @@ class CONCON(AbstractConstrainedMinimisation):
     Classification: LOI2-MN-15-11
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Problem dimensions
     N = 7  # Number of pressure variables
     M = 4  # Number of flow variables

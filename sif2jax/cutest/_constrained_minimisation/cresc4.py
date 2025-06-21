@@ -26,6 +26,9 @@ class CRESC4(AbstractConstrainedMinimisation):
     Classification: OOR2-MY-6-8
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables."""

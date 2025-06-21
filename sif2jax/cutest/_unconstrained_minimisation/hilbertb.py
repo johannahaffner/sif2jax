@@ -22,6 +22,9 @@ class HILBERTB(AbstractUnconstrainedMinimisation):
     Classification: QUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 10  # Other suggested values in SIF: 5, 50, should work for n >= 1
 
     def objective(self, y, args):

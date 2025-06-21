@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -25,6 +26,9 @@ class VANDERM1(AbstractConstrainedMinimisation):
     Classification: NOR2-AN-V-V
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 100  # Number of variables (default 100)
 
     @property
@@ -47,7 +51,7 @@ class VANDERM1(AbstractConstrainedMinimisation):
         x = y
 
         # Define the right-hand-side for equality constraints
-        al = jnp.arange(1, n + 1) / n
+        al = inexact_asarray(jnp.arange(1, n + 1)) * n
 
         # Compute A values
         a = jnp.zeros(n)
@@ -84,7 +88,7 @@ class VANDERM1(AbstractConstrainedMinimisation):
         n = self.n
         # Initial point: x[i] = (i-1)/n for i=1,...,n
         # In 0-based indexing: x[0] = 0/n, x[1] = 1/n, ..., x[n-1] = (n-1)/n
-        return jnp.arange(n) / n
+        return inexact_asarray(jnp.arange(n)) * n
 
     def args(self):
         """Additional arguments (none for this problem)."""

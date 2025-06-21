@@ -23,6 +23,9 @@ class POWELLSE(AbstractConstrainedMinimisation):
     Classification: NOR2-AN-V-V
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables (must be a multiple of 4)."""

@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -16,6 +17,9 @@ class TRIGON1(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-MN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     _n: int = 10
 
@@ -43,7 +47,7 @@ class TRIGON1(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         """Initial guess."""
-        return jnp.full(self.n, 0.1)
+        return inexact_asarray(jnp.full(self.n, 0.1))
 
     def args(self):
         """Additional arguments (none for this problem)."""

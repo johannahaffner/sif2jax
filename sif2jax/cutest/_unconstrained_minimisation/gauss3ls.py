@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class GAUSS3LS(AbstractUnconstrainedMinimisation):
 
     Classification SUR2-MN-8-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 8
 
@@ -312,7 +316,9 @@ class GAUSS3LS(AbstractUnconstrainedMinimisation):
     def y0(self):
         """Return the starting point from the NIST GAUSS3 dataset."""
         # Starting point values from GAUSS3.dat
-        return jnp.array([94.9, 0.009, 90.1, 113.0, 20.0, 73.8, 140.0, 20.0])
+        return inexact_asarray(
+            jnp.array([94.9, 0.009, 90.1, 113.0, 20.0, 73.8, 140.0, 20.0])
+        )
 
     def args(self):
         """Return None as no additional args are needed."""

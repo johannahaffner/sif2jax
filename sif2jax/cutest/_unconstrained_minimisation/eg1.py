@@ -21,6 +21,9 @@ class EG1(AbstractUnconstrainedMinimisation):
     Classification: OBR2-AY-3-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 3  # Problem has 3 variables
 
     def objective(self, y, args):

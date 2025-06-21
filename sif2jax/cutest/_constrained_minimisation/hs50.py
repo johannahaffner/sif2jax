@@ -26,6 +26,9 @@ class HS50(AbstractConstrainedMinimisation):
     Classification: PLR-T1-6
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3, x4, x5 = y
         return (x1 - x2) ** 2 + (x2 - x3) ** 2 + (x3 - x4) ** 4 + (x4 - x5) ** 2

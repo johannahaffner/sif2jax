@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -25,6 +26,9 @@ class FLETBV3M(AbstractUnconstrainedMinimisation):
     SIF input: Nick Gould, June, 2013
     Classification: OUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 5000  # Default dimension in SIF file
     kappa: float = 1.0  # Parameter used in the problem
@@ -57,7 +61,7 @@ class FLETBV3M(AbstractUnconstrainedMinimisation):
     def y0(self):
         # Initial values from SIF file: i*h for i=1..n
         h = 1.0 / (self.n + 1)
-        return jnp.arange(1, self.n + 1) * h
+        return inexact_asarray(jnp.arange(1, self.n + 1)) * h
 
     def args(self):
         return None

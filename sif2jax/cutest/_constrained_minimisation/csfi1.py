@@ -16,6 +16,9 @@ class CSFI1(AbstractConstrainedMinimisation):
     Classification: LOR2-RN-5-4
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables."""

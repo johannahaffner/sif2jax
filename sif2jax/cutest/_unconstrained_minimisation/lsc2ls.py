@@ -14,6 +14,9 @@ class LSC2LS(_AbstractLSC):
     Classification: SUR2-MN-3-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def _data(self):
         # Data points from the SIF file
         x = jnp.array([36.0, 36.0, 19.0, 18.0, 33.0, 26.0])

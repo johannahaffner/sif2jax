@@ -1,27 +1,30 @@
-"""
-LOOTSMA problem.
-
-An example by F. A. Lootsma in "Constrained optimization via penalty functions"
-Philips Res. Repts., Vol. 23, pp. 408-423, 1968.
-
-N.B. Many current methods fail to find a feasible point when
-started from the given starting values
-
-Source:
-a contribution to fullfill the LANCELOT academic licence agreement.
-
-SIF input: Li-zhi Liao, Dept. of Mathematics,
-           Hong Kong Baptist College, May 1994.
-
-classification OQR2-AN-3-2
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class LOOTSMA(AbstractConstrainedMinimisation):
+    """
+    LOOTSMA problem.
+
+    An example by F. A. Lootsma in "Constrained optimization via penalty functions"
+    Philips Res. Repts., Vol. 23, pp. 408-423, 1968.
+
+    N.B. Many current methods fail to find a feasible point when
+    started from the given starting values
+
+    Source:
+    a contribution to fullfill the LANCELOT academic licence agreement.
+
+    SIF input: Li-zhi Liao, Dept. of Mathematics,
+               Hong Kong Baptist College, May 1994.
+
+    classification OQR2-AN-3-2
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
         x1, x2, x3 = y

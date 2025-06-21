@@ -26,6 +26,9 @@ class HS70(AbstractConstrainedMinimisation):
     Classification: SQR2-MN-4-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables."""

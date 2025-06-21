@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -21,6 +22,9 @@ class GULF(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-3-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 3  # Number of variables is 3
     m: int = 99  # Number of data points
 
@@ -29,7 +33,7 @@ class GULF(AbstractUnconstrainedMinimisation):
         x1, x2, x3 = y
 
         # Create array of t_i values: t_i = 0.01 * i for i=1...m
-        t_values = jnp.arange(1, self.m + 1) * 0.01
+        t_values = inexact_asarray(jnp.arange(1, self.m + 1)) * 0.01
 
         # Compute the nonlinear expressions as defined in the SIF file (lines 133-142)
         # y_i terms: 25 + (-50 * log(t_i))^(2/3)
@@ -49,7 +53,7 @@ class GULF(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial point from SIF file
-        return jnp.array([5.0, 2.5, 0.15])
+        return inexact_asarray(jnp.array([5.0, 2.5, 0.15]))
 
     def args(self):
         return None

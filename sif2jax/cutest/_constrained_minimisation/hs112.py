@@ -28,6 +28,9 @@ class HS112(AbstractConstrainedMinimisation):
     Classification: GLR-P1-3
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         # cⱼ values from Appendix A (simplified for implementation)
         # In a complete implementation, these would be the actual values from Appendix A

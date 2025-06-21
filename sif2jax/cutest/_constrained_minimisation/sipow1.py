@@ -1,26 +1,29 @@
-"""
-SIPOW1 problem.
-
-This is a discretization of a semi-infinite programming problem, of
-minimizing the variable x_2 within a circle of radius 1. The circle
-is replaced by a discrete set of equally-spaced supporting tangents.
-
-Source: problem 1 in
-M. J. D. Powell,
-"Log barrier methods for semi-infinite programming calculations"
-Numerical Analysis Report DAMTP 1992/NA11, U. of Cambridge, UK.
-
-SIF input: A. R. Conn and Nick Gould, August 1993
-
-classification LLR2-AN-2-V
-"""
-
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class SIPOW1(AbstractConstrainedMinimisation):
+    """
+    SIPOW1 problem.
+
+    This is a discretization of a semi-infinite programming problem, of
+    minimizing the variable x_2 within a circle of radius 1. The circle
+    is replaced by a discrete set of equally-spaced supporting tangents.
+
+    Source: problem 1 in
+    M. J. D. Powell,
+    "Log barrier methods for semi-infinite programming calculations"
+    Numerical Analysis Report DAMTP 1992/NA11, U. of Cambridge, UK.
+
+    SIF input: A. R. Conn and Nick Gould, August 1993
+
+    classification LLR2-AN-2-V
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     m: int = 2000
 
     def __check_init__(self):
@@ -35,7 +38,7 @@ class SIPOW1(AbstractConstrainedMinimisation):
 
     def y0(self):
         # Starting point
-        return jnp.array([0.8, 0.5])
+        return inexact_asarray(jnp.array([0.8, 0.5]))
 
     def args(self):
         return None

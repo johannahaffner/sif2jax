@@ -20,6 +20,9 @@ class KIRBY2LS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-5-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Set of valid starting point IDs
     valid_ids = frozenset([0, 1])
 

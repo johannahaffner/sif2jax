@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -36,6 +37,9 @@ class LUKVLE15(AbstractConstrainedMinimisation):
     Classification: OOR2-AY-V-V
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 9997  # Default dimension, (n-1) must be divisible by 4
 
     def objective(self, y, args):
@@ -49,7 +53,7 @@ class LUKVLE15(AbstractConstrainedMinimisation):
             return jnp.array(0.0)
 
         # Create indices for the start of each group
-        group_starts = jnp.arange(num_groups) * 4
+        group_starts = inexact_asarray(jnp.arange(num_groups)) * 4
 
         # We need to ensure we don't go out of bounds
         valid_groups = group_starts[group_starts + 4 < n]

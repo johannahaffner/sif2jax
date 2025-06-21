@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -19,6 +20,9 @@ class BIGGS6(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-AN-6-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 6  # Problem has 6 variables
     m: int = 13  # Number of data points
@@ -49,7 +53,7 @@ class BIGGS6(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file
-        return jnp.array([1.0, 2.0, 1.0, 1.0, 1.0, 1.0])
+        return inexact_asarray(jnp.array([1.0, 2.0, 1.0, 1.0, 1.0, 1.0]))
 
     def args(self):
         return None

@@ -1,28 +1,26 @@
-"""
-BIGGSC4 problem.
-
-A test quadratic test problem (invented starting point).
-
-Source:
-M. Batholomew-Biggs and F.G. Hernandez,
-"Some improvements to the subroutine OPALQP for dealing with large
-problems",
-Numerical Optimization Centre, Hatfield, 1992.
-
-SIF input: Ph Toint, April 1992.
-
-classification QLR2-AN-4-7
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class BIGGSC4(AbstractConstrainedMinimisation):
-    def __init__(self, n: int = 4):
-        del n
-        super().__init__()
+    """BIGGSC4 problem.
+
+    A test quadratic test problem (invented starting point).
+
+    Source:
+    M. Batholomew-Biggs and F.G. Hernandez,
+    "Some improvements to the subroutine OPALQP for dealing with large
+    problems",
+    Numerical Optimization Centre, Hatfield, 1992.
+
+    SIF input: Ph Toint, April 1992.
+
+    classification QLR2-AN-4-7
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args

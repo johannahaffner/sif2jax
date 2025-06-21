@@ -24,6 +24,9 @@ class BRKMCC(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-2-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 2  # Problem has 2 variables
 
     def objective(self, y, args):

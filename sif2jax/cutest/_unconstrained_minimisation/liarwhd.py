@@ -17,6 +17,9 @@ class LIARWHD(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Problem dimension
     n: int = 5000  # Other suggested values: 36, 100, 500, 1000, 10000
 

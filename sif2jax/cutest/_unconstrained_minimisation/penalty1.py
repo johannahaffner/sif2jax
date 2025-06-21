@@ -1,28 +1,31 @@
-"""
-PENALTY1 problem.
-
-This problem is a sum of n+1 least-squares groups, the first n of
-which have only a linear element.
-It Hessian matrix is dense.
-
-Source:  Problem 23 in
-J.J. More', B.S. Garbow and K.E. Hillstrom,
-"Testing Unconstrained Optimization Software",
-ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
-
-See also Buckley #181 (p. 79).
-
-SIF input: Ph. Toint, Dec 1989.
-
-classification SUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class PENALTY1(AbstractUnconstrainedMinimisation):
+    """
+    PENALTY1 problem.
+
+    This problem is a sum of n+1 least-squares groups, the first n of
+    which have only a linear element.
+    It Hessian matrix is dense.
+
+    Source:  Problem 23 in
+    J.J. More', B.S. Garbow and K.E. Hillstrom,
+    "Testing Unconstrained Optimization Software",
+    ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+    See also Buckley #181 (p. 79).
+
+    SIF input: Ph. Toint, Dec 1989.
+
+    classification SUR2-AN-V-0
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     n: int = 1000
 
     def objective(self, y, args):
@@ -47,7 +50,7 @@ class PENALTY1(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Starting point: X(I) = I for I=1 to N
-        return jnp.arange(1.0, self.n + 1.0)
+        return inexact_asarray(jnp.arange(1.0, self.n + 1.0))
 
     def args(self):
         return None

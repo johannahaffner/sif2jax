@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -30,6 +31,9 @@ class ENSOLS(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-MN-9-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     # Allow selecting which starting point to use (0-based indexing)
     start_point: int = 0  # 0 or 1
@@ -262,10 +266,14 @@ class ENSOLS(AbstractUnconstrainedMinimisation):
         # Two starting points from the SIF file
         if self.start_point == 0:
             # Starting point 1
-            return jnp.array([11.0, 3.0, 0.5, 40.0, -0.7, -1.3, 25.0, -0.3, 1.4])
+            return inexact_asarray(
+                jnp.array([11.0, 3.0, 0.5, 40.0, -0.7, -1.3, 25.0, -0.3, 1.4])
+            )
         else:  # self.start_point == 1
             # Starting point 2
-            return jnp.array([10.0, 3.0, 0.5, 44.0, -1.5, 0.5, 26.0, -0.1, 1.5])
+            return inexact_asarray(
+                jnp.array([10.0, 3.0, 0.5, 44.0, -1.5, 0.5, 26.0, -0.1, 1.5])
+            )
 
     def args(self):
         return None

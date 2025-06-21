@@ -21,6 +21,9 @@ class HAHN1LS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-7-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 7  # Number of variables
     m: int = 236  # Number of data points
     y0_id: int = 0  # Initial point ID: 0 for START1, 1 for START2

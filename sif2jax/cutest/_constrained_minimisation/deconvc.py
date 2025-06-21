@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -20,6 +21,9 @@ class DECONVC(AbstractConstrainedMinimisation):
     # Suspected issues: Gradient/Hessian discrepancy - indexing issue with C variables
     # Additional resources needed: Clarification on fixed variables C(-LGSG:0)
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     @property
     def n(self):
@@ -161,7 +165,7 @@ class DECONVC(AbstractConstrainedMinimisation):
             [1e-2, 2e-2, 0.4, 0.6, 0.8, 3.0, 0.8, 0.6, 0.44, 1e-2, 1e-2]
         )
 
-        return jnp.concatenate([c_init, sg_init])
+        return inexact_asarray(jnp.concatenate([c_init, sg_init]))
 
     def args(self):
         """Additional arguments (none for this problem)."""

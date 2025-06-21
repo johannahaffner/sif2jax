@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -21,6 +22,9 @@ class FREUROTH(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 5000  # Default dimension in SIF file
     supported_dims = [2, 10, 50, 100, 500, 1000, 5000]
@@ -88,7 +92,7 @@ class FREUROTH(AbstractUnconstrainedMinimisation):
         x0 = jnp.zeros(self.n)
         x0 = x0.at[0].set(0.5)
         x0 = x0.at[1].set(-2.0)
-        return x0
+        return inexact_asarray(x0)
 
     def args(self):
         return None
@@ -208,7 +212,7 @@ class FREURONE(AbstractUnconstrainedMinimisation):
         x0 = jnp.zeros(self.n)
         x0 = x0.at[0].set(0.5)
         x0 = x0.at[1].set(-2.0)
-        return x0
+        return inexact_asarray(x0)
 
     def args(self):
         return None

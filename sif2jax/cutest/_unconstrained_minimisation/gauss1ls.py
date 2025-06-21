@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class GAUSS1LS(AbstractUnconstrainedMinimisation):
 
     Classification SUR2-MN-8-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     # Number of variables
     n: int = 8
@@ -312,7 +316,9 @@ class GAUSS1LS(AbstractUnconstrainedMinimisation):
     def y0(self):
         """Initial parameter guess."""
         # From START POINT 1 in the SIF file
-        return jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
+        return inexact_asarray(
+            jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
+        )
 
     def args(self):
         """No additional arguments."""

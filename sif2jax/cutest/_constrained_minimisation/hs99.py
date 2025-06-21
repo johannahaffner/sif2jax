@@ -31,6 +31,9 @@ class HS99(AbstractConstrainedMinimisation):
     TODO: Needs human review - complex recursive formulation requires implementation
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         # Simplified objective - the actual problem has complex recursive definitions
         return -jnp.sum(y**2)

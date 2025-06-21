@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class GAUSS1LS(AbstractUnconstrainedMinimisation):
 
     Classification SUR2-MN-8-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     # Number of variables
     n: int = 8
@@ -313,7 +317,9 @@ class GAUSS1LS(AbstractUnconstrainedMinimisation):
     def y0(self):
         """Return the starting point from the SIF file."""
         # START1 values from SIF file
-        return jnp.array([97.0, 0.009, 100.0, 65.0, 20.0, 70.0, 178.0, 16.5])
+        return inexact_asarray(
+            jnp.array([97.0, 0.009, 100.0, 65.0, 20.0, 70.0, 178.0, 16.5])
+        )
 
     def args(self):
         """Return None as no additional args are needed."""
@@ -638,7 +644,9 @@ class GAUSS2LS(AbstractUnconstrainedMinimisation):
     def y0(self):
         """Return the starting point from the SIF file."""
         # START1 values from GAUSS2LS.SIF file
-        return jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
+        return inexact_asarray(
+            jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
+        )
 
     def args(self):
         """Return None as no additional args are needed."""
@@ -962,7 +970,9 @@ class GAUSS3LS(AbstractUnconstrainedMinimisation):
     def y0(self):
         """Return the starting point from the NIST GAUSS3 dataset."""
         # Starting point values from GAUSS3.dat
-        return jnp.array([94.9, 0.009, 90.1, 113.0, 20.0, 73.8, 140.0, 20.0])
+        return inexact_asarray(
+            jnp.array([94.9, 0.009, 90.1, 113.0, 20.0, 73.8, 140.0, 20.0])
+        )
 
     def args(self):
         """Return None as no additional args are needed."""

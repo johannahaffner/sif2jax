@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -17,6 +18,9 @@ class ERRINROS(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 50  # Number of variables (default 50, but can also be 10 or 25)
 
@@ -105,7 +109,7 @@ class ERRINROS(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file (all -1.0)
-        return jnp.full(self.n, -1.0)
+        return inexact_asarray(jnp.full(self.n, -1.0))
 
     def args(self):
         return None

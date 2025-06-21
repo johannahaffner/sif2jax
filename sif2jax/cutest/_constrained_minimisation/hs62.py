@@ -27,6 +27,9 @@ class HS62(AbstractConstrainedMinimisation):
     Classification: GLR-P1-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3 = y
         # Based on SIF file: elements are combinations of variables, not products

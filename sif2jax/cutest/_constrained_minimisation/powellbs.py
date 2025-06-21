@@ -22,6 +22,9 @@ class POWELLBS(AbstractConstrainedMinimisation):
     Classification: NOR2-AN-2-2
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables."""

@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -21,6 +22,9 @@ class HILBERTA(AbstractUnconstrainedMinimisation):
 
     Classification: QUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 2  # Other suggested values: 4, 5, 6, 10, works for any positive integer
 
@@ -45,7 +49,7 @@ class HILBERTA(AbstractUnconstrainedMinimisation):
     def y0(self):
         # From AMPL data section: x[1] = -4, x[2] = -2, but default in SIF is -3.0
         # Let's use the SIF default for consistency
-        return jnp.full(self.n, -3.0)
+        return inexact_asarray(jnp.full(self.n, -3.0))
 
     def args(self):
         return None

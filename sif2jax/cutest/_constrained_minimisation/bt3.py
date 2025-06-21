@@ -25,6 +25,9 @@ class BT3(AbstractConstrainedMinimisation):
     Classification: SLR2-AY-5-3
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     y0_id: int = 1  # Default to second starting point (20.0) as per SIF
     provided_y0s: frozenset = frozenset({0, 1, 2})
 

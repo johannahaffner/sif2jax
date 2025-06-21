@@ -1,4 +1,5 @@
 """Runtime benchmarks comparing JAX implementations against pycutest."""
+
 import time
 from collections.abc import Callable
 
@@ -121,8 +122,8 @@ class TestRuntime:
 
         # Print results (visible with -s flag)
         print(f"\nObjective runtime for {problem.name()}:")
-        print(f"  pycutest: {pycutest_time*1000:.3f} ms")
-        print(f"  JAX:      {jax_time*1000:.3f} ms")
+        print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
+        print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
         # Assert within threshold
@@ -151,8 +152,8 @@ class TestRuntime:
 
         # Print results (visible with -s flag)
         print(f"\nGradient runtime for {problem.name()}:")
-        print(f"  pycutest: {pycutest_time*1000:.3f} ms")
-        print(f"  JAX:      {jax_time*1000:.3f} ms")
+        print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
+        print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
         # Assert within threshold
@@ -198,8 +199,8 @@ class TestRuntime:
 
         # Print results (visible with -s flag)
         print(f"\nCombined obj+grad runtime for {problem.name()}:")
-        print(f"  pycutest: {pycutest_time*1000:.3f} ms")
-        print(f"  JAX:      {jax_time*1000:.3f} ms")
+        print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
+        print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
         # Assert within threshold

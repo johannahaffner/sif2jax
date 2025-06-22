@@ -31,7 +31,10 @@ class HS63(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         x1, x2, x3 = y
-        return 1000 - x1**2 - 2 * x2**2 - x3**2 - x1 * x2 - x1 * x3
+        x1_sq = x1 * x1
+        x2_sq = x2 * x2
+        x3_sq = x3 * x3
+        return 1000 - x1_sq - 2 * x2_sq - x3_sq - x1 * x2 - x1 * x3
 
     def y0(self):
         return jnp.array([2.0, 2.0, 2.0])  # not feasible according to the problem
@@ -52,6 +55,9 @@ class HS63(AbstractConstrainedMinimisation):
         x1, x2, x3 = y
         # Equality constraints
         eq1 = 8 * x1 + 14 * x2 + 7 * x3 - 56
-        eq2 = x1**2 + x2**2 + x3**2 - 25
+        x1_sq = x1 * x1
+        x2_sq = x2 * x2
+        x3_sq = x3 * x3
+        eq2 = x1_sq + x2_sq + x3_sq - 25
         equality_constraints = jnp.array([eq1, eq2])
         return equality_constraints, None

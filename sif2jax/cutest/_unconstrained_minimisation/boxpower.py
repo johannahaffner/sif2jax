@@ -19,6 +19,7 @@ class BOXPOWER(AbstractUnconstrainedMinimisation):
     n: int = 20000
     p: int = 9
 
+    @property
     def name(self):
         return "BOXPOWER"
 

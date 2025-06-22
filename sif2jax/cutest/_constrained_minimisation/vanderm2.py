@@ -34,9 +34,9 @@ class VANDERM2(AbstractConstrainedMinimisation):
     @property
     def m(self):
         """Number of constraints."""
-        # Only n-1 inequality constraints (monotonicity)
-        # The Vandermonde equations are part of the objective (L2 group type)
-        return self.n - 1
+        # n equality constraints (Vandermonde equations)
+        # n-1 inequality constraints (monotonicity)
+        return 2 * self.n - 1
 
     def objective(self, y, args):
         """Compute the objective (constant zero)."""
@@ -89,7 +89,7 @@ class VANDERM2(AbstractConstrainedMinimisation):
         """Initial guess."""
         n = self.n
         # Initial point: x[i] = (i-1)/n
-        return inexact_asarray(jnp.arange(n)) * n
+        return inexact_asarray(jnp.arange(n)) / n
 
     def args(self):
         """Additional arguments (none for this problem)."""

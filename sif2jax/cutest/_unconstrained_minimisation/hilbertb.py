@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -47,14 +48,14 @@ class HILBERTB(AbstractUnconstrainedMinimisation):
         # Compute off-diagonal terms: x[i]*x[j]/(i+j-1) for j < i
         y_i = y[i_grid - 1]  # Convert to 0-based indexing
         y_j = y[j_grid - 1]  # Convert to 0-based indexing
-        hilbert_coeffs = 1.0 / (i_grid + j_grid - 1)
+        hilbert_coeffs = 1.0 / inexact_asarray(i_grid + j_grid - 1)
 
         off_diagonal_terms = jnp.where(
             upper_triangular_mask, y_i * y_j * hilbert_coeffs, 0.0
         )
 
         # Diagonal terms: (x[i]^2)*(D+1/(4*i-2))
-        diagonal_coeffs = d + 1.0 / (4 * i_indices - 2)
+        diagonal_coeffs = d + 1.0 / inexact_asarray(4 * i_indices - 2)
         diagonal_terms = y**2 * diagonal_coeffs
 
         return jnp.sum(jnp.asarray(off_diagonal_terms)) + jnp.sum(diagonal_terms)

@@ -12,7 +12,7 @@ from .ba_l1spls import BA_L1SPLS as BA_L1SPLS
 from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
-from .biggs import BIGGS6 as BIGGS6
+from .biggs6 import BIGGS6 as BIGGS6
 from .box import BOX as BOX
 from .box3 import BOX3 as BOX3
 from .boxbodls import BOXBODLS as BOXBODLS

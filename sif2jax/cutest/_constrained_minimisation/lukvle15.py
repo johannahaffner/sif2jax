@@ -1,6 +1,5 @@
 import jax.numpy as jnp
 
-from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -53,20 +52,18 @@ class LUKVLE15(AbstractConstrainedMinimisation):
             return jnp.array(0.0)
 
         # Create indices for the start of each group
-        group_starts = inexact_asarray(jnp.arange(num_groups)) * 4
+        group_starts = jnp.arange(num_groups) * 4
 
-        # We need to ensure we don't go out of bounds
-        valid_groups = group_starts[group_starts + 4 < n]
-
-        if len(valid_groups) == 0:
-            return jnp.array(0.0)
+        # All groups should be valid since n is chosen appropriately
+        # For n=9997, we have (9997-1)/4 = 2499 groups
+        # Last group starts at 2498*4 = 9992, needs indices up to 9996
 
         # Extract elements for all groups at once
-        x_j1 = y[valid_groups]  # First element of each group
-        x_j2 = y[valid_groups + 1]  # Second element
-        x_j3 = y[valid_groups + 2]  # Third element
-        x_j4 = y[valid_groups + 3]  # Fourth element
-        x_j5 = y[valid_groups + 4]  # Fifth element
+        x_j1 = y[group_starts]  # First element of each group
+        x_j2 = y[group_starts + 1]  # Second element
+        x_j3 = y[group_starts + 2]  # Third element
+        x_j4 = y[group_starts + 3]  # Fourth element
+        x_j5 = y[group_starts + 4]  # Fifth element
 
         # Compute all terms vectorized
         terms = (

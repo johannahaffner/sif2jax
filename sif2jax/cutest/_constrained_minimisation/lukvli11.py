@@ -1,6 +1,5 @@
 import jax.numpy as jnp
 
-from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -54,7 +53,7 @@ class LUKVLI11(AbstractConstrainedMinimisation):
             return jnp.array(0.0)
 
         # Create indices for the start of each group
-        group_starts = inexact_asarray(jnp.arange(num_groups)) * 3
+        group_starts = jnp.arange(num_groups) * 3
 
         # All groups should be valid since n is chosen appropriately
         # For n=9998, we have (9998-2)//3 = 3332 groups

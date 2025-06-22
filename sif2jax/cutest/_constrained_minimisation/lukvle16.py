@@ -1,6 +1,5 @@
 import jax.numpy as jnp
 
-from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -53,7 +52,7 @@ class LUKVLE16(AbstractConstrainedMinimisation):
         # j = 0, 4, 8, ... up to 4*(num_groups-1)
         # We need y[j], y[j+1], y[j+2], y[j+3], y[j+4]
 
-        j_indices = inexact_asarray(jnp.arange(num_groups)) * 4
+        j_indices = jnp.arange(num_groups) * 4
 
         # Extract slices for vectorized computation
         y_j = y[j_indices]

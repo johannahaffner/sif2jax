@@ -63,8 +63,8 @@ class SIPOW1(AbstractConstrainedMinimisation):
         m = self.m
 
         # Generate angles for the constraints
-        j_vals = jnp.arange(1, m + 1)
-        angles = 2.0 * jnp.pi * j_vals / m
+        j_vals = inexact_asarray(jnp.arange(1, m + 1))
+        angles = 2.0 * jnp.pi * j_vals / inexact_asarray(m)
         cos_vals = jnp.cos(angles)
         sin_vals = jnp.sin(angles)
 

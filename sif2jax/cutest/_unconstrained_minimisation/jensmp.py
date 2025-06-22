@@ -39,7 +39,7 @@ class JENSMP(AbstractUnconstrainedMinimisation):
         # Define the residual function for a single group i
         def residual_fn(i):
             # Adjust for 1-indexing
-            i_val = i + 1
+            i_val = inexact_asarray(i) + 1.0
             return jnp.exp(i_val * x1) + jnp.exp(i_val * x2) - (2 + 2 * i_val)
 
         # Compute all residuals using vmap

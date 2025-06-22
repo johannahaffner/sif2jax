@@ -164,11 +164,6 @@ class TestRuntime:
 
     def test_combined_runtime(self, problem, pycutest_problem, threshold):
         """Compare combined objective and gradient runtime."""
-        # Skip if problem is constrained (pycutest has different API)
-        if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
-            pytest.skip(
-                "Combined obj+grad test not implemented for constrained problems"
-            )
 
         # Get starting point
         x0 = problem.y0()

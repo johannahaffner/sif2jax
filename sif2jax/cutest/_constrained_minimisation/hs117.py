@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -32,20 +33,22 @@ class HS117(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         # Coefficients from AMPL formulation
-        b = jnp.array([-40, -2, -0.25, -4, -4, -1, -40, -60, 5, 1])
+        b = inexact_asarray(jnp.array([-40, -2, -0.25, -4, -4, -1, -40, -60, 5, 1]))
 
         # c matrix (5x5) from AMPL
-        c = jnp.array(
-            [
-                [30, -20, -10, 32, -10],
-                [-20, 39, -6, -31, 32],
-                [-10, -6, 10, -6, -10],
-                [32, -31, -6, 39, -20],
-                [-10, 32, -10, -20, 30],
-            ]
+        c = inexact_asarray(
+            jnp.array(
+                [
+                    [30, -20, -10, 32, -10],
+                    [-20, 39, -6, -31, 32],
+                    [-10, -6, 10, -6, -10],
+                    [32, -31, -6, 39, -20],
+                    [-10, 32, -10, -20, 30],
+                ]
+            )
         )
 
-        d = jnp.array([4, 8, 10, 6, 2])
+        d = inexact_asarray(jnp.array([4, 8, 10, 6, 2]))
 
         # First 10 variables
         x_first10 = y[:10]
@@ -123,34 +126,38 @@ class HS117(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         # Coefficients from AMPL formulation
-        a = jnp.array(
-            [
-                [-16, 2, 0, 1, 0],  # a[1,:]
-                [0, -2, 0, 4, 2],  # a[2,:]
-                [-3.5, 0, 2, 0, 0],  # a[3,:]
-                [0, -2, 0, -4, -1],  # a[4,:]
-                [0, -9, -2, 1, -2.8],  # a[5,:]
-                [2, 0, -4, 0, 0],  # a[6,:]
-                [-1, -1, -1, -1, -1],  # a[7,:]
-                [-1, -2, -3, -2, -1],  # a[8,:]
-                [1, 2, 3, 4, 5],  # a[9,:]
-                [1, 1, 1, 1, 1],  # a[10,:]
-            ]
+        a = inexact_asarray(
+            jnp.array(
+                [
+                    [-16, 2, 0, 1, 0],  # a[1,:]
+                    [0, -2, 0, 4, 2],  # a[2,:]
+                    [-3.5, 0, 2, 0, 0],  # a[3,:]
+                    [0, -2, 0, -4, -1],  # a[4,:]
+                    [0, -9, -2, 1, -2.8],  # a[5,:]
+                    [2, 0, -4, 0, 0],  # a[6,:]
+                    [-1, -1, -1, -1, -1],  # a[7,:]
+                    [-1, -2, -3, -2, -1],  # a[8,:]
+                    [1, 2, 3, 4, 5],  # a[9,:]
+                    [1, 1, 1, 1, 1],  # a[10,:]
+                ]
+            )
         )
 
         # c matrix (5x5) from AMPL
-        c = jnp.array(
-            [
-                [30, -20, -10, 32, -10],
-                [-20, 39, -6, -31, 32],
-                [-10, -6, 10, -6, -10],
-                [32, -31, -6, 39, -20],
-                [-10, 32, -10, -20, 30],
-            ]
+        c = inexact_asarray(
+            jnp.array(
+                [
+                    [30, -20, -10, 32, -10],
+                    [-20, 39, -6, -31, 32],
+                    [-10, -6, 10, -6, -10],
+                    [32, -31, -6, 39, -20],
+                    [-10, 32, -10, -20, 30],
+                ]
+            )
         )
 
-        d = jnp.array([4, 8, 10, 6, 2])
-        e = jnp.array([-15, -27, -36, -18, -12])
+        d = inexact_asarray(jnp.array([4, 8, 10, 6, 2]))
+        e = inexact_asarray(jnp.array([-15, -27, -36, -18, -12]))
 
         x_first10 = y[:10]
         x_last5 = y[10:15]

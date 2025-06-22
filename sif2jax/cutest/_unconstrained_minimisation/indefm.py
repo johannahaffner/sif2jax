@@ -53,7 +53,7 @@ class INDEFM(AbstractUnconstrainedMinimisation):
         # Starting point: X(I) = I/(N+1) for INDEF1
         # INDEF2 has all variables at 1000.0
         n = self.n
-        return inexact_asarray(jnp.arange(1.0, n + 1.0)) * (n + 1.0)
+        return inexact_asarray(jnp.arange(1.0, n + 1.0)) / inexact_asarray(n + 1.0)
 
     def args(self):
         return None

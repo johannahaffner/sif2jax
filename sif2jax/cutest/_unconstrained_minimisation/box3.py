@@ -39,13 +39,14 @@ class BOX3(AbstractUnconstrainedMinimisation):
 
         # Define inner function to compute residual for a single index i
         def compute_residual(i):
-            t_i = -0.1 * i
+            i_float = inexact_asarray(i)
+            t_i = -0.1 * i_float
 
             # Compute exp(-0.1*i*x1) - exp(-0.1*i*x2)
             term1 = jnp.exp(t_i * x1) - jnp.exp(t_i * x2)
 
             # Compute coefficient: -exp(-0.1*i) + exp(-i)
-            coeff = -jnp.exp(t_i) + jnp.exp(-i)
+            coeff = -jnp.exp(t_i) + jnp.exp(-i_float)
 
             # Compute the residual: x3 * coeff + term1
             residual = x3 * coeff + term1

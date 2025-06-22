@@ -38,8 +38,9 @@ class TRIGON1(AbstractUnconstrainedMinimisation):
         def compute_residual(i):
             # F(i) = sum cos(x_j) + (i+1) * (cos(x_i) + sin(x_i)) - (n + i + 1)
             cos_sum = jnp.sum(jnp.cos(x))
-            individual_term = (i + 1) * (jnp.cos(x[i]) + jnp.sin(x[i]))
-            target = n + i + 1
+            i_float = inexact_asarray(i)
+            individual_term = (i_float + 1) * (jnp.cos(x[i]) + jnp.sin(x[i]))
+            target = float(n) + i_float + 1
             return cos_sum + individual_term - target
 
         residuals = jax.vmap(compute_residual)(jnp.arange(n))

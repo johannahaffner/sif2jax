@@ -61,7 +61,7 @@ class LUKVLE7(AbstractConstrainedMinimisation):
         terms = cos_terms + sin_x_i_minus_1 - sin_x_i_plus_1
 
         # Multiply by i (1-based indexing: i = 1, 2, ..., n)
-        coefficients = jnp.arange(1, n + 1)
+        coefficients = inexact_asarray(jnp.arange(1, n + 1))
 
         return jnp.sum(coefficients * terms)
 

@@ -42,8 +42,9 @@ class EXPFIT(AbstractUnconstrainedMinimisation):
         def compute_residual(i):
             # i is 1-indexed in AMPL
             # Residual: (alpha*exp(i*h*beta) - i*h)^2
-            model_value = alpha * jnp.exp(i * h * beta)
-            target_value = i * h
+            i_float = inexact_asarray(i)
+            model_value = alpha * jnp.exp(i_float * h * beta)
+            target_value = i_float * h
             return (model_value - target_value) ** 2
 
         # Compute residuals for all data points (i = 1 to 10)

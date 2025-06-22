@@ -67,8 +67,8 @@ class SIPOW2(AbstractConstrainedMinimisation):
 
         # First M/2 constraints: tangent lines
         # Generate angles for the constraints (note: 4*pi instead of 2*pi)
-        j_vals = jnp.arange(1, m_half + 1)
-        angles = 4.0 * jnp.pi * j_vals / m
+        j_vals = inexact_asarray(jnp.arange(1, m_half + 1))
+        angles = 4.0 * jnp.pi * j_vals / inexact_asarray(m)
         cos_vals = jnp.cos(angles)
         sin_vals = jnp.sin(angles)
 

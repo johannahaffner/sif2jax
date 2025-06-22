@@ -63,7 +63,7 @@ class LUKVLI7(AbstractConstrainedMinimisation):
         terms = main_terms + sin_x_i_minus_1 - sin_x_i_plus_1
 
         # Multiply by i (1-based indexing)
-        i_values = jnp.arange(1, n + 1)
+        i_values = inexact_asarray(jnp.arange(1, n + 1))
 
         return jnp.sum(i_values * terms)
 

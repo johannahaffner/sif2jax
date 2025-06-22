@@ -40,7 +40,7 @@ class HILBERTA(AbstractUnconstrainedMinimisation):
         i_grid, j_grid = jnp.meshgrid(i_indices, j_indices, indexing="ij")
 
         # Create the Hilbert matrix A[i,j] = 1/(i+j-1)
-        hilbert_matrix = 1.0 / (i_grid + j_grid - 1.0)
+        hilbert_matrix = 1.0 / inexact_asarray(i_grid + j_grid - 1)
 
         # Compute the quadratic form: 0.5 * x^T * A * x
         # Note: Need 0.5 factor to match PyCUTEst results

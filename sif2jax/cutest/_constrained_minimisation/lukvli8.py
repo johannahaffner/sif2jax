@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -125,7 +126,7 @@ class LUKVLI8(AbstractConstrainedMinimisation):
         y_k_plus_2 = y[2:]  # y[2] to y[n-1]
 
         # k+1 in 1-based indexing for the formula
-        k_plus_1_1based = k_indices + 1
+        k_plus_1_1based = inexact_asarray(k_indices) + 1.0
 
         # Compute all constraints at once
         constraints = (

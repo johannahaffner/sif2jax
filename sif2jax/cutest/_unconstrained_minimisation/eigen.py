@@ -84,8 +84,9 @@ class EIGEN(AbstractUnconstrainedMinimisation):
 
         # Set Q diagonal to 1.0 (identity matrix)
         # Q is stored column-wise, so Q(j,j) is at position j in column j
-        for j in range(self.n):
-            y_reshaped = y_reshaped.at[j, j + 1].set(1.0)
+        # Vectorized approach: create diagonal indices
+        diag_indices = jnp.arange(self.n)
+        y_reshaped = y_reshaped.at[diag_indices, diag_indices + 1].set(1.0)
 
         return inexact_asarray(y_reshaped.ravel())
 

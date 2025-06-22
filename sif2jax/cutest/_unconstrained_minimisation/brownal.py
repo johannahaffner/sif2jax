@@ -31,21 +31,22 @@ class BROWNAL(AbstractUnconstrainedMinimisation):
         del args
         n = self.n
 
-        # Sum of squared residuals
-        residuals = []
-
         # First n-1 groups: each group G(i) has 2*x[i] + sum_{j≠i}(x[j]) - (n+1)
         # This is equivalent to x[i] + sum_all(x[j]) - (n+1)
         sum_all = jnp.sum(y)
-        for i in range(n - 1):
-            residual = y[i] + sum_all - (n + 1)
-            residuals.append(residual)
+
+        # Vectorized computation for first n-1 residuals
+        first_residuals = y[:-1] + sum_all - (n + 1)
 
         # Last group: product of components - 1
-        product = jnp.prod(y)
-        residuals.append(product - 1.0)
+        product_residual = jnp.prod(y) - 1.0
 
-        return jnp.sum(jnp.array(residuals) ** 2)
+        # Combine all residuals
+        all_residuals = jnp.concatenate(
+            [first_residuals, jnp.array([product_residual])]
+        )
+
+        return jnp.sum(all_residuals**2)
 
     def y0(self):
         # Initial values from SIF file (all 0.5)

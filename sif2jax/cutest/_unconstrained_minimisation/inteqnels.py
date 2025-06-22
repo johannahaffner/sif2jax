@@ -86,10 +86,10 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
         This gives t_i = ih and ξ_i = t_i(t_i - 1) starting with ξ_0 = 0.
         """
         n = self.n
-        h = 1.0 / (n - 1)  # This matches PyCUTEst behavior
+        h = jnp.array(1.0) / (n - 1)  # This matches PyCUTEst behavior
         # For i = 0, 1, 2, ..., n-1, compute t_i = i*h and ξ_i = t_i*(t_i - 1)
         i_vals = jnp.arange(n)
-        t_vals = i_vals * h
+        t_vals = i_vals.astype(h.dtype) * h
         xi_vals = t_vals * (t_vals - 1.0)
         return inexact_asarray(xi_vals)
 

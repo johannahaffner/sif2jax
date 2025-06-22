@@ -57,7 +57,7 @@ class DIXMAANE1(AbstractUnconstrainedMinimisation):
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
         term1 = alpha * jnp.sum(
-            ((inexact_asarray(jnp.arange(1, n + 1)) * n) ** k1) * (y**2)
+            ((inexact_asarray(jnp.arange(1, n + 1)) / n) ** k1) * (y**2)
         )
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)

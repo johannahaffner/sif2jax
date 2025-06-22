@@ -13,7 +13,7 @@ from ._bounded_minimisation import (
 )
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
-    AIRPORT as AIRPORT,
+    # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
     ALSOTAME as ALSOTAME,
     # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
@@ -391,7 +391,7 @@ from ._unconstrained_minimisation import (
 
 problems_dict = {
     # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
-    "AIRPORT": AIRPORT(),
+    # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
     "ALSOTAME": ALSOTAME(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review

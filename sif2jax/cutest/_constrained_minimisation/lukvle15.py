@@ -122,24 +122,20 @@ class LUKVLE15(AbstractConstrainedMinimisation):
             padding = max_idx - n
             y = jnp.pad(y, (0, padding), mode="constant", constant_values=0)
 
-        # Initialize constraints array
-        constraints = jnp.zeros(n_c)
+        # Vectorized constraint computation
+        # Create indices for all constraints
+        k_indices = jnp.arange(n_c)
 
-        # Process constraints in groups of 3
-        for k in range(0, n_c, 3):
-            # C(k): k ≡ 1 mod 3
-            if k < n_c:
-                c_k = y[k] ** 2 + 2 * y[k + 1] + 3 * y[k + 2] - 6
-                constraints = constraints.at[k].set(c_k)
+        # Compute all constraints at once based on their position mod 3
+        # C(k) depends on y[k], y[k+1], y[k+2] with pattern based on k mod 3
 
-            # C(k+1): k+1 ≡ 2 mod 3
-            if k + 1 < n_c:
-                c_k1 = y[k + 1] ** 2 + 2 * y[k + 2] + 3 * y[k + 3] - 6
-                constraints = constraints.at[k + 1].set(c_k1)
+        # For k ≡ 0 mod 3: y[k]^2 + 2*y[k+1] + 3*y[k+2] - 6
+        # For k ≡ 1 mod 3: y[k]^2 + 2*y[k+1] + 3*y[k+2] - 6
+        # For k ≡ 2 mod 3: y[k]^2 + 2*y[k+1] + 3*y[k+2] - 6
 
-            # C(k+2): k+2 ≡ 0 mod 3
-            if k + 2 < n_c:
-                c_k2 = y[k + 2] ** 2 + 2 * y[k + 3] + 3 * y[k + 4] - 6
-                constraints = constraints.at[k + 2].set(c_k2)
+        # All constraints have the same pattern!
+        constraints = (
+            y[k_indices] ** 2 + 2 * y[k_indices + 1] + 3 * y[k_indices + 2] - 6
+        )
 
         return constraints, None

@@ -4,6 +4,7 @@ import time
 from collections.abc import Callable
 
 import jax
+import jax.numpy as jnp
 import pycutest  # pyright: ignore[reportMissingImports]
 import pytest  # pyright: ignore[reportMissingImports]
 import sif2jax
@@ -201,5 +202,92 @@ class TestRuntime:
         # Assert within threshold
         assert ratio < threshold, (
             f"JAX combined is {ratio:.2f}x slower than pycutest "
+            f"(threshold: {threshold})"
+        )
+
+    def test_constraint_runtime(self, problem, pycutest_problem, threshold):
+        """Compare constraint function runtime."""
+        # Skip if problem is unconstrained
+        if not isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
+            pytest.skip("Problem has no constraints")
+
+        # Get starting point
+        x0 = problem.y0()
+
+        # Compile JAX constraint function
+        jax_cons = jax.jit(problem.constraint)
+
+        # Benchmark pycutest
+        pycutest_time = benchmark_function(pycutest_problem.cons, x0)
+
+        # Benchmark JAX
+        jax_time = benchmark_function(jax_cons, x0)
+
+        # Calculate ratio
+        ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
+
+        # Print results (visible with -s flag)
+        print(f"\nConstraint runtime for {problem.name}:")
+        print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
+        print(f"  JAX:      {jax_time * 1000:.3f} ms")
+        print(f"  Ratio:    {ratio:.2f}x")
+
+        # Assert within threshold
+        assert ratio < threshold, (
+            f"JAX constraint is {ratio:.2f}x slower than pycutest "
+            f"(threshold: {threshold})"
+        )
+
+    def test_constraint_jacobian_runtime(self, problem, pycutest_problem, threshold):
+        """Compare constraint Jacobian computation runtime."""
+        # Skip if problem is unconstrained
+        if not isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
+            pytest.skip("Problem has no constraints")
+
+        # Get starting point
+        x0 = problem.y0()
+
+        # Create JAX Jacobian function
+        # For constrained problems, we want the Jacobian of all constraints
+        def constraint_wrapper(x):
+            eq_cons, ineq_cons = problem.constraint(x)
+            # Concatenate all constraints
+            all_cons = []
+            if eq_cons is not None:
+                all_cons.append(eq_cons)
+            if ineq_cons is not None:
+                all_cons.append(ineq_cons)
+            return jnp.concatenate(all_cons) if all_cons else jnp.array([])
+
+        jax_jac = jax.jit(jax.jacfwd(constraint_wrapper))
+
+        # Benchmark pycutest - use dense Jacobian
+        # For constrained problems, cjac returns (gradient, Jacobian)
+        if hasattr(pycutest_problem, "cjac"):
+
+            def pycutest_jac_func(x):
+                _, J = pycutest_problem.cjac(x)
+                return J
+        else:
+            # Skip if no Jacobian method available
+            pytest.skip("No Jacobian method available in pycutest")
+
+        pycutest_time = benchmark_function(pycutest_jac_func, x0)
+
+        # Benchmark JAX
+        jax_time = benchmark_function(jax_jac, x0)
+
+        # Calculate ratio
+        ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
+
+        # Print results (visible with -s flag)
+        print(f"\nConstraint Jacobian runtime for {problem.name}:")
+        print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
+        print(f"  JAX:      {jax_time * 1000:.3f} ms")
+        print(f"  Ratio:    {ratio:.2f}x")
+
+        # Assert within threshold
+        assert ratio < threshold, (
+            f"JAX constraint Jacobian is {ratio:.2f}x slower than pycutest "
             f"(threshold: {threshold})"
         )

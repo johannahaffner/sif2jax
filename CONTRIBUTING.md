@@ -53,14 +53,7 @@ Finally, open a pull request on GitHub!
 
 *If you want to make changes to the Docker container itself:*
 
-(Be me. Or use your own Docker Hub.)
-
-Make your changes to the Dockerfile. Then build and push with
-
-```bash
-cd docker
-docker buildx build --platform linux/amd64,linux/arm64 -t johannahaffner/pycutest:latest --push .
-```
+Make your changes to the Dockerfile, and open a PR.
 
 ---
 

@@ -29,6 +29,7 @@ class TENFOLDTRLS(AbstractUnconstrainedMinimisation):
 
     n: int = 1000  # Problem dimension, SIF file suggests 4, 10, 100, or 1000
 
+    @property
     @override
     def name(self):
         return "10FOLDTRLS"

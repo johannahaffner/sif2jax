@@ -5,10 +5,13 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: Human review needed - Hessian test fails
-# This implementation includes all linear terms but only partial quadratic terms.
-# The full SIF file has thousands of P(i,j) quadratic product terms that would
-# need to be included for exact Hessian matching.
+# TODO: Human review needed
+# Attempts made: Implemented linear terms and partial quadratic terms
+# Suspected issues: The full SIF file has thousands of P(i,j) quadratic product terms
+# that would need to be included for exact Hessian matching. Current implementation
+# only includes a subset of these terms.
+# Additional resources needed: Full list of quadratic terms from SIF file or
+# alternative formulation that doesn't require explicit enumeration of all terms
 class BA_L1SPLS(AbstractUnconstrainedMinimisation):
     """BA-L1SPLS function.
 

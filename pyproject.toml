@@ -76,5 +76,5 @@ extra-standard-library = ["typing_extensions"]
 lines-after-imports = 2
 order-by-type = false
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"

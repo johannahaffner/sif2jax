@@ -117,25 +117,35 @@ class LUKVLI11(AbstractConstrainedMinimisation):
         # Initialize constraints array
         constraints = jnp.zeros(n_c)
 
-        # Process constraints in pairs
-        for k in range(1, n_c + 1, 2):  # K = 1, 3, 5, ...
-            k_idx = k - 1  # Convert to 0-based
+        # Vectorized processing of constraints in pairs
+        # K = 1, 3, 5, ... corresponds to 0-based indices 0, 2, 4, ...
+        odd_k_indices = jnp.arange(0, n_c, 2)  # 0-based indices for K=1,3,5,...
 
-            # C(K): EA(K) + EB(K)
-            if k <= n_c:
-                # EA(K): X(K)² * X(K+3)
-                # EB(K): sin(X(K+3) - X(K+4))
-                c_k = (
-                    y[k_idx] ** 2 * y[k_idx + 3]
-                    + jnp.sin(y[k_idx + 3] - y[k_idx + 4])
-                    - 1
-                )
-                constraints = constraints.at[k_idx].set(c_k)
+        # Process C(K) constraints: EA(K) + EB(K)
+        # EA(K): X(K)² * X(K+3)
+        # EB(K): sin(X(K+3) - X(K+4))
+        c_k = (
+            y[odd_k_indices] ** 2 * y[odd_k_indices + 3]
+            + jnp.sin(y[odd_k_indices + 3] - y[odd_k_indices + 4])
+            - 1
+        )
+        constraints = constraints.at[odd_k_indices].set(c_k)
 
-            # C(K+1): X(K+1) + E(K+1)
-            if k + 1 <= n_c:
-                # E(K+1): X(K+2)² * X(K+3) (using C21, not C42!)
-                c_k1 = y[k_idx + 1] + y[k_idx + 2] ** 2 * y[k_idx + 3] - 2
-                constraints = constraints.at[k_idx + 1].set(c_k1)
+        # Process C(K+1) constraints: X(K+1) + E(K+1)
+        # E(K+1): X(K+2)² * X(K+3)
+        even_k_indices = odd_k_indices + 1  # 0-based indices for K+1
+        # Only process even indices that are within bounds
+        valid_even = even_k_indices < n_c
+
+        # Use jnp.where to avoid boolean indexing issues
+        c_k1_all = (
+            y[even_k_indices] + y[even_k_indices + 1] ** 2 * y[even_k_indices + 2] - 2
+        )
+        c_k1 = jnp.where(valid_even, c_k1_all, 0.0)
+
+        # Only set valid indices
+        constraints = constraints.at[even_k_indices].set(
+            jnp.where(valid_even, c_k1, constraints[even_k_indices])
+        )
 
         return None, constraints

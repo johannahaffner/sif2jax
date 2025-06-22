@@ -122,25 +122,28 @@ class LUKVLI16(AbstractConstrainedMinimisation):
             padding = max_idx - n
             y = jnp.pad(y, (0, padding), mode="constant", constant_values=0)
 
-        # Initialize constraints array
+        # Vectorized constraint computation
+        # Create indices for all constraints
+        # K = 0, 3, 6, ... (0-based)
+        k_indices = jnp.arange(0, n_c, 3)
+
+        # C(K): y[k]^2 + 3*y[k+1] - 4
+        c1_indices = k_indices
+        c1 = y[c1_indices] ** 2 + 3 * y[c1_indices + 1] - 4
+
+        # C(K+1): y[k+2]^2 + y[k+3] - 2*y[k+4]
+        # Note: S2MPJ bug - E(K+1) uses X(K+2) not X(K+1)
+        c2_indices = k_indices + 1
+        c2 = y[c2_indices + 1] ** 2 + y[c2_indices + 2] - 2 * y[c2_indices + 3]
+
+        # C(K+2): y[k+1]^2 - y[k+4]
+        c3_indices = k_indices + 2
+        c3 = y[c3_indices - 1] ** 2 - y[c3_indices + 2]
+
+        # Interleave the constraints to maintain the original order
         constraints = jnp.zeros(n_c)
-
-        # Process constraints in groups of 3
-        for k in range(0, n_c, 3):
-            # C(k): k ≡ 1 mod 3
-            if k < n_c:
-                c_k = y[k] ** 2 + 3 * y[k + 1] - 4
-                constraints = constraints.at[k].set(c_k)
-
-            # C(k+1): k+1 ≡ 2 mod 3
-            if k + 1 < n_c:
-                # Note: S2MPJ bug - E(K+1) uses X(K+2) not X(K+1)
-                c_k1 = y[k + 2] ** 2 + y[k + 3] - 2 * y[k + 4]
-                constraints = constraints.at[k + 1].set(c_k1)
-
-            # C(k+2): k+2 ≡ 0 mod 3
-            if k + 2 < n_c:
-                c_k2 = y[k + 1] ** 2 - y[k + 4]
-                constraints = constraints.at[k + 2].set(c_k2)
+        constraints = constraints.at[::3].set(c1)
+        constraints = constraints.at[1::3].set(c2[: len(constraints[1::3])])
+        constraints = constraints.at[2::3].set(c3[: len(constraints[2::3])])
 
         return None, constraints

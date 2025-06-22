@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -20,6 +21,9 @@ class BIGGS6(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-6-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 6  # Problem has 6 variables
     m: int = 13  # Number of data points
 
@@ -32,10 +36,11 @@ class BIGGS6(AbstractUnconstrainedMinimisation):
 
         # Define inner function to compute residual for a single index i
         def compute_residual(i):
-            t = -0.1 * i
+            i_float = inexact_asarray(i)
+            t = -0.1 * i_float
 
             # Target value calculation from the SIF file
-            y_val = jnp.exp(t) - 5.0 * jnp.exp(-1.0 * i) + 3.0 * jnp.exp(4.0 * t)
+            y_val = jnp.exp(t) - 5.0 * jnp.exp(-1.0 * i_float) + 3.0 * jnp.exp(4.0 * t)
 
             # Model calculation
             y_pred = x3 * jnp.exp(t * x1) - x4 * jnp.exp(t * x2) + x6 * jnp.exp(t * x5)
@@ -49,7 +54,7 @@ class BIGGS6(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file
-        return jnp.array([1.0, 2.0, 1.0, 1.0, 1.0, 1.0])
+        return inexact_asarray(jnp.array([1.0, 2.0, 1.0, 1.0, 1.0, 1.0]))
 
     def args(self):
         return None

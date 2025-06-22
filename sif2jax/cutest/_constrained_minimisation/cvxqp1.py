@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -13,6 +14,9 @@ class CVXQP1(AbstractConstrainedMinimisation):
 
     Classification: QLR2-AN-V-V
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     @property
     def n(self):
@@ -47,7 +51,7 @@ class CVXQP1(AbstractConstrainedMinimisation):
             i3 = (3 * (i + 1) - 1) % n  # This gives 0-indexed position
 
             alpha = x[i1] + x[i2] + x[i3]
-            p = i + 1.0  # P parameter is i (1-indexed)
+            p = inexact_asarray(i + 1)  # P parameter is i (1-indexed)
 
             return 0.5 * p * alpha * alpha
 
@@ -92,7 +96,7 @@ class CVXQP1(AbstractConstrainedMinimisation):
     def y0(self):
         """Initial guess."""
         # Default value is 0.5
-        return jnp.full(self.n, 0.5)
+        return inexact_asarray(jnp.full(self.n, 0.5))
 
     def args(self):
         """Additional arguments (none for this problem)."""

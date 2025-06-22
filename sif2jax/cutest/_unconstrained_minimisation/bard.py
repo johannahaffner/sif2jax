@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -22,6 +23,9 @@ class BARD(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-3-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 3  # Problem has 3 variables
     m: int = 15  # Number of least squares groups
 
@@ -30,28 +34,30 @@ class BARD(AbstractUnconstrainedMinimisation):
         x1, x2, x3 = y
 
         # Constants from the SIF file
-        constants = jnp.array(
-            [
-                0.14,
-                0.18,
-                0.22,
-                0.25,
-                0.29,
-                0.32,
-                0.35,
-                0.39,
-                0.37,
-                0.58,
-                0.73,
-                0.96,
-                1.34,
-                2.10,
-                4.39,
-            ]
+        constants = inexact_asarray(
+            jnp.array(
+                [
+                    0.14,
+                    0.18,
+                    0.22,
+                    0.25,
+                    0.29,
+                    0.32,
+                    0.35,
+                    0.39,
+                    0.37,
+                    0.58,
+                    0.73,
+                    0.96,
+                    1.34,
+                    2.10,
+                    4.39,
+                ]
+            )
         )
 
         # Create array of indices from 1 to 15
-        i_values = jnp.arange(1, self.m + 1)
+        i_values = inexact_asarray(jnp.arange(1, self.m + 1))
 
         # Calculate u, v, w values for each group
         u_values = i_values
@@ -71,7 +77,7 @@ class BARD(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file (all 1.0)
-        return jnp.array([1.0, 1.0, 1.0])
+        return inexact_asarray(jnp.array([1.0, 1.0, 1.0]))
 
     def args(self):
         return None

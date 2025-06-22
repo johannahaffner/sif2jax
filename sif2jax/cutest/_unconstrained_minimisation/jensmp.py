@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -20,6 +21,9 @@ class JENSMP(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-2-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     m: int = 10  # Number of groups in the least-squares problem
 
     def objective(self, y, args):
@@ -35,7 +39,7 @@ class JENSMP(AbstractUnconstrainedMinimisation):
         # Define the residual function for a single group i
         def residual_fn(i):
             # Adjust for 1-indexing
-            i_val = i + 1
+            i_val = inexact_asarray(i) + 1.0
             return jnp.exp(i_val * x1) + jnp.exp(i_val * x2) - (2 + 2 * i_val)
 
         # Compute all residuals using vmap
@@ -46,7 +50,7 @@ class JENSMP(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         """Initial point (0.3, 0.4)."""
-        return jnp.array([0.3, 0.4])
+        return inexact_asarray(jnp.array([0.3, 0.4]))
 
     def args(self):
         """No additional arguments needed."""

@@ -20,6 +20,9 @@ class ERRINRSM(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 50  # Number of variables (default 50, but can also be 10 or 25)
 
     def objective(self, y, args):

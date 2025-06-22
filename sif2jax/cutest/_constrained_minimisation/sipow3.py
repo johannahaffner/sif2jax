@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -19,6 +20,9 @@ class SIPOW3(AbstractConstrainedMinimisation):
 
     Classification: LLR2-AN-4-V
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     @property
     def n(self):
@@ -100,7 +104,7 @@ class SIPOW3(AbstractConstrainedMinimisation):
 
     def y0(self):
         """Initial guess."""
-        return jnp.array([-0.1, 0.0, 0.0, 1.2])
+        return inexact_asarray(jnp.array([-0.1, 0.0, 0.0, 1.2]))
 
     def args(self):
         """Additional arguments (none for this problem)."""

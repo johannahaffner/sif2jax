@@ -23,6 +23,9 @@ class HS27(AbstractConstrainedMinimisation):
     Classification: PQR-T1-6
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3 = y
         return 0.01 * (x1 - 1.0) ** 2 + (x2 - x1**2) ** 2

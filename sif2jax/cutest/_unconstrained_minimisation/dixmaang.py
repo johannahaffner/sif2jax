@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -20,6 +21,9 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
 
     Classification: OUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 3000  # Default dimension
 
@@ -49,7 +53,10 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the 1st term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
+        term1 = alpha * jnp.sum(
+            ((inexact_asarray(jnp.arange(1, n + 1)) / inexact_asarray(n)) ** k1)
+            * (y**2)
+        )
 
         # Compute the 2nd term (type 2):
         # sum(beta * (i/n)^k2 * x_i^2 * (x_{i+1} + x_{i+1}^2)^2)
@@ -57,7 +64,7 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
         indices1 = jnp.arange(n - 1)
         indices2 = indices1 + 1
         term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2
+            (inexact_asarray(indices1 + 1) / inexact_asarray(n)) ** k2
             * y[indices1] ** 2
             * (y[indices2] + y[indices2] ** 2) ** 2
         )
@@ -68,7 +75,9 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
         indices2 = indices1 + m
         # Since we know n = 3m, indices2 will be in bounds for all i from 0 to 2m-1
         term3 = gamma * jnp.sum(
-            ((indices1 + 1) / n) ** k3 * (y[indices1] ** 2) * (y[indices2] ** 4)
+            (inexact_asarray(indices1 + 1) / inexact_asarray(n)) ** k3
+            * (y[indices1] ** 2)
+            * (y[indices2] ** 4)
         )
 
         # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
@@ -76,7 +85,11 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
         indices1 = jnp.arange(m)
         indices2 = indices1 + 2 * m
         # Since we know n = 3m, indices2 will be exactly at the boundary
-        term4 = delta * jnp.sum(((indices1 + 1) / n) ** k4 * y[indices1] * y[indices2])
+        term4 = delta * jnp.sum(
+            (inexact_asarray(indices1 + 1) / inexact_asarray(n)) ** k4
+            * y[indices1]
+            * y[indices2]
+        )
 
         # Add the constant term from GA group
         # In SIF format, CONSTANTS section subtracts the value from the group
@@ -87,7 +100,7 @@ class DIXMAANG(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
+        return inexact_asarray(jnp.full(self.n, 2.0))
 
     def args(self):
         return None

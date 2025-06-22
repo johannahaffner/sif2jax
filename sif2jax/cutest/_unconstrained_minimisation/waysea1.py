@@ -16,6 +16,9 @@ class WAYSEA1(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-2-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables."""

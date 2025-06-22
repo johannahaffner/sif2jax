@@ -20,6 +20,9 @@ class EGGCRATE(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-4-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
 

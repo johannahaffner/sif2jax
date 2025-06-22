@@ -1,27 +1,26 @@
-"""
-CHACONN1 problem.
-
-A nonlinear minmax problem in two variables.
-
-Source:
-C. Charalambous and A.R. Conn,
-"An efficient method to solve the minmax problem directly",
-SINUM 15, pp. 162-187, 1978.
-
-SIF input: Ph. Toint, Nov 1993.
-
-classification LOR2-AY-3-3
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class CHACONN1(AbstractConstrainedMinimisation):
-    def __init__(self, n: int = 3):
-        del n
-        super().__init__()
+    """
+    CHACONN1 problem.
+
+    A nonlinear minmax problem in two variables.
+
+    Source:
+    C. Charalambous and A.R. Conn,
+    "An efficient method to solve the minmax problem directly",
+    SINUM 15, pp. 162-187, 1978.
+
+    SIF input: Ph. Toint, Nov 1993.
+
+    classification LOR2-AY-3-3
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args

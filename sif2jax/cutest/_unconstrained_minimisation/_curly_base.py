@@ -1,7 +1,6 @@
-import equinox as eqx
 import jax.numpy as jnp
-from jaxtyping import Array
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -30,32 +29,39 @@ class CURLYBase(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 10000  # Number of dimensions. Options listed in SIF file: 100, 1000
     k: int = 20  # Semi-bandwidth.
-    mask: Array = eqx.field(init=False)  # Will be initialized in __init__
 
     def __init__(self, n: int = 10000, k: int = 20):
-        def create_mask(n, k):
-            row_indices = jnp.arange(n)[:, None]
-            col_indices = jnp.arange(n)[None, :]
-
-            # A cell (i,j) should be 1 if i ≤ j ≤ min(i+k, n-1)
-            min_indices = jnp.minimum(row_indices + k, n - 1)
-            mask = (col_indices >= row_indices) & (col_indices <= min_indices)
-            return mask
-
         self.n = n
         self.k = k
-        self.mask = create_mask(n, k)
 
     def objective(self, y, args):
         del args
-        q = self.mask @ y
+
+        # Efficient computation of banded matrix-vector product
+        # q[i] = sum(y[j] for j in range(i, min(i+k+1, n)))
+
+        # Use convolution for efficient computation of sliding window sums
+        # Pad y with zeros at the end to handle boundary
+        padded_y = jnp.pad(y, (0, self.k), mode="constant", constant_values=0)
+
+        # Create a kernel of ones with size k+1
+        kernel = jnp.ones(self.k + 1)
+
+        # Use 1D convolution to compute sliding window sums
+        # mode='valid' gives us exactly n outputs
+        q = jnp.convolve(padded_y, kernel, mode="valid")[: self.n]
+
         result = q * (q * (q**2 - 20) - 0.1)
         return jnp.sum(result)
 
     def y0(self):
-        i = jnp.arange(1, self.n + 1)
+        # Use float to ensure proper dtype promotion
+        i = inexact_asarray(jnp.arange(1, self.n + 1))
         return 0.0001 * i / (self.n + 1)
 
     def args(self):

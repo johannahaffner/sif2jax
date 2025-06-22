@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class BROYDNBDLS(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 5000  # Dimension of the problem
     kappa1: float = 2.0  # Parameter
@@ -144,7 +148,7 @@ class BROYDNBDLS(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file (all 1.0)
-        return jnp.ones(self.n)
+        return inexact_asarray(jnp.ones(self.n))
 
     def args(self):
         return None

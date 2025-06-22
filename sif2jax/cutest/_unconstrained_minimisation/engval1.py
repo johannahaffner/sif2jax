@@ -21,6 +21,9 @@ class ENGVAL1(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 5000  # Other dimensions suggested: 2, 50, 100, 1000
 
     def objective(self, y, args):

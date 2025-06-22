@@ -16,6 +16,9 @@ class AVGASB(AbstractConstrainedMinimisation):
     Classification: QLR2-AN-8-10
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables."""

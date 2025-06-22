@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -22,6 +23,9 @@ class EXPFIT(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-2-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
 
@@ -38,8 +42,9 @@ class EXPFIT(AbstractUnconstrainedMinimisation):
         def compute_residual(i):
             # i is 1-indexed in AMPL
             # Residual: (alpha*exp(i*h*beta) - i*h)^2
-            model_value = alpha * jnp.exp(i * h * beta)
-            target_value = i * h
+            i_float = inexact_asarray(i)
+            model_value = alpha * jnp.exp(i_float * h * beta)
+            target_value = i_float * h
             return (model_value - target_value) ** 2
 
         # Compute residuals for all data points (i = 1 to 10)
@@ -51,7 +56,7 @@ class EXPFIT(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # AMPL model has no initial values specified, so variables start at 0.0
-        return jnp.array([0.0, 0.0])
+        return inexact_asarray(jnp.array([0.0, 0.0]))
 
     def args(self):
         return None

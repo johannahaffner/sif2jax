@@ -20,6 +20,9 @@ class EDENSCH(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 2000  # Default dimension
 
     def objective(self, y, args):

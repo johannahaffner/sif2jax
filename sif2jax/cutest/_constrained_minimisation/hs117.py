@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -27,22 +28,27 @@ class HS117(AbstractConstrainedMinimisation):
     Classification: PQR-P1-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         # Coefficients from AMPL formulation
-        b = jnp.array([-40, -2, -0.25, -4, -4, -1, -40, -60, 5, 1])
+        b = inexact_asarray(jnp.array([-40, -2, -0.25, -4, -4, -1, -40, -60, 5, 1]))
 
         # c matrix (5x5) from AMPL
-        c = jnp.array(
-            [
-                [30, -20, -10, 32, -10],
-                [-20, 39, -6, -31, 32],
-                [-10, -6, 10, -6, -10],
-                [32, -31, -6, 39, -20],
-                [-10, 32, -10, -20, 30],
-            ]
+        c = inexact_asarray(
+            jnp.array(
+                [
+                    [30, -20, -10, 32, -10],
+                    [-20, 39, -6, -31, 32],
+                    [-10, -6, 10, -6, -10],
+                    [32, -31, -6, 39, -20],
+                    [-10, 32, -10, -20, 30],
+                ]
+            )
         )
 
-        d = jnp.array([4, 8, 10, 6, 2])
+        d = inexact_asarray(jnp.array([4, 8, 10, 6, 2]))
 
         # First 10 variables
         x_first10 = y[:10]
@@ -120,50 +126,56 @@ class HS117(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         # Coefficients from AMPL formulation
-        a = jnp.array(
-            [
-                [-16, 2, 0, 1, 0],  # a[1,:]
-                [0, -2, 0, 4, 2],  # a[2,:]
-                [-3.5, 0, 2, 0, 0],  # a[3,:]
-                [0, -2, 0, -4, -1],  # a[4,:]
-                [0, -9, -2, 1, -2.8],  # a[5,:]
-                [2, 0, -4, 0, 0],  # a[6,:]
-                [-1, -1, -1, -1, -1],  # a[7,:]
-                [-1, -2, -3, -2, -1],  # a[8,:]
-                [1, 2, 3, 4, 5],  # a[9,:]
-                [1, 1, 1, 1, 1],  # a[10,:]
-            ]
+        a = inexact_asarray(
+            jnp.array(
+                [
+                    [-16, 2, 0, 1, 0],  # a[1,:]
+                    [0, -2, 0, 4, 2],  # a[2,:]
+                    [-3.5, 0, 2, 0, 0],  # a[3,:]
+                    [0, -2, 0, -4, -1],  # a[4,:]
+                    [0, -9, -2, 1, -2.8],  # a[5,:]
+                    [2, 0, -4, 0, 0],  # a[6,:]
+                    [-1, -1, -1, -1, -1],  # a[7,:]
+                    [-1, -2, -3, -2, -1],  # a[8,:]
+                    [1, 2, 3, 4, 5],  # a[9,:]
+                    [1, 1, 1, 1, 1],  # a[10,:]
+                ]
+            )
         )
 
         # c matrix (5x5) from AMPL
-        c = jnp.array(
-            [
-                [30, -20, -10, 32, -10],
-                [-20, 39, -6, -31, 32],
-                [-10, -6, 10, -6, -10],
-                [32, -31, -6, 39, -20],
-                [-10, 32, -10, -20, 30],
-            ]
+        c = inexact_asarray(
+            jnp.array(
+                [
+                    [30, -20, -10, 32, -10],
+                    [-20, 39, -6, -31, 32],
+                    [-10, -6, 10, -6, -10],
+                    [32, -31, -6, 39, -20],
+                    [-10, 32, -10, -20, 30],
+                ]
+            )
         )
 
-        d = jnp.array([4, 8, 10, 6, 2])
-        e = jnp.array([-15, -27, -36, -18, -12])
+        d = inexact_asarray(jnp.array([4, 8, 10, 6, 2]))
+        e = inexact_asarray(jnp.array([-15, -27, -36, -18, -12]))
 
         x_first10 = y[:10]
         x_last5 = y[10:15]
 
-        # Five inequality constraints from AMPL formulation
-        ineq_constraints = []
-        for j in range(5):
-            # 2*c[k,j]*x[10+k] + 3*d[j]*x[10+j]^2 + e[j]
-            # - sum{k in 1..10} a[k,j]*x[k] >= 0
-            term1 = 2 * jnp.sum(c[:, j] * x_last5)  # 2*c[k,j]*x[10+k]
-            term2 = 3 * d[j] * x_last5[j] ** 2  # 3*d[j]*x[10+j]^2
-            term3 = e[j]  # e[j]
-            term4 = -jnp.sum(a[:, j] * x_first10)  # -sum{k in 1..10} a[k,j]*x[k]
+        # Five inequality constraints from AMPL formulation (vectorized)
+        # 2*c[k,j]*x[10+k] + 3*d[j]*x[10+j]^2 + e[j] - sum{k in 1..10} a[k,j]*x[k] >= 0
 
-            constraint_val = term1 + term2 + term3 + term4
-            ineq_constraints.append(constraint_val)
+        # term1: 2*sum(c[k,j]*x[10+k]) for each j
+        term1 = 2 * jnp.sum(c * x_last5[:, None], axis=0)  # shape: (5,)
 
-        inequality_constraints = jnp.array(ineq_constraints)
+        # term2: 3*d[j]*x[10+j]^2 for each j
+        term2 = 3 * d * x_last5**2  # shape: (5,)
+
+        # term3: e[j] for each j
+        term3 = e  # shape: (5,)
+
+        # term4: -sum{k in 1..10} a[k,j]*x[k] for each j
+        term4 = -jnp.sum(a * x_first10[:, None], axis=0)  # shape: (5,)
+
+        inequality_constraints = term1 + term2 + term3 + term4
         return None, inequality_constraints

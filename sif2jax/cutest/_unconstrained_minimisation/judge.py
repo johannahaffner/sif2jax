@@ -16,6 +16,9 @@ class JUDGE(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-2-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         """Compute the objective function value.
 

@@ -20,6 +20,9 @@ class DALLASS(AbstractConstrainedMinimisation):
     Classification: ONR2-MN-46-31
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables."""

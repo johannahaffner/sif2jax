@@ -40,6 +40,9 @@ class FMINSURF(AbstractUnconstrainedMinimisation):
     Classification: OUR2-MY-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     p: int = 75  # Number of points on one side of the unit square
     h00: float = 1.0  # Boundary condition parameters
     slopej: float = 4.0  # Boundary condition parameters

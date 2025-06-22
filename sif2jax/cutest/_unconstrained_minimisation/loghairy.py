@@ -1,31 +1,30 @@
-"""
-LOGHAIRY problem.
-
-A more difficult variant of the HAIRY problem in two variables.
-It is defined by a logarithmic transformation of the HAIRY surface,
-which is defined by this function has a large number of relatively
-sharp hills between which a valley leads to the minimizer.
-This problem contains a large number of saddle points.
-
-The problem is nonconvex.
-
-Source:
-Ph. Toint, private communication,
-
-SIF input: Ph. Toint, April 1997.
-
-classification OUR2-AN-2-0
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class LOGHAIRY(AbstractUnconstrainedMinimisation):
-    def __init__(self, n: int = 2):
-        del n
-        super().__init__()
+    """
+    LOGHAIRY problem.
+
+    A more difficult variant of the HAIRY problem in two variables.
+    It is defined by a logarithmic transformation of the HAIRY surface,
+    which is defined by this function has a large number of relatively
+    sharp hills between which a valley leads to the minimizer.
+    This problem contains a large number of saddle points.
+
+    The problem is nonconvex.
+
+    Source:
+    Ph. Toint, private communication,
+
+    SIF input: Ph. Toint, April 1997.
+
+    classification OUR2-AN-2-0
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args

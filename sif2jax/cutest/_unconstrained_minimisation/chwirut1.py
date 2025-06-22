@@ -20,6 +20,9 @@ class CHWIRUT1(AbstractUnconstrainedMinimisation):
     Classification: NOR2-MN-3-214
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # TODO: Full data (214 points) needs to be loaded from file
     # This problem requires external data that is not available in the SIF file
 

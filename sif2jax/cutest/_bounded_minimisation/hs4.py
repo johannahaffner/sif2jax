@@ -23,6 +23,9 @@ class HS4(AbstractBoundedMinimisation):
     Classification: PBR-T1-3
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2 = y
         return (1.0 / 3.0) * (x1 + 1) ** 3 + x2

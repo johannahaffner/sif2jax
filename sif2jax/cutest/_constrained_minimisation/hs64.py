@@ -25,6 +25,9 @@ class HS64(AbstractConstrainedMinimisation):
     Classification: OOR2-AN-3-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3 = y
         return 5 * x1 + 50000 / x1 + 20 * x2 + 72000 / x2 + 10 * x3 + 144000 / x3

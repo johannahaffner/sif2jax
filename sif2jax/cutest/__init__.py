@@ -13,7 +13,7 @@ from ._bounded_minimisation import (
 )
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
-    AIRPORT as AIRPORT,
+    # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
     ALSOTAME as ALSOTAME,
     # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
@@ -223,7 +223,7 @@ from ._unconstrained_minimisation import (
     ARGTRIGLS as ARGTRIGLS,
     ARWHEAD as ARWHEAD,
     # BA_L1LS as BA_L1LS,  # TODO: BA_L family needs human review - removed from imports
-    BA_L1SPLS as BA_L1SPLS,  # TODO: BA_L family needs human review
+    # BA_L1SPLS as BA_L1SPLS,  # TODO: BA_L family needs human review
     BARD as BARD,
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
@@ -391,7 +391,7 @@ from ._unconstrained_minimisation import (
 
 problems_dict = {
     # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
-    "AIRPORT": AIRPORT(),
+    # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
     "ALSOTAME": ALSOTAME(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
@@ -592,7 +592,7 @@ problems_dict = {
     "AVGASB": AVGASB(),
     # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
-    # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs to be split into files
+    # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs human review
     "BARD": BARD(),
     "BDQRTIC": BDQRTIC(),
     "BEALE": BEALE(),

@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -20,6 +21,9 @@ class DEVGLA2(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-5-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 5  # Number of variables
 
     def objective(self, y, args):
@@ -27,7 +31,7 @@ class DEVGLA2(AbstractUnconstrainedMinimisation):
         x1, x2, x3, x4, x5 = y
 
         # Generate time points t from 0.0 to 1.5 with step 0.1 (16 points total)
-        t_values = jnp.arange(0, 16) * 0.1
+        t_values = jnp.arange(0.0, 1.6, 0.1)
 
         # Compute the true data points (computed from SIF file with exact parameters)
         true_values = jnp.array(
@@ -79,7 +83,7 @@ class DEVGLA2(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file
-        return jnp.array([20.0, 2.0, 2.0, 2.0, 0.2])
+        return inexact_asarray(jnp.array([20.0, 2.0, 2.0, 2.0, 0.2]))
 
     def args(self):
         return None

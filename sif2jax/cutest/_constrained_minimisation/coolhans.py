@@ -22,6 +22,9 @@ class COOLHANS(AbstractConstrainedMinimisation):
     Classification: NQR2-RN-9-9
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Matrix dimension
     N = 3
 

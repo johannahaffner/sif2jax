@@ -23,6 +23,9 @@ class COOLHANSLS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-RN-9-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 9  # Number of variables (3x3 matrix X flattened)
 
     def objective(self, y, args):

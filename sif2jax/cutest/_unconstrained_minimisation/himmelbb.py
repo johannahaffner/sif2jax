@@ -1,29 +1,28 @@
-"""
-HIMMELBB problem.
-
-A 2 variables problem by Himmelblau.
-
-Source: problem 27 in
-D.H. Himmelblau,
-"Applied nonlinear programming",
-McGraw-Hill, New-York, 1972.
-
-See Buckley#77 (p. 62)
-
-SIF input: Ph. Toint, Dec 1989.
-
-classification OUR2-AN-2-0
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class HIMMELBB(AbstractUnconstrainedMinimisation):
-    def __init__(self, n: int = 2):
-        del n
-        super().__init__()
+    """
+    HIMMELBB problem.
+
+    A 2 variables problem by Himmelblau.
+
+    Source: problem 27 in
+    D.H. Himmelblau,
+    "Applied nonlinear programming",
+    McGraw-Hill, New-York, 1972.
+
+    See Buckley#77 (p. 62)
+
+    SIF input: Ph. Toint, Dec 1989.
+
+    classification OUR2-AN-2-0
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args

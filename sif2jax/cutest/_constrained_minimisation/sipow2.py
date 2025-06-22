@@ -1,28 +1,31 @@
-"""
-SIPOW2 problem.
-
-This is a discretization of a semi-infinite programming problem, of
-minimizing the variable x_2 within a circle of radius 1. The circle
-is replaced by a discrete set of equally-spaced supporting tangents.
-The symmetry in SIPOW1.SIF is imposed by replacing those constraints
-by an alternative set.
-
-Source: problem 2 in
-M. J. D. Powell,
-"Log barrier methods for semi-infinite programming calculations"
-Numerical Analysis Report DAMTP 1992/NA11, U. of Cambridge, UK.
-
-SIF input: A. R. Conn and Nick Gould, August 1993
-
-classification LLR2-AN-2-V
-"""
-
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class SIPOW2(AbstractConstrainedMinimisation):
+    """
+    SIPOW2 problem.
+
+    This is a discretization of a semi-infinite programming problem, of
+    minimizing the variable x_2 within a circle of radius 1. The circle
+    is replaced by a discrete set of equally-spaced supporting tangents.
+    The symmetry in SIPOW1.SIF is imposed by replacing those constraints
+    by an alternative set.
+
+    Source: problem 2 in
+    M. J. D. Powell,
+    "Log barrier methods for semi-infinite programming calculations"
+    Numerical Analysis Report DAMTP 1992/NA11, U. of Cambridge, UK.
+
+    SIF input: A. R. Conn and Nick Gould, August 1993
+
+    classification LLR2-AN-2-V
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     m: int = 2000
 
     def __check_init__(self):
@@ -37,7 +40,7 @@ class SIPOW2(AbstractConstrainedMinimisation):
 
     def y0(self):
         # Starting point
-        return jnp.array([0.8, 0.5])
+        return inexact_asarray(jnp.array([0.8, 0.5]))
 
     def args(self):
         return None
@@ -64,8 +67,8 @@ class SIPOW2(AbstractConstrainedMinimisation):
 
         # First M/2 constraints: tangent lines
         # Generate angles for the constraints (note: 4*pi instead of 2*pi)
-        j_vals = jnp.arange(1, m_half + 1)
-        angles = 4.0 * jnp.pi * j_vals / m
+        j_vals = inexact_asarray(jnp.arange(1, m_half + 1))
+        angles = 4.0 * jnp.pi * j_vals / inexact_asarray(m)
         cos_vals = jnp.cos(angles)
         sin_vals = jnp.sin(angles)
 

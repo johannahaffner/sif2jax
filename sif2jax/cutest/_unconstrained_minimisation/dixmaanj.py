@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -20,6 +21,9 @@ class DIXMAANJ(AbstractUnconstrainedMinimisation):
 
     Classification: OUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 3000  # Default dimension
 
@@ -78,7 +82,7 @@ class DIXMAANJ(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
+        return inexact_asarray(jnp.full(self.n, 2.0))
 
     def args(self):
         return None

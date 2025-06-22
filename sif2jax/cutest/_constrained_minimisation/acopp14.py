@@ -23,6 +23,9 @@ class ACOPP14(AbstractConstrainedMinimisation):
     Classification: QOR2-AY-38-68
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # System parameters
     n_nodes: int = 14
     n_generators: int = 5

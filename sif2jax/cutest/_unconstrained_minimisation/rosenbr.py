@@ -16,6 +16,9 @@ class ROSENBR(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-2-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2 = y
         return 100 * (x2 - x1**2) ** 2 + (1 - x1) ** 2

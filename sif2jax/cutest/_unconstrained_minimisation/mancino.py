@@ -25,6 +25,9 @@ class MANCINO(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 100  # Can also be tested with 60 as in FOSSEE implementation
 
     def objective(self, y: Float[Array, "..."], args: PyTree) -> Scalar:

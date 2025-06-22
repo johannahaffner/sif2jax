@@ -21,6 +21,9 @@ class BOXBODLS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-2-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 2  # Problem has 2 variables
     m: int = 6  # Number of data points
 

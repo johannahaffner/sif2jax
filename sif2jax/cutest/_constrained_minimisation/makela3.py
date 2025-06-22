@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -17,6 +18,9 @@ class MAKELA3(AbstractConstrainedMinimisation):
 
     Classification: LQR2-AN-21-20
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     @property
     def n(self):
@@ -51,11 +55,11 @@ class MAKELA3(AbstractConstrainedMinimisation):
         """Initial guess."""
         x0 = jnp.zeros(21)
         # Initial values for x1-x10: 1, 2, ..., 10
-        x0 = x0.at[:10].set(jnp.arange(1, 11))
+        x0 = x0.at[:10].set(inexact_asarray(jnp.arange(1, 11)))
         # Initial values for x11-x20: -11, -12, ..., -20
-        x0 = x0.at[10:20].set(jnp.arange(-11, -21, -1))
+        x0 = x0.at[10:20].set(inexact_asarray(jnp.arange(-11, -21, -1)))
         # u starts at 0
-        return x0
+        return inexact_asarray(x0)
 
     def args(self):
         """Additional arguments (none for this problem)."""

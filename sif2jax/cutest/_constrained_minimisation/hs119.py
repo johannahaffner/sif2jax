@@ -26,6 +26,9 @@ class HS119(AbstractConstrainedMinimisation):
     Classification: PLR-P1-2
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         # a matrix from AMPL formulation (16x16 sparse matrix)
         a = jnp.zeros((16, 16))

@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -33,6 +34,9 @@ class LUKVLE8(AbstractConstrainedMinimisation):
 
     Classification: OOR2-AY-V-V
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 10000  # Default dimension, can be overridden
 
@@ -123,9 +127,11 @@ class LUKVLE8(AbstractConstrainedMinimisation):
         k_plus_1_1based = k_indices + 1
 
         # Compute all constraints at once
+        h_float = inexact_asarray(h)
+        k_plus_1_float = inexact_asarray(k_plus_1_1based)
         constraints = (
             2 * y_k_plus_1
-            + h**2 * (y_k_plus_1 + h * k_plus_1_1based + 1) ** 3 / 2
+            + h_float**2 * (y_k_plus_1 + h_float * k_plus_1_float + 1) ** 3 / 2
             - y_k
             - y_k_plus_2
         )

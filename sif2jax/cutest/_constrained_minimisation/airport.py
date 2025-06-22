@@ -8,6 +8,8 @@ from ..._problem import AbstractConstrainedMinimisation
 # TODO: Human review needed - constraint values don't match pycutest
 # The constraint formulation seems correct based on AMPL model, but
 # pycutest returns very different values at the starting point
+# The SIF file indicates constraints should be (x-cx)^2 + (y-cy)^2 >= r
+# but pycutest values suggest a different formulation
 class AIRPORT(AbstractConstrainedMinimisation):
     """Localization of airports in Brazil.
 
@@ -26,6 +28,9 @@ class AIRPORT(AbstractConstrainedMinimisation):
 
     Classification: SQR2-MN-84-42
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n_airports: int = 42
     cx: Array = eqx.field(init=False)
@@ -212,15 +217,15 @@ class AIRPORT(AbstractConstrainedMinimisation):
         x = y[: self.n_airports]
         y_coords = y[self.n_airports :]
 
-        # Compute constraints: (x - cx)^2 + (y - cy)^2 <= r^2 for each city
-        # Based on pycutest values, it seems r might need to be squared
+        # Compute constraints: (x - cx)^2 + (y - cy)^2 >= r for each city
+        # This is equivalent to dist_sq - r >= 0
         constraints = []
         for i in range(self.n_airports):
             dx = x[i] - self.cx[i]
             dy = y_coords[i] - self.cy[i]
             dist_sq = dx * dx + dy * dy
-            # Constraint: dist_sq - r^2 <= 0, or r^2 - dist_sq >= 0
-            constraints.append(self.r[i] * self.r[i] - dist_sq)
+            # Constraint: dist_sq - r >= 0
+            constraints.append(dist_sq - self.r[i])
 
         return None, jnp.array(constraints)
 

@@ -1,0 +1,572 @@
+{
+  "HS10": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS100": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS101": {
+    "equality_count": 0,
+    "inequality_types": []
+  },
+  "HS102": {
+    "equality_count": 0,
+    "inequality_types": []
+  },
+  "HS103": {
+    "equality_count": 0,
+    "inequality_types": []
+  },
+  "HS104": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L",
+      "L",
+      "L",
+      "L",
+      "R"
+    ]
+  },
+  "HS105": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS106": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS107": {
+    "equality_count": 6,
+    "inequality_types": []
+  },
+  "HS108": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "L",
+      "G",
+      "G",
+      "G",
+      "L"
+    ]
+  },
+  "HS109": {
+    "equality_count": 2,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS11": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS111": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS112": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS113": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS114": {
+    "equality_count": 3,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS116": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "R",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS117": {
+    "equality_count": 0,
+    "inequality_types": []
+  },
+  "HS118": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS119": {
+    "equality_count": 0,
+    "inequality_types": []
+  },
+  "HS12": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS13": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS14": {
+    "equality_count": 1,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS15": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS16": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS17": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS18": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS19": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS20": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS21": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS22": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS23": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS24": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS26": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS27": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS28": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS29": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS30": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS31": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS32": {
+    "equality_count": 1,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS33": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS34": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS35": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS36": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS37": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS39": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS40": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS41": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS42": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS43": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS44": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G",
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS46": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS47": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS48": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS49": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS50": {
+    "equality_count": 0,
+    "inequality_types": []
+  },
+  "HS51": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS52": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS53": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS54": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS55": {
+    "equality_count": 6,
+    "inequality_types": []
+  },
+  "HS56": {
+    "equality_count": 0,
+    "inequality_types": []
+  },
+  "HS57": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS59": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G",
+      "G"
+    ]
+  },
+  "HS6": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS60": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS61": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS62": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS63": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS64": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L"
+    ]
+  },
+  "HS65": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS66": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS67": {
+    "equality_count": 0,
+    "inequality_types": []
+  },
+  "HS68": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS69": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS7": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS70": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS71": {
+    "equality_count": 1,
+    "inequality_types": [
+      "G"
+    ]
+  },
+  "HS72": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS73": {
+    "equality_count": 1,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS74": {
+    "equality_count": 3,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS75": {
+    "equality_count": 3,
+    "inequality_types": [
+      "G",
+      "G"
+    ]
+  },
+  "HS76": {
+    "equality_count": 0,
+    "inequality_types": [
+      "L",
+      "L",
+      "G"
+    ]
+  },
+  "HS77": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS78": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS79": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS8": {
+    "equality_count": 2,
+    "inequality_types": []
+  },
+  "HS80": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS81": {
+    "equality_count": 3,
+    "inequality_types": []
+  },
+  "HS83": {
+    "equality_count": 0,
+    "inequality_types": [
+      "R",
+      "R",
+      "R"
+    ]
+  },
+  "HS84": {
+    "equality_count": 0,
+    "inequality_types": []
+  },
+  "HS9": {
+    "equality_count": 1,
+    "inequality_types": []
+  },
+  "HS93": {
+    "equality_count": 0,
+    "inequality_types": [
+      "G",
+      "L"
+    ]
+  },
+  "HS99": {
+    "equality_count": 0,
+    "inequality_types": []
+  }
+}

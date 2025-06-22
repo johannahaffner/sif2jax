@@ -25,6 +25,9 @@ class DANIWOOD(AbstractConstrainedMinimisation):
     Classification: NOR2-MN-2-6
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Data values
     x_data = jnp.array([1.309, 1.471, 1.490, 1.565, 1.611, 1.680])
     y_data = jnp.array([2.138, 3.421, 3.597, 4.340, 4.882, 5.660])

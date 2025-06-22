@@ -12,6 +12,9 @@ class LANCZOS1LS(_AbstractLanczos):
     with known parameter values.
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def _data(self):
         """Initialize y_values based on the exact model."""
         # The y values are artificially created with known parameter values

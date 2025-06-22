@@ -1,26 +1,29 @@
-"""
-PENTAGON problem.
-
-An approximation to the problem of finding 3 points in a 2D
-pentagon whose minimal distance is maximal.
-
-Source:
-M.J.D. Powell,
-" TOLMIN: a Fortran package for linearly constrained
-optimization problems",
-Report DAMTP 1989/NA2, University of Cambridge, UK, 1989.
-
-SIF input: Ph. Toint, May 1990.
-
-classification OLR2-AY-6-15
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class PENTAGON(AbstractConstrainedMinimisation):
+    """
+    PENTAGON problem.
+
+    An approximation to the problem of finding 3 points in a 2D
+    pentagon whose minimal distance is maximal.
+
+    Source:
+    M.J.D. Powell,
+    " TOLMIN: a Fortran package for linearly constrained
+    optimization problems",
+    Report DAMTP 1989/NA2, University of Cambridge, UK, 1989.
+
+    SIF input: Ph. Toint, May 1990.
+
+    classification OLR2-AY-6-15
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
         x1, y1, x2, y2, x3, y3 = y

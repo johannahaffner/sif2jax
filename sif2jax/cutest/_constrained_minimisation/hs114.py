@@ -25,6 +25,9 @@ class HS114(AbstractConstrainedMinimisation):
     Classification: QQR-P1-6
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3, x4, x5, x6, x7, x8, x9, x10 = y
         return 5.04 * x1 + 0.035 * x2 + 10 * x3 + 3.36 * x5 - 0.063 * x4 * x7

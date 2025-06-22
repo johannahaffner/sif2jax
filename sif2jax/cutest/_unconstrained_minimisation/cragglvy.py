@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class CRAGGLVY(AbstractUnconstrainedMinimisation):
 
     Classification: OUR2-AY-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     m: int = 2499  # Number of group sets (default 2499, n=5000)
     # Other suggested values: 1, 4, 24, 49, 249, 499, 2499
@@ -83,7 +87,7 @@ class CRAGGLVY(AbstractUnconstrainedMinimisation):
         # Initial values from SIF file (all 2.0 except x1 = 1.0)
         y_init = 2.0 * jnp.ones(self.n)
         y_init = y_init.at[0].set(1.0)
-        return y_init
+        return inexact_asarray(y_init)
 
     def args(self):
         return None

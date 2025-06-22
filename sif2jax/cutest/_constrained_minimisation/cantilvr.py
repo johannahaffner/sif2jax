@@ -1,27 +1,26 @@
-"""
-CANTILVR problem.
-
-Computation of a minimum weight cantilever consisting of 5 sections of
-square shaped tube of given thickness.
-
-Source:
-an example in a talk by W.K. Zhang and C. Fleury, LLN, 1994.
-
-SIF input: Ph. Toint, November 1994
-           correction by S. Gratton & Ph. Toint, May 2024
-
-classification LOR2-MN-5-1
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class CANTILVR(AbstractConstrainedMinimisation):
-    def __init__(self, n: int = 5):
-        del n
-        super().__init__()
+    """
+    CANTILVR problem.
+
+    Computation of a minimum weight cantilever consisting of 5 sections of
+    square shaped tube of given thickness.
+
+    Source:
+    an example in a talk by W.K. Zhang and C. Fleury, LLN, 1994.
+
+    SIF input: Ph. Toint, November 1994
+               correction by S. Gratton & Ph. Toint, May 2024
+
+    classification LOR2-MN-5-1
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args

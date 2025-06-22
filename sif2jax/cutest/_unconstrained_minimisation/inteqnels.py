@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -26,6 +27,9 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 502  # Default value to match pycutest
 
     def objective(self, y, args):
@@ -34,7 +38,7 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
         h = 1.0 / (n - 1)  # Match the starting point indexing
 
         # t_i = ih for i = 0, 1, ..., n-1 (to match starting point)
-        t = jnp.arange(n) * h
+        t = inexact_asarray(jnp.arange(n)) * h
 
         # y represents x_0, x_1, ..., x_{n-1}
         x = y
@@ -82,12 +86,12 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
         This gives t_i = ih and ξ_i = t_i(t_i - 1) starting with ξ_0 = 0.
         """
         n = self.n
-        h = 1.0 / (n - 1)  # This matches PyCUTEst behavior
+        h = jnp.array(1.0) / (n - 1)  # This matches PyCUTEst behavior
         # For i = 0, 1, 2, ..., n-1, compute t_i = i*h and ξ_i = t_i*(t_i - 1)
         i_vals = jnp.arange(n)
-        t_vals = i_vals * h
+        t_vals = i_vals.astype(h.dtype) * h
         xi_vals = t_vals * (t_vals - 1.0)
-        return xi_vals
+        return inexact_asarray(xi_vals)
 
     def args(self):
         """No additional arguments needed."""

@@ -20,6 +20,9 @@ class TRUSPYR2(AbstractConstrainedMinimisation):
     Classification: LQR2-MN-11-11
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables (8 cross-sectional areas + 3 displacements)."""

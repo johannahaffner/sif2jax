@@ -25,6 +25,9 @@ class EG2(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-1000-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 1000  # Problem specifies N=1000
 
     def objective(self, y, args):

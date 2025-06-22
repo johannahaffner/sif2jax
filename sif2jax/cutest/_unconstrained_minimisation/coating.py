@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -22,6 +23,9 @@ class COATING(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-MN-134-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 134  # Number of variables
     m: int = 252  # Number of data points
@@ -373,7 +377,7 @@ class COATING(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file (all ones)
-        return jnp.ones(self.n)
+        return inexact_asarray(jnp.ones(self.n))
 
     def args(self):
         return None

@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -19,6 +20,9 @@ class HATFLDGLS(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-AY-25-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args
@@ -39,7 +43,7 @@ class HATFLDGLS(AbstractUnconstrainedMinimisation):
         def compute_2pri_element(i):
             return (y[i] + 1.0) * (y[i - 1] + 1.0 - y[i + 1])
 
-        indices = jnp.arange(1, len(y) - 1)
+        indices = inexact_asarray(jnp.arange(1, len(y)) * 1)
         inner_residuals = jax.vmap(compute_2pri_element)(indices)
         residuals = residuals.at[1:-1].add(inner_residuals)
 
@@ -51,7 +55,7 @@ class HATFLDGLS(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial point from SIF file (line 57)
-        return jnp.ones(25)  # Hard-coded as 25 per SIF file
+        return inexact_asarray(jnp.ones(25))  # Hard-coded as 25 per SIF file
 
     def args(self):
         return None

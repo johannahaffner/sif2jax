@@ -21,6 +21,9 @@ class EIGENBLS(EIGEN):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def _matrix(self):
         # Matrix B is tridiagonal with 2 on diagonal and -1 on off-diagonals
         diag = jnp.full(self.n, 2.0)

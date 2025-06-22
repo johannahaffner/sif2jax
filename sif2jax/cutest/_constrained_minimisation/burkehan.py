@@ -1,27 +1,26 @@
-"""
-BURKEHAN problem.
-
-An infeasible problem.
-
-Source:
-J. V. Burke and S. P. Han,
-"A robust SQP method",
-Mathematical Programming 43 1989:277-303
-
-SIF input: Nick Gould, May 2008
-
-classification QOR2-AN-1-1
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class BURKEHAN(AbstractConstrainedMinimisation):
-    def __init__(self, n: int = 1):
-        del n
-        super().__init__()
+    """
+    BURKEHAN problem.
+
+    An infeasible problem.
+
+    Source:
+    J. V. Burke and S. P. Han,
+    "A robust SQP method",
+    Mathematical Programming 43 1989:277-303
+
+    SIF input: Nick Gould, May 2008
+
+    classification QOR2-AN-1-1
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args

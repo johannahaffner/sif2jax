@@ -48,6 +48,9 @@ class HS67(AbstractConstrainedMinimisation):
     a coefficient of approximately 0.062 instead of 0.063 for the Y2*Y5 term.
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def _fixed_point_scan(self, update_fn, init_val, max_iter=50):
         """Solve fixed point equation using jax.lax.scan for differentiability."""
 

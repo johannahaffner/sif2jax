@@ -7,40 +7,16 @@ import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
 
 
-def get_test_cases(requested):
-    if requested is not None:
-        # Split by comma and strip whitespace
-        test_case_names = [name.strip() for name in requested.split(",")]
-        test_cases = []
-
-        for name in test_case_names:
-            try:
-                test_case = sif2jax.cutest.get_problem(name)
-                assert (
-                    test_case is not None
-                ), f"Test case '{name}' not found in sif2jax.cutest problems."
-                test_cases.append(test_case)
-            except Exception as e:
-                raise RuntimeError(
-                    f"Test case '{name}' not found in sif2jax.cutest problems."
-                ) from e
-        return tuple(test_cases)
-    else:
-        return sif2jax.problems
-
-
-def pytest_generate_tests(metafunc):
-    if "problem" in metafunc.fixturenames:
-        requested = metafunc.config.getoption("--test-case")
-        test_cases = get_test_cases(requested)
-        metafunc.parametrize("problem", test_cases, scope="class")
+# pytest_generate_tests is now handled in conftest.py
 
 
 class TestProblem:
+    """Test class for CUTEst problems."""
+
     @pytest.fixture(scope="class")
     def pycutest_problem(self, problem):
         """Load pycutest problem once per problem per class."""
-        return pycutest.import_problem(problem.name())
+        return pycutest.import_problem(problem.name)
 
     def test_correct_name(self, pycutest_problem):
         assert pycutest_problem is not None
@@ -120,6 +96,22 @@ class TestProblem:
         else:
             pytest.skip("Problem has no constraints")
 
+    # def test_correct_options(self, problem, pycutest_problem):
+    #     """Test for multiple starting points - not yet implemented in pycutest."""
+    #     print(pycutest.print_available_sif_params(problem.name))
+    #     if pycutest_problem.sifOptions is not None:
+    #         print(pycutest_problem.sifOptions)
+    #         print(problem.y0_iD)
+    #         print(problem.provided_y0s)
+    #         pass
+    #     elif pycutest_problem.sifParams is not None:
+    #         print(pycutest_problem.sifParams)
+    #         print(problem.y0_iD)
+    #         print(problem.provided_y0s)
+    #         pass
+    #     else:
+    #         pytest.skip("Problem has no SIF options to specify.")
+
     @pytest.mark.skip(
         reason="Seems to be a likely culprint in memory failure in CI. FIX"
     )
@@ -128,7 +120,7 @@ class TestProblem:
             compiled = jax.jit(problem.objective)
             _ = compiled(problem.y0(), problem.args())
         except Exception as e:
-            raise RuntimeError(f"Compilation failed for {problem.name()}") from e
+            raise RuntimeError(f"Compilation failed for {problem.name}") from e
         jax.clear_caches()
 
     def test_vmap(self, problem):
@@ -137,4 +129,4 @@ class TestProblem:
             y0 = problem.y0()
             _ = vmapped(jnp.array([y0, y0, y0]), problem.args())
         except Exception as e:
-            raise RuntimeError(f"Vmap failed for {problem.name()}") from e
+            raise RuntimeError(f"Vmap failed for {problem.name}") from e

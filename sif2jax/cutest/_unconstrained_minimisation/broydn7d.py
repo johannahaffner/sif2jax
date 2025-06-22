@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -18,6 +19,9 @@ class BROYDN7D(AbstractUnconstrainedMinimisation):
 
     Classification: OUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 5000  # Dimension of the problem (should be even)
 
@@ -61,7 +65,7 @@ class BROYDN7D(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file (all 1.0)
-        return jnp.ones(self.n)
+        return inexact_asarray(jnp.ones(self.n))
 
     def args(self):
         return None

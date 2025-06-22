@@ -1,26 +1,25 @@
-"""
-BYRDSPHR problem.
-
-Minimize a linear function in the intersection of two spheres.
-
-Source:
-R. Byrd,
-Private communication, Chicago, 1992.
-
-SIF input: Ph. Toint, November 1992.
-
-classification LQR2-AN-3-2
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class BYRDSPHR(AbstractConstrainedMinimisation):
-    def __init__(self, n: int = 3):
-        del n
-        super().__init__()
+    """
+    BYRDSPHR problem.
+
+    Minimize a linear function in the intersection of two spheres.
+
+    Source:
+    R. Byrd,
+    Private communication, Chicago, 1992.
+
+    SIF input: Ph. Toint, November 1992.
+
+    classification LQR2-AN-3-2
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args

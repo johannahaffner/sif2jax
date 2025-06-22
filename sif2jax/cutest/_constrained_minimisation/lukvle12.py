@@ -42,6 +42,9 @@ class LUKVLE12(AbstractConstrainedMinimisation):
     Classification: OOR2-AY-V-V
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 9997  # Default dimension, must satisfy (n-1) divisible by 4
 
     def objective(self, y, args):

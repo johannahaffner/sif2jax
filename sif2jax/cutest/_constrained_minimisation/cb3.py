@@ -1,27 +1,26 @@
-"""
-CB3 problem.
-
-A nonlinear minmax problem.
-
-Source:
-R. Wommersley and R. Fletcher,
-"An algorithm for composite nonsmooth optimization problems"
-JOTA, vol.48, pp.493-523, 1986
-
-SIF input: Ph. Toint, April 1992.
-
-classification LOR2-AN-3-3
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class CB3(AbstractConstrainedMinimisation):
-    def __init__(self, n: int = 3):
-        del n
-        super().__init__()
+    """
+    CB3 problem.
+
+    A nonlinear minmax problem.
+
+    Source:
+    R. Wommersley and R. Fletcher,
+    "An algorithm for composite nonsmooth optimization problems"
+    JOTA, vol.48, pp.493-523, 1986
+
+    SIF input: Ph. Toint, April 1992.
+
+    classification LOR2-AN-3-3
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     def objective(self, y, args):
         del args

@@ -32,6 +32,9 @@ class HS103(AbstractConstrainedMinimisation):
     Classification: PPR-P1-(8,9,10)
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2, x3, x4, x5, x6, x7 = y
         a = 0.5  # Parameter for HS103

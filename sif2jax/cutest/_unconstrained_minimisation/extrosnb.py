@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class EXTROSNB(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 1000  # Default dimension (other suggested dimensions: 5, 10, 100)
 
@@ -50,7 +54,7 @@ class EXTROSNB(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Starting point from the SIF file: all variables = -1.0
-        return jnp.full(self.n, -1.0)
+        return inexact_asarray(jnp.full(self.n, -1.0))
 
     def args(self):
         return None

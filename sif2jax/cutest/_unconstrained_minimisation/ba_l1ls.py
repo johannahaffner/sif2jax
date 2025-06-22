@@ -26,6 +26,10 @@ class BA_L1LS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-57-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
+    @property
     @override
     def name(self):
         return "BA-L1LS"

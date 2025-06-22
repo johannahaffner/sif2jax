@@ -24,8 +24,12 @@ class TENFOLDTRLS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 1000  # Problem dimension, SIF file suggests 4, 10, 100, or 1000
 
+    @property
     @override
     def name(self):
         return "10FOLDTRLS"

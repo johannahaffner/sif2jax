@@ -30,6 +30,9 @@ class BT5(AbstractConstrainedMinimisation):
     Note: The SIF file has -1000 as the constant, but AMPL and pycutest implement +1000.
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     y0_id: int = 0
     provided_y0s: frozenset = frozenset({0, 1, 2})
 

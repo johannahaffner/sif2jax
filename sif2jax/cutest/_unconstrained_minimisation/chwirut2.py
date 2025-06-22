@@ -20,6 +20,9 @@ class CHWIRUT2(AbstractUnconstrainedMinimisation):
     Classification: NOR2-MN-3-54
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # TODO: This problem has 54 data points defined in the SIF file
     # However, it should ideally use external data file for consistency with NIST
 

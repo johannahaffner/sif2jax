@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class GAUSS2LS(AbstractUnconstrainedMinimisation):
 
     Classification SUR2-MN-8-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 8
 
@@ -312,7 +316,9 @@ class GAUSS2LS(AbstractUnconstrainedMinimisation):
     def y0(self):
         """Return the starting point from the SIF file."""
         # START1 values from GAUSS2LS.SIF file
-        return jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
+        return inexact_asarray(
+            jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
+        )
 
     def args(self):
         """Return None as no additional args are needed."""

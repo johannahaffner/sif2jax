@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -35,6 +36,9 @@ class LUKVLI7(AbstractConstrainedMinimisation):
     Classification: OOR2-AY-V-V
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 10000  # Default dimension, can be overridden
 
     def objective(self, y, args):
@@ -59,13 +63,13 @@ class LUKVLI7(AbstractConstrainedMinimisation):
         terms = main_terms + sin_x_i_minus_1 - sin_x_i_plus_1
 
         # Multiply by i (1-based indexing)
-        i_values = jnp.arange(1, n + 1)
+        i_values = inexact_asarray(jnp.arange(1, n + 1))
 
         return jnp.sum(i_values * terms)
 
     def y0(self):
         # Starting point: x_i = 1 for all i
-        return jnp.ones(self.n)
+        return inexact_asarray(jnp.ones(self.n))
 
     def args(self):
         return None

@@ -1,27 +1,30 @@
-"""
-POWER problem.
-
-The Power problem by Oren.
-
-Source:
-S.S. Oren,
-Self-scaling variable metric algorithms,
-Part II: implementation and experiments"
-Management Science 20(5):863-874, 1974.
-
-See also Buckley#179 (p. 83)
-
-SIF input: Ph. Toint, Dec 1989.
-
-classification OUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class POWER(AbstractUnconstrainedMinimisation):
+    """
+    POWER problem.
+
+    The Power problem by Oren.
+
+    Source:
+    S.S. Oren,
+    Self-scaling variable metric algorithms,
+    Part II: implementation and experiments"
+    Management Science 20(5):863-874, 1974.
+
+    See also Buckley#179 (p. 83)
+
+    SIF input: Ph. Toint, Dec 1989.
+
+    classification OUR2-AN-V-0
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     n: int = 10000
 
     def objective(self, y, args):
@@ -39,7 +42,7 @@ class POWER(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Starting point: all variables at 1.0
-        return jnp.ones(self.n)
+        return inexact_asarray(jnp.ones(self.n))
 
     def args(self):
         return None

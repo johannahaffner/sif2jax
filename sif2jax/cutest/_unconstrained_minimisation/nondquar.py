@@ -1,29 +1,31 @@
-"""
-NONDQUAR problem.
-
-A nondiagonal quartic test problem.
-
-This problem has an arrow-head type Hessian with a tridiagonal
-central part and a border of width 1.
-The Hessian is singular at the solution.
-
-Source: problem 57 in
-A.R. Conn, N.I.M. Gould, M. Lescrenier and Ph.L. Toint,
-"Performance of a multi-frontal scheme for partially separable
-optimization"
-Report 88/4, Dept of Mathematics, FUNDP (Namur, B), 1988.
-
-SIF input: Ph. Toint, Dec 1989.
-
-classification OUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class NONDQUAR(AbstractUnconstrainedMinimisation):
+    """
+    NONDQUAR problem.
+
+    A nondiagonal quartic test problem.
+
+    This problem has an arrow-head type Hessian with a tridiagonal
+    central part and a border of width 1.
+    The Hessian is singular at the solution.
+
+    Source: problem 57 in
+    A.R. Conn, N.I.M. Gould, M. Lescrenier and Ph.L. Toint,
+    "Performance of a multi-frontal scheme for partially separable
+    optimization"
+    Report 88/4, Dept of Mathematics, FUNDP (Namur, B), 1988.
+
+    SIF input: Ph. Toint, Dec 1989.
+
+    classification OUR2-AN-V-0
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     n: int = 5000
 
     def objective(self, y, args):

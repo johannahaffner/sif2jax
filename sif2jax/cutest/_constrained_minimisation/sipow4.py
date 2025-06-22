@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
@@ -19,6 +20,9 @@ class SIPOW4(AbstractConstrainedMinimisation):
 
     Classification: LLR2-AN-4-V
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     @property
     def n(self):
@@ -49,7 +53,7 @@ class SIPOW4(AbstractConstrainedMinimisation):
         M_half = M // 2
 
         # Set up uniform spacings on the circle
-        theta = jnp.arange(1, M_half + 1) * 2.0 * jnp.pi / M
+        theta = inexact_asarray(jnp.arange(1, M_half + 1)) * 2.0 * jnp.pi / M
         pi_4_minus_theta = jnp.pi / 4.0 - theta
         cos_vals = jnp.cos(pi_4_minus_theta)
         sin_vals = jnp.sin(pi_4_minus_theta)
@@ -79,7 +83,7 @@ class SIPOW4(AbstractConstrainedMinimisation):
 
     def y0(self):
         """Initial guess."""
-        return jnp.array([-0.1, 0.0, 0.0, 1.2])
+        return inexact_asarray(jnp.array([-0.1, 0.0, 0.0, 1.2]))
 
     def args(self):
         """Additional arguments (none for this problem)."""

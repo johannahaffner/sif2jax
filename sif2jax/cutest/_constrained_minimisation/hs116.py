@@ -25,6 +25,9 @@ class HS116(AbstractConstrainedMinimisation):
     Classification: LQR-P1-6
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         return y[10] + y[11] + y[12]  # x₁₁ + x₁₂ + x₁₃
 

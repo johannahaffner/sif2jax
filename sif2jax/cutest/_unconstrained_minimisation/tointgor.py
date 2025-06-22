@@ -26,6 +26,9 @@ class TOINTGOR(AbstractUnconstrainedMinimisation):
     Classification: OUR2-MN-50-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables."""

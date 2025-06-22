@@ -19,16 +19,17 @@ _ConstraintOut = (
 class AbstractProblem(eqx.Module):
     """Abstract base class for benchmark problems."""
 
-    y0_iD: int = 0
-    provided_y0s: frozenset = frozenset({0})
+    y0_iD: eqx.AbstractVar[int]
+    provided_y0s: eqx.AbstractVar[frozenset]
 
     def __check_init__(self):
         if self.y0_iD not in self.provided_y0s:
             raise ValueError(
                 f"y0_iD {self.y0_iD} is not one of the accepted values for problem "
-                f"{self.name()}. Accepted values are {sorted(self.provided_y0s)}."
+                f"{self.name}. Accepted values are {sorted(self.provided_y0s)}."
             )
 
+    @property
     def name(self):
         """Returns the name of the benchmark problem, which should be the same as the
         name of the class that implements it. For CUTEST problems, this is the name of

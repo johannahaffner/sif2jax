@@ -21,6 +21,9 @@ class KOWOSB(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-4-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def model(self, u, params):
         """Compute the model function: (v1 * (u^2 + u*v2)) / (u^2 + u*v3 + v4)"""
         v1, v2, v3, v4 = params

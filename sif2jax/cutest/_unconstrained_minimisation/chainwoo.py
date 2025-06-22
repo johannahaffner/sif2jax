@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -26,6 +27,9 @@ class CHAINWOO(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 4000  # Dimension of the problem (2*ns + 2)
     ns: int = 1999  # Number of sets (default 1999, which gives n=4000)
@@ -85,7 +89,7 @@ class CHAINWOO(AbstractUnconstrainedMinimisation):
         y_init = y_init.at[2].set(-3.0)  # X3
         y_init = y_init.at[3].set(-1.0)  # X4
 
-        return y_init
+        return inexact_asarray(y_init)
 
     def args(self):
         return None

@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -16,6 +17,9 @@ class TRIGON1(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-MN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     _n: int = 10
 
@@ -34,8 +38,9 @@ class TRIGON1(AbstractUnconstrainedMinimisation):
         def compute_residual(i):
             # F(i) = sum cos(x_j) + (i+1) * (cos(x_i) + sin(x_i)) - (n + i + 1)
             cos_sum = jnp.sum(jnp.cos(x))
-            individual_term = (i + 1) * (jnp.cos(x[i]) + jnp.sin(x[i]))
-            target = n + i + 1
+            i_float = inexact_asarray(i)
+            individual_term = (i_float + 1) * (jnp.cos(x[i]) + jnp.sin(x[i]))
+            target = float(n) + i_float + 1
             return cos_sum + individual_term - target
 
         residuals = jax.vmap(compute_residual)(jnp.arange(n))
@@ -43,7 +48,7 @@ class TRIGON1(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         """Initial guess."""
-        return jnp.full(self.n, 0.1)
+        return inexact_asarray(jnp.full(self.n, 0.1))
 
     def args(self):
         """Additional arguments (none for this problem)."""

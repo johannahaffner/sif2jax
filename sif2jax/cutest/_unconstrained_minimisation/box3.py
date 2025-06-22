@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class BOX3(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-3-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 3  # Problem has 3 variables
     m: int = 10  # Number of data points
 
@@ -35,13 +39,14 @@ class BOX3(AbstractUnconstrainedMinimisation):
 
         # Define inner function to compute residual for a single index i
         def compute_residual(i):
-            t_i = -0.1 * i
+            i_float = inexact_asarray(i)
+            t_i = -0.1 * i_float
 
             # Compute exp(-0.1*i*x1) - exp(-0.1*i*x2)
             term1 = jnp.exp(t_i * x1) - jnp.exp(t_i * x2)
 
             # Compute coefficient: -exp(-0.1*i) + exp(-i)
-            coeff = -jnp.exp(t_i) + jnp.exp(-i)
+            coeff = -jnp.exp(t_i) + jnp.exp(-i_float)
 
             # Compute the residual: x3 * coeff + term1
             residual = x3 * coeff + term1
@@ -54,7 +59,7 @@ class BOX3(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial values from SIF file
-        return jnp.array([0.0, 10.0, 1.0])
+        return inexact_asarray(jnp.array([0.0, 10.0, 1.0]))
 
     def args(self):
         return None

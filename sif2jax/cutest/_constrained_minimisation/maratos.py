@@ -1,26 +1,29 @@
-"""
-MARATOS problem.
-
-The Maratos problem with penalty parameter = 0.000001
-
-Source:
-A.A. Brown and M. Bartholomew-Biggs,
-"Some effective methods for unconstrained optimization based on
-the solution of ordinary differential equations",
-Technical Report 178, Numerical Optimization Centre, Hatfield
-Polytechnic, (Hatfield, UK), 1987.
-
-SIF input: Nick Gould, June 1990.
-
-classification QQR2-AN-2-1
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class MARATOS(AbstractConstrainedMinimisation):
+    """
+    MARATOS problem.
+
+    The Maratos problem with penalty parameter = 0.000001
+
+    Source:
+    A.A. Brown and M. Bartholomew-Biggs,
+    "Some effective methods for unconstrained optimization based on
+    the solution of ordinary differential equations",
+    Technical Report 178, Numerical Optimization Centre, Hatfield
+    Polytechnic, (Hatfield, UK), 1987.
+
+    SIF input: Nick Gould, June 1990.
+
+    classification QQR2-AN-2-1
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
         x1, x2 = y

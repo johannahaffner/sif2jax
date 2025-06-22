@@ -27,6 +27,9 @@ class CERI651ELS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-7-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 7  # Number of variables
     m: int = 64  # Number of data points
 

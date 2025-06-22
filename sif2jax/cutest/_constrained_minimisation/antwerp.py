@@ -31,6 +31,9 @@ class ANTWERP(AbstractConstrainedMinimisation):
     Classification: SLR2-RN-27-8-0-3-24-0-2-0-8-0-0-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Problem data - demographic statistics for Antwerp
     # Number of households by size
     m3: float = 5827.0

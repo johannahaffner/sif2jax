@@ -36,6 +36,9 @@ class LUKVLE16(AbstractConstrainedMinimisation):
     Classification: OOR2-AY-V-V
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 9997  # Default dimension, (n-1) must be divisible by 4
 
     def objective(self, y, args):
@@ -103,29 +106,34 @@ class LUKVLE16(AbstractConstrainedMinimisation):
 
         # From SIF file: DO loop with DI K 3, so K = 1, 4, 7, ...
         # For each K, we create C(K), C(K+1), C(K+2)
-        num_triplets = n_c // 3
-        constraints = []
+        # Vectorized implementation
 
-        for i in range(num_triplets):
-            k = 3 * i + 1  # K = 1, 4, 7, ... in 1-based
-            k_idx = k - 1  # Convert to 0-based
+        # Pad y to ensure we can access all required indices
+        max_idx = n_c + 4  # Maximum index we might need
+        if max_idx > n:
+            padding = max_idx - n
+            y = jnp.pad(y, (0, padding), mode="constant", constant_values=0)
 
-            # C(K): 3*X(K+1) + E(K) - 4
-            # E(K) uses X(K) with SQR
-            if k_idx + 1 < n:
-                c1 = 3 * y[k_idx + 1] + y[k_idx] ** 2 - 4
-                constraints.append(c1)
+        # Create indices for all constraints
+        # K = 1, 4, 7, ... (1-based) -> 0, 3, 6, ... (0-based)
+        k_indices = jnp.arange(0, n_c, 3)
 
-            # C(K+1): X(K+3) - 2*X(K+4) + E(K+1)
-            # E(K+1) uses X(K+2) with SQR
-            if k_idx + 4 < n:
-                c2 = y[k_idx + 3] - 2 * y[k_idx + 4] + y[k_idx + 2] ** 2
-                constraints.append(c2)
+        # C(K): 3*X(K+1) + E(K) - 4, where E(K) = X(K)^2
+        c1_indices = k_indices
+        c1 = 3 * y[c1_indices + 1] + y[c1_indices] ** 2 - 4
 
-            # C(K+2): -X(K+4) + E(K+2)
-            # E(K+2) uses X(K+1) with SQR
-            if k_idx + 4 < n:
-                c3 = -y[k_idx + 4] + y[k_idx + 1] ** 2
-                constraints.append(c3)
+        # C(K+1): X(K+3) - 2*X(K+4) + E(K+1), where E(K+1) = X(K+2)^2
+        c2_indices = k_indices + 1
+        c2 = y[c2_indices + 2] - 2 * y[c2_indices + 3] + y[c2_indices + 1] ** 2
 
-        return jnp.array(constraints), None
+        # C(K+2): -X(K+4) + E(K+2), where E(K+2) = X(K+1)^2
+        c3_indices = k_indices + 2
+        c3 = -y[c3_indices + 2] + y[c3_indices - 1] ** 2
+
+        # Interleave the constraints to maintain the original order
+        constraints = jnp.zeros(n_c)
+        constraints = constraints.at[::3].set(c1)
+        constraints = constraints.at[1::3].set(c2[: len(constraints[1::3])])
+        constraints = constraints.at[2::3].set(c3[: len(constraints[2::3])])
+
+        return constraints, None

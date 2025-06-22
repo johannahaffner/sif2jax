@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -15,6 +16,9 @@ class EIGEN(AbstractUnconstrainedMinimisation):
 
     Source: Originating from T.F. Coleman and P.A. Liao
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 50  # Default dimension - individual problems may override
 
@@ -57,9 +61,11 @@ class EIGEN(AbstractUnconstrainedMinimisation):
         triu_mask = jnp.triu(jnp.ones((self.n, self.n), dtype=bool))
 
         # Compute objective: sum of squared residuals for upper triangular part
-        total_obj = jnp.sum(e_residual**2 * triu_mask) + jnp.sum(
-            o_residual**2 * triu_mask
-        )
+        # Use where to avoid boolean multiplication issues
+        e_squared = jnp.where(triu_mask, e_residual**2, 0.0)
+        o_squared = jnp.where(triu_mask, o_residual**2, 0.0)
+        # Cast to ensure pyright understands these are arrays
+        total_obj = jnp.sum(jnp.asarray(e_squared)) + jnp.sum(jnp.asarray(o_squared))
 
         return total_obj
 
@@ -78,10 +84,11 @@ class EIGEN(AbstractUnconstrainedMinimisation):
 
         # Set Q diagonal to 1.0 (identity matrix)
         # Q is stored column-wise, so Q(j,j) is at position j in column j
-        for j in range(self.n):
-            y_reshaped = y_reshaped.at[j, j + 1].set(1.0)
+        # Vectorized approach: create diagonal indices
+        diag_indices = jnp.arange(self.n)
+        y_reshaped = y_reshaped.at[diag_indices, diag_indices + 1].set(1.0)
 
-        return y_reshaped.ravel()
+        return inexact_asarray(y_reshaped.ravel())
 
     def args(self):
         return None

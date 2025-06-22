@@ -1,38 +1,41 @@
-"""
-PENALTY2 problem.
-
-The second penalty function
-
-This is a nonlinear least-squares problem with M=2*N groups.
- Group 1 is linear.
- Groups 2 to N use 2 nonlinear elements.
- Groups N+1 to M-1 use 1 nonlinear element.
- Group M uses N nonlinear elements.
-The Hessian matrix is dense.
-
-Source:  Problem 24 in
-J.J. More', B.S. Garbow and K.E. Hillstrom,
-"Testing Unconstrained Optimization Software",
-ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
-
-See also Buckley#112 (p. 80)
-
-SIF input: Ph. Toint, Dec 1989.
-
-classification SUR2-AN-V-0
-
-TODO: Human review needed
-Attempts made: Multiple interpretations of SCALE factor in SIF
-Suspected issues: Incorrect understanding of how SCALE interacts with L2 groups
-The objective/gradient values are off by a factor of ~10^10
-"""
-
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class PENALTY2(AbstractUnconstrainedMinimisation):
+    """
+    PENALTY2 problem.
+
+    The second penalty function
+
+    This is a nonlinear least-squares problem with M=2*N groups.
+     Group 1 is linear.
+     Groups 2 to N use 2 nonlinear elements.
+     Groups N+1 to M-1 use 1 nonlinear element.
+     Group M uses N nonlinear elements.
+    The Hessian matrix is dense.
+
+    Source:  Problem 24 in
+    J.J. More', B.S. Garbow and K.E. Hillstrom,
+    "Testing Unconstrained Optimization Software",
+    ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+    See also Buckley#112 (p. 80)
+
+    SIF input: Ph. Toint, Dec 1989.
+
+    classification SUR2-AN-V-0
+
+    TODO: Human review needed
+    Attempts made: Multiple interpretations of SCALE factor in SIF
+    Suspected issues: Incorrect understanding of how SCALE interacts with L2 groups
+    The objective/gradient values are off by a factor of ~10^10
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     n: int = 200
 
     def objective(self, y, args):
@@ -86,7 +89,7 @@ class PENALTY2(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Standard starting point (0.5, ..., 0.5)
-        return 0.5 * jnp.ones(self.n)
+        return inexact_asarray(0.5 * jnp.ones(self.n))
 
     def args(self):
         return None

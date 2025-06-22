@@ -19,6 +19,9 @@ class ECKERLE4LS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-MN-3-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Allow selecting which starting point to use (0-based indexing)
     start_point: int = 0  # 0 or 1
     _allowed_start_points = frozenset({0, 1})

@@ -20,6 +20,9 @@ class POWELLSQ(AbstractConstrainedMinimisation):
                NIMG corrected July 2005 (thanks to Roger Fletcher)
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables."""

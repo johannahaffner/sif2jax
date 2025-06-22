@@ -25,6 +25,9 @@ class HS21(AbstractConstrainedMinimisation):
     Classification: QLR-T1-1
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2 = y
         return 0.01 * x1**2 + x2**2 - 100

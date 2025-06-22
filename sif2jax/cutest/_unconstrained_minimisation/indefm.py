@@ -1,29 +1,32 @@
-"""
-INDEFM problem.
-
-Variant of INDEF, a nonconvex problem which has an indefinite Hessian
-at the starting point, by Luksan et al
-
-Source: problem 37 in
-L. Luksan, C. Matonoha and J. Vlcek
-Modified CUTE problems for sparse unconstrained optimization
-Technical Report 1081
-Institute of Computer Science
-Academy of Science of the Czech Republic
-
-based on the original problem by N. Gould
-
-SIF input: Nick Gould, June, 2013
-
-classification OUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class INDEFM(AbstractUnconstrainedMinimisation):
+    """
+    INDEFM problem.
+
+    Variant of INDEF, a nonconvex problem which has an indefinite Hessian
+    at the starting point, by Luksan et al
+
+    Source: problem 37 in
+    L. Luksan, C. Matonoha and J. Vlcek
+    Modified CUTE problems for sparse unconstrained optimization
+    Technical Report 1081
+    Institute of Computer Science
+    Academy of Science of the Czech Republic
+
+    based on the original problem by N. Gould
+
+    SIF input: Nick Gould, June, 2013
+
+    classification OUR2-AN-V-0
+    """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
     n: int = 100000
     alpha: float = 0.5
 
@@ -50,7 +53,7 @@ class INDEFM(AbstractUnconstrainedMinimisation):
         # Starting point: X(I) = I/(N+1) for INDEF1
         # INDEF2 has all variables at 1000.0
         n = self.n
-        return jnp.arange(1.0, n + 1.0) / (n + 1.0)
+        return inexact_asarray(jnp.arange(1.0, n + 1.0)) / inexact_asarray(n + 1.0)
 
     def args(self):
         return None

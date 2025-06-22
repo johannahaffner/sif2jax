@@ -13,9 +13,13 @@ class BOXPOWER(AbstractUnconstrainedMinimisation):
     Classification: OUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 20000
     p: int = 9
 
+    @property
     def name(self):
         return "BOXPOWER"
 

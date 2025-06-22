@@ -26,6 +26,9 @@ class AKIVA(AbstractUnconstrainedMinimisation):
     to match the framework's requirements.
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
         (

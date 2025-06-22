@@ -27,6 +27,9 @@ class HS11(AbstractConstrainedMinimisation):
     Classification: QQR-T1-2
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         x1, x2 = y
         return (x1 - 5) ** 2 + x2**2 - 25

@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -19,6 +20,9 @@ class ARGLINC(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 200  # SIF file suggests 10, 50, 100, or 200
     m: int = 400  # SIF file suggests m >= n and values like 20, 100, 200, or 400
 
@@ -36,9 +40,13 @@ class ARGLINC(AbstractUnconstrainedMinimisation):
         # which is 1 to N-2 (0-based)
 
         # i-1 where i ranges from 2 to M-1 means (i-1) ranges from 1 to M-2
-        i_values = jnp.arange(1, m - 1)[:, None]  # Shape (m-2, 1), values 1 to m-2
+        i_values = jnp.arange(1, m - 1, dtype=jnp.float64)[
+            :, None
+        ]  # Shape (m-2, 1), values 1 to m-2
         # j ranges from 2 to N-1 in AMPL (1-based), so j values are 2 to N-1
-        j_values = jnp.arange(2, n)[None, :]  # Shape (1, n-2), values 2 to n-1
+        j_values = jnp.arange(2, n, dtype=jnp.float64)[
+            None, :
+        ]  # Shape (1, n-2), values 2 to n-1
         A = i_values * j_values  # Shape (m-2, n-2)
 
         # Extract x[j] for j from 2 to N-1 (AMPL), which is indices 1 to n-2 (0-based)
@@ -52,7 +60,7 @@ class ARGLINC(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial value of 1.0 as specified in the SIF file
-        return jnp.ones(self.n)
+        return inexact_asarray(jnp.ones(self.n))
 
     def args(self):
         return None

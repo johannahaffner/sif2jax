@@ -1,6 +1,7 @@
 import jax
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -35,6 +36,9 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
     Classification: SUR2-MN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     p: int = 10000  # Number of molecules (default 10000, can be 8, 100, 1000, 100000)
     n: int = 0  # Number of variables (will be set in __init__)
@@ -104,7 +108,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
         # Simple approach: distribute molecules evenly on a ring in the xy-plane
         p = self.p
         radius = jnp.sqrt(1.0)  # c = 1.0
-        angles = jnp.arange(p) * (2 * jnp.pi / p)
+        angles = inexact_asarray(jnp.arange(p)) * (2 * jnp.pi / p)
 
         # Compute coordinates for each molecule
         v = jnp.zeros((p, 3))

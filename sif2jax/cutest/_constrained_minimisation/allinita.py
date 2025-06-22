@@ -26,6 +26,9 @@ class ALLINITA(AbstractConstrainedMinimisation):
     For compatibility with pycutest, we handle this by removing the fixed variable.
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     @property
     def n(self):
         """Number of variables (excluding fixed X4)."""

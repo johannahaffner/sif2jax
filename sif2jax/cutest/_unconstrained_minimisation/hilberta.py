@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -22,6 +23,9 @@ class HILBERTA(AbstractUnconstrainedMinimisation):
     Classification: QUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 2  # Other suggested values: 4, 5, 6, 10, works for any positive integer
 
     def objective(self, y, args):
@@ -36,7 +40,7 @@ class HILBERTA(AbstractUnconstrainedMinimisation):
         i_grid, j_grid = jnp.meshgrid(i_indices, j_indices, indexing="ij")
 
         # Create the Hilbert matrix A[i,j] = 1/(i+j-1)
-        hilbert_matrix = 1.0 / (i_grid + j_grid - 1.0)
+        hilbert_matrix = 1.0 / inexact_asarray(i_grid + j_grid - 1)
 
         # Compute the quadratic form: 0.5 * x^T * A * x
         # Note: Need 0.5 factor to match PyCUTEst results
@@ -45,7 +49,7 @@ class HILBERTA(AbstractUnconstrainedMinimisation):
     def y0(self):
         # From AMPL data section: x[1] = -4, x[2] = -2, but default in SIF is -3.0
         # Let's use the SIF default for consistency
-        return jnp.full(self.n, -3.0)
+        return inexact_asarray(jnp.full(self.n, -3.0))
 
     def args(self):
         return None

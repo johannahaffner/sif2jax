@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from .eigen import EIGEN
 
 
@@ -21,6 +22,9 @@ class EIGENALS(EIGEN):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def _matrix(self):
         # Matrix A is diagonal with entries 1, 2, ..., n
-        return jnp.diag(jnp.arange(1, self.n + 1))
+        return inexact_asarray(jnp.diag(jnp.arange(1, self.n + 1)))

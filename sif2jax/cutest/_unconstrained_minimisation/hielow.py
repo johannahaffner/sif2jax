@@ -55,6 +55,9 @@ class HIELOW(AbstractUnconstrainedMinimisation):
       and one structural coefficient (THE1)
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     def objective(self, y, args):
         del args
 

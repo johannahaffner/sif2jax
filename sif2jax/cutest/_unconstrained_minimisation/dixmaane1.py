@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -23,6 +24,9 @@ class DIXMAANE1(AbstractUnconstrainedMinimisation):
 
     Classification: OUR2-AN-V-0
     """
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     n: int = 3000  # Default dimension
 
@@ -52,7 +56,9 @@ class DIXMAANE1(AbstractUnconstrainedMinimisation):
         # i_over_n not used directly
 
         # Compute the first term (type 1): sum(alpha * (i/n)^k1 * (x_i)^2)
-        term1 = alpha * jnp.sum(((jnp.arange(1, n + 1) / n) ** k1) * (y**2))
+        term1 = alpha * jnp.sum(
+            ((inexact_asarray(jnp.arange(1, n + 1)) / n) ** k1) * (y**2)
+        )
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
@@ -79,7 +85,7 @@ class DIXMAANE1(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # Initial value is 2.0 for all variables
-        return jnp.full(self.n, 2.0)
+        return inexact_asarray(jnp.full(self.n, 2.0))
 
     def args(self):
         return None

@@ -19,6 +19,9 @@ class ARGLINA(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     n: int = 200  # SIF file suggests 10, 50, 100, or 200
     m: int = 400  # SIF file suggests m >= n and values like 20, 100, 200, or 400
 

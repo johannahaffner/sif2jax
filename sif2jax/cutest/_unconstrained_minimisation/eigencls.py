@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from .eigen import EIGEN
 
 
@@ -21,6 +22,9 @@ class EIGENCLS(EIGEN):
     Classification: SUR2-AN-V-0
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     m: int = 25  # Parameter M from SIF file
     n: int = 51  # Matrix dimension = 2*M+1 = 51
 
@@ -34,7 +38,9 @@ class EIGENCLS(EIGEN):
         diag_values = jnp.zeros(self.n)
         diag_values = diag_values.at[0].set(self.m)  # A(1,1) = M = 25
         j_indices = jnp.arange(2, self.n + 1)  # J = 2 to N
-        diag_values = diag_values.at[1:].set(self.m + 1 - j_indices)  # A(J,J) = M+1-J
+        diag_values = diag_values.at[1:].set(
+            inexact_asarray(self.m + 1) - inexact_asarray(j_indices)
+        )  # A(J,J) = M+1-J
 
         # Create the off-diagonals (super and sub diagonals are 1.0)
         off_diag = jnp.ones(self.n - 1)
@@ -44,4 +50,4 @@ class EIGENCLS(EIGEN):
             jnp.diag(diag_values) + jnp.diag(off_diag, k=1) + jnp.diag(off_diag, k=-1)
         )
 
-        return matrix
+        return inexact_asarray(matrix)

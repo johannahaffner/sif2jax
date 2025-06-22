@@ -69,8 +69,9 @@ class PyCUTEstCompatibilityWrapper(AbstractConstrainedMinimisation):
     def bounds(self) -> tuple[Array, Array] | None:
         return self.problem.bounds()
 
+    @property
     def name(self) -> str:
-        return self.problem.name()
+        return self.problem.name
 
     def constraint(self, y: ArrayLike) -> tuple[Array | None, Array | None]:
         """Convert constraints from Optimistix to PyCUTEst format.

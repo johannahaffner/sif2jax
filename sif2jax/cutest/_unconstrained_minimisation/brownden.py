@@ -43,7 +43,7 @@ class BROWNDEN(AbstractUnconstrainedMinimisation):
         # objective = sum(G_i^2)
 
         # Vectorized computation for better performance
-        i_values = jnp.arange(1, self.m + 1)
+        i_values = inexact_asarray(jnp.arange(1, self.m + 1))
         t_values = i_values / 5.0
 
         # Element A(i): x1 + t_i * x2 - exp(t_i)

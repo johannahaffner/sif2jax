@@ -42,7 +42,7 @@ class TestProblem:
     @pytest.fixture(scope="class")
     def pycutest_problem(self, problem):
         """Load pycutest problem once per problem per class."""
-        return pycutest.import_problem(problem.name())
+        return pycutest.import_problem(problem.name)
 
     def test_correct_name(self, pycutest_problem):
         assert pycutest_problem is not None
@@ -122,12 +122,21 @@ class TestProblem:
         else:
             pytest.skip("Problem has no constraints")
 
-    def test_correct_options(self, problem, pycutest_problem):
-        print(pycutest_problem.sifOptions)
-        print(pycutest_problem.sifParams)
-        print(problem.y0_iD)
-        print(problem.provided_y0s)
-        pass
+    # def test_correct_options(self, problem, pycutest_problem):
+    #     """Test for multiple starting points - not yet implemented in pycutest."""
+    #     print(pycutest.print_available_sif_params(problem.name))
+    #     if pycutest_problem.sifOptions is not None:
+    #         print(pycutest_problem.sifOptions)
+    #         print(problem.y0_iD)
+    #         print(problem.provided_y0s)
+    #         pass
+    #     elif pycutest_problem.sifParams is not None:
+    #         print(pycutest_problem.sifParams)
+    #         print(problem.y0_iD)
+    #         print(problem.provided_y0s)
+    #         pass
+    #     else:
+    #         pytest.skip("Problem has no SIF options to specify.")
 
     @pytest.mark.skip(
         reason="Seems to be a likely culprint in memory failure in CI. FIX"
@@ -137,7 +146,7 @@ class TestProblem:
             compiled = jax.jit(problem.objective)
             _ = compiled(problem.y0(), problem.args())
         except Exception as e:
-            raise RuntimeError(f"Compilation failed for {problem.name()}") from e
+            raise RuntimeError(f"Compilation failed for {problem.name}") from e
         jax.clear_caches()
 
     def test_vmap(self, problem):
@@ -146,4 +155,4 @@ class TestProblem:
             y0 = problem.y0()
             _ = vmapped(jnp.array([y0, y0, y0]), problem.args())
         except Exception as e:
-            raise RuntimeError(f"Vmap failed for {problem.name()}") from e
+            raise RuntimeError(f"Vmap failed for {problem.name}") from e

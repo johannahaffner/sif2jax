@@ -87,7 +87,7 @@ class TestRuntime:
     @pytest.fixture(scope="class")
     def pycutest_problem(self, problem):
         """Load pycutest problem once per problem per class."""
-        return pycutest.import_problem(problem.name())
+        return pycutest.import_problem(problem.name)
 
     @pytest.fixture(autouse=True)
     def clear_jax_cache(self):
@@ -121,7 +121,7 @@ class TestRuntime:
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
         # Print results (visible with -s flag)
-        print(f"\nObjective runtime for {problem.name()}:")
+        print(f"\nObjective runtime for {problem.name}:")
         print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
@@ -151,7 +151,7 @@ class TestRuntime:
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
         # Print results (visible with -s flag)
-        print(f"\nGradient runtime for {problem.name()}:")
+        print(f"\nGradient runtime for {problem.name}:")
         print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
@@ -198,7 +198,7 @@ class TestRuntime:
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
         # Print results (visible with -s flag)
-        print(f"\nCombined obj+grad runtime for {problem.name()}:")
+        print(f"\nCombined obj+grad runtime for {problem.name}:")
         print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")

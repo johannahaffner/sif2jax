@@ -37,30 +37,30 @@ def get_test_cases(requested):
 
 
 def test_correct_name(problem):
-    pycutest_problem = pycutest.import_problem(problem.name())
+    pycutest_problem = pycutest.import_problem(problem.name)
     assert pycutest_problem is not None
 
 
 def test_correct_dimension(problem):
-    pycutest_problem = pycutest.import_problem(problem.name())
+    pycutest_problem = pycutest.import_problem(problem.name)
     dimensions = problem.y0().size
     assert dimensions == pycutest_problem.n
 
 
 def test_correct_starting_value(problem):
-    pycutest_problem = pycutest.import_problem(problem.name())
+    pycutest_problem = pycutest.import_problem(problem.name)
     assert np.allclose(pycutest_problem.x0, problem.y0())
 
 
 def test_correct_objective_at_start(problem):
-    pycutest_problem = pycutest.import_problem(problem.name())
+    pycutest_problem = pycutest.import_problem(problem.name)
     pycutest_value = pycutest_problem.obj(pycutest_problem.x0)
     sif2jax_value = problem.objective(problem.y0(), problem.args())
     assert np.allclose(pycutest_value, sif2jax_value)
 
 
 def test_correct_gradient_at_start(problem):
-    pycutest_problem = pycutest.import_problem(problem.name())
+    pycutest_problem = pycutest.import_problem(problem.name)
     pycutest_gradient = pycutest_problem.grad(pycutest_problem.x0)
     sif2jax_gradient = jax.grad(problem.objective)(problem.y0(), problem.args())
     assert np.allclose(pycutest_gradient, sif2jax_gradient)
@@ -68,7 +68,7 @@ def test_correct_gradient_at_start(problem):
 
 def test_correct_hessian_at_start(problem):
     if problem.num_variables() < 1000:
-        pycutest_problem = pycutest.import_problem(problem.name())
+        pycutest_problem = pycutest.import_problem(problem.name)
         pycutest_hessian = pycutest_problem.ihess(pycutest_problem.x0)
         sif2jax_hessian = jax.hessian(problem.objective)(problem.y0(), problem.args())
         assert np.allclose(pycutest_hessian, sif2jax_hessian)
@@ -78,7 +78,7 @@ def test_correct_hessian_at_start(problem):
 
 def test_correct_constraint_dimensions(problem):
     num_equalities, num_inequalities, _ = problem.num_constraints()
-    pycutest_problem = pycutest.import_problem(problem.name())
+    pycutest_problem = pycutest.import_problem(problem.name)
 
     if pycutest_problem.m == 0:
         assert num_equalities == 0
@@ -98,7 +98,7 @@ def test_correct_constraint_dimensions(problem):
 
 def test_correct_number_of_finite_bounds(problem):
     _, _, num_finite_bounds = problem.num_constraints()
-    pycutest_problem = pycutest.import_problem(problem.name())
+    pycutest_problem = pycutest.import_problem(problem.name)
 
     # Pycutest defaults unconstrained variables to -1e20 and 1e20
     pycutest_finite_lower = jnp.sum(jnp.asarray(pycutest_problem.bl > -1e20))
@@ -109,7 +109,7 @@ def test_correct_number_of_finite_bounds(problem):
 
 def test_correct_constraints_at_start(problem):
     if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
-        pycutest_problem = pycutest.import_problem(problem.name())
+        pycutest_problem = pycutest.import_problem(problem.name)
         assert pycutest_problem.m > 0, "Problem should have constraints."
 
         pycutest_constraints = pycutest_problem.cons(pycutest_problem.x0)
@@ -139,7 +139,7 @@ def test_compilation(problem):
         compiled = jax.jit(problem.objective)
         _ = compiled(problem.y0(), problem.args())
     except Exception as e:
-        raise RuntimeError(f"Compilation failed for {problem.name()}") from e
+        raise RuntimeError(f"Compilation failed for {problem.name}") from e
     jax.clear_caches()
 
 

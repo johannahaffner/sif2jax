@@ -3,8 +3,9 @@ This script aims to run both the pycutest problem and the sif2jax problem throug
 cyipopts dense ipopt interface to conduct an end-to-end test. The resulting output,
 however suboptimal should be the same for both problems.
 """
+# pyright: reportMissingImports=false, reportUnboundVariable=false
 
-import cyipopt
+import cyipopt  # pyright: ignore[reportMissingImports]
 import jax
 import numpy as np
 import pycutest
@@ -15,7 +16,9 @@ jax.config.update("jax_enable_x64", True)  # ESSENTIAL
 import io  # for capturing stdout
 
 import pytest
-from wurlitzer import pipes  # pip install wurlitzer
+from wurlitzer import (
+    pipes,  # pyright: ignore[reportMissingImports]  # pip install wurlitzer
+)
 
 
 def opt_result_diff(result, result_ref, rtol=1e-5, atol=1e-8):
@@ -74,7 +77,7 @@ def e2e_dense_ipopt_test(problem):
     """
 
     # Import the pycutest problem
-    p_ref = pycutest.import_problem(problem.name())
+    p_ref = pycutest.import_problem(problem.name)
     p = problem
 
     # Define the objective function, gradient, and hessian for both problems
@@ -138,7 +141,7 @@ def e2e_dense_ipopt_test(problem):
 
 if __name__ == "__main__":
     for problem in sif2jax.problems:
-        print(f"Running end-to-end test for problem: {problem.name()}")
+        print(f"Running end-to-end test for problem: {problem.name}")
         e2e_dense_ipopt_test(problem)
 
     name = "AKIVA"

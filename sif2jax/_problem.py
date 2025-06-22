@@ -26,9 +26,10 @@ class AbstractProblem(eqx.Module):
         if self.y0_iD not in self.provided_y0s:
             raise ValueError(
                 f"y0_iD {self.y0_iD} is not one of the accepted values for problem "
-                f"{self.name()}. Accepted values are {sorted(self.provided_y0s)}."
+                f"{self.name}. Accepted values are {sorted(self.provided_y0s)}."
             )
 
+    @property
     def name(self):
         """Returns the name of the benchmark problem, which should be the same as the
         name of the class that implements it. For CUTEST problems, this is the name of

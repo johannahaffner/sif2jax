@@ -22,18 +22,10 @@ class HAHN1LS(AbstractUnconstrainedMinimisation):
     """
 
     y0_iD: int = 0
-    provided_y0s: frozenset = frozenset({0})
+    provided_y0s: frozenset = frozenset({0, 1})
 
     n: int = 7  # Number of variables
     m: int = 236  # Number of data points
-    y0_id: int = 0  # Initial point ID: 0 for START1, 1 for START2
-    allowed_y0_ids = frozenset({0, 1})  # Only allow these starting point IDs
-
-    def __check_init__(self):
-        if self.y0_id not in self.allowed_y0_ids:
-            raise ValueError(
-                f"y0_id must be one of {self.allowed_y0_ids}, got {self.y0_id}"
-            )
 
     def objective(self, y, args):
         del args
@@ -544,13 +536,13 @@ class HAHN1LS(AbstractUnconstrainedMinimisation):
 
     def y0(self):
         # First starting point (START1, lines 537-543)
-        if self.y0_id == 0:
+        if self.y0_iD == 0:
             return jnp.array([10.0, -1.0, 0.05, -0.00001, -0.05, 0.001, -0.000001])
         # Second starting point (START2, lines 547-553) - values are START1/10
-        elif self.y0_id == 1:
+        elif self.y0_iD == 1:
             return jnp.array([1.0, -0.1, 0.005, -0.000001, -0.005, 0.0001, -0.0000001])
         else:
-            assert False, f"Unexpected y0_id: {self.y0_id}"
+            assert False, f"Unexpected y0_iD: {self.y0_iD}"
 
     def args(self):
         return None

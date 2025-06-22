@@ -38,7 +38,12 @@ class HS75(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         x1, x2, x3, x4 = y
-        return 3 * x1 + 1.0e-6 * x1**3 + 2 * x2 + (2.0 / 3.0) * 1.0e-6 * x2**3
+        return (
+            3 * x1
+            + 1.0e-6 * x1 * x1 * x1
+            + 2 * x2
+            + (2.0 / 3.0) * 1.0e-6 * x2 * x2 * x2
+        )
 
     def y0(self):
         return jnp.array([0.0, 0.0, 0.0, 0.0])  # not feasible according to the problem
@@ -66,10 +71,18 @@ class HS75(AbstractConstrainedMinimisation):
         ineq1 = x4 - x3 + a2
         ineq2 = x3 - x4 + a2
 
+        # Precompute common trigonometric values for efficiency
+        sin_neg_x2_025 = jnp.sin(-x2 - 0.25)
+        sin_neg_x4_025 = jnp.sin(-x4 - 0.25)
+        sin_x3_025 = jnp.sin(x3 - 0.25)
+        sin_x4_025 = jnp.sin(x4 - 0.25)
+        sin_x3_x4_025 = jnp.sin(x3 - x4 - 0.25)
+        sin_x4_x3_025 = jnp.sin(x4 - x3 - 0.25)
+
         # Equality constraints
-        eq1 = 1000 * jnp.sin(-x2 - 0.25) + 1000 * jnp.sin(-x4 - 0.25) + 894.8 - x1
-        eq2 = 1000 * jnp.sin(x3 - 0.25) + 1000 * jnp.sin(x3 - x4 - 0.25) + 894.8 - x2
-        eq3 = 1000 * jnp.sin(x4 - 0.25) + 1000 * jnp.sin(x4 - x3 - 0.25) + 1294.8
+        eq1 = 1000.0 * sin_neg_x2_025 + 1000.0 * sin_neg_x4_025 + 894.8 - x1
+        eq2 = 1000.0 * sin_x3_025 + 1000.0 * sin_x3_x4_025 + 894.8 - x2
+        eq3 = 1000.0 * sin_x4_025 + 1000.0 * sin_x4_x3_025 + 1294.8
 
         equality_constraints = jnp.array([eq1, eq2, eq3])
         inequality_constraints = jnp.array([ineq1, ineq2])

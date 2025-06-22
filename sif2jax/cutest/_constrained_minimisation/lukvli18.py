@@ -95,72 +95,34 @@ class LUKVLI18(AbstractConstrainedMinimisation):
         if n_c == 0:
             return None, jnp.array([])
 
-        # Vectorized constraint computation
-        # We have three types of constraints cycling with period 3
-        # Type 1 (k ≡ 1 mod 3): c_k = x_{l+1}^2 + 3x_{l+2}
-        # Type 2 (k ≡ 2 mod 3): c_k = x_{l+3}^2 + x_{l+4} - 2x_{l+5}
-        # Type 3 (k ≡ 0 mod 3): c_k = x_{l+2}^2 - x_{l+5}
-        # where l = 4*((k-1)//3)
+        # Compute l values for all k
+        k_values = jnp.arange(1, n_c + 1)
+        l_values = 4 * ((k_values - 1) // 3)
 
-        # Number of constraint triplets
-        num_triplets = n_c // 3
-        remainder = n_c % 3
+        # Extend y with zeros to safely access all indices
+        # Maximum index needed is max(l_values) + 5
+        extended_length = n + 20  # Add sufficient padding
+        y_extended = jnp.zeros(extended_length)
+        y_extended = y_extended.at[:n].set(y)
 
-        # Generate l values for each triplet
-        i = jnp.arange(num_triplets + (1 if remainder > 0 else 0))
-        l = 4 * i  # l values in 0-based
+        # Type 1 constraints: k ≡ 1 (mod 3)
+        # c_k = x_{l+1}^2 + 3x_{l+2}
+        c1 = y_extended[l_values] ** 2 + 3 * y_extended[l_values + 1]
 
-        # Type 1 constraints (need l+1 < n)
-        valid_type1 = l + 1 < n
-        l_type1 = l[valid_type1]
-        if len(l_type1) > 0:
-            y_l = y[l_type1]  # x_{l+1} in 1-based
-            y_l1 = y[l_type1 + 1]  # x_{l+2} in 1-based
-            c_type1 = y_l**2 + 3 * y_l1
-        else:
-            c_type1 = jnp.array([])
+        # Type 2 constraints: k ≡ 2 (mod 3)
+        # c_k = x_{l+3}^2 + x_{l+4} - 2x_{l+5}
+        c2 = (
+            y_extended[l_values + 2] ** 2
+            + y_extended[l_values + 3]
+            - 2 * y_extended[l_values + 4]
+        )
 
-        # Type 2 constraints (need l+4 < n)
-        valid_type2 = l + 4 < n
-        l_type2 = l[valid_type2]
-        if len(l_type2) > 0:
-            y_l2 = y[l_type2 + 2]  # x_{l+3} in 1-based
-            y_l3 = y[l_type2 + 3]  # x_{l+4} in 1-based
-            y_l4 = y[l_type2 + 4]  # x_{l+5} in 1-based
-            c_type2 = y_l2**2 + y_l3 - 2 * y_l4
-        else:
-            c_type2 = jnp.array([])
+        # Type 3 constraints: k ≡ 0 (mod 3)
+        # c_k = x_{l+2}^2 - x_{l+5}
+        c3 = y_extended[l_values + 1] ** 2 - y_extended[l_values + 4]
 
-        # Type 3 constraints (need l+4 < n)
-        l_type3 = l[:num_triplets]  # Only take the first num_triplets
-        valid_type3 = l_type3 + 4 < n
-        l_type3 = l_type3[valid_type3]
-        if len(l_type3) > 0:
-            y_l1 = y[l_type3 + 1]  # x_{l+2} in 1-based
-            y_l4 = y[l_type3 + 4]  # x_{l+5} in 1-based
-            c_type3 = y_l1**2 - y_l4
-        else:
-            c_type3 = jnp.array([])
+        # Select constraints based on k modulo 3
+        k_mod3 = k_values % 3
+        constraints = jnp.where(k_mod3 == 1, c1, jnp.where(k_mod3 == 2, c2, c3))
 
-        # Interleave constraints in proper order
-        min_len = min(len(c_type1), len(c_type2), len(c_type3))
-        if min_len > 0:
-            constraints = jnp.zeros(3 * min_len)
-            constraints = constraints.at[::3].set(c_type1[:min_len])
-            constraints = constraints.at[1::3].set(c_type2[:min_len])
-            constraints = constraints.at[2::3].set(c_type3[:min_len])
-
-            # Add remaining constraints
-            remaining = []
-            if len(c_type1) > min_len:
-                remaining.extend(c_type1[min_len:])
-            if len(c_type2) > min_len:
-                remaining.extend(c_type2[min_len:])
-
-            if remaining:
-                constraints = jnp.concatenate([constraints, jnp.array(remaining)])
-        else:
-            # Concatenate whatever we have
-            constraints = jnp.concatenate([c_type1, c_type2, c_type3])
-
-        return None, constraints[:n_c]
+        return None, constraints

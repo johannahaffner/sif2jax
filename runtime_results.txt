@@ -1,0 +1,144 @@
+Obtaining file:///workspace
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: beartype in /opt/venv/lib/python3.12/site-packages (from sif2jax==0.0.4) (0.21.0)
+Requirement already satisfied: equinox in /opt/venv/lib/python3.12/site-packages (from sif2jax==0.0.4) (0.12.2)
+Requirement already satisfied: jax>=0.4.38 in /opt/venv/lib/python3.12/site-packages (from sif2jax==0.0.4) (0.6.1)
+Requirement already satisfied: jaxtyping>=0.2.20 in /opt/venv/lib/python3.12/site-packages (from sif2jax==0.0.4) (0.3.2)
+Requirement already satisfied: pytest in /opt/venv/lib/python3.12/site-packages (from sif2jax==0.0.4) (8.4.0)
+Requirement already satisfied: typing-extensions>=4.5.0 in /opt/venv/lib/python3.12/site-packages (from sif2jax==0.0.4) (4.14.0)
+Requirement already satisfied: wadler-lindig>=0.1.0 in /opt/venv/lib/python3.12/site-packages (from sif2jax==0.0.4) (0.1.6)
+Requirement already satisfied: jaxlib<=0.6.1,>=0.6.1 in /opt/venv/lib/python3.12/site-packages (from jax>=0.4.38->sif2jax==0.0.4) (0.6.1)
+Requirement already satisfied: ml_dtypes>=0.5.0 in /opt/venv/lib/python3.12/site-packages (from jax>=0.4.38->sif2jax==0.0.4) (0.5.1)
+Requirement already satisfied: numpy>=1.25 in /opt/venv/lib/python3.12/site-packages (from jax>=0.4.38->sif2jax==0.0.4) (2.2.6)
+Requirement already satisfied: opt_einsum in /opt/venv/lib/python3.12/site-packages (from jax>=0.4.38->sif2jax==0.0.4) (3.4.0)
+Requirement already satisfied: scipy>=1.11.1 in /opt/venv/lib/python3.12/site-packages (from jax>=0.4.38->sif2jax==0.0.4) (1.15.3)
+Requirement already satisfied: iniconfig>=1 in /opt/venv/lib/python3.12/site-packages (from pytest->sif2jax==0.0.4) (2.1.0)
+Requirement already satisfied: packaging>=20 in /opt/venv/lib/python3.12/site-packages (from pytest->sif2jax==0.0.4) (25.0)
+Requirement already satisfied: pluggy<2,>=1.5 in /opt/venv/lib/python3.12/site-packages (from pytest->sif2jax==0.0.4) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in /opt/venv/lib/python3.12/site-packages (from pytest->sif2jax==0.0.4) (2.19.1)
+Building wheels for collected packages: sif2jax
+  Building editable for sif2jax (pyproject.toml): started
+  Building editable for sif2jax (pyproject.toml): finished with status 'done'
+  Created wheel for sif2jax: filename=sif2jax-0.0.4-py3-none-any.whl size=10635 sha256=77d92d5aa0143843dce25435c5fc5690d09767171866b3754ef73f843dfba036
+  Stored in directory: /tmp/pip-ephem-wheel-cache-6pq_cqt8/wheels/b0/41/ab/4e04a8678980f3355548f1261923479fbf2a713a7393a7dea8
+Successfully built sif2jax
+Installing collected packages: sif2jax
+Successfully installed sif2jax-0.0.4
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.0, pluggy-1.6.0 -- /opt/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /workspace
+configfile: pyproject.toml
+plugins: jaxtyping-0.3.2
+collecting ... collected 4500 items / 3300 deselected / 1200 selected
+
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem0] PASSED [  0%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem0] PASSED [  0%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem0] SKIPPED [  0%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem0] SKIPPED [  0%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem1] PASSED [  0%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem1] PASSED [  0%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem1] SKIPPED [  0%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem1] SKIPPED [  0%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem2] PASSED [  0%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem2] PASSED [  0%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem2] SKIPPED [  0%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem2] SKIPPED [  1%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem3] PASSED [  1%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem3] PASSED [  1%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem3] SKIPPED [  1%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem3] SKIPPED [  1%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem4] PASSED [  1%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem4] PASSED [  1%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem4] SKIPPED [  1%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem4] SKIPPED [  1%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem5] PASSED [  1%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem5] PASSED [  1%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem5] SKIPPED [  1%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem5] SKIPPED [  2%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem6] PASSED [  2%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem6] PASSED [  2%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem6] SKIPPED [  2%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem6] SKIPPED [  2%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem7] PASSED [  2%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem7] PASSED [  2%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem7] SKIPPED [  2%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem7] SKIPPED [  2%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem8] PASSED [  2%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem8] PASSED [  2%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem8] SKIPPED [  2%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem8] SKIPPED [  3%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem9] PASSED [  3%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem9] PASSED [  3%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem9] SKIPPED [  3%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem9] SKIPPED [  3%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem10] PASSED [  3%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem10] PASSED [  3%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem10] SKIPPED [  3%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem10] SKIPPED [  3%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem11] PASSED [  3%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem11] PASSED [  3%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem11] SKIPPED [  3%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem11] SKIPPED [  4%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem12] PASSED [  4%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem12] PASSED [  4%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem12] SKIPPED [  4%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem12] SKIPPED [  4%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem13] PASSED [  4%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem13] PASSED [  4%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem13] SKIPPED [  4%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem13] SKIPPED [  4%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem14] PASSED [  4%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem14] PASSED [  4%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem14] SKIPPED [  4%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem14] SKIPPED [  5%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem15] PASSED [  5%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem15] PASSED [  5%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem15] SKIPPED [  5%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem15] SKIPPED [  5%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem16] PASSED [  5%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem16] PASSED [  5%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem16] SKIPPED [  5%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem16] SKIPPED [  5%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem17] PASSED [  5%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem17] PASSED [  5%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem17] SKIPPED [  5%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem17] SKIPPED [  6%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem18] PASSED [  6%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem18] PASSED [  6%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem18] SKIPPED [  6%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem18] SKIPPED [  6%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem19] PASSED [  6%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem19] PASSED [  6%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem19] SKIPPED [  6%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem19] SKIPPED [  6%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem20] PASSED [  6%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem20] PASSED [  6%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem20] SKIPPED [  6%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem20] SKIPPED [  7%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem21] PASSED [  7%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem21] PASSED [  7%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem21] SKIPPED [  7%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem21] SKIPPED [  7%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem22] PASSED [  7%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem22] PASSED [  7%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem22] SKIPPED [  7%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem22] SKIPPED [  7%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem23] PASSED [  7%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem23] PASSED [  7%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem23] SKIPPED [  7%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem23] SKIPPED [  8%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem24] PASSED [  8%]
+tests/test_runtime.py::TestRuntime::test_gradient_runtime[problem24] PASSED [  8%]
+tests/test_runtime.py::TestRuntime::test_constraint_runtime[problem24] SKIPPED [  8%]
+tests/test_runtime.py::TestRuntime::test_constraint_jacobian_runtime[problem24] SKIPPED [  8%]
+tests/test_runtime.py::TestRuntime::test_objective_runtime[problem25] 

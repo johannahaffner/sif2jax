@@ -1,0 +1,1 @@
+Optimized problems so far: BROWNAL (for loop removed but commented out), EIGEN base class (for loop removed, affects EIGENALS)

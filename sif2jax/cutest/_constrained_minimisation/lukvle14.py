@@ -110,33 +110,21 @@ class LUKVLE14(AbstractConstrainedMinimisation):
         k_values = jnp.arange(1, n_c + 1)  # 1-indexed k values
         k_idx = k_values - 1  # Convert to 0-based for array indexing
 
-        # Masks for odd and even k
-        odd_mask = (k_values % 2) == 1
-        even_mask = (k_values % 2) == 0
-
-        # Initialize constraints
-        constraints = jnp.zeros(n_c)
-
+        # Compute constraints for all k, then select based on odd/even
         # Odd constraints (k=1,3,5,...)
         # From S2MPJ: C(K) = E(K) + X(K+1) + X(K+2) + 4*X(K+3) - 7
         # where E(K) = X(K)^2
-        k_odd = k_idx[odd_mask]
-        if len(k_odd) > 0:
-            c_odd = y[k_odd] ** 2 + y[k_odd + 1] + y[k_odd + 2] + 4 * y[k_odd + 3] - 7
-            constraints = constraints.at[odd_mask].set(c_odd)
+        c_odd = y[k_idx] ** 2 + y[k_idx + 1] + y[k_idx + 2] + 4 * y[k_idx + 3] - 7
 
         # Even constraints (k=2,4,6,...)
         # From S2MPJ: For K=1,3,5,... (odd), C(K+1) = E(K+1) - 5*X(K+4) - 6
         # Note: Bug in S2MPJ Python - all E(K+1) elements use X(2)^2!
         # For k=2, K=1 so X(K+4)=X(5); for k=4, K=3 so X(K+4)=X(7), etc.
         # So for even k, we need X(2)^2 - 5*X(k+3) - 6
-        k_even = k_idx[even_mask]
-        if len(k_even) > 0:
-            c_even = (
-                y[1] ** 2  # Always X(2)^2 due to S2MPJ bug
-                - 5 * y[k_even + 3]
-                - 6
-            )
-            constraints = constraints.at[even_mask].set(c_even)
+        c_even = y[1] ** 2 - 5 * y[k_idx + 3] - 6  # Always X(2)^2 due to S2MPJ bug
+
+        # Select based on odd/even using where
+        is_odd = (k_values % 2) == 1
+        constraints = jnp.where(is_odd, c_odd, c_even)
 
         return constraints, None

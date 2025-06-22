@@ -162,18 +162,20 @@ class HS117(AbstractConstrainedMinimisation):
         x_first10 = y[:10]
         x_last5 = y[10:15]
 
-        # Five inequality constraints from AMPL formulation
-        ineq_constraints = []
-        for j in range(5):
-            # 2*c[k,j]*x[10+k] + 3*d[j]*x[10+j]^2 + e[j]
-            # - sum{k in 1..10} a[k,j]*x[k] >= 0
-            term1 = 2 * jnp.sum(c[:, j] * x_last5)  # 2*c[k,j]*x[10+k]
-            term2 = 3 * d[j] * x_last5[j] ** 2  # 3*d[j]*x[10+j]^2
-            term3 = e[j]  # e[j]
-            term4 = -jnp.sum(a[:, j] * x_first10)  # -sum{k in 1..10} a[k,j]*x[k]
+        # Five inequality constraints from AMPL formulation (vectorized)
+        # 2*c[k,j]*x[10+k] + 3*d[j]*x[10+j]^2 + e[j] - sum{k in 1..10} a[k,j]*x[k] >= 0
 
-            constraint_val = term1 + term2 + term3 + term4
-            ineq_constraints.append(constraint_val)
+        # term1: 2*sum(c[k,j]*x[10+k]) for each j
+        term1 = 2 * jnp.sum(c * x_last5[:, None], axis=0)  # shape: (5,)
 
-        inequality_constraints = jnp.array(ineq_constraints)
+        # term2: 3*d[j]*x[10+j]^2 for each j
+        term2 = 3 * d * x_last5**2  # shape: (5,)
+
+        # term3: e[j] for each j
+        term3 = e  # shape: (5,)
+
+        # term4: -sum{k in 1..10} a[k,j]*x[k] for each j
+        term4 = -jnp.sum(a * x_first10[:, None], axis=0)  # shape: (5,)
+
+        inequality_constraints = term1 + term2 + term3 + term4
         return None, inequality_constraints

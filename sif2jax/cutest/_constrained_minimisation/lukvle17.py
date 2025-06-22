@@ -93,46 +93,34 @@ class LUKVLE17(AbstractConstrainedMinimisation):
         if n_c == 0:
             return jnp.array([]), None
 
-        # Pre-allocate constraint array
-        constraints = jnp.zeros(n_c)
-
         # Compute l values for all k
         k_values = jnp.arange(1, n_c + 1)
         l_values = 4 * ((k_values - 1) // 3)
 
-        # Split k values by modulo 3
-        mask_mod1 = (k_values % 3) == 1
-        mask_mod2 = (k_values % 3) == 2
-        mask_mod0 = (k_values % 3) == 0
+        # Extend y with zeros to safely access all indices
+        # Maximum index needed is max(l_values) + 5
+        extended_length = n + 20  # Add sufficient padding
+        y_extended = jnp.zeros(extended_length)
+        y_extended = y_extended.at[:n].set(y)
 
         # Type 1 constraints: k ≡ 1 (mod 3)
         # c_k = x_{l+1}^2 + 3x_{l+2}
-        l1 = l_values[mask_mod1]
-        valid1 = l1 + 1 < n
-        if jnp.any(valid1):
-            l1_valid = l1[valid1]
-            constraints = constraints.at[jnp.where(mask_mod1)[0][valid1]].set(
-                y[l1_valid] ** 2 + 3 * y[l1_valid + 1]
-            )
+        c1 = y_extended[l_values] ** 2 + 3 * y_extended[l_values + 1]
 
         # Type 2 constraints: k ≡ 2 (mod 3)
         # c_k = x_{l+3}^2 + x_{l+4} - 2x_{l+5}
-        l2 = l_values[mask_mod2]
-        valid2 = l2 + 4 < n
-        if jnp.any(valid2):
-            l2_valid = l2[valid2]
-            constraints = constraints.at[jnp.where(mask_mod2)[0][valid2]].set(
-                y[l2_valid + 2] ** 2 + y[l2_valid + 3] - 2 * y[l2_valid + 4]
-            )
+        c2 = (
+            y_extended[l_values + 2] ** 2
+            + y_extended[l_values + 3]
+            - 2 * y_extended[l_values + 4]
+        )
 
         # Type 3 constraints: k ≡ 0 (mod 3)
         # c_k = x_{l+2}^2 - x_{l+5}
-        l0 = l_values[mask_mod0]
-        valid0 = l0 + 4 < n
-        if jnp.any(valid0):
-            l0_valid = l0[valid0]
-            constraints = constraints.at[jnp.where(mask_mod0)[0][valid0]].set(
-                y[l0_valid + 1] ** 2 - y[l0_valid + 4]
-            )
+        c3 = y_extended[l_values + 1] ** 2 - y_extended[l_values + 4]
+
+        # Select constraints based on k modulo 3
+        k_mod3 = k_values % 3
+        constraints = jnp.where(k_mod3 == 1, c1, jnp.where(k_mod3 == 2, c2, c3))
 
         return constraints, None

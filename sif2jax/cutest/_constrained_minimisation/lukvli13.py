@@ -113,36 +113,26 @@ class LUKVLI13(AbstractConstrainedMinimisation):
         k_values = jnp.arange(1, n_c + 1)  # 1-indexed k values
         k_idx = k_values - 1  # Convert to 0-based for array indexing
 
-        # Masks for odd and even k
-        odd_mask = (k_values % 2) == 1
-        even_mask = (k_values % 2) == 0
-
-        # Initialize constraints
-        constraints = jnp.zeros(n_c)
-
+        # Compute constraints for all k, then select based on odd/even
         # Odd constraints (k=1,3,5,...)
         # From S2MPJ: C(K) = X(K) + E(K) + X(K+2) + X(K+3) + 4*X(K+4) - 5
         # where E(K) = X(K+1)^2
-        k_odd = k_idx[odd_mask]
-        if len(k_odd) > 0:
-            c_odd = (
-                y[k_odd]
-                + y[k_odd + 1] ** 2
-                + y[k_odd + 2]
-                + y[k_odd + 3]
-                + 4 * y[k_odd + 4]
-                - 5
-            )
-            constraints = constraints.at[odd_mask].set(c_odd)
+        c_odd = (
+            y[k_idx]
+            + y[k_idx + 1] ** 2
+            + y[k_idx + 2]
+            + y[k_idx + 3]
+            + 4 * y[k_idx + 4]
+            - 5
+        )
 
         # Even constraints (k=2,4,6,...)
         # From S2MPJ: C(K) = E(K) - 2*X(K+2) - 2*X(K+3) - 3
         # where E(K) = X(K+1)^2
-        # But K is already 1-indexed, so for even k we need
-        # X(k+1)^2 - 2*(X(k+2) + X(k+3))
-        k_even = k_idx[even_mask]
-        if len(k_even) > 0:
-            c_even = y[k_even + 1] ** 2 - 2 * (y[k_even + 2] + y[k_even + 3]) - 3
-            constraints = constraints.at[even_mask].set(c_even)
+        c_even = y[k_idx + 1] ** 2 - 2 * (y[k_idx + 2] + y[k_idx + 3]) - 3
+
+        # Select based on odd/even using where
+        is_odd = (k_values % 2) == 1
+        constraints = jnp.where(is_odd, c_odd, c_even)
 
         return None, constraints

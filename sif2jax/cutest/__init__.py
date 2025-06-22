@@ -223,7 +223,7 @@ from ._unconstrained_minimisation import (
     ARGTRIGLS as ARGTRIGLS,
     ARWHEAD as ARWHEAD,
     # BA_L1LS as BA_L1LS,  # TODO: BA_L family needs human review - removed from imports
-    BA_L1SPLS as BA_L1SPLS,  # TODO: BA_L family needs human review
+    # BA_L1SPLS as BA_L1SPLS,  # TODO: BA_L family needs human review
     BARD as BARD,
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
@@ -592,7 +592,7 @@ problems_dict = {
     "AVGASB": AVGASB(),
     # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
-    "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs human review
+    # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs human review
     "BARD": BARD(),
     "BDQRTIC": BDQRTIC(),
     "BEALE": BEALE(),

@@ -51,5 +51,4 @@ class HS60(AbstractConstrainedMinimisation):
         x1, x2, x3 = y
         # Equality constraint
         eq1 = x1 * (1 + x2**2) + x3**4 - 4 - 3 * jnp.sqrt(2)
-        equality_constraints = jnp.array([eq1])
-        return equality_constraints, None
+        return jnp.array([eq1]), None

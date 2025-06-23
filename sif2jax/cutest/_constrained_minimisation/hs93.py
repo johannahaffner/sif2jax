@@ -30,11 +30,19 @@ class HS93(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         x1, x2, x3, x4, x5, x6 = y
+        # Precompute common terms
+        sum_123 = x1 + x2 + x3
+        sum_124 = x1 + 1.57 * x2 + x4
+        x1x4 = x1 * x4
+        x2x3 = x2 * x3
+        x5_sq = x5 * x5
+        x6_sq = x6 * x6
+
         return (
-            0.0204 * x1 * x4 * (x1 + x2 + x3)
-            + 0.0187 * x2 * x3 * (x1 + 1.57 * x2 + x4)
-            + 0.0607 * x1 * x4 * x5**2 * (x1 + x2 + x3)
-            + 0.0437 * x2 * x3 * x6**2 * (x1 + 1.57 * x2 + x4)
+            0.0204 * x1x4 * sum_123
+            + 0.0187 * x2x3 * sum_124
+            + 0.0607 * x1x4 * x5_sq * sum_123
+            + 0.0437 * x2x3 * x6_sq * sum_124
         )
 
     def y0(self):
@@ -54,17 +62,25 @@ class HS93(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         x1, x2, x3, x4, x5, x6 = y
+        # Precompute common terms
+        sum_123 = x1 + x2 + x3
+        sum_124 = x1 + 1.57 * x2 + x4
+        x1x4 = x1 * x4
+        x2x3 = x2 * x3
+        x5_sq = x5 * x5
+        x6_sq = x6 * x6
+
         # Inequality constraints from SIF file
         # C1 is a 'G' type: 0.001 * x1*x2*x3*x4*x5*x6 >= 2.07
         # pycutest reports the raw constraint value
-        ineq1 = 0.001 * x1 * x2 * x3 * x4 * x5 * x6 - 2.07
+        ineq1 = 0.001 * x1x4 * x2x3 * x5 * x6 - 2.07
 
         # C2 is an 'L' type constraint
         # 0.00062*OE3 + 0.00058*OE4 <= 1
         # where OE3 = x1*x4*x5²*(x1 + x2 + x3)
         # and OE4 = x2*x3*x6²*(x1 + 1.57*x2 + x4)
-        oe3 = x1 * x4 * x5**2 * (x1 + x2 + x3)
-        oe4 = x2 * x3 * x6**2 * (x1 + 1.57 * x2 + x4)
+        oe3 = x1x4 * x5_sq * sum_123
+        oe4 = x2x3 * x6_sq * sum_124
         ineq2 = 0.00062 * oe3 + 0.00058 * oe4 - 1.0
 
         inequality_constraints = jnp.array([ineq1, ineq2])

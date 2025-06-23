@@ -31,7 +31,9 @@ class HS32(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         x1, x2, x3 = y
-        return (x1 + 3.0 * x2 + x3) ** 2 + 4.0 * (x1 - x2) ** 2
+        sum_term = x1 + 3.0 * x2 + x3
+        diff_term = x1 - x2
+        return sum_term * sum_term + 4.0 * diff_term * diff_term
 
     def y0(self):
         return jnp.array([0.1, 0.7, 0.2])
@@ -53,5 +55,5 @@ class HS32(AbstractConstrainedMinimisation):
         # Equality constraint: 1 - x₁ - x₂ - x₃ = 0
         equality_constraint = jnp.array([1.0 - x1 - x2 - x3])
         # Inequality constraint: 6x₂ + 4x₃ - x₁³ - 3 ≥ 0
-        inequality_constraint = jnp.array([6.0 * x2 + 4.0 * x3 - x1**3 - 3.0])
+        inequality_constraint = jnp.array([6.0 * x2 + 4.0 * x3 - x1 * x1 * x1 - 3.0])
         return equality_constraint, inequality_constraint

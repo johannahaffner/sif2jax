@@ -14,6 +14,10 @@ import sif2jax
 # Default runtime ratio threshold (JAX time / pycutest time)
 DEFAULT_THRESHOLD = 5.0
 
+# Minimum runtime threshold in seconds
+# Below this threshold, noise dominates and comparisons are unreliable
+MIN_RUNTIME_SECONDS = 1e-5  # 10 microseconds
+
 
 # pytest_generate_tests is now handled in conftest.py
 
@@ -125,11 +129,13 @@ class TestRuntime:
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
-        # Assert within threshold
-        assert ratio < threshold, (
-            f"JAX objective is {ratio:.2f}x slower than pycutest "
-            f"(threshold: {threshold})"
-        )
+        # Assert within threshold only if runtime is above minimum
+        # This avoids failures due to noise in microsecond-level measurements
+        if pycutest_time > MIN_RUNTIME_SECONDS:
+            assert ratio < threshold, (
+                f"JAX objective is {ratio:.2f}x slower than pycutest "
+                f"(threshold: {threshold})"
+            )
 
     def test_gradient_runtime(self, problem, pycutest_problem, threshold):
         """Compare gradient computation runtime."""
@@ -155,11 +161,13 @@ class TestRuntime:
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
-        # Assert within threshold
-        assert ratio < threshold, (
-            f"JAX gradient is {ratio:.2f}x slower than pycutest "
-            f"(threshold: {threshold})"
-        )
+        # Assert within threshold only if runtime is above minimum
+        # This avoids failures due to noise in microsecond-level measurements
+        if pycutest_time > MIN_RUNTIME_SECONDS:
+            assert ratio < threshold, (
+                f"JAX gradient is {ratio:.2f}x slower than pycutest "
+                f"(threshold: {threshold})"
+            )
 
     def test_constraint_runtime(self, problem, pycutest_problem, threshold):
         """Compare constraint function runtime."""
@@ -188,11 +196,13 @@ class TestRuntime:
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
-        # Assert within threshold
-        assert ratio < threshold, (
-            f"JAX constraint is {ratio:.2f}x slower than pycutest "
-            f"(threshold: {threshold})"
-        )
+        # Assert within threshold only if runtime is above minimum
+        # This avoids failures due to noise in microsecond-level measurements
+        if pycutest_time > MIN_RUNTIME_SECONDS:
+            assert ratio < threshold, (
+                f"JAX constraint is {ratio:.2f}x slower than pycutest "
+                f"(threshold: {threshold})"
+            )
 
     def test_constraint_jacobian_runtime(self, problem, pycutest_problem, threshold):
         """Compare constraint Jacobian computation runtime."""
@@ -242,8 +252,10 @@ class TestRuntime:
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
-        # Assert within threshold
-        assert ratio < threshold, (
-            f"JAX constraint Jacobian is {ratio:.2f}x slower than pycutest "
-            f"(threshold: {threshold})"
-        )
+        # Assert within threshold only if runtime is above minimum
+        # This avoids failures due to noise in microsecond-level measurements
+        if pycutest_time > MIN_RUNTIME_SECONDS:
+            assert ratio < threshold, (
+                f"JAX constraint Jacobian is {ratio:.2f}x slower than pycutest "
+                f"(threshold: {threshold})"
+            )

@@ -46,24 +46,4 @@ The problems all have the following methods:
 - `y0` - returns the initial guess provided by the SIF file
 - `args` - returns any arguments (frequently none)
 
-bounded problems also have a `bounds` method, and constrained problems additionally include a `constraint` method. You can find more information in our documentation TODO Fix.
-
-## cyipopt installation
-
-I recommend using the conda install as it packages all necessary binaries. I can add this to the dockerimage later.
-
-```bash
-conda install -c conda-forge cyipopt
-```
-
-## CUTEst problems in SIF format
-
-To make the CUTEst problems in SIF format accessible to the LLM:
-
-```bash
-mkdir archive  # This name is in the .gitignore
-cd archive
-git clone https://bitbucket.org/optrove/sif ./mastsif
-```
-Suggestion: change the permissions to that folder to remove write access.
-
+bounded problems also have a `bounds` method, and constrained problems additionally include a `constraint` method.

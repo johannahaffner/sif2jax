@@ -69,6 +69,14 @@ mkdocs serve
 
 You can then see your local copy of the documentation by navigating to `localhost:8000` in a web browser.
 
+**A word on using generative AI to port benchmark problems** 
+
+We've used Claude Code extensively to make it possible to port this large collection of benchmark problems.
+The one thing that has worked for us is to use test-driven development throughout. So if you'd like to add a feature, we recommend thinking about the tests this feature should pass for you to be convinced that it has been implemented correctly, and then verifying this test yourself before "commissioning" any work. 
+Output improves with the granularity of the tests provided, so it is preferable to define a number of very small tests, rather than one large tests. Tests should ideally provide a natural ordering of increasing complexity (e.g. verify the initial point is correct before verifying the objective at the initial point).
+Think of this as automating the feedback-giving portion of human supervision to the greatest extent possible.
+Then ask the model to work in batches of problems, testing and fixing them one by one works best.
+
 ## Contributor License Agreement
 
 Contributions to this project must be accompanied by a Contributor License Agreement (CLA). 

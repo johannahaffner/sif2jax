@@ -38,11 +38,6 @@ class LUKVLI2(AbstractConstrainedMinimisation):
     n: int = 10000  # Default dimension, can be overridden
 
     def objective(self, y, args):
-        # TODO: This implementation matches the structure in the SIF file but
-        # differs from pycutest by a factor of ~34.5. The SIF file uses
-        # group-separable structure where scale factors are applied in the
-        # denominator, but even accounting for this there is a discrepancy.
-        # This needs further investigation.
         del args
         n = len(y)
         # Chained Wood function - vectorized

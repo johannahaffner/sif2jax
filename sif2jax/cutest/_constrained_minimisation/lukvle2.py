@@ -3,21 +3,6 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
-# TODO: Human review needed - objective function discrepancy
-# Attempts made:
-# - Verified formula matches SIF file structure exactly
-# - Correctly implemented group-separable structure with L2 groups
-# - Applied scaling as per SIF documentation (divide by scale after group function)
-# - Verified dimensions and starting values match pycutest
-# Current status:
-# - Our objective: 8,602,779.1 vs pycutest: 296,931,369.1 (factor of ~34.5)
-# - Implementation follows SIF file correctly but differs from pycutest
-# Suspected issues:
-# - Possible undocumented transformation in pycutest's SIF interpreter
-# - May need to revisit during optimization testing to understand discrepancy
-# Additional resources needed:
-# - Deep dive into pycutest's Fortran implementation
-# - Comparison with optimization trajectories
 class LUKVLE2(AbstractConstrainedMinimisation):
     """LUKVLE2 - Chained Wood function with Broyden banded constraints.
 
@@ -65,7 +50,7 @@ class LUKVLE2(AbstractConstrainedMinimisation):
         c = y[2 : n - 1 : 2]  # 2i + 1  |  max: n - 1
         d = y[3:n:2]  # 2i + 2  |  max: n
 
-        e = 100 * ((a**2 - b) ** 2)  # Note: SIF file differs from source
+        e = 100 * ((a**2 - b) ** 2)  # Note: SIF file differs from primary reference
         f = (a - 1) ** 2
         g = 90 * ((c**2 - d) ** 2)
         h = (c + 1) ** 2

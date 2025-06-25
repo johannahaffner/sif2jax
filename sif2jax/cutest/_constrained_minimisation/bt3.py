@@ -25,10 +25,7 @@ class BT3(AbstractConstrainedMinimisation):
     Classification: SLR2-AY-5-3
     """
 
-    y0_iD: int = 0
-    provided_y0s: frozenset = frozenset({0})
-
-    y0_id: int = 1  # Default to second starting point (20.0) as per SIF
+    y0_iD: int = 1  # Default to second starting point (20.0) as per SIF
     provided_y0s: frozenset = frozenset({0, 1, 2})
 
     def objective(self, y, args):
@@ -37,11 +34,11 @@ class BT3(AbstractConstrainedMinimisation):
         return (x1 - x2) ** 2 + (x2 + x3 - 2) ** 2 + (x4 - 1) ** 2 + (x5 - 1) ** 2
 
     def y0(self):
-        if self.y0_id == 0:
+        if self.y0_iD == 0:
             return jnp.array([2.0, 2.0, 2.0, 2.0, 2.0])
-        elif self.y0_id == 1:
+        elif self.y0_iD == 1:
             return jnp.array([20.0, 20.0, 20.0, 20.0, 20.0])
-        elif self.y0_id == 2:
+        elif self.y0_iD == 2:
             return jnp.array([200.0, 200.0, 200.0, 200.0, 200.0])
 
     def args(self):

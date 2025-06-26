@@ -130,3 +130,54 @@ class TestProblem:
             _ = vmapped(jnp.array([y0, y0, y0]), problem.args())
         except Exception as e:
             raise RuntimeError(f"Vmap failed for {problem.name}") from e
+
+    def test_constraint_bounds_investigation(self, problem, pycutest_problem):
+        """Investigate how pycutest represents different constraint types."""
+        if pycutest_problem.m == 0:
+            pytest.skip("Problem has no constraints")
+
+        print(f"\n{'='*70}")
+        print(f"CONSTRAINT BOUNDS INVESTIGATION FOR: {problem.name}")
+        print(f"{'='*70}")
+
+        print("\nBasic info:")
+        print(f"  Number of variables: {pycutest_problem.n}")
+        print(f"  Number of constraints: {pycutest_problem.m}")
+        print(f"  Is equality constraint mask: {pycutest_problem.is_eq_cons}")
+
+        print("\nConstraint bounds arrays:")
+        print(f"  cl (lower bounds): {pycutest_problem.cl}")
+        print(f"  cu (upper bounds): {pycutest_problem.cu}")
+
+        # Evaluate constraints at starting point
+        x0 = pycutest_problem.x0
+        cons = pycutest_problem.cons(x0)
+
+        print("\nDetailed constraint analysis:")
+        for i in range(pycutest_problem.m):
+            cl = pycutest_problem.cl[i]
+            cu = pycutest_problem.cu[i]
+            is_eq = pycutest_problem.is_eq_cons[i]
+
+            print(f"\nConstraint {i+1}:")
+            print(f"  is_eq_cons flag: {is_eq}")
+            print(f"  Lower bound (cl): {cl}")
+            print(f"  Upper bound (cu): {cu}")
+            print(f"  Value at x0: {cons[i]:.6f}")
+
+            # Determine constraint type
+            if is_eq:
+                print("  Type: EQUALITY (marked by is_eq_cons)")
+                print(f"  Note: cl={cl}, cu={cu} (should they be equal?)")
+            else:
+                # Check for range constraint
+                if cl > -1e19 and cu < 1e19:
+                    print(f"  Type: RANGE constraint ({cl} <= c <= {cu})")
+                elif cl > -1e19 and cu >= 1e19:
+                    print(f"  Type: G-type inequality (c >= {cl})")
+                elif cl <= -1e19 and cu < 1e19:
+                    print(f"  Type: L-type inequality (c <= {cu})")
+                else:
+                    print("  Type: UNCONSTRAINED? (both bounds at infinity)")
+
+        print(f"\n{'='*70}\n")

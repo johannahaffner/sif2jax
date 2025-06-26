@@ -160,31 +160,55 @@ class AbstractConstrainedMinimisation(AbstractProblem):
     def constraint(self, y) -> _ConstraintOut:
         """Returns the constraints on the variable `y`. The constraints can be either
         equality, inequality constraints, or both. This method returns a tuple, with the
-        equality constraint in the first argument and the inequality constraint values
-        in the second argument. If there are no equality constraints, the first element
-        should be `None`. If there are no inequality constraints, the second element
-        should be `None`. (None, None) is not allowed as an output - in that case the
-        problem has no constraints and should not be classified as a constrained
+        equality constraint values in the first argument and the inequality constraint
+        values in the second argument. If there are no equality constraints, the first
+        element should be `None`. If there are no inequality constraints, the second
+        element should be `None`. (None, None) is not allowed as an output - in
+        that case
+        the problem has no constraints and should not be classified as a constrained
         minimisation problem.
 
-        All constraints are assumed to be satisfied when the value is
-        equal to zero for equality constraints and greater than or equal to zero for
-        inequality constraints. Each element of each returned pytree of arrays will be
-        treated as the output of a constraint function (in other words: each constraint
-        function returns a scalar value, a collection of which may be arranged in a
-        pytree.)
+        The constraint values returned should be evaluated as-is, following the bounded
+        format convention. The interpretation of these values depends on the bounds
+        specified in `constraint_bounds`:
+        - Equality constraints: c(y) where bounds have cl = cu = 0
+        - Inequality constraints: c(y) where bounds specify cl ≤ c(y) ≤ cu
+
+        Each element of each returned pytree of arrays will be treated as the output
+        of a constraint function (in other words: each constraint function returns a
+        scalar value, a collection of which may be arranged in a pytree.)
 
         Example:
         ```python
         def constraint(self, y):
             x1, x2, x3 = y
-            # Equality constraints
+            # Equality constraints (with cl=cu=0 in constraint_bounds)
             c1 = x1 * x2 + x3
-            # Inequality constraints
+            # Inequality constraints (with appropriate cl/cu in constraint_bounds)
             c2 = x1 + x2
             c3 = x3 - x3
             return c1, (c2, c3)
         ```
+        """
+
+    @abc.abstractmethod
+    def constraint_bounds(self) -> tuple[PyTree[ArrayLike], PyTree[ArrayLike]]:
+        """Returns the bounds (cl, cu) for all constraints.
+
+        Following mathematical conventions with JAX infinities:
+        - Equality constraints: cl = cu = 0
+        - G-type inequalities (c ≥ b): cl = b, cu = jnp.inf
+        - L-type inequalities (c ≤ b): cl = -jnp.inf, cu = b
+        - Range constraints: finite cl and cu
+
+        The bounds should be ordered to match the constraint() output:
+        first all equality constraint bounds, then all inequality constraint bounds.
+        The structure of each bound pytree should match the structure of the
+        corresponding constraint values.
+
+        Returns:
+            (lower_bounds, upper_bounds): tuple of pytrees with same structure as
+            the constraints returned by constraint().
         """
 
     def num_constraints(self) -> tuple[Int, Int, Int]:

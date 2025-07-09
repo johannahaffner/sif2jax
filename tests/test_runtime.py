@@ -12,7 +12,7 @@ import sif2jax
 
 
 # Default runtime ratio threshold (JAX time / pycutest time)
-DEFAULT_THRESHOLD = 5.0
+DEFAULT_THRESHOLD = 4.0
 
 # Minimum runtime threshold in seconds
 # Below this threshold, noise dominates and comparisons are unreliable

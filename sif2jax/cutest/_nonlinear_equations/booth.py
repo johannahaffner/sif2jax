@@ -1,10 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-# TODO Requires human review, Claude tried and failed (and I don't know what was tried)
-class BOOTH(AbstractConstrainedMinimisation):
+class BOOTH(AbstractNonlinearEquations):
     """Booth quadratic problem in 2 variables.
 
     Source: Problem 36 in
@@ -26,43 +25,21 @@ class BOOTH(AbstractConstrainedMinimisation):
         """Number of variables."""
         return 2
 
-    @property
-    def m(self):
-        """Number of constraints."""
+    def num_residuals(self):
+        """Number of residual equations."""
         return 2
 
-    def objective(self, y, args):
-        """Compute the objective function.
+    def residual(self, y, args):
+        """Compute the residuals.
 
-        Looking at the SIF file, the objective is the sum of squared residuals:
-        f(x) = (x1 + 2*x2 - 7)^2 + (2*x1 + x2 - 5)^2
+        The nonlinear equations are:
+        x1 + 2*x2 - 7 = 0
+        2*x1 + x2 - 5 = 0
         """
         del args
         x1, x2 = y
 
-        # Group residuals
-        g1 = x1 + 2.0 * x2 - 7.0
-        g2 = 2.0 * x1 + x2 - 5.0
-
-        # Sum of squares
-        return g1**2 + g2**2
-
-    def constraint(self, y):
-        """Compute the constraints.
-
-        From AMPL, the constraints are:
-        x1 + 2*x2 - 7 = 0
-        2*x1 + x2 - 5 = 0
-        """
-        x1, x2 = y
-
-        eq_constraints = jnp.array([x1 + 2.0 * x2 - 7.0, 2.0 * x1 + x2 - 5.0])
-
-        return eq_constraints, None
-
-    def equality_constraints(self):
-        """Both constraints are equalities."""
-        return jnp.ones(2, dtype=bool)
+        return jnp.array([x1 + 2.0 * x2 - 7.0, 2.0 * x1 + x2 - 5.0])
 
     def y0(self):
         """Initial guess."""
@@ -71,10 +48,6 @@ class BOOTH(AbstractConstrainedMinimisation):
 
     def args(self):
         """No additional arguments."""
-        return None
-
-    def bounds(self):
-        """All variables are free."""
         return None
 
     def expected_result(self):
@@ -90,5 +63,5 @@ class BOOTH(AbstractConstrainedMinimisation):
 
     def expected_objective_value(self):
         """Expected optimal objective value."""
-        # At the solution, both residuals are 0, so f = 0
+        # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)

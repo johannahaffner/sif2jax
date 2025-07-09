@@ -67,8 +67,7 @@ def pytest_generate_tests(metafunc):
                 start_letter = start_at_letter.upper()
                 filtered_problems = []
                 for problem in all_problems:
-                    problem_name = problem.__class__.__name__
-                    if problem_name and problem_name[0].upper() >= start_letter:
+                    if problem.name[0].upper() >= start_letter:
                         filtered_problems.append(problem)
                 test_cases = tuple(filtered_problems)
             else:

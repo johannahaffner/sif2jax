@@ -21,7 +21,7 @@ from ._constrained_minimisation import (
     AVGASB as AVGASB,
     # AVION2 as AVION2,  # TODO: Human review - gradient discrepancies
     BIGGSC4 as BIGGSC4,
-    # BOOTH as BOOTH,  # TODO: needs human review - incorrectly classified
+    # BOOTH as BOOTH,  # Moved to nonlinear equations
     BOXBOD as BOXBOD,
     BT1 as BT1,
     BT2 as BT2,
@@ -214,6 +214,51 @@ from ._constrained_minimisation import (
     ZECEVIC3 as ZECEVIC3,
     ZECEVIC4 as ZECEVIC4,
 )
+from ._nonlinear_equations import (
+    ARGAUSS as ARGAUSS,
+    ARGTRIG as ARGTRIG,
+    ARTIF as ARTIF,
+    # TODO: Human review needed - constraint dimension mismatch
+    # ARWHDNE as ARWHDNE,
+    BARDNE as BARDNE,
+    # BDQRTICNE as BDQRTICNE,  # TODO: Human review needed
+    BEALENE as BEALENE,
+    BENNETT5 as BENNETT5,
+    BIGGS6NE as BIGGS6NE,
+    BOOTH as BOOTH,
+    BOX3NE as BOX3NE,
+    BROWNALE as BROWNALE,
+    BROWNBSNE as BROWNBSNE,
+    BROWNDENE as BROWNDENE,
+    BROYDNBD as BROYDNBD,
+    BRYBNDNE as BRYBNDNE,
+    CERI651A as CERI651A,
+    CERI651B as CERI651B,
+    CERI651C as CERI651C,
+    CHAINWOONE as CHAINWOONE,
+    # CHANNEL as CHANNEL,  # TODO: Human review needed
+    CHEBYQADNE as CHEBYQADNE,
+    # CHNRSBNE as CHNRSBNE,  # TODO: Human review needed
+    # CHNRSNBMNE as CHNRSNBMNE,  # TODO: Human review needed
+    CUBENE as CUBENE,
+    CYCLIC3 as CYCLIC3,
+    DENSCHNBNE as DENSCHNBNE,
+    ENGVAL2NE as ENGVAL2NE,
+    # ERRINROSNE as ERRINROSNE,  # TODO: Human review needed
+    HATFLDBNE as HATFLDBNE,
+    HATFLDFLNE as HATFLDFLNE,
+    MGH09 as MGH09,
+    MISRA1D as MISRA1D,
+    nonlinear_equations_problems as nonlinear_equations_problems,
+    NONMSQRTNE as NONMSQRTNE,
+    PALMER1BNE as PALMER1BNE,
+    PALMER5ENE as PALMER5ENE,
+    PALMER7ANE as PALMER7ANE,
+    POWERSUMNE as POWERSUMNE,
+    SINVALNE as SINVALNE,
+    SSBRYBNDNE as SSBRYBNDNE,
+    TENFOLDTR as TENFOLDTR,
+)
 from ._unconstrained_minimisation import (
     AKIVA as AKIVA,
     ALLINITU as ALLINITU,
@@ -396,7 +441,7 @@ problems_dict = {
     "ALSOTAME": ALSOTAME(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
-    # "BOOTH": BOOTH(),  # TODO: needs human review - incorrectly classified
+    "BOOTH": BOOTH(),
     "BURKEHAN": BURKEHAN(),
     "BYRDSPHR": BYRDSPHR(),
     "CANTILVR": CANTILVR(),
@@ -763,6 +808,47 @@ problems_dict = {
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
+    "ARGAUSS": ARGAUSS(),
+    "ARGTRIG": ARGTRIG(),
+    "ARTIF": ARTIF(),
+    # TODO: Human review needed - constraint dimension mismatch
+    # "ARWHDNE": ARWHDNE(),
+    "BARDNE": BARDNE(),
+    # "BDQRTICNE": BDQRTICNE(),  # TODO: Human review needed
+    "BEALENE": BEALENE(),
+    "BENNETT5": BENNETT5(),
+    "BIGGS6NE": BIGGS6NE(),
+    "BOX3NE": BOX3NE(),
+    "BROWNALE": BROWNALE(),
+    "BROWNBSNE": BROWNBSNE(),
+    "BROWNDENE": BROWNDENE(),
+    "BROYDNBD": BROYDNBD(),
+    "BRYBNDNE": BRYBNDNE(),
+    "CERI651A": CERI651A(),
+    "CERI651B": CERI651B(),
+    "CERI651C": CERI651C(),
+    "CHAINWOONE": CHAINWOONE(),
+    # "CHANNEL": CHANNEL(),  # TODO: Human review needed
+    "CHEBYQADNE": CHEBYQADNE(),
+    # "CHNRSBNE": CHNRSBNE(),  # TODO: Human review needed
+    # "CHNRSNBMNE": CHNRSNBMNE(),  # TODO: Human review needed
+    "CUBENE": CUBENE(),
+    "CYCLIC3": CYCLIC3(),
+    "DENSCHNBNE": DENSCHNBNE(),
+    "ENGVAL2NE": ENGVAL2NE(),
+    # "ERRINROSNE": ERRINROSNE(),  # TODO: Human review needed
+    "HATFLDBNE": HATFLDBNE(),
+    "HATFLDFLNE": HATFLDFLNE(),
+    "MGH09": MGH09(),
+    "MISRA1D": MISRA1D(),
+    "NONMSQRTNE": NONMSQRTNE(),
+    "PALMER1BNE": PALMER1BNE(),
+    "PALMER5ENE": PALMER5ENE(),
+    "PALMER7ANE": PALMER7ANE(),
+    "POWERSUMNE": POWERSUMNE(),
+    "SINVALNE": SINVALNE(),
+    "SSBRYBNDNE": SSBRYBNDNE(),
+    "10FOLDTR": TENFOLDTR(),
 }
 
 
@@ -774,4 +860,5 @@ problems = (
     unconstrained_minimisation_problems
     + bounded_minimisation_problems
     + constrained_minimisation_problems
+    + nonlinear_equations_problems
 )

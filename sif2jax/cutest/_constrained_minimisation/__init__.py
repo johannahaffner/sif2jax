@@ -16,7 +16,7 @@ from .avgasb import AVGASB as AVGASB
 from .biggsc4 import BIGGSC4 as BIGGSC4
 
 # TODO: BOOTH needs human review - incorrectly classified as constrained
-# from .booth import BOOTH as BOOTH
+# from .booth import BOOTH as BOOTH  # Moved to nonlinear equations
 from .boxbod import BOXBOD as BOXBOD
 from .bt1 import BT1 as BT1
 from .bt2 import BT2 as BT2

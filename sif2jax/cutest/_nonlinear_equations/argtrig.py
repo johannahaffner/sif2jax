@@ -24,10 +24,6 @@ class ARGTRIG(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "ARGTRIG"
-
     def starting_point(self) -> Array:
         return jnp.full(self.n, 1.0 / self.n, dtype=jnp.float64)
 

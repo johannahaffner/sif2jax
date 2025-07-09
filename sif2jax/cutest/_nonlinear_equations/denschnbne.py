@@ -22,10 +22,6 @@ class DENSCHNBNE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "DENSCHNBNE"
-
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the Dennis-Schnabel nonlinear equations"""
         x1, x2 = y

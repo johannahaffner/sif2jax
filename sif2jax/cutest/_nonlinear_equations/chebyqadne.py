@@ -27,10 +27,6 @@ class CHEBYQADNE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "CHEBYQADNE"
-
     def chebypol(self, x, i):
         """Evaluate the i-th shifted Chebyshev polynomial at x"""
         dif = 2.0 * x - 1.0

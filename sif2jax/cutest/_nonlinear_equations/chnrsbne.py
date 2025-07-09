@@ -31,10 +31,6 @@ class CHNRSBNE(AbstractNonlinearEquations):
     provided_y0s: frozenset = frozenset({0})
 
     @property
-    def name(self) -> str:
-        return "CHNRSBNE"
-
-    @property
     def alpha(self) -> Array:
         """Alpha parameters for the problem"""
         alphas = [

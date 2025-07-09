@@ -33,10 +33,6 @@ class BRYBNDNE(AbstractNonlinearEquations):
     lb: int = 5  # Lower bandwidth
     ub: int = 1  # Upper bandwidth
 
-    @property
-    def name(self) -> str:
-        return "BRYBNDNE"
-
     def starting_point(self) -> Array:
         return jnp.ones(self.n, dtype=jnp.float64)
 

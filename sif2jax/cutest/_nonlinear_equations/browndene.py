@@ -27,10 +27,6 @@ class BROWNDENE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "BROWNDENE"
-
     def starting_point(self) -> Array:
         return jnp.array([25.0, 5.0, -5.0, -1.0], dtype=jnp.float64)
 

@@ -40,10 +40,6 @@ class CHAINWOONE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "CHAINWOONE"
-
     def starting_point(self) -> Array:
         x = jnp.full(self.n, -2.0, dtype=jnp.float64)
         # Special starting values for first 4 variables

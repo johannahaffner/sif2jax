@@ -27,10 +27,6 @@ class BROWNBSNE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "BROWNBSNE"
-
     def starting_point(self) -> Array:
         return jnp.ones(self.n, dtype=jnp.float64)
 

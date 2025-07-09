@@ -40,10 +40,6 @@ class CHNRSNBMNE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "CHNRSNBMNE"
-
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the chained Rosenbrock nonlinear equations"""
         n = self.n

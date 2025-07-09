@@ -24,10 +24,6 @@ class CUBENE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "CUBENE"
-
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the cubic nonlinear equations"""
         # SQ(1): y(1) - 1 = 0

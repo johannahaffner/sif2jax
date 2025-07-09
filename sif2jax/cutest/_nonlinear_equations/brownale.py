@@ -27,10 +27,6 @@ class BROWNALE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "BROWNALE"
-
     def starting_point(self) -> Array:
         return jnp.full(self.n, 0.5, dtype=jnp.float64)
 

@@ -26,10 +26,6 @@ class CYCLIC3(AbstractNonlinearEquations):
     provided_y0s: frozenset = frozenset({0})
 
     @property
-    def name(self) -> str:
-        return "CYCLIC3"
-
-    @property
     def num_vars(self) -> int:
         """Number of variables is N+2"""
         return self.n + 2

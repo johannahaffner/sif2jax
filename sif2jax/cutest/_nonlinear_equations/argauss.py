@@ -23,10 +23,6 @@ class ARGAUSS(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def name(self) -> str:
-        return "ARGAUSS"
-
     def starting_point(self) -> Array:
         return jnp.array([0.4, 1.0, 0.0], dtype=jnp.float64)
 

@@ -1,10 +1,10 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class CLUSTER(AbstractConstrainedMinimisation):
-    """CLUSTER problem as a constrained formulation.
+class CLUSTER(AbstractNonlinearEquations):
+    """CLUSTER problem as a nonlinear equations formulation.
 
     Source: problem 207 in
     A.R. Buckley,
@@ -25,26 +25,12 @@ class CLUSTER(AbstractConstrainedMinimisation):
         """Number of variables."""
         return 2
 
-    @property
-    def m(self):
-        """Number of constraints."""
+    def num_residuals(self):
+        """Number of residual equations."""
         return 2  # Two residual equations
 
-    def objective(self, y, args):
-        """Compute the objective function.
-
-        For a constrained least squares formulation, the objective is 0.
-        """
-        del args, y
-        return jnp.array(0.0)
-
-    def constraint(self, y):
-        """Implement the abstract constraint method."""
-        eq, ineq = self.equality_constraints(y, self.args())
-        return eq, ineq
-
-    def equality_constraints(self, y, args):
-        """Compute the equality constraints.
+    def residual(self, y, args):
+        """Compute the residuals.
 
         The residuals are:
         G1 = (X1 - X2^2) * (X1 - sin(X2))
@@ -68,12 +54,6 @@ class CLUSTER(AbstractConstrainedMinimisation):
     def y0(self):
         """Initial guess."""
         return jnp.zeros(2)
-
-    def bounds(self):
-        """Variable bounds."""
-        lower = jnp.full(self.n, -jnp.inf)
-        upper = jnp.full(self.n, jnp.inf)
-        return lower, upper
 
     def args(self):
         """No additional arguments."""

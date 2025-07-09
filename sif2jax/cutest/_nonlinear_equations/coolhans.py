@@ -1,10 +1,10 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class COOLHANS(AbstractConstrainedMinimisation):
-    """Cooley-Hansen economy with loglinear approximation as constrained.
+class COOLHANS(AbstractNonlinearEquations):
+    """Cooley-Hansen economy with loglinear approximation - nonlinear equations problem.
 
     A problem arising from the analysis of a Cooley-Hansen economy with
     loglinear approximation. The problem is to solve the matrix equation
@@ -48,28 +48,14 @@ class COOLHANS(AbstractConstrainedMinimisation):
         """Number of variables."""
         return self.N * self.N  # 9 variables for 3x3 matrix
 
-    @property
-    def m(self):
-        """Number of constraints."""
-        return self.N * self.N  # 9 constraints for 3x3 matrix equation
+    def num_residuals(self):
+        """Number of residuals."""
+        return self.N * self.N  # 9 residuals for 3x3 matrix equation
 
-    def objective(self, y, args):
-        """Compute the objective function.
+    def residual(self, y, args):
+        """Compute the residuals of the matrix equation.
 
-        For a constrained least squares formulation, the objective is 0.
-        """
-        del args, y
-        return jnp.array(0.0)
-
-    def constraint(self, y):
-        """Implement the abstract constraint method."""
-        eq, ineq = self.equality_constraints(y, self.args())
-        return eq, ineq
-
-    def equality_constraints(self, y, args):
-        """Compute the equality constraints.
-
-        The constraints are the residuals of the matrix equation:
+        The residuals are from the matrix equation:
         R = A*X*X + B*X + C = 0
         """
         del args
@@ -83,18 +69,12 @@ class COOLHANS(AbstractConstrainedMinimisation):
         residual = AXX + BX + self.C
 
         # Flatten residual to vector form
-        return residual.flatten(), None
+        return residual.flatten()
 
     def y0(self):
         """Initial guess."""
         # Zero initial guess
         return jnp.zeros(self.n)
-
-    def bounds(self):
-        """Variable bounds."""
-        lower = jnp.full(self.n, -jnp.inf)
-        upper = jnp.full(self.n, jnp.inf)
-        return lower, upper
 
     def args(self):
         """No additional arguments."""

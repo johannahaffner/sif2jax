@@ -1,11 +1,11 @@
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class CHANDHEQ(AbstractConstrainedMinimisation):
-    """Chandrasekhar Radiative Transfer H equation as a constrained problem.
+class CHANDHEQ(AbstractNonlinearEquations):
+    """Chandrasekhar Radiative Transfer H equation as a nonlinear equations problem.
 
     Source: problem 4 in
     J.J. More',
@@ -31,26 +31,12 @@ class CHANDHEQ(AbstractConstrainedMinimisation):
         """Number of variables."""
         return self.N
 
-    @property
-    def m(self):
-        """Number of constraints."""
-        return self.N  # One constraint per discretization point
+    def num_residuals(self):
+        """Number of residual equations."""
+        return self.N  # One equation per discretization point
 
-    def objective(self, y, args):
-        """Compute the objective function.
-
-        For a constrained least squares formulation, the objective is 0.
-        """
-        del args, y
-        return jnp.array(0.0)
-
-    def constraint(self, y):
-        """Implement the abstract constraint method."""
-        eq, ineq = self.equality_constraints(y, self.args())
-        return eq, ineq
-
-    def equality_constraints(self, y, args):
-        """Compute the equality constraints.
+    def residual(self, y, args):
+        """Compute the residuals.
 
         The H-equation is:
         H(mu) = 1 - (c/2) * mu * integral_0^1 H(nu)/(mu+nu) dnu
@@ -58,7 +44,7 @@ class CHANDHEQ(AbstractConstrainedMinimisation):
         Discretized as:
         H_i = 1 - (c/2) * x_i * sum_j w_j * H_j / (x_i + x_j)
 
-        Each equation becomes a constraint.
+        Each equation becomes a residual.
         """
         del args
         h = y  # H values at discretization points
@@ -85,22 +71,15 @@ class CHANDHEQ(AbstractConstrainedMinimisation):
         h_j = h[jnp.newaxis, :]  # Shape (1, N)
         integral_terms = jnp.sum(coeffs * h_i * h_j, axis=1)  # Shape (N,)
 
-        # Constraints: H_i - 1 + integral term = 0
-        constraints = h - 1.0 + integral_terms
+        # Residuals: H_i - 1 + integral term = 0
+        residuals = h - 1.0 + integral_terms
 
-        return constraints, None
+        return residuals
 
     def y0(self):
         """Initial guess."""
         # All components set to 1.0
         return inexact_asarray(jnp.ones(self.N))
-
-    def bounds(self):
-        """Variable bounds."""
-        # From pycutest, all variables have lower bound 0
-        lower = jnp.zeros(self.n)
-        upper = jnp.full(self.n, jnp.inf)
-        return lower, upper
 
     def args(self):
         """No additional arguments."""
@@ -115,3 +94,11 @@ class CHANDHEQ(AbstractConstrainedMinimisation):
         """Expected optimal objective value."""
         # Should be 0.0 at solution
         return jnp.array(0.0)
+
+    def bounds(self):
+        """Variable bounds."""
+        # From SIF file comment: "Positive variables"
+        # All H(i) >= 0
+        lower = jnp.zeros(self.n)
+        upper = jnp.full(self.n, jnp.inf)
+        return lower, upper

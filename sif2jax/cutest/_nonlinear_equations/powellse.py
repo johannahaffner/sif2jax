@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class POWELLSE(AbstractConstrainedMinimisation):
+class POWELLSE(AbstractNonlinearEquations):
     """POWELLSE problem - The extended Powell singular problem.
 
     This problem is a sum of n/4 sets of four terms, each of which is
@@ -31,28 +31,21 @@ class POWELLSE(AbstractConstrainedMinimisation):
         """Number of variables (must be a multiple of 4)."""
         return 4  # Default value
 
-    @property
-    def m(self):
-        """Number of constraints."""
-        # Each set of 4 variables produces 4 equality constraints
+    def num_residuals(self):
+        """Number of residuals."""
+        # Each set of 4 variables produces 4 residuals
         return self.n
 
-    def objective(self, y, args):
-        """Compute the objective (constant zero)."""
-        del args, y
-        # POWELLSE has a constant zero objective
-        # The equations are handled as constraints
-        return jnp.array(0.0)
-
-    def constraint(self, y):
-        """Compute the constraints."""
+    def residual(self, y, args):
+        """Compute the residuals."""
+        del args
         x = y
 
         # Ensure n is a multiple of 4
         assert self.n % 4 == 0, "n must be a multiple of 4"
 
-        # Equality constraints:
-        eq_constraints = []
+        # Residuals:
+        residuals = []
 
         for i in range(0, self.n, 4):
             # G(i): x(i) + 10*x(i+1) = 0
@@ -69,11 +62,10 @@ class POWELLSE(AbstractConstrainedMinimisation):
             # Note: SIF has SCALE 0.1, and squared term gives factor 10
             g4 = 10.0 * (x[i] - x[i + 3]) ** 2
 
-            eq_constraints.extend([g1, g2, g3, g4])
+            residuals.extend([g1, g2, g3, g4])
 
-        eq_constraints = jnp.array(eq_constraints)
-        # No inequality constraints
-        return eq_constraints, None
+        residuals = jnp.array(residuals)
+        return residuals
 
     def y0(self):
         """Initial guess."""
@@ -92,12 +84,6 @@ class POWELLSE(AbstractConstrainedMinimisation):
     def expected_result(self):
         """Expected optimal solution (not provided in SIF)."""
         return None
-
-    def bounds(self):
-        """Variable bounds (all free)."""
-        lower = jnp.full(self.n, -jnp.inf)
-        upper = jnp.full(self.n, jnp.inf)
-        return lower, upper
 
     def expected_objective_value(self):
         """Expected optimal objective value."""

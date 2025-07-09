@@ -1,10 +1,10 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class DANIWOOD(AbstractConstrainedMinimisation):
-    """NIST data fitting problem DANIWOOD as a constrained problem.
+class DANIWOOD(AbstractNonlinearEquations):
+    """NIST data fitting problem DANIWOOD as a nonlinear equations problem.
 
     This is a revised version of the original inaccurate
     formulation of DANWOOD, with corrections provided by Abel Siqueira,
@@ -37,23 +37,12 @@ class DANIWOOD(AbstractConstrainedMinimisation):
         """Number of variables."""
         return 2
 
-    @property
-    def m(self):
-        """Number of constraints."""
-        return 6  # One constraint per data point
+    def num_residuals(self):
+        """Number of residuals."""
+        return 6  # One residual per data point
 
-    def objective(self, y, args):
-        """For a constrained least squares formulation, the objective is 0."""
-        del args, y
-        return jnp.array(0.0)
-
-    def constraint(self, y):
-        """Implement the abstract constraint method."""
-        eq, ineq = self.equality_constraints(y, self.args())
-        return eq, ineq
-
-    def equality_constraints(self, y, args):
-        """The constraints are the residuals: b1*x**b2 - y_i = 0"""
+    def residual(self, y, args):
+        """The residuals: b1*x**b2 - y_i = 0"""
         del args
         b1, b2 = y
 
@@ -63,7 +52,7 @@ class DANIWOOD(AbstractConstrainedMinimisation):
         # Residuals
         residuals = predictions - self.y_data
 
-        return residuals, None
+        return residuals
 
     def y0(self):
         """Initial guess."""
@@ -73,10 +62,6 @@ class DANIWOOD(AbstractConstrainedMinimisation):
     def args(self):
         """No additional arguments."""
         return None
-
-    def bounds(self):
-        """Variable bounds."""
-        return jnp.full(self.n, -jnp.inf), jnp.full(self.n, jnp.inf)
 
     def expected_result(self):
         """Expected optimal solution.

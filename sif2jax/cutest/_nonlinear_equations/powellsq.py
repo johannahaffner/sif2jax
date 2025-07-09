@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class POWELLSQ(AbstractConstrainedMinimisation):
+class POWELLSQ(AbstractNonlinearEquations):
     """POWELLSQ problem - Powell's singular problem.
 
     Source:
@@ -28,33 +28,24 @@ class POWELLSQ(AbstractConstrainedMinimisation):
         """Number of variables."""
         return 2
 
-    @property
-    def m(self):
-        """Number of constraints."""
-        # 2 equality constraints
+    def num_residuals(self):
+        """Number of residuals."""
+        # 2 residual equations
         return 2
 
-    def objective(self, y, args):
-        """Compute the objective (constant zero)."""
-        del args, y
-        # POWELLSQ has a constant zero objective
-        # The equations are handled as constraints
-        return jnp.array(0.0)
-
-    def constraint(self, y):
-        """Compute the constraints."""
+    def residual(self, y, args):
+        """Compute the residuals."""
+        del args
         x1, x2 = y
 
-        # Equality constraints:
+        # Residual equations:
         # Group G1: x1^2 = 0
         g1 = x1**2
 
         # Group G2: 10*x1/(x1+0.1) + 2*x2^2 = 0
         g2 = 10.0 * x1 / (x1 + 0.1) + 2.0 * x2**2
 
-        eq_constraints = jnp.array([g1, g2])
-        # No inequality constraints
-        return eq_constraints, None
+        return jnp.array([g1, g2])
 
     def y0(self):
         """Initial guess."""
@@ -67,12 +58,6 @@ class POWELLSQ(AbstractConstrainedMinimisation):
     def expected_result(self):
         """Expected optimal solution (not provided in SIF)."""
         return None
-
-    def bounds(self):
-        """Variable bounds (all free)."""
-        lower = jnp.full(self.n, -jnp.inf)
-        upper = jnp.full(self.n, jnp.inf)
-        return lower, upper
 
     def expected_objective_value(self):
         """Expected optimal objective value."""

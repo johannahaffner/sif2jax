@@ -12,6 +12,7 @@ from .bennett5 import BENNETT5 as BENNETT5
 from .biggs6ne import BIGGS6NE as BIGGS6NE
 from .booth import BOOTH as BOOTH
 from .box3ne import BOX3NE as BOX3NE
+from .boxbod import BOXBOD as BOXBOD
 from .brownale import BROWNALE as BROWNALE
 from .brownbsne import BROWNBSNE as BROWNBSNE
 from .browndene import BROWNDENE as BROWNDENE
@@ -23,14 +24,18 @@ from .ceri651b import CERI651B as CERI651B
 # from .errinrosne import ERRINROSNE as ERRINROSNE  # TODO: Human review needed
 from .ceri651c import CERI651C as CERI651C
 from .chainwoone import CHAINWOONE as CHAINWOONE
+from .chandheq import CHANDHEQ as CHANDHEQ
 
 # from .channel import CHANNEL as CHANNEL  # TODO: Human review needed
 from .chebyqadne import CHEBYQADNE as CHEBYQADNE
+from .cluster import CLUSTER as CLUSTER
+from .coolhans import COOLHANS as COOLHANS
 
 # from .chnrsbne import CHNRSBNE as CHNRSBNE  # TODO: Human review needed
 # from .chnrsnbmne import CHNRSNBMNE as CHNRSNBMNE  # TODO: Human review needed
 from .cubene import CUBENE as CUBENE
 from .cyclic3 import CYCLIC3 as CYCLIC3
+from .daniwood import DANIWOOD as DANIWOOD
 from .denschnbne import DENSCHNBNE as DENSCHNBNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
@@ -41,10 +46,20 @@ from .nonmsqrtne import NONMSQRTNE as NONMSQRTNE
 from .palmer1bne import PALMER1BNE as PALMER1BNE
 from .palmer5ene import PALMER5ENE as PALMER5ENE
 from .palmer7ane import PALMER7ANE as PALMER7ANE
+from .powellbs import POWELLBS as POWELLBS
+from .powellse import POWELLSE as POWELLSE
+from .powellsq import POWELLSQ as POWELLSQ
 from .powersumne import POWERSUMNE as POWERSUMNE
 from .sinvalne import SINVALNE as SINVALNE
 from .ssbrybndne import SSBRYBNDNE as SSBRYBNDNE
 from .tenfoldtr import TENFOLDTR as TENFOLDTR
+from .vanderm1 import VANDERM1 as VANDERM1
+from .vanderm2 import VANDERM2 as VANDERM2
+
+
+# TODO: Human review needed - originally had issues in constrained version
+# from .vanderm3 import VANDERM3 as VANDERM3
+# from .vanderm4 import VANDERM4 as VANDERM4
 
 
 nonlinear_equations_problems = (
@@ -90,4 +105,16 @@ nonlinear_equations_problems = (
     SINVALNE(),
     SSBRYBNDNE(),
     TENFOLDTR(),
+    BOXBOD(),
+    CHANDHEQ(),
+    CLUSTER(),
+    COOLHANS(),
+    DANIWOOD(),
+    POWELLBS(),
+    POWELLSE(),
+    POWELLSQ(),
+    VANDERM1(),
+    VANDERM2(),
+    # VANDERM3(),  # TODO: Human review needed - originally had issues
+    # VANDERM4(),  # TODO: Human review needed - originally had issues
 )

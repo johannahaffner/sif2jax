@@ -28,31 +28,32 @@ class TENFOLDTR(AbstractNonlinearEquations):
     def name(self) -> str:
         return "10FOLDTR"
 
-    def starting_point(self) -> Array:
-        return jnp.full(self.n, 10.0, dtype=jnp.float64)
-
     def num_residuals(self) -> int:
         return self.n
 
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the ten-fold triangular system"""
-        res = jnp.zeros(self.n, dtype=y.dtype)
-
         # E(i) = sum(x[j] for j in range(i)) for i in range(n-2)
-        for i in range(self.n - 2):
-            res = res.at[i].set(jnp.sum(y[: i + 1]))
+        # This is a cumulative sum
+        cumsum = jnp.cumsum(y)
+
+        # First n-2 residuals are cumulative sums
+        res_first = cumsum[: self.n - 2]
 
         # E(n-2) = (sum(x[j] for j in range(n-1)))^2
-        res = res.at[self.n - 2].set(jnp.sum(y[: self.n - 1]) ** 2)
+        res_n_minus_2 = cumsum[self.n - 2] ** 2
 
         # E(n-1) = (sum(x[j] for j in range(n)))^5
-        res = res.at[self.n - 1].set(jnp.sum(y) ** 5)
+        res_n_minus_1 = cumsum[self.n - 1] ** 5
+
+        # Concatenate all residuals
+        res = jnp.concatenate([res_first, jnp.array([res_n_minus_2, res_n_minus_1])])
 
         return res
 
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
-        return self.starting_point()
+        return jnp.full(self.n, 10.0)
 
     def args(self):
         """Additional arguments for the residual function."""

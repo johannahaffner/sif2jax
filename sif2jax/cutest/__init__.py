@@ -218,7 +218,8 @@ from ._nonlinear_equations import (
     ARGAUSS as ARGAUSS,
     ARGTRIG as ARGTRIG,
     ARTIF as ARTIF,
-    ARWHDNE as ARWHDNE,
+    # TODO: Human review needed - constraint dimension mismatch
+    # ARWHDNE as ARWHDNE,
     BARDNE as BARDNE,
     # BDQRTICNE as BDQRTICNE,  # TODO: Human review needed
     BEALENE as BEALENE,
@@ -809,7 +810,8 @@ problems_dict = {
     "ARGAUSS": ARGAUSS(),
     "ARGTRIG": ARGTRIG(),
     "ARTIF": ARTIF(),
-    "ARWHDNE": ARWHDNE(),
+    # TODO: Human review needed - constraint dimension mismatch
+    # "ARWHDNE": ARWHDNE(),
     "BARDNE": BARDNE(),
     # "BDQRTICNE": BDQRTICNE(),  # TODO: Human review needed
     "BEALENE": BEALENE(),

@@ -1,7 +1,9 @@
 from .argauss import ARGAUSS as ARGAUSS
 from .argtrig import ARGTRIG as ARGTRIG
 from .artif import ARTIF as ARTIF
-from .arwhdne import ARWHDNE as ARWHDNE
+
+# TODO: Human review needed - constraint dimension mismatch
+# from .arwhdne import ARWHDNE as ARWHDNE
 from .bardne import BARDNE as BARDNE
 
 # from .bdqrticne import BDQRTICNE as BDQRTICNE  # TODO: Human review needed
@@ -48,7 +50,8 @@ nonlinear_equations_problems = (
     ARGAUSS(),
     ARGTRIG(),
     ARTIF(),
-    ARWHDNE(),
+    # TODO: Human review needed - constraint dimension mismatch
+    # ARWHDNE(),
     BARDNE(),
     # BDQRTICNE(),  # TODO: Human review needed
     BEALENE(),

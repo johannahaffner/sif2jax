@@ -1,3 +1,8 @@
+# TODO: Human review needed
+# Constraint dimension mismatch: pycutest returns 998 equality constraints
+# but our implementation expects 499. This needs investigation to determine
+# the correct constraint formulation
+
 from jax import numpy as jnp
 from jaxtyping import Array, Float
 

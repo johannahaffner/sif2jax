@@ -215,16 +215,34 @@ from ._constrained_minimisation import (
     ZECEVIC4 as ZECEVIC4,
 )
 from ._nonlinear_equations import (
+    ARGAUSS as ARGAUSS,
+    ARGTRIG as ARGTRIG,
     ARTIF as ARTIF,
     ARWHDNE as ARWHDNE,
     BARDNE as BARDNE,
+    # BDQRTICNE as BDQRTICNE,  # TODO: Human review needed
+    BEALENE as BEALENE,
     BENNETT5 as BENNETT5,
     BIGGS6NE as BIGGS6NE,
     BOX3NE as BOX3NE,
+    BROWNALE as BROWNALE,
+    BROWNBSNE as BROWNBSNE,
+    BROWNDENE as BROWNDENE,
+    BROYDNBD as BROYDNBD,
+    BRYBNDNE as BRYBNDNE,
     CERI651A as CERI651A,
     CERI651B as CERI651B,
     CERI651C as CERI651C,
+    CHAINWOONE as CHAINWOONE,
+    # CHANNEL as CHANNEL,  # TODO: Human review needed
+    CHEBYQADNE as CHEBYQADNE,
+    # CHNRSBNE as CHNRSBNE,  # TODO: Human review needed
+    # CHNRSNBMNE as CHNRSNBMNE,  # TODO: Human review needed
+    CUBENE as CUBENE,
+    CYCLIC3 as CYCLIC3,
+    DENSCHNBNE as DENSCHNBNE,
     ENGVAL2NE as ENGVAL2NE,
+    # ERRINROSNE as ERRINROSNE,  # TODO: Human review needed
     HATFLDBNE as HATFLDBNE,
     HATFLDFLNE as HATFLDFLNE,
     MGH09 as MGH09,
@@ -237,6 +255,7 @@ from ._nonlinear_equations import (
     POWERSUMNE as POWERSUMNE,
     SINVALNE as SINVALNE,
     SSBRYBNDNE as SSBRYBNDNE,
+    TENFOLDTR as TENFOLDTR,
 )
 from ._unconstrained_minimisation import (
     AKIVA as AKIVA,
@@ -787,16 +806,34 @@ problems_dict = {
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
+    "ARGAUSS": ARGAUSS(),
+    "ARGTRIG": ARGTRIG(),
     "ARTIF": ARTIF(),
     "ARWHDNE": ARWHDNE(),
     "BARDNE": BARDNE(),
+    # "BDQRTICNE": BDQRTICNE(),  # TODO: Human review needed
+    "BEALENE": BEALENE(),
     "BENNETT5": BENNETT5(),
     "BIGGS6NE": BIGGS6NE(),
     "BOX3NE": BOX3NE(),
+    "BROWNALE": BROWNALE(),
+    "BROWNBSNE": BROWNBSNE(),
+    "BROWNDENE": BROWNDENE(),
+    "BROYDNBD": BROYDNBD(),
+    "BRYBNDNE": BRYBNDNE(),
     "CERI651A": CERI651A(),
     "CERI651B": CERI651B(),
     "CERI651C": CERI651C(),
+    "CHAINWOONE": CHAINWOONE(),
+    # "CHANNEL": CHANNEL(),  # TODO: Human review needed
+    "CHEBYQADNE": CHEBYQADNE(),
+    # "CHNRSBNE": CHNRSBNE(),  # TODO: Human review needed
+    # "CHNRSNBMNE": CHNRSNBMNE(),  # TODO: Human review needed
+    "CUBENE": CUBENE(),
+    "CYCLIC3": CYCLIC3(),
+    "DENSCHNBNE": DENSCHNBNE(),
     "ENGVAL2NE": ENGVAL2NE(),
+    # "ERRINROSNE": ERRINROSNE(),  # TODO: Human review needed
     "HATFLDBNE": HATFLDBNE(),
     "HATFLDFLNE": HATFLDFLNE(),
     "MGH09": MGH09(),
@@ -808,6 +845,7 @@ problems_dict = {
     "POWERSUMNE": POWERSUMNE(),
     "SINVALNE": SINVALNE(),
     "SSBRYBNDNE": SSBRYBNDNE(),
+    "10FOLDTR": TENFOLDTR(),
 }
 
 

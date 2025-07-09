@@ -215,7 +215,13 @@ class AbstractNonlinearEquations(AbstractProblem):
     find a solution y such that residual(y, args) = 0.
 
     To match pycutest's formulation, these are implemented as constrained problems
-    with zero objective and the residuals as equality constraints.
+    with the residuals as equality constraints. The objective function is typically
+    zero, but may be a constant value in some SIF formulations (e.g., CHAINWOONE).
+    Since the objective is constant, it doesn't affect the solution of the equations.
+
+    While most nonlinear equations problems do not have bounds on variables, some
+    problems (e.g., CHEBYQADNE) represent bounded root-finding problems where we
+    seek y ∈ [lower, upper] such that residual(y, args) = 0.
     """
 
     @abc.abstractmethod
@@ -224,7 +230,8 @@ class AbstractNonlinearEquations(AbstractProblem):
         arrays representing the system of nonlinear equations."""
 
     def objective(self, y, args) -> Scalar:
-        """For compatibility with pycutest, the objective is always zero."""
+        """For compatibility with pycutest, the objective is typically zero,
+        but may be a constant value for some problems."""
         return jnp.array(0.0)
 
     def constraint(self, y) -> tuple[PyTree[ArrayLike], None]:
@@ -238,10 +245,21 @@ class AbstractNonlinearEquations(AbstractProblem):
 
     def num_constraints(self) -> tuple[Int, Int, Int]:
         """Returns the number of constraints.
-        All residuals are equality constraints."""
+        All residuals are equality constraints. Bounds are counted if present."""
         residuals = self.residual(self.y0(), self.args())
         flat_residuals, _ = jfu.ravel_pytree(residuals)
-        return flat_residuals.size, 0, 0
+        num_equalities = flat_residuals.size
+
+        # Count bounds if present
+        bounds = self.bounds()
+        if bounds is None:
+            num_bounds = 0
+        else:
+            lower, upper = bounds
+            # Count finite bounds
+            num_bounds = jnp.sum(jnp.isfinite(lower)) + jnp.sum(jnp.isfinite(upper))
+
+        return num_equalities, 0, num_bounds
 
     def bounds(self) -> tuple[PyTree[ArrayLike], PyTree[ArrayLike]] | None:
         """Bounds on variables. Default is None for no bounds."""

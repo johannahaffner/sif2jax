@@ -208,3 +208,41 @@ class AbstractConstrainedMinimisation(AbstractProblem):
             num_bounds, _ = jfu.ravel_pytree(jtu.tree_map(jnp.isfinite, bounds))
             num_bounds = jnp.sum(num_bounds)
         return num_equalities, num_inequalities, num_bounds
+
+
+class AbstractNonlinearEquations(AbstractProblem):
+    """Abstract base class for nonlinear equations problems. These problems seek to
+    find a solution y such that residual(y, args) = 0.
+
+    To match pycutest's formulation, these are implemented as constrained problems
+    with zero objective and the residuals as equality constraints.
+    """
+
+    @abc.abstractmethod
+    def residual(self, y, args) -> PyTree[ArrayLike]:
+        """Residual function that should be zero at the solution. Returns a PyTree of
+        arrays representing the system of nonlinear equations."""
+
+    def objective(self, y, args) -> Scalar:
+        """For compatibility with pycutest, the objective is always zero."""
+        return jnp.array(0.0)
+
+    def constraint(self, y) -> tuple[PyTree[ArrayLike], None]:
+        """Returns the residuals as equality constraints for pycutest compatibility."""
+        return self.residual(y, self.args()), None
+
+    @abc.abstractmethod
+    def expected_objective_value(self) -> Scalar | None:
+        """Expected value of the objective at the solution. For nonlinear equations,
+        this is always zero."""
+
+    def num_constraints(self) -> tuple[Int, Int, Int]:
+        """Returns the number of constraints.
+        All residuals are equality constraints."""
+        residuals = self.residual(self.y0(), self.args())
+        flat_residuals, _ = jfu.ravel_pytree(residuals)
+        return flat_residuals.size, 0, 0
+
+    def bounds(self) -> tuple[PyTree[ArrayLike], PyTree[ArrayLike]] | None:
+        """Bounds on variables. Default is None for no bounds."""
+        return None

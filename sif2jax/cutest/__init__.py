@@ -214,6 +214,30 @@ from ._constrained_minimisation import (
     ZECEVIC3 as ZECEVIC3,
     ZECEVIC4 as ZECEVIC4,
 )
+from ._nonlinear_equations import (
+    ARTIF as ARTIF,
+    ARWHDNE as ARWHDNE,
+    BARDNE as BARDNE,
+    BENNETT5 as BENNETT5,
+    BIGGS6NE as BIGGS6NE,
+    BOX3NE as BOX3NE,
+    CERI651A as CERI651A,
+    CERI651B as CERI651B,
+    CERI651C as CERI651C,
+    ENGVAL2NE as ENGVAL2NE,
+    HATFLDBNE as HATFLDBNE,
+    HATFLDFLNE as HATFLDFLNE,
+    MGH09 as MGH09,
+    MISRA1D as MISRA1D,
+    nonlinear_equations_problems as nonlinear_equations_problems,
+    NONMSQRTNE as NONMSQRTNE,
+    PALMER1BNE as PALMER1BNE,
+    PALMER5ENE as PALMER5ENE,
+    PALMER7ANE as PALMER7ANE,
+    POWERSUMNE as POWERSUMNE,
+    SINVALNE as SINVALNE,
+    SSBRYBNDNE as SSBRYBNDNE,
+)
 from ._unconstrained_minimisation import (
     AKIVA as AKIVA,
     ALLINITU as ALLINITU,
@@ -763,6 +787,27 @@ problems_dict = {
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
+    "ARTIF": ARTIF(),
+    "ARWHDNE": ARWHDNE(),
+    "BARDNE": BARDNE(),
+    "BENNETT5": BENNETT5(),
+    "BIGGS6NE": BIGGS6NE(),
+    "BOX3NE": BOX3NE(),
+    "CERI651A": CERI651A(),
+    "CERI651B": CERI651B(),
+    "CERI651C": CERI651C(),
+    "ENGVAL2NE": ENGVAL2NE(),
+    "HATFLDBNE": HATFLDBNE(),
+    "HATFLDFLNE": HATFLDFLNE(),
+    "MGH09": MGH09(),
+    "MISRA1D": MISRA1D(),
+    "NONMSQRTNE": NONMSQRTNE(),
+    "PALMER1BNE": PALMER1BNE(),
+    "PALMER5ENE": PALMER5ENE(),
+    "PALMER7ANE": PALMER7ANE(),
+    "POWERSUMNE": POWERSUMNE(),
+    "SINVALNE": SINVALNE(),
+    "SSBRYBNDNE": SSBRYBNDNE(),
 }
 
 
@@ -774,4 +819,5 @@ problems = (
     unconstrained_minimisation_problems
     + bounded_minimisation_problems
     + constrained_minimisation_problems
+    + nonlinear_equations_problems
 )

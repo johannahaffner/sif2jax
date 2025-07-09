@@ -10,6 +10,7 @@ from .bardne import BARDNE as BARDNE
 from .bealene import BEALENE as BEALENE
 from .bennett5 import BENNETT5 as BENNETT5
 from .biggs6ne import BIGGS6NE as BIGGS6NE
+from .booth import BOOTH as BOOTH
 from .box3ne import BOX3NE as BOX3NE
 from .brownale import BROWNALE as BROWNALE
 from .brownbsne import BROWNBSNE as BROWNBSNE
@@ -57,6 +58,7 @@ nonlinear_equations_problems = (
     BEALENE(),
     BENNETT5(),
     BIGGS6NE(),
+    BOOTH(),
     BOX3NE(),
     BROWNALE(),
     BROWNBSNE(),

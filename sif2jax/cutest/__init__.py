@@ -21,7 +21,7 @@ from ._constrained_minimisation import (
     AVGASB as AVGASB,
     # AVION2 as AVION2,  # TODO: Human review - gradient discrepancies
     BIGGSC4 as BIGGSC4,
-    # BOOTH as BOOTH,  # TODO: needs human review - incorrectly classified
+    # BOOTH as BOOTH,  # Moved to nonlinear equations
     BOXBOD as BOXBOD,
     BT1 as BT1,
     BT2 as BT2,
@@ -225,6 +225,7 @@ from ._nonlinear_equations import (
     BEALENE as BEALENE,
     BENNETT5 as BENNETT5,
     BIGGS6NE as BIGGS6NE,
+    BOOTH as BOOTH,
     BOX3NE as BOX3NE,
     BROWNALE as BROWNALE,
     BROWNBSNE as BROWNBSNE,
@@ -440,7 +441,7 @@ problems_dict = {
     "ALSOTAME": ALSOTAME(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
-    # "BOOTH": BOOTH(),  # TODO: needs human review - incorrectly classified
+    "BOOTH": BOOTH(),
     "BURKEHAN": BURKEHAN(),
     "BYRDSPHR": BYRDSPHR(),
     "CANTILVR": CANTILVR(),

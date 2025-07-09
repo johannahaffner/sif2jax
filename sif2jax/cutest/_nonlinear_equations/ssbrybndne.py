@@ -1,3 +1,4 @@
+import jax
 from jax import numpy as jnp
 from jaxtyping import Array, Float
 
@@ -48,52 +49,62 @@ class SSBRYBNDNE(AbstractNonlinearEquations):
         ub = 1
         scal = 6.0
 
-        # Compute scaling factors
-        scale = jnp.zeros(n)
-        for i in range(n):
-            rat = float(i) / float(n - 1)
-            arg = rat * scal
-            scale = scale.at[i].set(jnp.exp(arg))
+        # Compute scaling factors vectorized
+        indices = jnp.arange(n)
+        rat = indices / (n - 1)
+        arg = rat * scal
+        scale = jnp.exp(arg)
 
-        # Initialize residuals
-        residuals = jnp.zeros(n)
+        # Compute nonlinear part for all equations at once
+        x_cubed = x * x * x
+        # Sum of all scale[j] * x[j]^3
+        total_nonlinear = kappa2 * jnp.sum(scale * x_cubed)
+        # Subtract the diagonal part (scale[i] * x[i]^3) for each i
+        nonlinear_parts = total_nonlinear - kappa2 * scale * x_cubed
 
-        # Compute residuals for each equation
-        for i in range(n):
-            # Linear part
-            linear_part = 0.0
-
+        # Compute linear part using vectorized operations
+        def compute_linear_part(i):
             # Determine the range of j indices
-            j_start = max(0, i - lb)
-            j_end = min(n - 1, i + ub)
+            j_start = jnp.maximum(0, i - lb)
+            j_end = jnp.minimum(n - 1, i + ub)
 
-            # Sum over j
-            for j in range(j_start, j_end + 1):
-                if j == i:
-                    linear_part += kappa1 * scale[i] * x[i]
-                else:
-                    linear_part -= kappa3 * scale[j] * x[j]
+            # Create mask for valid j indices
+            j_indices = jnp.arange(n)
+            mask = (j_indices >= j_start) & (j_indices <= j_end)
 
-            # Nonlinear part
-            nonlinear_part = 0.0
-            for j in range(n):
-                if j != i:
-                    xj_cubed = x[j] * x[j] * x[j]
-                    nonlinear_part += kappa2 * scale[j] * xj_cubed
-
-            # Full residual
-            xi_plus_1 = 1.0 + x[i]
-            xi_plus_1_cubed = xi_plus_1 * xi_plus_1 * xi_plus_1
-            residuals = residuals.at[i].set(
-                linear_part + nonlinear_part + kappa2 * scale[i] * xi_plus_1_cubed
+            # Compute linear contributions
+            linear_contrib = jnp.where(
+                j_indices == i,
+                kappa1 * scale[i] * x[i],  # diagonal term
+                -kappa3 * scale * x,  # off-diagonal terms
             )
+
+            # Apply mask and sum
+            return jnp.sum(linear_contrib * mask.astype(linear_contrib.dtype))
+
+        # Vectorize linear part computation over all i
+        linear_parts = jax.vmap(compute_linear_part)(indices)
+
+        # Compute final residuals
+        xi_plus_1 = 1.0 + x
+        xi_plus_1_cubed = xi_plus_1 * xi_plus_1 * xi_plus_1
+        residuals = linear_parts + nonlinear_parts + kappa2 * scale * xi_plus_1_cubed
 
         return residuals
 
     def y0(self) -> Float[Array, "5000"]:
         """Initial guess for the optimization problem."""
         n = self.n
-        return -jnp.ones(n)
+        scal = 6.0
+
+        # Compute starting values: x[i] = 1 / scale[i] - vectorized
+        indices = jnp.arange(n)
+        rat = indices / (n - 1)
+        arg = rat * scal
+        scale = jnp.exp(arg)
+        x0 = 1.0 / scale
+
+        return x0
 
     def args(self):
         """Additional arguments for the residual function."""

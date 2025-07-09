@@ -63,8 +63,3 @@ class ARWHDNE(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
-
-    def num_constraints(self) -> tuple[int, int, int]:
-        """Number of equality and inequality constraints."""
-        # Number of residuals is n-1
-        return (self.n - 1, 0, 0)

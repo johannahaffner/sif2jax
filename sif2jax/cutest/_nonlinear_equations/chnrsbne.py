@@ -119,12 +119,12 @@ class CHNRSBNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
-    def expected_result(self) -> Array | None:
+    def expected_result(self) -> None:
         """Expected result of the optimization problem."""
         # Solution should give objective value 0.0, but exact solution not specified
         return None
 
-    def expected_objective_value(self) -> Array | None:
+    def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)

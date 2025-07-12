@@ -25,8 +25,8 @@ class BARDNE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    def residual(self, y, args) -> Float[Array, "15"]:
-        """Residual function for the nonlinear equations."""
+    def constraint(self, y) -> tuple[Float[Array, "15"], None]:
+        """Returns the nonlinear equations as equality constraints."""
         x1, x2, x3 = y
 
         # Y data from constants
@@ -65,7 +65,7 @@ class BARDNE(AbstractNonlinearEquations):
 
         residuals = model - y_data
 
-        return residuals
+        return residuals, None
 
     @property
     def y0(self) -> Float[Array, "3"]:
@@ -77,19 +77,15 @@ class BARDNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
-    def expected_result(self) -> Float[Array, "3"] | None:
+    def expected_result(self) -> None:
         """Expected result of the optimization problem."""
         # The SIF file doesn't provide a solution
         return None
 
-    def expected_objective_value(self) -> Float[Array, ""] | None:
+    def expected_objective_value(self) -> Float[Array, ""]:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
-
-    def constraint(self, y):
-        """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args), None
 
     @property
     def bounds(self) -> tuple[Array, Array] | None:

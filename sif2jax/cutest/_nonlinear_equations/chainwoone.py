@@ -112,12 +112,12 @@ class CHAINWOONE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
-    def expected_result(self) -> Array | None:
+    def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # The solution has all variables equal to 1
         return jnp.ones(self.n, dtype=jnp.float64)
 
-    def expected_objective_value(self) -> Array | None:
+    def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)

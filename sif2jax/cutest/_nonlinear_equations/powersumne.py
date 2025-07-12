@@ -65,12 +65,12 @@ class POWERSUMNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
-    def expected_result(self) -> Float[Array, "4"] | None:
+    def expected_result(self) -> Float[Array, "4"]:
         """Expected result of the optimization problem."""
         # Optimal solution from SIF file
         return jnp.array([1.0, 2.0, 3.0, 2.0])
 
-    def expected_objective_value(self) -> Float[Array, ""] | None:
+    def expected_objective_value(self) -> Float[Array, ""]:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)

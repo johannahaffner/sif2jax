@@ -217,22 +217,17 @@ class AbstractConstrainedMinimisation(AbstractProblem[_Y]):
 
 class AbstractNonlinearEquations(AbstractProblem[_Y]):
     """Abstract base class for nonlinear equations problems. These problems seek to
-    find a solution y such that residual(y, args) = 0.
+    find a solution y such that the equality constraints are zero.
 
     To match pycutest's formulation, these are implemented as constrained problems
-    with the residuals as equality constraints. The objective function is typically
-    zero, but may be a constant value in some SIF formulations (e.g., CHAINWOONE).
+    with the nonlinear equations as equality constraints. The objective function is
+    typically zero, but may also take a constant value.
     Since the objective is constant, it doesn't affect the solution of the equations.
 
     While most nonlinear equations problems do not have bounds on variables, some
     problems (e.g., CHEBYQADNE) represent bounded root-finding problems where we
-    seek y ∈ [lower, upper] such that residual(y, args) = 0.
+    seek y ∈ [lower, upper] such that the constraints are satisfied.
     """
-
-    @abc.abstractmethod
-    def residual(self, y: _Y, args) -> PyTree[ArrayLike]:
-        """Residual function that should be zero at the solution. Returns a PyTree of
-        arrays representing the system of nonlinear equations."""
 
     def objective(self, y: _Y, args) -> Scalar:
         """For compatibility with pycutest, the objective is typically zero,

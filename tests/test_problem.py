@@ -1,3 +1,5 @@
+import inspect
+
 import jax
 import jax.flatten_util as jfu
 import jax.numpy as jnp
@@ -128,3 +130,20 @@ class TestProblem:
             _ = vmapped(jnp.array([y0, y0, y0]), problem.args)
         except Exception as e:
             raise RuntimeError(f"Vmap failed for {problem.name}") from e
+
+    def test_type_annotation_constraint(self, problem):
+        if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
+            signature = inspect.signature(problem.constraint)
+            # No union types in return type hints of concrete implementations
+            assert str(signature).split("->")[-1].strip().find("|") == -1
+        elif isinstance(problem, sif2jax.AbstractNonlinearEquations):
+            signature = inspect.signature(problem.constraint)
+            # No union types in return type hints of concrete implementations
+            assert str(signature).split("->")[-1].strip().find("|") == -1
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_type_annotation_objective(self, problem):
+        signature = inspect.signature(problem.objective)
+        # No union types in return type hints of concrete implementations
+        assert str(signature).split("->")[-1].strip().find("|") == -1

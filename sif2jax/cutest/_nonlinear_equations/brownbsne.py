@@ -54,12 +54,12 @@ class BROWNBSNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
-    def expected_result(self) -> Array | None:
+    def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # The solution is x[0] = 1e6, x[1] = 2e-6
         return jnp.array([1e6, 2e-6], dtype=jnp.float64)
 
-    def expected_objective_value(self) -> Array | None:
+    def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)

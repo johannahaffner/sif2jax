@@ -25,8 +25,8 @@ class BARDNE(AbstractNonlinearEquations):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    def residual(self, y, args) -> Float[Array, "15"]:
-        """Residual function for the nonlinear equations."""
+    def constraint(self, y) -> tuple[Float[Array, "15"], None]:
+        """Returns the nonlinear equations as equality constraints."""
         x1, x2, x3 = y
 
         # Y data from constants
@@ -51,25 +51,21 @@ class BARDNE(AbstractNonlinearEquations):
         )
 
         # Compute residuals for each group
-        residuals = []
-        for i in range(15):
-            u = float(i + 1)  # i = 1 to 15 in 1-indexed
-            v = 16.0 - u
+        i = jnp.arange(15)
+        u = i + 1.0  # i = 1 to 15 in 1-indexed
+        v = 16.0 - u
 
-            # For i = 1 to 8: w = u
-            # For i = 9 to 15: w = 16 - i = v
-            if i < 8:
-                w = u
-            else:
-                w = v
+        # For i = 1 to 8: w = u
+        # For i = 9 to 15: w = 16 - i = v
+        w = jnp.where(i < 8, u, v)
 
-            # Model: x1 + u / (v * x2 + w * x3)
-            denominator = v * x2 + w * x3
-            model = x1 + u / denominator
+        # Model: x1 + u / (v * x2 + w * x3)
+        denominator = v * x2 + w * x3
+        model = x1 + u / denominator
 
-            residuals.append(model - y_data[i])
+        residuals = model - y_data
 
-        return jnp.array(residuals)
+        return residuals, None
 
     def y0(self) -> Float[Array, "3"]:
         """Initial guess for the optimization problem."""
@@ -79,12 +75,12 @@ class BARDNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
-    def expected_result(self) -> Float[Array, "3"] | None:
+    def expected_result(self) -> None:
         """Expected result of the optimization problem."""
         # The SIF file doesn't provide a solution
         return None
 
-    def expected_objective_value(self) -> Float[Array, ""] | None:
+    def expected_objective_value(self) -> Float[Array, ""]:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)

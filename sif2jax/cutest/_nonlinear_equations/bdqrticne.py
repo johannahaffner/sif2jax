@@ -41,27 +41,28 @@ class BDQRTICNE(AbstractNonlinearEquations):
         n = self.n
         n_minus_4 = n - 4
 
-        # Initialize residuals array with n elements (pad with zeros)
-        residuals = jnp.zeros(n, dtype=y.dtype)
+        # Create indices for vectorized computation
+        indices = jnp.arange(n_minus_4)
 
-        # For each group i = 1, ..., n-4
-        for i in range(n_minus_4):
-            # L(i) = -4*y[i] - 3
-            linear_part = -4.0 * y[i] - 3.0
+        # Linear part: L(i) = -4*y[i] - 3
+        linear_part = -4.0 * y[indices] - 3.0
 
-            # G(i) = y[i]^2 + 2*y[i+1]^2 + 3*y[i+2]^2 + 4*y[i+3]^2 + 5*y[n-1]^2
-            nonlinear_part = (
-                y[i] ** 2
-                + 2.0 * y[i + 1] ** 2
-                + 3.0 * y[i + 2] ** 2
-                + 4.0 * y[i + 3] ** 2
-                + 5.0 * y[n - 1] ** 2
-            )
+        # Nonlinear part: G(i) = y[i]^2 + 2*y[i+1]^2 + 3*y[i+2]^2
+        #                        + 4*y[i+3]^2 + 5*y[n-1]^2
+        nonlinear_part = (
+            y[indices] ** 2
+            + 2.0 * y[indices + 1] ** 2
+            + 3.0 * y[indices + 2] ** 2
+            + 4.0 * y[indices + 3] ** 2
+            + 5.0 * y[n - 1] ** 2
+        )
 
-            # Combined residual for group i
-            residuals = residuals.at[i].set(linear_part + nonlinear_part)
+        # Combined residuals for groups 1 to n-4
+        group_residuals = linear_part + nonlinear_part
 
-        # Last 4 residuals remain zero
+        # Pad with zeros for the last 4 residuals
+        residuals = jnp.concatenate([group_residuals, jnp.zeros(4, dtype=y.dtype)])
+
         return residuals
 
     def y0(self) -> Array:
@@ -72,12 +73,12 @@ class BDQRTICNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
-    def expected_result(self) -> Array | None:
+    def expected_result(self) -> None:
         """Expected result of the optimization problem."""
         # The SIF file doesn't provide the solution vector
         return None
 
-    def expected_objective_value(self) -> Array | None:
+    def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)

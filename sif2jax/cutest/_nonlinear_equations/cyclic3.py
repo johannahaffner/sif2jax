@@ -59,12 +59,12 @@ class CYCLIC3(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
-    def expected_result(self) -> Array | None:
+    def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution should have all variables = 0
         return jnp.zeros(self.num_vars, dtype=jnp.float64)
 
-    def expected_objective_value(self) -> Array | None:
+    def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)

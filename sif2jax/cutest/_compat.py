@@ -73,7 +73,7 @@ class PyCUTEstCompatibilityWrapper(AbstractConstrainedMinimisation):
     def name(self) -> str:
         return self.problem.name
 
-    def constraint(self, y: ArrayLike) -> tuple[Array | None, Array | None]:
+    def constraint(self, y: ArrayLike) -> tuple[Array, Array]:
         """Convert constraints from Optimistix to PyCUTEst format.
 
         This method transforms constraints from consistent g(x) >= 0 format

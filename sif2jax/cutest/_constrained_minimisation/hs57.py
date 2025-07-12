@@ -141,9 +141,11 @@ class HS57(AbstractConstrainedMinimisation):
         # Sum of squares
         return jnp.sum(f_i**2)
 
+    @property
     def y0(self):
         return jnp.array([0.42, 5.0])
 
+    @property
     def args(self):
         return None
 
@@ -153,6 +155,7 @@ class HS57(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.02845966972)
 
+    @property
     def bounds(self):
         lower = jnp.array([0.4, -4.0])
         upper = None

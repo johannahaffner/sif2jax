@@ -75,10 +75,12 @@ class PALMER7ANE(AbstractNonlinearEquations):
         # Residuals
         return model - y_data
 
+    @property
     def y0(self) -> Float[Array, "6"]:
         """Initial guess for the optimization problem."""
         return jnp.array([1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -95,7 +97,7 @@ class PALMER7ANE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
 
     def num_constraints(self) -> tuple[int, int, int]:
         """Returns the number of constraints."""
@@ -106,6 +108,7 @@ class PALMER7ANE(AbstractNonlinearEquations):
         num_bounds = 2  # 2 finite lower bounds on B and C
         return num_equalities, num_inequalities, num_bounds
 
+    @property
     def bounds(self) -> tuple[Float[Array, "6"], Float[Array, "6"]]:
         """Bounds on variables."""
         # Lower bounds: B and C have lower bounds of 0.00001

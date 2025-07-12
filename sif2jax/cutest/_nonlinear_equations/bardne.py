@@ -71,10 +71,12 @@ class BARDNE(AbstractNonlinearEquations):
 
         return jnp.array(residuals)
 
+    @property
     def y0(self) -> Float[Array, "3"]:
         """Initial guess for the optimization problem."""
         return jnp.array([1.0, 1.0, 1.0])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -91,4 +93,9 @@ class BARDNE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

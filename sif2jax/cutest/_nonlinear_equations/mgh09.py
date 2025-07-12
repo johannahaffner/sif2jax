@@ -57,6 +57,7 @@ class MGH09(AbstractNonlinearEquations):
         model_y = numerator / denominator
         return model_y - y_data
 
+    @property
     def y0(self) -> Float[Array, "4"]:
         """Initial guess for the optimization problem."""
         if self.y0_iD == 0:
@@ -66,6 +67,7 @@ class MGH09(AbstractNonlinearEquations):
             # START2
             return jnp.array([0.25, 0.39, 0.415, 0.39])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -82,4 +84,9 @@ class MGH09(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

@@ -34,10 +34,12 @@ class HATFLDBNE(AbstractNonlinearEquations):
 
         return jnp.array(residuals)
 
+    @property
     def y0(self) -> Float[Array, "4"]:
         """Initial guess for the optimization problem."""
         return jnp.array([0.1, 0.1, 0.1, 0.1])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -52,6 +54,7 @@ class HATFLDBNE(AbstractNonlinearEquations):
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
 
+    @property
     def bounds(self) -> tuple[Float[Array, "4"], Float[Array, "4"]]:
         """Bounds on variables."""
         # Lower bounds: all 0.0000001
@@ -70,4 +73,4 @@ class HATFLDBNE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None

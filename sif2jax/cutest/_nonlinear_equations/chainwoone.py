@@ -99,10 +99,12 @@ class CHAINWOONE(AbstractNonlinearEquations):
         """Returns the constant objective value of -1.0."""
         return jnp.array(-1.0)
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         return self.starting_point()
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -119,4 +121,9 @@ class CHAINWOONE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

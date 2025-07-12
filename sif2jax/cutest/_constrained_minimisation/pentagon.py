@@ -37,10 +37,12 @@ class PENTAGON(AbstractConstrainedMinimisation):
         # From SIF: F = 1.0 / D**8 where D = DX*DX + DY*DY
         return 1.0 / d12_sq**8 + 1.0 / d13_sq**8 + 1.0 / d23_sq**8
 
+    @property
     def y0(self):
         # Starting point
         return jnp.array([-1.0, 0.0, 0.0, -1.0, 1.0, 1.0])
 
+    @property
     def args(self):
         return None
 
@@ -55,6 +57,7 @@ class PENTAGON(AbstractConstrainedMinimisation):
     def num_variables(self):
         return 6
 
+    @property
     def bounds(self):
         # All variables are free (unbounded)
         return jnp.array([-jnp.inf] * 6), jnp.array([jnp.inf] * 6)

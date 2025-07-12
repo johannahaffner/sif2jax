@@ -43,10 +43,12 @@ class BEALE(AbstractUnconstrainedMinimisation):
 
         return term1 + term2 + term3
 
+    @property
     def y0(self):
         # Initial values from SIF file (all 1.0)
         return jnp.array([1.0, 1.0])
 
+    @property
     def args(self):
         return None
 

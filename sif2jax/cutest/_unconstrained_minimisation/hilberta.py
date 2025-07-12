@@ -46,11 +46,13 @@ class HILBERTA(AbstractUnconstrainedMinimisation):
         # Note: Need 0.5 factor to match PyCUTEst results
         return 0.5 * jnp.dot(y, jnp.dot(hilbert_matrix, y))
 
+    @property
     def y0(self):
         # From AMPL data section: x[1] = -4, x[2] = -2, but default in SIF is -3.0
         # Let's use the SIF default for consistency
         return inexact_asarray(jnp.full(self.n, -3.0))
 
+    @property
     def args(self):
         return None
 

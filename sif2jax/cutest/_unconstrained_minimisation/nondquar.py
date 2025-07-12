@@ -53,6 +53,7 @@ class NONDQUAR(AbstractUnconstrainedMinimisation):
 
         return l4_sum + ln_1 + ln
 
+    @property
     def y0(self):
         # Starting from (1, -1, 1, -1, ... )
         n = self.n
@@ -60,6 +61,7 @@ class NONDQUAR(AbstractUnconstrainedMinimisation):
         y0 = y0.at[1::2].set(-1.0)
         return y0
 
+    @property
     def args(self):
         return None
 

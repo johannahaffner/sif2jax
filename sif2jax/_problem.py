@@ -1,5 +1,5 @@
 import abc
-from typing import Any
+from typing import Any, Generic, TypeVar
 
 import equinox as eqx
 import jax.flatten_util as jfu
@@ -8,7 +8,8 @@ from jax import numpy as jnp
 from jaxtyping import ArrayLike, Int, PyTree, Scalar
 
 
-_Out = Scalar | PyTree[ArrayLike] | None
+_Y = TypeVar("_Y")
+_Out = Scalar | PyTree[ArrayLike]
 _ConstraintOut = (
     tuple[None, PyTree[ArrayLike]]
     | tuple[PyTree[ArrayLike], None]
@@ -16,7 +17,7 @@ _ConstraintOut = (
 )
 
 
-class AbstractProblem(eqx.Module):
+class AbstractProblem(eqx.Module, Generic[_Y]):
     """Abstract base class for benchmark problems."""
 
     y0_iD: eqx.AbstractVar[int]
@@ -38,31 +39,33 @@ class AbstractProblem(eqx.Module):
         return self.__class__.__name__
 
     @abc.abstractmethod
-    def objective(self, y, args) -> _Out:
+    def objective(self, y: _Y, args) -> _Out:
         """Objective function to be minimized. Can return a single scalar value (for a
         minimisation problem) or a PyTree of arrays (for a least-squares problem).
         """
 
+    @property
     @abc.abstractmethod
-    def y0(self) -> PyTree[ArrayLike]:
+    def y0(self) -> _Y:
         """Initial guess for the optimization problem.
 
         If the problem provides multiple initial values (indicated by provided_y0s
-        having more than one element), this method should return the initial value
+        having more than one element), this property should return the initial value
         corresponding to the current y0_iD.
         """
 
+    @property
     @abc.abstractmethod
     def args(self) -> PyTree[Any]:
         """Additional arguments for the objective function."""
 
     @abc.abstractmethod
-    def expected_result(self) -> PyTree[ArrayLike]:
+    def expected_result(self) -> _Y:
         """Expected result of the optimization problem. Should be a PyTree of arrays
         with the same structure as `y0`."""
 
     @abc.abstractmethod
-    def expected_objective_value(self) -> _Out:
+    def expected_objective_value(self) -> _Out | None:
         """Expected value of the objective function at the optimal solution. For a
         minimisation function, this is a scalar value.
         For a least-squares problem, this is a PyTree of residuals.
@@ -72,7 +75,7 @@ class AbstractProblem(eqx.Module):
         """Returns the number of variables in the problem. This is the total number of
         elements in the PyTree returned by `y0`.
         """
-        flattened_y0, _ = jfu.ravel_pytree(self.y0())
+        flattened_y0, _ = jfu.ravel_pytree(self.y0)
         return flattened_y0.size
 
     @abc.abstractmethod
@@ -83,14 +86,14 @@ class AbstractProblem(eqx.Module):
         """
 
 
-class AbstractUnconstrainedMinimisation(AbstractProblem):
+class AbstractUnconstrainedMinimisation(AbstractProblem[_Y]):
     """Abstract base class for unconstrained minimisation problems. The objective
     function for these problems returns a single scalar value, and they have neither
     bounds on the variable `y` nor any other constraints.
     """
 
     @abc.abstractmethod
-    def objective(self, y, args) -> Scalar:
+    def objective(self, y: _Y, args) -> Scalar:
         """Objective function to be minimized. Must return a scalar value."""
 
     @abc.abstractmethod
@@ -103,14 +106,14 @@ class AbstractUnconstrainedMinimisation(AbstractProblem):
         return 0, 0, 0
 
 
-class AbstractBoundedMinimisation(AbstractProblem):
+class AbstractBoundedMinimisation(AbstractProblem[_Y]):
     """Abstract base class for bounded minimisation problems. The objective
     function for these problems returns a single scalar value, they specify bounds on
     the variable `y` but no other constraints.
     """
 
     @abc.abstractmethod
-    def objective(self, y, args) -> Scalar:
+    def objective(self, y: _Y, args) -> Scalar:
         """Objective function to be minimized. Must return a scalar value."""
 
     @abc.abstractmethod
@@ -119,19 +122,20 @@ class AbstractBoundedMinimisation(AbstractProblem):
         minimisation function, this is a scalar value.
         """
 
+    @property
     @abc.abstractmethod
-    def bounds(self) -> PyTree[ArrayLike]:
+    def bounds(self) -> tuple[_Y, _Y]:
         """Returns the bounds on the variable `y`. Should be a tuple (`lower`, `upper`)
         where `lower` and `upper` are PyTrees of arrays with the same structure as `y0`.
         """
 
     def num_constraints(self) -> tuple[Int, Int, Int]:
-        num_bounds = jtu.tree_map(jnp.isfinite, self.bounds())
+        num_bounds = jtu.tree_map(jnp.isfinite, self.bounds)
         num_bounds, _ = jfu.ravel_pytree(num_bounds)
         return 0, 0, jnp.sum(num_bounds)
 
 
-class AbstractConstrainedMinimisation(AbstractProblem):
+class AbstractConstrainedMinimisation(AbstractProblem[_Y]):
     """Abstract base class for constrained minimisation problems. These can have both
     equality or inequality constraints, and they may also have bounds on `y`. We do not
     differentiate between bounded constrained problems and constrained optimisation
@@ -140,7 +144,7 @@ class AbstractConstrainedMinimisation(AbstractProblem):
     """
 
     @abc.abstractmethod
-    def objective(self, y, args) -> Scalar:
+    def objective(self, y: _Y, args) -> Scalar:
         """Objective function to be minimized. Must return a scalar value."""
 
     @abc.abstractmethod
@@ -149,15 +153,16 @@ class AbstractConstrainedMinimisation(AbstractProblem):
         minimisation function, this is a scalar value.
         """
 
+    @property
     @abc.abstractmethod
-    def bounds(self) -> PyTree[ArrayLike] | None:
+    def bounds(self) -> tuple[_Y, _Y] | None:
         """Returns the bounds on the variable `y`, if specified.
         Should be a tuple (`lower`, `upper`) where `lower` and `upper` are PyTrees of
         arrays with the same structure as `y0`.
         """
 
     @abc.abstractmethod
-    def constraint(self, y) -> _ConstraintOut:
+    def constraint(self, y: _Y) -> _ConstraintOut:
         """Returns the constraints on the variable `y`. The constraints can be either
         equality, inequality constraints, or both. This method returns a tuple, with the
         equality constraint in the first argument and the inequality constraint values
@@ -188,7 +193,7 @@ class AbstractConstrainedMinimisation(AbstractProblem):
         """
 
     def num_constraints(self) -> tuple[Int, Int, Int]:
-        equality_out, inequality_out = self.constraint(self.y0())
+        equality_out, inequality_out = self.constraint(self.y0)
         if equality_out is None:
             num_equalities = 0
         else:
@@ -201,7 +206,7 @@ class AbstractConstrainedMinimisation(AbstractProblem):
                 jtu.tree_map(jnp.isfinite, inequality_out)
             )
             num_inequalities = jnp.sum(inequalities)
-        bounds = self.bounds()
+        bounds = self.bounds
         if bounds is None:
             num_bounds = 0
         else:
@@ -210,7 +215,7 @@ class AbstractConstrainedMinimisation(AbstractProblem):
         return num_equalities, num_inequalities, num_bounds
 
 
-class AbstractNonlinearEquations(AbstractProblem):
+class AbstractNonlinearEquations(AbstractProblem[_Y]):
     """Abstract base class for nonlinear equations problems. These problems seek to
     find a solution y such that residual(y, args) = 0.
 
@@ -225,17 +230,17 @@ class AbstractNonlinearEquations(AbstractProblem):
     """
 
     @abc.abstractmethod
-    def residual(self, y, args) -> PyTree[ArrayLike]:
+    def residual(self, y: _Y, args) -> PyTree[ArrayLike]:
         """Residual function that should be zero at the solution. Returns a PyTree of
         arrays representing the system of nonlinear equations."""
 
-    def objective(self, y, args) -> Scalar:
+    def objective(self, y: _Y, args) -> Scalar:
         """For compatibility with pycutest, the objective is typically zero,
         but may be a constant value for some problems."""
         return jnp.array(0.0)
 
     @abc.abstractmethod
-    def constraint(self, y) -> _ConstraintOut:
+    def constraint(self, y: _Y) -> _ConstraintOut:
         """Returns the constraints on the variable `y`. The constraints can be either
         equality, inequality constraints, or both. This method returns a tuple, with the
         equality constraint in the first argument and the inequality constraint values
@@ -265,7 +270,7 @@ class AbstractNonlinearEquations(AbstractProblem):
     def num_constraints(self) -> tuple[Int, Int, Int]:
         """Returns the number of constraints.
         Counts equality constraints, inequality constraints, and bounds."""
-        equality_out, inequality_out = self.constraint(self.y0())
+        equality_out, inequality_out = self.constraint(self.y0)
         if equality_out is None:
             num_equalities = 0
         else:
@@ -278,7 +283,7 @@ class AbstractNonlinearEquations(AbstractProblem):
                 jtu.tree_map(jnp.isfinite, inequality_out)
             )
             num_inequalities = jnp.sum(inequalities)
-        bounds = self.bounds()
+        bounds = self.bounds
         if bounds is None:
             num_bounds = 0
         else:
@@ -286,6 +291,9 @@ class AbstractNonlinearEquations(AbstractProblem):
             num_bounds = jnp.sum(num_bounds)
         return num_equalities, num_inequalities, num_bounds
 
-    def bounds(self) -> tuple[PyTree[ArrayLike], PyTree[ArrayLike]] | None:
-        """Bounds on variables. Default is None for no bounds."""
-        return None
+    @property
+    @abc.abstractmethod
+    def bounds(self) -> tuple[_Y, _Y] | None:
+        """Returns the bounds on the variable `y`, if specified.
+        Should be a tuple (`lower`, `upper`) where `lower` and `upper` are PyTrees of
+        arrays with the same structure as `y0`. Returns None for no bounds."""

@@ -30,9 +30,11 @@ class HS4(AbstractBoundedMinimisation):
         x1, x2 = y
         return (1.0 / 3.0) * (x1 + 1) ** 3 + x2
 
+    @property
     def y0(self):
         return jnp.array([1.125, 0.125])
 
+    @property
     def args(self):
         return None
 
@@ -42,6 +44,7 @@ class HS4(AbstractBoundedMinimisation):
     def expected_objective_value(self):
         return jnp.array(8.0 / 3.0)
 
+    @property
     def bounds(self):
         # x1 >= 1, x2 >= 0
         lower = jnp.array([1.0, 0.0])

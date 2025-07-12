@@ -38,11 +38,13 @@ class HS77(AbstractConstrainedMinimisation):
             + (x5 - 1) ** 6
         )
 
+    @property
     def y0(self):
         return jnp.array(
             [2.0, 2.0, 2.0, 2.0, 2.0]
         )  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -52,6 +54,7 @@ class HS77(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.24150513)
 
+    @property
     def bounds(self):
         return None
 

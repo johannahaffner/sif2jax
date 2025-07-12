@@ -30,10 +30,12 @@ class LOOTSMA(AbstractConstrainedMinimisation):
         x1, x2, x3 = y
         return x1**3 - 6.0 * x1**2 + 11.0 * x1 + x3
 
+    @property
     def y0(self):
         # Starting point
         return jnp.array([1.0, 1.0, -3.0])
 
+    @property
     def args(self):
         return None
 
@@ -48,6 +50,7 @@ class LOOTSMA(AbstractConstrainedMinimisation):
     def num_variables(self):
         return 3
 
+    @property
     def bounds(self):
         # X3 has upper bound of 5.0
         # All variables have default lower bound of 0 when no bounds are specified

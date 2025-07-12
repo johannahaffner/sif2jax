@@ -46,9 +46,11 @@ class HS100(AbstractConstrainedMinimisation):
             - 8 * x7
         )
 
+    @property
     def y0(self):
         return jnp.array([1.0, 2.0, 0.0, 4.0, 0.0, 1.0, 1.0])  # feasible
 
+    @property
     def args(self):
         return None
 
@@ -60,6 +62,7 @@ class HS100(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(680.6300573)
 
+    @property
     def bounds(self):
         return None
 

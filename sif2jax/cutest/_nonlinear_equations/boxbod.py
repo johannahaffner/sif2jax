@@ -58,11 +58,13 @@ class BOXBOD(AbstractNonlinearEquations):
 
         return residuals
 
+    @property
     def y0(self):
         """Initial guess."""
         # Using START1 from SIF file
         return jnp.array([1.0, 1.0])
 
+    @property
     def args(self):
         """No additional arguments."""
         return None
@@ -83,4 +85,9 @@ class BOXBOD(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

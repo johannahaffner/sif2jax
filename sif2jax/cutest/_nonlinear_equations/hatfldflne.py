@@ -37,11 +37,13 @@ class HATFLDFLNE(AbstractNonlinearEquations):
 
         return jnp.array(residuals)
 
+    @property
     def y0(self) -> Float[Array, "3"]:
         """Initial guess for the optimization problem."""
         # Fletcher's nasty starting point
         return jnp.array([1.2, -1.2, 0.98])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -58,4 +60,9 @@ class HATFLDFLNE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

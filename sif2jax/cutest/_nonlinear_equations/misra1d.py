@@ -73,6 +73,7 @@ class MISRA1D(AbstractNonlinearEquations):
         # Residuals
         return model - y_data
 
+    @property
     def y0(self) -> Float[Array, "2"]:
         """Initial guess for the optimization problem."""
         if self.y0_iD == 0:
@@ -82,6 +83,7 @@ class MISRA1D(AbstractNonlinearEquations):
             # START2
             return jnp.array([450.0, 0.0003])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -98,4 +100,9 @@ class MISRA1D(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

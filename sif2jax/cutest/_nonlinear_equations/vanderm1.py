@@ -72,7 +72,7 @@ class VANDERM1(AbstractNonlinearEquations):
     def constraint(self, y):
         """Compute the constraints (both equality and inequality)."""
         # Equality constraints: the residuals
-        equalities = self.residual(y, self.args())
+        equalities = self.residual(y, self.args)
 
         # Inequality constraints: monotonicity x[i] >= x[i-1] for i = 2, ..., n
         # Rewritten as x[i] - x[i-1] >= 0
@@ -82,6 +82,7 @@ class VANDERM1(AbstractNonlinearEquations):
 
         return equalities, inequalities
 
+    @property
     def y0(self):
         """Initial guess."""
         n = self.n
@@ -89,6 +90,7 @@ class VANDERM1(AbstractNonlinearEquations):
         # In 0-based indexing: x[0] = 0/n, x[1] = 1/n, ..., x[n-1] = (n-1)/n
         return inexact_asarray(jnp.arange(n)) / n
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
@@ -100,3 +102,8 @@ class VANDERM1(AbstractNonlinearEquations):
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(0.0)
+
+    @property
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

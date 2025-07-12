@@ -286,10 +286,12 @@ class CERI651B(AbstractNonlinearEquations):
 
         return jnp.array(residuals)
 
+    @property
     def y0(self) -> Float[Array, "7"]:
         """Initial guess for the optimization problem."""
         return jnp.array([0.0, 0.0, 1.0, 0.05, 3527.31, 29.4219, 26185.9])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -306,4 +308,9 @@ class CERI651B(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

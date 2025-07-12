@@ -325,10 +325,12 @@ class CERI651DLS(AbstractUnconstrainedMinimisation):
         residuals = weights * (y_pred - y_data)
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values from the SIF file (START4)
         return jnp.array([0.0, 0.0, 1.0, 0.05, 15.1595, 8.0, 13072.9])
 
+    @property
     def args(self):
         return None
 

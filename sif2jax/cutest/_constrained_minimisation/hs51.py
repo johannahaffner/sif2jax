@@ -33,9 +33,11 @@ class HS51(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5 = y
         return (x1 - x2) ** 2 + (x2 + x3 - 2) ** 2 + (x4 - 1) ** 2 + (x5 - 1) ** 2
 
+    @property
     def y0(self):
         return jnp.array([2.5, 0.5, 2.0, -1.0, 0.5])
 
+    @property
     def args(self):
         return None
 
@@ -45,6 +47,7 @@ class HS51(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.0)
 
+    @property
     def bounds(self):
         return None
 

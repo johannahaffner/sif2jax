@@ -51,6 +51,7 @@ class MAKELA3(AbstractConstrainedMinimisation):
         # Return as inequality constraints (pycutest convention: <= 0)
         return None, constraints
 
+    @property
     def y0(self):
         """Initial guess."""
         x0 = jnp.zeros(21)
@@ -61,10 +62,12 @@ class MAKELA3(AbstractConstrainedMinimisation):
         # u starts at 0
         return inexact_asarray(x0)
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds (all free)."""
         lower = jnp.full(21, -jnp.inf)

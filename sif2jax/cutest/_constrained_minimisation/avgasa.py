@@ -107,14 +107,17 @@ class AVGASA(AbstractConstrainedMinimisation):
         """All constraints are inequalities."""
         return jnp.zeros(10, dtype=bool)
 
+    @property
     def y0(self):
         """Initial guess for variables."""
         return jnp.full(8, 0.5)
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Bounds on variables."""
         # All variables bounded between 0 and 1

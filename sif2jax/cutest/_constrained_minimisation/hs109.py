@@ -32,11 +32,13 @@ class HS109(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5, x6, x7, x8, x9 = y
         return 3 * x1 + 1.0e-6 * x1**3 + 2 * x2 + 0.522074e-6 * x2**3
 
+    @property
     def y0(self):
         return jnp.array(
             [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         )  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -47,6 +49,7 @@ class HS109(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(5362.06928)
 
+    @property
     def bounds(self):
         # Bounds from the PDF
         lower = jnp.array([0.0, 0.0, -0.55, -0.55, 196.0, 196.0, 196.0, -400.0, -400.0])

@@ -76,11 +76,13 @@ class CHANDHEQ(AbstractNonlinearEquations):
 
         return residuals
 
+    @property
     def y0(self):
         """Initial guess."""
         # All components set to 1.0
         return inexact_asarray(jnp.ones(self.N))
 
+    @property
     def args(self):
         """No additional arguments."""
         return None
@@ -97,8 +99,9 @@ class CHANDHEQ(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
 
+    @property
     def bounds(self):
         """Variable bounds."""
         # From SIF file comment: "Positive variables"

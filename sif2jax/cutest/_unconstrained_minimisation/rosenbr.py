@@ -23,9 +23,11 @@ class ROSENBR(AbstractUnconstrainedMinimisation):
         x1, x2 = y
         return 100 * (x2 - x1**2) ** 2 + (1 - x1) ** 2
 
+    @property
     def y0(self):
         return jnp.array([-1.2, 1.0])
 
+    @property
     def args(self):
         return None
 

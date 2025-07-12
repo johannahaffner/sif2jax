@@ -113,10 +113,12 @@ class JUDGE(AbstractUnconstrainedMinimisation):
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Initial point (1.0, 5.0)."""
         return jnp.array([1.0, 5.0])
 
+    @property
     def args(self):
         """No additional arguments needed."""
         return None

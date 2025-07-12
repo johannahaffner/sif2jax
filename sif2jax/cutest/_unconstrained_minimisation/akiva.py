@@ -93,10 +93,12 @@ class AKIVA(AbstractUnconstrainedMinimisation):
         # Return negative log likelihood for minimization
         return jnp.array(-log_likelihood)
 
+    @property
     def y0(self):
         # Initial values from SIF file (both start at 0.0)
         return jnp.array([0.0, 0.0])
 
+    @property
     def args(self):
         return None
 

@@ -75,10 +75,12 @@ class DJTL(AbstractUnconstrainedMinimisation):
 
         return f
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return jnp.array([15.0, 6.0])
 
+    @property
     def args(self):
         return None
 

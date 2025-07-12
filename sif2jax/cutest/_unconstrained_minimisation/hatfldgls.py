@@ -53,10 +53,12 @@ class HATFLDGLS(AbstractUnconstrainedMinimisation):
         # Objective function is sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial point from SIF file (line 57)
         return inexact_asarray(jnp.ones(25))  # Hard-coded as 25 per SIF file
 
+    @property
     def args(self):
         return None
 

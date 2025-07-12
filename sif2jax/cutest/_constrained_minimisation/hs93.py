@@ -45,9 +45,11 @@ class HS93(AbstractConstrainedMinimisation):
             + 0.0437 * x2x3 * x6_sq * sum_124
         )
 
+    @property
     def y0(self):
         return jnp.array([5.54, 4.4, 12.02, 11.82, 0.702, 0.852])
 
+    @property
     def args(self):
         return None
 
@@ -57,8 +59,12 @@ class HS93(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(135.075961)
 
+    @property
     def bounds(self):
-        return [(0.0, None) for _ in range(6)]
+        # All variables have lower bound 0, no upper bound
+        lower = jnp.zeros(6)
+        upper = jnp.full(6, jnp.inf)
+        return lower, upper
 
     def constraint(self, y):
         x1, x2, x3, x4, x5, x6 = y

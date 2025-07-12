@@ -107,10 +107,12 @@ class ERRINROS(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(first_terms) + jnp.sum(second_terms)
 
+    @property
     def y0(self):
         # Initial values from SIF file (all -1.0)
         return inexact_asarray(jnp.full(self.n, -1.0))
 
+    @property
     def args(self):
         return None
 

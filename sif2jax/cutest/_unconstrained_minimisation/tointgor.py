@@ -247,10 +247,12 @@ class TOINTGOR(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(ga_terms) + jnp.sum(gb_terms)
 
+    @property
     def y0(self):
         """Initial guess (not specified in SIF, use zeros)."""
         return jnp.zeros(50)
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None

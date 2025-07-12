@@ -30,9 +30,11 @@ class HS3(AbstractBoundedMinimisation):
         x1, x2 = y
         return x2 + 1e-5 * (x2 - x1) ** 2
 
+    @property
     def y0(self):
         return jnp.array([10.0, 1.0])
 
+    @property
     def args(self):
         return None
 
@@ -42,6 +44,7 @@ class HS3(AbstractBoundedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.0)
 
+    @property
     def bounds(self):
         # Only x2 has a lower bound of 0, x1 is unbounded
         lower = jnp.array([-jnp.inf, 0.0])

@@ -30,9 +30,11 @@ class HS29(AbstractConstrainedMinimisation):
         x1, x2, x3 = y
         return -x1 * x2 * x3
 
+    @property
     def y0(self):
         return jnp.array([1.0, 1.0, 1.0])
 
+    @property
     def args(self):
         return None
 
@@ -44,6 +46,7 @@ class HS29(AbstractConstrainedMinimisation):
         sqrt2 = jnp.sqrt(2.0)
         return jnp.array(-16.0 * sqrt2)
 
+    @property
     def bounds(self):
         return None
 

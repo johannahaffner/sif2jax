@@ -47,10 +47,12 @@ class POWERSUMNE(AbstractNonlinearEquations):
 
         return jnp.array(residuals)
 
+    @property
     def y0(self) -> Float[Array, "4"]:
         """Initial guess for the optimization problem."""
         return jnp.array([2.0, 2.0, 2.0, 2.0])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -67,4 +69,9 @@ class POWERSUMNE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

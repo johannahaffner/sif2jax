@@ -44,10 +44,12 @@ class HELIX(AbstractUnconstrainedMinimisation):
         # Return sum of squared residuals
         return r1**2 + r2**2 + r3**2
 
+    @property
     def y0(self):
         # Starting point from the SIF file
         return jnp.array([-1.0, 0.0, 0.0])
 
+    @property
     def args(self):
         return None
 

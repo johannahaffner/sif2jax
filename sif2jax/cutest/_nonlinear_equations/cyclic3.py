@@ -50,11 +50,13 @@ class CYCLIC3(AbstractNonlinearEquations):
 
         return residuals
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         # Starting point: all variables = 1000.0
         return jnp.full(self.num_vars, 1000.0, dtype=jnp.float64)
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -71,4 +73,9 @@ class CYCLIC3(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

@@ -54,6 +54,7 @@ class POWELLBS(AbstractNonlinearEquations):
         residuals = jnp.array(residuals)
         return residuals
 
+    @property
     def y0(self):
         """Initial guess."""
         x0 = jnp.zeros(self.n)
@@ -61,6 +62,7 @@ class POWELLBS(AbstractNonlinearEquations):
         x0 = x0.at[1].set(1.0)
         return x0
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
@@ -75,4 +77,9 @@ class POWELLBS(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

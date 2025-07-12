@@ -354,6 +354,7 @@ class BENNETT5(AbstractNonlinearEquations):
         # Residuals
         return model - y_data
 
+    @property
     def y0(self) -> Float[Array, "3"]:
         """Initial guess for the optimization problem."""
         if self.y0_iD == 0:
@@ -363,6 +364,7 @@ class BENNETT5(AbstractNonlinearEquations):
             # START2
             return jnp.array([-1500.0, 45.0, 0.85])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -379,4 +381,9 @@ class BENNETT5(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

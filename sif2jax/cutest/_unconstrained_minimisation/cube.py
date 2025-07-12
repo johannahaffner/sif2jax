@@ -39,10 +39,12 @@ class CUBE(AbstractUnconstrainedMinimisation):
 
         return term1 + term2
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return jnp.array([-1.2, 1.0])
 
+    @property
     def args(self):
         return None
 

@@ -58,9 +58,11 @@ class MEXHAT(AbstractUnconstrainedMinimisation):
 
         return first_term + second_term
 
+    @property
     def y0(self):
         return jnp.array([0.86, 0.72])
 
+    @property
     def args(self):
         return None
 

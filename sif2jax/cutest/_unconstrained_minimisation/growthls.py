@@ -84,11 +84,13 @@ class GROWTHLS(AbstractUnconstrainedMinimisation):
         # Return sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Starting point from the SIF file: U1 = 100.0, U2 and U3 not specified
         # Using reasonable values for U2 and U3
         return jnp.array([100.0, 0.0, 0.0])
 
+    @property
     def args(self):
         return None
 

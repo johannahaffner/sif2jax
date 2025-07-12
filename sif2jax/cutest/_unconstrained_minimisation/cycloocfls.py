@@ -103,6 +103,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
         all_residuals = jnp.concatenate([a_residuals, b_residuals])
         return jnp.sum(all_residuals**2)
 
+    @property
     def y0(self):
         # Initial values from SIF file
         # Simple approach: distribute molecules evenly on a ring in the xy-plane
@@ -130,6 +131,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
         return y
 
+    @property
     def args(self):
         return None
 

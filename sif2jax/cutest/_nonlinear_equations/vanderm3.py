@@ -69,12 +69,14 @@ class VANDERM3(AbstractNonlinearEquations):
 
         return residuals
 
+    @property
     def y0(self):
         """Initial guess."""
         n = self.n
         # Initial point: x[i] = (i-1)/n
         return inexact_asarray(jnp.arange(n)) * n
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
@@ -91,7 +93,7 @@ class VANDERM3(AbstractNonlinearEquations):
     def constraint(self, y):
         """Compute the constraints (both equality and inequality)."""
         # Equality constraints: the residuals
-        equalities = self.residual(y, self.args())
+        equalities = self.residual(y, self.args)
 
         # Inequality constraints: monotonicity x[i] >= x[i-1] for i = 2, ..., n
         # Rewritten as x[i] - x[i-1] >= 0
@@ -100,3 +102,8 @@ class VANDERM3(AbstractNonlinearEquations):
         inequalities = x[1:n] - x[0 : n - 1]
 
         return equalities, inequalities
+
+    @property
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

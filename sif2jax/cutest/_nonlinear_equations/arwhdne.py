@@ -51,10 +51,12 @@ class ARWHDNE(AbstractNonlinearEquations):
 
         return jnp.array(residuals)
 
+    @property
     def y0(self) -> Float[Array, "500"]:
         """Initial guess for the optimization problem."""
         return jnp.ones(self.n)
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -71,4 +73,4 @@ class ARWHDNE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None

@@ -47,16 +47,19 @@ class EXP2B(AbstractBoundedMinimisation):
         # Sum of squared residuals
         return jnp.sum(jnp.square(residuals))
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return inexact_asarray(jnp.array([1.0, 5.0]))
 
+    @property
     def bounds(self):
         # Box constraints: 0 <= x <= 20
         lower = jnp.zeros(self.n)
         upper = jnp.full(self.n, 20.0)
         return lower, upper
 
+    @property
     def args(self):
         return None
 

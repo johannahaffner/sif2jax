@@ -53,6 +53,7 @@ class GENHUMPS(AbstractUnconstrainedMinimisation):
         # Sum all terms
         return jnp.sum(terms)
 
+    @property
     def y0(self):
         # Starting point from the SIF file:
         # all variables = -506.2, except first = -506.0
@@ -60,6 +61,7 @@ class GENHUMPS(AbstractUnconstrainedMinimisation):
         y_init = y_init.at[0].set(-506.0)
         return inexact_asarray(y_init)
 
+    @property
     def args(self):
         return None
 

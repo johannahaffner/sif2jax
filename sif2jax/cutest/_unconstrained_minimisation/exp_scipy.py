@@ -48,10 +48,12 @@ class EXP2(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals
         return jnp.sum(jnp.square(residuals))
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return inexact_asarray(jnp.array([1.0, 5.0]))
 
+    @property
     def args(self):
         return None
 

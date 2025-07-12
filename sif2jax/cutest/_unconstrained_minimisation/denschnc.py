@@ -31,10 +31,12 @@ class DENSCHNC(AbstractUnconstrainedMinimisation):
 
         return term1 + term2
 
+    @property
     def y0(self):
         # Initial values from AMPL model: x[1]=2, x[2]=3
         return jnp.array([2.0, 3.0])
 
+    @property
     def args(self):
         return None
 

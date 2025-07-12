@@ -229,11 +229,13 @@ class AIRPORT(AbstractConstrainedMinimisation):
 
         return None, jnp.array(constraints)
 
+    @property
     def y0(self):
         """Initial guess for variables (zeros within bounds)."""
         # No explicit starting point in SIF file, use zeros
         return jnp.zeros(2 * self.n_airports)
 
+    @property
     def bounds(self):
         """Get variable bounds."""
         # All variables bounded in [-10, 10]
@@ -241,6 +243,7 @@ class AIRPORT(AbstractConstrainedMinimisation):
         upper = jnp.full(2 * self.n_airports, 10.0)
         return (lower, upper)
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None

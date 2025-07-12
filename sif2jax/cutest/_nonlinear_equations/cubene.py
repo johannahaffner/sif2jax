@@ -34,10 +34,12 @@ class CUBENE(AbstractNonlinearEquations):
 
         return jnp.array([res1, res2])
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         return jnp.array([-1.2, 1.0], dtype=jnp.float64)
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -54,4 +56,9 @@ class CUBENE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

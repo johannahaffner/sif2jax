@@ -75,10 +75,12 @@ class FBRAIN3LS(AbstractUnconstrainedMinimisation):
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Starting point from the SIF file
         return jnp.array([-4.0, -0.1, 4.0, 0.1, -2.0, -0.1])
 
+    @property
     def args(self):
         return None
 

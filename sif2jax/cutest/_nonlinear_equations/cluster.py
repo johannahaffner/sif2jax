@@ -51,10 +51,12 @@ class CLUSTER(AbstractNonlinearEquations):
 
         return jnp.array([g1, g2]), None
 
+    @property
     def y0(self):
         """Initial guess."""
         return jnp.zeros(2)
 
+    @property
     def args(self):
         """No additional arguments."""
         return None
@@ -70,4 +72,9 @@ class CLUSTER(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

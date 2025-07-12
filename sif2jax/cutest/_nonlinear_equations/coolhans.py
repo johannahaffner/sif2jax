@@ -71,11 +71,13 @@ class COOLHANS(AbstractNonlinearEquations):
         # Flatten residual to vector form
         return residual.flatten()
 
+    @property
     def y0(self):
         """Initial guess."""
         # Zero initial guess
         return jnp.zeros(self.n)
 
+    @property
     def args(self):
         """No additional arguments."""
         return None
@@ -92,4 +94,9 @@ class COOLHANS(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

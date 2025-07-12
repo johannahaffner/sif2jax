@@ -42,11 +42,13 @@ class BOX(AbstractUnconstrainedMinimisation):
 
         return a_terms + b_terms + c_terms + d_term + q_terms
 
+    @property
     def y0(self):
         # Initial values not specified in SIF file
         # Using default all zeros as a reasonable starting point
         return jnp.zeros(self.n)
 
+    @property
     def args(self):
         return None
 

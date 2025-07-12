@@ -64,10 +64,12 @@ class BDQRTICNE(AbstractNonlinearEquations):
         # Last 4 residuals remain zero
         return residuals
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         return self.starting_point()
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -84,4 +86,4 @@ class BDQRTICNE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None

@@ -63,11 +63,13 @@ class CHNRSNBMNE(AbstractNonlinearEquations):
         # Last residual remains zero for padding
         return residuals
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         # Starting point: all variables = -1.0
         return jnp.full(self.n, -1.0, dtype=jnp.float64)
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -84,4 +86,4 @@ class CHNRSNBMNE(AbstractNonlinearEquations):
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args()), None
+        return self.residual(y, self.args), None

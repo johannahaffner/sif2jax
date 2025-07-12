@@ -40,10 +40,12 @@ class LIARWHD(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(first_terms) + jnp.sum(second_terms)
 
+    @property
     def y0(self):
         """Initial point with all variables set to 4.0."""
         return jnp.ones(self.n) * 4.0
 
+    @property
     def args(self):
         """No additional arguments needed."""
         return None

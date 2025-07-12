@@ -62,3 +62,7 @@ class POWELLSQ(AbstractNonlinearEquations):
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args()), None

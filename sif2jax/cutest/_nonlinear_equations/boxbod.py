@@ -80,3 +80,7 @@ class BOXBOD(AbstractNonlinearEquations):
         """Expected optimal objective value."""
         # For constrained formulation, objective is 0
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args()), None

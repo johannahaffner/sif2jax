@@ -67,3 +67,7 @@ class HATFLDBNE(AbstractNonlinearEquations):
         num_inequalities = 0
         num_bounds = 5  # 4 finite lower bounds + 1 finite upper bound
         return num_equalities, num_inequalities, num_bounds
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args()), None

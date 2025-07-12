@@ -136,6 +136,10 @@ class PALMER5ENE(AbstractNonlinearEquations):
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
 
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args()), None
+
     def num_constraints(self) -> tuple[int, int, int]:
         """Returns the number of constraints."""
         # 12 equality constraints (the residuals) + 1 finite bound (lower bound on K)

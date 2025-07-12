@@ -89,3 +89,7 @@ class COOLHANS(AbstractNonlinearEquations):
         """Expected optimal objective value."""
         # Should be 0.0 at solution
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args()), None

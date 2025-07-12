@@ -81,6 +81,10 @@ class CHEBYQADNE(AbstractNonlinearEquations):
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
 
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args()), None
+
     def bounds(self) -> tuple[Array, Array] | None:
         """Bounds on variables: all in [0, 1]"""
         n = self.n

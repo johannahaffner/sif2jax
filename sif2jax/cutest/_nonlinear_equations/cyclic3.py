@@ -68,3 +68,7 @@ class CYCLIC3(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args()), None

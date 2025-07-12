@@ -234,9 +234,28 @@ class AbstractNonlinearEquations(AbstractProblem):
         but may be a constant value for some problems."""
         return jnp.array(0.0)
 
-    def constraint(self, y) -> tuple[PyTree[ArrayLike], None]:
-        """Returns the residuals as equality constraints for pycutest compatibility."""
-        return self.residual(y, self.args()), None
+    @abc.abstractmethod
+    def constraint(self, y) -> _ConstraintOut:
+        """Returns the constraints on the variable `y`. The constraints can be either
+        equality, inequality constraints, or both. This method returns a tuple, with the
+        equality constraint in the first argument and the inequality constraint values
+        in the second argument. If there are no equality constraints, the first element
+        should be `None`. If there are no inequality constraints, the second element
+        should be `None`. (None, None) is not allowed as an output - in that case the
+        problem has no constraints and should not be classified as a nonlinear equations
+        problem.
+
+        All constraints are assumed to be satisfied when the value is
+        equal to zero for equality constraints and greater than or equal to zero for
+        inequality constraints. Each element of each returned pytree of arrays will be
+        treated as the output of a constraint function (in other words: each constraint
+        function returns a scalar value, a collection of which may be arranged in a
+        pytree.)
+
+        For most nonlinear equations problems, this will return (residuals, None) where
+        residuals come from the residual method. However, some problems may have
+        additional inequality constraints.
+        """
 
     @abc.abstractmethod
     def expected_objective_value(self) -> Scalar | None:
@@ -245,21 +264,27 @@ class AbstractNonlinearEquations(AbstractProblem):
 
     def num_constraints(self) -> tuple[Int, Int, Int]:
         """Returns the number of constraints.
-        All residuals are equality constraints. Bounds are counted if present."""
-        residuals = self.residual(self.y0(), self.args())
-        flat_residuals, _ = jfu.ravel_pytree(residuals)
-        num_equalities = flat_residuals.size
-
-        # Count bounds if present
+        Counts equality constraints, inequality constraints, and bounds."""
+        equality_out, inequality_out = self.constraint(self.y0())
+        if equality_out is None:
+            num_equalities = 0
+        else:
+            equalities, _ = jfu.ravel_pytree(jtu.tree_map(jnp.isfinite, equality_out))
+            num_equalities = jnp.sum(equalities)
+        if inequality_out is None:
+            num_inequalities = 0
+        else:
+            inequalities, _ = jfu.ravel_pytree(
+                jtu.tree_map(jnp.isfinite, inequality_out)
+            )
+            num_inequalities = jnp.sum(inequalities)
         bounds = self.bounds()
         if bounds is None:
             num_bounds = 0
         else:
-            lower, upper = bounds
-            # Count finite bounds
-            num_bounds = jnp.sum(jnp.isfinite(lower)) + jnp.sum(jnp.isfinite(upper))
-
-        return num_equalities, 0, num_bounds
+            num_bounds, _ = jfu.ravel_pytree(jtu.tree_map(jnp.isfinite, bounds))
+            num_bounds = jnp.sum(num_bounds)
+        return num_equalities, num_inequalities, num_bounds
 
     def bounds(self) -> tuple[PyTree[ArrayLike], PyTree[ArrayLike]] | None:
         """Bounds on variables. Default is None for no bounds."""

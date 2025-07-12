@@ -58,7 +58,10 @@ class HS93(AbstractConstrainedMinimisation):
         return jnp.array(135.075961)
 
     def bounds(self):
-        return [(0.0, None) for _ in range(6)]
+        # All variables have lower bound 0, no upper bound
+        lower = jnp.zeros(6)
+        upper = jnp.full(6, jnp.inf)
+        return lower, upper
 
     def constraint(self, y):
         x1, x2, x3, x4, x5, x6 = y

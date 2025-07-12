@@ -92,3 +92,7 @@ class POWELLSE(AbstractNonlinearEquations):
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
         return self.residual(y, self.args()), None
+
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

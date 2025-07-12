@@ -101,3 +101,7 @@ class VANDERM2(AbstractNonlinearEquations):
         inequalities = x[1:n] - x[0 : n - 1]
 
         return equalities, inequalities
+
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

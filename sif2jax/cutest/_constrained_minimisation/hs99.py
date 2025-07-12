@@ -61,7 +61,10 @@ class HS99(AbstractConstrainedMinimisation):
         return jnp.array(-0.831079892e9)
 
     def bounds(self):
-        return [(0.0, 1.58) for _ in range(7)]
+        # All variables have bounds [0.0, 1.58]
+        lower = jnp.zeros(7)
+        upper = jnp.full(7, 1.58)
+        return lower, upper
 
     def constraint(self, y):
         # Simplified constraints - actual problem has complex recursive definitions

@@ -100,3 +100,7 @@ class VANDERM1(AbstractNonlinearEquations):
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(0.0)
+
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

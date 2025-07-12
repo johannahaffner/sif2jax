@@ -60,7 +60,10 @@ class ZECEVIC4(AbstractConstrainedMinimisation):
 
     def bounds(self):
         """Bounds on variables."""
-        return jnp.array([[0.0, 10.0], [0.0, 10.0]])
+        # Both variables have bounds [0.0, 10.0]
+        lower = jnp.array([0.0, 0.0])
+        upper = jnp.array([10.0, 10.0])
+        return lower, upper
 
     def expected_result(self):
         """Expected optimal solution."""

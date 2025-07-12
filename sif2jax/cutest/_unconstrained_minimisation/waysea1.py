@@ -38,10 +38,12 @@ class WAYSEA1(AbstractUnconstrainedMinimisation):
         # Sum of squares
         return f1**2 + f2**2
 
+    @property
     def y0(self):
         """Initial guess."""
         return jnp.array([1.0, 5.0])
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None

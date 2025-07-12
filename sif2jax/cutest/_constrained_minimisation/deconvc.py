@@ -153,6 +153,7 @@ class DECONVC(AbstractConstrainedMinimisation):
         """Energy constraint is an equality."""
         return jnp.ones(1, dtype=bool)
 
+    @property
     def y0(self):
         """Initial guess."""
         lgtr = 40
@@ -167,10 +168,12 @@ class DECONVC(AbstractConstrainedMinimisation):
 
         return inexact_asarray(jnp.concatenate([c_init, sg_init]))
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds."""
         # From pycutest behavior, all variables have lower bound 0

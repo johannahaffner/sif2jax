@@ -31,9 +31,11 @@ class HIMMELBH(AbstractUnconstrainedMinimisation):
 
         return term1 + term2 + constant
 
+    @property
     def y0(self):
         return jnp.array([0.0, 2.0])
 
+    @property
     def args(self):
         return None
 

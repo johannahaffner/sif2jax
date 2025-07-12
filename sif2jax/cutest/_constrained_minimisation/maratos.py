@@ -30,10 +30,12 @@ class MARATOS(AbstractConstrainedMinimisation):
         tau = 0.000001
         return -x1 + tau * (x1**2 + x2**2)
 
+    @property
     def y0(self):
         # Starting point
         return jnp.array([1.1, 0.1])
 
+    @property
     def args(self):
         return None
 
@@ -48,6 +50,7 @@ class MARATOS(AbstractConstrainedMinimisation):
     def num_variables(self):
         return 2
 
+    @property
     def bounds(self):
         # All variables are free (unbounded)
         return jnp.array([-jnp.inf, -jnp.inf]), jnp.array([jnp.inf, jnp.inf])

@@ -313,6 +313,7 @@ class GAUSS2LS(AbstractUnconstrainedMinimisation):
         residuals = model - y_data
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Return the starting point from the SIF file."""
         # START1 values from GAUSS2LS.SIF file
@@ -320,6 +321,7 @@ class GAUSS2LS(AbstractUnconstrainedMinimisation):
             jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
         )
 
+    @property
     def args(self):
         """Return None as no additional args are needed."""
         return None

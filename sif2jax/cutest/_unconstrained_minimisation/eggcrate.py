@@ -38,10 +38,12 @@ class EGGCRATE(AbstractUnconstrainedMinimisation):
         # Computing the sum of squares directly
         return x**2 + y**2 + 25.0 * jnp.sin(x) ** 2 + 25.0 * jnp.sin(y) ** 2
 
+    @property
     def y0(self):
         # Starting point from the SIF file: (1.0, 2.0)
         return jnp.array([1.0, 2.0])
 
+    @property
     def args(self):
         return None
 

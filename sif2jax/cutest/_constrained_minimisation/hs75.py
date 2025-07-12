@@ -45,9 +45,11 @@ class HS75(AbstractConstrainedMinimisation):
             + (2.0 / 3.0) * 1.0e-6 * x2 * x2 * x2
         )
 
+    @property
     def y0(self):
         return jnp.array([0.0, 0.0, 0.0, 0.0])  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -57,6 +59,7 @@ class HS75(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(5174.4129)
 
+    @property
     def bounds(self):
         # Problem parameter
         a2 = 0.48

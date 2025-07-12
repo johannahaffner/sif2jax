@@ -46,11 +46,13 @@ class HS103(AbstractConstrainedMinimisation):
 
         return term1 + term2 + term3 + term4
 
+    @property
     def y0(self):
         return jnp.array(
             [6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0]
         )  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -61,6 +63,7 @@ class HS103(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(543.667958)
 
+    @property
     def bounds(self):
         lower = jnp.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.01])
         upper = jnp.array([10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0])
@@ -105,7 +108,7 @@ class HS103(AbstractConstrainedMinimisation):
         # Objective bound constraint
         # Note: The problem has bounds 100 ≤ f(x) ≤ 3000
         # But pycutest from SIF file only includes the upper bound as a constraint
-        f_val = self.objective(y, self.args())
+        f_val = self.objective(y, self.args)
         obj_constraint = f_val - 3000.0  # f(x) - 3000 ≤ 0
 
         inequality_constraints = jnp.array([ineq1, ineq2, ineq3, ineq4, obj_constraint])

@@ -38,9 +38,11 @@ class HS38(AbstractBoundedMinimisation):
             + 19.8 * (x2 - 1) * (x4 - 1)
         )
 
+    @property
     def y0(self):
         return jnp.array([-3.0, -1.0, -3.0, -1.0])
 
+    @property
     def args(self):
         return None
 
@@ -50,6 +52,7 @@ class HS38(AbstractBoundedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.0)
 
+    @property
     def bounds(self):
         # -10 ≤ xi ≤ 10 for i = 1,2,3,4
         lower = jnp.array([-10.0, -10.0, -10.0, -10.0])

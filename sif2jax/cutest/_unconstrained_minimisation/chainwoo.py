@@ -79,6 +79,7 @@ class CHAINWOO(AbstractUnconstrainedMinimisation):
         # Sum all terms plus constant
         return 1.0 + jnp.sum(term1 + term2 + term3 + term4 + term5 + term6)
 
+    @property
     def y0(self):
         # Initial values from SIF file
         y_init = jnp.full(self.n, -2.0)
@@ -91,6 +92,7 @@ class CHAINWOO(AbstractUnconstrainedMinimisation):
 
         return inexact_asarray(y_init)
 
+    @property
     def args(self):
         return None
 

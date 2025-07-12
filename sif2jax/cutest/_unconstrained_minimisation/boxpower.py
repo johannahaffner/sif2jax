@@ -44,10 +44,12 @@ class BOXPOWER(AbstractUnconstrainedMinimisation):
 
         return g1 + middle_terms + gn
 
+    @property
     def y0(self):
         # Initial values from SIF file (all 0.99)
         return jnp.full(self.n, 0.99)
 
+    @property
     def args(self):
         return None
 

@@ -69,6 +69,7 @@ class HS117(AbstractConstrainedMinimisation):
 
         return term1 + term2 + term3
 
+    @property
     def y0(self):
         return jnp.array(
             [
@@ -90,6 +91,7 @@ class HS117(AbstractConstrainedMinimisation):
             ]
         )  # from AMPL formulation
 
+    @property
     def args(self):
         return None
 
@@ -118,6 +120,7 @@ class HS117(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(32.348679)
 
+    @property
     def bounds(self):
         # Bounds: 0 ≤ xᵢ for all i
         lower = jnp.array([0.0] * 15)

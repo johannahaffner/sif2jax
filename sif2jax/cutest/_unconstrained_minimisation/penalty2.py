@@ -87,10 +87,12 @@ class PENALTY2(AbstractUnconstrainedMinimisation):
 
         return g1 + groups_2_to_n + groups_np1_to_m1 + gm
 
+    @property
     def y0(self):
         # Standard starting point (0.5, ..., 0.5)
         return inexact_asarray(0.5 * jnp.ones(self.n))
 
+    @property
     def args(self):
         return None
 

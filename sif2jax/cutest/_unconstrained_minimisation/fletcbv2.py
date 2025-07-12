@@ -59,11 +59,13 @@ class FLETCBV2(AbstractUnconstrainedMinimisation):
 
         return f1 + f2 + f3 + f4 + f5 + f6
 
+    @property
     def y0(self):
         # Initial values from SIF file: i*h for i=1..n
         h = 1.0 / (self.n + 1)
         return inexact_asarray(jnp.arange(1, self.n + 1)) * h
 
+    @property
     def args(self):
         return None
 

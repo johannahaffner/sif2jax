@@ -83,10 +83,12 @@ class DEVGLA1(AbstractUnconstrainedMinimisation):
         # Compute the final model prediction
         return x1 * x2_power_t * sin_term
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return inexact_asarray(jnp.array([2.0, 2.0, 2.0, 2.0]))
 
+    @property
     def args(self):
         return None
 

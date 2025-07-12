@@ -150,14 +150,17 @@ class HS84(AbstractConstrainedMinimisation):
         # Return as inequality constraints
         return None, constraints
 
+    @property
     def y0(self):
         """Initial guess."""
         return jnp.array([2.52, 2.0, 37.5, 9.25, 6.8])
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds."""
         lower = jnp.array([0.0, 1.2, 20.0, 9.0, 6.5])

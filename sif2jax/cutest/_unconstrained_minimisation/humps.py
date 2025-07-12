@@ -40,10 +40,12 @@ class HUMPS(AbstractUnconstrainedMinimisation):
         # Full objective function
         return hump_term + quad_term
 
+    @property
     def y0(self):
         # Starting point from SIF file
         return jnp.array([-506.0, -506.2])
 
+    @property
     def args(self):
         return None
 

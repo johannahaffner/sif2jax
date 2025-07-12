@@ -48,11 +48,13 @@ class NONCVXU2(AbstractUnconstrainedMinimisation):
         # GROUP USES adds elements, not multiplies them
         return jnp.sum(sq_values + cos_values)
 
+    @property
     def y0(self):
         # Starting point: X(I) = I for default start
         # START2 has all variables at 0.6318
         return inexact_asarray(jnp.arange(1.0, self.n + 1.0))
 
+    @property
     def args(self):
         return None
 

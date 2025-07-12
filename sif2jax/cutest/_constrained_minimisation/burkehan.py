@@ -26,10 +26,12 @@ class BURKEHAN(AbstractConstrainedMinimisation):
         del args
         return y[0]
 
+    @property
     def y0(self):
         # Starting point
         return jnp.array([10.0])
 
+    @property
     def args(self):
         return None
 
@@ -41,6 +43,7 @@ class BURKEHAN(AbstractConstrainedMinimisation):
         # Infeasible problem - no feasible solution
         return None
 
+    @property
     def bounds(self):
         # Variable bounds: -inf <= x <= 0
         lower = jnp.array([-jnp.inf])

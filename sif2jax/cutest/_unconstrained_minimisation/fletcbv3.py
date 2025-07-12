@@ -47,12 +47,14 @@ class FLETCBV3(AbstractUnconstrainedMinimisation):
 
         return term1 + term2 + term3 + term4 + term5
 
+    @property
     def y0(self):
         n = self.n
         h = 1.0 / (self.n + 1)
         # Starting point according to SIF file: i*h for i=1..n
         return inexact_asarray(jnp.arange(1, n + 1)) * h
 
+    @property
     def args(self):
         # p and kappa from SIF file
         p = 1.0 / self.scale

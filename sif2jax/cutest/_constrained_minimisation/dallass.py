@@ -115,6 +115,7 @@ class DALLASS(AbstractConstrainedMinimisation):
 
         return jnp.array(constraints), None
 
+    @property
     def bounds(self):
         """Variable bounds."""
         lower = jnp.full(self.n, -200.0)
@@ -134,6 +135,7 @@ class DALLASS(AbstractConstrainedMinimisation):
 
         return lower, upper
 
+    @property
     def y0(self):
         """Initial guess."""
         y0 = jnp.full(self.n, -200.0)
@@ -181,6 +183,7 @@ class DALLASS(AbstractConstrainedMinimisation):
 
         return y0
 
+    @property
     def args(self):
         """No additional arguments."""
         return None

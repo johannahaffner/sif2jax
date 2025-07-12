@@ -60,6 +60,7 @@ class POWELLSG(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(g1 + g2 + g3 + g4)
 
+    @property
     def y0(self):
         # Starting point: (3, -1, 0, 1) repeated
         n = self.n
@@ -71,6 +72,7 @@ class POWELLSG(AbstractUnconstrainedMinimisation):
             y0 = y0.at[i + 3].set(1.0)
         return y0
 
+    @property
     def args(self):
         return None
 

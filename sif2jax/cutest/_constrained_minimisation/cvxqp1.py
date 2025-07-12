@@ -93,15 +93,18 @@ class CVXQP1(AbstractConstrainedMinimisation):
         """All constraints are equalities."""
         return jnp.ones(self.m, dtype=bool)
 
+    @property
     def y0(self):
         """Initial guess."""
         # Default value is 0.5
         return inexact_asarray(jnp.full(self.n, 0.5))
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds."""
         # 0.1 <= x[i] <= 10.0 for all i

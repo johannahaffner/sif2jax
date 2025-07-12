@@ -67,10 +67,12 @@ class LUKVLE6(AbstractConstrainedMinimisation):
         # Apply the power function
         return jnp.sum(jnp.abs(all_terms) ** p)
 
+    @property
     def y0(self):
         # Starting point: x_i = 3 for all i
         return jnp.full(self.n, 3.0)
 
+    @property
     def args(self):
         return None
 
@@ -81,6 +83,7 @@ class LUKVLE6(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return None  # Unknown exact objective value
 
+    @property
     def bounds(self):
         return None
 

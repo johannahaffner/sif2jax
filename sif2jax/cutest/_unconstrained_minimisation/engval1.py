@@ -38,9 +38,11 @@ class ENGVAL1(AbstractUnconstrainedMinimisation):
 
         return nonlinear + linear
 
+    @property
     def y0(self):
         return jnp.full(self.n, 2.0)
 
+    @property
     def args(self):
         return None
 

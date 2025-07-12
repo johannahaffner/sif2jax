@@ -170,10 +170,12 @@ class CHWIRUT2LS(AbstractUnconstrainedMinimisation):
         residuals = y_pred - y_data
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values from SIF file (START1)
         return jnp.array([0.1, 0.01, 0.02])
 
+    @property
     def args(self):
         return None
 

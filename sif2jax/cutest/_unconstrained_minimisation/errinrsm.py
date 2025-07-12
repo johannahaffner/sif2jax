@@ -56,10 +56,12 @@ class ERRINRSM(AbstractUnconstrainedMinimisation):
 
         return jnp.array(total)
 
+    @property
     def y0(self):
         # Initial values from SIF file (all -1.0)
         return jnp.full(self.n, -1.0)
 
+    @property
     def args(self):
         return None
 

@@ -55,6 +55,7 @@ class NONMSQRT(AbstractUnconstrainedMinimisation):
         diff = products - A
         return jnp.sum(diff * diff)
 
+    @property
     def y0(self):
         # Starting point based on SIF description
         p = self.p
@@ -71,6 +72,7 @@ class NONMSQRT(AbstractUnconstrainedMinimisation):
         # Flatten to 1D array
         return inexact_asarray(X_start.flatten())
 
+    @property
     def args(self):
         return None
 

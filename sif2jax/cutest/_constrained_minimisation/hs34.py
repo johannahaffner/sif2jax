@@ -34,9 +34,11 @@ class HS34(AbstractConstrainedMinimisation):
         x1, x2, x3 = y
         return -x1
 
+    @property
     def y0(self):
         return jnp.array([0.0, 1.05, 2.9])
 
+    @property
     def args(self):
         return None
 
@@ -48,6 +50,7 @@ class HS34(AbstractConstrainedMinimisation):
         ln10 = jnp.log(10.0)
         return jnp.array(-ln10)
 
+    @property
     def bounds(self):
         return (jnp.array([0.0, 0.0, 0.0]), jnp.array([100.0, 100.0, 10.0]))
 

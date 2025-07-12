@@ -28,10 +28,12 @@ class CHACONN1(AbstractConstrainedMinimisation):
         # Linear objective: minimize u
         return u
 
+    @property
     def y0(self):
         # Starting point (note: u not specified in SIF, using 0)
         return jnp.array([1.0, -0.1, 0.0])
 
+    @property
     def args(self):
         return None
 
@@ -43,6 +45,7 @@ class CHACONN1(AbstractConstrainedMinimisation):
         # Solution value given in SIF file
         return jnp.array(1.95222)
 
+    @property
     def bounds(self):
         # No variable bounds
         return None

@@ -59,9 +59,11 @@ class HS54(AbstractConstrainedMinimisation):
 
         return -jnp.exp(-0.5 * q)
 
+    @property
     def y0(self):
         return jnp.array([6.0e3, 1.5, 4.0e6, 2.0, 3.0e-3, 5.0e7])
 
+    @property
     def args(self):
         return None
 
@@ -72,6 +74,7 @@ class HS54(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return -jnp.exp(-27.0 / 280.0)
 
+    @property
     def bounds(self):
         lower = jnp.array([0.0, -10.0, 0.0, 0.0, -1.0, 0.0])
         upper = jnp.array([2.0e4, 10.0, 1.0e7, 20.0, 1.0, 2.0e8])

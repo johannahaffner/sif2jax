@@ -38,9 +38,11 @@ class HIMMELBB(AbstractUnconstrainedMinimisation):
         # L2 group function: gvar^2
         return h_element * h_element
 
+    @property
     def y0(self):
         return jnp.array([-1.2, 1.0])
 
+    @property
     def args(self):
         return None
 

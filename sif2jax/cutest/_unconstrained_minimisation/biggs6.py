@@ -52,10 +52,12 @@ class BIGGS6(AbstractUnconstrainedMinimisation):
         residuals = jax.vmap(compute_residual)(indices)
         return jnp.sum(residuals)
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return inexact_asarray(jnp.array([1.0, 2.0, 1.0, 1.0, 1.0, 1.0]))
 
+    @property
     def args(self):
         return None
 

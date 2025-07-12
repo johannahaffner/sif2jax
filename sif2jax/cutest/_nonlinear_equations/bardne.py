@@ -50,31 +50,29 @@ class BARDNE(AbstractNonlinearEquations):
             ]
         )
 
-        # Compute residuals for each group
-        residuals = []
-        for i in range(15):
-            u = float(i + 1)  # i = 1 to 15 in 1-indexed
-            v = 16.0 - u
+        # Vectorized computation
+        i = jnp.arange(15, dtype=float)
+        u = i + 1.0  # i = 1 to 15 in 1-indexed
+        v = 16.0 - u
 
-            # For i = 1 to 8: w = u
-            # For i = 9 to 15: w = 16 - i = v
-            if i < 8:
-                w = u
-            else:
-                w = v
+        # For i = 1 to 8: w = u
+        # For i = 9 to 15: w = 16 - i = v
+        w = jnp.where(i < 8, u, v)
 
-            # Model: x1 + u / (v * x2 + w * x3)
-            denominator = v * x2 + w * x3
-            model = x1 + u / denominator
+        # Model: x1 + u / (v * x2 + w * x3)
+        denominator = v * x2 + w * x3
+        model = x1 + u / denominator
 
-            residuals.append(model - y_data[i])
+        residuals = model - y_data
 
-        return jnp.array(residuals)
+        return residuals
 
+    @property
     def y0(self) -> Float[Array, "3"]:
         """Initial guess for the optimization problem."""
         return jnp.array([1.0, 1.0, 1.0])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -88,3 +86,12 @@ class BARDNE(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

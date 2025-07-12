@@ -151,6 +151,7 @@ class BA_L1LS(AbstractUnconstrainedMinimisation):
 
         return jnp.array(total_residual)
 
+    @property
     def y0(self):
         # Initial guess from the SIF file (exact values from CUTEst)
         return jnp.array(
@@ -215,6 +216,7 @@ class BA_L1LS(AbstractUnconstrainedMinimisation):
             ]
         )
 
+    @property
     def args(self):
         return None
 
@@ -430,11 +432,13 @@ class BA_L1SPLS(AbstractUnconstrainedMinimisation):
 
         return jnp.array(total_obj)
 
+    @property
     def y0(self):
         # Initialize with zeros for this simplified problem
         # The full problem has 57 variables
         return jnp.zeros(57)
 
+    @property
     def args(self):
         return None
 

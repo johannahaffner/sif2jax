@@ -83,12 +83,14 @@ class CRAGGLVY(AbstractUnconstrainedMinimisation):
         # Sum all terms
         return jnp.sum(terms)
 
+    @property
     def y0(self):
         # Initial values from SIF file (all 2.0 except x1 = 1.0)
         y_init = 2.0 * jnp.ones(self.n)
         y_init = y_init.at[0].set(1.0)
         return inexact_asarray(y_init)
 
+    @property
     def args(self):
         return None
 

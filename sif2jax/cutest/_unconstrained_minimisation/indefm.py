@@ -49,12 +49,14 @@ class INDEFM(AbstractUnconstrainedMinimisation):
 
         return sin_sum + cos_sum
 
+    @property
     def y0(self):
         # Starting point: X(I) = I/(N+1) for INDEF1
         # INDEF2 has all variables at 1000.0
         n = self.n
         return inexact_asarray(jnp.arange(1.0, n + 1.0)) / inexact_asarray(n + 1.0)
 
+    @property
     def args(self):
         return None
 

@@ -28,10 +28,12 @@ class CANTILVR(AbstractConstrainedMinimisation):
         # Linear objective: minimize weight
         return 0.0624 * (x1 + x2 + x3 + x4 + x5)
 
+    @property
     def y0(self):
         # Starting point
         return jnp.ones(5)
 
+    @property
     def args(self):
         return None
 
@@ -43,6 +45,7 @@ class CANTILVR(AbstractConstrainedMinimisation):
         # Solution value given in SIF file
         return jnp.array(1.3399595938)
 
+    @property
     def bounds(self):
         # Variable bounds: 0.000001 <= x <= inf
         lower = jnp.full(5, 0.000001)

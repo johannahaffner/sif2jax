@@ -30,9 +30,11 @@ class BT13(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5 = y
         return x5
 
+    @property
     def y0(self):
         return jnp.array([1.0, 2.0, 3.0, 3.0, 228.0])  # Note: x4 = 3.0 in SIF
 
+    @property
     def args(self):
         return None
 
@@ -42,6 +44,7 @@ class BT13(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.0)
 
+    @property
     def bounds(self):
         # x5 has lower bound of 0.0
         return (

@@ -40,12 +40,14 @@ class BT6(AbstractConstrainedMinimisation):
             + (x5 - 1) ** 6
         )
 
+    @property
     def y0(self):
         if self.y0_id == 0:
             return jnp.array([2.0, 2.0, 2.0, 2.0, 2.0])
         elif self.y0_id == 1:
             return jnp.array([8.0, 8.0, 8.0, 8.0, 8.0])
 
+    @property
     def args(self):
         return None
 
@@ -55,6 +57,7 @@ class BT6(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return None  # Not explicitly given
 
+    @property
     def bounds(self):
         return None
 

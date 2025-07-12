@@ -36,9 +36,11 @@ class HIMMELBCLS(AbstractUnconstrainedMinimisation):
         # Return the sum of squares
         return g1**2 + g2**2
 
+    @property
     def y0(self):
         return jnp.array([1.0, 1.0])
 
+    @property
     def args(self):
         return None
 

@@ -70,10 +70,12 @@ class LUKVLI9(AbstractConstrainedMinimisation):
 
         return jnp.sum(terms)
 
+    @property
     def y0(self):
         # Starting point: x_i = -1 for all i
         return jnp.full(self.n, -1.0)
 
+    @property
     def args(self):
         return None
 
@@ -84,6 +86,7 @@ class LUKVLI9(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return None  # Unknown exact objective value
 
+    @property
     def bounds(self):
         return None
 

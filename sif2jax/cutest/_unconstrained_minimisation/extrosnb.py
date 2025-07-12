@@ -52,10 +52,12 @@ class EXTROSNB(AbstractUnconstrainedMinimisation):
 
         return term1 + term2
 
+    @property
     def y0(self):
         # Starting point from the SIF file: all variables = -1.0
         return inexact_asarray(jnp.full(self.n, -1.0))
 
+    @property
     def args(self):
         return None
 

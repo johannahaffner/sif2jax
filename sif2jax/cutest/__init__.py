@@ -21,8 +21,6 @@ from ._constrained_minimisation import (
     AVGASB as AVGASB,
     # AVION2 as AVION2,  # TODO: Human review - gradient discrepancies
     BIGGSC4 as BIGGSC4,
-    # BOOTH as BOOTH,  # Moved to nonlinear equations
-    BOXBOD as BOXBOD,
     BT1 as BT1,
     BT2 as BT2,
     BT3 as BT3,
@@ -43,17 +41,13 @@ from ._constrained_minimisation import (
     CB3 as CB3,
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
-    CHANDHEQ as CHANDHEQ,
-    CLUSTER as CLUSTER,
     CONCON as CONCON,
     constrained_minimisation_problems as constrained_minimisation_problems,
-    COOLHANS as COOLHANS,
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
     CSFI1 as CSFI1,
     CSFI2 as CSFI2,
     CVXQP1 as CVXQP1,
     # DALLASS as DALLASS,  # TODO: needs complex element implementations
-    DANIWOOD as DANIWOOD,
     DECONVC as DECONVC,
     HS6 as HS6,
     HS7 as HS7,
@@ -197,17 +191,12 @@ from ._constrained_minimisation import (
     POLAK1 as POLAK1,
     POLAK2 as POLAK2,
     POLAK5 as POLAK5,
-    POWELLBS as POWELLBS,
-    POWELLSE as POWELLSE,
-    POWELLSQ as POWELLSQ,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
     # SIPOW3 as SIPOW3,  # TODO: Human review - constraint formulation issues
     # SIPOW4 as SIPOW4,  # TODO: Human review - constraint formulation issues
     TRUSPYR1 as TRUSPYR1,
     # TRUSPYR2 as TRUSPYR2,  # TODO: Human review - test requested to be removed
-    VANDERM1 as VANDERM1,
-    VANDERM2 as VANDERM2,
     # VANDERM3 as VANDERM3,  # TODO: Human review - constraints mismatch
     # VANDERM4 as VANDERM4,  # TODO: Human review - constraints mismatch
     ZECEVIC2 as ZECEVIC2,
@@ -227,6 +216,7 @@ from ._nonlinear_equations import (
     BIGGS6NE as BIGGS6NE,
     BOOTH as BOOTH,
     BOX3NE as BOX3NE,
+    BOXBOD as BOXBOD,
     BROWNALE as BROWNALE,
     BROWNBSNE as BROWNBSNE,
     BROWNDENE as BROWNDENE,
@@ -236,12 +226,16 @@ from ._nonlinear_equations import (
     CERI651B as CERI651B,
     CERI651C as CERI651C,
     CHAINWOONE as CHAINWOONE,
+    CHANDHEQ as CHANDHEQ,
     # CHANNEL as CHANNEL,  # TODO: Human review needed
     CHEBYQADNE as CHEBYQADNE,
+    CLUSTER as CLUSTER,
+    COOLHANS as COOLHANS,
     # CHNRSBNE as CHNRSBNE,  # TODO: Human review needed
     # CHNRSNBMNE as CHNRSNBMNE,  # TODO: Human review needed
     CUBENE as CUBENE,
     CYCLIC3 as CYCLIC3,
+    DANIWOOD as DANIWOOD,
     DENSCHNBNE as DENSCHNBNE,
     ENGVAL2NE as ENGVAL2NE,
     # ERRINROSNE as ERRINROSNE,  # TODO: Human review needed
@@ -254,11 +248,19 @@ from ._nonlinear_equations import (
     PALMER1BNE as PALMER1BNE,
     PALMER5ENE as PALMER5ENE,
     PALMER7ANE as PALMER7ANE,
+    POWELLBS as POWELLBS,
+    POWELLSE as POWELLSE,
+    POWELLSQ as POWELLSQ,
     POWERSUMNE as POWERSUMNE,
     SINVALNE as SINVALNE,
     SSBRYBNDNE as SSBRYBNDNE,
     TENFOLDTR as TENFOLDTR,
+    VANDERM1 as VANDERM1,
+    VANDERM2 as VANDERM2,
 )
+
+# VANDERM3 as VANDERM3,  # TODO: Human review needed - originally had issues
+# VANDERM4 as VANDERM4,  # TODO: Human review needed - originally had issues
 from ._unconstrained_minimisation import (
     AKIVA as AKIVA,
     ALLINITU as ALLINITU,
@@ -275,7 +277,6 @@ from ._unconstrained_minimisation import (
     BIGGS6 as BIGGS6,
     BOX as BOX,
     BOX3 as BOX3,
-    # BOXBOD as BOXBOD,  # Moved to constrained formulation
     BOXBODLS as BOXBODLS,
     # BOXPOWER as BOXPOWER,  # TODO: Human review - minor gradient discrepancy
     # BRKMCC as BRKMCC,  # TODO: Human review - significant discrepancies
@@ -292,7 +293,6 @@ from ._unconstrained_minimisation import (
     # CERI651DLS as CERI651DLS,  # TODO: Human review - numerical instability
     # CERI651ELS as CERI651ELS,  # TODO: Human review - numerical instability
     CHAINWOO as CHAINWOO,
-    # CHANDHEQ as CHANDHEQ,  # Moved to constrained formulation
     CHNROSNB as CHNROSNB,
     CHNRSNBM as CHNRSNBM,
     # CHWIRUT1 as CHWIRUT1,  # TODO: needs external data file
@@ -300,10 +300,8 @@ from ._unconstrained_minimisation import (
     # CHWIRUT2 as CHWIRUT2,  # TODO: needs implementation with 54 data points
     CHWIRUT2LS as CHWIRUT2LS,
     CLIFF as CLIFF,
-    # CLUSTER as CLUSTER,  # Moved to constrained formulation
     CLUSTERLS as CLUSTERLS,
     COATING as COATING,
-    # COOLHANS as COOLHANS,  # Moved to constrained formulation
     COOLHANSLS as COOLHANSLS,
     COSINE as COSINE,
     CRAGGLVY as CRAGGLVY,
@@ -312,7 +310,6 @@ from ._unconstrained_minimisation import (
     CURLY20 as CURLY20,
     CURLY30 as CURLY30,
     # CYCLOOCFLS as CYCLOOCFLS,  # TODO: Human review - times out with default p=10000
-    # DANIWOOD as DANIWOOD,  # Moved to constrained formulation
     DANIWOODLS as DANIWOODLS,
     DENSCHNA as DENSCHNA,
     DENSCHNB as DENSCHNB,

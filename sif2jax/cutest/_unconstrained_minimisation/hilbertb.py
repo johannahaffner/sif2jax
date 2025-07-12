@@ -60,10 +60,12 @@ class HILBERTB(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(jnp.asarray(off_diagonal_terms)) + jnp.sum(diagonal_terms)
 
+    @property
     def y0(self):
         # Starting point: all variables set to -3.0 (from AMPL var x{1..N} := -3.0)
         return jnp.full(self.n, -3.0)
 
+    @property
     def args(self):
         return None
 

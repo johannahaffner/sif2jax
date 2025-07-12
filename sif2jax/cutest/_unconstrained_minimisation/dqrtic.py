@@ -31,10 +31,12 @@ class DQRTIC(AbstractUnconstrainedMinimisation):
         i_values = inexact_asarray(jnp.arange(1, self.n + 1))
         return jnp.sum((y - i_values) ** 4)
 
+    @property
     def y0(self):
         # Initial values from SIF file: all variables = 2.0
         return inexact_asarray(jnp.full(self.n, 2.0))
 
+    @property
     def args(self):
         return None
 

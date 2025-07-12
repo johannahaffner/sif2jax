@@ -37,11 +37,13 @@ class HS110(AbstractBoundedMinimisation):
 
         return log_sum - product**0.2
 
+    @property
     def y0(self):
         return jnp.array(
             [9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0]
         )  # feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -65,6 +67,7 @@ class HS110(AbstractBoundedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-45.77846971)
 
+    @property
     def bounds(self):
         # Bounds from the PDF
         lower = jnp.array(

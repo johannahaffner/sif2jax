@@ -59,11 +59,13 @@ class CURLYBase(AbstractUnconstrainedMinimisation):
         result = q * (q * (q**2 - 20) - 0.1)
         return jnp.sum(result)
 
+    @property
     def y0(self):
         # Use float to ensure proper dtype promotion
         i = inexact_asarray(jnp.arange(1, self.n + 1))
         return 0.0001 * i / (self.n + 1)
 
+    @property
     def args(self):
         return None
 

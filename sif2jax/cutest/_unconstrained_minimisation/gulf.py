@@ -51,10 +51,12 @@ class GULF(AbstractUnconstrainedMinimisation):
         # Sum of squares of residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial point from SIF file
         return inexact_asarray(jnp.array([5.0, 2.5, 0.15]))
 
+    @property
     def args(self):
         return None
 

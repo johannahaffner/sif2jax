@@ -48,10 +48,12 @@ class PENALTY1(AbstractUnconstrainedMinimisation):
 
         return sum1 + sum2
 
+    @property
     def y0(self):
         # Starting point: X(I) = I for I=1 to N
         return inexact_asarray(jnp.arange(1.0, self.n + 1.0))
 
+    @property
     def args(self):
         return None
 

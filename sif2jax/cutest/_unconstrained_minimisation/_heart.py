@@ -62,10 +62,12 @@ class HEART6LS(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals (least-squares objective)
         return jnp.sum(jnp.array([r1, r2, r3, r4, r5, r6]) ** 2)
 
+    @property
     def y0(self):
         # Initial values from SIF file: a=0, c=0, others=1
         return jnp.array([0.0, 0.0, 1.0, 1.0, 1.0, 1.0])
 
+    @property
     def args(self):
         return None
 
@@ -164,11 +166,13 @@ class HEART8LS(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals (least-squares objective)
         return jnp.sum(jnp.array([r1, r2, r3, r4, r5, r6, r7, r8]) ** 2)
 
+    @property
     def y0(self):
         # Initial values from SIF file
         # a=0, c=0, others=1
         return jnp.array([0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0])
 
+    @property
     def args(self):
         return None
 

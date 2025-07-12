@@ -46,10 +46,12 @@ class TRIGON1(AbstractUnconstrainedMinimisation):
         residuals = jax.vmap(compute_residual)(jnp.arange(n))
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Initial guess."""
         return inexact_asarray(jnp.full(self.n, 0.1))
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None

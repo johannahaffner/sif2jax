@@ -22,28 +22,26 @@ class TestProblem:
         assert pycutest_problem is not None
 
     def test_correct_dimension(self, problem, pycutest_problem):
-        dimensions = problem.y0().size
+        dimensions = problem.y0.size
         assert dimensions == pycutest_problem.n
 
     def test_correct_starting_value(self, problem, pycutest_problem):
-        assert np.allclose(pycutest_problem.x0, problem.y0())
+        assert np.allclose(pycutest_problem.x0, problem.y0)
 
     def test_correct_objective_at_start(self, problem, pycutest_problem):
         pycutest_value = pycutest_problem.obj(pycutest_problem.x0)
-        sif2jax_value = problem.objective(problem.y0(), problem.args())
+        sif2jax_value = problem.objective(problem.y0, problem.args)
         assert np.allclose(pycutest_value, sif2jax_value)
 
     def test_correct_gradient_at_start(self, problem, pycutest_problem):
         pycutest_gradient = pycutest_problem.grad(pycutest_problem.x0)
-        sif2jax_gradient = jax.grad(problem.objective)(problem.y0(), problem.args())
+        sif2jax_gradient = jax.grad(problem.objective)(problem.y0, problem.args)
         assert np.allclose(pycutest_gradient, sif2jax_gradient)
 
     def test_correct_hessian_at_start(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
             pycutest_hessian = pycutest_problem.ihess(pycutest_problem.x0)
-            sif2jax_hessian = jax.hessian(problem.objective)(
-                problem.y0(), problem.args()
-            )
+            sif2jax_hessian = jax.hessian(problem.objective)(problem.y0, problem.args)
             assert np.allclose(pycutest_hessian, sif2jax_hessian)
         else:
             pytest.skip("Skip Hessian test for large problems to save time and memory")
@@ -85,7 +83,7 @@ class TestProblem:
             pycutest_inequalities = pycutest_constraints[~pycutest_problem.is_eq_cons]  # pyright: ignore
             pycutest_inequalities = jnp.array(pycutest_inequalities).squeeze()
 
-            sif2jax_constraints = problem.constraint(problem.y0())
+            sif2jax_constraints = problem.constraint(problem.y0)
             sif2jax_equalities, sif2jax_inequalities = sif2jax_constraints
             sif2jax_equalities, _ = jfu.ravel_pytree(sif2jax_equalities)
             sif2jax_inequalities, _ = jfu.ravel_pytree(sif2jax_inequalities)
@@ -118,7 +116,7 @@ class TestProblem:
     def test_compilation(self, problem):
         try:
             compiled = jax.jit(problem.objective)
-            _ = compiled(problem.y0(), problem.args())
+            _ = compiled(problem.y0, problem.args)
         except Exception as e:
             raise RuntimeError(f"Compilation failed for {problem.name}") from e
         jax.clear_caches()
@@ -126,7 +124,7 @@ class TestProblem:
     def test_vmap(self, problem):
         try:
             vmapped = jax.vmap(problem.objective, in_axes=(0, None))
-            y0 = problem.y0()
-            _ = vmapped(jnp.array([y0, y0, y0]), problem.args())
+            y0 = problem.y0
+            _ = vmapped(jnp.array([y0, y0, y0]), problem.args)
         except Exception as e:
             raise RuntimeError(f"Vmap failed for {problem.name}") from e

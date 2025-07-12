@@ -25,10 +25,12 @@ class COSINE(AbstractUnconstrainedMinimisation):
         del args
         return jnp.sum(jnp.cos(-0.5 * y[1:] + y[:-1] ** 2))
 
+    @property
     def y0(self):
         # Initial guess - specified as 1.0 for all variables
         return jnp.ones(self.n)
 
+    @property
     def args(self):
         return None
 

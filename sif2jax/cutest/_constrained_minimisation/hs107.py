@@ -36,11 +36,13 @@ class HS107(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5, x6, x7, x8, x9 = y
         return 3000 * x1 + 1000 * x1**3 + 2000 * x2 + 666.667 * x2**3
 
+    @property
     def y0(self):
         return jnp.array(
             [0.8, 0.8, 0.2, 0.2, 1.0454, 1.0454, 1.0454, 0.0, 0.0]
         )  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -63,6 +65,7 @@ class HS107(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(5055.011803)
 
+    @property
     def bounds(self):
         # Bounds from the AMPL formulation
         lower = jnp.array(

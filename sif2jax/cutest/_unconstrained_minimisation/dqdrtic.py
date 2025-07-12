@@ -42,10 +42,12 @@ class DQDRTIC(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(terms)
 
+    @property
     def y0(self):
         # Starting point from the SIF file: all variables = 3.0
         return inexact_asarray(jnp.full(self.n, 3.0))
 
+    @property
     def args(self):
         return None
 

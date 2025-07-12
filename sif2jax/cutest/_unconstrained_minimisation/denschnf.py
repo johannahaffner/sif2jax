@@ -32,10 +32,12 @@ class DENSCHNF(AbstractUnconstrainedMinimisation):
 
         return term1 + term2
 
+    @property
     def y0(self):
         # Initial values based on problem specification
         return jnp.array([2.0, 0.0])
 
+    @property
     def args(self):
         return None
 

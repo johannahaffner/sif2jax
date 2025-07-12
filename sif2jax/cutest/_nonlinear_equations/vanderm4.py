@@ -1,16 +1,16 @@
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
 # TODO: Human review needed - pycutest returns 0.0 at starting point
 # Similar to VANDERM1 issue
 # TODO: Human review needed - constraint values don't match pycutest
-class VANDERM4(AbstractConstrainedMinimisation):
+class VANDERM4(AbstractNonlinearEquations):
     """VANDERM4 problem - Vandermonde matrix nonlinear equation system.
 
-    A nonlinear equation problem, subject to monotonicity constraints.
+    A nonlinear equations problem, subject to monotonicity constraints.
     The Jacobian is a dense Vandermonde matrix.
 
     Problems VANDERM1, VANDERM2, VANDERM3 and VANDERM4 differ by the rhs
@@ -31,26 +31,18 @@ class VANDERM4(AbstractConstrainedMinimisation):
 
     n: int = 100  # Number of variables (default 100)
 
-    @property
-    def m(self):
-        """Number of constraints."""
-        # Only n-1 inequality constraints (monotonicity)
-        # The Vandermonde equations are part of the objective (L2 group type)
-        return self.n - 1
+    def num_residuals(self):
+        """Number of residuals."""
+        # n residual equations (Vandermonde equations)
+        return self.n
 
-    def objective(self, y, args):
-        """Compute the objective (constant zero)."""
-        del args, y
-        # VANDERM4 has a constant zero objective
-        # The equations are handled as constraints
-        return jnp.array(0.0)
-
-    def constraint(self, y):
-        """Compute all constraints."""
+    def residual(self, y, args):
+        """Compute the residuals."""
+        del args
         n = self.n
         x = y
 
-        # Define the right-hand-side for equality constraints
+        # Define the right-hand-side for residual equations
         # al[i] = 1/2^(i-1) for i = 1, ..., n
         al = 1.0 / (2.0 ** inexact_asarray(jnp.arange(n)))
 
@@ -65,41 +57,30 @@ class VANDERM4(AbstractConstrainedMinimisation):
             al_k = jnp.exp(k * log_al)
             a = a.at[k - 1].set(jnp.sum(al_k))
 
-        # Equality constraints: the Vandermonde equations
-        eq_constraints = jnp.zeros(n)
+        # Residual equations: the Vandermonde equations
+        residuals = jnp.zeros(n)
 
         # First equation: sum(x_i) = a[0]
         # Note: pycutest appears to use a[k] - sum(x^k) convention
-        eq_constraints = eq_constraints.at[0].set(a[0] - jnp.sum(x))
+        residuals = residuals.at[0].set(a[0] - jnp.sum(x))
 
         # Remaining equations: sum(x_i^k) = a[k-1]
         for k in range(2, n + 1):
-            eq_constraints = eq_constraints.at[k - 1].set(a[k - 1] - jnp.sum(x**k))
+            residuals = residuals.at[k - 1].set(a[k - 1] - jnp.sum(x**k))
 
-        # Inequality constraints: monotonicity
-        # x[i] >= x[i-1] for i = 2, ..., n
-        # The SIF defines M(i) = x[i] - x[i-1] >= 0
-        # But pycutest seems to return x[i] - x[i-1] directly
-        ineq_constraints = x[1:] - x[:-1]
+        return residuals
 
-        return eq_constraints, ineq_constraints
-
+    @property
     def y0(self):
         """Initial guess."""
         n = self.n
         # Initial point: x[i] = (i-1)/n
         return inexact_asarray(jnp.arange(n)) * n
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
-
-    def bounds(self):
-        """Variable bounds (all free)."""
-        n = self.n
-        lower = jnp.full(n, -jnp.inf)
-        upper = jnp.full(n, jnp.inf)
-        return lower, upper
 
     def expected_result(self):
         """Expected optimal solution (not provided in SIF)."""
@@ -108,3 +89,21 @@ class VANDERM4(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Compute the constraints (both equality and inequality)."""
+        # Equality constraints: the residuals
+        equalities = self.residual(y, self.args)
+
+        # Inequality constraints: monotonicity x[i] >= x[i-1] for i = 2, ..., n
+        # Rewritten as x[i] - x[i-1] >= 0
+        x = y
+        n = self.n
+        inequalities = x[1:n] - x[0 : n - 1]
+
+        return equalities, inequalities
+
+    @property
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

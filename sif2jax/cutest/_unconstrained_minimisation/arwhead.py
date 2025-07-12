@@ -33,9 +33,11 @@ class ARWHEAD(AbstractUnconstrainedMinimisation):
         f2 = (y[:-1] ** 2 + yn**2) ** 2  # Second sum: (x[i]^2 + x[N]^2)^2
         return jnp.sum(f1 + f2)
 
+    @property
     def y0(self):
         return jnp.ones(self.n)
 
+    @property
     def args(self):
         return None
 

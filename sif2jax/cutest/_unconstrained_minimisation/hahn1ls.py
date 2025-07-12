@@ -534,6 +534,7 @@ class HAHN1LS(AbstractUnconstrainedMinimisation):
         # Objective function is sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # First starting point (START1, lines 537-543)
         if self.y0_iD == 0:
@@ -544,6 +545,7 @@ class HAHN1LS(AbstractUnconstrainedMinimisation):
         else:
             assert False, f"Unexpected y0_iD: {self.y0_iD}"
 
+    @property
     def args(self):
         return None
 

@@ -37,9 +37,11 @@ class HS14(AbstractConstrainedMinimisation):
         x1, x2 = y
         return (x1 - 2) ** 2 + (x2 - 1) ** 2
 
+    @property
     def y0(self):
         return jnp.array([2.0, 2.0])
 
+    @property
     def args(self):
         return None
 
@@ -53,6 +55,7 @@ class HS14(AbstractConstrainedMinimisation):
         sqrt7 = jnp.sqrt(7)
         return jnp.array(9 - 2.875 * sqrt7)
 
+    @property
     def bounds(self):
         return None
 

@@ -30,9 +30,11 @@ class HS5(AbstractBoundedMinimisation):
         x1, x2 = y
         return jnp.sin(x1 + x2) + (x1 - x2) ** 2 - 1.5 * x1 + 2.5 * x2 + 1
 
+    @property
     def y0(self):
         return jnp.array([0.0, 0.0])
 
+    @property
     def args(self):
         return None
 
@@ -44,6 +46,7 @@ class HS5(AbstractBoundedMinimisation):
         # From PDF: f(x*) = -2√3 - π/2
         return jnp.array(-2 * jnp.sqrt(3) - jnp.pi / 2)
 
+    @property
     def bounds(self):
         # -1.5 ≤ x1 ≤ 4, -3 ≤ x2 ≤ 3
         lower = jnp.array([-1.5, -3.0])

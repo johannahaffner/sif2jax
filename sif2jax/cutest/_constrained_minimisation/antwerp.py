@@ -231,6 +231,7 @@ class ANTWERP(AbstractConstrainedMinimisation):
 
         return jnp.array(eq_constraints), jnp.array(ineq_constraints)
 
+    @property
     def y0(self):
         """Initial guess for variables."""
         # Compute initial values based on data
@@ -279,6 +280,7 @@ class ANTWERP(AbstractConstrainedMinimisation):
             ]
         )
 
+    @property
     def bounds(self):
         """Get variable bounds."""
         # All probabilities in [0, 1], except P3F, P4F, P5F with tighter bounds
@@ -351,6 +353,7 @@ class ANTWERP(AbstractConstrainedMinimisation):
 
         return (lower, upper)
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None

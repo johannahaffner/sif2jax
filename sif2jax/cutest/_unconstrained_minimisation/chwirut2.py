@@ -41,11 +41,13 @@ class CHWIRUT2(AbstractUnconstrainedMinimisation):
             "CHWIRUT2 requires implementation with 54 data points"
         )
 
+    @property
     def y0(self):
         """Initial guess."""
         # START1 from SIF file
         return jnp.array([0.1, 0.01, 0.02])
 
+    @property
     def args(self):
         """No additional arguments."""
         return None

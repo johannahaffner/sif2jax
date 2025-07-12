@@ -38,10 +38,12 @@ class SINVALNE(AbstractNonlinearEquations):
 
         return jnp.array([res1, res2])
 
+    @property
     def y0(self) -> Float[Array, "2"]:
         """Initial guess for the optimization problem."""
         return jnp.array([4.712389, -1.0])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -55,3 +57,12 @@ class SINVALNE(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

@@ -42,10 +42,12 @@ class HATFLDFLS(AbstractUnconstrainedMinimisation):
         # Objective function is sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial point from SIF file (line 50)
         return jnp.full(3, 0.1)
 
+    @property
     def args(self):
         return None
 

@@ -271,6 +271,7 @@ class GBRAINLS(AbstractUnconstrainedMinimisation):
         # Return sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Starting points from the SIF file
         if self.start_point == 0:
@@ -282,6 +283,7 @@ class GBRAINLS(AbstractUnconstrainedMinimisation):
         else:
             assert False
 
+    @property
     def args(self):
         return None
 

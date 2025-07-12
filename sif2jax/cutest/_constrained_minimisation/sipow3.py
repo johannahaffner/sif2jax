@@ -102,14 +102,17 @@ class SIPOW3(AbstractConstrainedMinimisation):
 
         return None, constraints
 
+    @property
     def y0(self):
         """Initial guess."""
         return inexact_asarray(jnp.array([-0.1, 0.0, 0.0, 1.2]))
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds (all free)."""
         lower = jnp.full(4, -jnp.inf)

@@ -29,9 +29,11 @@ class HIMMELBG(AbstractUnconstrainedMinimisation):
         quadratic = 2 * x1**2 + 3 * x2**2
         return exponential * quadratic
 
+    @property
     def y0(self):
         return jnp.array([0.5, 0.5])
 
+    @property
     def args(self):
         return None
 

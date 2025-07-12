@@ -48,10 +48,12 @@ class TENFOLDTRLS(AbstractUnconstrainedMinimisation):
 
         return f1 + f2
 
+    @property
     def y0(self):
         # Initial value of 10.0 as specified in the SIF file
         return jnp.full(self.n, 10.0)
 
+    @property
     def args(self):
         return None
 

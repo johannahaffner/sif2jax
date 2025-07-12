@@ -104,14 +104,17 @@ class CRESC4(AbstractConstrainedMinimisation):
         # All constraints are inequalities, no equalities
         return None, jnp.array(constraints)
 
+    @property
     def y0(self):
         """Initial guess."""
         return jnp.array([-40.0, 5.0, 1.0, 2.0, 1.5, 0.75])
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds."""
         lower = jnp.array([-jnp.inf, -jnp.inf, 1e-8, 1.0, 0.0, 0.39])

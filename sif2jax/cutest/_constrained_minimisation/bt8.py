@@ -34,12 +34,14 @@ class BT8(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5 = y
         return x1**2 + x2**2 + x3**2
 
+    @property
     def y0(self):
         if self.y0_id == 0:
             return jnp.array([1.0, 1.0, 1.0, 0.0, 0.0])
         elif self.y0_id == 1:
             return jnp.array([7.0, 7.0, 7.0, 0.0, 0.0])
 
+    @property
     def args(self):
         return None
 
@@ -49,6 +51,7 @@ class BT8(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(1.0)
 
+    @property
     def bounds(self):
         return None
 

@@ -322,10 +322,12 @@ class CERI651BLS(AbstractUnconstrainedMinimisation):
         residuals = weights * (y_pred - y_data)
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values similar to CERI651ALS
         return jnp.array([0.0, 0.0, 1.0, 0.05, 26061.4, 38.7105, 26227.1])
 
+    @property
     def args(self):
         return None
 

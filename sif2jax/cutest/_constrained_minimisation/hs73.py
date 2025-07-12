@@ -36,9 +36,11 @@ class HS73(AbstractConstrainedMinimisation):
         x1, x2, x3, x4 = y
         return 24.55 * x1 + 26.75 * x2 + 39 * x3 + 40.50 * x4
 
+    @property
     def y0(self):
         return jnp.array([1.0, 1.0, 1.0, 1.0])  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -48,6 +50,7 @@ class HS73(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(29.894378)
 
+    @property
     def bounds(self):
         return (
             jnp.array([0.0, 0.0, 0.0, 0.0]),

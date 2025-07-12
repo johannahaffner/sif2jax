@@ -60,12 +60,14 @@ class COOLHANSLS(AbstractUnconstrainedMinimisation):
         # Compute the sum of squares of all elements in the residual matrix
         return jnp.sum(residual_matrix**2)
 
+    @property
     def y0(self):
         # Initial values not explicitly specified in the SIF file,
         # but lines 95-98 suggest X(1,:) and X(3,:) might be fixed at 0
         # Default initialization is 0.0 for all variables
         return jnp.zeros(self.n)
 
+    @property
     def args(self):
         return None
 

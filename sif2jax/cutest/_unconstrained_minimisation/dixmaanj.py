@@ -80,10 +80,12 @@ class DIXMAANJ(AbstractUnconstrainedMinimisation):
 
         return term1 + term2 + term3 + term4 + constant
 
+    @property
     def y0(self):
         # Initial value is 2.0 for all variables
         return inexact_asarray(jnp.full(self.n, 2.0))
 
+    @property
     def args(self):
         return None
 

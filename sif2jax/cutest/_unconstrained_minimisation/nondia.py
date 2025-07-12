@@ -57,10 +57,12 @@ class NONDIA(AbstractUnconstrainedMinimisation):
 
         return sq1 + sq_sum
 
+    @property
     def y0(self):
         # Starting point: all variables at -1.0
         return -jnp.ones(self.n)
 
+    @property
     def args(self):
         return None
 

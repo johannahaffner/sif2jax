@@ -65,10 +65,12 @@ class LUKVLE7(AbstractConstrainedMinimisation):
 
         return jnp.sum(coefficients * terms)
 
+    @property
     def y0(self):
         # Starting point: x_i = 1 for all i
         return inexact_asarray(jnp.ones(self.n))
 
+    @property
     def args(self):
         return None
 
@@ -79,6 +81,7 @@ class LUKVLE7(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return None  # Unknown exact objective value
 
+    @property
     def bounds(self):
         return None
 

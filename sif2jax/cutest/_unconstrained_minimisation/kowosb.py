@@ -67,10 +67,12 @@ class KOWOSB(AbstractUnconstrainedMinimisation):
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Initial point from the SIF file."""
         return jnp.array([0.25, 0.39, 0.415, 0.39])
 
+    @property
     def args(self):
         """No additional arguments needed."""
         return None

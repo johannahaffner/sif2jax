@@ -35,9 +35,11 @@ class HS32(AbstractConstrainedMinimisation):
         diff_term = x1 - x2
         return sum_term * sum_term + 4.0 * diff_term * diff_term
 
+    @property
     def y0(self):
         return jnp.array([0.1, 0.7, 0.2])
 
+    @property
     def args(self):
         return None
 
@@ -47,6 +49,7 @@ class HS32(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(1.0)
 
+    @property
     def bounds(self):
         return (jnp.array([0.0, 0.0, 0.0]), jnp.array([jnp.inf, jnp.inf, jnp.inf]))
 

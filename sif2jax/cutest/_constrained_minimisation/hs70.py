@@ -146,14 +146,17 @@ class HS70(AbstractConstrainedMinimisation):
         """Specify which constraints are equalities."""
         return jnp.array([])  # No equality constraints
 
+    @property
     def y0(self):
         """Initial guess."""
         return jnp.array([2.0, 4.0, 0.04, 2.0])
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds."""
         lower = jnp.array([0.00001, 0.00001, 0.00001, 0.00001])

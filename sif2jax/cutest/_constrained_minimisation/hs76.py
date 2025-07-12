@@ -46,9 +46,11 @@ class HS76(AbstractConstrainedMinimisation):
             - x4
         )
 
+    @property
     def y0(self):
         return jnp.array([0.5, 0.5, 0.5, 0.5])  # feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -58,6 +60,7 @@ class HS76(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-4.681818181)
 
+    @property
     def bounds(self):
         return (
             jnp.array([0.0, 0.0, 0.0, 0.0]),

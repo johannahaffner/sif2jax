@@ -30,9 +30,11 @@ class HS9(AbstractConstrainedMinimisation):
         x1, x2 = y
         return jnp.sin(jnp.pi * x1 / 12) * jnp.cos(jnp.pi * x2 / 16)
 
+    @property
     def y0(self):
         return jnp.array([0.0, 0.0])
 
+    @property
     def args(self):
         return None
 
@@ -44,6 +46,7 @@ class HS9(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-0.5)
 
+    @property
     def bounds(self):
         return None
 

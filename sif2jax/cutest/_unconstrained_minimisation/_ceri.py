@@ -311,10 +311,12 @@ class CERI651ALS(AbstractUnconstrainedMinimisation):
         residuals = weights * (y_pred - y_data)
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values from SIF file (START1)
         return jnp.array([0.0, 0.0, 1.0, 0.05, 26061.4, 38.7105, 37027.1])
 
+    @property
     def args(self):
         return None
 
@@ -641,10 +643,12 @@ class CERI651BLS(AbstractUnconstrainedMinimisation):
         residuals = weights * (y_pred - y_data)
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values similar to CERI651ALS
         return jnp.array([0.0, 0.0, 1.0, 0.05, 26061.4, 38.7105, 26227.1])
 
+    @property
     def args(self):
         return None
 
@@ -941,10 +945,12 @@ class CERI651CLS(AbstractUnconstrainedMinimisation):
         residuals = weights * (y_pred - y_data)
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values from the SIF file (START3)
         return jnp.array([0.0, 0.0, 1.0, 0.05, 597.076, 22.9096, 24027.5])
 
+    @property
     def args(self):
         return None
 
@@ -1274,10 +1280,12 @@ class CERI651DLS(AbstractUnconstrainedMinimisation):
         residuals = weights * (y_pred - y_data)
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values from the SIF file (START4)
         return jnp.array([0.0, 0.0, 1.0, 0.05, 15.1595, 8.0, 13072.9])
 
+    @property
     def args(self):
         return None
 
@@ -1598,10 +1606,12 @@ class CERI651ELS(AbstractUnconstrainedMinimisation):
         residuals = weights * (y_pred - y_data)
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values from the SIF file (START5)
         return jnp.array([0.0, 0.0, 1.0, 0.05, 17.06794, 8.0, 13642.3])
 
+    @property
     def args(self):
         return None
 

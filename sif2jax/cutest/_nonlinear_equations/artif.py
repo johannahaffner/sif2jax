@@ -41,11 +41,13 @@ class ARTIF(AbstractNonlinearEquations):
 
         return jnp.array(residuals)
 
+    @property
     def y0(self) -> Float[Array, "5000"]:
         """Initial guess for the optimization problem."""
         # All variables start at 1.0 (except fixed boundary values)
         return jnp.ones(self.n)
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -59,3 +61,12 @@ class ARTIF(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

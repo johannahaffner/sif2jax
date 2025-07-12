@@ -29,9 +29,11 @@ class BT1(AbstractConstrainedMinimisation):
         x1, x2 = y
         return 100 * x1**2 + 100 * x2**2 - x1 - 100
 
+    @property
     def y0(self):
         return jnp.array([0.08, 0.06])
 
+    @property
     def args(self):
         return None
 
@@ -41,6 +43,7 @@ class BT1(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-1.0)
 
+    @property
     def bounds(self):
         return None
 

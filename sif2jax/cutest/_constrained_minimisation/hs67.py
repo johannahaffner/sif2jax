@@ -111,9 +111,11 @@ class HS67(AbstractConstrainedMinimisation):
         # SIF file: f(x) = 5.04*x1 + 0.035*x2 + 10.0*x3 - 0.063*y2*y5 + 3.36*y3
         return 5.04 * x1 + 0.035 * x2 + 10.0 * x3 - 0.063 * y2 * y5 + 3.36 * y3
 
+    @property
     def y0(self):
         return jnp.array([1745.0, 12000.0, 110.0])  # feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -123,6 +125,7 @@ class HS67(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-1162.036507)  # This matches H&S book and our SIF file
 
+    @property
     def bounds(self):
         return (jnp.array([1.0e-5, 1.0e-5, 1.0e-5]), jnp.array([2.0e3, 1.6e4, 1.2e2]))
 

@@ -133,6 +133,7 @@ class ECKERLE4LS(AbstractUnconstrainedMinimisation):
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Two starting points from the SIF file
         if self.start_point == 0:
@@ -142,6 +143,7 @@ class ECKERLE4LS(AbstractUnconstrainedMinimisation):
             # Starting point 2: b1 = 1.5, b2 = 5.0, b3 = 450.0
             return jnp.array([1.5, 5.0, 450.0])
 
+    @property
     def args(self):
         return None
 

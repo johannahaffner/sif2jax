@@ -33,10 +33,12 @@ class FLETCHCR(AbstractUnconstrainedMinimisation):
 
         return term1 + term2
 
+    @property
     def y0(self):
         # Starting point: all zeros
         return jnp.zeros(self.n)
 
+    @property
     def args(self):
         return None
 

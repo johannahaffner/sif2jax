@@ -52,10 +52,12 @@ class DANIWOODLS(AbstractUnconstrainedMinimisation):
         residuals = y_pred - y_data
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values from SIF file (START1)
         return jnp.array([1.0, 5.0])
 
+    @property
     def args(self):
         return None
 

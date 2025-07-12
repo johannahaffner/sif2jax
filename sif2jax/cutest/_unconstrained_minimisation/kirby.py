@@ -367,6 +367,7 @@ class KIRBY2LS(AbstractUnconstrainedMinimisation):
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Initial point based on the y0_id parameter."""
         if self.y0_id == 0:
@@ -376,6 +377,7 @@ class KIRBY2LS(AbstractUnconstrainedMinimisation):
         else:
             assert False, "Invalid y0_id"
 
+    @property
     def args(self):
         """No additional arguments needed."""
         return None

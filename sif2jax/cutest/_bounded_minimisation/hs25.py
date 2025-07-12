@@ -48,9 +48,11 @@ class HS25(AbstractBoundedMinimisation):
 
         return jnp.array(sum_val)
 
+    @property
     def y0(self):
         return jnp.array([100.0, 12.5, 3.0])
 
+    @property
     def args(self):
         return None
 
@@ -60,6 +62,7 @@ class HS25(AbstractBoundedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.0)
 
+    @property
     def bounds(self):
         return (jnp.array([0.1, 0.0, 0.0]), jnp.array([100.0, 25.6, 5.0]))
 

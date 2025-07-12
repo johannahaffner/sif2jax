@@ -54,10 +54,12 @@ class EXPFIT(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals
         return jnp.sum(residuals)
 
+    @property
     def y0(self):
         # AMPL model has no initial values specified, so variables start at 0.0
         return inexact_asarray(jnp.array([0.0, 0.0]))
 
+    @property
     def args(self):
         return None
 

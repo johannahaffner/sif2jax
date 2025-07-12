@@ -30,30 +30,31 @@ class BOX3NE(AbstractNonlinearEquations):
         # Number of groups
         m = 10
 
-        # Compute residuals for each group
-        residuals = []
-        for i in range(m):
-            ri = float(i + 1)  # i = 1 to 10 in 1-indexed
-            ti = -0.1 * ri
+        # Vectorized computation
+        i = jnp.arange(m, dtype=float)
+        ri = i + 1.0  # i = 1 to 10 in 1-indexed
+        ti = -0.1 * ri
 
-            # Linear coefficient for x3
-            emti = jnp.exp(-0.1 * ri)
-            emri = jnp.exp(-ri)
-            coeff = -emti + emri
+        # Linear coefficient for x3
+        emti = jnp.exp(-0.1 * ri)
+        emri = jnp.exp(-ri)
+        coeff = -emti + emri
 
-            # Nonlinear elements
-            a_i = jnp.exp(ti * x1)  # exp(-0.1*i*x1)
-            b_i = jnp.exp(ti * x2)  # exp(-0.1*i*x2)
+        # Nonlinear elements
+        a_i = jnp.exp(ti * x1)  # exp(-0.1*i*x1)
+        b_i = jnp.exp(ti * x2)  # exp(-0.1*i*x2)
 
-            # Group equation: coeff * x3 + a_i - b_i = 0
-            residuals.append(coeff * x3 + a_i - b_i)
+        # Group equation: coeff * x3 + a_i - b_i = 0
+        residuals = coeff * x3 + a_i - b_i
 
-        return jnp.array(residuals)
+        return residuals
 
+    @property
     def y0(self) -> Float[Array, "3"]:
         """Initial guess for the optimization problem."""
         return jnp.array([0.0, 10.0, 1.0])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -67,3 +68,12 @@ class BOX3NE(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

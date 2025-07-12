@@ -132,14 +132,17 @@ class TRUSPYR1(AbstractConstrainedMinimisation):
 
         return equil, jnp.array([strain_energy])
 
+    @property
     def y0(self):
         """Initial guess - all zeros as in pycutest."""
         return jnp.zeros(11)
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Bounds on variables."""
         # Cross-sectional areas have lower bound of 1.0, displacements unbounded

@@ -77,15 +77,18 @@ class CSFI1(AbstractConstrainedMinimisation):
 
         return equalities, inequalities
 
+    @property
     def y0(self):
         """Initial guess."""
         # From START POINT section with default 0.5
         return jnp.array([0.5, 0.5, 0.5, 0.5, 0.5])
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds."""
         # Parameters

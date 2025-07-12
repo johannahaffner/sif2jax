@@ -35,9 +35,11 @@ class HS24(AbstractConstrainedMinimisation):
         sqrt3 = jnp.sqrt(3.0)
         return (1.0 / (27.0 * sqrt3)) * ((x1 - 3.0) ** 2 - 9.0) * (x2**3)
 
+    @property
     def y0(self):
         return jnp.array([1.0, 0.5])
 
+    @property
     def args(self):
         return None
 
@@ -48,6 +50,7 @@ class HS24(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-1.0)
 
+    @property
     def bounds(self):
         return (jnp.array([0.0, 0.0]), jnp.array([jnp.inf, jnp.inf]))
 

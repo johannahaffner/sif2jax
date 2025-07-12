@@ -41,11 +41,13 @@ class BOOTH(AbstractNonlinearEquations):
 
         return jnp.array([x1 + 2.0 * x2 - 7.0, 2.0 * x1 + x2 - 5.0])
 
+    @property
     def y0(self):
         """Initial guess."""
         # No explicit start point in SIF, using zeros
         return jnp.zeros(2)
 
+    @property
     def args(self):
         """No additional arguments."""
         return None
@@ -65,3 +67,12 @@ class BOOTH(AbstractNonlinearEquations):
         """Expected optimal objective value."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

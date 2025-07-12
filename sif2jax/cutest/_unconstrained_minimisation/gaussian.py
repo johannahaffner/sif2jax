@@ -78,11 +78,13 @@ class GAUSSIAN(AbstractUnconstrainedMinimisation):
         residuals = model - y_data
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Return the starting point from the SIF file."""
         # Initial point from the SIF file: x1 = 0.4, x2 = 1.0, x3 = 0.0
         return jnp.array([0.4, 1.0, 0.0])
 
+    @property
     def args(self):
         """Return None as no additional args are needed."""
         return None

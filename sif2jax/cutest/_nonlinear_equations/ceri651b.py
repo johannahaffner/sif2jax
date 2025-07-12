@@ -261,30 +261,28 @@ class CERI651B(AbstractNonlinearEquations):
         apb = a + b
         p = 0.5 * i_param * a * b / apb
 
-        residuals = []
-        for i in range(66):
-            x = x_data[i]
-            xmy = x - x0
-            z = xmy / s
+        # Vectorized computation
+        xmy = x_data - x0
+        z = xmy / s
 
-            # R term
-            r = jnp.exp(-0.5 * z * z)
+        # R term
+        r = jnp.exp(-0.5 * z * z)
 
-            # AC and BC terms
-            ac = rootp5 * (a * s + xmy / s)
-            bc = rootp5 * (b * s + xmy / s)
+        # AC and BC terms
+        ac = rootp5 * (a * s + xmy / s)
+        bc = rootp5 * (b * s + xmy / s)
 
-            # QA and QB using scaled erfc
-            qa = erfc_scaled(ac)
-            qb = erfc_scaled(bc)
+        # QA and QB using scaled erfc
+        qa = erfc_scaled(ac)
+        qb = erfc_scaled(bc)
 
-            # Model value
-            model = c + l * x + p * r * (qa + qb)
+        # Model values
+        model = c + l * x_data + p * r * (qa + qb)
 
-            # Residual weighted by error
-            residuals.append((model - y_data[i]) / e_data[i])
+        # Residuals weighted by error
+        residuals = (model - y_data) / e_data
 
-        return jnp.array(residuals)
+        return residuals
 
     @property
     def y0(self) -> Float[Array, "7"]:

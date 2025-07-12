@@ -44,38 +44,42 @@ class POWELLSE(AbstractNonlinearEquations):
         # Ensure n is a multiple of 4
         assert self.n % 4 == 0, "n must be a multiple of 4"
 
-        # Residuals:
-        residuals = []
+        # Reshape x to process groups of 4 variables at once
+        x_groups = x.reshape(-1, 4)  # Shape: (n/4, 4)
 
-        for i in range(0, self.n, 4):
-            # G(i): x(i) + 10*x(i+1) = 0
-            g1 = x[i] + 10.0 * x[i + 1]
+        # Extract components for all groups
+        x0 = x_groups[:, 0]  # x(i)
+        x1 = x_groups[:, 1]  # x(i+1)
+        x2 = x_groups[:, 2]  # x(i+2)
+        x3 = x_groups[:, 3]  # x(i+3)
 
-            # G(i+1): 5 * (x(i+2) - x(i+3)) = 0
-            # Note: SIF has SCALE 0.2, which means multiply by 5 = 1/0.2
-            g2 = 5.0 * (x[i + 2] - x[i + 3])
+        # Compute residuals for all groups vectorized
+        # G(i): x(i) + 10*x(i+1) = 0
+        g1 = x0 + 10.0 * x1
 
-            # G(i+2): (x(i+1) - 2*x(i+2))^2 = 0
-            g3 = (x[i + 1] - 2.0 * x[i + 2]) ** 2
+        # G(i+1): 5 * (x(i+2) - x(i+3)) = 0
+        # Note: SIF has SCALE 0.2, which means multiply by 5 = 1/0.2
+        g2 = 5.0 * (x2 - x3)
 
-            # G(i+3): 10 * (x(i) - x(i+3))^2 = 0
-            # Note: SIF has SCALE 0.1, and squared term gives factor 10
-            g4 = 10.0 * (x[i] - x[i + 3]) ** 2
+        # G(i+2): (x(i+1) - 2*x(i+2))^2 = 0
+        g3 = (x1 - 2.0 * x2) ** 2
 
-            residuals.extend([g1, g2, g3, g4])
+        # G(i+3): 10 * (x(i) - x(i+3))^2 = 0
+        # Note: SIF has SCALE 0.1, and squared term gives factor 10
+        g4 = 10.0 * (x0 - x3) ** 2
 
-        residuals = jnp.array(residuals)
+        # Stack and flatten to return residuals in the correct order
+        residuals = jnp.stack([g1, g2, g3, g4], axis=1).ravel()
+
         return residuals
 
     @property
     def y0(self):
         """Initial guess."""
-        x0 = jnp.zeros(self.n)
-        for i in range(0, self.n, 4):
-            x0 = x0.at[i].set(3.0)
-            x0 = x0.at[i + 1].set(-1.0)
-            x0 = x0.at[i + 2].set(0.0)
-            x0 = x0.at[i + 3].set(1.0)
+        # Create the repeating pattern [3.0, -1.0, 0.0, 1.0]
+        pattern = jnp.array([3.0, -1.0, 0.0, 1.0])
+        # Tile it to match the problem dimension
+        x0 = jnp.tile(pattern, self.n // 4)
         return x0
 
     @property

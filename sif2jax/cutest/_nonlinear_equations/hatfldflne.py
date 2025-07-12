@@ -29,13 +29,13 @@ class HATFLDFLNE(AbstractNonlinearEquations):
         # Constants
         c = jnp.array([0.032, 0.056, 0.099])
 
-        residuals = []
-        for i in range(1, 4):  # i = 1, 2, 3
-            # G(i): X1 + X2 * X3^i = C(i)
-            res = x1 + x2 * (x3**i) - c[i - 1]
-            residuals.append(res)
+        # Vectorized computation
+        i = jnp.arange(1, 4, dtype=float)  # i = 1, 2, 3
 
-        return jnp.array(residuals)
+        # G(i): X1 + X2 * X3^i = C(i)
+        residuals = x1 + x2 * (x3**i) - c
+
+        return residuals
 
     @property
     def y0(self) -> Float[Array, "3"]:

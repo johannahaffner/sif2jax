@@ -29,13 +29,13 @@ class NONMSQRTNE(AbstractNonlinearEquations):
         # Reshape y to p x p matrix X
         x = y.reshape((p, p))
 
-        # Define the matrix B
-        b = jnp.zeros((p, p))
-        k = 0.0
-        for i in range(p):
-            for j in range(p):
-                k += 1.0
-                b = b.at[i, j].set(jnp.sin(k * k))
+        # Define the matrix B using vectorized operations
+        # Create k values: 1, 2, 3, ..., p*p
+        k_values = jnp.arange(1, p * p + 1, dtype=float)
+        # Compute sin(k^2) for all values
+        sin_k2 = jnp.sin(k_values * k_values)
+        # Reshape to p x p matrix
+        b = sin_k2.reshape((p, p))
 
         # B(3,1) = 0.0 for p >= 3
         if p >= 3:
@@ -58,26 +58,21 @@ class NONMSQRTNE(AbstractNonlinearEquations):
         """Initial guess for the optimization problem."""
         p = self.p
 
-        # Define the matrix B
-        b = jnp.zeros((p, p))
-        k = 0.0
-        for i in range(p):
-            for j in range(p):
-                k += 1.0
-                b = b.at[i, j].set(jnp.sin(k * k))
+        # Define the matrix B using vectorized operations
+        # Create k values: 1, 2, 3, ..., p*p
+        k_values = jnp.arange(1, p * p + 1, dtype=float)
+        # Compute sin(k^2) for all values
+        sin_k2 = jnp.sin(k_values * k_values)
+        # Reshape to p x p matrix
+        b = sin_k2.reshape((p, p))
 
         # B(3,1) = 0.0 for p >= 3
         if p >= 3:
             b = b.at[2, 0].set(0.0)
 
         # Initial guess: X = B - 0.8 * sin(k^2) for each element
-        x = jnp.zeros((p, p))
-        k = 0.0
-        for i in range(p):
-            for j in range(p):
-                k += 1.0
-                sk2 = jnp.sin(k * k)
-                x = x.at[i, j].set(b[i, j] - 0.8 * sk2)
+        # sin_k2 already contains sin(k^2) values
+        x = b - 0.8 * sin_k2.reshape((p, p))
 
         return x.flatten()
 

@@ -45,27 +45,28 @@ class VANDERM1(AbstractNonlinearEquations):
         # Define the right-hand-side for residual equations
         al = inexact_asarray(jnp.arange(1, n + 1)) / n
 
-        # Compute A values
-        a = jnp.zeros(n)
-        a = a.at[0].set(jnp.sum(al))
+        # Compute A values vectorized
+        # Create k values from 1 to n
+        k_values = jnp.arange(1, n + 1, dtype=float)[:, None]  # Shape: (n, 1)
 
-        # For k >= 2, use log/exp to compute al^k to avoid numerical issues
-        for k in range(2, n + 1):
-            # al^k = exp(k * log(al))
-            log_al = jnp.log(al)
-            al_k = jnp.exp(k * log_al)
-            a = a.at[k - 1].set(jnp.sum(al_k))
+        # Compute al^k for all k using broadcasting with log/exp for numerical stability
+        # Note: for k=1, al^1 = al
+        log_al = jnp.log(al[None, :])  # Shape: (1, n)
+        al_powers = jnp.exp(k_values * log_al)  # Shape: (n, n)
+
+        # Sum over al dimension to get a[k-1] for k=1,2,...,n
+        a = jnp.sum(al_powers, axis=1)  # Shape: (n,)
 
         # Residual equations: the Vandermonde equations
-        residuals = jnp.zeros(n)
+        # Compute x^k for k=1,2,...,n vectorized
+        x_powers = x[None, :] ** k_values  # Shape: (n, n)
 
-        # First equation: sum(x_i) = a[0]
+        # Sum over x dimension to get sum(x^k) for all k
+        x_sums = jnp.sum(x_powers, axis=1)  # Shape: (n,)
+
+        # Compute residuals: a[k-1] - sum(x^k)
         # Note: pycutest appears to use a[k] - sum(x^k) convention
-        residuals = residuals.at[0].set(a[0] - jnp.sum(x))
-
-        # Remaining equations: sum(x_i^k) = a[k-1]
-        for k in range(2, n + 1):
-            residuals = residuals.at[k - 1].set(a[k - 1] - jnp.sum(x**k))
+        residuals = a - x_sums
 
         return residuals
 

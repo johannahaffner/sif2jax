@@ -40,18 +40,24 @@ class POWELLBS(AbstractNonlinearEquations):
         del args
         x = y
 
-        # Residuals:
+        # Vectorized computation for residuals
         # For i = 1 to n-1:
         # A(i) = 10000 * x(i) * x(i+1) - 1 = 0
         # B(i) = exp(-x(i)) + exp(-x(i+1)) - 1.0001 = 0
-        residuals = []
-        for i in range(self.n - 1):
-            a_i = 10000.0 * x[i] * x[i + 1] - 1.0
-            b_i = jnp.exp(-x[i]) + jnp.exp(-x[i + 1]) - 1.0001
-            residuals.append(a_i)
-            residuals.append(b_i)
 
-        residuals = jnp.array(residuals)
+        # Extract consecutive pairs
+        x_i = x[:-1]  # x[0] to x[n-2]
+        x_ip1 = x[1:]  # x[1] to x[n-1]
+
+        # Compute A residuals
+        a = 10000.0 * x_i * x_ip1 - 1.0
+
+        # Compute B residuals
+        b = jnp.exp(-x_i) + jnp.exp(-x_ip1) - 1.0001
+
+        # Interleave A and B residuals
+        residuals = jnp.stack([a, b], axis=1).ravel()
+
         return residuals
 
     @property

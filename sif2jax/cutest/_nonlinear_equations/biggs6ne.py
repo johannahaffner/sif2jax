@@ -27,21 +27,21 @@ class BIGGS6NE(AbstractNonlinearEquations):
         """Residual function for the nonlinear equations."""
         x1, x2, x3, x4, x5, x6 = y
 
-        residuals = []
-        for i in range(1, 14):  # i from 1 to 13
-            t = -0.1 * i
+        # Vectorized computation
+        i = jnp.arange(1, 14, dtype=float)  # i from 1 to 13
+        t = -0.1 * i
 
-            # Compute Y(i) = exp(-0.1*i) - 5*exp(-i) + 3*exp(-0.4*i)
-            y_i = jnp.exp(t) - 5.0 * jnp.exp(-i) + 3.0 * jnp.exp(4.0 * t)
+        # Compute Y(i) = exp(-0.1*i) - 5*exp(-i) + 3*exp(-0.4*i)
+        y_i = jnp.exp(t) - 5.0 * jnp.exp(-i) + 3.0 * jnp.exp(4.0 * t)
 
-            # Compute residual
-            term1 = x3 * jnp.exp(t * x1)
-            term2 = x4 * jnp.exp(t * x2)
-            term3 = x6 * jnp.exp(t * x5)
+        # Compute residual
+        term1 = x3 * jnp.exp(t * x1)
+        term2 = x4 * jnp.exp(t * x2)
+        term3 = x6 * jnp.exp(t * x5)
 
-            residuals.append(term1 - term2 + term3 - y_i)
+        residuals = term1 - term2 + term3 - y_i
 
-        return jnp.array(residuals)
+        return residuals
 
     @property
     def y0(self) -> Float[Array, "6"]:

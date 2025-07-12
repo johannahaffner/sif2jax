@@ -38,22 +38,20 @@ class BROWNALE(AbstractNonlinearEquations):
         n = self.n
         n_plus_1 = float(n + 1)
 
-        # Initialize residuals array
-        residuals = []
-
-        # For each group i = 1, ..., n-1
-        for i in range(n - 1):
-            # G(i) = sum(y[j] for j != i) + 2*y[i] - (n+1)
-            # This is equivalent to sum(y) + y[i] - (n+1)
-            res_i = jnp.sum(y) + y[i] - n_plus_1
-            residuals.append(res_i)
+        # Vectorized computation for first n-1 residuals
+        # G(i) = sum(y[j] for j != i) + 2*y[i] - (n+1)
+        # This is equivalent to sum(y) + y[i] - (n+1)
+        sum_y = jnp.sum(y)
+        residuals_n_minus_1 = sum_y + y[:-1] - n_plus_1
 
         # For the last group G(n), we have a product of all variables minus 1
         # G(n) = prod(y[j] for j in range(n)) - 1
         res_n = jnp.prod(y) - 1.0
-        residuals.append(res_n)
 
-        return jnp.array(residuals)
+        # Concatenate all residuals
+        residuals = jnp.concatenate([residuals_n_minus_1, jnp.array([res_n])])
+
+        return residuals
 
     @property
     def y0(self) -> Array:

@@ -8,10 +8,10 @@ from ..._problem import AbstractNonlinearEquations
 class VANDERM3(AbstractNonlinearEquations):
     """VANDERM3 problem - Vandermonde matrix nonlinear equation system.
 
-    A nonlinear equations problem, subject to monotonicity constraints.
-    The Jacobian is a dense Vandermonde matrix.
+    A nonlinear equations problem, subject to monotonicity constraints. The Jacobian is
+    a dense Vandermonde matrix.
 
-    Problems VANDERM1, VANDERM2, VANDERM3 and VANDERM4 differ by the rhs
+    Problems VANDERM1, VANDERM2, VANDERM3 and VANDERM4 differ by the right hand side
     of the equation. They are increasingly degenerate.
 
     The problem is non-convex.

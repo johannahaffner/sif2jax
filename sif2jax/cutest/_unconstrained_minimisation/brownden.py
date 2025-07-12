@@ -57,10 +57,12 @@ class BROWNDEN(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(G_values**2)
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return inexact_asarray(jnp.array([25.0, 5.0, -5.0, -1.0]))
 
+    @property
     def args(self):
         return None
 

@@ -32,9 +32,11 @@ class HS64(AbstractConstrainedMinimisation):
         x1, x2, x3 = y
         return 5 * x1 + 50000 / x1 + 20 * x2 + 72000 / x2 + 10 * x3 + 144000 / x3
 
+    @property
     def y0(self):
         return jnp.array([1.0, 1.0, 1.0])  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -44,6 +46,7 @@ class HS64(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(6299.842428)
 
+    @property
     def bounds(self):
         return (
             jnp.array([1.0e-5, 1.0e-5, 1.0e-5]),

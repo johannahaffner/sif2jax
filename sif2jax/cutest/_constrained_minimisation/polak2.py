@@ -65,16 +65,19 @@ class POLAK2(AbstractConstrainedMinimisation):
         # Return as inequality constraints
         return None, constraints
 
+    @property
     def y0(self):
         """Initial guess."""
         x0 = jnp.ones(11) * 0.1
         x0 = x0.at[0].set(100.0)  # x1 = 100.0
         return x0
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds (all free)."""
         lower = jnp.full(11, -jnp.inf)

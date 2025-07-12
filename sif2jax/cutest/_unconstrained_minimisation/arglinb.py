@@ -44,10 +44,12 @@ class ARGLINB(AbstractUnconstrainedMinimisation):
         # Sum of squares of residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial value of 1.0 as specified in the SIF file
         return inexact_asarray(jnp.ones(self.n))
 
+    @property
     def args(self):
         return None
 

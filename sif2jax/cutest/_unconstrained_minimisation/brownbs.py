@@ -44,10 +44,12 @@ class BROWNBS(AbstractUnconstrainedMinimisation):
 
         return term_a + term_b + term_c
 
+    @property
     def y0(self):
         # Initial values from SIF file (all 1.0)
         return jnp.array([1.0, 1.0])
 
+    @property
     def args(self):
         return None
 

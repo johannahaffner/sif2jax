@@ -24,6 +24,7 @@ class LSC1LS(_AbstractLSC):
         y = jnp.array([34.0, 10.0, 6.0, -14.0, 27.0, -10.0])
         return x, y
 
+    @property
     def y0(self):
         """Get the starting point based on the y0_id."""
         if self.y0_id == 0:

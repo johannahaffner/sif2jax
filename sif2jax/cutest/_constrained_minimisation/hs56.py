@@ -34,6 +34,7 @@ class HS56(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5, x6, x7 = y
         return -x1 * x2 * x3
 
+    @property
     def y0(self):
         # Starting point from SIF file
         # Note: There's a typo mentioned in the SIF file about decimal points
@@ -42,6 +43,7 @@ class HS56(AbstractConstrainedMinimisation):
             [1.0, 1.0, 1.0, 0.50973968, 0.50973968, 0.50973968, 0.98511078]
         )
 
+    @property
     def args(self):
         return None
 
@@ -62,6 +64,7 @@ class HS56(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-3.456)
 
+    @property
     def bounds(self):
         return None
 

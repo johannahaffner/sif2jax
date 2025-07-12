@@ -102,10 +102,12 @@ class _AbstractLanczos(AbstractUnconstrainedMinimisation):
         ]
         return start_points[id_val]
 
+    @property
     def y0(self):
         """Initial point based on the y0_id parameter."""
         return self.get_start_point(self.y0_id)
 
+    @property
     def args(self):
         return None
 

@@ -63,10 +63,12 @@ class TOINTGSS(AbstractUnconstrainedMinimisation):
         # Sum all elements
         return jnp.sum(elements)
 
+    @property
     def y0(self):
         """Initial guess."""
         return jnp.full(self.n, 3.0)
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None

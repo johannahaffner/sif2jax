@@ -77,6 +77,7 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(f_values**2)
 
+    @property
     def y0(self):
         """Initial point: ξ_i = t_i(t_i - 1) where t_i = ih.
 
@@ -93,6 +94,7 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
         xi_vals = t_vals * (t_vals - 1.0)
         return inexact_asarray(xi_vals)
 
+    @property
     def args(self):
         """No additional arguments needed."""
         return None

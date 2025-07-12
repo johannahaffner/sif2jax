@@ -27,10 +27,12 @@ class BIGGSC4(AbstractConstrainedMinimisation):
         x1, x2, x3, x4 = y
         return -x1 * x3 - x2 * x4
 
+    @property
     def y0(self):
         # Default starting point
         return jnp.zeros(4)
 
+    @property
     def args(self):
         return None
 
@@ -42,6 +44,7 @@ class BIGGSC4(AbstractConstrainedMinimisation):
         # Solution value given in SIF file
         return jnp.array(-24.5)
 
+    @property
     def bounds(self):
         # Variable bounds: 0 <= x <= 5
         lower = jnp.zeros(4)

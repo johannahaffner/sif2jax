@@ -42,10 +42,12 @@ class CLUSTERLS(AbstractUnconstrainedMinimisation):
         # Sum of squared terms (least-squares objective)
         return term_a * term_a + term_b * term_b
 
+    @property
     def y0(self):
         # Initial values from SIF file (all zeros)
         return jnp.zeros(2)
 
+    @property
     def args(self):
         return None
 

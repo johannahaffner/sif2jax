@@ -62,47 +62,52 @@ class CHAINWOONE(AbstractNonlinearEquations):
         rootp1 = jnp.sqrt(0.1)
         r90 = jnp.sqrt(90.0)
 
-        residuals = []
+        # Create indices for accessing the variables
+        # For each set i, we access y[j-3], y[j-2], y[j-1], y[j] where j = 3 + 2*i
+        i = jnp.arange(ns)
+        j = 3 + 2 * i
 
-        # Process each set i = 1, ..., ns
-        j = 3  # Starting from 4 in Fortran (0-indexed: 3)
-        for i in range(ns):
-            # Group A(i): 0.1 * (y[j-2] - y[j-3]^2)
-            a_i = 0.1 * (y[j - 2] - y[j - 3] ** 2)
-            residuals.append(a_i)
+        # Extract the required variables for all sets at once
+        y_jm3 = y[j - 3]  # y[j-3] for all sets
+        y_jm2 = y[j - 2]  # y[j-2] for all sets
+        y_jm1 = y[j - 1]  # y[j-1] for all sets
+        y_j = y[j]  # y[j] for all sets
 
-            # Group B(i): -y[j-3] - 1.0
-            b_i = -y[j - 3] - 1.0
-            residuals.append(b_i)
+        # Compute all residuals vectorially
+        # Group A(i): 0.1 * (y[j-2] - y[j-3]^2)
+        a = 0.1 * (y_jm2 - y_jm3**2)
 
-            # Group C(i): (1/sqrt(90)) * (y[j] - y[j-1]^2)
-            c_i = (1.0 / r90) * (y[j] - y[j - 1] ** 2)
-            residuals.append(c_i)
+        # Group B(i): -y[j-3] - 1.0
+        b = -y_jm3 - 1.0
 
-            # Group D(i): -y[j-1] - 1.0
-            d_i = -y[j - 1] - 1.0
-            residuals.append(d_i)
+        # Group C(i): (1/sqrt(90)) * (y[j] - y[j-1]^2)
+        c = (1.0 / r90) * (y_j - y_jm1**2)
 
-            # Group E(i): sqrt(0.1) * (y[j-2] + y[j]) - 2.0
-            e_i = rootp1 * (y[j - 2] + y[j]) - 2.0
-            residuals.append(e_i)
+        # Group D(i): -y[j-1] - 1.0
+        d = -y_jm1 - 1.0
 
-            # Group F(i): sqrt(10) * (y[j-2] - y[j])
-            f_i = root10 * (y[j - 2] - y[j])
-            residuals.append(f_i)
+        # Group E(i): sqrt(0.1) * (y[j-2] + y[j]) - 2.0
+        e = rootp1 * (y_jm2 + y_j) - 2.0
 
-            j += 2
+        # Group F(i): sqrt(10) * (y[j-2] - y[j])
+        f = root10 * (y_jm2 - y_j)
 
-        return jnp.array(residuals)
+        # Stack and reshape to interleave the groups
+        # Shape: (ns, 6) -> (6*ns,)
+        residuals = jnp.stack([a, b, c, d, e, f], axis=1).ravel()
+
+        return residuals
 
     def objective(self, y: Array, args) -> Array:
         """Returns the constant objective value of -1.0."""
         return jnp.array(-1.0)
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         return self.starting_point()
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -116,3 +121,12 @@ class CHAINWOONE(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

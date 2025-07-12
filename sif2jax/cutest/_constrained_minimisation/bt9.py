@@ -40,6 +40,7 @@ class BT9(AbstractConstrainedMinimisation):
         x1, x2, x3, x4 = y
         return -x1
 
+    @property
     def y0(self):
         if self.y0_id == 0:
             return jnp.array([2.0, 2.0, 2.0, 2.0])
@@ -48,6 +49,7 @@ class BT9(AbstractConstrainedMinimisation):
         elif self.y0_id == 2:
             return jnp.array([50.0, 50.0, 50.0, 50.0])
 
+    @property
     def args(self):
         return None
 
@@ -57,6 +59,7 @@ class BT9(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-1.0)
 
+    @property
     def bounds(self):
         return None
 

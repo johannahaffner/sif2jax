@@ -45,10 +45,12 @@ class EDENSCH(AbstractUnconstrainedMinimisation):
 
         return result
 
+    @property
     def y0(self):
         # Starting point from SIF file: all variables = 8.0
         return jnp.full(self.n, 8.0)
 
+    @property
     def args(self):
         return None
 

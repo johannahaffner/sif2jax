@@ -1,18 +1,17 @@
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
 # TODO: Human review needed - constraint values don't match pycutest
-class VANDERM3(AbstractConstrainedMinimisation):
-    """VANDERM3 problem - Vandermonde least squares with monotonicity constraints.
+class VANDERM3(AbstractNonlinearEquations):
+    """VANDERM3 problem - Vandermonde matrix nonlinear equation system.
 
-    A least-squares problem where we minimize the sum of squares of Vandermonde
-    equation residuals, subject to monotonicity constraints.
-    The Jacobian is a dense Vandermonde matrix.
+    A nonlinear equations problem, subject to monotonicity constraints. The Jacobian is
+    a dense Vandermonde matrix.
 
-    Problems VANDERM1, VANDERM2, VANDERM3 and VANDERM4 differ by the rhs
+    Problems VANDERM1, VANDERM2, VANDERM3 and VANDERM4 differ by the right hand side
     of the equation. They are increasingly degenerate.
 
     The problem is non-convex.
@@ -30,15 +29,13 @@ class VANDERM3(AbstractConstrainedMinimisation):
 
     n: int = 100  # Number of variables (default 100)
 
-    @property
-    def m(self):
-        """Number of constraints."""
-        # Only n-1 inequality constraints (monotonicity)
-        # The Vandermonde equations are part of the objective (L2 group type)
-        return self.n - 1
+    def num_residuals(self):
+        """Number of residuals."""
+        # n residual equations (Vandermonde equations)
+        return self.n
 
-    def objective(self, y, args):
-        """Compute the objective (sum of squares of Vandermonde equation residuals)."""
+    def residual(self, y, args):
+        """Compute the residuals."""
         del args
         n = self.n
         x = y
@@ -70,37 +67,19 @@ class VANDERM3(AbstractConstrainedMinimisation):
         for k in range(2, n + 1):
             residuals = residuals.at[k - 1].set(jnp.sum(x**k) - a[k - 1])
 
-        # The objective is the sum of squares
-        return jnp.sum(residuals**2)
+        return residuals
 
-    def constraint(self, y):
-        """Compute all constraints."""
-        x = y
-
-        # Only inequality constraints: monotonicity
-        # x[i] >= x[i-1] for i = 2, ..., n
-        # The SIF defines M(i) = x[i] - x[i-1] >= 0
-        ineq_constraints = x[1:] - x[:-1]
-
-        # No equality constraints (they are in the objective as least squares)
-        return None, ineq_constraints
-
+    @property
     def y0(self):
         """Initial guess."""
         n = self.n
         # Initial point: x[i] = (i-1)/n
         return inexact_asarray(jnp.arange(n)) * n
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
-
-    def bounds(self):
-        """Variable bounds (all free)."""
-        n = self.n
-        lower = jnp.full(n, -jnp.inf)
-        upper = jnp.full(n, jnp.inf)
-        return lower, upper
 
     def expected_result(self):
         """Expected optimal solution (not provided in SIF)."""
@@ -110,3 +89,21 @@ class VANDERM3(AbstractConstrainedMinimisation):
         """Expected optimal objective value."""
         # The optimal value should be 0.0 when all equations are satisfied
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Compute the constraints (both equality and inequality)."""
+        # Equality constraints: the residuals
+        equalities = self.residual(y, self.args)
+
+        # Inequality constraints: monotonicity x[i] >= x[i-1] for i = 2, ..., n
+        # Rewritten as x[i] - x[i-1] >= 0
+        x = y
+        n = self.n
+        inequalities = x[1:n] - x[0 : n - 1]
+
+        return equalities, inequalities
+
+    @property
+    def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
+        """No bounds for this problem."""
+        return None

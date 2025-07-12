@@ -32,11 +32,13 @@ class HS114(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5, x6, x7, x8, x9, x10 = y
         return 5.04 * x1 + 0.035 * x2 + 10 * x3 + 3.36 * x5 - 0.063 * x4 * x7
 
+    @property
     def y0(self):
         return jnp.array(
             [1745.0, 12000.0, 110.0, 3048.0, 1974.0, 89.2, 92.8, 8.0, 3.6, 145.0]
         )  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -60,6 +62,7 @@ class HS114(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-1768.80696)
 
+    @property
     def bounds(self):
         # Bounds from Appendix A (simplified)
         lower = jnp.array(

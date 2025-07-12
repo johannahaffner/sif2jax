@@ -30,9 +30,11 @@ class HS6(AbstractConstrainedMinimisation):
         x1, x2 = y
         return (1 - x1) ** 2
 
+    @property
     def y0(self):
         return jnp.array([-1.2, 1.0])
 
+    @property
     def args(self):
         return None
 
@@ -42,6 +44,7 @@ class HS6(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.0)
 
+    @property
     def bounds(self):
         return None
 

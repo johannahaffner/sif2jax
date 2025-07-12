@@ -48,10 +48,12 @@ class JENSMP(AbstractUnconstrainedMinimisation):
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Initial point (0.3, 0.4)."""
         return inexact_asarray(jnp.array([0.3, 0.4]))
 
+    @property
     def args(self):
         """No additional arguments needed."""
         return None

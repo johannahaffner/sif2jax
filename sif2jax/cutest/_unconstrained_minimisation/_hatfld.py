@@ -43,10 +43,12 @@ class HATFLDD(AbstractUnconstrainedMinimisation):
         # Objective function is sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial point from SIF file (lines 75-77)
         return inexact_asarray(jnp.array([1.0, -1.0, 0.0]))
 
+    @property
     def args(self):
         return None
 
@@ -140,10 +142,12 @@ class HATFLDE(AbstractUnconstrainedMinimisation):
         # Objective function is sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial point from SIF file (lines 97-99)
         return inexact_asarray(jnp.array([1.0, -1.0, 0.0]))
 
+    @property
     def args(self):
         return None
 
@@ -195,10 +199,12 @@ class HATFLDFL(AbstractUnconstrainedMinimisation):
         # Objective function is sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial point from SIF file (the "nasty" starting point, lines 55-57)
         return inexact_asarray(jnp.array([1.2, -1.2, 0.98]))
 
+    @property
     def args(self):
         return None
 
@@ -247,10 +253,12 @@ class HATFLDFLS(AbstractUnconstrainedMinimisation):
         # Objective function is sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial point from SIF file (line 50)
         return inexact_asarray(jnp.full(3, 0.1))
 
+    @property
     def args(self):
         return None
 
@@ -308,10 +316,12 @@ class HATFLDGLS(AbstractUnconstrainedMinimisation):
         # Objective function is sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial point from SIF file (line 57)
         return inexact_asarray(jnp.ones(25))  # Hard-coded as 25 per SIF file
 
+    @property
     def args(self):
         return None
 

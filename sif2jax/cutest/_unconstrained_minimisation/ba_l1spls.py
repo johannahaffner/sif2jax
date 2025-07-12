@@ -308,11 +308,13 @@ class BA_L1SPLS(AbstractUnconstrainedMinimisation):
 
         return jnp.array(total_obj)
 
+    @property
     def y0(self):
         # Initialize with zeros for this problem
         # The full problem has 57 variables
         return jnp.zeros(57)
 
+    @property
     def args(self):
         return None
 

@@ -50,11 +50,13 @@ class HS113(AbstractConstrainedMinimisation):
             + 45
         )
 
+    @property
     def y0(self):
         return jnp.array(
             [2.0, 3.0, 5.0, 5.0, 1.0, 2.0, 7.0, 3.0, 6.0, 10.0]
         )  # feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -78,6 +80,7 @@ class HS113(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(24.3062091)
 
+    @property
     def bounds(self):
         # No explicit bounds
         lower = jnp.array([-jnp.inf] * 10)

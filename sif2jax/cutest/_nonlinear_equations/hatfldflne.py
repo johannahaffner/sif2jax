@@ -29,19 +29,21 @@ class HATFLDFLNE(AbstractNonlinearEquations):
         # Constants
         c = jnp.array([0.032, 0.056, 0.099])
 
-        residuals = []
-        for i in range(1, 4):  # i = 1, 2, 3
-            # G(i): X1 + X2 * X3^i = C(i)
-            res = x1 + x2 * (x3**i) - c[i - 1]
-            residuals.append(res)
+        # Vectorized computation
+        i = jnp.arange(1, 4, dtype=float)  # i = 1, 2, 3
 
-        return jnp.array(residuals)
+        # G(i): X1 + X2 * X3^i = C(i)
+        residuals = x1 + x2 * (x3**i) - c
 
+        return residuals
+
+    @property
     def y0(self) -> Float[Array, "3"]:
         """Initial guess for the optimization problem."""
         # Fletcher's nasty starting point
         return jnp.array([1.2, -1.2, 0.98])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -55,3 +57,12 @@ class HATFLDFLNE(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

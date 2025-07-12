@@ -87,6 +87,7 @@ class FREUROTH(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals (least squares objective)
         return jnp.sum(r_residuals**2 + s_residuals**2)
 
+    @property
     def y0(self):
         # Starting point from SIF file: x1=0.5, x2=-2.0, rest are zeros
         x0 = jnp.zeros(self.n)
@@ -94,6 +95,7 @@ class FREUROTH(AbstractUnconstrainedMinimisation):
         x0 = x0.at[1].set(-2.0)
         return inexact_asarray(x0)
 
+    @property
     def args(self):
         return None
 
@@ -207,6 +209,7 @@ class FREURONE(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals (nonlinear equations formulation)
         return jnp.sum(all_residuals**2)
 
+    @property
     def y0(self):
         # Starting point from SIF file: x1=0.5, x2=-2.0, rest are zeros
         x0 = jnp.zeros(self.n)
@@ -214,6 +217,7 @@ class FREURONE(AbstractUnconstrainedMinimisation):
         x0 = x0.at[1].set(-2.0)
         return inexact_asarray(x0)
 
+    @property
     def args(self):
         return None
 

@@ -39,9 +39,11 @@ class HS62(AbstractConstrainedMinimisation):
             - 9330.46 * jnp.log((x3 + 0.03) / (0.13 * x3 + 0.03))
         )
 
+    @property
     def y0(self):
         return jnp.array([0.7, 0.2, 0.1])  # feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -51,6 +53,7 @@ class HS62(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-26272.51448)
 
+    @property
     def bounds(self):
         return (jnp.array([0.0, 0.0, 0.0]), jnp.array([1.0, 1.0, 1.0]))
 

@@ -120,11 +120,13 @@ class HIELOW(AbstractUnconstrainedMinimisation):
 
         return neg_log_likelihood
 
+    @property
     def y0(self):
         # Initial values from SIF file
         # BET1=0.0, BET2=0.0, THE1=1.0
         return jnp.array([0.0, 0.0, 1.0])
 
+    @property
     def args(self):
         return None
 

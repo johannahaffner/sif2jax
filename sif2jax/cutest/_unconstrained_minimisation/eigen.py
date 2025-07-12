@@ -69,6 +69,7 @@ class EIGEN(AbstractUnconstrainedMinimisation):
 
         return total_obj
 
+    @property
     def y0(self):
         # Starting values as specified in SIF file:
         # - All variables default to 0.0
@@ -90,6 +91,7 @@ class EIGEN(AbstractUnconstrainedMinimisation):
 
         return inexact_asarray(y_reshaped.ravel())
 
+    @property
     def args(self):
         return None
 

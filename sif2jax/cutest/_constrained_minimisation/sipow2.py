@@ -38,10 +38,12 @@ class SIPOW2(AbstractConstrainedMinimisation):
         # Linear objective: minimize x2
         return x2
 
+    @property
     def y0(self):
         # Starting point
         return inexact_asarray(jnp.array([0.8, 0.5]))
 
+    @property
     def args(self):
         return None
 
@@ -56,6 +58,7 @@ class SIPOW2(AbstractConstrainedMinimisation):
     def num_variables(self):
         return 2
 
+    @property
     def bounds(self):
         # All variables are free (unbounded)
         return jnp.array([-jnp.inf, -jnp.inf]), jnp.array([jnp.inf, jnp.inf])

@@ -48,10 +48,12 @@ class BDQRTIC(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(part1 + part2)
 
+    @property
     def y0(self):
         # Initial values from SIF file (all 1.0)
         return inexact_asarray(jnp.ones(self.n))
 
+    @property
     def args(self):
         return None
 

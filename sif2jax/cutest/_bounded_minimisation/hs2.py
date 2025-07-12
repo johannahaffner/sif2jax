@@ -30,9 +30,11 @@ class HS2(AbstractBoundedMinimisation):
         x1, x2 = y
         return 100 * (x2 - x1**2) ** 2 + (1 - x1) ** 2
 
+    @property
     def y0(self):
         return jnp.array([-2.0, 1.0])
 
+    @property
     def args(self):
         return None
 
@@ -45,6 +47,7 @@ class HS2(AbstractBoundedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.05042618790)
 
+    @property
     def bounds(self):
         # Only x2 has a lower bound of 1.5, x1 is unbounded
         lower = jnp.array([-jnp.inf, 1.5])

@@ -313,6 +313,7 @@ class GAUSS3LS(AbstractUnconstrainedMinimisation):
         residuals = model - y_data
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Return the starting point from the NIST GAUSS3 dataset."""
         # Starting point values from GAUSS3.dat
@@ -320,6 +321,7 @@ class GAUSS3LS(AbstractUnconstrainedMinimisation):
             jnp.array([94.9, 0.009, 90.1, 113.0, 20.0, 73.8, 140.0, 20.0])
         )
 
+    @property
     def args(self):
         """Return None as no additional args are needed."""
         return None

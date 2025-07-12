@@ -144,9 +144,11 @@ class HS119(AbstractConstrainedMinimisation):
 
         return objective_sum
 
+    @property
     def y0(self):
         return jnp.array([10.0] * 16)  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -176,6 +178,7 @@ class HS119(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(244.899698)
 
+    @property
     def bounds(self):
         # Bounds: 0 ≤ xᵢ ≤ 5 for all i
         lower = jnp.array([0.0] * 16)

@@ -375,10 +375,12 @@ class COATING(AbstractUnconstrainedMinimisation):
         all_residuals = all_residuals.reshape(-1)
         return jnp.sum(all_residuals**2)
 
+    @property
     def y0(self):
         # Initial values from SIF file (all ones)
         return inexact_asarray(jnp.ones(self.n))
 
+    @property
     def args(self):
         return None
 

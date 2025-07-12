@@ -61,6 +61,7 @@ class _AbstractLSC(AbstractUnconstrainedMinimisation):
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def args(self):
         """No additional arguments needed."""
         return None

@@ -63,10 +63,12 @@ class CHNRSNBM(AbstractUnconstrainedMinimisation):
         # Sum all terms
         return jnp.sum(term1 + term2)
 
+    @property
     def y0(self):
         # Initial values from SIF file (all -1.0)
         return inexact_asarray(jnp.full(self.n, -1.0))
 
+    @property
     def args(self):
         return None
 

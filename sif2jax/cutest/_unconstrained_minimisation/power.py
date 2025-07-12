@@ -40,10 +40,12 @@ class POWER(AbstractUnconstrainedMinimisation):
         # L2 group type squares the result
         return weighted_sum**2
 
+    @property
     def y0(self):
         # Starting point: all variables at 1.0
         return inexact_asarray(jnp.ones(self.n))
 
+    @property
     def args(self):
         return None
 

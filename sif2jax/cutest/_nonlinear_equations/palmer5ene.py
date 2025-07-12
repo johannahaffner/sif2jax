@@ -106,6 +106,7 @@ class PALMER5ENE(AbstractNonlinearEquations):
 
         return jnp.array(residuals)
 
+    @property
     def y0(self) -> Float[Array, "8"]:
         """Initial guess for the optimization problem."""
         # From START POINT in SIF
@@ -122,6 +123,7 @@ class PALMER5ENE(AbstractNonlinearEquations):
             ]
         )
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -136,6 +138,10 @@ class PALMER5ENE(AbstractNonlinearEquations):
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
 
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
     def num_constraints(self) -> tuple[int, int, int]:
         """Returns the number of constraints."""
         # 12 equality constraints (the residuals) + 1 finite bound (lower bound on K)
@@ -144,6 +150,7 @@ class PALMER5ENE(AbstractNonlinearEquations):
         num_bounds = 1  # 1 finite lower bound on K
         return num_equalities, num_inequalities, num_bounds
 
+    @property
     def bounds(self) -> tuple[Float[Array, "8"], Float[Array, "8"]]:
         """Bounds on variables."""
         # Lower bounds: K has implicit lower bound (likely 0)

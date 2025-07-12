@@ -54,10 +54,12 @@ class BRKMCC(AbstractUnconstrainedMinimisation):
 
         return g1 + g2 + g3 + g4
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return jnp.array([2.0, 2.0])
 
+    @property
     def args(self):
         return None
 

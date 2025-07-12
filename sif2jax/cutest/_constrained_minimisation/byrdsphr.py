@@ -27,10 +27,12 @@ class BYRDSPHR(AbstractConstrainedMinimisation):
         # Linear objective: minimize -x1 - x2 - x3
         return -x1 - x2 - x3
 
+    @property
     def y0(self):
         # Starting point
         return jnp.array([5.0, 0.0001, -0.0001])
 
+    @property
     def args(self):
         return None
 
@@ -42,6 +44,7 @@ class BYRDSPHR(AbstractConstrainedMinimisation):
         # Solution value given in SIF file
         return jnp.array(-4.68330049)
 
+    @property
     def bounds(self):
         # No variable bounds
         return None

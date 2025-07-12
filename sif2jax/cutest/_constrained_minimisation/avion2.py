@@ -213,6 +213,7 @@ class AVION2(AbstractConstrainedMinimisation):
         # All constraints are equalities
         return jnp.array(constraints), None
 
+    @property
     def y0(self):
         """Initial guess for variables."""
         return jnp.array(
@@ -269,10 +270,12 @@ class AVION2(AbstractConstrainedMinimisation):
             ]
         )
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def bounds(self):
         """Variable bounds."""
         lower = jnp.array(

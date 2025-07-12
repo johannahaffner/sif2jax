@@ -75,10 +75,12 @@ class BARD(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values from SIF file (all 1.0)
         return inexact_asarray(jnp.array([1.0, 1.0, 1.0]))
 
+    @property
     def args(self):
         return None
 

@@ -48,10 +48,12 @@ class ENGVAL2(AbstractUnconstrainedMinimisation):
 
         return g1 + g2 + g3 + g4 + g5
 
+    @property
     def y0(self):
         # Starting point from the file
         return jnp.array([1.0, 2.0, 0.0])
 
+    @property
     def args(self):
         return None
 

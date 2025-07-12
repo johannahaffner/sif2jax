@@ -33,28 +33,41 @@ class CYCLIC3(AbstractNonlinearEquations):
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the cyclic cubic system"""
         n = self.n
-        n_plus_2 = self.num_vars
-        residuals = jnp.zeros(n_plus_2, dtype=y.dtype)
 
-        # For i = 1 to N: E(i) = x(i)^3 - x(i+1)*x(i+2)
-        for i in range(n):
-            cubic_term = y[i] ** 3
-            product_term = y[i + 1] * y[i + 2]
-            residuals = residuals.at[i].set(cubic_term - product_term)
+        # Vectorized computation for i = 1 to N: E(i) = x(i)^3 - x(i+1)*x(i+2)
+        # Compute cubic terms for first n elements
+        cubic_terms = y[:n] ** 3
+
+        # Compute product terms: y[i+1] * y[i+2] for i = 0 to n-1
+        product_terms = y[1 : n + 1] * y[2 : n + 2]
+
+        # First n residuals
+        residuals_n = cubic_terms - product_terms
 
         # E(N+1) = x(N+1) - x(1)
-        residuals = residuals.at[n].set(y[n] - y[0])
+        residual_n_plus_1 = y[n] - y[0]
 
         # E(N+2) = x(N+2) - x(2)
-        residuals = residuals.at[n + 1].set(y[n + 1] - y[1])
+        residual_n_plus_2 = y[n + 1] - y[1]
+
+        # Concatenate all residuals
+        residuals = jnp.concatenate(
+            [
+                residuals_n,
+                jnp.array([residual_n_plus_1]),
+                jnp.array([residual_n_plus_2]),
+            ]
+        )
 
         return residuals
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         # Starting point: all variables = 1000.0
         return jnp.full(self.num_vars, 1000.0, dtype=jnp.float64)
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -68,3 +81,12 @@ class CYCLIC3(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

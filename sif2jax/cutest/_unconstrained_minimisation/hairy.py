@@ -60,10 +60,12 @@ class HAIRY(AbstractUnconstrainedMinimisation):
         # Group uses (lines 75-77)
         return hlength * fur_term + cslope * dcup_term + cslope * cup1d_term
 
+    @property
     def y0(self):
         # Initial point from SIF file (lines 42-43)
         return jnp.array([-5.0, -7.0])
 
+    @property
     def args(self):
         return None
 

@@ -43,11 +43,13 @@ class INDEF(AbstractUnconstrainedMinimisation):
 
         return linear_sum + cos_sum
 
+    @property
     def y0(self):
         """Initial point with x_i = i/(n+1)."""
         indices = jnp.arange(1, self.n + 1)
         return indices / (self.n + 1)
 
+    @property
     def args(self):
         """No additional arguments needed."""
         return None

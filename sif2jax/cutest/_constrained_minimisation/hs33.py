@@ -34,9 +34,11 @@ class HS33(AbstractConstrainedMinimisation):
         x1, x2, x3 = y
         return (x1 - 1.0) * (x1 - 2.0) * (x1 - 3.0) + x3
 
+    @property
     def y0(self):
         return jnp.array([0.0, 0.0, 3.0])
 
+    @property
     def args(self):
         return None
 
@@ -48,6 +50,7 @@ class HS33(AbstractConstrainedMinimisation):
         sqrt2 = jnp.sqrt(2.0)
         return jnp.array(sqrt2 - 6.0)
 
+    @property
     def bounds(self):
         return (jnp.array([0.0, 0.0, 0.0]), jnp.array([jnp.inf, jnp.inf, 5.0]))
 

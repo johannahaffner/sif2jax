@@ -108,8 +108,8 @@ class TestRuntime:
     def test_objective_runtime(self, problem, pycutest_problem, threshold):
         """Compare objective function runtime."""
         # Get starting point
-        x0 = problem.y0()
-        args = problem.args()
+        x0 = problem.y0
+        args = problem.args
 
         # Compile JAX function
         jax_obj = jax.jit(problem.objective)
@@ -140,8 +140,8 @@ class TestRuntime:
     def test_gradient_runtime(self, problem, pycutest_problem, threshold):
         """Compare gradient computation runtime."""
         # Get starting point
-        x0 = problem.y0()
-        args = problem.args()
+        x0 = problem.y0
+        args = problem.args
 
         # Compile JAX gradient
         jax_grad = jax.jit(jax.grad(problem.objective))
@@ -176,7 +176,7 @@ class TestRuntime:
             pytest.skip("Problem has no constraints")
 
         # Get starting point
-        x0 = problem.y0()
+        x0 = problem.y0
 
         # Compile JAX constraint function
         jax_cons = jax.jit(problem.constraint)
@@ -211,7 +211,7 @@ class TestRuntime:
             pytest.skip("Problem has no constraints")
 
         # Get starting point
-        x0 = problem.y0()
+        x0 = problem.y0
 
         # Create JAX Jacobian function
         # For constrained problems, we want the Jacobian of all constraints

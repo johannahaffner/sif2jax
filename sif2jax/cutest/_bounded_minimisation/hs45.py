@@ -30,9 +30,11 @@ class HS45(AbstractBoundedMinimisation):
         x1, x2, x3, x4, x5 = y
         return 2 - (1.0 / 120.0) * x1 * x2 * x3 * x4 * x5
 
+    @property
     def y0(self):
         return jnp.array([2.0, 2.0, 2.0, 2.0, 2.0])
 
+    @property
     def args(self):
         return None
 
@@ -42,6 +44,7 @@ class HS45(AbstractBoundedMinimisation):
     def expected_objective_value(self):
         return jnp.array(1.0)
 
+    @property
     def bounds(self):
         # 0 ≤ xi ≤ i for i = 1, 2, 3, 4, 5
         lower = jnp.array([0.0, 0.0, 0.0, 0.0, 0.0])

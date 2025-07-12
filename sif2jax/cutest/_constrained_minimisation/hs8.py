@@ -31,9 +31,11 @@ class HS8(AbstractConstrainedMinimisation):
         del y, args
         return jnp.array(-1.0)
 
+    @property
     def y0(self):
         return jnp.array([2.0, 1.0])
 
+    @property
     def args(self):
         return None
 
@@ -47,6 +49,7 @@ class HS8(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-1.0)
 
+    @property
     def bounds(self):
         return None
 

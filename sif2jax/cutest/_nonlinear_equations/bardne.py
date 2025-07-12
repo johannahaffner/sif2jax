@@ -50,8 +50,8 @@ class BARDNE(AbstractNonlinearEquations):
             ]
         )
 
-        # Compute residuals for each group
-        i = jnp.arange(15)
+        # Vectorized computation
+        i = jnp.arange(15, dtype=float)
         u = i + 1.0  # i = 1 to 15 in 1-indexed
         v = 16.0 - u
 
@@ -67,10 +67,12 @@ class BARDNE(AbstractNonlinearEquations):
 
         return residuals, None
 
+    @property
     def y0(self) -> Float[Array, "3"]:
         """Initial guess for the optimization problem."""
         return jnp.array([1.0, 1.0, 1.0])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -84,3 +86,8 @@ class BARDNE(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

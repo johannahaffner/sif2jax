@@ -313,6 +313,7 @@ class GAUSS1LS(AbstractUnconstrainedMinimisation):
         # Return sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Initial parameter guess."""
         # From START POINT 1 in the SIF file
@@ -320,6 +321,7 @@ class GAUSS1LS(AbstractUnconstrainedMinimisation):
             jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
         )
 
+    @property
     def args(self):
         """No additional arguments."""
         return None

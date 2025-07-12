@@ -28,10 +28,12 @@ class POLAK5(AbstractConstrainedMinimisation):
         # Linear objective: minimize u
         return u
 
+    @property
     def y0(self):
         # Starting point
         return jnp.array([0.1, 0.1, 0.0])
 
+    @property
     def args(self):
         return None
 
@@ -46,6 +48,7 @@ class POLAK5(AbstractConstrainedMinimisation):
     def num_variables(self):
         return 3
 
+    @property
     def bounds(self):
         # All variables are free (unbounded)
         return jnp.array([-jnp.inf, -jnp.inf, -jnp.inf]), jnp.array(

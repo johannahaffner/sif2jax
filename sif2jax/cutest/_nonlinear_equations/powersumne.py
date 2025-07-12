@@ -33,24 +33,34 @@ class POWERSUMNE(AbstractNonlinearEquations):
         x_ref = jnp.array([1.0, 2.0, 3.0, 2.0])
 
         # Calculate Y(i) = sum of x_ref[j]^i for i=1 to 4
-        y_data = []
-        for i in range(1, 5):  # i = 1, 2, 3, 4
-            sum_val = jnp.sum(x_ref**i)
-            y_data.append(sum_val)
-        y_data = jnp.array(y_data)
+        # Create powers array: i = 1, 2, 3, 4
+        powers = jnp.arange(1, 5, dtype=float)[:, None]  # Shape: (4, 1)
+
+        # Compute x_ref^i for all i using broadcasting
+        # Shape: (4, 4) where [i, j] = x_ref[j]^powers[i]
+        x_ref_powers = x_ref[None, :] ** powers  # Shape: (4, 4)
+
+        # Sum over j axis to get Y(i)
+        y_data = jnp.sum(x_ref_powers, axis=1)  # Shape: (4,)
 
         # Model: sum_j=1^n x_j^i for each i
-        residuals = []
-        for i in range(1, 5):  # i = 1, 2, 3, 4
-            model = jnp.sum(x**i)
-            residuals.append(model - y_data[i - 1])
+        # Similarly compute x^i for all i
+        x_powers = x[None, :] ** powers  # Shape: (4, 4)
 
-        return jnp.array(residuals)
+        # Sum over j axis to get model values
+        model = jnp.sum(x_powers, axis=1)  # Shape: (4,)
 
+        # Compute residuals
+        residuals = model - y_data
+
+        return residuals
+
+    @property
     def y0(self) -> Float[Array, "4"]:
         """Initial guess for the optimization problem."""
         return jnp.array([2.0, 2.0, 2.0, 2.0])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -64,3 +74,12 @@ class POWERSUMNE(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

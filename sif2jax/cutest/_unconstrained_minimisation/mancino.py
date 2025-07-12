@@ -79,6 +79,7 @@ class MANCINO(AbstractUnconstrainedMinimisation):
         # Return sum of squares without any scaling
         return jnp.sum(alphas**2)
 
+    @property
     def y0(self) -> Float[Array, "n"]:
         """Initial guess for the Mancino problem based on AMPL file."""
         n = self.n
@@ -121,6 +122,7 @@ class MANCINO(AbstractUnconstrainedMinimisation):
 
         return jax.vmap(compute_x_i)(indices)
 
+    @property
     def args(self) -> None:
         return None
 

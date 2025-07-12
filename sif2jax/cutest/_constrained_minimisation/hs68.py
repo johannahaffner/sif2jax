@@ -46,9 +46,11 @@ class HS68(AbstractConstrainedMinimisation):
         nasty_term = x4 * (b * (jnp.exp(x1) - 1) - x3) / (jnp.exp(x1) - 1 + x4) / x1
         return recip_term - nasty_term
 
+    @property
     def y0(self):
         return jnp.array([1.0, 1.0, 1.0, 1.0])  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -58,6 +60,7 @@ class HS68(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-0.920425026)
 
+    @property
     def bounds(self):
         return (jnp.array([0.0001, 0.0, 0.0, 0.0]), jnp.array([100.0, 100.0, 2.0, 2.0]))
 

@@ -54,11 +54,13 @@ class PycutestCompatWrapper(AbstractConstrainedMinimisation):
     def objective(self, y: PyTree[ArrayLike], args: PyTree[Any]) -> Scalar:
         return self.problem.objective(y, args)
 
+    @property
     def y0(self) -> PyTree[ArrayLike]:
-        return self.problem.y0()
+        return self.problem.y0
 
+    @property
     def args(self) -> PyTree[Any]:
-        return self.problem.args()
+        return self.problem.args
 
     def expected_result(self) -> PyTree[ArrayLike]:
         return self.problem.expected_result()
@@ -66,8 +68,9 @@ class PycutestCompatWrapper(AbstractConstrainedMinimisation):
     def expected_objective_value(self) -> Scalar | None:
         return self.problem.expected_objective_value()
 
+    @property
     def bounds(self) -> PyTree[ArrayLike] | None:
-        return self.problem.bounds()
+        return self.problem.bounds
 
     def constraint(self, y: PyTree[ArrayLike]) -> tuple[Array, Array]:
         # TODO return ConstraintOut

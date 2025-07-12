@@ -30,9 +30,11 @@ class HS7(AbstractConstrainedMinimisation):
         x1, x2 = y
         return jnp.log(1 + x1**2) - x2
 
+    @property
     def y0(self):
         return jnp.array([2.0, 2.0])
 
+    @property
     def args(self):
         return None
 
@@ -42,6 +44,7 @@ class HS7(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-jnp.sqrt(3.0))
 
+    @property
     def bounds(self):
         return None
 

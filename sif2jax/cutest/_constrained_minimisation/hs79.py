@@ -39,11 +39,13 @@ class HS79(AbstractConstrainedMinimisation):
             + (x4 - x5) ** 4
         )
 
+    @property
     def y0(self):
         return jnp.array(
             [2.0, 2.0, 2.0, 2.0, 2.0]
         )  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -53,6 +55,7 @@ class HS79(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.0787768209)
 
+    @property
     def bounds(self):
         return None
 

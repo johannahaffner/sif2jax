@@ -274,6 +274,7 @@ class CHANNEL(AbstractNonlinearEquations):
         """Returns the constant objective value of -1.0."""
         return jnp.array(-1.0)
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         h = self.h
@@ -331,6 +332,7 @@ class CHANNEL(AbstractNonlinearEquations):
         # Pack all variables into a single array
         return jnp.concatenate([v.flatten(), w.flatten(), dc.flatten()])
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -342,3 +344,7 @@ class CHANNEL(AbstractNonlinearEquations):
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None

@@ -344,6 +344,7 @@ class ACOPP14(AbstractConstrainedMinimisation):
 
         return equality_constraints, inequality_constraints
 
+    @property
     def y0(self):
         """Initial guess for variables."""
         # From SIF file starting values
@@ -390,6 +391,7 @@ class ACOPP14(AbstractConstrainedMinimisation):
 
         return jnp.concatenate([angles, magnitudes, p_gen, q_gen])
 
+    @property
     def bounds(self):
         """Get variable bounds."""
         # Angle bounds (effectively unbounded)
@@ -413,6 +415,7 @@ class ACOPP14(AbstractConstrainedMinimisation):
 
         return (lower, upper)
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None

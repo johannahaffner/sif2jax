@@ -262,6 +262,7 @@ class ENSOLS(AbstractUnconstrainedMinimisation):
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Two starting points from the SIF file
         if self.start_point == 0:
@@ -275,6 +276,7 @@ class ENSOLS(AbstractUnconstrainedMinimisation):
                 jnp.array([10.0, 3.0, 0.5, 44.0, -1.5, 0.5, 26.0, -0.1, 1.5])
             )
 
+    @property
     def args(self):
         return None
 

@@ -43,9 +43,11 @@ class HS55(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5, x6 = y
         return x1 + 2 * x2 + 4 * x5 + jnp.exp(x1 * x4)
 
+    @property
     def y0(self):
         return jnp.array([1.0, 2.0, 0.0, 0.0, 0.0, 2.0])
 
+    @property
     def args(self):
         return None
 
@@ -55,6 +57,7 @@ class HS55(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(19.0 / 3.0)
 
+    @property
     def bounds(self):
         lower = jnp.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         # From SIF file: only X1 and X4 have upper bounds of 1.0

@@ -33,9 +33,11 @@ class HS65(AbstractConstrainedMinimisation):
         x1, x2, x3 = y
         return (x1 - x2) ** 2 + (x1 + x2 - 10) ** 2 / 9 + (x3 - 5) ** 2
 
+    @property
     def y0(self):
         return jnp.array([-5.0, 5.0, 0.0])  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -45,6 +47,7 @@ class HS65(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(0.9535288567)
 
+    @property
     def bounds(self):
         return (jnp.array([-4.5, -4.5, -5.0]), jnp.array([4.5, 4.5, 5.0]))
 

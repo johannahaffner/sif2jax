@@ -26,10 +26,12 @@ class ALSOTAME(AbstractConstrainedMinimisation):
         # Objective: exp(x - 2*y)
         return jnp.exp(x - 2 * y_var)
 
+    @property
     def y0(self):
         # Starting point not given in SIF, using zeros
         return jnp.zeros(2)
 
+    @property
     def args(self):
         return None
 
@@ -40,6 +42,7 @@ class ALSOTAME(AbstractConstrainedMinimisation):
         # No inequality constraints
         return eq_constraint, None
 
+    @property
     def bounds(self):
         # x: -2.0 <= x <= 2.0
         # y: -1.5 <= y <= 1.5

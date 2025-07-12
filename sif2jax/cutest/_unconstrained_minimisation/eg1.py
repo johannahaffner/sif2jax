@@ -42,10 +42,12 @@ class EG1(AbstractUnconstrainedMinimisation):
 
         return f1 + f2 + f3_1 + f3_2
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return jnp.array([1.0, 1.0, 1.0])
 
+    @property
     def args(self):
         return None
 

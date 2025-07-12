@@ -68,11 +68,13 @@ class TRIGON2(AbstractUnconstrainedMinimisation):
         )
         return obj
 
+    @property
     def y0(self):
         """Initial guess."""
         # Start point: x_i = i/n for i = 1, ..., n
         return inexact_asarray((jnp.arange(1, self.n + 1)) / self.n)
 
+    @property
     def args(self):
         """Additional arguments (none for this problem)."""
         return None

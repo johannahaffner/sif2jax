@@ -61,12 +61,14 @@ class CHEBYQADNE(AbstractNonlinearEquations):
 
         return residuals
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         # Starting point: j/(n+1) for j = 1, ..., n
         n = self.n
         return jnp.arange(1, n + 1, dtype=jnp.float64) / (n + 1)
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -81,7 +83,12 @@ class CHEBYQADNE(AbstractNonlinearEquations):
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
 
-    def bounds(self) -> tuple[Array, Array]:
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
         """Bounds on variables: all in [0, 1]"""
         n = self.n
         lower = jnp.zeros(n, dtype=jnp.float64)

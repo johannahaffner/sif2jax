@@ -39,10 +39,12 @@ class EG2(AbstractUnconstrainedMinimisation):
         f2 = 0.5 * jnp.sin(last**2)
         return f1 + f2
 
+    @property
     def y0(self):
         # Initial guess: all zeros (from PyCUTEst)
         return jnp.zeros(self.n)
 
+    @property
     def args(self):
         return None
 

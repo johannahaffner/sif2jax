@@ -36,9 +36,11 @@ class HS63(AbstractConstrainedMinimisation):
         x3_sq = x3 * x3
         return 1000 - x1_sq - 2 * x2_sq - x3_sq - x1 * x2 - x1 * x3
 
+    @property
     def y0(self):
         return jnp.array([2.0, 2.0, 2.0])  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -48,6 +50,7 @@ class HS63(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(961.7151721)
 
+    @property
     def bounds(self):
         return (jnp.array([0.0, 0.0, 0.0]), jnp.array([jnp.inf, jnp.inf, jnp.inf]))
 

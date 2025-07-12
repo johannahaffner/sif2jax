@@ -31,6 +31,7 @@ class HS116(AbstractConstrainedMinimisation):
     def objective(self, y, args):
         return y[10] + y[11] + y[12]  # x₁₁ + x₁₂ + x₁₃
 
+    @property
     def y0(self):
         return jnp.array(
             [
@@ -50,6 +51,7 @@ class HS116(AbstractConstrainedMinimisation):
             ]
         )  # not feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -76,6 +78,7 @@ class HS116(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(97.588409)
 
+    @property
     def bounds(self):
         # Bounds from Appendix A (simplified)
         lower = jnp.array(
@@ -112,7 +115,7 @@ class HS116(AbstractConstrainedMinimisation):
         ineq3 = 1 - 0.002 * x7 + 0.002 * x8
 
         # Objective lower bound (C4 in SIF): f(x) ≥ 50
-        f_val = self.objective(y, self.args())
+        f_val = self.objective(y, self.args)
         ineq4 = f_val - 50.0
 
         ineq5 = x13 - 1.262626 * x10 + 1.231059 * x3 * x10

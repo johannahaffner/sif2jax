@@ -56,10 +56,12 @@ class KSSLS(AbstractUnconstrainedMinimisation):
         # Return sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         """Initial point with all variables set to 1000 (from SIF file)."""
         return inexact_asarray(jnp.full(self.n, 1000.0))
 
+    @property
     def args(self):
         """No additional arguments needed."""
         return None

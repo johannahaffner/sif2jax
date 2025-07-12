@@ -46,10 +46,12 @@ class BROWNBSNE(AbstractNonlinearEquations):
 
         return jnp.array([res1, res2, res3])
 
+    @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
         return self.starting_point()
 
+    @property
     def args(self):
         """Additional arguments for the residual function."""
         return None
@@ -63,3 +65,12 @@ class BROWNBSNE(AbstractNonlinearEquations):
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero
         return jnp.array(0.0)
+
+    def constraint(self, y):
+        """Returns the residuals as equality constraints."""
+        return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

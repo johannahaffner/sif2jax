@@ -34,6 +34,7 @@ class BT2(AbstractConstrainedMinimisation):
         x1, x2, x3 = y
         return (x1 - 1) ** 2 + (x1 - x2) ** 2 + (x2 - x3) ** 4
 
+    @property
     def y0(self):
         if self.y0_id == 0:
             return jnp.array([1.0, 1.0, 1.0])
@@ -42,6 +43,7 @@ class BT2(AbstractConstrainedMinimisation):
         elif self.y0_id == 2:
             return jnp.array([100.0, 100.0, 100.0])
 
+    @property
     def args(self):
         return None
 
@@ -51,6 +53,7 @@ class BT2(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return None  # Not explicitly given
 
+    @property
     def bounds(self):
         return None
 

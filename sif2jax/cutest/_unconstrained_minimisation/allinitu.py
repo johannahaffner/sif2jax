@@ -41,11 +41,13 @@ class ALLINITU(AbstractUnconstrainedMinimisation):
             + jnp.sin(x4) ** 4
         )
 
+    @property
     def y0(self):
         # Initial point is not explicitly given in the SIF file
         # Using zeros as a reasonable starting point
         return jnp.zeros(4)
 
+    @property
     def args(self):
         return None
 

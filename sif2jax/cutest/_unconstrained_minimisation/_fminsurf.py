@@ -85,6 +85,7 @@ class FMINSURF(AbstractUnconstrainedMinimisation):
 
         return area_sum + penalty
 
+    @property
     def y0(self):
         # Initialize with zeros, then set boundary values
         p = self.p
@@ -128,6 +129,7 @@ class FMINSURF(AbstractUnconstrainedMinimisation):
         # Flatten the 2D grid to 1D vector
         return x.flatten()
 
+    @property
     def args(self):
         return None
 
@@ -231,6 +233,7 @@ class FMINSRF2(AbstractUnconstrainedMinimisation):
 
         return area_sum + center_penalty
 
+    @property
     def y0(self):
         # Initialize with zeros, then set boundary values
         p = self.p
@@ -275,6 +278,7 @@ class FMINSRF2(AbstractUnconstrainedMinimisation):
         # Flatten the 2D grid to 1D vector
         return inexact_asarray(x.flatten())
 
+    @property
     def args(self):
         return None
 

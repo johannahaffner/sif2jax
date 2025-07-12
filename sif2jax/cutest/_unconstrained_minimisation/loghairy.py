@@ -64,9 +64,11 @@ class LOGHAIRY(AbstractUnconstrainedMinimisation):
         s = 100.0
         return jnp.log((s + group_sum) / s)
 
+    @property
     def y0(self):
         return jnp.array([-500.0, -700.0])
 
+    @property
     def args(self):
         return None
 

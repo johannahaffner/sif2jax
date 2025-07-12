@@ -48,6 +48,7 @@ class HS118(AbstractConstrainedMinimisation):
 
         return jnp.array(objective_sum)
 
+    @property
     def y0(self):
         return jnp.array(
             [
@@ -69,6 +70,7 @@ class HS118(AbstractConstrainedMinimisation):
             ]
         )  # feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -97,6 +99,7 @@ class HS118(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(664.8204500)
 
+    @property
     def bounds(self):
         # Variable bounds from the PDF
         lower = jnp.array(

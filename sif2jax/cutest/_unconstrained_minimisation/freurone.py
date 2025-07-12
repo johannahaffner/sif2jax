@@ -92,6 +92,7 @@ class FREURONE(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals (nonlinear equations formulation)
         return jnp.sum(all_residuals**2)
 
+    @property
     def y0(self):
         # Starting point from SIF file: x1=0.5, x2=-2.0, rest are zeros
         x0 = jnp.zeros(self.n)
@@ -99,6 +100,7 @@ class FREURONE(AbstractUnconstrainedMinimisation):
         x0 = x0.at[1].set(-2.0)
         return inexact_asarray(x0)
 
+    @property
     def args(self):
         return None
 

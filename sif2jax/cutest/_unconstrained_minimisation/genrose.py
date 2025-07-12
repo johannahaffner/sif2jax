@@ -51,11 +51,13 @@ class GENROSE(AbstractUnconstrainedMinimisation):
         # Sum all terms
         return result + quadratic_terms + rosenbrock_sum
 
+    @property
     def y0(self):
         # Starting point: x_i = i/(n+1) for i=1,...,n
         indices = jnp.arange(1, self.n + 1)
         return indices / (self.n + 1)
 
+    @property
     def args(self):
         return None
 

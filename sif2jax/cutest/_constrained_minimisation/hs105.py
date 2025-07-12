@@ -333,11 +333,13 @@ class HS105(AbstractConstrainedMinimisation):
 
         return jnp.array(-total_log_likelihood)
 
+    @property
     def y0(self):
         return jnp.array(
             [0.1, 0.2, 100.0, 125.0, 175.0, 11.2, 13.2, 15.8]
         )  # feasible according to the problem
 
+    @property
     def args(self):
         return None
 
@@ -359,6 +361,7 @@ class HS105(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(1138.416240)
 
+    @property
     def bounds(self):
         # Bounds from the AMPL formulation
         lower = jnp.array([0.001, 0.001, 100.0, 130.0, 170.0, 5.0, 5.0, 5.0])

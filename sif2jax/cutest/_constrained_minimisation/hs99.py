@@ -38,9 +38,11 @@ class HS99(AbstractConstrainedMinimisation):
         # Simplified objective - the actual problem has complex recursive definitions
         return -jnp.sum(y**2)
 
+    @property
     def y0(self):
         return jnp.array([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5])  # not feasible
 
+    @property
     def args(self):
         return None
 
@@ -60,8 +62,12 @@ class HS99(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-0.831079892e9)
 
+    @property
     def bounds(self):
-        return [(0.0, 1.58) for _ in range(7)]
+        # All variables have bounds [0.0, 1.58]
+        lower = jnp.zeros(7)
+        upper = jnp.full(7, 1.58)
+        return lower, upper
 
     def constraint(self, y):
         # Simplified constraints - actual problem has complex recursive definitions

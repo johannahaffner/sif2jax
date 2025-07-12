@@ -32,9 +32,11 @@ class HS21(AbstractConstrainedMinimisation):
         x1, x2 = y
         return 0.01 * x1**2 + x2**2 - 100
 
+    @property
     def y0(self):
         return jnp.array([-1.0, -1.0])
 
+    @property
     def args(self):
         return None
 
@@ -44,6 +46,7 @@ class HS21(AbstractConstrainedMinimisation):
     def expected_objective_value(self):
         return jnp.array(-99.96)
 
+    @property
     def bounds(self):
         return (jnp.array([2.0, -50.0]), jnp.array([50.0, 50.0]))
 

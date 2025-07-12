@@ -43,7 +43,7 @@ class CONCON(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         """Implement the abstract constraint method."""
-        eq, ineq = self.equality_constraints(y, self.args())
+        eq, ineq = self.equality_constraints(y, self.args)
         return eq, ineq
 
     def equality_constraints(self, y, args):
@@ -99,6 +99,7 @@ class CONCON(AbstractConstrainedMinimisation):
 
         return jnp.array(pan + mbal), None
 
+    @property
     def y0(self):
         """Initial guess."""
         y0 = jnp.zeros(self.n)
@@ -118,6 +119,7 @@ class CONCON(AbstractConstrainedMinimisation):
 
         return y0
 
+    @property
     def bounds(self):
         """Variable bounds."""
         lower = jnp.full(self.n, -jnp.inf)
@@ -134,6 +136,7 @@ class CONCON(AbstractConstrainedMinimisation):
 
         return lower, upper
 
+    @property
     def args(self):
         """No additional arguments."""
         return None

@@ -83,6 +83,7 @@ class ALLINITA(AbstractConstrainedMinimisation):
 
         return ft2 + ft3 + ft4 + ft5 + ft6 + fnt1 + fnt2 + fnt3 + fnt4 + fnt5 + fnt6
 
+    @property
     def y0(self):
         # Starting point not given in SIF
         # X1 is free: use 0
@@ -90,6 +91,7 @@ class ALLINITA(AbstractConstrainedMinimisation):
         # X3 in [-1e10, 1.0]: use 0
         return jnp.array([0.0, 1.0, 0.0])
 
+    @property
     def args(self):
         return None
 
@@ -122,6 +124,7 @@ class ALLINITA(AbstractConstrainedMinimisation):
         """Mark which constraints are equalities."""
         return jnp.array([True, True, False, False])
 
+    @property
     def bounds(self):
         # X1: free
         # X2 >= 1.0

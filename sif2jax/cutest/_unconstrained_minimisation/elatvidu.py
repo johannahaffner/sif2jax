@@ -36,10 +36,12 @@ class ELATVIDU(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals
         return r1**2 + r2**2 + r3**2
 
+    @property
     def y0(self):
         # Initial values from SIF file
         return jnp.array([1.0, 5.0])
 
+    @property
     def args(self):
         return None
 

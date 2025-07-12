@@ -359,10 +359,12 @@ class BENNETT5LS(AbstractUnconstrainedMinimisation):
         # Sum of squared residuals
         return jnp.sum(residuals**2)
 
+    @property
     def y0(self):
         # Initial values from SIF file (START1)
         return jnp.array([-2000.0, 50.0, 0.8])
 
+    @property
     def args(self):
         return None
 

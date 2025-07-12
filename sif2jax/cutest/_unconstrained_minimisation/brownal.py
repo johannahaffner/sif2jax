@@ -48,10 +48,12 @@ class BROWNAL(AbstractUnconstrainedMinimisation):
 
         return jnp.sum(all_residuals**2)
 
+    @property
     def y0(self):
         # Initial values from SIF file (all 0.5)
         return jnp.full(self.n, 0.5)
 
+    @property
     def args(self):
         return None
 

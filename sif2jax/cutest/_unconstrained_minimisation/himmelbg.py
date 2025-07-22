@@ -37,8 +37,10 @@ class HIMMELBG(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return None
 
+    @property
     def expected_objective_value(self):
         return jnp.array(0.0)

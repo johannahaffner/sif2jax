@@ -66,10 +66,12 @@ class BOX3(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is approximately (1, 10, 1)
         return jnp.array([1.0, 10.0, 1.0])
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file comment (line 104),
         # the optimal objective value is 0.0

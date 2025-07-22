@@ -53,11 +53,13 @@ class HELIX(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # From the SIF file and the problem description,
         # the solution is (cos(0), sin(0), 0) = (1, 0, 0)
         return jnp.array([1.0, 0.0, 0.0])
 
+    @property
     def expected_objective_value(self):
         # At the optimal solution, all residuals should be zero
         return jnp.array(0.0)

@@ -49,11 +49,13 @@ class POWER(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution not provided in detail in SIF file
         # But optimal is all zeros
         return jnp.zeros(self.n)
 
+    @property
     def expected_objective_value(self):
         # Solution value is 0.0
         return jnp.array(0.0)

@@ -53,9 +53,11 @@ class HS75(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return jnp.array([776.1592, 925.1949, 0.05110879, -0.4288911])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(5174.4129)
 

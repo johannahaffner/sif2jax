@@ -61,8 +61,10 @@ class FLETCBV3(AbstractUnconstrainedMinimisation):
         kappa = float(self.extra_term)
         return jnp.array([p, kappa])
 
+    @property
     def expected_result(self):
         return None
 
+    @property
     def expected_objective_value(self):
         return None  # Takes different values for different problem configurations

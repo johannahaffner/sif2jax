@@ -92,12 +92,14 @@ class DEVGLA1(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # True parameter values that generate the data
         # These values aren't explicitly given in the SIF file,
         # but can be derived from the data generation process
         return jnp.array([60.137, 1.371, 3.112, 1.761])
 
+    @property
     def expected_objective_value(self):
         # For a perfect fit, the objective value would be 0
         return jnp.array(0.0)

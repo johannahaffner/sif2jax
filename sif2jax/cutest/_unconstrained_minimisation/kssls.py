@@ -66,10 +66,12 @@ class KSSLS(AbstractUnconstrainedMinimisation):
         """No additional arguments needed."""
         return None
 
+    @property
     def expected_result(self):
         """The solution is (1, 1, ..., 1) as mentioned in the reference."""
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         """The solution value mentioned in the SIF file comment."""
         return jnp.array(0.0)

@@ -45,12 +45,14 @@ class HS14(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         sqrt7 = jnp.sqrt(7)
         x1 = 0.5 * (sqrt7 - 1)
         x2 = 0.25 * (sqrt7 + 1)
         return jnp.array([x1, x2])
 
+    @property
     def expected_objective_value(self):
         sqrt7 = jnp.sqrt(7)
         return jnp.array(9 - 2.875 * sqrt7)

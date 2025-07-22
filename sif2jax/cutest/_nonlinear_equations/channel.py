@@ -337,10 +337,12 @@ class CHANNEL(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> None:
         """Expected result of the optimization problem."""
         return None
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         return jnp.array(0.0)

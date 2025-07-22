@@ -320,10 +320,12 @@ class CERI651ALS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # The SIF file doesn't specify the optimal objective value
         return None

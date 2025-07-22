@@ -51,10 +51,12 @@ class ALLINITU(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # No expected result is given in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # No expected objective value is given in the SIF file
         return None

@@ -63,11 +63,13 @@ class BRKMCC(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is not explicitly provided in the SIF file
         # According to literature, the minimum is around (0.91, 0.61)
         return jnp.array([0.91, 0.61])
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file comment (line 77),
         # the optimal objective value is 0.16904

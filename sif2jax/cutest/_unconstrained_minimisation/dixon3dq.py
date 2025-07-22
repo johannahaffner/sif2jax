@@ -57,10 +57,12 @@ class DIXON3DQ(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The minimum is at x_i = 1 for all i
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         # At x_i = 1 for all i, all terms are zero
         return jnp.array(0.0)

@@ -57,10 +57,12 @@ class LUKVLE1(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution is all ones
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         return jnp.array(0.0)
 

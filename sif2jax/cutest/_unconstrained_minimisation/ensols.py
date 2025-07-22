@@ -280,10 +280,12 @@ class ENSOLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Should use certified values from NIST
         return None
 
+    @property
     def expected_objective_value(self):
         # Should use certified minimum value from NIST
         return None

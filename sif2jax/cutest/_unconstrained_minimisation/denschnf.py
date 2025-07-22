@@ -41,10 +41,12 @@ class DENSCHNF(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution depends on solving the system of equations
         return None
 
+    @property
     def expected_objective_value(self):
         # The minimum value is 0 when both terms equal 0
         return jnp.array(0.0)

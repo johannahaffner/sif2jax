@@ -116,10 +116,12 @@ class ERRINROS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution has all components equal to 1
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         # Solution values from the SIF file comments
         if self.n == 10:
@@ -192,10 +194,12 @@ class ERRINRSM(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution has all components equal to 1
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         # Solution values from the SIF file comments
         if self.n == 10:

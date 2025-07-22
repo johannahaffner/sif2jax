@@ -42,10 +42,12 @@ class HS33(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         sqrt2 = jnp.sqrt(2.0)
         return jnp.array([0.0, sqrt2, sqrt2])
 
+    @property
     def expected_objective_value(self):
         sqrt2 = jnp.sqrt(2.0)
         return jnp.array(sqrt2 - 6.0)

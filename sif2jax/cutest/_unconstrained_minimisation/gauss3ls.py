@@ -326,10 +326,12 @@ class GAUSS3LS(AbstractUnconstrainedMinimisation):
         """Return None as no additional args are needed."""
         return None
 
+    @property
     def expected_result(self):
         """Return None as the exact solution is not specified."""
         return None
 
+    @property
     def expected_objective_value(self):
         # The minimum objective value is not specified
         return None

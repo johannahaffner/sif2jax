@@ -57,9 +57,11 @@ class TENFOLDTRLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The solution is at zero as mentioned in the SIF file description
         return jnp.zeros(self.n)
 
+    @property
     def expected_objective_value(self):
         return jnp.array(0.0)

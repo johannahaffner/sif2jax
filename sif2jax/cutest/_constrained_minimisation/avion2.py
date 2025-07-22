@@ -388,10 +388,12 @@ class AVION2(AbstractConstrainedMinimisation):
 
         return lower, upper
 
+    @property
     def expected_result(self):
         """Expected optimal solution (not provided in SIF)."""
         return None
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         # From comment in SIF file

@@ -135,10 +135,12 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The SIF file suggests there are multiple solutions (different conformations)
         return None
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file, the minimal objective value is 0.0
         return jnp.array(0.0)

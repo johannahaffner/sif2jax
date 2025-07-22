@@ -56,9 +56,11 @@ class ARGTRIGLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return None
 
+    @property
     def expected_objective_value(self):
         # The SIF file comments mention: *LO SOLTN 0.0
         return jnp.array(0.0)

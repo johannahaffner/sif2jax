@@ -42,9 +42,11 @@ class HS12(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return jnp.array([2.0, 3.0])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-30.0)
 

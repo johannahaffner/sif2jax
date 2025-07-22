@@ -59,11 +59,13 @@ class AbstractProblem(eqx.Module, Generic[_Y]):
     def args(self) -> PyTree[Any]:
         """Additional arguments for the objective function."""
 
+    @property
     @abc.abstractmethod
     def expected_result(self) -> _Y:
         """Expected result of the optimization problem. Should be a PyTree of arrays
         with the same structure as `y0`."""
 
+    @property
     @abc.abstractmethod
     def expected_objective_value(self) -> _Out | None:
         """Expected value of the objective function at the optimal solution. For a
@@ -96,6 +98,7 @@ class AbstractUnconstrainedMinimisation(AbstractProblem[_Y]):
     def objective(self, y: _Y, args) -> Scalar:
         """Objective function to be minimized. Must return a scalar value."""
 
+    @property
     @abc.abstractmethod
     def expected_objective_value(self) -> Scalar | None:
         """Expected value of the objective function at the optimal solution. For a
@@ -116,6 +119,7 @@ class AbstractBoundedMinimisation(AbstractProblem[_Y]):
     def objective(self, y: _Y, args) -> Scalar:
         """Objective function to be minimized. Must return a scalar value."""
 
+    @property
     @abc.abstractmethod
     def expected_objective_value(self) -> Scalar | None:
         """Expected value of the objective function at the optimal solution. For a
@@ -147,6 +151,7 @@ class AbstractConstrainedMinimisation(AbstractProblem[_Y]):
     def objective(self, y: _Y, args) -> Scalar:
         """Objective function to be minimized. Must return a scalar value."""
 
+    @property
     @abc.abstractmethod
     def expected_objective_value(self) -> Scalar | None:
         """Expected value of the objective function at the optimal solution. For a
@@ -257,6 +262,7 @@ class AbstractNonlinearEquations(AbstractProblem[_Y]):
         additional inequality constraints.
         """
 
+    @property
     @abc.abstractmethod
     def expected_objective_value(self) -> Scalar | None:
         """Expected value of the objective at the solution. For nonlinear equations,

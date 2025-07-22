@@ -49,9 +49,11 @@ class HS35(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return jnp.array([4.0 / 3.0, 7.0 / 9.0, 4.0 / 9.0])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(1.0 / 9.0)
 

@@ -94,10 +94,12 @@ class CRAGGLVY(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The SIF file doesn't specify the optimal solution
         return None
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file, optimal objective values depend on the size
         # For m=249 (n=500): 167.45

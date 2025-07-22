@@ -53,10 +53,12 @@ class BROWNBS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution for this badly scaled problem
         return None
 
+    @property
     def expected_objective_value(self):
         # The optimal objective value bound is 0.0
         return jnp.array(0.0)

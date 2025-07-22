@@ -69,6 +69,7 @@ class BOXBOD(AbstractNonlinearEquations):
         """No additional arguments."""
         return None
 
+    @property
     def expected_result(self):
         """Expected optimal solution.
 
@@ -78,6 +79,7 @@ class BOXBOD(AbstractNonlinearEquations):
         """
         return jnp.array([213.80940889, 0.54723748542])
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         # For constrained formulation, objective is 0

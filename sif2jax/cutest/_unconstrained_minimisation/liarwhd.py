@@ -50,10 +50,12 @@ class LIARWHD(AbstractUnconstrainedMinimisation):
         """No additional arguments needed."""
         return None
 
+    @property
     def expected_result(self):
         """The solution is all ones according to the problem definition."""
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         """The solution value is 0.0."""
         return jnp.array(0.0)

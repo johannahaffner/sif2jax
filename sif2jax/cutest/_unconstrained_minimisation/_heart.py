@@ -71,10 +71,12 @@ class HEART6LS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The solution isn't explicitly provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # From SIF file, the objective value at the minimum is 0.0
         return jnp.array(0.0)
@@ -176,10 +178,12 @@ class HEART8LS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The solution isn't provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # According to SIF file, the objective value at the minimum is 0.0
         return jnp.array(0.0)

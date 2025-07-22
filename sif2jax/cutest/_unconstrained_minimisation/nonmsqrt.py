@@ -76,10 +76,12 @@ class NONMSQRT(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution not provided in detail in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Solution values provided for some values of p
         p = self.p

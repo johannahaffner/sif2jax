@@ -66,6 +66,7 @@ class BROYDN3DLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Set values of all components to the same value r
         # where r is approximately -k2/(n*k1)
@@ -75,6 +76,7 @@ class BROYDN3DLS(AbstractUnconstrainedMinimisation):
         r = -k2 / (n * k1)
         return jnp.full(self.n, r)
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file comment (line 110),
         # the optimal objective value is 0.0

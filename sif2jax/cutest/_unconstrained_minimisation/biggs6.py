@@ -61,11 +61,13 @@ class BIGGS6(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is known to be (1, 10, 1, 5, 4, 3)
         # per other references, including Buckley's original paper
         return jnp.array([1.0, 10.0, 1.0, 5.0, 4.0, 3.0])
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file comment (line 135),
         # the optimal objective value is 0.0

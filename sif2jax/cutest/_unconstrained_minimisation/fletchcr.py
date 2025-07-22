@@ -42,9 +42,11 @@ class FLETCHCR(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Minimum value is 0, achieved when all variables are 1
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         return jnp.array(0.0)

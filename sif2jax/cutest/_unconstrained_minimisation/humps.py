@@ -49,11 +49,13 @@ class HUMPS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is at the origin (0, 0)
         # since both terms are minimized there
         return jnp.array([0.0, 0.0])
 
+    @property
     def expected_objective_value(self):
         # At (0, 0), the sin terms are 0, and the quadratic term is also 0
         return jnp.array(0.0)

@@ -326,10 +326,12 @@ class GAUSS1LS(AbstractUnconstrainedMinimisation):
         """No additional arguments."""
         return None
 
+    @property
     def expected_result(self):
         """The expected result is not specified in the SIF file."""
         return None
 
+    @property
     def expected_objective_value(self):
         """The expected objective value is not specified in the SIF file."""
         return None

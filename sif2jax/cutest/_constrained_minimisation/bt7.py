@@ -46,9 +46,11 @@ class BT7(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return jnp.array([-0.79212, -1.2624, 0.0, -0.89532, 1.1367])
 
+    @property
     def expected_objective_value(self):
         return None  # Not explicitly given
 

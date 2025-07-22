@@ -52,6 +52,7 @@ class BOOTH(AbstractNonlinearEquations):
         """No additional arguments."""
         return None
 
+    @property
     def expected_result(self):
         """Expected optimal solution.
 
@@ -63,6 +64,7 @@ class BOOTH(AbstractNonlinearEquations):
         """
         return jnp.array([1.0, 3.0])
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         # For nonlinear equations with pycutest formulation, this is always zero

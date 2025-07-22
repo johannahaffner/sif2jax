@@ -51,10 +51,12 @@ class DQDRTIC(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is all variables = 0
         return jnp.zeros(self.n)
 
+    @property
     def expected_objective_value(self):
         # The minimum objective value is 0.0
         return jnp.array(0.0)

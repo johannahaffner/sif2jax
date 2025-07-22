@@ -82,10 +82,12 @@ class VANDERM4(AbstractNonlinearEquations):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def expected_result(self):
         """Expected optimal solution (not provided in SIF)."""
         return None
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(0.0)

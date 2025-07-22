@@ -52,6 +52,7 @@ class CHWIRUT2(AbstractUnconstrainedMinimisation):
         """No additional arguments."""
         return None
 
+    @property
     def expected_result(self):
         """Expected optimal solution.
 
@@ -62,6 +63,7 @@ class CHWIRUT2(AbstractUnconstrainedMinimisation):
         """
         return jnp.array([0.16657666, 0.0051653291, 0.012150007])
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value.
 

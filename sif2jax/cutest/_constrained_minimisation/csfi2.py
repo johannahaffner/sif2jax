@@ -102,10 +102,12 @@ class CSFI2(AbstractConstrainedMinimisation):
 
         return lower, upper
 
+    @property
     def expected_result(self):
         """Expected optimal solution (from commented start point)."""
         return jnp.array([10.01, 20.02, 60.0, 49.1, 28.75])
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         # From OBJECT BOUND section

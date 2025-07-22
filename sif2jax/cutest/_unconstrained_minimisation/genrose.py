@@ -61,10 +61,12 @@ class GENROSE(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is all variables = 1
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         # The minimum objective value is given as 1.0
         return jnp.array(1.0)

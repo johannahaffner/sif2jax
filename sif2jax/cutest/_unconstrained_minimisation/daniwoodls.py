@@ -61,12 +61,14 @@ class DANIWOODLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # According to NIST, the certified values are:
         # b1 = 0.76280 ± 0.13845
         # b2 = 4.0294 ± 0.89523
         return jnp.array([0.7628, 4.0294])
 
+    @property
     def expected_objective_value(self):
         # Using the certified values, the residual sum of squares is
         # approximately 0.0040132

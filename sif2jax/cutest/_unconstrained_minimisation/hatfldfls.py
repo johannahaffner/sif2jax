@@ -51,10 +51,12 @@ class HATFLDFLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Not provided in the SIF file
         return None

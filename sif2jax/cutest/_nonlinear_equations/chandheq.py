@@ -87,11 +87,13 @@ class CHANDHEQ(AbstractNonlinearEquations):
         """No additional arguments."""
         return None
 
+    @property
     def expected_result(self):
         """Expected optimal solution."""
         # Not provided in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         # Should be 0.0 at solution

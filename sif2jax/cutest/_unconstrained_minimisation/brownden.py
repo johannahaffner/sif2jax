@@ -66,10 +66,12 @@ class BROWNDEN(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # No specific expected result provided in SIF
         return None
 
+    @property
     def expected_objective_value(self):
         # According to SIF comment, solution value is approximately 85822.2
         return jnp.array(85822.2)

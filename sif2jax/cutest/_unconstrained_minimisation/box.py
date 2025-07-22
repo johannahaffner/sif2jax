@@ -52,10 +52,12 @@ class BOX(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # The optimal objective value bound is -(n-1) according to line 74
         return jnp.array(-(self.n - 1))

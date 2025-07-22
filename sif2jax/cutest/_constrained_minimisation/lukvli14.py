@@ -82,10 +82,12 @@ class LUKVLI14(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution pattern based on problem structure
         return None  # Unknown exact solution
 
+    @property
     def expected_objective_value(self):
         return None  # Unknown exact objective value
 

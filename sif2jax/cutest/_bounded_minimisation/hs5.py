@@ -38,10 +38,12 @@ class HS5(AbstractBoundedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # From PDF: x* = (-π/2 + 1/2, -π/2 - 1/2)
         return jnp.array([-jnp.pi / 2 + 0.5, -jnp.pi / 2 - 0.5])
 
+    @property
     def expected_objective_value(self):
         # From PDF: f(x*) = -2√3 - π/2
         return jnp.array(-2 * jnp.sqrt(3) - jnp.pi / 2)

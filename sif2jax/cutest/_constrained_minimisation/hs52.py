@@ -41,12 +41,14 @@ class HS52(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution: x* = (-33, 11, 180, -158, 11)/349
         return jnp.array(
             [-33.0 / 349.0, 11.0 / 349.0, 180.0 / 349.0, -158.0 / 349.0, 11.0 / 349.0]
         )
 
+    @property
     def expected_objective_value(self):
         return jnp.array(1859.0 / 349.0)
 

@@ -130,10 +130,12 @@ class HIELOW(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The exact solution is not clearly specified in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # From SIF file, there's a value of 874.16543206, but it's unclear
         # if this is the optimal value or just a reference

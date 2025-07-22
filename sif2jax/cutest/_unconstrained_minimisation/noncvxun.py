@@ -58,10 +58,12 @@ class NONCVXUN(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution not provided in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Solution value for n=5000
         return jnp.array(11584.042)

@@ -35,10 +35,12 @@ class BURKEHAN(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Infeasible problem - no feasible solution
         return None
 
+    @property
     def expected_objective_value(self):
         # Infeasible problem - no feasible solution
         return None

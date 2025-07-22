@@ -40,9 +40,11 @@ class HS61(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return jnp.array([5.32677016, -2.11899864, 3.21046424])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-143.6461422)
 

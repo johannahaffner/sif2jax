@@ -77,10 +77,12 @@ class KOWOSB(AbstractUnconstrainedMinimisation):
         """No additional arguments needed."""
         return None
 
+    @property
     def expected_result(self):
         """The solution is not specified in the SIF file."""
         return None
 
+    @property
     def expected_objective_value(self):
         """The solution value mentioned in the SIF file comment."""
         return jnp.array(0.00102734)

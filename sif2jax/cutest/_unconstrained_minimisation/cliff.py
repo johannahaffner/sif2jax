@@ -51,12 +51,14 @@ class CLIFF(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The SIF file doesn't fully specify the optimal solution,
         # but based on the objective value we can identify the
         # approximate location of the solution
         return jnp.array([0.02, 0.0])
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file, line 62
         return jnp.array(0.199786613)

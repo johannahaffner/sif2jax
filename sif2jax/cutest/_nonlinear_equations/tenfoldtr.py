@@ -61,11 +61,13 @@ class TENFOLDTR(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # The SIF file mentions root at zero has multiplicity 10
         return jnp.zeros(self.n)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

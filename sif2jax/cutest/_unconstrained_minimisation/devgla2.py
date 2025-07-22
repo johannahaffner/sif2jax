@@ -90,10 +90,12 @@ class DEVGLA2(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution values given in the SIF file
         return jnp.array([53.81, 1.27, 3.012, 2.13, 0.507])
 
+    @property
     def expected_objective_value(self):
         # For a perfect fit, the objective value would be 0
         return jnp.array(0.0)

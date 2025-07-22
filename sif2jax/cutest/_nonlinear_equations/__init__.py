@@ -29,6 +29,7 @@ from .chandheq import CHANDHEQ as CHANDHEQ
 # from .channel import CHANNEL as CHANNEL  # TODO: Human review needed
 from .chebyqadne import CHEBYQADNE as CHEBYQADNE
 from .cluster import CLUSTER as CLUSTER
+from .coatingne import COATINGNE as COATINGNE
 from .coolhans import COOLHANS as COOLHANS
 
 # from .chnrsbne import CHNRSBNE as CHNRSBNE  # TODO: Human review needed
@@ -36,8 +37,25 @@ from .coolhans import COOLHANS as COOLHANS
 from .cubene import CUBENE as CUBENE
 from .cyclic3 import CYCLIC3 as CYCLIC3
 from .daniwood import DANIWOOD as DANIWOOD
+from .deconvbne import DECONVBNE as DECONVBNE
+from .deconvne import DECONVNE as DECONVNE
 from .denschnbne import DENSCHNBNE as DENSCHNBNE
+from .denschncne import DENSCHNCNE as DENSCHNCNE
+from .denschndne import DENSCHNDNE as DENSCHNDNE
+from .denschnene import DENSCHNENE as DENSCHNENE
+from .denschnfne import DENSCHNFNE as DENSCHNFNE
+from .devgla1ne import DEVGLA1NE as DEVGLA1NE
+from .devgla2ne import DEVGLA2NE as DEVGLA2NE
+from .eggcratene import EGGCRATENE as EGGCRATENE
+from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
+from .expfitne import EXPFITNE as EXPFITNE
+from .extrosnbne import EXTROSNBNE as EXTROSNBNE
+from .freurone import FREURONE as FREURONE
+from .genrosebne import GENROSEBNE as GENROSEBNE
+from .genrosene import GENROSENE as GENROSENE
+from .gulfne import GULFNE as GULFNE
+from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
 from .mgh09 import MGH09 as MGH09
@@ -88,11 +106,29 @@ nonlinear_equations_problems = (
     CHEBYQADNE(),
     # CHNRSBNE(),  # TODO: Human review needed
     # CHNRSNBMNE(),  # TODO: Human review needed
+    COATINGNE(),
     CUBENE(),
     CYCLIC3(),
     DENSCHNBNE(),
+    DENSCHNCNE(),
+    DENSCHNDNE(),
+    DENSCHNENE(),
+    DENSCHNFNE(),
+    DECONVBNE(),
+    DECONVNE(),
+    DEVGLA1NE(),
+    DEVGLA2NE(),
+    EGGCRATENE(),
+    ELATVIDUNE(),
     ENGVAL2NE(),
     # ERRINROSNE(),  # TODO: Human review needed
+    EXPFITNE(),
+    EXTROSNBNE(),
+    FREURONE(),
+    GENROSEBNE(),
+    GENROSENE(),
+    GULFNE(),
+    HATFLDANE(),
     HATFLDBNE(),
     HATFLDFLNE(),
     MGH09(),

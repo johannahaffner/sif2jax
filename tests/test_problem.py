@@ -75,17 +75,22 @@ class TestProblem:
 
         assert num_finite_bounds == pycutest_finite_lower + pycutest_finite_upper
 
+        if pycutest_finite_lower + pycutest_finite_upper == 0:
+            assert problem.bounds is None, "sif2jax problem should not have bounds."
+
     def test_correct_bounds(self, problem, pycutest_problem):
-        if pycutest_problem.bl is not None or pycutest_problem.bu is not None:
+        if problem.bounds is not None:
             lower, upper = problem.bounds
-            if pycutest_problem.bl is not None:
-                _lower = jnp.asarray(pycutest_problem.bl)
-                pycutest_lower = jnp.where(_lower == -1e20, -jnp.inf, _lower)
-                assert np.allclose(pycutest_lower, lower), "Lower bounds do not match."
-            if pycutest_problem.bu is not None:
-                _upper = jnp.asarray(pycutest_problem.bu)
-                pycutest_upper = jnp.where(_upper == 1e20, jnp.inf, _upper)
-                assert np.allclose(pycutest_upper, upper), "Upper bounds do not match."
+
+            assert pycutest_problem.bl is not None
+            pc_lower = jnp.asarray(pycutest_problem.bl)
+            pc_lower = jnp.where(pc_lower == -1e20, -jnp.inf, pc_lower)
+            assert np.allclose(pc_lower, lower), "Lower bounds do not match."
+
+            assert pycutest_problem.bu is not None
+            pc_upper = jnp.asarray(pycutest_problem.bu)
+            pc_upper = jnp.where(pc_upper == 1e20, jnp.inf, pc_upper)
+            assert np.allclose(pc_upper, upper), "Upper bounds do not match."
         else:
             assert problem.bounds is None, "sif2jax problem should not have bounds."
             pytest.skip("Problem has no bounds defined.")

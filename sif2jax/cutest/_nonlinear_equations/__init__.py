@@ -49,6 +49,8 @@ from .devgla2ne import DEVGLA2NE as DEVGLA2NE
 from .eggcratene import EGGCRATENE as EGGCRATENE
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
+from .errinrsmne import ERRINRSMNE as ERRINRSMNE
+from .exp2ne import EXP2NE as EXP2NE
 from .expfitne import EXPFITNE as EXPFITNE
 from .extrosnbne import EXTROSNBNE as EXTROSNBNE
 from .freurone import FREURONE as FREURONE
@@ -59,15 +61,22 @@ from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
 from .hatfldcne import HATFLDCNE as HATFLDCNE
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
+from .helixne import HELIXNE as HELIXNE
+from .himmelbfne import HIMMELBFNE as HIMMELBFNE
 from .hs1ne import HS1NE as HS1NE
 from .hs2ne import HS2NE as HS2NE
 from .hs25ne import HS25NE as HS25NE
+from .inteqne import INTEQNE as INTEQNE
+from .jensmpne import JENSMPNE as JENSMPNE
 from .judgene import JUDGENE as JUDGENE
 from .koebhelbne import KOEBHELBNE as KOEBHELBNE
 from .kowosbne import KOWOSBNE as KOWOSBNE
 from .levymone5 import LEVYMONE5 as LEVYMONE5
 from .levymone8 import LEVYMONE8 as LEVYMONE8
 from .levymone10 import LEVYMONE10 as LEVYMONE10
+from .liarwhdne import LIARWHDNE as LIARWHDNE
+from .linversene import LINVERSENE as LINVERSENE
+from .mancinone import MANCINONE as MANCINONE
 from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
 from .misra1d import MISRA1D as MISRA1D
@@ -132,7 +141,9 @@ nonlinear_equations_problems = (
     EGGCRATENE(),
     ELATVIDUNE(),
     ENGVAL2NE(),
+    ERRINRSMNE(),
     # ERRINROSNE(),  # TODO: Human review needed
+    EXP2NE(),
     EXPFITNE(),
     EXTROSNBNE(),
     FREURONE(),
@@ -143,15 +154,22 @@ nonlinear_equations_problems = (
     HATFLDBNE(),
     HATFLDCNE(),
     HATFLDFLNE(),
+    HELIXNE(),
+    HIMMELBFNE(),
     HS1NE(),
     HS2NE(),
     HS25NE(),
+    INTEQNE(),
+    JENSMPNE(),
     JUDGENE(),
     KOEBHELBNE(),
     KOWOSBNE(),
     LEVYMONE5(),
     LEVYMONE8(),
     LEVYMONE10(),
+    LIARWHDNE(),
+    LINVERSENE(),
+    MANCINONE(),
     MEYER3NE(),
     MGH09(),
     MISRA1D(),

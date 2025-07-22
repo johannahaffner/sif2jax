@@ -75,6 +75,21 @@ class TestProblem:
 
         assert num_finite_bounds == pycutest_finite_lower + pycutest_finite_upper
 
+    def test_correct_bounds(self, problem, pycutest_problem):
+        if pycutest_problem.bl is not None or pycutest_problem.bu is not None:
+            lower, upper = problem.bounds
+            if pycutest_problem.bl is not None:
+                _lower = jnp.asarray(pycutest_problem.bl)
+                pycutest_lower = jnp.where(_lower == -1e20, -jnp.inf, _lower)
+                assert np.allclose(pycutest_lower, lower), "Lower bounds do not match."
+            if pycutest_problem.bu is not None:
+                _upper = jnp.asarray(pycutest_problem.bu)
+                pycutest_upper = jnp.where(_upper == 1e20, jnp.inf, _upper)
+                assert np.allclose(pycutest_upper, upper), "Upper bounds do not match."
+        else:
+            assert problem.bounds is None, "sif2jax problem should not have bounds."
+            pytest.skip("Problem has no bounds defined.")
+
     def test_correct_constraints_at_start(self, problem, pycutest_problem):
         if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
             assert pycutest_problem.m > 0, "Problem should have constraints."

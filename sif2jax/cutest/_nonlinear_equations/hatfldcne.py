@@ -82,11 +82,12 @@ class HATFLDCNE(AbstractNonlinearEquations):
 
     @property
     def bounds(self) -> tuple[Array, Array] | None:
-        """Upper bounds from the SIF file."""
-        # XU HATFLDC 'DEFAULT' 10.0
-        # XR HATFLDC X(N) - free last variable
-        lower = jnp.full(self.n, -jnp.inf, dtype=jnp.float64)
+        """Bounds from the AMPL model: 0 <= x[i] <= 10 for i=1..N-1, x[N] free."""
+        # From AMPL: subject to cons1{i in 1..N-1}: 0.0 <= x[i] <= 10.0;
+        # Variable N is free (no bounds)
+        lower = jnp.full(self.n, 0.0, dtype=jnp.float64)
         upper = jnp.full(self.n, 10.0, dtype=jnp.float64)
         # Free the last variable (both bounds become ±inf)
+        lower = lower.at[self.n - 1].set(-jnp.inf)
         upper = upper.at[self.n - 1].set(jnp.inf)
         return lower, upper

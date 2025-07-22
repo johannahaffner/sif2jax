@@ -413,7 +413,9 @@ class KOEBHELBNE(AbstractNonlinearEquations):
     @property
     def bounds(self) -> tuple[Array, Array]:
         """Return the bounds for the variables."""
-        # A is free, B has lower bound 0.001, THETA is free
-        lower = jnp.array([-jnp.inf, 0.001, -jnp.inf])
+        # N has implicit lower bound 0 (likely positive normalization constant)
+        # A is free
+        # B has lower bound 0.001
+        lower = jnp.array([0.0, -jnp.inf, 0.001])
         upper = jnp.array([jnp.inf, jnp.inf, jnp.inf])
         return lower, upper

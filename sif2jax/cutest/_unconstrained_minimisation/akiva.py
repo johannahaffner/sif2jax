@@ -102,10 +102,12 @@ class AKIVA(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal values are not explicitly given in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # The SIF file has a commented out line: "*LO SOLUTION 6.1660422124"
         # Since we're minimizing negative log likelihood, we negate this value

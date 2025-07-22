@@ -72,10 +72,12 @@ class CHNRSNBM(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution has all components equal to 1
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file comment, the optimal objective value is 0.0
         return jnp.array(0.0)

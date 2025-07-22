@@ -40,10 +40,12 @@ class DQRTIC(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is x_i = i for all i
         return inexact_asarray(jnp.arange(1, self.n + 1))
 
+    @property
     def expected_objective_value(self):
         # When x_i = i, the objective value is 0
         return jnp.array(0.0)

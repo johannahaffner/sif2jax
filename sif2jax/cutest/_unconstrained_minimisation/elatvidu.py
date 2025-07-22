@@ -45,8 +45,10 @@ class ELATVIDU(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return None  # Solution not provided in the SIF file
 
+    @property
     def expected_objective_value(self):
         return jnp.array(0.0)  # From OBJECT BOUND in the file

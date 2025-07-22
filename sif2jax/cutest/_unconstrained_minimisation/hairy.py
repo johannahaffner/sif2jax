@@ -69,10 +69,12 @@ class HAIRY(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # According to SIF file (line 83), the optimal objective value is 20.0
         return jnp.array(20.0)

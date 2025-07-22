@@ -129,10 +129,12 @@ class BRYBND(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is not explicitly provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file comment (line 213),
         # the optimal objective value is 0.0

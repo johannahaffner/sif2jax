@@ -57,10 +57,12 @@ class HS101(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution is given in Appendix A according to the problem
         return None  # Would need Appendix A data
 
+    @property
     def expected_objective_value(self):
         return jnp.array(1809.76476)
 

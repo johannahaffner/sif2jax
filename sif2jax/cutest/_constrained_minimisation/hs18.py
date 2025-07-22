@@ -47,9 +47,11 @@ class HS18(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return jnp.array([jnp.sqrt(250), jnp.sqrt(2.5)])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(5.0)
 

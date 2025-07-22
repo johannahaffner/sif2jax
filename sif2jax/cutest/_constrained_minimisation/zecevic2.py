@@ -67,10 +67,12 @@ class ZECEVIC2(AbstractConstrainedMinimisation):
         upper = jnp.array([10.0, 10.0])
         return lower, upper
 
+    @property
     def expected_result(self):
         """Expected optimal solution."""
         return None  # Not provided in SIF
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(-4.125)

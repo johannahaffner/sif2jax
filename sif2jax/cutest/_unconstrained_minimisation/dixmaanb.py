@@ -87,10 +87,12 @@ class DIXMAANB(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The minimum is at the origin
         return jnp.zeros(self.n)
 
+    @property
     def expected_objective_value(self):
         # At the origin, all terms are zero
         return jnp.array(0.0)

@@ -48,10 +48,12 @@ class WAYSEA2(AbstractUnconstrainedMinimisation):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def expected_result(self):
         """Expected optimal solution."""
         return jnp.array([0.424861025, 1.0])
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(0.0)

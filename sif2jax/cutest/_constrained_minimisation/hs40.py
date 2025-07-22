@@ -41,6 +41,7 @@ class HS40(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution: x* = (2^a, 2^{2b}, (-1)^{1}2^c, (-1)^{1}2^b)
         # where a = -1/3, b = -1/4, c = -11/12
@@ -50,6 +51,7 @@ class HS40(AbstractConstrainedMinimisation):
         c = -11.0 / 12.0
         return jnp.array([2.0**a, 2.0 ** (2 * b), -(2.0**c), -(2.0**b)])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-0.25)
 

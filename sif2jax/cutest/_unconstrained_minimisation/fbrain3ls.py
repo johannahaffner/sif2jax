@@ -84,10 +84,12 @@ class FBRAIN3LS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The exact solution is not specified in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # The minimum objective value is not precisely specified in the SIF file
         # But the lower bound is given as 0.0

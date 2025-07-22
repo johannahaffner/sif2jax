@@ -38,12 +38,14 @@ class HS2(AbstractBoundedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # From the PDF: x* = (2a cos(1/3 arccos(1/b)), 1.5)
         # where a = (598/1200)^(1/2), b = 400 a³
         a = jnp.sqrt(598.0 / 1200.0)
         return jnp.array([2 * a * jnp.cos(jnp.arccos(1.0 / (400 * a**3)) / 3), 1.5])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(0.05042618790)
 

@@ -65,6 +65,7 @@ class DANIWOOD(AbstractNonlinearEquations):
         """No additional arguments."""
         return None
 
+    @property
     def expected_result(self):
         """Expected optimal solution.
 
@@ -74,6 +75,7 @@ class DANIWOOD(AbstractNonlinearEquations):
         """
         return jnp.array([0.76886226, 3.8604055])
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value (0 for constrained formulation)."""
         return jnp.array(0.0)

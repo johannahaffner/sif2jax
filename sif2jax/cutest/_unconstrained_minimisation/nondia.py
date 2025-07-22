@@ -66,12 +66,14 @@ class NONDIA(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution not provided in detail in SIF file
         # But noted that least square problems are bounded below by zero
         # and solution value is 0.0
         return None
 
+    @property
     def expected_objective_value(self):
         # Solution value
         return jnp.array(0.0)

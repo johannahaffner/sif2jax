@@ -57,6 +57,7 @@ class BROWNAL(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution for Brown almost linear problem is all variables = 1
         # This satisfies both constraints:
@@ -65,6 +66,7 @@ class BROWNAL(AbstractUnconstrainedMinimisation):
         # giving an optimal objective value of 0.0
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self):
         # The optimal objective value for Brown almost linear problem is 0.0
         # when all variables equal 1. This satisfies both:

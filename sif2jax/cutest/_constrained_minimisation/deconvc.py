@@ -182,10 +182,12 @@ class DECONVC(AbstractConstrainedMinimisation):
 
         return lower, upper
 
+    @property
     def expected_result(self):
         """Expected optimal solution (not provided in SIF)."""
         return None
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value (not provided in SIF)."""
         return None

@@ -47,6 +47,7 @@ class HS56(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution involves arcsin functions
         # a = arcsin(√(1/4.2))
@@ -61,6 +62,7 @@ class HS56(AbstractConstrainedMinimisation):
         r_val = 0.5  # choosing r=0.5 for (r+0.5)π
         return jnp.array([2.4, 1.2, 1.2, c, d, d, (r_val + 0.5) * jnp.pi])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-3.456)
 

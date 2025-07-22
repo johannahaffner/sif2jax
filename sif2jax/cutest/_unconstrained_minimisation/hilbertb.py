@@ -69,10 +69,12 @@ class HILBERTB(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is x = 0 for a positive definite quadratic form
         return jnp.zeros(self.n)
 
+    @property
     def expected_objective_value(self):
         # The minimum value of the quadratic form is 0.0
         return jnp.array(0.0)

@@ -95,10 +95,12 @@ class EIGEN(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The exact solution is not provided in the SIF files
         return None
 
+    @property
     def expected_objective_value(self):
         # These problems should have a minimum of 0.0
         return jnp.array(0.0)

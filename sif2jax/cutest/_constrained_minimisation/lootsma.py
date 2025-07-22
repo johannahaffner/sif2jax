@@ -39,10 +39,12 @@ class LOOTSMA(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution not provided in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Solution value not provided in SIF file
         return None

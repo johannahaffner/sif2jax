@@ -67,10 +67,12 @@ class HS54(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution approximated as rational numbers
         return jnp.array([91600.0 / 7.0, 179.0 / 70.0, 2.0e6, 10.0, 1.0e-3, 1.0e8])
 
+    @property
     def expected_objective_value(self):
         return -jnp.exp(-27.0 / 280.0)
 

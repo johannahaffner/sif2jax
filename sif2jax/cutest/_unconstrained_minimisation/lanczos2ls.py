@@ -45,5 +45,6 @@ class LANCZOS2LS(_AbstractLanczos):
         )
         return y
 
+    @property
     def expected_result(self):
         return None

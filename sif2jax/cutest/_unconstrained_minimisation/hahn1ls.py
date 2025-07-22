@@ -549,6 +549,7 @@ class HAHN1LS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution from SIF file (lines 557-563)
         return jnp.array(
@@ -563,6 +564,7 @@ class HAHN1LS(AbstractUnconstrainedMinimisation):
             ]
         )
 
+    @property
     def expected_objective_value(self):
         # The optimal objective value is not explicitly given in the SIF file
         return None

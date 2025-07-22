@@ -72,10 +72,12 @@ class MAKELA1(AbstractConstrainedMinimisation):
         upper = jnp.full(3, jnp.inf)
         return lower, upper
 
+    @property
     def expected_result(self):
         """Expected optimal solution (not provided in SIF)."""
         return None
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(-1.4142121558)

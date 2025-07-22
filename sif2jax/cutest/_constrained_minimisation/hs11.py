@@ -42,6 +42,7 @@ class HS11(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # a = 7.5/6 + √338.5
         a = 7.5 / 6 + jnp.sqrt(338.5)
@@ -49,6 +50,7 @@ class HS11(AbstractConstrainedMinimisation):
         x2 = (a**2 - 2 + a ** (-2)) / 6
         return jnp.array([x1, x2])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-8.498464223)
 

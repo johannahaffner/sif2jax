@@ -54,10 +54,12 @@ class EDENSCH(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is not specified in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Expected minimum value depends on dimension
         if self.n == 36:

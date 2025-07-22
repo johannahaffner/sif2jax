@@ -50,6 +50,7 @@ class LANCZOS1LS(_AbstractLanczos):
         y = jax.vmap(lambda x: self.model(x, exact_params))(x_values)
         return y
 
+    @property
     def expected_result(self):
         """The exact solution for LANCZOS1."""
         return jnp.array([0.0951, 1.0, 0.8607, 3.0, 1.5576, 5.0])

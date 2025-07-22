@@ -38,11 +38,13 @@ class HS9(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # From PDF: x* = (12k - 3, 16k - 4), k=0, ±1, ±2, ...
         # Using k=-1 to get the solution that gives f(x*) = -0.5
         return jnp.array([-15.0, -20.0])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-0.5)
 

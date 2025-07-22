@@ -51,6 +51,7 @@ class CLUSTERLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The SIF file mentions that the objective value is 0.0 at the optimal solution
         # This implies that both terms can be zero simultaneously
@@ -59,6 +60,7 @@ class CLUSTERLS(AbstractUnconstrainedMinimisation):
         # sin(π/2) = 1, cos(π/2) = 0, which makes several factors zero
         return jnp.array([jnp.pi / 2, jnp.pi / 2])
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file, line 69
         return jnp.array(0.0)

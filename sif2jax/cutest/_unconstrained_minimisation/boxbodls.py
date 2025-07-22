@@ -53,10 +53,12 @@ class BOXBODLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # NIST certified values from https://www.itl.nist.gov/div898/strd/nls/data/boxbod.shtml
         return jnp.array([213.80937, 0.54723])
 
+    @property
     def expected_objective_value(self):
         # From NIST: sum of squared residuals is 1.1680088766E+03
         return jnp.array(1.1680088766e03)

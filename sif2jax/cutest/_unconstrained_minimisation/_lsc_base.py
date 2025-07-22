@@ -66,10 +66,12 @@ class _AbstractLSC(AbstractUnconstrainedMinimisation):
         """No additional arguments needed."""
         return None
 
+    @property
     def expected_result(self):
         """The solution is not specified in the SIF file."""
         return None
 
+    @property
     def expected_objective_value(self):
         """The solution value is not specified in the SIF file."""
         return None

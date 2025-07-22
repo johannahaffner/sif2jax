@@ -96,10 +96,12 @@ class HATFLDE(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # According to SIF file (line 142), the optimal objective value is 5.120377D-07
         return jnp.array(5.120377e-07)

@@ -39,10 +39,12 @@ class HIMMELBH(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The solution is at x1 = 1, x2 = 1
         return jnp.array([1.0, 1.0])
 
+    @property
     def expected_objective_value(self):
         # Evaluating at (1, 1): 1³ - 3*1 + 1² - 2*1 + 2 = 1 - 3 + 1 - 2 + 2 = -1
         return jnp.array(-1.0)

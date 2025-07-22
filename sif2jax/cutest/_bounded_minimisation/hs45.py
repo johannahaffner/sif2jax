@@ -38,9 +38,11 @@ class HS45(AbstractBoundedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return jnp.array([1.0, 2.0, 3.0, 4.0, 5.0])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(1.0)
 

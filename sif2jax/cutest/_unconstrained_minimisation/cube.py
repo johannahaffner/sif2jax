@@ -48,6 +48,7 @@ class CUBE(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Based on the optimal objective value of 0.0,
         # the solution must satisfy:
@@ -55,6 +56,7 @@ class CUBE(AbstractUnconstrainedMinimisation):
         # x_2 = x_1^3 = 1
         return jnp.array([1.0, 1.0])
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file, line 91
         return jnp.array(0.0)

@@ -42,10 +42,12 @@ class HS34(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         ln10 = jnp.log(10.0)
         return jnp.array([ln10, 10.0, 10.0])
 
+    @property
     def expected_objective_value(self):
         ln10 = jnp.log(10.0)
         return jnp.array(-ln10)

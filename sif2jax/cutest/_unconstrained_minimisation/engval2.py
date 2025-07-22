@@ -57,9 +57,11 @@ class ENGVAL2(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return None
 
+    @property
     def expected_objective_value(self):
         # From SIF file: *LO SOLTN              0.0
         return jnp.array(0.0)

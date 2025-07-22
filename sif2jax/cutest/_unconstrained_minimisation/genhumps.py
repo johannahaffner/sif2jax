@@ -65,10 +65,12 @@ class GENHUMPS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is not specified in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # The minimum objective value is given as 0.0
         return jnp.array(0.0)

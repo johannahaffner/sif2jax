@@ -141,11 +141,13 @@ class CONCON(AbstractConstrainedMinimisation):
         """No additional arguments."""
         return None
 
+    @property
     def expected_result(self):
         """Expected optimal solution."""
         # Not provided in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         # Not provided in SIF file

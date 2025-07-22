@@ -76,10 +76,12 @@ class POWELLSG(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution not provided in detail in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Solution value is 0.0
         return jnp.array(0.0)

@@ -125,10 +125,12 @@ class AVGASB(AbstractConstrainedMinimisation):
         upper = jnp.ones(8)
         return lower, upper
 
+    @property
     def expected_result(self):
         """Expected optimal solution."""
         return None
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return None

@@ -34,9 +34,11 @@ class COSINE(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return None
 
+    @property
     def expected_objective_value(self):
         # According to line 83 in the SIF file, the objective is bounded
         # below by -(n-1), but no exact solution value is given

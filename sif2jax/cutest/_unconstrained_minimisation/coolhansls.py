@@ -71,12 +71,14 @@ class COOLHANSLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The SIF file doesn't specify the optimal solution
         # But line 146 suggests the objective value at the solution is 0.0,
         # meaning that a perfect solution to the matrix equation exists
         return None
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file, line 146
         return jnp.array(0.0)

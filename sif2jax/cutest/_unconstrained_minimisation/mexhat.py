@@ -66,10 +66,12 @@ class MEXHAT(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution not provided in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Two solution values given in SIF file
         # Using the first one

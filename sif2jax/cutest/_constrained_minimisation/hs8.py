@@ -39,6 +39,7 @@ class HS8(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # From PDF: a = √((25 + √301)/2), b = √((25 - √301)/2)
         # Four solutions: (a, 9/a), (-a, -9/a), (b, 9/b), (-b, -9/b)
@@ -46,6 +47,7 @@ class HS8(AbstractConstrainedMinimisation):
         a = jnp.sqrt((25 + jnp.sqrt(301)) / 2)
         return jnp.array([a, 9.0 / a])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-1.0)
 

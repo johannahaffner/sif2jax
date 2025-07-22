@@ -58,10 +58,12 @@ class JENSMP(AbstractUnconstrainedMinimisation):
         """No additional arguments needed."""
         return None
 
+    @property
     def expected_result(self):
         """The solution is not specified in the SIF file."""
         return None
 
+    @property
     def expected_objective_value(self):
         """The optimal objective value is approximately 124.362."""
         return jnp.array(124.362)  # This value is mentioned in the SIF file

@@ -119,9 +119,11 @@ class HS67(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return jnp.array([1728.371286, 16000.00000, 98.14151402])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-1162.036507)  # This matches H&S book and our SIF file
 

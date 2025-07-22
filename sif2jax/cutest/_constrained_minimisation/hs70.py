@@ -163,10 +163,12 @@ class HS70(AbstractConstrainedMinimisation):
         upper = jnp.array([100.0, 100.0, 1.0, 100.0])
         return lower, upper
 
+    @property
     def expected_result(self):
         """Expected optimal solution."""
         return jnp.array([12.27695, 4.631788, 0.3128625, 2.029290])
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(0.007498464)  # From SIF file solution comment

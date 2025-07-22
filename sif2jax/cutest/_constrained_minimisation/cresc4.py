@@ -121,10 +121,12 @@ class CRESC4(AbstractConstrainedMinimisation):
         upper = jnp.array([jnp.inf, jnp.inf, jnp.inf, jnp.inf, 6.2831852, jnp.inf])
         return lower, upper
 
+    @property
     def expected_result(self):
         """Expected optimal solution."""
         return jnp.array([-0.75, 0.0, 0.5, 1.5, 0.0, 0.5])
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         # From SIF file comment

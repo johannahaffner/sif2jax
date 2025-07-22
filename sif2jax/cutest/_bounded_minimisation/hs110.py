@@ -47,6 +47,7 @@ class HS110(AbstractBoundedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution from PDF (all variables have the same value)
         return jnp.array(
@@ -64,6 +65,7 @@ class HS110(AbstractBoundedMinimisation):
             ]
         )
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-45.77846971)
 

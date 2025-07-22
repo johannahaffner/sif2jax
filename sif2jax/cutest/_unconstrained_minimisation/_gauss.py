@@ -327,11 +327,13 @@ class GAUSS1LS(AbstractUnconstrainedMinimisation):
         """Return None as no additional args are needed."""
         return None
 
+    @property
     def expected_result(self):
         """Return None as the exact solution is not specified in the SIF file."""
         # The problem doesn't specify the exact minimum point
         return None
 
+    @property
     def expected_objective_value(self):
         # The problem doesn't specify the minimum objective value in the SIF file
         return None
@@ -656,10 +658,12 @@ class GAUSS2LS(AbstractUnconstrainedMinimisation):
         """Return None as no additional args are needed."""
         return None
 
+    @property
     def expected_result(self):
         """Return None as the exact solution is not specified."""
         return None
 
+    @property
     def expected_objective_value(self):
         # The minimum objective value is not specified
         return None
@@ -984,10 +988,12 @@ class GAUSS3LS(AbstractUnconstrainedMinimisation):
         """Return None as no additional args are needed."""
         return None
 
+    @property
     def expected_result(self):
         """Return None as the exact solution is not specified."""
         return None
 
+    @property
     def expected_objective_value(self):
         # The minimum objective value is not specified
         return None

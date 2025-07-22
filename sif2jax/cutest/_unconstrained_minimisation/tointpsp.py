@@ -248,10 +248,12 @@ class TOINTPSP(AbstractUnconstrainedMinimisation):
         """Additional arguments (none for this problem)."""
         return None
 
+    @property
     def expected_result(self):
         """Expected optimal solution."""
         return None  # Not provided in SIF
 
+    @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
         return jnp.array(225.56040942)  # From SIF file

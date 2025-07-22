@@ -41,10 +41,12 @@ class DENSCHNB(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Based on the problem formulation, the minimum is at:
         return jnp.array([2.0, -1.0])
 
+    @property
     def expected_objective_value(self):
         # At x = [2.0, -1.0]: (2-2)^2 + ((2-2)*(-1))^2 + (-1+1)^2 = 0
         return jnp.array(0.0)

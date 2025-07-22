@@ -499,11 +499,13 @@ class CHWIRUT1LS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is not directly provided in the SIF file
         # Values from NIST: 0.1901261, 0.0061962, 0.0105
         return jnp.array([0.1901261, 0.0061962, 0.0105])
 
+    @property
     def expected_objective_value(self):
         # Certified value from NIST: 2.3894212
         return jnp.array(2.3894212)

@@ -56,11 +56,13 @@ class BEALENE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # The known solution for Beale's function is (3, 0.5)
         return jnp.array([3.0, 0.5], dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

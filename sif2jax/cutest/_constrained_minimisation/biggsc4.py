@@ -36,10 +36,12 @@ class BIGGSC4(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # No expected result given in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Solution value given in SIF file
         return jnp.array(-24.5)

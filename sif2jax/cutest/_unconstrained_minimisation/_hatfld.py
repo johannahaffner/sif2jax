@@ -52,10 +52,12 @@ class HATFLDD(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # According to SIF file (line 120), the optimal objective value is 6.615114D-08
         return jnp.array(6.615114e-08)
@@ -151,10 +153,12 @@ class HATFLDE(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # According to SIF file (line 142), the optimal objective value is 5.120377D-07
         return jnp.array(5.120377e-07)
@@ -208,10 +212,12 @@ class HATFLDFL(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Not provided in the SIF file
         return None
@@ -262,10 +268,12 @@ class HATFLDFLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Not provided in the SIF file
         return None
@@ -325,10 +333,12 @@ class HATFLDGLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Not provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Not provided in the SIF file
         return None

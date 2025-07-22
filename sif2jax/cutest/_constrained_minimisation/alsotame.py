@@ -50,10 +50,12 @@ class ALSOTAME(AbstractConstrainedMinimisation):
         upper = jnp.array([2.0, 1.5])
         return (lower, upper)
 
+    @property
     def expected_result(self):
         # No expected result given in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # No expected objective value given in SIF file
         return None

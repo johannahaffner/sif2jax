@@ -43,12 +43,14 @@ class HS53(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution: x* = (-33, 11, 27, -5, 11)/43
         return jnp.array(
             [-33.0 / 43.0, 11.0 / 43.0, 27.0 / 43.0, -5.0 / 43.0, 11.0 / 43.0]
         )
 
+    @property
     def expected_objective_value(self):
         return jnp.array(176.0 / 43.0)
 

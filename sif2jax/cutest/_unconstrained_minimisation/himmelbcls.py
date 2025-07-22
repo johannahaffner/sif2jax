@@ -44,11 +44,13 @@ class HIMMELBCLS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The exact solution is (±√7, ±√11)
         # We'll return one of the four solutions
         return jnp.array([jnp.sqrt(7.0), jnp.sqrt(11.0)])
 
+    @property
     def expected_objective_value(self):
         # At the optimal solution, both residuals are 0
         return jnp.array(0.0)

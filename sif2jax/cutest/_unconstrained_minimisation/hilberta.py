@@ -56,10 +56,12 @@ class HILBERTA(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is not explicitly provided in the SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # The minimum value depends on the dimension
         return None

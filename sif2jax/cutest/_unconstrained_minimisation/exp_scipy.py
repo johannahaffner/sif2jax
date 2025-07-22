@@ -57,8 +57,10 @@ class EXP2(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return None
 
+    @property
     def expected_objective_value(self):
         return None

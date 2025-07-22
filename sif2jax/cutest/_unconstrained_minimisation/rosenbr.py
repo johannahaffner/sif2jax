@@ -31,8 +31,10 @@ class ROSENBR(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return jnp.array([1.0, 1.0])
 
+    @property
     def expected_objective_value(self):
         return jnp.array(0.0)

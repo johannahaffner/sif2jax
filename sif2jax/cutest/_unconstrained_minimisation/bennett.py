@@ -368,10 +368,12 @@ class BENNETT5LS(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # NIST certified values (https://www.itl.nist.gov/div898/strd/nls/data/bennett5.shtml)
         return jnp.array([-2523.80, 46.737, 0.93218])
 
+    @property
     def expected_objective_value(self):
         # The SIF file doesn't specify the optimal objective value,
         # but from the NIST website, the sum of squared residuals is 5.2404744073E-04

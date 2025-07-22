@@ -42,6 +42,7 @@ class HS114(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution from PDF
         return jnp.array(
@@ -59,6 +60,7 @@ class HS114(AbstractConstrainedMinimisation):
             ]
         )
 
+    @property
     def expected_objective_value(self):
         return jnp.array(-1768.80696)
 

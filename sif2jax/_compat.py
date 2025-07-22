@@ -62,11 +62,13 @@ class PycutestCompatWrapper(AbstractConstrainedMinimisation):
     def args(self) -> PyTree[Any]:
         return self.problem.args
 
+    @property
     def expected_result(self) -> PyTree[ArrayLike]:
-        return self.problem.expected_result()
+        return self.problem.expected_result
 
+    @property
     def expected_objective_value(self) -> Scalar | None:
-        return self.problem.expected_objective_value()
+        return self.problem.expected_objective_value
 
     @property
     def bounds(self) -> PyTree[ArrayLike] | None:

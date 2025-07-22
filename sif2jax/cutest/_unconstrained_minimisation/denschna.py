@@ -47,10 +47,12 @@ class DENSCHNA(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The minimum is at x = [0.0, 0.0]
         return jnp.array([0.0, 0.0])
 
+    @property
     def expected_objective_value(self):
         # At x = [0.0, 0.0]: 0^4 + (0+0)^2 + (-1+exp(0))^2 = 0 + 0 + 0 = 0
         return jnp.array(0.0)

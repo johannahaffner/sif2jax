@@ -104,9 +104,11 @@ class FREURONE(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         return None
 
+    @property
     def expected_objective_value(self):
         # Expected objective values from the SIF file for different dimensions
         if self.n == 2:

@@ -52,10 +52,12 @@ class BEALE(AbstractUnconstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # The optimal solution is known to be (3, 0.5)
         return jnp.array([3.0, 0.5])
 
+    @property
     def expected_objective_value(self):
         # According to the SIF file comment (line 91),
         # the optimal objective value is 0.0

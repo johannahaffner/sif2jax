@@ -37,10 +37,12 @@ class POLAK5(AbstractConstrainedMinimisation):
     def args(self):
         return None
 
+    @property
     def expected_result(self):
         # Solution not provided in detail in SIF file
         return None
 
+    @property
     def expected_objective_value(self):
         # Solution value provided as 50.0
         return jnp.array(50.0)

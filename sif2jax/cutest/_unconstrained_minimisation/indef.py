@@ -54,6 +54,7 @@ class INDEF(AbstractUnconstrainedMinimisation):
         """No additional arguments needed."""
         return None
 
+    @property
     def expected_result(self):
         """The solution is not specified in the SIF file."""
         # Since there's no specified solution, we'll return None
@@ -61,6 +62,7 @@ class INDEF(AbstractUnconstrainedMinimisation):
         # (as only the l2 term would exist, which is minimized at zero)
         return None
 
+    @property
     def expected_objective_value(self):
         """The solution value is not specified in the SIF file."""
         return None

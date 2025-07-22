@@ -57,7 +57,18 @@ from .genrosene import GENROSENE as GENROSENE
 from .gulfne import GULFNE as GULFNE
 from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
+from .hatfldcne import HATFLDCNE as HATFLDCNE
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
+from .hs1ne import HS1NE as HS1NE
+from .hs2ne import HS2NE as HS2NE
+from .hs25ne import HS25NE as HS25NE
+from .judgene import JUDGENE as JUDGENE
+from .koebhelbne import KOEBHELBNE as KOEBHELBNE
+from .kowosbne import KOWOSBNE as KOWOSBNE
+from .levymone5 import LEVYMONE5 as LEVYMONE5
+from .levymone8 import LEVYMONE8 as LEVYMONE8
+from .levymone10 import LEVYMONE10 as LEVYMONE10
+from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
 from .misra1d import MISRA1D as MISRA1D
 from .nonmsqrtne import NONMSQRTNE as NONMSQRTNE
@@ -130,7 +141,18 @@ nonlinear_equations_problems = (
     GULFNE(),
     HATFLDANE(),
     HATFLDBNE(),
+    HATFLDCNE(),
     HATFLDFLNE(),
+    HS1NE(),
+    HS2NE(),
+    HS25NE(),
+    JUDGENE(),
+    KOEBHELBNE(),
+    KOWOSBNE(),
+    LEVYMONE5(),
+    LEVYMONE8(),
+    LEVYMONE10(),
+    MEYER3NE(),
     MGH09(),
     MISRA1D(),
     NONMSQRTNE(),

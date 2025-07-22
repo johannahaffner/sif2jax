@@ -1,4 +1,7 @@
 # sif2jax
+
+![Progress](https://img.shields.io/badge/JAX%20Porting-373%2F1500%20(47%25)-tealblue)
+
 Functionally pure definitions of optimisation problems extracted from Standard Input Format (SIF), written in [JAX](https://github.com/jax-ml/jax).
 
 This is for you if you write optimisation software in JAX (or Python) and want to stress-test it on the CUTEst set of benchmark problems. Features include 

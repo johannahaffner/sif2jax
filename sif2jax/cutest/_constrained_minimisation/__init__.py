@@ -44,6 +44,7 @@ from .cvxqp1 import CVXQP1 as CVXQP1
 # TODO: DALLASS needs complex element implementations
 # from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
+from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
 from .hs8 import HS8 as HS8
@@ -206,6 +207,7 @@ from .sipow2 import SIPOW2 as SIPOW2
 # from .sipow3 import SIPOW3 as SIPOW3
 # TODO: SIPOW4 needs human review - constraint formulation issues
 # from .sipow4 import SIPOW4 as SIPOW4
+from .tenbars4 import TENBARS4 as TENBARS4
 from .truspyr1 import TRUSPYR1 as TRUSPYR1
 
 # TODO: TRUSPYR2 needs human review - test requested to be removed
@@ -240,6 +242,7 @@ constrained_minimisation_problems = (
     CSFI2(),
     CVXQP1(),
     DECONVC(),
+    GIGOMEZ2(),
     HS6(),
     HS7(),
     HS8(),
@@ -355,6 +358,7 @@ constrained_minimisation_problems = (
     ZECEVIC2(),
     ZECEVIC3(),
     ZECEVIC4(),
+    TENBARS4(),
     TRUSPYR1(),
     # TRUSPYR2(),  # TODO: Human review - test requested to be removed
     BT1(),

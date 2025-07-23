@@ -49,6 +49,7 @@ from ._constrained_minimisation import (
     CVXQP1 as CVXQP1,
     # DALLASS as DALLASS,  # TODO: needs complex element implementations
     DECONVC as DECONVC,
+    GIGOMEZ2 as GIGOMEZ2,
     HS6 as HS6,
     HS7 as HS7,
     HS8 as HS8,
@@ -195,6 +196,7 @@ from ._constrained_minimisation import (
     SIPOW2 as SIPOW2,
     # SIPOW3 as SIPOW3,  # TODO: Human review - constraint formulation issues
     # SIPOW4 as SIPOW4,  # TODO: Human review - constraint formulation issues
+    TENBARS4 as TENBARS4,
     TRUSPYR1 as TRUSPYR1,
     # TRUSPYR2 as TRUSPYR2,  # TODO: Human review - test requested to be removed
     # VANDERM3 as VANDERM3,  # TODO: Human review - constraints mismatch
@@ -326,6 +328,7 @@ from ._unconstrained_minimisation import (
     BARD as BARD,
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
+    BENNETT5LS as BENNETT5LS,
     BIGGS5 as BIGGS5,
     BIGGS6 as BIGGS6,
     BOX as BOX,
@@ -691,6 +694,7 @@ problems_dict = {
     "BARD": BARD(),
     "BDQRTIC": BDQRTIC(),
     "BEALE": BEALE(),
+    "BENNETT5LS": BENNETT5LS(),
     "BIGGS5": BIGGS5(),
     "BIGGS6": BIGGS6(),
     "BOX": BOX(),
@@ -800,6 +804,7 @@ problems_dict = {
     "GAUSSIAN": GAUSSIAN(),
     # "GBRAINLS": GBRAINLS(),  # TODO: Human review - complex data dependencies
     "GENHUMPS": GENHUMPS(),
+    "GIGOMEZ2": GIGOMEZ2(),
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
     # "GULF": GULF(),  # TODO: Human review - issues reported by user
@@ -848,6 +853,7 @@ problems_dict = {
     "POWER": POWER(),
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "ROSENBR": ROSENBR(),
+    "TENBARS4": TENBARS4(),
     "TENFOLDTRLS": TENFOLDTRLS(),
     "POWELLBS": POWELLBS(),
     "POWELLSE": POWELLSE(),

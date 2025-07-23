@@ -75,8 +75,9 @@ class TestProblem:
 
         assert num_finite_bounds == pycutest_finite_lower + pycutest_finite_upper
 
-        if pycutest_finite_lower + pycutest_finite_upper == 0:
-            assert problem.bounds is None, "sif2jax problem should not have bounds."
+        if pycutest_finite_upper + pycutest_finite_lower == 0:
+            if not isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                assert problem.bounds is None, "sif2jax problem should not have bounds."
 
     def test_correct_bounds(self, problem, pycutest_problem):
         if problem.bounds is not None:

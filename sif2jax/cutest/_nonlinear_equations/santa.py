@@ -5,14 +5,14 @@ The Santa problem as suggested in a Christmas competition by Jens Jensen
 Santa is flying around the world, presently presenting presents. The Earth is
 modeled as a perfect sphere with radius precisely 6,371,000 metres. Santa sets
 off from the North Pole along 2°6'57.6" E bearing south and visits various
-locations, leaving an elf behind at each 
+locations, leaving an elf behind at each
 location to help unwrap presents.
 
 The problem is to find Santa's route given the distances traveled between locations.
 The constraints are given by the spherical law of cosines:
 sin phi_1 sin phi_2 + cos phi_1 cos phi_2 cos(lam_1 - lam_2) = cos(d/r)
 
-The problem has many local minimizers of the sum of squares of infeasibility, but it is 
+The problem has many local minimizers of the sum of squares of infeasibility, but it is
 only the solution with zero residuals that is of interest.
 
 Source:

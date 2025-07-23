@@ -58,48 +58,37 @@ class MANCINONE(AbstractNonlinearEquations):
         A = self._compute_a()
         n_half = n / 2.0
 
-        x0 = jnp.zeros(n, dtype=jnp.float64)
+        # Create indices arrays
+        i_indices = jnp.arange(1, n + 1, dtype=jnp.float64)
+        j_indices = jnp.arange(1, n + 1, dtype=jnp.float64)
 
-        for i in range(1, n + 1):
-            h = 0.0
+        # Create meshgrid for i and j
+        I, J = jnp.meshgrid(i_indices, j_indices, indexing="ij")
 
-            # Sum over j < i
-            for j in range(1, i):
-                vij = jnp.sqrt(i / j)
-                lij = jnp.log(vij)
-                sij = jnp.sin(lij)
-                cij = jnp.cos(lij)
+        # Compute v_ij = sqrt(i/j) for all pairs
+        vij = jnp.sqrt(I / J)
+        lij = jnp.log(vij)
+        sij = jnp.sin(lij)
+        cij = jnp.cos(lij)
 
-                # Compute s^alpha and c^alpha
-                sa = sij**alpha
-                ca = cij**alpha
+        # Compute s^alpha + c^alpha
+        sca = sij**alpha + cij**alpha
 
-                sca = sa + ca
-                hij = vij * sca
-                h += hij
+        # Compute h_ij = v_ij * (s^alpha + c^alpha)
+        hij = vij * sca
 
-            # Sum over j > i
-            for j in range(i + 1, n + 1):
-                vij = jnp.sqrt(i / j)
-                lij = jnp.log(vij)
-                sij = jnp.sin(lij)
-                cij = jnp.cos(lij)
+        # Mask for j != i
+        mask = (I != J).astype(jnp.float64)
 
-                # Compute s^alpha and c^alpha
-                sa = sij**alpha
-                ca = cij**alpha
+        # Sum contributions for each i
+        h = jnp.sum(hij * mask, axis=1)
 
-                sca = sa + ca
-                hij = vij * sca
-                h += hij
+        # Compute ci = (i - n/2)^gamma
+        i_minus_n_half = i_indices - n_half
+        ci = i_minus_n_half**gamma
 
-            # Compute ci = (i - n/2)^gamma
-            i_minus_n_half = i - n_half
-            ci = i_minus_n_half**gamma
-
-            # Starting value
-            xi0 = (h + ci) * A
-            x0 = x0.at[i - 1].set(xi0)
+        # Starting values
+        x0 = (h + ci) * A
 
         return x0
 
@@ -111,48 +100,45 @@ class MANCINONE(AbstractNonlinearEquations):
         gamma = self.gamma
         n_half = n / 2.0
 
-        residuals = jnp.zeros(n, dtype=jnp.float64)
+        # Create indices
+        i_indices = jnp.arange(1, n + 1, dtype=jnp.float64)
 
-        for i in range(1, n + 1):
-            # G(i) = beta*n*x(i) + sum of elements
+        # Compute ci = (i - n/2)^gamma for all i
+        i_minus_n_half = i_indices - n_half
+        ci = i_minus_n_half**gamma
 
-            # Compute ci = (i - n/2)^gamma for the constant term
-            i_minus_n_half = i - n_half
-            ci = i_minus_n_half**gamma
+        # First term: beta*n*x(i) - ci
+        residuals = beta_n * y - ci
 
-            res = beta_n * y[i - 1] - ci
+        # Create meshgrid for i and j (1-indexed)
+        I, J = jnp.meshgrid(
+            i_indices, jnp.arange(1, n + 1, dtype=jnp.float64), indexing="ij"
+        )
 
-            # Add contributions from j < i
-            for j in range(1, i):
-                x_j = y[j - 1]
-                vij = jnp.sqrt(x_j * x_j + i / j)
-                lij = jnp.log(vij)
-                sij = jnp.sin(lij)
-                cij = jnp.cos(lij)
+        # Extract x_j values for all j
+        X_j = y[jnp.arange(n)]
+        X_j_expanded = X_j[jnp.newaxis, :]  # Shape (1, n)
+        X_j_grid = jnp.broadcast_to(X_j_expanded, (n, n))  # Shape (n, n)
 
-                # Compute s^alpha and c^alpha
-                sa = sij**alpha
-                ca = cij**alpha
+        # Compute v_ij = sqrt(x_j^2 + i/j)
+        vij = jnp.sqrt(X_j_grid**2 + I / J)
+        lij = jnp.log(vij)
+        sij = jnp.sin(lij)
+        cij = jnp.cos(lij)
 
-                sumal = sa + ca
-                res += vij * sumal
+        # Compute s^alpha + c^alpha
+        sumal = sij**alpha + cij**alpha
 
-            # Add contributions from j > i
-            for j in range(i + 1, n + 1):
-                x_j = y[j - 1]
-                vij = jnp.sqrt(x_j * x_j + i / j)
-                lij = jnp.log(vij)
-                sij = jnp.sin(lij)
-                cij = jnp.cos(lij)
+        # Element contributions
+        element_contrib = vij * sumal
 
-                # Compute s^alpha and c^alpha
-                sa = sij**alpha
-                ca = cij**alpha
+        # Mask for j != i (we sum over all j except j = i)
+        mask = (I != J).astype(jnp.float64)
 
-                sumal = sa + ca
-                res += vij * sumal
+        # Sum contributions for each i
+        sum_contrib = jnp.sum(element_contrib * mask, axis=1)
 
-            residuals = residuals.at[i - 1].set(res)
+        residuals = residuals + sum_contrib
 
         return residuals
 

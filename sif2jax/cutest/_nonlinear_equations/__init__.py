@@ -80,8 +80,22 @@ from .mancinone import MANCINONE as MANCINONE
 from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
 from .misra1d import MISRA1D as MISRA1D
+from .modbealene import MODBEALENE as MODBEALENE
+from .morebvne import MOREBVNE as MOREBVNE
+from .muonsine import MUONSINE as MUONSINE
+from .nondiane import NONDIANE as NONDIANE
 from .nonmsqrtne import NONMSQRTNE as NONMSQRTNE
+from .nonscompne import NONSCOMPNE as NONSCOMPNE
+from .oscigrne import OSCIGRNE as OSCIGRNE
+from .oscipane import OSCIPANE as OSCIPANE
+from .palmer1ane import PALMER1ANE as PALMER1ANE
 from .palmer1bne import PALMER1BNE as PALMER1BNE
+from .palmer1ene import PALMER1ENE as PALMER1ENE
+from .palmer1ne import PALMER1NE as PALMER1NE
+from .palmer2ane import PALMER2ANE as PALMER2ANE
+from .palmer2bne import PALMER2BNE as PALMER2BNE
+from .palmer2ene import PALMER2ENE as PALMER2ENE
+from .palmer2ne import PALMER2NE as PALMER2NE
 from .palmer5ene import PALMER5ENE as PALMER5ENE
 from .palmer7ane import PALMER7ANE as PALMER7ANE
 from .powellbs import POWELLBS as POWELLBS
@@ -173,8 +187,22 @@ nonlinear_equations_problems = (
     MEYER3NE(),
     MGH09(),
     MISRA1D(),
+    MODBEALENE(),
+    MOREBVNE(),
+    MUONSINE(),
+    NONDIANE(),
     NONMSQRTNE(),
+    NONSCOMPNE(),
+    OSCIGRNE(),
+    OSCIPANE(),
+    PALMER1ANE(),
     PALMER1BNE(),
+    PALMER1ENE(),
+    PALMER1NE(),
+    PALMER2ANE(),
+    PALMER2BNE(),
+    PALMER2ENE(),
+    PALMER2NE(),
     PALMER5ENE(),
     PALMER7ANE(),
     POWERSUMNE(),

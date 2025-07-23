@@ -44,6 +44,7 @@ from .cvxqp1 import CVXQP1 as CVXQP1
 # TODO: DALLASS needs complex element implementations
 # from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
+from .dtoc1l import DTOC1L as DTOC1L
 from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7

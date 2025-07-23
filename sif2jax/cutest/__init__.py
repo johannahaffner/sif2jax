@@ -52,6 +52,7 @@ from ._constrained_minimisation import (
     CVXQP1 as CVXQP1,
     # DALLASS as DALLASS,  # TODO: needs complex element implementations
     DECONVC as DECONVC,
+    DTOC1L as DTOC1L,
     GIGOMEZ2 as GIGOMEZ2,
     HS6 as HS6,
     HS7 as HS7,
@@ -756,6 +757,7 @@ problems_dict = {
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
     "DECONVC": DECONVC(),
+    "DTOC1L": DTOC1L(),
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),

@@ -207,6 +207,7 @@ from .power import POWER as POWER
 # TODO: Human review - objective off by factor of 4.15
 # from .powellsg import POWELLSG as POWELLSG
 from .rosenbr import ROSENBR as ROSENBR
+from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
 
 # TODO: TOINTGOR needs human review - runtime test fails (~8x slower than threshold)
@@ -385,6 +386,7 @@ unconstrained_minimisation_problems = (
     POWER(),
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
+    ROSZMAN1LS(),
     TENFOLDTRLS(),
     WAYSEA1(),
     WAYSEA2(),

@@ -10,6 +10,8 @@ from ._bounded_minimisation import (
     HS38 as HS38,
     HS45 as HS45,
     HS110 as HS110,
+    PALMER3B as PALMER3B,
+    PRICE4B as PRICE4B,
 )
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
@@ -475,6 +477,7 @@ from ._unconstrained_minimisation import (
     POWER as POWER,
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     ROSENBR as ROSENBR,
+    ROSZMAN1LS as ROSZMAN1LS,
     TENFOLDTRLS as TENFOLDTRLS,
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
     TOINTGSS as TOINTGSS,
@@ -853,11 +856,13 @@ problems_dict = {
     "POWER": POWER(),
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "ROSENBR": ROSENBR(),
+    "ROSZMAN1LS": ROSZMAN1LS(),
     "TENBARS4": TENBARS4(),
     "TENFOLDTRLS": TENFOLDTRLS(),
     "POWELLBS": POWELLBS(),
     "POWELLSE": POWELLSE(),
     "POWELLSQ": POWELLSQ(),
+    "PRICE4B": PRICE4B(),
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
     "TRIGON1": TRIGON1(),
@@ -952,6 +957,7 @@ problems_dict = {
     "PALMER2BNE": PALMER2BNE(),
     "PALMER2ENE": PALMER2ENE(),
     "PALMER2NE": PALMER2NE(),
+    "PALMER3B": PALMER3B(),
     "PALMER5ENE": PALMER5ENE(),
     "PALMER7ANE": PALMER7ANE(),
     "POWERSUMNE": POWERSUMNE(),

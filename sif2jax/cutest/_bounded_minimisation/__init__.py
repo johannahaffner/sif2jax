@@ -8,6 +8,8 @@ from .hs25 import HS25 as HS25
 from .hs38 import HS38 as HS38
 from .hs45 import HS45 as HS45
 from .hs110 import HS110 as HS110
+from .palmer3b import PALMER3B as PALMER3B
+from .price4b import PRICE4B as PRICE4B
 
 
 bounded_minimisation_problems = (
@@ -21,4 +23,6 @@ bounded_minimisation_problems = (
     HS38(),
     HS45(),
     HS110(),
+    PALMER3B(),
+    PRICE4B(),
 )

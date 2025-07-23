@@ -196,6 +196,7 @@ from .makela2 import MAKELA2 as MAKELA2
 from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
 from .maratos import MARATOS as MARATOS
+from .odfits import ODFITS as ODFITS
 from .pentagon import PENTAGON as PENTAGON
 from .polak1 import POLAK1 as POLAK1
 from .polak2 import POLAK2 as POLAK2
@@ -203,6 +204,7 @@ from .polak3 import POLAK3 as POLAK3
 from .polak5 import POLAK5 as POLAK5
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
+from .steenbrb import STEENBRB as STEENBRB
 
 # TODO: SIPOW3 needs human review - constraint formulation issues
 # from .sipow3 import SIPOW3 as SIPOW3
@@ -338,6 +340,7 @@ constrained_minimisation_problems = (
     HS119(),
     LOOTSMA(),
     MARATOS(),
+    ODFITS(),
     PENTAGON(),
     POLAK1(),
     POLAK2(),
@@ -345,6 +348,7 @@ constrained_minimisation_problems = (
     POLAK5(),
     SIPOW1(),
     SIPOW2(),
+    STEENBRB(),
     # SIPOW3(),  # TODO: Human review - constraint formulation issues
     # SIPOW4(),  # TODO: Human review - constraint formulation issues
     # VANDERM1(),  # Moved to nonlinear equations (NOR2 classification)

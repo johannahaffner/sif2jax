@@ -96,12 +96,16 @@ from .palmer2ane import PALMER2ANE as PALMER2ANE
 from .palmer2bne import PALMER2BNE as PALMER2BNE
 from .palmer2ene import PALMER2ENE as PALMER2ENE
 from .palmer2ne import PALMER2NE as PALMER2NE
+from .palmer3ene import PALMER3ENE as PALMER3ENE
+from .palmer4ene import PALMER4ENE as PALMER4ENE
+from .palmer5bne import PALMER5BNE as PALMER5BNE
 from .palmer5ene import PALMER5ENE as PALMER5ENE
 from .palmer7ane import PALMER7ANE as PALMER7ANE
 from .powellbs import POWELLBS as POWELLBS
 from .powellse import POWELLSE as POWELLSE
 from .powellsq import POWELLSQ as POWELLSQ
 from .powersumne import POWERSUMNE as POWERSUMNE
+from .santa import SANTA as SANTA
 from .sinvalne import SINVALNE as SINVALNE
 from .ssbrybndne import SSBRYBNDNE as SSBRYBNDNE
 from .tenfoldtr import TENFOLDTR as TENFOLDTR
@@ -203,9 +207,13 @@ nonlinear_equations_problems = (
     PALMER2BNE(),
     PALMER2ENE(),
     PALMER2NE(),
+    PALMER3ENE(),
+    PALMER4ENE(),
+    PALMER5BNE(),
     PALMER5ENE(),
     PALMER7ANE(),
     POWERSUMNE(),
+    SANTA(),
     SINVALNE(),
     SSBRYBNDNE(),
     TENFOLDTR(),

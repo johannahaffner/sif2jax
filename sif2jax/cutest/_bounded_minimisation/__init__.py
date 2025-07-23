@@ -1,4 +1,5 @@
 from .exp2b import EXP2B as EXP2B
+from .hatfldc import HATFLDC as HATFLDC
 from .hs1 import HS1 as HS1
 from .hs2 import HS2 as HS2
 from .hs3 import HS3 as HS3
@@ -14,6 +15,7 @@ from .price4b import PRICE4B as PRICE4B
 
 bounded_minimisation_problems = (
     EXP2B(),
+    HATFLDC(),
     HS1(),
     HS2(),
     HS3(),

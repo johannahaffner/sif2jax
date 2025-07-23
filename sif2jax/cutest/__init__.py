@@ -1,6 +1,7 @@
 from ._bounded_minimisation import (
     bounded_minimisation_problems as bounded_minimisation_problems,
     EXP2B as EXP2B,
+    HATFLDC as HATFLDC,
     HS1 as HS1,
     HS2 as HS2,
     HS3 as HS3,
@@ -190,6 +191,7 @@ from ._constrained_minimisation import (
     MAKELA3 as MAKELA3,
     MAKELA4 as MAKELA4,
     MARATOS as MARATOS,
+    ODFITS as ODFITS,
     PENTAGON as PENTAGON,
     POLAK1 as POLAK1,
     POLAK2 as POLAK2,
@@ -197,6 +199,7 @@ from ._constrained_minimisation import (
     POLAK5 as POLAK5,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
+    STEENBRB as STEENBRB,
     # SIPOW3 as SIPOW3,  # TODO: Human review - constraint formulation issues
     # SIPOW4 as SIPOW4,  # TODO: Human review - constraint formulation issues
     TENBARS4 as TENBARS4,
@@ -303,12 +306,16 @@ from ._nonlinear_equations import (
     PALMER2BNE as PALMER2BNE,
     PALMER2ENE as PALMER2ENE,
     PALMER2NE as PALMER2NE,
+    PALMER3ENE as PALMER3ENE,
+    PALMER4ENE as PALMER4ENE,
+    PALMER5BNE as PALMER5BNE,
     PALMER5ENE as PALMER5ENE,
     PALMER7ANE as PALMER7ANE,
     POWELLBS as POWELLBS,
     POWELLSE as POWELLSE,
     POWELLSQ as POWELLSQ,
     POWERSUMNE as POWERSUMNE,
+    SANTA as SANTA,
     SINVALNE as SINVALNE,
     SSBRYBNDNE as SSBRYBNDNE,
     TENFOLDTR as TENFOLDTR,
@@ -609,6 +616,7 @@ problems_dict = {
     "HS119": HS119(),
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
+    "ODFITS": ODFITS(),
     "PENTAGON": PENTAGON(),
     "POLAK1": POLAK1(),
     "POLAK2": POLAK2(),
@@ -815,6 +823,7 @@ problems_dict = {
     # "GULF": GULF(),  # TODO: Human review - issues reported by user
     "HAHN1LS": HAHN1LS(),
     "HAIRY": HAIRY(),
+    "HATFLDC": HATFLDC(),
     # "HATFLDD": HATFLDD(),  # TODO: HATFLD family needs human review - discrepancies
     # "HATFLDE": HATFLDE(),  # TODO: HATFLD family needs human review - discrepancies
     # "HATFLDFL": HATFLDFL(),  # TODO: HATFLD family needs human review - discrepancies
@@ -960,11 +969,16 @@ problems_dict = {
     "PALMER2ENE": PALMER2ENE(),
     "PALMER2NE": PALMER2NE(),
     "PALMER3B": PALMER3B(),
+    "PALMER3ENE": PALMER3ENE(),
+    "PALMER4ENE": PALMER4ENE(),
+    "PALMER5BNE": PALMER5BNE(),
     "PALMER5ENE": PALMER5ENE(),
     "PALMER7ANE": PALMER7ANE(),
     "POWERSUMNE": POWERSUMNE(),
+    "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),
     "SSBRYBNDNE": SSBRYBNDNE(),
+    "STEENBRB": STEENBRB(),
     "10FOLDTR": TENFOLDTR(),
 }
 

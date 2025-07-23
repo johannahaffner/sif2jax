@@ -365,7 +365,7 @@ class HS105(AbstractConstrainedMinimisation):
     def bounds(self):
         # Bounds from the AMPL formulation
         lower = jnp.array([0.001, 0.001, 100.0, 130.0, 170.0, 5.0, 5.0, 5.0])
-        upper = jnp.array([0.499, 0.449, 180.0, 210.0, 240.0, 25.0, 25.0, 25.0])
+        upper = jnp.array([0.499, 0.499, 180.0, 210.0, 240.0, 25.0, 25.0, 25.0])
         return (lower, upper)
 
     def constraint(self, y):

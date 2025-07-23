@@ -12,6 +12,7 @@ from .arwhead import ARWHEAD as ARWHEAD
 from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
+from .biggs5 import BIGGS5 as BIGGS5
 from .biggs6 import BIGGS6 as BIGGS6
 from .box import BOX as BOX
 from .box3 import BOX3 as BOX3

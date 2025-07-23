@@ -68,7 +68,7 @@ class HS101(AbstractConstrainedMinimisation):
 
     @property
     def bounds(self):
-        lower = jnp.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.001])
+        lower = jnp.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.01])
         upper = jnp.array([10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0])
         return (lower, upper)
 

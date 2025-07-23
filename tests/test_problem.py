@@ -75,6 +75,32 @@ class TestProblem:
 
         assert num_finite_bounds == pycutest_finite_lower + pycutest_finite_upper
 
+        if pycutest_finite_upper + pycutest_finite_lower == 0:
+            # Check if the sif2jax problem should have a bounds attribute
+            if not isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                assert problem.bounds is None, "sif2jax problem should not have bounds."
+
+    def test_correct_bounds(self, problem, pycutest_problem):
+        # Skip test for unconstrained problems which don't have bounds attribute
+        if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+            pytest.skip("Unconstrained problems have no bounds.")
+
+        if problem.bounds is not None:
+            lower, upper = problem.bounds
+
+            assert pycutest_problem.bl is not None
+            pc_lower = jnp.asarray(pycutest_problem.bl)
+            pc_lower = jnp.where(pc_lower == -1e20, -jnp.inf, pc_lower)
+            assert np.allclose(pc_lower, lower), "Lower bounds do not match."
+
+            assert pycutest_problem.bu is not None
+            pc_upper = jnp.asarray(pycutest_problem.bu)
+            pc_upper = jnp.where(pc_upper == 1e20, jnp.inf, pc_upper)
+            assert np.allclose(pc_upper, upper), "Upper bounds do not match."
+        else:
+            assert problem.bounds is None, "sif2jax problem should not have bounds."
+            pytest.skip("Problem has no bounds defined.")
+
     def test_correct_constraints_at_start(self, problem, pycutest_problem):
         if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
             assert pycutest_problem.m > 0, "Problem should have constraints."

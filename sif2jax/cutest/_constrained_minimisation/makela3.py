@@ -70,9 +70,7 @@ class MAKELA3(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         """Variable bounds (all free)."""
-        lower = jnp.full(21, -jnp.inf)
-        upper = jnp.full(21, jnp.inf)
-        return lower, upper
+        return None
 
     @property
     def expected_result(self):

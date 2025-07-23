@@ -80,9 +80,7 @@ class POLAK2(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         """Variable bounds (all free)."""
-        lower = jnp.full(11, -jnp.inf)
-        upper = jnp.full(11, jnp.inf)
-        return lower, upper
+        return None
 
     @property
     def expected_result(self):

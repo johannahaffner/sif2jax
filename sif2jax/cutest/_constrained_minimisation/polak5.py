@@ -53,9 +53,7 @@ class POLAK5(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         # All variables are free (unbounded)
-        return jnp.array([-jnp.inf, -jnp.inf, -jnp.inf]), jnp.array(
-            [jnp.inf, jnp.inf, jnp.inf]
-        )
+        return None
 
     def constraint(self, y):
         x1, x2, u = y

@@ -12,7 +12,7 @@ Since these problem definitions are to be used to validate optimisation algorith
 
 The testing workflow is:
 1. Make any change to a file
-2. Run `bash run_tests.sh --test-case "PROBLEM"`
+2. Run `bash run_tests.sh --test-case "PROBLEM"`. Use `sudo bash ...` if you run into permission issues.
 3. Fix issues based on test results
 4. Repeat until tests pass
 

@@ -85,9 +85,7 @@ class HS113(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         # No explicit bounds
-        lower = jnp.array([-jnp.inf] * 10)
-        upper = jnp.array([jnp.inf] * 10)
-        return (lower, upper)
+        return None
 
     def constraint(self, y):
         x1, x2, x3, x4, x5, x6, x7, x8, x9, x10 = y

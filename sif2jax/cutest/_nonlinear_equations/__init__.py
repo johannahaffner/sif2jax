@@ -29,6 +29,7 @@ from .chandheq import CHANDHEQ as CHANDHEQ
 # from .channel import CHANNEL as CHANNEL  # TODO: Human review needed
 from .chebyqadne import CHEBYQADNE as CHEBYQADNE
 from .cluster import CLUSTER as CLUSTER
+from .coatingne import COATINGNE as COATINGNE
 from .coolhans import COOLHANS as COOLHANS
 
 # from .chnrsbne import CHNRSBNE as CHNRSBNE  # TODO: Human review needed
@@ -36,14 +37,65 @@ from .coolhans import COOLHANS as COOLHANS
 from .cubene import CUBENE as CUBENE
 from .cyclic3 import CYCLIC3 as CYCLIC3
 from .daniwood import DANIWOOD as DANIWOOD
+from .deconvbne import DECONVBNE as DECONVBNE
+from .deconvne import DECONVNE as DECONVNE
 from .denschnbne import DENSCHNBNE as DENSCHNBNE
+from .denschncne import DENSCHNCNE as DENSCHNCNE
+from .denschndne import DENSCHNDNE as DENSCHNDNE
+from .denschnene import DENSCHNENE as DENSCHNENE
+from .denschnfne import DENSCHNFNE as DENSCHNFNE
+from .devgla1ne import DEVGLA1NE as DEVGLA1NE
+from .devgla2ne import DEVGLA2NE as DEVGLA2NE
+from .eggcratene import EGGCRATENE as EGGCRATENE
+from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
+from .errinrsmne import ERRINRSMNE as ERRINRSMNE
+from .exp2ne import EXP2NE as EXP2NE
+from .expfitne import EXPFITNE as EXPFITNE
+from .extrosnbne import EXTROSNBNE as EXTROSNBNE
+from .freurone import FREURONE as FREURONE
+from .genrosebne import GENROSEBNE as GENROSEBNE
+from .genrosene import GENROSENE as GENROSENE
+from .gulfne import GULFNE as GULFNE
+from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
+from .hatfldcne import HATFLDCNE as HATFLDCNE
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
+from .helixne import HELIXNE as HELIXNE
+from .himmelbfne import HIMMELBFNE as HIMMELBFNE
+from .hs1ne import HS1NE as HS1NE
+from .hs2ne import HS2NE as HS2NE
+from .hs25ne import HS25NE as HS25NE
+from .inteqne import INTEQNE as INTEQNE
+from .jensmpne import JENSMPNE as JENSMPNE
+from .judgene import JUDGENE as JUDGENE
+from .koebhelbne import KOEBHELBNE as KOEBHELBNE
+from .kowosbne import KOWOSBNE as KOWOSBNE
+from .levymone5 import LEVYMONE5 as LEVYMONE5
+from .levymone8 import LEVYMONE8 as LEVYMONE8
+from .levymone10 import LEVYMONE10 as LEVYMONE10
+from .liarwhdne import LIARWHDNE as LIARWHDNE
+from .linversene import LINVERSENE as LINVERSENE
+from .mancinone import MANCINONE as MANCINONE
+from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
 from .misra1d import MISRA1D as MISRA1D
+from .modbealene import MODBEALENE as MODBEALENE
+from .morebvne import MOREBVNE as MOREBVNE
+from .muonsine import MUONSINE as MUONSINE
+from .nondiane import NONDIANE as NONDIANE
 from .nonmsqrtne import NONMSQRTNE as NONMSQRTNE
+from .nonscompne import NONSCOMPNE as NONSCOMPNE
+from .oscigrne import OSCIGRNE as OSCIGRNE
+from .oscipane import OSCIPANE as OSCIPANE
+from .palmer1ane import PALMER1ANE as PALMER1ANE
 from .palmer1bne import PALMER1BNE as PALMER1BNE
+from .palmer1ene import PALMER1ENE as PALMER1ENE
+from .palmer1ne import PALMER1NE as PALMER1NE
+from .palmer2ane import PALMER2ANE as PALMER2ANE
+from .palmer2bne import PALMER2BNE as PALMER2BNE
+from .palmer2ene import PALMER2ENE as PALMER2ENE
+from .palmer2ne import PALMER2NE as PALMER2NE
 from .palmer5ene import PALMER5ENE as PALMER5ENE
 from .palmer7ane import PALMER7ANE as PALMER7ANE
 from .powellbs import POWELLBS as POWELLBS
@@ -88,17 +140,69 @@ nonlinear_equations_problems = (
     CHEBYQADNE(),
     # CHNRSBNE(),  # TODO: Human review needed
     # CHNRSNBMNE(),  # TODO: Human review needed
+    COATINGNE(),
     CUBENE(),
     CYCLIC3(),
     DENSCHNBNE(),
+    DENSCHNCNE(),
+    DENSCHNDNE(),
+    DENSCHNENE(),
+    DENSCHNFNE(),
+    DECONVBNE(),
+    DECONVNE(),
+    DEVGLA1NE(),
+    DEVGLA2NE(),
+    EGGCRATENE(),
+    ELATVIDUNE(),
     ENGVAL2NE(),
+    ERRINRSMNE(),
     # ERRINROSNE(),  # TODO: Human review needed
+    EXP2NE(),
+    EXPFITNE(),
+    EXTROSNBNE(),
+    FREURONE(),
+    GENROSEBNE(),
+    GENROSENE(),
+    GULFNE(),
+    HATFLDANE(),
     HATFLDBNE(),
+    HATFLDCNE(),
     HATFLDFLNE(),
+    HELIXNE(),
+    HIMMELBFNE(),
+    HS1NE(),
+    HS2NE(),
+    HS25NE(),
+    INTEQNE(),
+    JENSMPNE(),
+    JUDGENE(),
+    KOEBHELBNE(),
+    KOWOSBNE(),
+    LEVYMONE5(),
+    LEVYMONE8(),
+    LEVYMONE10(),
+    LIARWHDNE(),
+    LINVERSENE(),
+    MANCINONE(),
+    MEYER3NE(),
     MGH09(),
     MISRA1D(),
+    MODBEALENE(),
+    MOREBVNE(),
+    MUONSINE(),
+    NONDIANE(),
     NONMSQRTNE(),
+    NONSCOMPNE(),
+    OSCIGRNE(),
+    OSCIPANE(),
+    PALMER1ANE(),
     PALMER1BNE(),
+    PALMER1ENE(),
+    PALMER1NE(),
+    PALMER2ANE(),
+    PALMER2BNE(),
+    PALMER2ENE(),
+    PALMER2NE(),
     PALMER5ENE(),
     PALMER7ANE(),
     POWERSUMNE(),

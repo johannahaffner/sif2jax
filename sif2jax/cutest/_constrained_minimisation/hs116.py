@@ -82,25 +82,25 @@ class HS116(AbstractConstrainedMinimisation):
 
     @property
     def bounds(self):
-        # Bounds from Appendix A (simplified)
+        # Bounds from SIF file
         lower = jnp.array(
-            [0.1, 0.1, 0.1, 0.0001, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+            [0.1, 0.1, 0.1, 0.0001, 0.1, 0.1, 0.1, 0.1, 500.0, 0.1, 1.0, 0.0001, 0.0001]
         )
         upper = jnp.array(
             [
                 1.0,
                 1.0,
                 1.0,
-                1.0,
-                1.0,
-                1.0,
+                0.1,
+                0.9,
+                0.9,
                 1000.0,
                 1000.0,
                 1000.0,
-                1000.0,
-                1000.0,
-                1000.0,
-                1000.0,
+                500.0,
+                150.0,
+                150.0,
+                150.0,
             ]
         )
         return (lower, upper)

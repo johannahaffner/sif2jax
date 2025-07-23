@@ -60,7 +60,7 @@ class PENTAGON(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         # All variables are free (unbounded)
-        return jnp.array([-jnp.inf] * 6), jnp.array([jnp.inf] * 6)
+        return None
 
     def constraint(self, y):
         x1, y1, x2, y2, x3, y3 = y

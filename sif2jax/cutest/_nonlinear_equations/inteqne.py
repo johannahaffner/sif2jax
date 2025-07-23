@@ -117,6 +117,4 @@ class INTEQNE(AbstractNonlinearEquations):
     @property
     def bounds(self) -> tuple[Array, Array] | None:
         """Free bounds for all variables."""
-        lower = jnp.full(self.n + 2, -jnp.inf, dtype=jnp.float64)
-        upper = jnp.full(self.n + 2, jnp.inf, dtype=jnp.float64)
-        return lower, upper
+        return None

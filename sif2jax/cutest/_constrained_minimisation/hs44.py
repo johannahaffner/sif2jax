@@ -55,7 +55,7 @@ class HS44(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         lower = jnp.array([0.0, 0.0, 0.0, 0.0])
-        upper = None
+        upper = jnp.full(4, jnp.inf)
         return lower, upper
 
     def constraint(self, y):

@@ -74,9 +74,7 @@ class MAKELA4(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         """Variable bounds (all free)."""
-        lower = jnp.full(21, -jnp.inf)
-        upper = jnp.full(21, jnp.inf)
-        return lower, upper
+        return None
 
     def expected_result(self):
         """Expected optimal solution (not provided in SIF)."""

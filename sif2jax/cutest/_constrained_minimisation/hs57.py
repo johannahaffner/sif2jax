@@ -158,7 +158,7 @@ class HS57(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         lower = jnp.array([0.4, -4.0])
-        upper = None
+        upper = jnp.full(2, jnp.inf)
         return lower, upper
 
     def constraint(self, y):

@@ -78,6 +78,4 @@ class JENSMPNE(AbstractNonlinearEquations):
     @property
     def bounds(self) -> tuple[Array, Array] | None:
         """Free bounds for all variables."""
-        lower = jnp.full(self.n, -jnp.inf, dtype=jnp.float64)
-        upper = jnp.full(self.n, jnp.inf, dtype=jnp.float64)
-        return lower, upper
+        return None

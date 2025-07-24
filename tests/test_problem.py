@@ -32,6 +32,10 @@ def _evaluate_at_other(problem_function, pycutest_problem_function, point):
     try:
         pycutest_value = pycutest_problem_function(point)
         pycutest_failed = False
+        if jnp.any(jnp.isnan(pycutest_value)) or jnp.any(jnp.isinf(pycutest_value)):
+            pycutest_failed = True
+            pycutest_e = ValueError("pycutest returned NaN or Inf.")
+            pycutest_value = None
     except (ZeroDivisionError, ValueError) as e:
         pycutest_e = e
         pycutest_value = None
@@ -40,6 +44,10 @@ def _evaluate_at_other(problem_function, pycutest_problem_function, point):
     try:
         sif2jax_value = problem_function(point)
         sif2jax_failed = False
+        if jnp.any(jnp.isnan(sif2jax_value)) or jnp.any(jnp.isinf(sif2jax_value)):
+            sif2jax_failed = True
+            sif2jax_e = ValueError("sif2jax returned NaN or Inf.")
+            sif2jax_value = None
     except (ZeroDivisionError, ValueError) as e:
         sif2jax_e = e
         sif2jax_value = None

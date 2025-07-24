@@ -64,7 +64,17 @@ def _evaluate_at_other(problem_function, pycutest_problem_function, point):
 
 
 class TestProblem:
-    """Test class for CUTEst problems."""
+    """Test class for CUTEst problems. This class tests sif2jax implementations of
+    CUTEst problems against the pycutest interface to the Fortran problems, using the
+    latter as the ground truth. It provides a range of test cases, escalating in
+    complexity, to ensure that the sif2jax problems match the Fortran implementations
+    up to numerical precision.
+
+    When fixing issues in the tests, it is recommended to start with the basics (correct
+    dimensions, starting values, and objective function) before moving on to more
+    difficult tests, e.g. those evaluating gradients or hessians, or involving
+    vectorisation of the code.
+    """
 
     @pytest.fixture(scope="class")
     def pycutest_problem(self, problem):
@@ -88,12 +98,16 @@ class TestProblem:
 
     def test_correct_objective_zero_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
-            problem.objective, pycutest_problem.obj, jnp.zeros_like(problem.y0)
+            lambda x: problem.objective(x, problem.args),
+            pycutest_problem.obj,
+            jnp.zeros_like(problem.y0),
         )
 
     def test_correct_objective_ones_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
-            problem.objective, pycutest_problem.obj, jnp.ones_like(problem.y0)
+            lambda x: problem.objective(x, problem.args),
+            pycutest_problem.obj,
+            jnp.ones_like(problem.y0),
         )
 
     def test_correct_gradient_at_start(self, problem, pycutest_problem):
@@ -103,14 +117,14 @@ class TestProblem:
 
     def test_correct_gradient_zero_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
-            jax.grad(problem.objective),
+            lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
             jnp.zeros_like(problem.y0),
         )
 
     def test_correct_gradient_ones_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
-            jax.grad(problem.objective),
+            lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
             jnp.ones_like(problem.y0),
         )
@@ -126,7 +140,7 @@ class TestProblem:
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
             _evaluate_at_other(
-                jax.hessian(problem.objective),
+                lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.zeros_like(problem.y0),
             )
@@ -136,7 +150,7 @@ class TestProblem:
     def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
             _evaluate_at_other(
-                jax.hessian(problem.objective),
+                lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.ones_like(problem.y0),
             )

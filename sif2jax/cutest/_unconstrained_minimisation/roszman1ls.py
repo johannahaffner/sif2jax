@@ -15,10 +15,6 @@ SIF input: Nick Gould and Tyrone Rees, Oct 2015
 
 classification SUR2-MN-4-0
 
-TODO: Human review needed
-Attempts made: Various formulations of the objective function
-Suspected issues: Scaling factor or GROUP TYPE L2 interpretation
-Additional resources needed: Clarification on how GROUP TYPE L2 is applied
 """
 
 import jax.numpy as jnp
@@ -117,15 +113,16 @@ class ROSZMAN1LS(AbstractUnconstrainedMinimisation):
         x_data, y_data = args
 
         # Model: y = b1 - b2*x - arctan[b3/(x-b4)]/pi
-        # Calculate sum of squared residuals
-        obj = 0.0
-        for i in range(self.m):
-            model_val = b1 - b2 * x_data[i] - jnp.arctan(b3 / (x_data[i] - b4)) / jnp.pi
-            residual = model_val - y_data[i]
-            obj += residual * residual
+        # Note: The SIF file element E7 computes -ATAN(V1/(V2-X))/PI
+        # where V1=B3, V2=B4, X=x_data
+        # This means the term is -arctan(b3/(b4-x))/pi, not -arctan(b3/(x-b4))/pi
+        # However, since arctan is an odd function: arctan(-z) = -arctan(z)
+        # So -arctan(b3/(b4-x))/pi = -arctan(-b3/(x-b4))/pi = arctan(b3/(x-b4))/pi
+        model_vals = b1 - b2 * x_data + jnp.arctan(b3 / (x_data - b4)) / jnp.pi
+        residuals = model_vals - y_data
 
-        # The SIF file may use a factor of 2 for least squares problems
-        return jnp.array(2.0 * obj)
+        # Sum of squared residuals
+        return jnp.sum(residuals**2)
 
     @property
     def expected_result(self):

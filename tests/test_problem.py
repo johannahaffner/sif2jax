@@ -60,7 +60,7 @@ def _evaluate_at_other(problem_function, pycutest_problem_function, point):
         pytest.fail(msg)
     else:
         assert pycutest_value is not None and sif2jax_value is not None
-        assert np.allclose(pycutest_value, sif2jax_value)
+        assert np.allclose(jnp.asarray(pycutest_value), sif2jax_value)
 
 
 class TestProblem:

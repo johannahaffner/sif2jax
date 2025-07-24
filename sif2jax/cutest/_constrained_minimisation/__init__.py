@@ -34,9 +34,10 @@ from .cb2 import CB2 as CB2
 from .cb3 import CB3 as CB3
 from .chaconn1 import CHACONN1 as CHACONN1
 from .chaconn2 import CHACONN2 as CHACONN2
-from .concon import CONCON as CONCON
 
 # from .cresc4 import CRESC4 as CRESC4  # TODO: Human review - complex crescent area
+from .clnlbeam import CLNLBEAM as CLNLBEAM
+from .concon import CONCON as CONCON
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
 from .cvxqp1 import CVXQP1 as CVXQP1
@@ -146,6 +147,7 @@ from .hs116 import HS116 as HS116
 from .hs117 import HS117 as HS117
 from .hs118 import HS118 as HS118
 from .hs119 import HS119 as HS119
+from .hydroell import HYDROELL as HYDROELL
 from .lootsma import LOOTSMA as LOOTSMA
 from .lukvle1 import LUKVLE1 as LUKVLE1
 
@@ -202,6 +204,7 @@ from .polak1 import POLAK1 as POLAK1
 from .polak2 import POLAK2 as POLAK2
 from .polak3 import POLAK3 as POLAK3
 from .polak5 import POLAK5 as POLAK5
+from .polygon import POLYGON as POLYGON
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
@@ -240,6 +243,7 @@ constrained_minimisation_problems = (
     CB3(),
     CHACONN1(),
     CHACONN2(),
+    CLNLBEAM(),
     CONCON(),
     # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
@@ -339,6 +343,7 @@ constrained_minimisation_problems = (
     HS117(),
     HS118(),
     HS119(),
+    HYDROELL(),
     LOOTSMA(),
     MARATOS(),
     ODFITS(),
@@ -347,6 +352,7 @@ constrained_minimisation_problems = (
     POLAK2(),
     POLAK3(),
     POLAK5(),
+    POLYGON(),
     SIPOW1(),
     SIPOW2(),
     # STEENBRB(),  # TODO: Human review - gradient test failing

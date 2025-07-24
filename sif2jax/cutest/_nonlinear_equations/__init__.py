@@ -1,3 +1,4 @@
+from .aircrfta import AIRCRFTA as AIRCRFTA
 from .argauss import ARGAUSS as ARGAUSS
 from .argtrig import ARGTRIG as ARGTRIG
 from .artif import ARTIF as ARTIF
@@ -13,6 +14,7 @@ from .biggs6ne import BIGGS6NE as BIGGS6NE
 from .booth import BOOTH as BOOTH
 from .box3ne import BOX3NE as BOX3NE
 from .boxbod import BOXBOD as BOXBOD
+from .bratu2dt import BRATU2DT as BRATU2DT
 from .brownale import BROWNALE as BROWNALE
 from .brownbsne import BROWNBSNE as BROWNBSNE
 from .browndene import BROWNDENE as BROWNDENE
@@ -122,6 +124,7 @@ from .vanderm2 import VANDERM2 as VANDERM2
 
 
 nonlinear_equations_problems = (
+    AIRCRFTA(),
     ARGAUSS(),
     ARGTRIG(),
     ARTIF(),
@@ -134,6 +137,7 @@ nonlinear_equations_problems = (
     BIGGS6NE(),
     BOOTH(),
     BOX3NE(),
+    BRATU2DT(),
     BROWNALE(),
     BROWNBSNE(),
     BROWNDENE(),

@@ -43,40 +43,40 @@
 [x] PALMER4E
 [skip - external function] HS91
 [x] BROYDN3D
-[] CHEBYQAD
+[skip - already in NE version] CHEBYQAD
 [skip - too large] VESUVIA
 [skip - quadratic] DEGDIAG
 [skip - too large] BRAINPC2
 [skip - linear] OET3
-[] TRO3X3
-[] READING9
-[] STEENBRC
-[] AIRCRFTA
-[] POLYGON
-[] HATFLDH
-[] FMINSRF2
+[skip - linear] TRO3X3
+[skip - complex optimal control] READING9
+[skip - too large] STEENBRC
+[x] AIRCRFTA
+[x] POLYGON
+[skip - quadratic] HATFLDH
+[skip - complex] FMINSRF2
 [] BRAINPC8
 [] HET-Z
 [] A0ENSNDL
 [] TORSIOND
-[] MODBEALE
+[x] MODBEALE
 [] MPC10
-[] CLNLBEAM
+[p] CLNLBEAM
 [] TABLE8
-[] BA-L49LS
-[] BROYDNBDLS
-[] HYDROELL
-[] BRATU2DT
-[] EXPLIN
+[skip - too complex] BA-L49LS
+[already impl - needs human review] BROYDNBDLS
+[p] HYDROELL
+[x] BRATU2DT
+[x] EXPLIN
 [] LEVYMONE9
 [] SSEBLIN
 [] ROSEPETAL2
 [] ORTHREGC
 [] HS88
 [] QUDLIN
-[] MGH10LS
-[] YAO
-[] TOINTQOR
+[x] MGH10LS
+[skip - quadratic] YAO
+[skip - quadratic] TOINTQOR
 [] HAHN1
 [] BA-L21LS
 [] HS100MOD

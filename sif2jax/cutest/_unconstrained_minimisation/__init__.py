@@ -192,6 +192,7 @@ from .lsc2ls import LSC2LS as LSC2LS
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
 # from .mexhat import MEXHAT as MEXHAT  # TODO: Human review - complex scaling issues
+from .mgh10ls import MGH10LS as MGH10LS
 from .modbeale import MODBEALE as MODBEALE
 
 # from .nondia import NONDIA as NONDIA  # TODO: Human review - SCALE factor issue
@@ -379,6 +380,7 @@ unconstrained_minimisation_problems = (
     LSC2LS(),
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     # MEXHAT(),  # TODO: Human review - complex scaling issues
+    MGH10LS(),
     MODBEALE(),
     # NONDIA(),  # TODO: Human review - SCALE factor issue
     NONCVXU2(),

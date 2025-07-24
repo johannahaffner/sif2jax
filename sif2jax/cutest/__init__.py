@@ -1,6 +1,7 @@
 from ._bounded_minimisation import (
     bounded_minimisation_problems as bounded_minimisation_problems,
     EXP2B as EXP2B,
+    EXPLIN as EXPLIN,
     HATFLDC as HATFLDC,
     HS1 as HS1,
     HS2 as HS2,
@@ -45,6 +46,7 @@ from ._constrained_minimisation import (
     CB3 as CB3,
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
+    CLNLBEAM as CLNLBEAM,
     CONCON as CONCON,
     constrained_minimisation_problems as constrained_minimisation_problems,
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
@@ -150,6 +152,7 @@ from ._constrained_minimisation import (
     HS117 as HS117,
     HS118 as HS118,
     HS119 as HS119,
+    HYDROELL as HYDROELL,
     LOOTSMA as LOOTSMA,
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,
@@ -200,6 +203,7 @@ from ._constrained_minimisation import (
     POLAK2 as POLAK2,
     POLAK3 as POLAK3,
     POLAK5 as POLAK5,
+    POLYGON as POLYGON,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
     # STEENBRB as STEENBRB,  # TODO: Human review - gradient test failing
@@ -215,6 +219,7 @@ from ._constrained_minimisation import (
     ZECEVIC4 as ZECEVIC4,
 )
 from ._nonlinear_equations import (
+    AIRCRFTA as AIRCRFTA,
     ARGAUSS as ARGAUSS,
     ARGTRIG as ARGTRIG,
     ARTIF as ARTIF,
@@ -228,6 +233,7 @@ from ._nonlinear_equations import (
     BOOTH as BOOTH,
     BOX3NE as BOX3NE,
     BOXBOD as BOXBOD,
+    BRATU2DT as BRATU2DT,
     BROWNALE as BROWNALE,
     BROWNBSNE as BROWNBSNE,
     BROWNDENE as BROWNDENE,
@@ -479,6 +485,7 @@ from ._unconstrained_minimisation import (
     LOGHAIRY as LOGHAIRY,
     LSC1LS as LSC1LS,
     LSC2LS as LSC2LS,
+    MGH10LS as MGH10LS,
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     # MEXHAT as MEXHAT,  # TODO: Human review - complex scaling issues
     MODBEALE as MODBEALE,
@@ -521,6 +528,7 @@ problems_dict = {
     "CB3": CB3(),
     "CHACONN1": CHACONN1(),
     "CHACONN2": CHACONN2(),
+    "CLNLBEAM": CLNLBEAM(),
     "HS1": HS1(),
     "HS2": HS2(),
     "HS3": HS3(),
@@ -630,6 +638,7 @@ problems_dict = {
     "POLAK2": POLAK2(),
     "POLAK3": POLAK3(),
     "POLAK5": POLAK5(),
+    "POLYGON": POLYGON(),
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
     # "SIPOW3": SIPOW3(),  # TODO: Human review - constraint formulation issues
@@ -805,6 +814,7 @@ problems_dict = {
     "ENGVAL2": ENGVAL2(),
     # "ENSOLS": ENSOLS(),  # TODO: Human review - significant discrepancies
     "ERRINROS": ERRINROS(),
+    "EXPLIN": EXPLIN(),
     # "ERRINRSM": ERRINRSM(),  # TODO: Human review - significant discrepancies
     "EXP2": EXP2(),
     "EXP2B": EXP2B(),
@@ -850,6 +860,7 @@ problems_dict = {
     "HIMMELBG": HIMMELBG(),
     "HIMMELBH": HIMMELBH(),
     "HUMPS": HUMPS(),
+    "HYDROELL": HYDROELL(),
     "INDEF": INDEF(),
     "INDEFM": INDEFM(),
     "INTEQNELS": INTEQNELS(),
@@ -867,6 +878,7 @@ problems_dict = {
     # "MANCINO": MANCINO(),  # TODO: Human review - significant discrepancies in all
     # "MEXHAT": MEXHAT(),  # TODO: Human review - complex scaling issues
     "MODBEALE": MODBEALE(),
+    "MGH10LS": MGH10LS(),
     # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),
@@ -893,6 +905,7 @@ problems_dict = {
     "TOINTGSS": TOINTGSS(),
     "VARDIM": VARDIM(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
+    "AIRCRFTA": AIRCRFTA(),
     "ARGAUSS": ARGAUSS(),
     "ARGTRIG": ARGTRIG(),
     "ARTIF": ARTIF(),
@@ -907,6 +920,7 @@ problems_dict = {
     "BROWNALE": BROWNALE(),
     "BROWNBSNE": BROWNBSNE(),
     "BROWNDENE": BROWNDENE(),
+    "BRATU2DT": BRATU2DT(),
     "BROYDN3D": BROYDN3D(),
     "BROYDNBD": BROYDNBD(),
     "BRYBNDNE": BRYBNDNE(),

@@ -12,7 +12,9 @@ import sif2jax
 # pytest_generate_tests is now handled in conftest.py
 
 
-def _evaluate_at_other(problem_function, pycutest_problem_function, point):
+def _evaluate_at_other(
+    problem_function, pycutest_problem_function, point, problem_name
+):
     """Evaluate the problem function at a given point. We don't know if the function is
     actually defined at that point, or if evaluating it there causes a division by zero,
     an infinite value or something else. So we handle these cases here.
@@ -58,7 +60,7 @@ def _evaluate_at_other(problem_function, pycutest_problem_function, point):
         assert type(pycutest_e) == type(sif2jax_e)
     elif pycutest_failed or sif2jax_failed:
         msg = (
-            f"One implementation failed at point {point}: "
+            f"One implementation failed at point {point} for problem {problem_name}: "
             f"pycutest_failed={pycutest_failed}, sif2jax_failed={sif2jax_failed}. "
         )
         if pycutest_failed:
@@ -109,6 +111,7 @@ class TestProblem:
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
             jnp.zeros_like(problem.y0),
+            problem.name,
         )
 
     def test_correct_objective_ones_vector(self, problem, pycutest_problem):
@@ -116,6 +119,7 @@ class TestProblem:
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
             jnp.ones_like(problem.y0),
+            problem.name,
         )
 
     def test_correct_gradient_at_start(self, problem, pycutest_problem):
@@ -128,6 +132,7 @@ class TestProblem:
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
             jnp.zeros_like(problem.y0),
+            problem.name,
         )
 
     def test_correct_gradient_ones_vector(self, problem, pycutest_problem):
@@ -135,6 +140,7 @@ class TestProblem:
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
             jnp.ones_like(problem.y0),
+            problem.name,
         )
 
     def test_correct_hessian_at_start(self, problem, pycutest_problem):
@@ -151,6 +157,7 @@ class TestProblem:
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.zeros_like(problem.y0),
+                problem.name,
             )
         else:
             pytest.skip("Skip Hessian test for large problems to save time and memory")
@@ -161,6 +168,7 @@ class TestProblem:
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.ones_like(problem.y0),
+                problem.name,
             )
         else:
             pytest.skip("Skip Hessian test for large problems to save time and memory")

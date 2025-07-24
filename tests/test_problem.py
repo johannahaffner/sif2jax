@@ -13,7 +13,7 @@ import sif2jax
 
 
 def _evaluate_at_other(
-    problem_function, pycutest_problem_function, point, problem_name
+    problem_name, problem_function, pycutest_problem_function, point
 ):
     """Evaluate the problem function at a given point. We don't know if the function is
     actually defined at that point, or if evaluating it there causes a division by zero,
@@ -121,18 +121,18 @@ class TestProblem:
 
     def test_correct_objective_zero_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
+            problem.name,
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
             jnp.zeros_like(problem.y0),
-            problem.name,
         )
 
     def test_correct_objective_ones_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
+            problem.name,
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
             jnp.ones_like(problem.y0),
-            problem.name,
         )
 
     def test_correct_gradient_at_start(self, problem, pycutest_problem):
@@ -142,18 +142,18 @@ class TestProblem:
 
     def test_correct_gradient_zero_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
+            problem.name,
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
             jnp.zeros_like(problem.y0),
-            problem.name,
         )
 
     def test_correct_gradient_ones_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
+            problem.name,
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
             jnp.ones_like(problem.y0),
-            problem.name,
         )
 
     def test_correct_hessian_at_start(self, problem, pycutest_problem):
@@ -167,10 +167,10 @@ class TestProblem:
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
             _evaluate_at_other(
+                problem.name,
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.zeros_like(problem.y0),
-                problem.name,
             )
         else:
             pytest.skip("Skip Hessian test for large problems to save time and memory")
@@ -178,10 +178,10 @@ class TestProblem:
     def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
             _evaluate_at_other(
+                problem.name,
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.ones_like(problem.y0),
-                problem.name,
             )
         else:
             pytest.skip("Skip Hessian test for large problems to save time and memory")

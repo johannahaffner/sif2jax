@@ -31,12 +31,18 @@ class EG2(AbstractUnconstrainedMinimisation):
     n: int = 1000  # Problem specifies N=1000
 
     def objective(self, y, args):
-        # Verified against original reference (J. Haffner)
+        # From AMPL: sum {i in 1..N-1} sin(x[1] + x[i]^2 - 1.0) + 0.5*sin(x[N]^2)
         del args
         first = y[0]
         last = y[-1]
-        f1 = jnp.sum(jnp.sin(last**2 + y[:-1] ** 2 + first - 1))
+
+        # Sum from i=1 to N-1 of sin(x[1] + x[i]^2 - 1.0)
+        # Note: in 0-indexed arrays, this is i=0 to N-2
+        f1 = jnp.sum(jnp.sin(first + y[:-1] ** 2 - 1.0))
+
+        # Add 0.5*sin(x[N]^2)
         f2 = 0.5 * jnp.sin(last**2)
+
         return f1 + f2
 
     @property

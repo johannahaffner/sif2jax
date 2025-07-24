@@ -72,8 +72,7 @@ def benchmark_jax(
 
     # Create a timer that calls block_until_ready
     def timed_call():
-        out = compiled(*args)
-        return jtu.tree_map(lambda x: x.block_until_ready(), out)
+        return compiled(*args).block_until_ready()
 
     timer = timeit.Timer(timed_call)
 

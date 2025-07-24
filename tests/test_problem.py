@@ -124,7 +124,7 @@ class TestProblem:
 
     def test_correct_objective_zero_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
-            problem.name,
+            problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
             jnp.zeros_like(problem.y0),
@@ -132,7 +132,7 @@ class TestProblem:
 
     def test_correct_objective_ones_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
-            problem.name,
+            problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
             jnp.ones_like(problem.y0),
@@ -145,7 +145,7 @@ class TestProblem:
 
     def test_correct_gradient_zero_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
-            problem.name,
+            problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
             jnp.zeros_like(problem.y0),
@@ -153,7 +153,7 @@ class TestProblem:
 
     def test_correct_gradient_ones_vector(self, problem, pycutest_problem):
         _evaluate_at_other(
-            problem.name,
+            problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
             jnp.ones_like(problem.y0),
@@ -170,7 +170,7 @@ class TestProblem:
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
             _evaluate_at_other(
-                problem.name,
+                problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.zeros_like(problem.y0),
@@ -181,7 +181,7 @@ class TestProblem:
     def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
             _evaluate_at_other(
-                problem.name,
+                problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.ones_like(problem.y0),

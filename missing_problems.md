@@ -79,12 +79,12 @@
 [skip - quadratic] TOINTQOR
 [already impl] HAHN1
 [skip - too complex] BA-L21LS
-[p] HS100MOD
-[] FLOSP2TL
-[] LUKSAN22LS
-[] A2NSDSIL
-[] TAME
-[] EXPLIN2
+[skip - complex] HS100MOD
+[skip - too complex] FLOSP2TL
+[p] LUKSAN22LS
+[skip - quadratic] A2NSDSIL
+[skip - quadratic] TAME
+[x] EXPLIN2
 [] YATP2LS
 [] LEVYMONT
 [] ORTHRGDM

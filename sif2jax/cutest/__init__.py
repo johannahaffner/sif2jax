@@ -2,6 +2,7 @@ from ._bounded_minimisation import (
     bounded_minimisation_problems as bounded_minimisation_problems,
     EXP2B as EXP2B,
     EXPLIN as EXPLIN,
+    EXPLIN2 as EXPLIN2,
     HATFLDC as HATFLDC,
     HS1 as HS1,
     HS2 as HS2,
@@ -816,6 +817,7 @@ problems_dict = {
     # "ENSOLS": ENSOLS(),  # TODO: Human review - significant discrepancies
     "ERRINROS": ERRINROS(),
     "EXPLIN": EXPLIN(),
+    "EXPLIN2": EXPLIN2(),
     # "ERRINRSM": ERRINRSM(),  # TODO: Human review - significant discrepancies
     "EXP2": EXP2(),
     "EXP2B": EXP2B(),

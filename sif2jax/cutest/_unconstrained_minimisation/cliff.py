@@ -31,13 +31,15 @@ class CLIFF(AbstractUnconstrainedMinimisation):
         del args
         x1, x2 = y
 
-        # The objective has three terms:
-        # 1. 0.01*x1^2 - 0.03*0.01*x1 = 0.01*x1*(x1 - 0.03)
-        # 2. x1 - x2 (This term doesn't appear as a separate group in the SIF file)
+        # The objective from AMPL:
+        # (0.01*x[1]-0.03)^2 - x[1] + x[2] + exp(20*(x[1]-x[2]))
+        # Breaking it down:
+        # 1. (0.01*x1 - 0.03)^2
+        # 2. -x1 + x2
         # 3. exp(20*(x1 - x2))
 
-        term1 = 0.01 * x1 * (x1 - 0.03)
-        term2 = x1 - x2
+        term1 = (0.01 * x1 - 0.03) ** 2
+        term2 = -x1 + x2
         term3 = jnp.exp(20.0 * (x1 - x2))
 
         return term1 + term2 + term3

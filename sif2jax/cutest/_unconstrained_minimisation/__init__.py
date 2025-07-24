@@ -12,6 +12,8 @@ from .arwhead import ARWHEAD as ARWHEAD
 from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
+from .bennett5ls import BENNETT5LS as BENNETT5LS
+from .biggs5 import BIGGS5 as BIGGS5
 from .biggs6 import BIGGS6 as BIGGS6
 from .box import BOX as BOX
 from .box3 import BOX3 as BOX3
@@ -205,6 +207,7 @@ from .power import POWER as POWER
 # TODO: Human review - objective off by factor of 4.15
 # from .powellsg import POWELLSG as POWELLSG
 from .rosenbr import ROSENBR as ROSENBR
+from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
 
 # TODO: TOINTGOR needs human review - runtime test fails (~8x slower than threshold)
@@ -234,6 +237,8 @@ unconstrained_minimisation_problems = (
     BARD(),
     BDQRTIC(),
     BEALE(),
+    BENNETT5LS(),
+    BIGGS5(),
     BIGGS6(),
     BOX(),
     BOX3(),
@@ -381,6 +386,7 @@ unconstrained_minimisation_problems = (
     POWER(),
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
+    ROSZMAN1LS(),
     TENFOLDTRLS(),
     WAYSEA1(),
     WAYSEA2(),

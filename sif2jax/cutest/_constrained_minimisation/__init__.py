@@ -44,6 +44,8 @@ from .cvxqp1 import CVXQP1 as CVXQP1
 # TODO: DALLASS needs complex element implementations
 # from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
+from .dtoc1l import DTOC1L as DTOC1L
+from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
 from .hs8 import HS8 as HS8
@@ -195,17 +197,22 @@ from .makela2 import MAKELA2 as MAKELA2
 from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
 from .maratos import MARATOS as MARATOS
+from .odfits import ODFITS as ODFITS
 from .pentagon import PENTAGON as PENTAGON
 from .polak1 import POLAK1 as POLAK1
 from .polak2 import POLAK2 as POLAK2
+from .polak3 import POLAK3 as POLAK3
 from .polak5 import POLAK5 as POLAK5
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
+# TODO: STEENBRB needs human review - gradient test failing
+# from .steenbrb import STEENBRB as STEENBRB
 # TODO: SIPOW3 needs human review - constraint formulation issues
 # from .sipow3 import SIPOW3 as SIPOW3
 # TODO: SIPOW4 needs human review - constraint formulation issues
 # from .sipow4 import SIPOW4 as SIPOW4
+from .tenbars4 import TENBARS4 as TENBARS4
 from .truspyr1 import TRUSPYR1 as TRUSPYR1
 
 # TODO: TRUSPYR2 needs human review - test requested to be removed
@@ -240,6 +247,7 @@ constrained_minimisation_problems = (
     CSFI2(),
     CVXQP1(),
     DECONVC(),
+    GIGOMEZ2(),
     HS6(),
     HS7(),
     HS8(),
@@ -334,12 +342,15 @@ constrained_minimisation_problems = (
     HS119(),
     LOOTSMA(),
     MARATOS(),
+    ODFITS(),
     PENTAGON(),
     POLAK1(),
     POLAK2(),
+    POLAK3(),
     POLAK5(),
     SIPOW1(),
     SIPOW2(),
+    # STEENBRB(),  # TODO: Human review - gradient test failing
     # SIPOW3(),  # TODO: Human review - constraint formulation issues
     # SIPOW4(),  # TODO: Human review - constraint formulation issues
     # VANDERM1(),  # Moved to nonlinear equations (NOR2 classification)
@@ -355,6 +366,7 @@ constrained_minimisation_problems = (
     ZECEVIC2(),
     ZECEVIC3(),
     ZECEVIC4(),
+    TENBARS4(),
     TRUSPYR1(),
     # TRUSPYR2(),  # TODO: Human review - test requested to be removed
     BT1(),

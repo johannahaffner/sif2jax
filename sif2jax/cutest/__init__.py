@@ -1,6 +1,7 @@
 from ._bounded_minimisation import (
     bounded_minimisation_problems as bounded_minimisation_problems,
     EXP2B as EXP2B,
+    HATFLDC as HATFLDC,
     HS1 as HS1,
     HS2 as HS2,
     HS3 as HS3,
@@ -10,6 +11,8 @@ from ._bounded_minimisation import (
     HS38 as HS38,
     HS45 as HS45,
     HS110 as HS110,
+    PALMER3B as PALMER3B,
+    PRICE4B as PRICE4B,
 )
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
@@ -49,6 +52,8 @@ from ._constrained_minimisation import (
     CVXQP1 as CVXQP1,
     # DALLASS as DALLASS,  # TODO: needs complex element implementations
     DECONVC as DECONVC,
+    DTOC1L as DTOC1L,
+    GIGOMEZ2 as GIGOMEZ2,
     HS6 as HS6,
     HS7 as HS7,
     HS8 as HS8,
@@ -187,14 +192,18 @@ from ._constrained_minimisation import (
     MAKELA3 as MAKELA3,
     MAKELA4 as MAKELA4,
     MARATOS as MARATOS,
+    ODFITS as ODFITS,
     PENTAGON as PENTAGON,
     POLAK1 as POLAK1,
     POLAK2 as POLAK2,
+    POLAK3 as POLAK3,
     POLAK5 as POLAK5,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
+    # STEENBRB as STEENBRB,  # TODO: Human review - gradient test failing
     # SIPOW3 as SIPOW3,  # TODO: Human review - constraint formulation issues
     # SIPOW4 as SIPOW4,  # TODO: Human review - constraint formulation issues
+    TENBARS4 as TENBARS4,
     TRUSPYR1 as TRUSPYR1,
     # TRUSPYR2 as TRUSPYR2,  # TODO: Human review - test requested to be removed
     # VANDERM3 as VANDERM3,  # TODO: Human review - constraints mismatch
@@ -298,12 +307,16 @@ from ._nonlinear_equations import (
     PALMER2BNE as PALMER2BNE,
     PALMER2ENE as PALMER2ENE,
     PALMER2NE as PALMER2NE,
+    PALMER3ENE as PALMER3ENE,
+    PALMER4ENE as PALMER4ENE,
+    PALMER5BNE as PALMER5BNE,
     PALMER5ENE as PALMER5ENE,
     PALMER7ANE as PALMER7ANE,
     POWELLBS as POWELLBS,
     POWELLSE as POWELLSE,
     POWELLSQ as POWELLSQ,
     POWERSUMNE as POWERSUMNE,
+    SANTA as SANTA,
     SINVALNE as SINVALNE,
     SSBRYBNDNE as SSBRYBNDNE,
     TENFOLDTR as TENFOLDTR,
@@ -326,6 +339,8 @@ from ._unconstrained_minimisation import (
     BARD as BARD,
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
+    BENNETT5LS as BENNETT5LS,
+    BIGGS5 as BIGGS5,
     BIGGS6 as BIGGS6,
     BOX as BOX,
     BOX3 as BOX3,
@@ -471,6 +486,7 @@ from ._unconstrained_minimisation import (
     POWER as POWER,
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     ROSENBR as ROSENBR,
+    ROSZMAN1LS as ROSZMAN1LS,
     TENFOLDTRLS as TENFOLDTRLS,
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
     TOINTGSS as TOINTGSS,
@@ -601,9 +617,11 @@ problems_dict = {
     "HS119": HS119(),
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
+    "ODFITS": ODFITS(),
     "PENTAGON": PENTAGON(),
     "POLAK1": POLAK1(),
     "POLAK2": POLAK2(),
+    "POLAK3": POLAK3(),
     "POLAK5": POLAK5(),
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
@@ -690,6 +708,8 @@ problems_dict = {
     "BARD": BARD(),
     "BDQRTIC": BDQRTIC(),
     "BEALE": BEALE(),
+    "BENNETT5LS": BENNETT5LS(),
+    "BIGGS5": BIGGS5(),
     "BIGGS6": BIGGS6(),
     "BOX": BOX(),
     "BOX3": BOX3(),
@@ -737,6 +757,7 @@ problems_dict = {
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
     "DECONVC": DECONVC(),
+    "DTOC1L": DTOC1L(),
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),
@@ -798,11 +819,13 @@ problems_dict = {
     "GAUSSIAN": GAUSSIAN(),
     # "GBRAINLS": GBRAINLS(),  # TODO: Human review - complex data dependencies
     "GENHUMPS": GENHUMPS(),
+    "GIGOMEZ2": GIGOMEZ2(),
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
     # "GULF": GULF(),  # TODO: Human review - issues reported by user
     "HAHN1LS": HAHN1LS(),
     "HAIRY": HAIRY(),
+    "HATFLDC": HATFLDC(),
     # "HATFLDD": HATFLDD(),  # TODO: HATFLD family needs human review - discrepancies
     # "HATFLDE": HATFLDE(),  # TODO: HATFLD family needs human review - discrepancies
     # "HATFLDFL": HATFLDFL(),  # TODO: HATFLD family needs human review - discrepancies
@@ -846,10 +869,13 @@ problems_dict = {
     "POWER": POWER(),
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "ROSENBR": ROSENBR(),
+    "ROSZMAN1LS": ROSZMAN1LS(),
+    "TENBARS4": TENBARS4(),
     "TENFOLDTRLS": TENFOLDTRLS(),
     "POWELLBS": POWELLBS(),
     "POWELLSE": POWELLSE(),
     "POWELLSQ": POWELLSQ(),
+    "PRICE4B": PRICE4B(),
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
     "TRIGON1": TRIGON1(),
@@ -944,11 +970,17 @@ problems_dict = {
     "PALMER2BNE": PALMER2BNE(),
     "PALMER2ENE": PALMER2ENE(),
     "PALMER2NE": PALMER2NE(),
+    "PALMER3B": PALMER3B(),
+    "PALMER3ENE": PALMER3ENE(),
+    "PALMER4ENE": PALMER4ENE(),
+    "PALMER5BNE": PALMER5BNE(),
     "PALMER5ENE": PALMER5ENE(),
     "PALMER7ANE": PALMER7ANE(),
     "POWERSUMNE": POWERSUMNE(),
+    "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),
     "SSBRYBNDNE": SSBRYBNDNE(),
+    # "STEENBRB": STEENBRB(),  # TODO: Human review - gradient test failing
     "10FOLDTR": TENFOLDTR(),
 }
 

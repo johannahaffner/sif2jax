@@ -5,7 +5,9 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: needs human review
+# Note: In SIF least-squares problems, pycutest interprets groups without
+# explicit type assignments as linear terms, not squared terms. This differs
+# from the typical least-squares interpretation where residuals are squared.
 class TENFOLDTRLS(AbstractUnconstrainedMinimisation):
     """The 10FOLDTRLS function.
 
@@ -42,11 +44,22 @@ class TENFOLDTRLS(AbstractUnconstrainedMinimisation):
         # Where E(i) = sum_{j=1}^i x_j for i=1...n
         e = jnp.cumsum(y)
 
-        # Compute (E_{n-1})^4 and (E_n)^10 as described in the SIF file
+        # This is a least-squares problem (classification starts with 'S')
+        # In pycutest's interpretation, groups without explicit types contribute
+        # linearly, not as squared terms. Only groups with explicit types use
+        # their specified functions.
+        # E(1) through E(N-2) contribute linearly (no explicit type)
+        # E(N-1) contributes as fourth power (L4 group type)
+        # E(N) contributes as tenth power (L10 group type)
+
+        # Sum of E(1) through E(N-2) - linear contribution
+        f_linear = jnp.sum(e[: self.n - 2])
+
+        # Special terms
         f1 = e[self.n - 2] ** 4  # E_{n-1}^4
         f2 = e[self.n - 1] ** 10  # E_n^10
 
-        return f1 + f2
+        return f_linear + f1 + f2
 
     @property
     def y0(self):

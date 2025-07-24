@@ -1,0 +1,87 @@
+"""
+Biggs EXP problem in 5 variables
+
+Source: Problem 74 in
+A.R. Buckley,
+"Test functions for unconstrained minimization",
+TR 1989CS-3, Mathematics, statistics and computing centre,
+Dalhousie University, Halifax (CDN), 1989.
+
+SIF input: Ph. Toint, Dec 1989.
+
+classification SXR2-AN-6-0
+
+This function is a nonlinear least squares with 13 groups. Each
+group has 3 nonlinear elements. It is obtained by fixing
+    X6 = 3
+in BIGGS6.
+
+The number of groups can be varied, but should be larger or equal
+to the number of variables.
+"""
+
+import jax.numpy as jnp
+
+from ..._problem import AbstractUnconstrainedMinimisation
+
+
+class BIGGS5(AbstractUnconstrainedMinimisation):
+    @property
+    def name(self) -> str:
+        return "BIGGS5"
+
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
+    n: int = 5  # X6 is fixed at 3.0 so we only have 5 variables
+    m: int = 13  # Number of groups (residuals)
+
+    @property
+    def y0(self):
+        # Only 5 variables since X6 is fixed at 3.0
+        return jnp.array([1.0, 2.0, 1.0, 1.0, 4.0])
+
+    @property
+    def args(self):
+        return None
+
+    def _pexp(self, v1, v2, t):
+        """Parametric product with exponential element function"""
+        return v1 * jnp.exp(t * v2)
+
+    def objective(self, y, args):
+        del args
+        x1, x2, x3, x4, x5 = y
+        x6 = 3.0  # X6 is fixed at 3.0 in BIGGS5
+
+        obj = 0.0
+        for i in range(1, self.m + 1):
+            ti = 0.1 * i
+
+            # Compute yi from the constants
+            emti = jnp.exp(-ti)
+            e2 = jnp.exp(-i)
+            e3 = jnp.exp(-4.0 * ti)
+            y_val = emti - 5.0 * e2 + 3.0 * e3
+
+            # Compute the residual
+            a_i = self._pexp(x3, x1, -ti)
+            b_i = self._pexp(x4, x2, -ti)
+            c_i = self._pexp(x6, x5, -ti)
+
+            residual = a_i - b_i + c_i - y_val
+            obj += residual * residual
+
+        return jnp.array(obj)
+
+    @property
+    def expected_result(self):
+        # The optimal solution is not explicitly given in the SIF file
+        # This should be verified through optimization
+        return None
+
+    @property
+    def expected_objective_value(self):
+        # According to the SIF file comment (line 137),
+        # the optimal objective value is 0.0
+        return jnp.array(0.0)

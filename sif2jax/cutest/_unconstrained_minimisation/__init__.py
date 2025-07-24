@@ -192,6 +192,8 @@ from .lsc2ls import LSC2LS as LSC2LS
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
 # from .mexhat import MEXHAT as MEXHAT  # TODO: Human review - complex scaling issues
+from .modbeale import MODBEALE as MODBEALE
+
 # from .nondia import NONDIA as NONDIA  # TODO: Human review - SCALE factor issue
 from .noncvxu2 import NONCVXU2 as NONCVXU2
 from .noncvxun import NONCVXUN as NONCVXUN
@@ -220,6 +222,7 @@ from .trigon1 import TRIGON1 as TRIGON1
 
 # TODO: TRIGON2 needs human review - Hessian test fails
 # from .trigon2 import TRIGON2 as TRIGON2
+from .vardim import VARDIM as VARDIM
 from .waysea1 import WAYSEA1 as WAYSEA1
 from .waysea2 import WAYSEA2 as WAYSEA2
 
@@ -376,6 +379,7 @@ unconstrained_minimisation_problems = (
     LSC2LS(),
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     # MEXHAT(),  # TODO: Human review - complex scaling issues
+    MODBEALE(),
     # NONDIA(),  # TODO: Human review - SCALE factor issue
     NONCVXU2(),
     NONCVXUN(),
@@ -395,4 +399,5 @@ unconstrained_minimisation_problems = (
     # TOINTGOR(),  # TODO: Human review - runtime test fails
     TOINTGSS(),
     # TOINTPSP(),  # TODO: Human review - gradient test fails
+    VARDIM(),
 )

@@ -1,4 +1,4 @@
-[] A5NNDNIL
+[skip - quadratic] A5NNDNIL
 [] QPCBLEND
 [] AUG3DCQP
 [] FBRAINNE
@@ -16,7 +16,7 @@
 [x] GRIDNETG
 [x] PALMER3B
 [x] ROSZMAN1LS
-[] DANWOOD
+[skip - incorrect] DANWOOD
 [x] POLAK3
 [x] ODFITS
 [] PRIMALC5
@@ -28,26 +28,26 @@
 [] DTOC1NB
 [x] PALMER5BNE
 [x] SANTA
-[] WALL50
-[] CHENHARK
-[] DALLASS
-[] MNISTS5
-[] EIGENAU
-[] GULF
-[] ACOPR57
-[] VARDIM
-[] QPBAND
-[] ELATTAR
-[] ODNAMUR
-[] HYDCAR6
-[] PALMER4E
-[] HS91
-[] BROYDN3D
+[skip - quadratic] WALL50
+[skip - quadratic] CHENHARK
+[x] DALLASS
+[skip - too complex] MNISTS5
+[x] EIGENAU
+[already impl] GULF
+[skip - complex power] ACOPR57
+[x] VARDIM
+[skip - quadratic] QPBAND
+[x] ELATTAR
+[skip - too large] ODNAMUR
+[x] HYDCAR6
+[x] PALMER4E
+[skip - external function] HS91
+[x] BROYDN3D
 [] CHEBYQAD
-[] VESUVIA
-[] DEGDIAG
-[] BRAINPC2
-[] OET3
+[skip - too large] VESUVIA
+[skip - quadratic] DEGDIAG
+[skip - too large] BRAINPC2
+[skip - linear] OET3
 [] TRO3X3
 [] READING9
 [] STEENBRC

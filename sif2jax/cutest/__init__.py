@@ -12,6 +12,7 @@ from ._bounded_minimisation import (
     HS45 as HS45,
     HS110 as HS110,
     PALMER3B as PALMER3B,
+    PALMER4E as PALMER4E,
     PRICE4B as PRICE4B,
 )
 from ._constrained_minimisation import (
@@ -50,9 +51,10 @@ from ._constrained_minimisation import (
     CSFI1 as CSFI1,
     CSFI2 as CSFI2,
     CVXQP1 as CVXQP1,
-    # DALLASS as DALLASS,  # TODO: needs complex element implementations
+    DALLASS as DALLASS,
     DECONVC as DECONVC,
     DTOC1L as DTOC1L,
+    ELATTAR as ELATTAR,
     GIGOMEZ2 as GIGOMEZ2,
     HS6 as HS6,
     HS7 as HS7,
@@ -229,6 +231,7 @@ from ._nonlinear_equations import (
     BROWNALE as BROWNALE,
     BROWNBSNE as BROWNBSNE,
     BROWNDENE as BROWNDENE,
+    BROYDN3D as BROYDN3D,
     BROYDNBD as BROYDNBD,
     BRYBNDNE as BRYBNDNE,
     CERI651A as CERI651A,
@@ -256,6 +259,7 @@ from ._nonlinear_equations import (
     DEVGLA1NE as DEVGLA1NE,
     DEVGLA2NE as DEVGLA2NE,
     EGGCRATENE as EGGCRATENE,
+    EIGENAU as EIGENAU,
     ELATVIDUNE as ELATVIDUNE,
     ENGVAL2NE as ENGVAL2NE,
     ERRINRSMNE as ERRINRSMNE,
@@ -276,6 +280,7 @@ from ._nonlinear_equations import (
     HS1NE as HS1NE,
     HS2NE as HS2NE,
     HS25NE as HS25NE,
+    HYDCAR6 as HYDCAR6,
     INTEQNE as INTEQNE,
     JENSMPNE as JENSMPNE,
     JUDGENE as JUDGENE,
@@ -476,6 +481,7 @@ from ._unconstrained_minimisation import (
     LSC2LS as LSC2LS,
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     # MEXHAT as MEXHAT,  # TODO: Human review - complex scaling issues
+    MODBEALE as MODBEALE,
     # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
     NONCVXU2 as NONCVXU2,
     NONCVXUN as NONCVXUN,
@@ -494,6 +500,7 @@ from ._unconstrained_minimisation import (
     TRIGON1 as TRIGON1,
     # TRIGON2 as TRIGON2,  # TODO: Human review - Hessian test fails
     unconstrained_minimisation_problems as unconstrained_minimisation_problems,
+    VARDIM as VARDIM,
     WAYSEA1 as WAYSEA1,
     WAYSEA2 as WAYSEA2,
 )
@@ -753,7 +760,7 @@ problems_dict = {
     "CURLY30": CURLY30(),
     "CVXQP1": CVXQP1(),
     # "CYCLOOCFLS": CYCLOOCFLS(),  # TODO: Human review - times out with default p=10000
-    # "DALLASS": DALLASS(),  # TODO: needs complex element implementations
+    "DALLASS": DALLASS(),
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
     "DECONVC": DECONVC(),
@@ -859,11 +866,13 @@ problems_dict = {
     "LSC2LS": LSC2LS(),
     # "MANCINO": MANCINO(),  # TODO: Human review - significant discrepancies in all
     # "MEXHAT": MEXHAT(),  # TODO: Human review - complex scaling issues
+    "MODBEALE": MODBEALE(),
     # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),
     "NONDQUAR": NONDQUAR(),
     "NONMSQRT": NONMSQRT(),
+    "PALMER4E": PALMER4E(),
     # "PENALTY1": PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # "PENALTY2": PENALTY2(),  # TODO: Human review - SCALE factor issue
     "POWER": POWER(),
@@ -882,6 +891,7 @@ problems_dict = {
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
+    "VARDIM": VARDIM(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
     "ARGAUSS": ARGAUSS(),
     "ARGTRIG": ARGTRIG(),
@@ -897,6 +907,7 @@ problems_dict = {
     "BROWNALE": BROWNALE(),
     "BROWNBSNE": BROWNBSNE(),
     "BROWNDENE": BROWNDENE(),
+    "BROYDN3D": BROYDN3D(),
     "BROYDNBD": BROYDNBD(),
     "BRYBNDNE": BRYBNDNE(),
     "CERI651A": CERI651A(),
@@ -920,6 +931,8 @@ problems_dict = {
     "DEVGLA1NE": DEVGLA1NE(),
     "DEVGLA2NE": DEVGLA2NE(),
     "EGGCRATENE": EGGCRATENE(),
+    "EIGENAU": EIGENAU(),
+    "ELATTAR": ELATTAR(),
     "ELATVIDUNE": ELATVIDUNE(),
     "ENGVAL2NE": ENGVAL2NE(),
     "ERRINRSMNE": ERRINRSMNE(),
@@ -940,6 +953,7 @@ problems_dict = {
     "HS1NE": HS1NE(),
     "HS2NE": HS2NE(),
     "HS25NE": HS25NE(),
+    "HYDCAR6": HYDCAR6(),
     "INTEQNE": INTEQNE(),
     "JENSMPNE": JENSMPNE(),
     "JUDGENE": JUDGENE(),

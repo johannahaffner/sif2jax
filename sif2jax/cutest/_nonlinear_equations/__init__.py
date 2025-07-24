@@ -16,6 +16,7 @@ from .boxbod import BOXBOD as BOXBOD
 from .brownale import BROWNALE as BROWNALE
 from .brownbsne import BROWNBSNE as BROWNBSNE
 from .browndene import BROWNDENE as BROWNDENE
+from .broydn3d import BROYDN3D as BROYDN3D
 from .broydnbd import BROYDNBD as BROYDNBD
 from .brybndne import BRYBNDNE as BRYBNDNE
 from .ceri651a import CERI651A as CERI651A
@@ -47,6 +48,7 @@ from .denschnfne import DENSCHNFNE as DENSCHNFNE
 from .devgla1ne import DEVGLA1NE as DEVGLA1NE
 from .devgla2ne import DEVGLA2NE as DEVGLA2NE
 from .eggcratene import EGGCRATENE as EGGCRATENE
+from .eigenau import EIGENAU as EIGENAU
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
 from .errinrsmne import ERRINRSMNE as ERRINRSMNE
@@ -66,6 +68,7 @@ from .himmelbfne import HIMMELBFNE as HIMMELBFNE
 from .hs1ne import HS1NE as HS1NE
 from .hs2ne import HS2NE as HS2NE
 from .hs25ne import HS25NE as HS25NE
+from .hydcar6 import HYDCAR6 as HYDCAR6
 from .inteqne import INTEQNE as INTEQNE
 from .jensmpne import JENSMPNE as JENSMPNE
 from .judgene import JUDGENE as JUDGENE
@@ -134,6 +137,7 @@ nonlinear_equations_problems = (
     BROWNALE(),
     BROWNBSNE(),
     BROWNDENE(),
+    BROYDN3D(),
     BROYDNBD(),
     BRYBNDNE(),
     CERI651A(),
@@ -177,6 +181,7 @@ nonlinear_equations_problems = (
     HS1NE(),
     HS2NE(),
     HS25NE(),
+    HYDCAR6(),
     INTEQNE(),
     JENSMPNE(),
     JUDGENE(),

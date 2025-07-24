@@ -40,11 +40,10 @@ from .concon import CONCON as CONCON
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
 from .cvxqp1 import CVXQP1 as CVXQP1
-
-# TODO: DALLASS needs complex element implementations
-# from .dallass import DALLASS as DALLASS
+from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
 from .dtoc1l import DTOC1L as DTOC1L
+from .elattar import ELATTAR as ELATTAR
 from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7

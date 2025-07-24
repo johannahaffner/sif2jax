@@ -1,6 +1,6 @@
 # sif2jax
 
-![Progress](https://img.shields.io/badge/CUTEst%20Problems-387%2F1539%20(25%25)-brightgreen)
+![Progress](https://img.shields.io/badge/CUTEst%20Problems-401%2F1539%20(26%25)-brightgreen)
 
 Functionally pure definitions of optimisation problems extracted from Standard Input Format (SIF), written in [JAX](https://github.com/jax-ml/jax).
 

@@ -36,14 +36,61 @@ class TestProblem:
         assert np.allclose(pycutest_value, sif2jax_value)
 
     def test_correct_objective_zero_vector(self, problem, pycutest_problem):
-        pycutest_value = pycutest_problem.obj(0 * pycutest_problem.x0)
-        sif2jax_value = problem.objective(jnp.zeros_like(problem.y0), problem.args)
-        assert np.allclose(pycutest_value, sif2jax_value)
+        try:
+            pycutest_value = pycutest_problem.obj(0 * pycutest_problem.x0)
+            pycutest_failed = False
+        except ZeroDivisionError:
+            pycutest_value = None
+            pycutest_failed = True
+
+        try:
+            sif2jax_value = problem.objective(jnp.zeros_like(problem.y0), problem.args)
+            sif2jax_failed = False
+        except ZeroDivisionError:
+            sif2jax_value = None
+            sif2jax_failed = True
+
+        # Both should either succeed or fail in the same way
+        if pycutest_failed and sif2jax_failed:  # This is due to problem definition
+            pytest.skip("Can't divide by zero vector, skipping this test.")
+        elif pycutest_failed or sif2jax_failed:
+            msg = (
+                f"One implementation failed at zero vector: "
+                f"pycutest_failed={pycutest_failed}, sif2jax_failed={sif2jax_failed}"
+            )
+            pytest.fail(msg)
+        else:
+            assert pycutest_value is not None and sif2jax_value is not None
+            assert np.allclose(pycutest_value, sif2jax_value)
 
     def test_correct_objective_ones_vector(self, problem, pycutest_problem):
-        pycutest_value = pycutest_problem.obj(jnp.ones_like(pycutest_problem.x0))
-        sif2jax_value = problem.objective(jnp.ones_like(problem.y0), problem.args)
-        assert np.allclose(pycutest_value, sif2jax_value)
+        try:
+            pycutest_value = pycutest_problem.obj(jnp.ones_like(pycutest_problem.x0))
+            pycutest_failed = False
+        except ZeroDivisionError:
+            pycutest_value = None
+            pycutest_failed = True
+
+        try:
+            sif2jax_value = problem.objective(jnp.ones_like(problem.y0), problem.args)
+            sif2jax_failed = False
+        except ZeroDivisionError:
+            sif2jax_failed = True
+            sif2jax_value = None
+
+        # Both should either succeed or fail in the same way
+        if pycutest_failed and sif2jax_failed:  # This is due to the problem definition
+            # Both failed with division by zero or similar - this is acceptable
+            pytest.skip("Causes division by zero, skipping this test.")
+        elif pycutest_failed or sif2jax_failed:
+            msg = (
+                f"One implementation failed at ones vector: "
+                f"pycutest_failed={pycutest_failed}, sif2jax_failed={sif2jax_failed}"
+            )
+            pytest.fail(msg)
+        else:
+            assert pycutest_value is not None and sif2jax_value is not None
+            assert np.allclose(pycutest_value, sif2jax_value)
 
     def test_correct_gradient_at_start(self, problem, pycutest_problem):
         pycutest_gradient = pycutest_problem.grad(pycutest_problem.x0)
@@ -51,18 +98,68 @@ class TestProblem:
         assert np.allclose(pycutest_gradient, sif2jax_gradient)
 
     def test_correct_gradient_zero_vector(self, problem, pycutest_problem):
-        pycutest_gradient = pycutest_problem.grad(0 * pycutest_problem.x0)
-        sif2jax_gradient = jax.grad(problem.objective)(
-            jnp.zeros_like(problem.y0), problem.args
-        )
-        assert np.allclose(pycutest_gradient, sif2jax_gradient)
+        try:
+            pycutest_gradient = pycutest_problem.grad(0 * pycutest_problem.x0)
+            pycutest_failed = False
+        except ZeroDivisionError:
+            pycutest_gradient = None
+            pycutest_failed = True
+
+        try:
+            sif2jax_gradient = jax.grad(problem.objective)(
+                jnp.zeros_like(problem.y0), problem.args
+            )
+            sif2jax_failed = False
+        except ZeroDivisionError:
+            sif2jax_gradient = None
+            sif2jax_failed = True
+
+        # Both should either succeed or fail in the same way
+        if pycutest_failed and sif2jax_failed:
+            # Both failed with division by zero or similar - this is acceptable
+            pytest.skip("Causes division by zero, skipping this test.")
+        elif pycutest_failed or sif2jax_failed:
+            msg = (
+                f"One implementation failed at zero vector: "
+                f"pycutest_failed={pycutest_failed}, sif2jax_failed={sif2jax_failed}"
+            )
+            pytest.fail(msg)
+        else:
+            assert pycutest_gradient is not None and sif2jax_gradient is not None
+            assert np.allclose(pycutest_gradient, sif2jax_gradient)
 
     def test_correct_gradient_ones_vector(self, problem, pycutest_problem):
-        pycutest_gradient = pycutest_problem.grad(jnp.ones_like(pycutest_problem.x0))
-        sif2jax_gradient = jax.grad(problem.objective)(
-            jnp.ones_like(problem.y0), problem.args
-        )
-        assert np.allclose(pycutest_gradient, sif2jax_gradient)
+        try:
+            pycutest_gradient = pycutest_problem.grad(
+                jnp.ones_like(pycutest_problem.x0)
+            )
+            pycutest_failed = False
+        except ZeroDivisionError:
+            pycutest_gradient = None
+            pycutest_failed = True
+
+        try:
+            sif2jax_gradient = jax.grad(problem.objective)(
+                jnp.ones_like(problem.y0), problem.args
+            )
+            sif2jax_failed = False
+        except ZeroDivisionError:
+            sif2jax_gradient = None
+            sif2jax_failed = True
+
+        # Both should either succeed or fail in the same way
+        if pycutest_failed and sif2jax_failed:
+            # Both failed with division by zero or similar - this is acceptable
+            pytest.skip("Causes division by zero, skipping this test.")
+        elif pycutest_failed or sif2jax_failed:
+            msg = (
+                f"One implementation failed at ones vector: "
+                f"pycutest_failed={pycutest_failed}, sif2jax_failed={sif2jax_failed}"
+            )
+            pytest.fail(msg)
+        else:
+            assert pycutest_gradient is not None and sif2jax_gradient is not None
+            assert np.allclose(pycutest_gradient, sif2jax_gradient)
 
     def test_correct_hessian_at_start(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
@@ -74,23 +171,73 @@ class TestProblem:
 
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
-            pycutest_hessian = pycutest_problem.ihess(0 * pycutest_problem.x0)
-            sif2jax_hessian = jax.hessian(problem.objective)(
-                jnp.zeros_like(problem.y0), problem.args
-            )
-            assert np.allclose(pycutest_hessian, sif2jax_hessian)
+            try:
+                pycutest_hessian = pycutest_problem.ihess(0 * pycutest_problem.x0)
+                pycutest_failed = False
+            except ZeroDivisionError:
+                pycutest_hessian = None
+                pycutest_failed = True
+
+            try:
+                sif2jax_hessian = jax.hessian(problem.objective)(
+                    jnp.zeros_like(problem.y0), problem.args
+                )
+                sif2jax_failed = False
+            except ZeroDivisionError:
+                sif2jax_hessian = None
+                sif2jax_failed = True
+
+            # Both should either succeed or fail in the same way
+            if pycutest_failed and sif2jax_failed:
+                # Both failed with division by zero or similar - this is acceptable
+                pytest.skip("Causes division by zero, skipping this test.")
+            elif pycutest_failed or sif2jax_failed:
+                msg = (
+                    f"One implementation failed at zero vector: "
+                    f"pycutest_failed={pycutest_failed}, "
+                    f"sif2jax_failed={sif2jax_failed}"
+                )
+                pytest.fail(msg)
+            else:
+                assert pycutest_hessian is not None and sif2jax_hessian is not None
+                assert np.allclose(pycutest_hessian, sif2jax_hessian)
         else:
             pytest.skip("Skip Hessian test for large problems to save time and memory")
 
     def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
-            pycutest_hessian = pycutest_problem.ihess(
-                jnp.ones_like(pycutest_problem.x0)
-            )
-            sif2jax_hessian = jax.hessian(problem.objective)(
-                jnp.ones_like(problem.y0), problem.args
-            )
-            assert np.allclose(pycutest_hessian, sif2jax_hessian)
+            try:
+                pycutest_hessian = pycutest_problem.ihess(
+                    jnp.ones_like(pycutest_problem.x0)
+                )
+                pycutest_failed = False
+            except ZeroDivisionError:
+                pycutest_hessian = None
+                pycutest_failed = True
+
+            try:
+                sif2jax_hessian = jax.hessian(problem.objective)(
+                    jnp.ones_like(problem.y0), problem.args
+                )
+                sif2jax_failed = False
+            except ZeroDivisionError:
+                sif2jax_hessian = None
+                sif2jax_failed = True
+
+            # Both should either succeed or fail in the same way
+            if pycutest_failed and sif2jax_failed:
+                # Both failed with division by zero or similar - this is acceptable
+                pytest.skip("Causes division by zero, skipping this test.")
+            elif pycutest_failed or sif2jax_failed:
+                msg = (
+                    f"One implementation failed at ones vector: "
+                    f"pycutest_failed={pycutest_failed}, "
+                    f"sif2jax_failed={sif2jax_failed}"
+                )
+                pytest.fail(msg)
+            else:
+                assert pycutest_hessian is not None and sif2jax_hessian is not None
+                assert np.allclose(pycutest_hessian, sif2jax_hessian)
         else:
             pytest.skip("Skip Hessian test for large problems to save time and memory")
 

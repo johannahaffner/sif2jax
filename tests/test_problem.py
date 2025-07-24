@@ -35,15 +35,61 @@ class TestProblem:
         sif2jax_value = problem.objective(problem.y0, problem.args)
         assert np.allclose(pycutest_value, sif2jax_value)
 
+    def test_correct_objective_zero_vector(self, problem, pycutest_problem):
+        pycutest_value = pycutest_problem.obj(0 * pycutest_problem.x0)
+        sif2jax_value = problem.objective(jnp.zeros_like(problem.y0), problem.args)
+        assert np.allclose(pycutest_value, sif2jax_value)
+
+    def test_correct_objective_ones_vector(self, problem, pycutest_problem):
+        pycutest_value = pycutest_problem.obj(jnp.ones_like(pycutest_problem.x0))
+        sif2jax_value = problem.objective(jnp.ones_like(problem.y0), problem.args)
+        assert np.allclose(pycutest_value, sif2jax_value)
+
     def test_correct_gradient_at_start(self, problem, pycutest_problem):
         pycutest_gradient = pycutest_problem.grad(pycutest_problem.x0)
         sif2jax_gradient = jax.grad(problem.objective)(problem.y0, problem.args)
+        assert np.allclose(pycutest_gradient, sif2jax_gradient)
+
+    def test_correct_gradient_zero_vector(self, problem, pycutest_problem):
+        pycutest_gradient = pycutest_problem.grad(0 * pycutest_problem.x0)
+        sif2jax_gradient = jax.grad(problem.objective)(
+            jnp.zeros_like(problem.y0), problem.args
+        )
+        assert np.allclose(pycutest_gradient, sif2jax_gradient)
+
+    def test_correct_gradient_ones_vector(self, problem, pycutest_problem):
+        pycutest_gradient = pycutest_problem.grad(jnp.ones_like(pycutest_problem.x0))
+        sif2jax_gradient = jax.grad(problem.objective)(
+            jnp.ones_like(problem.y0), problem.args
+        )
         assert np.allclose(pycutest_gradient, sif2jax_gradient)
 
     def test_correct_hessian_at_start(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
             pycutest_hessian = pycutest_problem.ihess(pycutest_problem.x0)
             sif2jax_hessian = jax.hessian(problem.objective)(problem.y0, problem.args)
+            assert np.allclose(pycutest_hessian, sif2jax_hessian)
+        else:
+            pytest.skip("Skip Hessian test for large problems to save time and memory")
+
+    def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
+        if problem.num_variables() < 1000:
+            pycutest_hessian = pycutest_problem.ihess(0 * pycutest_problem.x0)
+            sif2jax_hessian = jax.hessian(problem.objective)(
+                jnp.zeros_like(problem.y0), problem.args
+            )
+            assert np.allclose(pycutest_hessian, sif2jax_hessian)
+        else:
+            pytest.skip("Skip Hessian test for large problems to save time and memory")
+
+    def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
+        if problem.num_variables() < 1000:
+            pycutest_hessian = pycutest_problem.ihess(
+                jnp.ones_like(pycutest_problem.x0)
+            )
+            sif2jax_hessian = jax.hessian(problem.objective)(
+                jnp.ones_like(problem.y0), problem.args
+            )
             assert np.allclose(pycutest_hessian, sif2jax_hessian)
         else:
             pytest.skip("Skip Hessian test for large problems to save time and memory")

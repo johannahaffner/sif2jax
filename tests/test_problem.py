@@ -57,7 +57,11 @@ def _evaluate_at_other(
 
     # Both should either succeed or fail in the same way
     if pycutest_failed and sif2jax_failed:
-        assert type(pycutest_e) == type(sif2jax_e)
+        assert type(pycutest_e) == type(sif2jax_e), (
+            f"Errors differ for problem {problem_name} at point {point}: "
+            f"pycutest_error={type(pycutest_e).__name__}, "
+            f"sif2jax_error={type(sif2jax_e).__name__}"
+        )
     elif pycutest_failed or sif2jax_failed:
         msg = (
             f"One implementation failed at point {point} for problem {problem_name}: "

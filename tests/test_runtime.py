@@ -72,7 +72,8 @@ def benchmark_jax(
 
     # Create a timer that calls block_until_ready
     def timed_call():
-        return compiled(*args).block_until_ready()
+        out = compiled(*args)  # Map for constraint method: (equalities, inequalities)
+        return jtu.tree_map(lambda x: x.block_until_ready(), out)
 
     timer = timeit.Timer(timed_call)
 

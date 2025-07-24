@@ -68,18 +68,18 @@
 [p] HYDROELL
 [x] BRATU2DT
 [x] EXPLIN
-[] LEVYMONE9
-[] SSEBLIN
-[] ROSEPETAL2
-[] ORTHREGC
-[] HS88
-[] QUDLIN
+[x] LEVYMONE9
+[skip - linear] SSEBLIN
+[skip - quadratic] ROSEPETAL2
+[skip - quadratic] ORTHREGC
+[skip - quadratic] HS88
+[skip - quadratic] QUDLIN
 [x] MGH10LS
 [skip - quadratic] YAO
 [skip - quadratic] TOINTQOR
-[] HAHN1
-[] BA-L21LS
-[] HS100MOD
+[already impl] HAHN1
+[skip - too complex] BA-L21LS
+[p] HS100MOD
 [] FLOSP2TL
 [] LUKSAN22LS
 [] A2NSDSIL

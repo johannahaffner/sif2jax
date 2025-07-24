@@ -78,6 +78,7 @@ from .koebhelbne import KOEBHELBNE as KOEBHELBNE
 from .kowosbne import KOWOSBNE as KOWOSBNE
 from .levymone5 import LEVYMONE5 as LEVYMONE5
 from .levymone8 import LEVYMONE8 as LEVYMONE8
+from .levymone9 import LEVYMONE9 as LEVYMONE9
 from .levymone10 import LEVYMONE10 as LEVYMONE10
 from .liarwhdne import LIARWHDNE as LIARWHDNE
 from .linversene import LINVERSENE as LINVERSENE
@@ -138,6 +139,7 @@ nonlinear_equations_problems = (
     BOOTH(),
     BOX3NE(),
     BRATU2DT(),
+    LEVYMONE9(),
     BROWNALE(),
     BROWNBSNE(),
     BROWNDENE(),

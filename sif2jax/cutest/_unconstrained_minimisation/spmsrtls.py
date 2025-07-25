@@ -1,18 +1,14 @@
 import jax.numpy as jnp
 
-from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class SPMSRTLS(AbstractUnconstrainedMinimisation):
-    """Liu and Nocedal tridiagonal matrix square root problem.
+    """Liu and Nocedal tridiagonal matrix square root least-squares problem.
 
-    This is a least-squares variant of problem SPMSQRT. The problem is to find
-    a tridiagonal matrix X such that X^T * X approximates a pentadiagonal matrix A
-    in the least-squares sense.
-
-    The matrix dimension is M, and the number of variables is 3*M-2.
-    The variables represent the entries of the tridiagonal matrix X.
+    This is a least-squares variant of problem SPMSQRT. We seek a tridiagonal
+    matrix X such that X^T * X approximates a given tridiagonal matrix A in
+    the least-squares sense.
 
     Source: problem 151 (p. 93) in
     A.R. Buckley,
@@ -25,170 +21,249 @@ class SPMSRTLS(AbstractUnconstrainedMinimisation):
     Classification: SUR2-AN-V-V
     """
 
-    M: int = (
-        1667  # Dimension of the matrix (default: 1667, which gives n=4999 variables)
-    )
-    n: int = 4999  # Number of variables (3*M-2)
+    _m: int = 1667  # Default dimension
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
 
     @property
-    def y0_iD(self) -> int:
-        return 0
+    def n(self):
+        """Number of variables: 3*M-2."""
+        return 3 * self._m - 2
 
     @property
-    def provided_y0s(self) -> frozenset:
-        return frozenset({0})
+    def args(self):
+        """No additional arguments."""
+        return None
 
-    def _compute_B_matrix(self):
-        """Compute the tridiagonal matrix B."""
-        M = self.M
+    def _compute_b_matrix(self):
+        """Compute the entries of the tridiagonal matrix B."""
+        m = self._m
 
-        # B is an M x M tridiagonal matrix
-        # We'll store the diagonals vectorized
-        B_diag = jnp.zeros(M)
-        B_lower = jnp.zeros(M - 1)  # B[i+1, i] for i = 0, ..., M-2
-        B_upper = jnp.zeros(M - 1)  # B[i, i+1] for i = 0, ..., M-2
+        # Initialize B matrix entries
+        b = {}
 
-        # Build k values for all entries following SIF pattern
-        # Row 1: k values are not used, we use fixed values
-        B_diag = B_diag.at[0].set(jnp.sin(1.0))
-        B_upper = B_upper.at[0].set(jnp.sin(4.0))
-
-        # Rows 2 to M generate k values from 3 onwards
-        # For each row i (1-indexed, so i=2 to M), we have 3 values
-        # Total k values needed: 3*(M-1) starting from k=3
-        k_start = 3
-        k_values = jnp.arange(k_start, k_start + 3 * (M - 1))
-        k_squared = k_values**2
-        sin_k_squared = jnp.sin(k_squared)
-
-        # Distribute to the diagonals
-        # For row i (0-indexed i = 1 to M-1), we use k values at positions
-        # 3*(i-1), 3*(i-1)+1, 3*(i-1)+2
-        idx = 0
-        for i in range(1, M):
-            if i < M - 1:  # Not last row
-                B_lower = B_lower.at[i - 1].set(sin_k_squared[idx])
-                B_diag = B_diag.at[i].set(sin_k_squared[idx + 1])
-                B_upper = B_upper.at[i].set(sin_k_squared[idx + 2])
-                idx += 3
-            else:  # Last row
-                B_lower = B_lower.at[i - 1].set(sin_k_squared[idx])
-                B_diag = B_diag.at[i].set(sin_k_squared[idx + 1])
-                # No upper diagonal for last row
-
-        return B_diag, B_lower, B_upper
-
-    def objective(self, y, args):
-        """Compute the least-squares objective function."""
-        del args
-
-        M = self.M
-
-        # Unpack variables into tridiagonal matrix X
-        # Variables are ordered as: X(1,1), X(1,2), X(2,1), X(2,2), X(2,3), ...
-        # Row 1: 2 elements, Rows 2 to M-1: 3 elements each, Row M: 2 elements
-        X_diag = jnp.zeros(M)
-        X_lower = jnp.zeros(M - 1)
-        X_upper = jnp.zeros(M - 1)
-
-        idx = 0
         # Row 1
-        X_diag = X_diag.at[0].set(y[idx])
-        X_upper = X_upper.at[0].set(y[idx + 1])
-        idx += 2
+        b[(1, 1)] = jnp.sin(1.0)
+        b[(1, 2)] = jnp.sin(4.0)
 
         # Rows 2 to M-1
-        for i in range(1, M - 1):
-            X_lower = X_lower.at[i - 1].set(y[idx])
-            X_diag = X_diag.at[i].set(y[idx + 1])
-            X_upper = X_upper.at[i].set(y[idx + 2])
-            idx += 3
+        k = 2
+        for i in range(2, m):
+            for j in [i - 1, i, i + 1]:
+                k += 1
+                rk = float(k)
+                b[(i, j)] = jnp.sin(rk * rk)
 
         # Row M
-        X_lower = X_lower.at[M - 2].set(y[idx])
-        X_diag = X_diag.at[M - 1].set(y[idx + 1])
+        k += 1
+        rk = float(k)
+        b[(m, m - 1)] = jnp.sin(rk * rk)
+        k += 1
+        rk = float(k)
+        b[(m, m)] = jnp.sin(rk * rk)
 
-        # Compute B matrix
-        B_diag, B_lower, B_upper = self._compute_B_matrix()
+        return b
 
-        # Compute target matrix A = B^T * B entries
-        # Main diagonal of A
-        A_diag = jnp.zeros(M)
-        A_diag = A_diag.at[0].set(B_diag[0] ** 2 + B_upper[0] * B_lower[0])
-        A_diag = A_diag.at[1 : M - 1].set(
-            B_diag[1 : M - 1] ** 2 + B_lower[:-1] ** 2 + B_upper[1:] ** 2
-        )
-        A_diag = A_diag.at[M - 1].set(B_diag[M - 1] ** 2 + B_lower[M - 2] ** 2)
+    def _compute_a_matrix(self, b):
+        """Compute the pentadiagonal matrix A from B."""
+        m = self._m
+        a = {}
 
-        # First sub/super-diagonals of A
-        A_sub1 = B_lower * B_diag[:-1] + B_diag[1:] * B_lower
-        A_super1 = B_upper * B_diag[1:] + B_diag[:-1] * B_upper
+        # Diagonal entries
+        a[(1, 1)] = b[(1, 1)] * b[(1, 1)] + b[(1, 2)] * b[(2, 1)]
 
-        # Second sub/super-diagonals of A
-        A_sub2 = B_upper[1:] * B_lower[:-1]
-        A_super2 = B_upper[:-1] * B_lower[1:]
+        for i in range(2, m):
+            a[(i, i)] = (
+                b[(i, i)] * b[(i, i)]
+                + b[(i - 1, i)] * b[(i, i - 1)]
+                + b[(i + 1, i)] * b[(i, i + 1)]
+            )
 
-        # Compute X^T * X entries
-        # Main diagonal
-        XTX_diag = jnp.zeros(M)
-        XTX_diag = XTX_diag.at[0].set(X_diag[0] ** 2 + X_upper[0] * X_lower[0])
-        XTX_diag = XTX_diag.at[1 : M - 1].set(
-            X_diag[1 : M - 1] ** 2 + X_lower[:-1] ** 2 + X_upper[1:] ** 2
-        )
-        XTX_diag = XTX_diag.at[M - 1].set(X_diag[M - 1] ** 2 + X_lower[M - 2] ** 2)
+        a[(m, m)] = b[(m, m)] * b[(m, m)] + b[(m - 1, m)] * b[(m, m - 1)]
 
-        # First sub/super-diagonals
-        XTX_sub1 = X_lower * X_diag[:-1] + X_diag[1:] * X_lower
-        XTX_super1 = X_upper * X_diag[1:] + X_diag[:-1] * X_upper
+        # Sub-diagonal entries
+        for i in range(1, m):
+            a[(i + 1, i)] = (
+                b[(i + 1, i)] * b[(i, i)] + b[(i + 1, i + 1)] * b[(i + 1, i)]
+            )
 
-        # Second sub/super-diagonals
-        XTX_sub2 = X_upper[1:] * X_lower[:-1]
-        XTX_super2 = X_upper[:-1] * X_lower[1:]
+        # Super-diagonal entries
+        for i in range(2, m + 1):
+            a[(i - 1, i)] = (
+                b[(i - 1, i)] * b[(i, i)] + b[(i - 1, i - 1)] * b[(i - 1, i)]
+            )
 
-        # Compute sum of squared residuals
-        obj = (
-            jnp.sum((XTX_diag - A_diag) ** 2)
-            + jnp.sum((XTX_sub1 - A_sub1) ** 2)
-            + jnp.sum((XTX_super1 - A_super1) ** 2)
-            + jnp.sum((XTX_sub2 - A_sub2) ** 2)
-            + jnp.sum((XTX_super2 - A_super2) ** 2)
-        )
+        # Sub-sub-diagonal entries
+        for i in range(2, m):
+            a[(i + 1, i - 1)] = b[(i + 1, i)] * b[(i, i - 1)]
+
+        # Super-super-diagonal entries
+        for i in range(2, m):
+            a[(i - 1, i + 1)] = b[(i - 1, i)] * b[(i, i + 1)]
+
+        return a
+
+    @property
+    def y0(self):
+        """Initial guess: 0.2 * B matrix entries."""
+        m = self._m
+        b = self._compute_b_matrix()
+        y0 = jnp.zeros(self.n)
+
+        # X(1,1) and X(1,2)
+        y0 = y0.at[0].set(0.2 * b[(1, 1)])
+        y0 = y0.at[1].set(0.2 * b[(1, 2)])
+
+        # X(i,i-1), X(i,i), X(i,i+1) for i = 2 to M-1
+        idx = 2
+        for i in range(2, m):
+            y0 = y0.at[idx].set(0.2 * b[(i, i - 1)])
+            y0 = y0.at[idx + 1].set(0.2 * b[(i, i)])
+            y0 = y0.at[idx + 2].set(0.2 * b[(i, i + 1)])
+            idx += 3
+
+        # X(M,M-1) and X(M,M)
+        y0 = y0.at[idx].set(0.2 * b[(m, m - 1)])
+        y0 = y0.at[idx + 1].set(0.2 * b[(m, m)])
+
+        return y0
+
+    def objective(self, y, args):
+        """Compute the least-squares objective function.
+
+        The objective is the sum of squared differences between entries of
+        A and X^T * X, where X is the tridiagonal matrix formed from y.
+        """
+        del args  # Not used
+
+        m = self._m
+
+        # Compute target matrix A
+        b = self._compute_b_matrix()
+        a = self._compute_a_matrix(b)
+
+        # Extract X matrix entries from y
+        x11 = y[0]
+        x12 = y[1]
+
+        # Initialize objective
+        obj = 0.0
+
+        # Line 1 of X^T * X
+        # E(1,1): D(1) + G(1) where D(1) = x11^2, G(1) = x12 * x21
+        # Since X is tridiagonal, x21 = x12
+        e11 = x11**2 + x12 * x12
+        obj += (e11 - a[(1, 1)]) ** 2
+
+        # E(1,2): H(1) + R(1) where H(1) = x11 * x12, R(1) = x12 * x22
+        idx = 2
+        x22 = y[idx + 1] if m > 2 else y[idx]  # X(2,2)
+        e12 = x11 * x12 + x12 * x22
+        obj += (e12 - a.get((1, 2), 0.0)) ** 2
+
+        # E(1,3): S(1) where S(1) = x12 * x23
+        if m > 2:
+            x23 = y[idx + 2]  # X(2,3)
+            e13 = x12 * x23
+            obj += (e13 - a.get((1, 3), 0.0)) ** 2
+
+        # Lines 2 to M-1 of X^T * X
+        idx = 2
+        for i in range(2, m):
+            # Extract X entries for row i
+            xi_im1 = y[idx]  # X(i,i-1)
+            xi_i = y[idx + 1]  # X(i,i)
+            xi_ip1 = y[idx + 2] if i < m - 1 else 0.0  # X(i,i+1)
+
+            # Also need entries from adjacent rows
+            if i > 2:
+                xim1_im2 = y[idx - 3]  # X(i-1,i-2)
+                xim1_im1 = y[idx - 2]  # X(i-1,i-1)
+                xim1_i = y[idx - 1]  # X(i-1,i)
+            else:
+                xim1_im2 = 0.0
+                xim1_im1 = x11
+                xim1_i = x12
+
+            if i < m - 1:
+                xip1_i = xi_ip1  # X(i+1,i) = X(i,i+1) by symmetry
+                xip1_ip1 = y[idx + 4] if i < m - 2 else y[idx + 3]  # X(i+1,i+1)
+                xip1_ip2 = y[idx + 5] if i < m - 2 else 0.0  # X(i+1,i+2)
+            else:
+                xip1_i = y[idx + 2]  # X(M,M-1)
+                xip1_ip1 = y[idx + 3]  # X(M,M)
+                xip1_ip2 = 0.0
+
+            # E(i,i-2): A(i) = xi_im1 * xim1_im2
+            if i > 2:
+                e_iim2 = xi_im1 * xim1_im2
+                obj += (e_iim2 - a.get((i, i - 2), 0.0)) ** 2
+
+            # E(i,i-1): B(i) + C(i) where B(i) = xi_im1 * xim1_im1, C(i) = xi_i * xi_im1
+            e_iim1 = xi_im1 * xim1_im1 + xi_i * xi_im1
+            obj += (e_iim1 - a.get((i, i - 1), 0.0)) ** 2
+
+            # E(i,i): F(i) + D(i) + G(i)
+            # F(i) = xi_im1 * xim1_i, D(i) = xi_i^2, G(i) = xi_ip1 * xip1_i
+            f_i = xi_im1 * xim1_i
+            d_i = xi_i**2
+            g_i = xi_ip1 * xip1_i if i < m else 0.0
+            e_ii = f_i + d_i + g_i
+            obj += (e_ii - a.get((i, i), 0.0)) ** 2
+
+            # E(i,i+1): H(i) + R(i)
+            # H(i) = xi_i * xi_ip1, R(i) = xi_ip1 * xip1_ip1
+            if i < m:
+                h_i = xi_i * xi_ip1
+                r_i = xi_ip1 * xip1_ip1
+                e_iip1 = h_i + r_i
+                obj += (e_iip1 - a.get((i, i + 1), 0.0)) ** 2
+
+            # E(i,i+2): S(i) = xi_ip1 * xip1_ip2
+            if i < m - 1:
+                s_i = xi_ip1 * xip1_ip2
+                e_iip2 = s_i
+                obj += (e_iip2 - a.get((i, i + 2), 0.0)) ** 2
+
+            idx += 3
+
+        # Line M of X^T * X
+        xm_mm1 = y[-2]  # X(M,M-1)
+        xm_m = y[-1]  # X(M,M)
+
+        # Need X(M-1,M-2), X(M-1,M-1), X(M-1,M)
+        if m > 2:
+            xm1_mm2 = y[-5]  # X(M-1,M-2)
+            xm1_mm1 = y[-4]  # X(M-1,M-1)
+            xm1_m = y[-3]  # X(M-1,M)
+        else:
+            xm1_mm2 = 0.0
+            xm1_mm1 = x11
+            xm1_m = x12
+
+        # E(M,M-2): A(M) = xm_mm1 * xm1_mm2
+        if m > 2:
+            em_mm2 = xm_mm1 * xm1_mm2
+            obj += (em_mm2 - a.get((m, m - 2), 0.0)) ** 2
+
+        # E(M,M-1): B(M) + C(M)
+        em_mm1 = xm_mm1 * xm1_mm1 + xm_m * xm_mm1
+        obj += (em_mm1 - a.get((m, m - 1), 0.0)) ** 2
+
+        # E(M,M): F(M) + D(M)
+        fm = xm_mm1 * xm1_m
+        dm = xm_m**2
+        em_m = fm + dm
+        obj += (em_m - a.get((m, m), 0.0)) ** 2
 
         return obj
 
     @property
-    def y0(self):
-        """Initial point: 0.2 * B."""
-        M = self.M
-        B_diag, B_lower, B_upper = self._compute_B_matrix()
-
-        # Pack initial values in the same order as variables
-        y0_values = []
-
-        # Row 1
-        y0_values.append(0.2 * B_diag[0])
-        y0_values.append(0.2 * B_upper[0])
-
-        # Rows 2 to M-1
-        for i in range(1, M - 1):
-            y0_values.append(0.2 * B_lower[i - 1])
-            y0_values.append(0.2 * B_diag[i])
-            y0_values.append(0.2 * B_upper[i])
-
-        # Row M
-        y0_values.append(0.2 * B_lower[M - 2])
-        y0_values.append(0.2 * B_diag[M - 1])
-
-        return inexact_asarray(jnp.array(y0_values))
-
-    @property
-    def args(self):
-        return None
-
-    @property
     def expected_result(self):
+        """Expected optimal solution (not provided in SIF)."""
         return None
 
     @property
     def expected_objective_value(self):
+        """Expected optimal objective value (not provided in SIF)."""
         return None

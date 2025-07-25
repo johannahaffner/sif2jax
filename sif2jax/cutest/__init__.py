@@ -509,7 +509,7 @@ from ._unconstrained_minimisation import (
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
-    # SPMSRTLS as SPMSRTLS,  # TODO: Not yet implemented
+    # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
     TOINTGSS as TOINTGSS,
@@ -907,7 +907,7 @@ problems_dict = {
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "ROSENBR": ROSENBR(),
     "ROSZMAN1LS": ROSZMAN1LS(),
-    # "SPMSRTLS": SPMSRTLS(),  # TODO: Not yet implemented
+    # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     "TENBARS4": TENBARS4(),
     "TENFOLDTRLS": TENFOLDTRLS(),
     "POWELLBS": POWELLBS(),

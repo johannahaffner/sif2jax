@@ -215,7 +215,8 @@ from .powersum import POWERSUM as POWERSUM
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 
-# from .spmsrtls import SPMSRTLS as SPMSRTLS  # TODO: Not yet implemented
+# TODO: Human review needed - complex matrix multiplication formulation
+# from .spmsrtls import SPMSRTLS as SPMSRTLS
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
 
 # TODO: TOINTGOR needs human review - runtime test fails (~8x slower than threshold)
@@ -405,7 +406,7 @@ unconstrained_minimisation_problems = (
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
     ROSZMAN1LS(),
-    # SPMSRTLS(),  # TODO: Not yet implemented
+    # SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS(),
     WAYSEA1(),
     WAYSEA2(),

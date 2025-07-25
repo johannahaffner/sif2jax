@@ -1,32 +1,3 @@
-"""
-TODO: This implementation requires human review and may need substantial rework.
-
-This file implements a simplified approximation of the HIELOW problem from CUTEst.
-The actual implementation requires access to a FORTRAN subroutine named "HIELOW"
-which is called in the SIF file but not included in it. The SIF file contains:
-
-```fortran
-DOUBLE PRECISION FUNCTION F(B1,B2,B3)
-...
-CALL HIELOW(.FALSE.,.FALSE.)
-```
-
-The HIELOW problem models a hierarchical logit function for transportation choice:
-- Car
-- Public transportation (with Theta0/THE1 parameter)
-  - Bus
-  - Tram
-
-The coefficients represent:
-- BET1, BET2: Elemental coefficients affecting utility functions
-  (related to time and cost)
-- THE1: A structural coefficient for the hierarchical model's nesting structure
-
-Without the actual FORTRAN implementation, this file provides only an approximate
-implementation based on general hierarchical logit model principles. The results
-may not match the original CUTEst problem.
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
@@ -36,6 +7,33 @@ from ..._problem import AbstractUnconstrainedMinimisation
 # as the original FORTRAN implementation is not available
 class HIELOW(AbstractUnconstrainedMinimisation):
     """Hierarchical logit model for modal choice prediction.
+
+    TODO: This implementation requires human review and may need substantial rework.
+
+    This file implements a simplified approximation of the HIELOW problem from CUTEst.
+    The actual implementation requires access to a FORTRAN subroutine named "HIELOW"
+    which is called in the SIF file but not included in it. The SIF file contains:
+
+    ```fortran
+    DOUBLE PRECISION FUNCTION F(B1,B2,B3)
+    ...
+    CALL HIELOW(.FALSE.,.FALSE.)
+    ```
+
+    The HIELOW problem models a hierarchical logit function for transportation choice:
+    - Car
+    - Public transportation (with Theta0/THE1 parameter)
+      - Bus
+      - Tram
+
+    The coefficients represent:
+    - BET1, BET2: Elemental coefficients affecting utility functions
+      (related to time and cost)
+    - THE1: A structural coefficient for the hierarchical model's nesting structure
+
+    Without the actual FORTRAN implementation, this file provides only an approximate
+    implementation based on general hierarchical logit model principles. The results
+    may not match the original CUTEst problem.
 
     This problem involves finding the parameters of a hierarchical logit
     model that maximize the likelihood of a sample of observations.

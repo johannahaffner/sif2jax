@@ -1,25 +1,23 @@
-"""NIST Data fitting problem MGH10.
-
-Fit model: y = b1 * exp[b2/(x+b3)] + e
-
-Source: Meyer, R. R. (1970). Theoretical and computational aspects of
-nonlinear regression. In Nonlinear Programming (J. Rosen, O. Mangasarian,
-and K. Ritter, eds.), pp. 465-486. Academic Press, New York.
-
-This is a nonlinear regression problem from the NIST nonlinear regression test set.
-
-SIF input: Nick Gould, Oct 1992.
-
-Classification: SUR2-MN-3-0
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class MGH10LS(AbstractUnconstrainedMinimisation):
-    """NIST Data fitting problem MGH10."""
+    """NIST Data fitting problem MGH10.
+
+    Fit model: y = b1 * exp[b2/(x+b3)] + e
+
+    Source: Meyer, R. R. (1970). Theoretical and computational aspects of
+    nonlinear regression. In Nonlinear Programming (J. Rosen, O. Mangasarian,
+    and K. Ritter, eds.), pp. 465-486. Academic Press, New York.
+
+    This is a nonlinear regression problem from the NIST nonlinear regression test set.
+
+    SIF input: Nick Gould, Oct 1992.
+
+    Classification: SUR2-MN-3-0
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})

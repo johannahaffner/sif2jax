@@ -84,6 +84,7 @@ from .levymone9 import LEVYMONE9 as LEVYMONE9
 from .levymone10 import LEVYMONE10 as LEVYMONE10
 from .liarwhdne import LIARWHDNE as LIARWHDNE
 from .linversene import LINVERSENE as LINVERSENE
+from .luksan14 import LUKSAN14 as LUKSAN14
 from .mancinone import MANCINONE as MANCINONE
 from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
@@ -109,10 +110,12 @@ from .palmer4ene import PALMER4ENE as PALMER4ENE
 from .palmer5bne import PALMER5BNE as PALMER5BNE
 from .palmer5ene import PALMER5ENE as PALMER5ENE
 from .palmer7ane import PALMER7ANE as PALMER7ANE
+from .pfit4 import PFIT4 as PFIT4
 from .powellbs import POWELLBS as POWELLBS
 from .powellse import POWELLSE as POWELLSE
 from .powellsq import POWELLSQ as POWELLSQ
 from .powersumne import POWERSUMNE as POWERSUMNE
+from .res import RES as RES
 from .santa import SANTA as SANTA
 from .sinvalne import SINVALNE as SINVALNE
 from .ssbrybndne import SSBRYBNDNE as SSBRYBNDNE
@@ -200,6 +203,7 @@ nonlinear_equations_problems = (
     LEVYMONE10(),
     LIARWHDNE(),
     LINVERSENE(),
+    LUKSAN14(),
     MANCINONE(),
     MEYER3NE(),
     MGH09(),
@@ -225,7 +229,9 @@ nonlinear_equations_problems = (
     PALMER5BNE(),
     PALMER5ENE(),
     PALMER7ANE(),
+    PFIT4(),
     POWERSUMNE(),
+    RES(),
     SANTA(),
     SINVALNE(),
     SSBRYBNDNE(),

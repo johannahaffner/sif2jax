@@ -208,6 +208,7 @@ from .nonmsqrt import NONMSQRT as NONMSQRT
 # TODO: Human review - SCALE factor issue
 # from .penalty2 import PENALTY2 as PENALTY2
 from .power import POWER as POWER
+from .powersum import POWERSUM as POWERSUM
 
 # TODO: Human review - objective off by factor of 4.15
 # from .powellsg import POWELLSG as POWELLSG
@@ -223,6 +224,8 @@ from .tointgss import TOINTGSS as TOINTGSS
 
 # TODO: TOINTPSP needs human review - gradient test fails with small differences
 # from .tointpsp import TOINTPSP as TOINTPSP
+# TODO: TQUARTIC needs human review - objective calculation incorrect
+# from .tquartic import TQUARTIC as TQUARTIC
 from .trigon1 import TRIGON1 as TRIGON1
 
 # TODO: TRIGON2 needs human review - Hessian test fails
@@ -398,6 +401,7 @@ unconstrained_minimisation_problems = (
     # PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # PENALTY2(),  # TODO: Human review - SCALE factor issue
     POWER(),
+    POWERSUM(),
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
     ROSZMAN1LS(),
@@ -411,5 +415,6 @@ unconstrained_minimisation_problems = (
     # TOINTGOR(),  # TODO: Human review - runtime test fails
     TOINTGSS(),
     # TOINTPSP(),  # TODO: Human review - gradient test fails
+    # TQUARTIC(),  # TODO: Human review - objective calculation incorrect
     VARDIM(),
 )

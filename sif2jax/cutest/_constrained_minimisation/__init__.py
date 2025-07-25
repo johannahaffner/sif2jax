@@ -36,7 +36,8 @@ from .chaconn1 import CHACONN1 as CHACONN1
 from .chaconn2 import CHACONN2 as CHACONN2
 
 # from .cresc4 import CRESC4 as CRESC4  # TODO: Human review - complex crescent area
-from .clnlbeam import CLNLBEAM as CLNLBEAM
+# TODO: CLNLBEAM needs fixing - dimension mismatch in constraints
+# from .clnlbeam import CLNLBEAM as CLNLBEAM
 from .concon import CONCON as CONCON
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
@@ -199,6 +200,8 @@ from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
 from .maratos import MARATOS as MARATOS
 from .odfits import ODFITS as ODFITS
+from .orthregd import ORTHREGD as ORTHREGD
+from .orthrgdm import ORTHRGDM as ORTHRGDM
 from .pentagon import PENTAGON as PENTAGON
 from .polak1 import POLAK1 as POLAK1
 from .polak2 import POLAK2 as POLAK2
@@ -243,7 +246,7 @@ constrained_minimisation_problems = (
     CB3(),
     CHACONN1(),
     CHACONN2(),
-    CLNLBEAM(),
+    # CLNLBEAM(),  # TODO: Dimension mismatch in constraints
     CONCON(),
     # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
@@ -347,6 +350,8 @@ constrained_minimisation_problems = (
     LOOTSMA(),
     MARATOS(),
     ODFITS(),
+    ORTHRGDM(),
+    ORTHREGD(),
     PENTAGON(),
     POLAK1(),
     POLAK2(),

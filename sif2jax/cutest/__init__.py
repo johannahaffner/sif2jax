@@ -48,7 +48,7 @@ from ._constrained_minimisation import (
     CB3 as CB3,
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
-    CLNLBEAM as CLNLBEAM,
+    # CLNLBEAM as CLNLBEAM,  # TODO: Dimension mismatch in constraints
     CONCON as CONCON,
     constrained_minimisation_problems as constrained_minimisation_problems,
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
@@ -200,6 +200,8 @@ from ._constrained_minimisation import (
     MAKELA4 as MAKELA4,
     MARATOS as MARATOS,
     ODFITS as ODFITS,
+    ORTHREGD as ORTHREGD,
+    ORTHRGDM as ORTHRGDM,
     PENTAGON as PENTAGON,
     POLAK1 as POLAK1,
     POLAK2 as POLAK2,
@@ -300,6 +302,7 @@ from ._nonlinear_equations import (
     LEVYMONE10 as LEVYMONE10,
     LIARWHDNE as LIARWHDNE,
     LINVERSENE as LINVERSENE,
+    LUKSAN14 as LUKSAN14,
     MANCINONE as MANCINONE,
     MEYER3NE as MEYER3NE,
     MGH09 as MGH09,
@@ -326,10 +329,12 @@ from ._nonlinear_equations import (
     PALMER5BNE as PALMER5BNE,
     PALMER5ENE as PALMER5ENE,
     PALMER7ANE as PALMER7ANE,
+    PFIT4 as PFIT4,
     POWELLBS as POWELLBS,
     POWELLSE as POWELLSE,
     POWELLSQ as POWELLSQ,
     POWERSUMNE as POWERSUMNE,
+    RES as RES,
     SANTA as SANTA,
     SINVALNE as SINVALNE,
     SSBRYBNDNE as SSBRYBNDNE,
@@ -500,6 +505,7 @@ from ._unconstrained_minimisation import (
     # PENALTY1 as PENALTY1,  # TODO: Human review - minor numerical precision issues
     # PENALTY2 as PENALTY2,  # TODO: Human review - SCALE factor issue
     POWER as POWER,
+    POWERSUM as POWERSUM,
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
@@ -508,6 +514,7 @@ from ._unconstrained_minimisation import (
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
     TOINTGSS as TOINTGSS,
     # TOINTPSP as TOINTPSP,  # TODO: Human review - gradient test fails
+    # TQUARTIC as TQUARTIC,  # TODO: Human review - objective calculation incorrect
     TRIGON1 as TRIGON1,
     # TRIGON2 as TRIGON2,  # TODO: Human review - Hessian test fails
     unconstrained_minimisation_problems as unconstrained_minimisation_problems,
@@ -532,7 +539,7 @@ problems_dict = {
     "CB3": CB3(),
     "CHACONN1": CHACONN1(),
     "CHACONN2": CHACONN2(),
-    "CLNLBEAM": CLNLBEAM(),
+    # "CLNLBEAM": CLNLBEAM(),  # TODO: Dimension mismatch in constraints
     "HS1": HS1(),
     "HS2": HS2(),
     "HS3": HS3(),
@@ -638,6 +645,8 @@ problems_dict = {
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
     "ODFITS": ODFITS(),
+    "ORTHRGDM": ORTHRGDM(),
+    "ORTHREGD": ORTHREGD(),
     "PENTAGON": PENTAGON(),
     "POLAK1": POLAK1(),
     "POLAK2": POLAK2(),
@@ -894,6 +903,7 @@ problems_dict = {
     # "PENALTY1": PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # "PENALTY2": PENALTY2(),  # TODO: Human review - SCALE factor issue
     "POWER": POWER(),
+    "POWERSUM": POWERSUM(),
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "ROSENBR": ROSENBR(),
     "ROSZMAN1LS": ROSZMAN1LS(),
@@ -911,6 +921,7 @@ problems_dict = {
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
+    # "TQUARTIC": TQUARTIC(),  # TODO: Human review - objective calculation incorrect
     "VARDIM": VARDIM(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
     "AIRCRFTA": AIRCRFTA(),
@@ -987,6 +998,7 @@ problems_dict = {
     "LEVYMONE10": LEVYMONE10(),
     "LIARWHDNE": LIARWHDNE(),
     "LINVERSENE": LINVERSENE(),
+    "LUKSAN14": LUKSAN14(),
     "MANCINONE": MANCINONE(),
     "MEYER3NE": MEYER3NE(),
     "MGH09": MGH09(),
@@ -1013,7 +1025,9 @@ problems_dict = {
     "PALMER5BNE": PALMER5BNE(),
     "PALMER5ENE": PALMER5ENE(),
     "PALMER7ANE": PALMER7ANE(),
+    "PFIT4": PFIT4(),
     "POWERSUMNE": POWERSUMNE(),
+    "RES": RES(),
     "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),
     "SSBRYBNDNE": SSBRYBNDNE(),

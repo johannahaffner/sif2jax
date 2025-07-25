@@ -1,30 +1,28 @@
-"""The Levy and Montalvo global optimization test problem.
-
-TODO: Human review needed
-Attempts made: Multiple interpretations of SCALE parameter, checked group structure
-Suspected issues: SCALE interpretation in SIF format not matching pycutest
-Additional resources needed: Documentation on exact SCALE behavior in SIF files
-
-This is a bounded nonlinear least squares problem with trigonometric terms,
-designed to test global optimization algorithms. The problem has multiple 
-local minima due to the sine functions.
-
-Source: A. Levy, A. Montalvo,
-The tunneling algorithm for the global minimization of functions,
-SIAM J. Sci. Stat. Comp. 6 (1985) 1, pp 15-29.
-
-SIF input: A.R. Conn, May 1993.
-
-Classification: SBR2-AY-V-0
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractBoundedMinimisation
 
 
 class LEVYMONT(AbstractBoundedMinimisation):
-    """The Levy-Montalvo global optimization test problem."""
+    """The Levy and Montalvo global optimization test problem.
+
+    TODO: Human review needed
+    Attempts made: Multiple interpretations of SCALE parameter, checked group structure
+    Suspected issues: SCALE interpretation in SIF format not matching pycutest
+    Additional resources needed: Documentation on exact SCALE behavior in SIF files
+
+    This is a bounded nonlinear least squares problem with trigonometric terms,
+    designed to test global optimization algorithms. The problem has multiple
+    local minima due to the sine functions.
+
+    Source: A. Levy, A. Montalvo,
+    The tunneling algorithm for the global minimization of functions,
+    SIAM J. Sci. Stat. Comp. 6 (1985) 1, pp 15-29.
+
+    SIF input: A.R. Conn, May 1993.
+
+    Classification: SBR2-AY-V-0
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -77,33 +75,29 @@ class LEVYMONT(AbstractBoundedMinimisation):
         n_over_pi = self.N / pi
         sqrt_k_pi_over_n = jnp.sqrt(self.K * pi / self.N)
 
-        sum_of_squares = 0.0
-
-        # Q(i) groups: coefficient L is scaled by N/π
-        # Group value is: (N/π * L) * x(i) - (A-C)
+        # Q(i) groups: coefficient L is scaled by N/π - vectorized
         a_minus_c = self.A - self.C
         scaled_L = n_over_pi * self.L
-        for i in range(self.N):
-            group_value = scaled_L * y[i] - a_minus_c
-            sum_of_squares += group_value**2
+        q_values = scaled_L * y - a_minus_c
+        q_sum_of_squares = jnp.sum(q_values**2)
 
-        # N(i) groups: elements already include the sqrt(K*π/N) scaling
-        # N(1) uses element S2: sin(π(L*x1 + C))
-        # Element is scaled by sqrt(K*π/N), squared contribution is K*π/N * sin^2(...)
+        # N(1) group: sin(π(L*x1 + C))
         lx1_c = self.L * y[0] + self.C
         element_1 = jnp.sin(pi * lx1_c)
         n_1_scaled = sqrt_k_pi_over_n * element_1
-        sum_of_squares += n_1_scaled**2
+        n_1_contribution = n_1_scaled**2
 
-        # N(i) for i >= 2 uses element PS2: (L*x(i-1) + C - A) * sin(π(L*x(i) + C))
-        for i in range(1, self.N):
-            lx_im1_c_a = self.L * y[i - 1] + self.C - self.A
-            lx_i_c = self.L * y[i] + self.C
-            element_i = lx_im1_c_a * jnp.sin(pi * lx_i_c)
-            n_i_scaled = sqrt_k_pi_over_n * element_i
-            sum_of_squares += n_i_scaled**2
+        # N(i) for i >= 2: (L*x(i-1) + C - A) * sin(π(L*x(i) + C)) - vectorized
+        if self.N > 1:
+            lx_im1_c_a = self.L * y[:-1] + self.C - self.A  # y[0] to y[N-2]
+            lx_i_c = self.L * y[1:] + self.C  # y[1] to y[N-1]
+            elements_i = lx_im1_c_a * jnp.sin(pi * lx_i_c)
+            n_i_scaled = sqrt_k_pi_over_n * elements_i
+            n_i_contributions = jnp.sum(n_i_scaled**2)
+        else:
+            n_i_contributions = 0.0
 
-        return sum_of_squares
+        return q_sum_of_squares + n_1_contribution + n_i_contributions
 
     @property
     def expected_result(self):

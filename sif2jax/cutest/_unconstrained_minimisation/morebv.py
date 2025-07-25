@@ -9,6 +9,21 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
+# TODO: Human review needed - Minor gradient precision differences
+# Attempts made:
+# 1. Vectorized for loops in objective function using JAX array operations
+# 2. Vectorized y0 computation
+# 3. Fixed dtype consistency issues (explicit dtype=jnp.float64)
+# 4. All tests pass except gradient_at_start with tiny differences (1e-14 level)
+#
+# Suspected issues:
+# - Gradient differences are at numerical precision limits (1e-14 to 1e-19)
+# - Likely due to different accumulation order in vectorized vs loop operations
+# - May be related to how JAX handles floating-point operations vs Fortran
+#
+# Additional resources needed:
+# - Determine if these precision differences are acceptable
+# - Consider using higher precision or different summation algorithms if needed
 class MOREBV(AbstractUnconstrainedMinimisation):
     """The Boundary Value problem.
 

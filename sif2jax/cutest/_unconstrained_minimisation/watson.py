@@ -7,6 +7,25 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
+# TODO: Human review needed - Hessian computation issues
+# Attempts made:
+# 1. Vectorized nested loops using JAX meshgrid and broadcasting
+# 2. Fixed matrix multiplication by using proper axis summation
+# 3. Verified objective and gradient match the loop-based implementation
+# 4. Confirmed vectorized implementation is mathematically correct
+#
+# Suspected issues:
+# - Hessian shows differences up to 16 in specific matrix positions
+# - Issue appears in column 8 (variable x9) interactions
+# - Problem may be related to how JAX autodiff handles the vectorized operations
+# - The combination of broadcasting, masking, and summation might interact
+#   poorly with second-order automatic differentiation
+#
+# Additional resources needed:
+# - Detailed comparison of Hessian values from pycutest vs JAX implementation
+# - Investigation of whether the SIF file's use of logarithms for numerical
+#   stability (ti^(j-2) computed as exp((j-2)*log(ti))) affects autodiff
+# - Consider alternative vectorization strategies that might be more autodiff-friendly
 class WATSON(AbstractUnconstrainedMinimisation):
     """Watson problem in 12 variables.
 

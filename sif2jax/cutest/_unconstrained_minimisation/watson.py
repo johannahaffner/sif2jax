@@ -50,12 +50,12 @@ class WATSON(AbstractUnconstrainedMinimisation):
         coefficients = (j_grid - 1) * (ti_grid ** (j_grid - 2))
         coefficients = jnp.where(j_grid > 1, coefficients, 0.0)
 
-        # Linear sums: coefficients @ y (excluding y[0] which corresponds to j=1)
-        linear_sums = jnp.dot(coefficients, y)
+        # Linear sums: sum over j for each i
+        linear_sums = jnp.sum(coefficients * y[None, :], axis=1)
 
         # Element MWSQ: weighted sum with ti^(j-1) weights
         weights = ti_grid ** (j_grid - 1)
-        element_sums = jnp.dot(weights, y)
+        element_sums = jnp.sum(weights * y[None, :], axis=1)
 
         # MWSQ element function is -u^2
         element_vals = -element_sums * element_sums

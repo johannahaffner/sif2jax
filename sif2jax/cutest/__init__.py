@@ -29,6 +29,7 @@ from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
+    ALLINITC as ALLINITC,
     ALSOTAME as ALSOTAME,
     # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
     AVGASA as AVGASA,
@@ -242,6 +243,9 @@ from ._constrained_minimisation import (
 from ._nonlinear_equations import (
     AIRCRFTA as AIRCRFTA,
     ARGAUSS as ARGAUSS,
+    ARGLALE as ARGLALE,
+    ARGLBLE as ARGLBLE,
+    ARGLCLE as ARGLCLE,
     ARGTRIG as ARGTRIG,
     ARTIF as ARTIF,
     # TODO: Human review needed - constraint dimension mismatch
@@ -568,6 +572,7 @@ problems_dict = {
     # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
     # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
+    "ALLINITC": ALLINITC(),
     "ALSOTAME": ALSOTAME(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
@@ -1003,6 +1008,9 @@ problems_dict = {
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
     "AIRCRFTA": AIRCRFTA(),
     "ARGAUSS": ARGAUSS(),
+    "ARGLALE": ARGLALE(),
+    "ARGLBLE": ARGLBLE(),
+    "ARGLCLE": ARGLCLE(),
     "ARGTRIG": ARGTRIG(),
     "ARTIF": ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch

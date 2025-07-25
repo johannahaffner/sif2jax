@@ -1,5 +1,8 @@
 from .aircrfta import AIRCRFTA as AIRCRFTA
 from .argauss import ARGAUSS as ARGAUSS
+from .arglale import ARGLALE as ARGLALE
+from .arglble import ARGLBLE as ARGLBLE
+from .arglcle import ARGLCLE as ARGLCLE
 from .argtrig import ARGTRIG as ARGTRIG
 from .artif import ARTIF as ARTIF
 
@@ -134,6 +137,9 @@ from .vanderm2 import VANDERM2 as VANDERM2
 nonlinear_equations_problems = (
     AIRCRFTA(),
     ARGAUSS(),
+    ARGLALE(),
+    ARGLBLE(),
+    ARGLCLE(),
     ARGTRIG(),
     ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch

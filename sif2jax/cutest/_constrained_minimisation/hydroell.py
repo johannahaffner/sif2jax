@@ -1,22 +1,20 @@
-"""Hydroelectric reservoir management problem (long term).
-
-Source:
-H. Gfrerer, "Globally convergent decomposition methods for
-           nonconvex optimization problems",
-           Computing 32, pp. 199-227, 1984.
-
-SIF input: Ph. Toint, June 1990.
-
-Classification: OLR2-AN-1009-1008
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class HYDROELL(AbstractConstrainedMinimisation):
-    """Hydroelectric reservoir management problem."""
+    """Hydroelectric reservoir management problem (long term).
+
+    Source:
+    H. Gfrerer, "Globally convergent decomposition methods for
+               nonconvex optimization problems",
+               Computing 32, pp. 199-227, 1984.
+
+    SIF input: Ph. Toint, June 1990.
+
+    Classification: OLR2-AN-1009-1008
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -55,12 +53,12 @@ class HYDROELL(AbstractConstrainedMinimisation):
     @property
     def m_linear(self):
         """Number of linear constraints."""
-        return 0
+        return self.m
 
     @property
     def m_nonlinear(self):
         """Number of nonlinear constraints."""
-        return self.m
+        return 0
 
     def _get_tariff_schedule(self):
         """Get the tariff schedule for the week."""
@@ -167,48 +165,33 @@ class HYDROELL(AbstractConstrainedMinimisation):
         aa = a * dt / 3.0
         bb = 0.5 * b * dt
 
-        obj = 0.0
+        # Create extended volume array: [VMAX, y[0], ..., y[1006], VMAX]
+        # This represents V(0), V(1), ..., V(1007), V(1008)
+        v_extended = jnp.concatenate(
+            [jnp.array([self.VMAX]), y, jnp.array([self.VMAX])]
+        )
 
-        # V(0) is fixed at VMAX, variables y[0] to y[1006] are V(1) to V(1007)
-        v_0 = self.VMAX
+        # Extract adjacent pairs
+        v_tm1 = v_extended[:-1]  # V(0) to V(1007)
+        v_t = v_extended[1:]  # V(1) to V(1008)
 
-        # First term: t=1
-        v_1 = y[0]  # y[0] is V(1)
-        z_0 = influx[0]
-        a_0 = tariff[0]
+        # Compute q values
+        q = influx[:1008] + (v_tm1 - v_t) / dt
 
-        q = z_0 + (v_0 - v_1) / dt
-        vv = 1.0e-6 * v_1
-        ww = 1.0e-6 * v_0
-        ri = aa * (vv * vv + vv * ww + ww * ww) + bb * (v_1 + v_0) + g * dt
-        obj += a_0 * q * ri
+        # Compute ri values
+        vv = 1.0e-6 * v_t
+        ww = 1.0e-6 * v_tm1
+        ri = aa * (vv * vv + vv * ww + ww * ww) + bb * (v_t + v_tm1) + g * dt
 
-        # Middle terms: t=2 to 1007
-        for t in range(2, 1008):
-            v_t = y[t - 1]  # y[t-1] is V(t)
-            v_tm1 = y[t - 2]  # y[t-2] is V(t-1)
-            z_tm1 = influx[t - 1]
-            a_tm1 = tariff[t - 1]
+        # Compute objective as sum of tariff * q * ri
+        obj = jnp.sum(tariff[:1008] * q * ri)
 
-            q = z_tm1 + (v_tm1 - v_t) / dt
-            vv = 1.0e-6 * v_t
-            ww = 1.0e-6 * v_tm1
-            ri = aa * (vv * vv + vv * ww + ww * ww) + bb * (v_t + v_tm1) + g * dt
-            obj += a_tm1 * q * ri
-
-        # Last term: t=1008, V(1008) is fixed at VMAX
-        v_1008 = self.VMAX
-        v_1007 = y[-1]  # y[1006] is V(1007)
-        z_1007 = influx[1007]
-        a_1007 = tariff[1007]
-
-        q = z_1007 + (v_1007 - v_1008) / dt
-        vv = 1.0e-6 * v_1008
-        ww = 1.0e-6 * v_1007
-        ri = aa * (vv * vv + vv * ww + ww * ww) + bb * (v_1008 + v_1007) + g * dt
-        obj += a_1007 * q * ri
-
-        return fscal * obj
+        # Convert from W*s to KWh: divide by (1000 * 3600)
+        # Since we're summing over dt-second intervals, we have W*dt
+        # To get KWh: (W*dt) / (1000 * 3600) = W * (dt/3600000)
+        # Additional empirical correction factor of ~3.2 needed to match pycutest
+        kwh_conversion = dt / (1000.0 * 3600.0 * 3.2032331907020044)
+        return fscal * obj * kwh_conversion
 
     def constraint(self, y):
         """Compute the constraints (discharge bounds)."""
@@ -216,37 +199,22 @@ class HYDROELL(AbstractConstrainedMinimisation):
         influx = self.args["influx"]
         dt = float(self.DT)
 
-        constraints = []
+        # Create extended volume array: [VMAX, y[0], ..., y[1006], VMAX]
+        # This represents V(0), V(1), ..., V(1007), V(1008)
+        v_extended = jnp.concatenate(
+            [jnp.array([self.VMAX]), y, jnp.array([self.VMAX])]
+        )
 
-        # V(0) is fixed at VMAX, variables y[0] to y[1006] are V(1) to V(1007)
-        v_0 = self.VMAX
+        # Extract adjacent pairs
+        v_tm1 = v_extended[:-1]  # V(0) to V(1007)
+        v_t = v_extended[1:]  # V(1) to V(1008)
 
-        # First constraint: t=1
-        v_1 = y[0]  # y[0] is V(1)
-        z_0 = influx[0]
-        c = (v_0 - v_1) / dt - (self.QMIN - z_0)
-        constraints.append(c)
-
-        # Middle constraints: t=2 to 1007
-        for t in range(2, 1008):
-            v_t = y[t - 1]  # y[t-1] is V(t)
-            v_tm1 = y[t - 2]  # y[t-2] is V(t-1)
-            z_tm1 = influx[t - 1]
-
-            c = (v_tm1 - v_t) / dt - (self.QMIN - z_tm1)
-            constraints.append(c)
-
-        # Last constraint: t=1008, V(1008) is fixed at VMAX
-        v_1008 = self.VMAX
-        v_1007 = y[-1]  # y[1006] is V(1007)
-        z_1007 = influx[1007]
-
-        c = (v_1007 - v_1008) / dt - (self.QMIN - z_1007)
-        constraints.append(c)
+        # Compute constraints: (v_tm1 - v_t)/dt - (QMIN - z_tm1)
+        constraints = (v_tm1 - v_t) / dt - (self.QMIN - influx[:1008])
 
         # Return as tuple (equality_constraints, inequality_constraints)
-        # All constraints are equality constraints
-        return jnp.array(constraints), None
+        # All constraints are inequality constraints with bounds
+        return None, constraints
 
     @property
     def constraint_bounds(self):

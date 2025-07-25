@@ -3,15 +3,15 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
-class HIMMELBC(AbstractConstrainedMinimisation):
+class HIMMELBD(AbstractConstrainedMinimisation):
     """A 2 variables problem by Himmelblau.
 
-    Source: problem 28 in
+    Source: problem 29 in
     D.H. Himmelblau,
     "Applied nonlinear programming",
     McGraw-Hill, New-York, 1972.
 
-    See Buckley#6 (p. 63)
+    See Buckley#86 (p. 64)
 
     SIF input: Ph. Toint, Dec 1989.
 
@@ -51,12 +51,19 @@ class HIMMELBC(AbstractConstrainedMinimisation):
     def constraint(self, y):
         """Returns the constraints on the variable y."""
         x1, x2 = y
+
         # Equality constraints: g(x) = 0
-        g1 = x1**2 + x2 - 11.0
-        g2 = x1 + x2**2 - 7.0
+        # G1: x1^2 + 12*x2 - 1.0 = 0
+        g1 = x1**2 + 12.0 * x2 - 1.0
+
+        # G2: 49*x1^2 + 84*x1 + 49*x2^2 + 2324*x2 - 681.0 = 0
+        g2 = 49.0 * x1**2 + 84.0 * x1 + 49.0 * x2**2 + 2324.0 * x2 - 681.0
+
         eq_constraints = jnp.array([g1, g2])
+
         # No inequality constraints
         ineq_constraints = None
+
         return eq_constraints, ineq_constraints
 
     @property

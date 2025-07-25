@@ -3,32 +3,32 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
-class HIMMELBC(AbstractConstrainedMinimisation):
-    """A 2 variables problem by Himmelblau.
+class HIMMELBE(AbstractConstrainedMinimisation):
+    """A 3 variables problem by Himmelblau.
 
-    Source: problem 28 in
+    Source: problem 30 in
     D.H. Himmelblau,
     "Applied nonlinear programming",
     McGraw-Hill, New-York, 1972.
 
-    See Buckley#6 (p. 63)
+    See Buckley#88 (p. 65)
 
     SIF input: Ph. Toint, Dec 1989.
 
-    classification: NQR2-AN-2-2
+    classification: NQR2-AY-3-3
     """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    n: int = 2  # 2 variables
-    m_eq: int = 2  # 2 equality constraints
+    n: int = 3  # 3 variables
+    m_eq: int = 3  # 3 equality constraints
     m_ineq: int = 0  # no inequality constraints
 
     @property
     def y0(self):
-        # Both variables start at 1.0
-        return jnp.ones(self.n)
+        # Starting point from SIF file
+        return jnp.array([-1.2, 2.0, 0.0])
 
     @property
     def args(self):
@@ -50,19 +50,29 @@ class HIMMELBC(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         """Returns the constraints on the variable y."""
-        x1, x2 = y
+        x1, x2, x3 = y
+
         # Equality constraints: g(x) = 0
-        g1 = x1**2 + x2 - 11.0
-        g2 = x1 + x2**2 - 7.0
-        eq_constraints = jnp.array([g1, g2])
+        # G1: 0.25 * (x1 + x2)^2 - x3 = 0
+        g1 = 0.25 * (x1 + x2) ** 2 - x3
+
+        # G2: -x1 + 1.0 = 0 => x1 = 1.0
+        g2 = -x1 + 1.0
+
+        # G3: -x2 + 1.0 = 0 => x2 = 1.0
+        g3 = -x2 + 1.0
+
+        eq_constraints = jnp.array([g1, g2, g3])
+
         # No inequality constraints
         ineq_constraints = None
+
         return eq_constraints, ineq_constraints
 
     @property
     def expected_result(self):
-        # The optimal solution is not explicitly given in the SIF file
-        return None
+        # From the constraints: x1 = 1.0, x2 = 1.0, x3 = 0.25*(1+1)^2 = 1.0
+        return jnp.array([1.0, 1.0, 1.0])
 
     @property
     def expected_objective_value(self):

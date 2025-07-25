@@ -47,6 +47,9 @@ from .deconvc import DECONVC as DECONVC
 from .dtoc1l import DTOC1L as DTOC1L
 from .elattar import ELATTAR as ELATTAR
 from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
+from .himmelbc import HIMMELBC as HIMMELBC
+from .himmelbd import HIMMELBD as HIMMELBD
+from .himmelbe import HIMMELBE as HIMMELBE
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
 from .hs8 import HS8 as HS8
@@ -208,6 +211,8 @@ from .polak2 import POLAK2 as POLAK2
 from .polak3 import POLAK3 as POLAK3
 from .polak5 import POLAK5 as POLAK5
 from .polygon import POLYGON as POLYGON
+from .simpllpa import SIMPLLPA as SIMPLLPA
+from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
@@ -346,6 +351,9 @@ constrained_minimisation_problems = (
     HS117(),
     HS118(),
     HS119(),
+    HIMMELBC(),
+    HIMMELBD(),
+    HIMMELBE(),
     HYDROELL(),
     LOOTSMA(),
     MARATOS(),
@@ -358,6 +366,8 @@ constrained_minimisation_problems = (
     POLAK3(),
     POLAK5(),
     POLYGON(),
+    SIMPLLPA(),
+    SIMPLLPB(),
     SIPOW1(),
     SIPOW2(),
     # STEENBRB(),  # TODO: Human review - gradient test failing

@@ -68,6 +68,7 @@ from .hatfldbne import HATFLDBNE as HATFLDBNE
 from .hatfldcne import HATFLDCNE as HATFLDCNE
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
 from .helixne import HELIXNE as HELIXNE
+from .himmelba import HIMMELBA as HIMMELBA
 from .himmelbfne import HIMMELBFNE as HIMMELBFNE
 from .hs1ne import HS1NE as HS1NE
 from .hs2ne import HS2NE as HS2NE
@@ -188,6 +189,7 @@ nonlinear_equations_problems = (
     HATFLDCNE(),
     HATFLDFLNE(),
     HELIXNE(),
+    HIMMELBA(),
     HIMMELBFNE(),
     HS1NE(),
     HS2NE(),

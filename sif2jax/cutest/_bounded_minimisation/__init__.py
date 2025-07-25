@@ -1,3 +1,4 @@
+from .dgospec import DGOSPEC as DGOSPEC
 from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
@@ -19,6 +20,7 @@ from .price4b import PRICE4B as PRICE4B
 
 
 bounded_minimisation_problems = (
+    DGOSPEC(),
     EXP2B(),
     EXPLIN(),
     EXPLIN2(),

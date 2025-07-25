@@ -1,5 +1,7 @@
 from ._bounded_minimisation import (
     bounded_minimisation_problems as bounded_minimisation_problems,
+    BRANIN as BRANIN,
+    CAMEL6 as CAMEL6,
     DGOSPEC as DGOSPEC,
     EXP2B as EXP2B,
     EXPLIN as EXPLIN,
@@ -528,6 +530,7 @@ from ._unconstrained_minimisation import (
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
+    SISSER as SISSER,
     # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
@@ -540,6 +543,7 @@ from ._unconstrained_minimisation import (
     VARDIM as VARDIM,
     WAYSEA1 as WAYSEA1,
     WAYSEA2 as WAYSEA2,
+    ZANGWIL2 as ZANGWIL2,
 )
 
 
@@ -771,7 +775,9 @@ problems_dict = {
     "BOXBOD": BOXBOD(),
     "BOXBODLS": BOXBODLS(),
     # "BOXPOWER": BOXPOWER(),  # TODO: Human review - minor gradient discrepancy
+    "BRANIN": BRANIN(),
     # "BRKMCC": BRKMCC(),  # TODO: Human review - significant discrepancies
+    "CAMEL6": CAMEL6(),
     # "BROWNAL": BROWNAL(),  # TODO: Human review - small Hessian discrepancies
     "BROWNBS": BROWNBS(),
     "BROWNDEN": BROWNDEN(),
@@ -942,6 +948,7 @@ problems_dict = {
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "ROSENBR": ROSENBR(),
     "ROSZMAN1LS": ROSZMAN1LS(),
+    "SISSER": SISSER(),
     # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     "TENBARS4": TENBARS4(),
     "TENFOLDTRLS": TENFOLDTRLS(),
@@ -952,6 +959,7 @@ problems_dict = {
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
     # "YATP2LS": YATP2LS(),  # TODO: Fix dimension mismatch
+    "ZANGWIL2": ZANGWIL2(),
     "TRIGON1": TRIGON1(),
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails

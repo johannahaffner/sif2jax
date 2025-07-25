@@ -224,6 +224,7 @@ from .powersum import POWERSUM as POWERSUM
 # from .powellsg import POWELLSG as POWELLSG
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
+from .sisser import SISSER as SISSER
 
 # TODO: Human review needed - complex matrix multiplication formulation
 # from .spmsrtls import SPMSRTLS as SPMSRTLS
@@ -244,6 +245,7 @@ from .trigon1 import TRIGON1 as TRIGON1
 from .vardim import VARDIM as VARDIM
 from .waysea1 import WAYSEA1 as WAYSEA1
 from .waysea2 import WAYSEA2 as WAYSEA2
+from .zangwil2 import ZANGWIL2 as ZANGWIL2
 
 
 # from .yatp2ls import YATP2LS as YATP2LS  # TODO: Fix dimension mismatch
@@ -426,11 +428,13 @@ unconstrained_minimisation_problems = (
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
     ROSZMAN1LS(),
+    SISSER(),
     # SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS(),
     WAYSEA1(),
     WAYSEA2(),
     # YATP2LS(),  # TODO: Fix dimension mismatch
+    ZANGWIL2(),
     TRIGON1(),
     # TRIGON2(),  # TODO: Human review - Hessian test fails
     # TOINTGOR(),  # TODO: Human review - runtime test fails

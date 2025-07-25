@@ -189,6 +189,7 @@ from .loghairy import LOGHAIRY as LOGHAIRY
 from .lsc1ls import LSC1LS as LSC1LS
 from .lsc2ls import LSC2LS as LSC2LS
 
+# from .luksan22ls import LUKSAN22LS as LUKSAN22LS  # TODO: Fix objective calculation
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
 # from .mexhat import MEXHAT as MEXHAT  # TODO: Human review - complex scaling issues
@@ -211,6 +212,8 @@ from .power import POWER as POWER
 # from .powellsg import POWELLSG as POWELLSG
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
+
+# from .spmsrtls import SPMSRTLS as SPMSRTLS  # TODO: Not yet implemented
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
 
 # TODO: TOINTGOR needs human review - runtime test fails (~8x slower than threshold)
@@ -226,6 +229,9 @@ from .trigon1 import TRIGON1 as TRIGON1
 from .vardim import VARDIM as VARDIM
 from .waysea1 import WAYSEA1 as WAYSEA1
 from .waysea2 import WAYSEA2 as WAYSEA2
+
+
+# from .yatp2ls import YATP2LS as YATP2LS  # TODO: Fix dimension mismatch
 
 
 unconstrained_minimisation_problems = (
@@ -378,6 +384,7 @@ unconstrained_minimisation_problems = (
     # LR(),
     LSC1LS(),
     LSC2LS(),
+    # LUKSAN22LS(),  # TODO: Fix objective calculation
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     # MEXHAT(),  # TODO: Human review - complex scaling issues
     MGH10LS(),
@@ -393,9 +400,11 @@ unconstrained_minimisation_problems = (
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
     ROSZMAN1LS(),
+    # SPMSRTLS(),  # TODO: Not yet implemented
     TENFOLDTRLS(),
     WAYSEA1(),
     WAYSEA2(),
+    # YATP2LS(),  # TODO: Fix dimension mismatch
     TRIGON1(),
     # TRIGON2(),  # TODO: Human review - Hessian test fails
     # TOINTGOR(),  # TODO: Human review - runtime test fails

@@ -13,6 +13,7 @@ from ._bounded_minimisation import (
     HS38 as HS38,
     HS45 as HS45,
     HS110 as HS110,
+    # LEVYMONT as LEVYMONT,  # TODO: Fix SCALE interpretation
     PALMER3B as PALMER3B,
     PALMER4E as PALMER4E,
     PRICE4B as PRICE4B,
@@ -502,6 +503,7 @@ from ._unconstrained_minimisation import (
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
+    # SPMSRTLS as SPMSRTLS,  # TODO: Not yet implemented
     TENFOLDTRLS as TENFOLDTRLS,
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
     TOINTGSS as TOINTGSS,
@@ -624,6 +626,7 @@ problems_dict = {
     "HS108": HS108(),
     "HS109": HS109(),
     "HS110": HS110(),
+    # "LEVYMONT": LEVYMONT(),  # TODO: Fix SCALE interpretation
     "HS111": HS111(),
     "HS112": HS112(),
     "HS113": HS113(),
@@ -894,6 +897,7 @@ problems_dict = {
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "ROSENBR": ROSENBR(),
     "ROSZMAN1LS": ROSZMAN1LS(),
+    # "SPMSRTLS": SPMSRTLS(),  # TODO: Not yet implemented
     "TENBARS4": TENBARS4(),
     "TENFOLDTRLS": TENFOLDTRLS(),
     "POWELLBS": POWELLBS(),
@@ -902,6 +906,7 @@ problems_dict = {
     "PRICE4B": PRICE4B(),
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
+    # "YATP2LS": YATP2LS(),  # TODO: Fix dimension mismatch
     "TRIGON1": TRIGON1(),
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails

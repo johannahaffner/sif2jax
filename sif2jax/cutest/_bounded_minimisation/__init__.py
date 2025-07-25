@@ -30,6 +30,7 @@ bounded_minimisation_problems = (
     HS38(),
     HS45(),
     HS110(),
+    # LEVYMONT(),  # TODO: Fix SCALE interpretation
     PALMER3B(),
     PALMER4E(),
     PRICE4B(),

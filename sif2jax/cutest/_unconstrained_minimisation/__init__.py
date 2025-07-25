@@ -221,8 +221,7 @@ from .palmer8c import PALMER8C as PALMER8C
 # from .penalty2 import PENALTY2 as PENALTY2
 from .power import POWER as POWER
 from .powersum import POWERSUM as POWERSUM
-
-# from .price3 import PRICE3 as PRICE3  # TODO: Human review - objective issues remain
+from .price3 import PRICE3 as PRICE3
 from .price4 import PRICE4 as PRICE4
 
 # TODO: Human review - objective off by factor of 4.15
@@ -435,7 +434,7 @@ unconstrained_minimisation_problems = (
     POWER(),
     POWERSUM(),
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
-    # PRICE3(),  # TODO: Human review - objective issues remain
+    PRICE3(),
     PRICE4(),
     ROSENBR(),
     ROSZMAN1LS(),

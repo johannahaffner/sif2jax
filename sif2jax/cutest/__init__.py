@@ -538,7 +538,7 @@ from ._unconstrained_minimisation import (
     POWER as POWER,
     POWERSUM as POWERSUM,
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
-    # PRICE3 as PRICE3,  # TODO: Human review - objective issues remain
+    PRICE3 as PRICE3,
     PRICE4 as PRICE4,
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
@@ -970,7 +970,7 @@ problems_dict = {
     "POWER": POWER(),
     "POWERSUM": POWERSUM(),
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
-    # "PRICE3": PRICE3(),  # TODO: Human review - objective issues remain
+    "PRICE3": PRICE3(),
     "PRICE4": PRICE4(),
     "ROSENBR": ROSENBR(),
     "ROSZMAN1LS": ROSZMAN1LS(),

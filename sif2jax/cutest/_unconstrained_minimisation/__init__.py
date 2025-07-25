@@ -202,6 +202,15 @@ from .noncvxu2 import NONCVXU2 as NONCVXU2
 from .noncvxun import NONCVXUN as NONCVXUN
 from .nondquar import NONDQUAR as NONDQUAR
 from .nonmsqrt import NONMSQRT as NONMSQRT
+from .palmer1c import PALMER1C as PALMER1C
+from .palmer1d import PALMER1D as PALMER1D
+from .palmer2c import PALMER2C as PALMER2C
+from .palmer3c import PALMER3C as PALMER3C
+from .palmer4c import PALMER4C as PALMER4C
+from .palmer5c import PALMER5C as PALMER5C
+from .palmer6c import PALMER6C as PALMER6C
+from .palmer7c import PALMER7C as PALMER7C
+from .palmer8c import PALMER8C as PALMER8C
 
 # TODO: Human review - minor numerical precision issues
 # from .penalty1 import PENALTY1 as PENALTY1
@@ -399,6 +408,15 @@ unconstrained_minimisation_problems = (
     NONCVXUN(),
     NONDQUAR(),
     NONMSQRT(),
+    PALMER1C(),
+    PALMER1D(),
+    PALMER2C(),
+    PALMER3C(),
+    PALMER4C(),
+    PALMER5C(),
+    PALMER6C(),
+    PALMER7C(),
+    PALMER8C(),
     # PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # PENALTY2(),  # TODO: Human review - SCALE factor issue
     POWER(),

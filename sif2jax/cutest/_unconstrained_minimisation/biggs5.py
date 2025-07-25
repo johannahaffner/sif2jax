@@ -24,7 +24,7 @@ class BIGGS5(AbstractUnconstrainedMinimisation):
     The number of groups can be varied, but should be larger or equal
     to the number of variables.
     """
-
+    
     @property
     def name(self) -> str:
         return "BIGGS5"

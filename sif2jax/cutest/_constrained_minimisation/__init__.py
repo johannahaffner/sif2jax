@@ -50,6 +50,7 @@ from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .himmelbc import HIMMELBC as HIMMELBC
 from .himmelbd import HIMMELBD as HIMMELBD
 from .himmelbe import HIMMELBE as HIMMELBE
+from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
 from .hs8 import HS8 as HS8

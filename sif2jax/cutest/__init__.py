@@ -21,6 +21,7 @@ from ._bounded_minimisation import (
     PALMER2 as PALMER2,
     PALMER3B as PALMER3B,
     PALMER4E as PALMER4E,
+    PALMER3B as PALMER3B,
     PRICE4B as PRICE4B,
 )
 from ._constrained_minimisation import (
@@ -68,6 +69,7 @@ from ._constrained_minimisation import (
     HIMMELBC as HIMMELBC,
     HIMMELBD as HIMMELBD,
     HIMMELBE as HIMMELBE,
+    GIGOMEZ2 as GIGOMEZ2,
     HS6 as HS6,
     HS7 as HS7,
     HS8 as HS8,

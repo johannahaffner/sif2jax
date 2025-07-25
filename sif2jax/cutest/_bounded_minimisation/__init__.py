@@ -18,6 +18,7 @@ from .palmer1 import PALMER1 as PALMER1
 from .palmer2 import PALMER2 as PALMER2
 from .palmer3b import PALMER3B as PALMER3B
 from .palmer4e import PALMER4E as PALMER4E
+from .palmer3b import PALMER3B as PALMER3B
 from .price4b import PRICE4B as PRICE4B
 
 
@@ -43,5 +44,6 @@ bounded_minimisation_problems = (
     PALMER2(),
     PALMER3B(),
     PALMER4E(),
+    PALMER3B(),
     PRICE4B(),
 )

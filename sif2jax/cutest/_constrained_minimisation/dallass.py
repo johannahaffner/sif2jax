@@ -42,12 +42,15 @@ class DALLASS(AbstractConstrainedMinimisation):
 
         # Define pipe function (T1 elements)
         def pipe_function(arc, c1, c2, c3):
-            """Pipe function: f(x) = tmp * |x|^2 * |x|^0.85
+            """Pipe function: f(x) = tmp * |x|^2.85
             where tmp = 850559.0 / 2.85 * c1 / (c3^1.85) / (c2^4.87)"""
             tmp = 850559.0 / 2.85 * c1 / (c3**1.85) / (c2**4.87)
             x_abs = jnp.abs(arc)
-            # Avoid division by zero issues when arc is exactly 0
-            return jnp.where(x_abs == 0.0, 0.0, tmp * x_abs**2 * x_abs**0.85)
+            # For numerical stability and differentiability at 0, use a small epsilon
+            eps = 1e-10
+            x_safe = jnp.maximum(x_abs, eps)
+            # When x is very small, the function value should approach 0
+            return jnp.where(x_abs < eps, 0.0, tmp * x_safe**2.85)
 
         # Define elliptic pump function (T4 elements)
         def elliptic_pump_function(arc, c1, c2):

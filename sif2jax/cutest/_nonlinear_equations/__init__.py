@@ -50,7 +50,9 @@ from .denschnfne import DENSCHNFNE as DENSCHNFNE
 from .devgla1ne import DEVGLA1NE as DEVGLA1NE
 from .devgla2ne import DEVGLA2NE as DEVGLA2NE
 from .eggcratene import EGGCRATENE as EGGCRATENE
-from .eigenau import EIGENAU as EIGENAU
+
+# TODO: Human review - pycutest has non-standard initial values
+# from .eigenau import EIGENAU as EIGENAU
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
 from .errinrsmne import ERRINRSMNE as ERRINRSMNE

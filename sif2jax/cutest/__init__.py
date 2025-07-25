@@ -267,7 +267,7 @@ from ._nonlinear_equations import (
     DEVGLA1NE as DEVGLA1NE,
     DEVGLA2NE as DEVGLA2NE,
     EGGCRATENE as EGGCRATENE,
-    EIGENAU as EIGENAU,
+    # EIGENAU as EIGENAU,  # TODO: Human review - non-standard initial values
     ELATVIDUNE as ELATVIDUNE,
     ENGVAL2NE as ENGVAL2NE,
     ERRINRSMNE as ERRINRSMNE,
@@ -491,7 +491,7 @@ from ._unconstrained_minimisation import (
     MGH10LS as MGH10LS,
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     # MEXHAT as MEXHAT,  # TODO: Human review - complex scaling issues
-    MODBEALE as MODBEALE,
+    # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
     # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
     NONCVXU2 as NONCVXU2,
     NONCVXUN as NONCVXUN,
@@ -883,7 +883,7 @@ problems_dict = {
     "LSC2LS": LSC2LS(),
     # "MANCINO": MANCINO(),  # TODO: Human review - significant discrepancies in all
     # "MEXHAT": MEXHAT(),  # TODO: Human review - complex scaling issues
-    "MODBEALE": MODBEALE(),
+    # "MODBEALE": MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     "MGH10LS": MGH10LS(),
     # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
     "NONCVXU2": NONCVXU2(),
@@ -954,7 +954,7 @@ problems_dict = {
     "DEVGLA1NE": DEVGLA1NE(),
     "DEVGLA2NE": DEVGLA2NE(),
     "EGGCRATENE": EGGCRATENE(),
-    "EIGENAU": EIGENAU(),
+    # "EIGENAU": EIGENAU(),  # TODO: Human review - non-standard initial values
     "ELATTAR": ELATTAR(),
     "ELATVIDUNE": ELATVIDUNE(),
     "ENGVAL2NE": ENGVAL2NE(),

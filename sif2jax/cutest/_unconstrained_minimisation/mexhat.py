@@ -1,13 +1,14 @@
+from __future__ import annotations
+
+from typing import Any
+
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class MEXHAT(AbstractUnconstrainedMinimisation):
-    """
-    MEXHAT problem.
-
-    The mexican hat problem with penalty parameter 0.00001
+    """The mexican hat problem with penalty parameter 0.00001.
 
     Source:
     A.A. Brown and M. Bartholomew-Biggs,
@@ -19,44 +20,43 @@ class MEXHAT(AbstractUnconstrainedMinimisation):
     SIF input: Ph. Toint, June 1990.
 
     classification OUR2-AN-2-0
-
-    TODO: Human review needed
-    Attempts made: Multiple interpretations of SIF scaling and group types
-    Suspected issues: Incorrect interpretation of how INVP scaling interacts with
-    L2 group type
-    Additional resources needed: Clarification on SIF group scaling semantics
     """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    def objective(self, y, args):
-        del args
+    n: int = 2  # Number of variables
+
+    # Penalty parameter
+    invp = 0.00001
+
+    def objective(self, y: Any, args: Any) -> Any:
+        """Compute the objective function."""
         x1, x2 = y
 
-        # Parameters
-        invp = 0.00001
-        p = 1.0 / invp  # p = 100000.0
+        # Element O1 (SSQ type with S=1.0)
+        xms = x1 - 1.0
+        o1 = xms * xms
 
-        # Element values
-        x1_minus_1 = x1 - 1.0
-        x1_minus_1_sq = x1_minus_1 * x1_minus_1
+        # Element O2 (SSQ type with S=1.0)
+        # Both O1 and O2 use X1 and S=1.0, so they are identical
+        o2 = o1
 
-        x2_minus_x1sq = x2 - x1 * x1
-        x2_minus_x1sq_sq = x2_minus_x1sq * x2_minus_x1sq
+        # Element C1 (XMYSQ type)
+        xx = x2 - x1 * x1
+        c1 = xx * xx
 
-        # Based on AMPL model:
-        # minimize f: - 2*(x[1]-1)^2 + p*(   (-0.02+(x[2]-x[1]^2)^2/p+(x[1]-1)^2)^2  )
+        # Group F: E  F         O1        -1.0           O2        -1.0
+        f = -1.0 * o1 + -1.0 * o2  # = -2.0 * o1 since o1 == o2
 
-        # First term: -2*(x1-1)^2
-        first_term = -2.0 * x1_minus_1_sq
+        # Group C with L2 type and constant 0.02
+        c_linear = 10000.0 * c1 + o1 - 0.02
+        c_group = c_linear * c_linear
 
-        # Second term: p * (inner_expression)^2
-        # inner_expression = -0.02 + (x2-x1^2)^2/p + (x1-1)^2
-        inner_expr = -0.02 + x2_minus_x1sq_sq / p + x1_minus_1_sq
-        second_term = p * inner_expr * inner_expr
+        # Objective with scale - group C scaled by INVP means divided by INVP
+        obj = f + c_group / self.invp
 
-        return first_term + second_term
+        return obj
 
     @property
     def y0(self):
@@ -68,11 +68,14 @@ class MEXHAT(AbstractUnconstrainedMinimisation):
 
     @property
     def expected_result(self):
-        # Solution not provided in SIF file
+        """Expected solution - not provided in SIF file."""
+        # Will be determined by testing
         return None
 
     @property
     def expected_objective_value(self):
-        # Two solution values given in SIF file
-        # Using the first one
+        """Expected optimal objective value."""
+        # From SIF file comments, two possible solutions:
+        # -0.0898793 or -1.1171526
+        # Will use the first one
         return jnp.array(-0.0898793)

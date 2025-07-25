@@ -3,8 +3,6 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: This implementation requires human review and verification against
-# another CUTEst interface
 class EG2(AbstractUnconstrainedMinimisation):
     """The EG2 function.
 

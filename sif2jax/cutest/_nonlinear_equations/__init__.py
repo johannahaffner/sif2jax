@@ -62,6 +62,7 @@ from .extrosnbne import EXTROSNBNE as EXTROSNBNE
 from .freurone import FREURONE as FREURONE
 from .genrosebne import GENROSEBNE as GENROSEBNE
 from .genrosene import GENROSENE as GENROSENE
+from .gottfr import GOTTFR as GOTTFR
 from .gulfne import GULFNE as GULFNE
 from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
@@ -183,6 +184,7 @@ nonlinear_equations_problems = (
     FREURONE(),
     GENROSEBNE(),
     GENROSENE(),
+    GOTTFR(),
     GULFNE(),
     HATFLDANE(),
     HATFLDBNE(),

@@ -4,7 +4,9 @@ from .dgospec import DGOSPEC as DGOSPEC
 from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
+from .hart6 import HART6 as HART6
 from .hatfldc import HATFLDC as HATFLDC
+from .himmelp1 import HIMMELP1 as HIMMELP1
 from .hs1 import HS1 as HS1
 from .hs2 import HS2 as HS2
 from .hs3 import HS3 as HS3
@@ -18,7 +20,6 @@ from .palmer1 import PALMER1 as PALMER1
 from .palmer2 import PALMER2 as PALMER2
 from .palmer3b import PALMER3B as PALMER3B
 from .palmer4e import PALMER4E as PALMER4E
-from .palmer3b import PALMER3B as PALMER3B
 from .price4b import PRICE4B as PRICE4B
 
 
@@ -29,7 +30,9 @@ bounded_minimisation_problems = (
     EXP2B(),
     EXPLIN(),
     EXPLIN2(),
+    HART6(),
     HATFLDC(),
+    HIMMELP1(),
     HS1(),
     HS2(),
     HS3(),

@@ -3,7 +3,6 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
-# TODO needs human review, Claude tried and failed (and I don't know what was tried)
 class DALLASS(AbstractConstrainedMinimisation):
     """The small Dallas water distribution problem.
 
@@ -38,7 +37,98 @@ class DALLASS(AbstractConstrainedMinimisation):
 
         The objective consists of nonlinear pipe flow elements and linear terms.
         """
-        raise NotImplementedError("DALLASS requires complex element implementations")
+        del args
+        x = y
+
+        # Define pipe function (T1 elements)
+        def pipe_function(arc, c1, c2, c3):
+            """Pipe function: f(x) = tmp * |x|^2.85
+            where tmp = 850559.0 / 2.85 * c1 / (c3^1.85) / (c2^4.87)"""
+            tmp = 850559.0 / 2.85 * c1 / (c3**1.85) / (c2**4.87)
+            x_abs = jnp.abs(arc)
+            # For numerical stability and differentiability at 0, use a small epsilon
+            eps = 1e-10
+            x_safe = jnp.maximum(x_abs, eps)
+            # When x is very small, the function value should approach 0
+            return jnp.where(x_abs < eps, 0.0, tmp * x_safe**2.85)
+
+        # Define elliptic pump function (T4 elements)
+        def elliptic_pump_function(arc, c1, c2):
+            """Elliptic pump function"""
+            eps2 = 1e-14
+            sqc1 = jnp.sqrt(c1)
+            x_clipped = jnp.minimum(arc, sqc1)
+            tmp = c2 * (c1 - x_clipped * x_clipped)
+            tmp = jnp.sqrt(jnp.maximum(tmp, eps2))
+            # Handle division by zero in arcsin
+            safe_ratio = jnp.clip(x_clipped / sqc1, -1.0, 1.0)
+            tmp2 = jnp.sqrt(c2) * jnp.arcsin(safe_ratio)
+            return 0.5 * (-x_clipped * tmp - c1 * tmp2)
+
+        # Objective function terms
+        obj = 0.0
+
+        # Linear terms
+        obj += -638.400 * x[41]  # X42
+        obj += -633.000 * x[42]  # X43
+        obj += -554.500 * x[43]  # X44
+        obj += -505.000 * x[44]  # X45
+        obj += -436.900 * x[45]  # X46
+
+        # T4 elements (elliptic pump)
+        obj += elliptic_pump_function(x[0], 448.060, 251.200)  # E1
+        obj += elliptic_pump_function(x[1], 1915.26, 64.6300)  # E2
+        obj += elliptic_pump_function(x[2], 1077.52, 48.1400)  # E3
+        obj += elliptic_pump_function(x[18], 484.530, 112.970)  # E19
+        obj += elliptic_pump_function(x[20], 186.880, 160.610)  # E21
+
+        # T1 elements (pipe function)
+        obj += pipe_function(x[3], 6900.00, 66.0000, 122.000)  # E4
+        obj += pipe_function(x[4], 100.000, 10.0000, 100.000)  # E5
+        obj += pipe_function(x[5], 663.000, 36.0000, 120.000)  # E6
+        obj += pipe_function(x[6], 5100.00, 66.0000, 122.000)  # E7
+        obj += pipe_function(x[7], 645.000, 30.0000, 120.000)  # E8
+        obj += pipe_function(x[8], 7400.00, 66.0000, 122.000)  # E9
+        obj += pipe_function(x[9], 5000.00, 66.0000, 95.0000)  # E10
+        obj += pipe_function(x[10], 800.000, 54.0000, 107.000)  # E11
+        obj += pipe_function(x[11], 5200.00, 48.0000, 110.000)  # E12
+        obj += pipe_function(x[12], 6000.00, 48.0000, 110.000)  # E13
+        obj += pipe_function(x[13], 400.000, 54.0000, 100.000)  # E14
+        obj += pipe_function(x[14], 40.0000, 31.2200, 130.000)  # E15
+        obj += pipe_function(x[15], 4500.00, 66.0000, 122.000)  # E16
+        obj += pipe_function(x[16], 5100.00, 24.0000, 110.000)  # E17
+        obj += pipe_function(x[17], 30.0000, 48.0000, 118.000)  # E18
+        obj += pipe_function(x[19], 26000.0, 48.0000, 110.000)  # E20
+        obj += pipe_function(x[21], 520.000, 33.6100, 130.000)  # E22
+        obj += pipe_function(x[22], 4600.00, 54.0000, 95.0000)  # E23
+        obj += pipe_function(x[23], 5400.00, 54.0000, 95.0000)  # E24
+        obj += pipe_function(x[24], 5600.00, 12.0000, 110.000)  # E25
+        obj += pipe_function(x[25], 3300.00, 12.0000, 110.000)  # E26
+        obj += pipe_function(x[26], 2200.00, 24.0000, 124.000)  # E27
+        obj += pipe_function(x[27], 1000.00, 24.0000, 110.000)  # E28
+        obj += pipe_function(x[28], 5900.00, 24.0000, 113.000)  # E29
+        obj += pipe_function(x[29], 2800.00, 24.0000, 113.000)  # E30
+        obj += pipe_function(x[30], 2700.00, 12.0000, 110.000)  # E31
+        obj += pipe_function(x[31], 3100.00, 54.0000, 95.0000)  # E32
+        obj += pipe_function(x[32], 100.000, 10.0000, 100.000)  # E33
+        obj += pipe_function(x[33], 4300.00, 24.0000, 113.000)  # E34
+        obj += pipe_function(x[34], 2200.00, 54.0000, 95.0000)  # E35
+        obj += pipe_function(x[35], 1800.00, 54.0000, 110.000)  # E36
+        obj += pipe_function(x[36], 100.000, 24.0000, 110.000)  # E37
+        obj += pipe_function(x[37], 1310.00, 30.0000, 100.000)  # E38
+        obj += pipe_function(x[38], 665.000, 36.0000, 120.000)  # E39
+        obj += pipe_function(x[39], 1100.00, 36.0000, 120.000)  # E40
+        obj += pipe_function(x[40], 32.3000, 10.0000, 100.000)  # E41
+
+        return obj
+
+    def constraint(self, y):
+        """Compute the constraints.
+
+        Returns:
+            (equality_constraints, inequality_constraints)
+        """
+        return self.equality_constraints(y, None), None
 
     def equality_constraints(self, y, args):
         """Compute the equality constraints.
@@ -58,8 +148,8 @@ class DALLASS(AbstractConstrainedMinimisation):
         constraints.append(x[43] - x[2])
         # N4: -X4 = 0
         constraints.append(-x[3])
-        # N5: X16 + X7 - X6 - X5 = 2.8
-        constraints.append(x[15] + x[6] - x[5] - x[4] - 2.8)
+        # N5: X16 - X7 - X6 - X5 = 2.8
+        constraints.append(x[15] - x[6] - x[5] - x[4] - 2.8)
         # N6: X7 - X9 - X8 = 0
         constraints.append(x[6] - x[8] - x[7])
         # N7: X9 - X10 = 0.403

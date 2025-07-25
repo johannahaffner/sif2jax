@@ -1,6 +1,11 @@
 from ._bounded_minimisation import (
     bounded_minimisation_problems as bounded_minimisation_problems,
+    BRANIN as BRANIN,
+    CAMEL6 as CAMEL6,
+    DGOSPEC as DGOSPEC,
     EXP2B as EXP2B,
+    EXPLIN as EXPLIN,
+    EXPLIN2 as EXPLIN2,
     HATFLDC as HATFLDC,
     HS1 as HS1,
     HS2 as HS2,
@@ -11,6 +16,11 @@ from ._bounded_minimisation import (
     HS38 as HS38,
     HS45 as HS45,
     HS110 as HS110,
+    # LEVYMONT as LEVYMONT,  # TODO: Fix SCALE interpretation
+    PALMER1 as PALMER1,
+    PALMER2 as PALMER2,
+    PALMER3B as PALMER3B,
+    PALMER4E as PALMER4E,
     PALMER3B as PALMER3B,
     PRICE4B as PRICE4B,
 )
@@ -44,15 +54,21 @@ from ._constrained_minimisation import (
     CB3 as CB3,
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
+    # CLNLBEAM as CLNLBEAM,  # TODO: Dimension mismatch in constraints
     CONCON as CONCON,
     constrained_minimisation_problems as constrained_minimisation_problems,
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
     CSFI1 as CSFI1,
     CSFI2 as CSFI2,
     CVXQP1 as CVXQP1,
-    # DALLASS as DALLASS,  # TODO: needs complex element implementations
+    DALLASS as DALLASS,
     DECONVC as DECONVC,
     DTOC1L as DTOC1L,
+    ELATTAR as ELATTAR,
+    GIGOMEZ2 as GIGOMEZ2,
+    HIMMELBC as HIMMELBC,
+    HIMMELBD as HIMMELBD,
+    HIMMELBE as HIMMELBE,
     GIGOMEZ2 as GIGOMEZ2,
     HS6 as HS6,
     HS7 as HS7,
@@ -148,6 +164,7 @@ from ._constrained_minimisation import (
     HS117 as HS117,
     HS118 as HS118,
     HS119 as HS119,
+    HYDROELL as HYDROELL,
     LOOTSMA as LOOTSMA,
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,
@@ -193,11 +210,16 @@ from ._constrained_minimisation import (
     MAKELA4 as MAKELA4,
     MARATOS as MARATOS,
     ODFITS as ODFITS,
+    ORTHREGD as ORTHREGD,
+    ORTHRGDM as ORTHRGDM,
     PENTAGON as PENTAGON,
     POLAK1 as POLAK1,
     POLAK2 as POLAK2,
     POLAK3 as POLAK3,
     POLAK5 as POLAK5,
+    POLYGON as POLYGON,
+    SIMPLLPA as SIMPLLPA,
+    SIMPLLPB as SIMPLLPB,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
     # STEENBRB as STEENBRB,  # TODO: Human review - gradient test failing
@@ -213,6 +235,7 @@ from ._constrained_minimisation import (
     ZECEVIC4 as ZECEVIC4,
 )
 from ._nonlinear_equations import (
+    AIRCRFTA as AIRCRFTA,
     ARGAUSS as ARGAUSS,
     ARGTRIG as ARGTRIG,
     ARTIF as ARTIF,
@@ -226,9 +249,11 @@ from ._nonlinear_equations import (
     BOOTH as BOOTH,
     BOX3NE as BOX3NE,
     BOXBOD as BOXBOD,
+    BRATU2DT as BRATU2DT,
     BROWNALE as BROWNALE,
     BROWNBSNE as BROWNBSNE,
     BROWNDENE as BROWNDENE,
+    BROYDN3D as BROYDN3D,
     BROYDNBD as BROYDNBD,
     BRYBNDNE as BRYBNDNE,
     CERI651A as CERI651A,
@@ -256,6 +281,7 @@ from ._nonlinear_equations import (
     DEVGLA1NE as DEVGLA1NE,
     DEVGLA2NE as DEVGLA2NE,
     EGGCRATENE as EGGCRATENE,
+    # EIGENAU as EIGENAU,  # TODO: Human review - non-standard initial values
     ELATVIDUNE as ELATVIDUNE,
     ENGVAL2NE as ENGVAL2NE,
     ERRINRSMNE as ERRINRSMNE,
@@ -272,10 +298,12 @@ from ._nonlinear_equations import (
     HATFLDCNE as HATFLDCNE,
     HATFLDFLNE as HATFLDFLNE,
     HELIXNE as HELIXNE,
+    HIMMELBA as HIMMELBA,
     HIMMELBFNE as HIMMELBFNE,
     HS1NE as HS1NE,
     HS2NE as HS2NE,
     HS25NE as HS25NE,
+    HYDCAR6 as HYDCAR6,
     INTEQNE as INTEQNE,
     JENSMPNE as JENSMPNE,
     JUDGENE as JUDGENE,
@@ -283,9 +311,11 @@ from ._nonlinear_equations import (
     KOWOSBNE as KOWOSBNE,
     LEVYMONE5 as LEVYMONE5,
     LEVYMONE8 as LEVYMONE8,
+    LEVYMONE9 as LEVYMONE9,
     LEVYMONE10 as LEVYMONE10,
     LIARWHDNE as LIARWHDNE,
     LINVERSENE as LINVERSENE,
+    LUKSAN14 as LUKSAN14,
     MANCINONE as MANCINONE,
     MEYER3NE as MEYER3NE,
     MGH09 as MGH09,
@@ -312,10 +342,12 @@ from ._nonlinear_equations import (
     PALMER5BNE as PALMER5BNE,
     PALMER5ENE as PALMER5ENE,
     PALMER7ANE as PALMER7ANE,
+    PFIT4 as PFIT4,
     POWELLBS as POWELLBS,
     POWELLSE as POWELLSE,
     POWELLSQ as POWELLSQ,
     POWERSUMNE as POWERSUMNE,
+    RES as RES,
     SANTA as SANTA,
     SINVALNE as SINVALNE,
     SSBRYBNDNE as SSBRYBNDNE,
@@ -343,6 +375,7 @@ from ._unconstrained_minimisation import (
     BIGGS5 as BIGGS5,
     BIGGS6 as BIGGS6,
     BOX as BOX,
+    BOX2 as BOX2,
     BOX3 as BOX3,
     BOXBODLS as BOXBODLS,
     # BOXPOWER as BOXPOWER,  # TODO: Human review - minor gradient discrepancy
@@ -474,28 +507,45 @@ from ._unconstrained_minimisation import (
     LOGHAIRY as LOGHAIRY,
     LSC1LS as LSC1LS,
     LSC2LS as LSC2LS,
+    MGH10LS as MGH10LS,
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     # MEXHAT as MEXHAT,  # TODO: Human review - complex scaling issues
+    # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
     # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
     NONCVXU2 as NONCVXU2,
     NONCVXUN as NONCVXUN,
     NONDQUAR as NONDQUAR,
     NONMSQRT as NONMSQRT,
+    PALMER1C as PALMER1C,
+    PALMER1D as PALMER1D,
+    PALMER2C as PALMER2C,
+    PALMER3C as PALMER3C,
+    PALMER4C as PALMER4C,
+    PALMER5C as PALMER5C,
+    PALMER6C as PALMER6C,
+    PALMER7C as PALMER7C,
+    PALMER8C as PALMER8C,
     # PENALTY1 as PENALTY1,  # TODO: Human review - minor numerical precision issues
     # PENALTY2 as PENALTY2,  # TODO: Human review - SCALE factor issue
     POWER as POWER,
+    POWERSUM as POWERSUM,
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
+    SISSER as SISSER,
+    # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
     TOINTGSS as TOINTGSS,
     # TOINTPSP as TOINTPSP,  # TODO: Human review - gradient test fails
+    # TQUARTIC as TQUARTIC,  # TODO: Human review - objective calculation incorrect
     TRIGON1 as TRIGON1,
     # TRIGON2 as TRIGON2,  # TODO: Human review - Hessian test fails
     unconstrained_minimisation_problems as unconstrained_minimisation_problems,
+    VARDIM as VARDIM,
     WAYSEA1 as WAYSEA1,
     WAYSEA2 as WAYSEA2,
+    ZANGWIL2 as ZANGWIL2,
 )
 
 
@@ -514,6 +564,7 @@ problems_dict = {
     "CB3": CB3(),
     "CHACONN1": CHACONN1(),
     "CHACONN2": CHACONN2(),
+    # "CLNLBEAM": CLNLBEAM(),  # TODO: Dimension mismatch in constraints
     "HS1": HS1(),
     "HS2": HS2(),
     "HS3": HS3(),
@@ -607,6 +658,7 @@ problems_dict = {
     "HS108": HS108(),
     "HS109": HS109(),
     "HS110": HS110(),
+    # "LEVYMONT": LEVYMONT(),  # TODO: Fix SCALE interpretation
     "HS111": HS111(),
     "HS112": HS112(),
     "HS113": HS113(),
@@ -615,14 +667,22 @@ problems_dict = {
     "HS117": HS117(),
     "HS118": HS118(),
     "HS119": HS119(),
+    "HIMMELBC": HIMMELBC(),
+    "HIMMELBD": HIMMELBD(),
+    "HIMMELBE": HIMMELBE(),
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
     "ODFITS": ODFITS(),
+    "ORTHRGDM": ORTHRGDM(),
+    "ORTHREGD": ORTHREGD(),
     "PENTAGON": PENTAGON(),
     "POLAK1": POLAK1(),
     "POLAK2": POLAK2(),
     "POLAK3": POLAK3(),
     "POLAK5": POLAK5(),
+    "POLYGON": POLYGON(),
+    "SIMPLLPA": SIMPLLPA(),
+    "SIMPLLPB": SIMPLLPB(),
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
     # "SIPOW3": SIPOW3(),  # TODO: Human review - constraint formulation issues
@@ -712,11 +772,14 @@ problems_dict = {
     "BIGGS5": BIGGS5(),
     "BIGGS6": BIGGS6(),
     "BOX": BOX(),
+    "BOX2": BOX2(),
     "BOX3": BOX3(),
     "BOXBOD": BOXBOD(),
     "BOXBODLS": BOXBODLS(),
     # "BOXPOWER": BOXPOWER(),  # TODO: Human review - minor gradient discrepancy
+    "BRANIN": BRANIN(),
     # "BRKMCC": BRKMCC(),  # TODO: Human review - significant discrepancies
+    "CAMEL6": CAMEL6(),
     # "BROWNAL": BROWNAL(),  # TODO: Human review - small Hessian discrepancies
     "BROWNBS": BROWNBS(),
     "BROWNDEN": BROWNDEN(),
@@ -753,7 +816,7 @@ problems_dict = {
     "CURLY30": CURLY30(),
     "CVXQP1": CVXQP1(),
     # "CYCLOOCFLS": CYCLOOCFLS(),  # TODO: Human review - times out with default p=10000
-    # "DALLASS": DALLASS(),  # TODO: needs complex element implementations
+    "DALLASS": DALLASS(),
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
     "DECONVC": DECONVC(),
@@ -798,6 +861,9 @@ problems_dict = {
     "ENGVAL2": ENGVAL2(),
     # "ENSOLS": ENSOLS(),  # TODO: Human review - significant discrepancies
     "ERRINROS": ERRINROS(),
+    "DGOSPEC": DGOSPEC(),
+    "EXPLIN": EXPLIN(),
+    "EXPLIN2": EXPLIN2(),
     # "ERRINRSM": ERRINRSM(),  # TODO: Human review - significant discrepancies
     "EXP2": EXP2(),
     "EXP2B": EXP2B(),
@@ -843,6 +909,7 @@ problems_dict = {
     "HIMMELBG": HIMMELBG(),
     "HIMMELBH": HIMMELBH(),
     "HUMPS": HUMPS(),
+    "HYDROELL": HYDROELL(),
     "INDEF": INDEF(),
     "INDEFM": INDEFM(),
     "INTEQNELS": INTEQNELS(),
@@ -859,17 +926,32 @@ problems_dict = {
     "LSC2LS": LSC2LS(),
     # "MANCINO": MANCINO(),  # TODO: Human review - significant discrepancies in all
     # "MEXHAT": MEXHAT(),  # TODO: Human review - complex scaling issues
+    # "MODBEALE": MODBEALE(),  # TODO: Human review - SCALE interpretation issue
+    "MGH10LS": MGH10LS(),
     # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),
     "NONDQUAR": NONDQUAR(),
     "NONMSQRT": NONMSQRT(),
+    "PALMER1C": PALMER1C(),
+    "PALMER1D": PALMER1D(),
+    "PALMER2C": PALMER2C(),
+    "PALMER3C": PALMER3C(),
+    "PALMER4C": PALMER4C(),
+    "PALMER5C": PALMER5C(),
+    "PALMER6C": PALMER6C(),
+    "PALMER7C": PALMER7C(),
+    "PALMER8C": PALMER8C(),
+    "PALMER4E": PALMER4E(),
     # "PENALTY1": PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # "PENALTY2": PENALTY2(),  # TODO: Human review - SCALE factor issue
     "POWER": POWER(),
+    "POWERSUM": POWERSUM(),
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "ROSENBR": ROSENBR(),
     "ROSZMAN1LS": ROSZMAN1LS(),
+    "SISSER": SISSER(),
+    # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     "TENBARS4": TENBARS4(),
     "TENFOLDTRLS": TENFOLDTRLS(),
     "POWELLBS": POWELLBS(),
@@ -878,11 +960,16 @@ problems_dict = {
     "PRICE4B": PRICE4B(),
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
+    # "YATP2LS": YATP2LS(),  # TODO: Fix dimension mismatch
+    "ZANGWIL2": ZANGWIL2(),
     "TRIGON1": TRIGON1(),
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
+    # "TQUARTIC": TQUARTIC(),  # TODO: Human review - objective calculation incorrect
+    "VARDIM": VARDIM(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
+    "AIRCRFTA": AIRCRFTA(),
     "ARGAUSS": ARGAUSS(),
     "ARGTRIG": ARGTRIG(),
     "ARTIF": ARTIF(),
@@ -897,6 +984,9 @@ problems_dict = {
     "BROWNALE": BROWNALE(),
     "BROWNBSNE": BROWNBSNE(),
     "BROWNDENE": BROWNDENE(),
+    "BRATU2DT": BRATU2DT(),
+    "LEVYMONE9": LEVYMONE9(),
+    "BROYDN3D": BROYDN3D(),
     "BROYDNBD": BROYDNBD(),
     "BRYBNDNE": BRYBNDNE(),
     "CERI651A": CERI651A(),
@@ -920,6 +1010,8 @@ problems_dict = {
     "DEVGLA1NE": DEVGLA1NE(),
     "DEVGLA2NE": DEVGLA2NE(),
     "EGGCRATENE": EGGCRATENE(),
+    # "EIGENAU": EIGENAU(),  # TODO: Human review - non-standard initial values
+    "ELATTAR": ELATTAR(),
     "ELATVIDUNE": ELATVIDUNE(),
     "ENGVAL2NE": ENGVAL2NE(),
     "ERRINRSMNE": ERRINRSMNE(),
@@ -936,10 +1028,12 @@ problems_dict = {
     "HATFLDCNE": HATFLDCNE(),
     "HATFLDFLNE": HATFLDFLNE(),
     "HELIXNE": HELIXNE(),
+    "HIMMELBA": HIMMELBA(),
     "HIMMELBFNE": HIMMELBFNE(),
     "HS1NE": HS1NE(),
     "HS2NE": HS2NE(),
     "HS25NE": HS25NE(),
+    "HYDCAR6": HYDCAR6(),
     "INTEQNE": INTEQNE(),
     "JENSMPNE": JENSMPNE(),
     "JUDGENE": JUDGENE(),
@@ -950,6 +1044,7 @@ problems_dict = {
     "LEVYMONE10": LEVYMONE10(),
     "LIARWHDNE": LIARWHDNE(),
     "LINVERSENE": LINVERSENE(),
+    "LUKSAN14": LUKSAN14(),
     "MANCINONE": MANCINONE(),
     "MEYER3NE": MEYER3NE(),
     "MGH09": MGH09(),
@@ -970,13 +1065,17 @@ problems_dict = {
     "PALMER2BNE": PALMER2BNE(),
     "PALMER2ENE": PALMER2ENE(),
     "PALMER2NE": PALMER2NE(),
+    "PALMER1": PALMER1(),
+    "PALMER2": PALMER2(),
     "PALMER3B": PALMER3B(),
     "PALMER3ENE": PALMER3ENE(),
     "PALMER4ENE": PALMER4ENE(),
     "PALMER5BNE": PALMER5BNE(),
     "PALMER5ENE": PALMER5ENE(),
     "PALMER7ANE": PALMER7ANE(),
+    "PFIT4": PFIT4(),
     "POWERSUMNE": POWERSUMNE(),
+    "RES": RES(),
     "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),
     "SSBRYBNDNE": SSBRYBNDNE(),

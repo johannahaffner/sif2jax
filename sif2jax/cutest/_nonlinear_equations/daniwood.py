@@ -8,7 +8,8 @@ class DANIWOOD(AbstractNonlinearEquations):
 
     This is a revised version of the original inaccurate
     formulation of DANWOOD, with corrections provided by Abel Siqueira,
-    Federal University of Parana
+    Federal University of Parana. The original DANWOOD problem in the SIF
+    collection contains an incorrect formulation and should not be used
 
     Fit: y = b1*x**b2
 

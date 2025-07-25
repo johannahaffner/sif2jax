@@ -1,4 +1,4 @@
-[] A5NNDNIL
+[skip - quadratic] A5NNDNIL
 [] QPCBLEND
 [] AUG3DCQP
 [] FBRAINNE
@@ -16,7 +16,7 @@
 [x] GRIDNETG
 [x] PALMER3B
 [x] ROSZMAN1LS
-[] DANWOOD
+[skip - incorrect] DANWOOD
 [x] POLAK3
 [x] ODFITS
 [] PRIMALC5
@@ -28,6 +28,33 @@
 [] DTOC1NB
 [x] PALMER5BNE
 [x] SANTA
+[skip - quadratic] WALL50
+[skip - quadratic] CHENHARK
+[x] DALLASS
+[skip - too complex] MNISTS5
+[x] EIGENAU
+[already impl] GULF
+[skip - complex power] ACOPR57
+[x] VARDIM
+[skip - quadratic] QPBAND
+[x] ELATTAR
+[skip - too large] ODNAMUR
+[x] HYDCAR6
+[x] PALMER4E
+[skip - external function] HS91
+[x] BROYDN3D
+[skip - already in NE version] CHEBYQAD
+[skip - too large] VESUVIA
+[skip - quadratic] DEGDIAG
+[skip - too large] BRAINPC2
+[skip - linear] OET3
+[skip - linear] TRO3X3
+[skip - complex optimal control] READING9
+[skip - too large] STEENBRC
+[x] AIRCRFTA
+[x] POLYGON
+[skip - quadratic] HATFLDH
+[skip - complex] FMINSRF2
 [] WALL50
 [] CHENHARK
 [] DALLASS
@@ -59,52 +86,52 @@
 [] HET-Z
 [] A0ENSNDL
 [] TORSIOND
-[] MODBEALE
+[x] MODBEALE
 [] MPC10
-[] CLNLBEAM
+[p] CLNLBEAM
 [] TABLE8
-[] BA-L49LS
-[] BROYDNBDLS
-[] HYDROELL
-[] BRATU2DT
-[] EXPLIN
-[] LEVYMONE9
-[] SSEBLIN
-[] ROSEPETAL2
-[] ORTHREGC
-[] HS88
-[] QUDLIN
-[] MGH10LS
-[] YAO
-[] TOINTQOR
-[] HAHN1
-[] BA-L21LS
-[] HS100MOD
-[] FLOSP2TL
-[] LUKSAN22LS
-[] A2NSDSIL
-[] TAME
-[] EXPLIN2
-[] YATP2LS
-[] LEVYMONT
-[] ORTHRGDM
-[] ORTHREGD
-[] SPMSRTLS
+[skip - too complex] BA-L49LS
+[already impl - needs human review] BROYDNBDLS
+[p] HYDROELL
+[x] BRATU2DT
+[x] EXPLIN
+[x] LEVYMONE9
+[skip - linear] SSEBLIN
+[skip - quadratic] ROSEPETAL2
+[skip - quadratic] ORTHREGC
+[skip - quadratic] HS88
+[skip - quadratic] QUDLIN
+[x] MGH10LS
+[skip - quadratic] YAO
+[skip - quadratic] TOINTQOR
+[already impl] HAHN1
+[skip - too complex] BA-L21LS
+[skip - complex] HS100MOD
+[skip - too complex] FLOSP2TL
+[p] LUKSAN22LS
+[skip - quadratic] A2NSDSIL
+[skip - quadratic] TAME
+[x] EXPLIN2
+[p] YATP2LS
+[p] LEVYMONT
+[x] ORTHRGDM
+[x] ORTHREGD
+[p] SPMSRTLS
 [] TORSION2
 [] PRODPL0
-[] PFIT4
+[x] PFIT4
 [] ORTHREGB
 [] CMPC16
-[] POWERSUM
+[x] POWERSUM
 [] OET5
-[] RES
+[x] RES
 [] CERI651DLS
 [] LISWET5
 [] TESTQUAD
 [] FERRISDC
 [] CMPC13
-[] TQUARTIC
-[] LUKSAN14
+[p - incorrect objective] TQUARTIC
+[x] LUKSAN14
 [] STEENBRG
 [] CHANDHEU
 [] SCURLY20
@@ -176,7 +203,7 @@
 [] YATP2SQ
 [] EXTRASIM
 [] A5ESDNDL
-[] PALMER2
+[x] PALMER2
 [] GOULDQP1
 [] KOEBHELB
 [] LUKVLE12
@@ -429,7 +456,7 @@
 [] PALMER8A
 [] A2ESSNDL
 [] MINSURF
-[] PALMER2C
+[x] PALMER2C
 [] HS97
 [] NCVXQP2
 [] YFIT
@@ -461,7 +488,7 @@
 [] GBRAIN
 [] JNLBRNGA
 [] ACOPR300
-[] PALMER7C
+[x] PALMER7C
 [] GPP
 [] NASH
 [] ACOPP57
@@ -475,7 +502,7 @@
 [] FIVE20C
 [] ROCKET
 [] FMINSURF
-[] PALMER1
+[x] PALMER1
 [] PORTFL4
 [] BRYBND
 [] LUKSAN15LS
@@ -508,7 +535,7 @@
 [] TWIRIMD1
 [] NET4
 [] RDW2D52F
-[] PALMER4C
+[x] PALMER4
 [] TENBARS2
 [] LUKSAN12
 [] MPC15
@@ -540,7 +567,7 @@
 [] SBRYBND
 [] GROUPING
 [] SCOSINE
-[] PALMER8C
+[x] PALMER8
 [] SISSER2
 [] ARWHDNE
 [] LRA9A
@@ -627,7 +654,7 @@
 [] READING5
 [] CHEMRCTB
 [] ZAMB2-10
-[] PALMER1C
+[x] PALMER1C
 [] LUKSAN22
 [] TRIGON1NE
 [] GRIDNETB
@@ -641,7 +668,7 @@
 [] CAR2
 [] ZANGWIL2
 [] QPCSTAIR
-[] PALMER1D
+[x] PALMER1D
 [] GRIDNETE
 [] OSBORNE1
 [] A5NSSSSL
@@ -927,6 +954,7 @@
 [] LISWET11
 [] STRTCHDV
 [] S308NE
+[x] PALMER6C
 [] PALMER6C
 [] PALMER7E
 [] POWELLSG
@@ -998,7 +1026,7 @@
 [] TRIGON2NE
 [] DRCAVTY3
 [] HIMMELBC
-[] PALMER5C
+[x] PALMER5C
 [] YFITNE
 [] HIMMELBK
 [] GIGOMEZ3
@@ -1141,7 +1169,7 @@
 [] ALLINITA
 [] CLPLATEB
 [] MANNE
-[] PALMER3C
+[x] PALMER3C
 [] QR3D
 [] SPARSQUR
 [] DUAL2

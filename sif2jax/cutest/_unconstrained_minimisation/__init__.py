@@ -16,6 +16,7 @@ from .bennett5ls import BENNETT5LS as BENNETT5LS
 from .biggs5 import BIGGS5 as BIGGS5
 from .biggs6 import BIGGS6 as BIGGS6
 from .box import BOX as BOX
+from .box2 import BOX2 as BOX2
 from .box3 import BOX3 as BOX3
 from .boxbodls import BOXBODLS as BOXBODLS
 
@@ -189,25 +190,44 @@ from .loghairy import LOGHAIRY as LOGHAIRY
 from .lsc1ls import LSC1LS as LSC1LS
 from .lsc2ls import LSC2LS as LSC2LS
 
+# from .luksan22ls import LUKSAN22LS as LUKSAN22LS  # TODO: Fix objective calculation
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
 # from .mexhat import MEXHAT as MEXHAT  # TODO: Human review - complex scaling issues
+from .mgh10ls import MGH10LS as MGH10LS
+
+# TODO: Human review - SCALE interpretation issue
+# from .modbeale import MODBEALE as MODBEALE
 # from .nondia import NONDIA as NONDIA  # TODO: Human review - SCALE factor issue
 from .noncvxu2 import NONCVXU2 as NONCVXU2
 from .noncvxun import NONCVXUN as NONCVXUN
 from .nondquar import NONDQUAR as NONDQUAR
 from .nonmsqrt import NONMSQRT as NONMSQRT
+from .palmer1c import PALMER1C as PALMER1C
+from .palmer1d import PALMER1D as PALMER1D
+from .palmer2c import PALMER2C as PALMER2C
+from .palmer3c import PALMER3C as PALMER3C
+from .palmer4c import PALMER4C as PALMER4C
+from .palmer5c import PALMER5C as PALMER5C
+from .palmer6c import PALMER6C as PALMER6C
+from .palmer7c import PALMER7C as PALMER7C
+from .palmer8c import PALMER8C as PALMER8C
 
 # TODO: Human review - minor numerical precision issues
 # from .penalty1 import PENALTY1 as PENALTY1
 # TODO: Human review - SCALE factor issue
 # from .penalty2 import PENALTY2 as PENALTY2
 from .power import POWER as POWER
+from .powersum import POWERSUM as POWERSUM
 
 # TODO: Human review - objective off by factor of 4.15
 # from .powellsg import POWELLSG as POWELLSG
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
+from .sisser import SISSER as SISSER
+
+# TODO: Human review needed - complex matrix multiplication formulation
+# from .spmsrtls import SPMSRTLS as SPMSRTLS
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
 
 # TODO: TOINTGOR needs human review - runtime test fails (~8x slower than threshold)
@@ -216,12 +236,19 @@ from .tointgss import TOINTGSS as TOINTGSS
 
 # TODO: TOINTPSP needs human review - gradient test fails with small differences
 # from .tointpsp import TOINTPSP as TOINTPSP
+# TODO: TQUARTIC needs human review - objective calculation incorrect
+# from .tquartic import TQUARTIC as TQUARTIC
 from .trigon1 import TRIGON1 as TRIGON1
 
 # TODO: TRIGON2 needs human review - Hessian test fails
 # from .trigon2 import TRIGON2 as TRIGON2
+from .vardim import VARDIM as VARDIM
 from .waysea1 import WAYSEA1 as WAYSEA1
 from .waysea2 import WAYSEA2 as WAYSEA2
+from .zangwil2 import ZANGWIL2 as ZANGWIL2
+
+
+# from .yatp2ls import YATP2LS as YATP2LS  # TODO: Fix dimension mismatch
 
 
 unconstrained_minimisation_problems = (
@@ -241,6 +268,7 @@ unconstrained_minimisation_problems = (
     BIGGS5(),
     BIGGS6(),
     BOX(),
+    BOX2(),
     BOX3(),
     BOXBODLS(),
     # BOXPOWER(),  # TODO: Human review - minor gradient discrepancy at last element
@@ -374,25 +402,44 @@ unconstrained_minimisation_problems = (
     # LR(),
     LSC1LS(),
     LSC2LS(),
+    # LUKSAN22LS(),  # TODO: Fix objective calculation
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     # MEXHAT(),  # TODO: Human review - complex scaling issues
+    MGH10LS(),
+    # MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     # NONDIA(),  # TODO: Human review - SCALE factor issue
     NONCVXU2(),
     NONCVXUN(),
     NONDQUAR(),
     NONMSQRT(),
+    PALMER1C(),
+    PALMER1D(),
+    PALMER2C(),
+    PALMER3C(),
+    PALMER4C(),
+    PALMER5C(),
+    PALMER6C(),
+    PALMER7C(),
+    PALMER8C(),
     # PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # PENALTY2(),  # TODO: Human review - SCALE factor issue
     POWER(),
+    POWERSUM(),
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     ROSENBR(),
     ROSZMAN1LS(),
+    SISSER(),
+    # SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS(),
     WAYSEA1(),
     WAYSEA2(),
+    # YATP2LS(),  # TODO: Fix dimension mismatch
+    ZANGWIL2(),
     TRIGON1(),
     # TRIGON2(),  # TODO: Human review - Hessian test fails
     # TOINTGOR(),  # TODO: Human review - runtime test fails
     TOINTGSS(),
     # TOINTPSP(),  # TODO: Human review - gradient test fails
+    # TQUARTIC(),  # TODO: Human review - objective calculation incorrect
+    VARDIM(),
 )

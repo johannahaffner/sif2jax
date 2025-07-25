@@ -1,5 +1,6 @@
 import inspect
 
+import equinox as eqx
 import jax
 import jax.flatten_util as jfu
 import jax.numpy as jnp
@@ -89,6 +90,15 @@ def _evaluate_at_other(
         assert np.allclose(jnp.asarray(pycutest_value), sif2jax_value, atol=1e-6)
 
 
+@pytest.fixture(scope="class")
+def clear_caches():
+    # Setup
+    yield
+    eqx.clear_caches()
+    # Teardown
+
+
+@pytest.mark.usefixtures("clear_caches")
 class TestProblem:
     """Test class for CUTEst problems. This class tests sif2jax implementations of
     CUTEst problems against the pycutest interface to the Fortran problems, using the

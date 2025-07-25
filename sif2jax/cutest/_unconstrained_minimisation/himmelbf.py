@@ -40,24 +40,26 @@ class HIMMELBF(AbstractUnconstrainedMinimisation):
     )
 
     def objective(self, y: Any, args: Any) -> Any:
-        """Compute the objective function.
+        """Compute the objective function (vectorized).
 
         The objective is a sum of squared ratios.
         """
         x1, x2, x3, x4 = y
 
-        obj = 0.0
-        for a, b in zip(self.a_data, self.b_data):
-            # Element function HF
-            u = x1 * x1 + a * x2 * x2 + a * a * x3 * x3
-            v = b * (1.0 + a * x4 * x4)
-            f_i = u / v
+        # Convert data to JAX arrays for vectorized operations
+        a_vals = jnp.array(self.a_data)
+        b_vals = jnp.array(self.b_data)
 
-            # Group evaluation with constant 1.0 and scale 0.0001
-            g_i = (f_i - 1.0) ** 2
-            obj = obj + g_i / 0.0001  # SCALE means division
+        # Vectorized element function HF
+        u = x1 * x1 + a_vals * x2 * x2 + a_vals * a_vals * x3 * x3
+        v = b_vals * (1.0 + a_vals * x4 * x4)
+        f_i = u / v
 
-        return obj
+        # Vectorized group evaluation with constant 1.0 and scale 0.0001
+        g_i = (f_i - 1.0) ** 2
+
+        # Sum of all groups divided by scale
+        return jnp.sum(g_i) / 0.0001  # SCALE means division
 
     @property
     def y0(self):

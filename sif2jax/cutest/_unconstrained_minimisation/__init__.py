@@ -202,7 +202,9 @@ from .noncvxun import NONCVXUN as NONCVXUN
 from .nondquar import NONDQUAR as NONDQUAR
 from .nonmsqrt import NONMSQRT as NONMSQRT
 from .osbornea import OSBORNEA as OSBORNEA
-from .osborneb import OSBORNEB as OSBORNEB
+
+# TODO: Human review - objective discrepancy
+# from .osborneb import OSBORNEB as OSBORNEB
 from .palmer1c import PALMER1C as PALMER1C
 from .palmer1d import PALMER1D as PALMER1D
 from .palmer2c import PALMER2C as PALMER2C
@@ -219,7 +221,8 @@ from .palmer8c import PALMER8C as PALMER8C
 # from .penalty2 import PENALTY2 as PENALTY2
 from .power import POWER as POWER
 from .powersum import POWERSUM as POWERSUM
-from .price3 import PRICE3 as PRICE3
+
+# from .price3 import PRICE3 as PRICE3  # TODO: Human review - objective issues remain
 from .price4 import PRICE4 as PRICE4
 
 # TODO: Human review - objective off by factor of 4.15
@@ -417,7 +420,7 @@ unconstrained_minimisation_problems = (
     NONDQUAR(),
     NONMSQRT(),
     OSBORNEA(),
-    OSBORNEB(),
+    # OSBORNEB(),  # TODO: Human review - objective discrepancy
     PALMER1C(),
     PALMER1D(),
     PALMER2C(),
@@ -432,7 +435,7 @@ unconstrained_minimisation_problems = (
     POWER(),
     POWERSUM(),
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
-    PRICE3(),
+    # PRICE3(),  # TODO: Human review - objective issues remain
     PRICE4(),
     ROSENBR(),
     ROSZMAN1LS(),

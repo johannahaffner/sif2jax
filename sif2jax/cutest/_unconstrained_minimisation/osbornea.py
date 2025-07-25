@@ -71,26 +71,24 @@ class OSBORNEA(AbstractUnconstrainedMinimisation):
     )
 
     def objective(self, y: Any, args: Any) -> Any:
-        """Compute the objective function."""
+        """Compute the objective function (vectorized)."""
         x1, x2, x3, x4, x5 = y
 
-        obj = 0.0
+        # Vectorized computation for all i from 0 to m-1
+        i_vals = jnp.arange(self.m, dtype=jnp.float64)
+        ti = -10.0 * i_vals
 
-        for i in range(self.m):
-            # t_i = -10 * i
-            ti = -10.0 * i
+        # Element A: x2 * exp(x4 * ti) for all i
+        element_a = x2 * jnp.exp(x4 * ti)
 
-            # Element A: x2 * exp(x4 * ti)
-            element_a = x2 * jnp.exp(x4 * ti)
+        # Element B: x3 * exp(x5 * ti) for all i
+        element_b = x3 * jnp.exp(x5 * ti)
 
-            # Element B: x3 * exp(x5 * ti)
-            element_b = x3 * jnp.exp(x5 * ti)
+        # Groups: (x1 + element_a + element_b - y_data[i])^2 for all i
+        residuals = x1 + element_a + element_b - self.y_data
 
-            # Group i: (x1 + element_a + element_b - y_data[i])^2
-            group_val = x1 + element_a + element_b - self.y_data[i]
-            obj = obj + group_val * group_val
-
-        return obj
+        # Sum of squared residuals
+        return jnp.sum(residuals * residuals)
 
     @property
     def y0(self):

@@ -7,6 +7,10 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Fixed dtype issues, analyzed Hessian computation
+# Suspected issues: H[0,0] differs from pycutest (1780441 vs 1918433)
+# Additional resources needed: Verify exact Hessian formula for L2 group type
 class HIMMELBB(AbstractUnconstrainedMinimisation):
     """A 2 variables problem by Himmelblau.
 
@@ -45,7 +49,7 @@ class HIMMELBB(AbstractUnconstrainedMinimisation):
 
     @property
     def y0(self):
-        return jnp.array([-1.2, 1.0])
+        return jnp.array([-1.2, 1.0], dtype=jnp.float64)
 
     @property
     def args(self):
@@ -61,4 +65,4 @@ class HIMMELBB(AbstractUnconstrainedMinimisation):
     def expected_objective_value(self):
         """Expected optimal objective value."""
         # From the SIF file: SOLTN 0.0
-        return jnp.array(0.0)
+        return jnp.array(0.0, dtype=jnp.float64)

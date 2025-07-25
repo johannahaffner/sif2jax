@@ -10,6 +10,10 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Fixed dtype issues, analyzed Hessian computation
+# Suspected issues: Cross-derivative H[2,3] differs significantly from pycutest
+# Additional resources needed: Verify the exact Hessian computation for scaled L2 groups
 class HIMMELBF(AbstractUnconstrainedMinimisation):
     """Himmelblau 4 variable data fitting problem.
 
@@ -47,8 +51,8 @@ class HIMMELBF(AbstractUnconstrainedMinimisation):
         x1, x2, x3, x4 = y
 
         # Convert data to JAX arrays for vectorized operations
-        a_vals = jnp.array(self.a_data)
-        b_vals = jnp.array(self.b_data)
+        a_vals = jnp.array(self.a_data, dtype=y.dtype)
+        b_vals = jnp.array(self.b_data, dtype=y.dtype)
 
         # Vectorized element function HF
         u = x1 * x1 + a_vals * x2 * x2 + a_vals * a_vals * x3 * x3
@@ -63,7 +67,7 @@ class HIMMELBF(AbstractUnconstrainedMinimisation):
 
     @property
     def y0(self):
-        return jnp.array([2.7, 90.0, 1500.0, 10.0])
+        return jnp.array([2.7, 90.0, 1500.0, 10.0], dtype=jnp.float64)
 
     @property
     def args(self):
@@ -75,4 +79,4 @@ class HIMMELBF(AbstractUnconstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        return jnp.array(318.572)
+        return jnp.array(318.572, dtype=jnp.float64)

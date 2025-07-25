@@ -194,6 +194,7 @@ from .lsc2ls import LSC2LS as LSC2LS
 # from .mancino import MANCINO as MANCINO
 from .mexhat import MEXHAT as MEXHAT
 from .mgh10ls import MGH10LS as MGH10LS
+from .morebv import MOREBV as MOREBV
 
 # TODO: Human review - SCALE interpretation issue
 # from .modbeale import MODBEALE as MODBEALE
@@ -415,6 +416,7 @@ unconstrained_minimisation_problems = (
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     MEXHAT(),
     MGH10LS(),
+    MOREBV(),
     # MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     # NONDIA(),  # TODO: Human review - SCALE factor issue
     NONCVXU2(),

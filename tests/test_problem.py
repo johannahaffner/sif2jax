@@ -87,6 +87,15 @@ def _evaluate_at_other(
         # Absolute tolerance made slightly more permissive here.
         # TODO: this either needs to be fixed (so we can go back to the default 1e-8)),
         # or we need to document this as a known issue.
+        if problem_name == "WATSON" or problem_name == "MOREBV":
+            print(f"sif2jax_value: {sif2jax_value}")
+            print(f"pycutest_value: {pycutest_value}")
+            difference = pycutest_value - sif2jax_value
+            print(f"Difference: {difference}")
+            print(f"Max difference: {jnp.max(difference)}")
+            print(f"Argmax difference: {jnp.argmax(difference)}")
+            print(f"Min difference: {jnp.min(difference)}")
+            print(f"Argmin difference: {jnp.argmin(difference)}")
         assert np.allclose(jnp.asarray(pycutest_value), sif2jax_value, atol=1e-6)
 
 

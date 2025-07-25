@@ -35,33 +35,34 @@ class WATSON(AbstractUnconstrainedMinimisation):
     def objective(self, y: Any, args: Any) -> Any:
         """Compute the objective function."""
         # For groups 1 to 29
-        obj = 0.0
+        # Create array of t_i values: i/29 for i = 1 to 29
+        i_vals = jnp.arange(1, 30, dtype=jnp.float64)
+        ti_vals = i_vals / 29.0
 
-        for i in range(1, 30):  # Groups 1 to 29
-            # t_i = i/29
-            ti = i / 29.0
+        # Prepare indices for vectorized computation
+        j_indices = jnp.arange(1, self.n + 1, dtype=jnp.float64)  # 1 to n
 
-            # Linear part: sum of coefficients times variables
-            linear_sum = 0.0
-            for j in range(2, self.n + 1):  # j from 2 to n
-                rj_minus_1 = j - 1
-                rj_minus_2 = j - 2
-                # coefficient is (j-1) * ti^(j-2)
-                coeff = rj_minus_1 * (ti**rj_minus_2)
-                linear_sum = linear_sum + coeff * y[j - 1]
+        # Create meshgrid for broadcasting: ti_vals (29,) and j_indices (n,)
+        ti_grid, j_grid = jnp.meshgrid(ti_vals, j_indices, indexing="ij")
 
-            # Element MWSQ: weighted sum of all variables with ti^(j-1) weights
-            element_sum = 0.0
-            for j in range(1, self.n + 1):  # j from 1 to n
-                weight = ti ** (j - 1)
-                element_sum = element_sum + weight * y[j - 1]
+        # Linear part: for j from 2 to n, coefficient is (j-1) * ti^(j-2)
+        # We compute for all j, then mask out j=1
+        coefficients = (j_grid - 1) * (ti_grid ** (j_grid - 2))
+        coefficients = jnp.where(j_grid > 1, coefficients, 0.0)
 
-            # MWSQ element function is -u^2 where u is the weighted sum
-            element_val = -element_sum * element_sum
+        # Linear sums: coefficients @ y (excluding y[0] which corresponds to j=1)
+        linear_sums = jnp.dot(coefficients, y)
 
-            # Group contribution with L2 type: (linear + element - 1)^2
-            group_val = linear_sum + element_val - 1.0
-            obj = obj + group_val * group_val
+        # Element MWSQ: weighted sum with ti^(j-1) weights
+        weights = ti_grid ** (j_grid - 1)
+        element_sums = jnp.dot(weights, y)
+
+        # MWSQ element function is -u^2
+        element_vals = -element_sums * element_sums
+
+        # Group contributions with L2 type: (linear + element - 1)^2
+        group_vals = linear_sums + element_vals - 1.0
+        obj = jnp.sum(group_vals * group_vals)
 
         # Group 30: x1 (constant is 0)
         group_30 = y[0] - 0.0
@@ -77,7 +78,7 @@ class WATSON(AbstractUnconstrainedMinimisation):
 
     @property
     def y0(self):
-        return jnp.zeros(self.n)
+        return jnp.zeros(self.n, dtype=jnp.float64)
 
     @property
     def args(self):
@@ -91,4 +92,4 @@ class WATSON(AbstractUnconstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        return jnp.array(2.27559922e-9)
+        return jnp.array(2.27559922e-9, dtype=jnp.float64)

@@ -517,6 +517,7 @@ from ._unconstrained_minimisation import (
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     MEXHAT as MEXHAT,
     MGH10LS as MGH10LS,
+    MOREBV as MOREBV,
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
     # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
     NONCVXU2 as NONCVXU2,
@@ -951,6 +952,7 @@ problems_dict = {
     # "MODBEALE": MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     "MGH10LS": MGH10LS(),
     "MEXHAT": MEXHAT(),
+    "MOREBV": MOREBV(),
     # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),

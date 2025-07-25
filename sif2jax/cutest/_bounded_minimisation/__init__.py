@@ -6,7 +6,8 @@ from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
 from .hart6 import HART6 as HART6
 from .hatfldc import HATFLDC as HATFLDC
-from .himmelp1 import HIMMELP1 as HIMMELP1
+
+# from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
 from .hs1 import HS1 as HS1
 from .hs2 import HS2 as HS2
 from .hs3 import HS3 as HS3
@@ -32,7 +33,7 @@ bounded_minimisation_problems = (
     EXPLIN2(),
     HART6(),
     HATFLDC(),
-    HIMMELP1(),
+    # HIMMELP1(),  # TODO: Human review needed - OBNL element issues
     HS1(),
     HS2(),
     HS3(),

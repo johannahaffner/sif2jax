@@ -50,7 +50,12 @@ from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .himmelbc import HIMMELBC as HIMMELBC
 from .himmelbd import HIMMELBD as HIMMELBD
 from .himmelbe import HIMMELBE as HIMMELBE
-from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
+
+# from .himmelp2 import HIMMELP2 as HIMMELP2  # TODO: Human review - OBNL issues
+# from .himmelp3 import HIMMELP3 as HIMMELP3  # TODO: Human review - OBNL issues
+# from .himmelp4 import HIMMELP4 as HIMMELP4  # TODO: Human review - OBNL issues
+# from .himmelp5 import HIMMELP5 as HIMMELP5  # TODO: Human review - OBNL issues
+# from .himmelp6 import HIMMELP6 as HIMMELP6  # TODO: Human review - OBNL issues
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
 from .hs8 import HS8 as HS8
@@ -355,6 +360,11 @@ constrained_minimisation_problems = (
     HIMMELBC(),
     HIMMELBD(),
     HIMMELBE(),
+    # HIMMELP2(),  # TODO: Human review needed - OBNL element issues
+    # HIMMELP3(),  # TODO: Human review needed - OBNL element issues
+    # HIMMELP4(),  # TODO: Human review needed - OBNL element issues
+    # HIMMELP5(),  # TODO: Human review needed - OBNL element issues
+    # HIMMELP6(),  # TODO: Human review needed - OBNL element issues
     HYDROELL(),
     LOOTSMA(),
     MARATOS(),

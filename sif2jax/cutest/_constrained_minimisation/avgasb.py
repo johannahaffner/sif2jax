@@ -19,16 +19,6 @@ class AVGASB(AbstractConstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @property
-    def n(self):
-        """Number of variables."""
-        return 8
-
-    @property
-    def m(self):
-        """Number of constraints."""
-        return 10
-
     def objective(self, y, args):
         """Compute the objective function."""
         del args

@@ -1,37 +1,33 @@
-"""
-The Santa problem as suggested in a Christmas competition by Jens Jensen
-(Scientific Computing, STFC).
-
-Santa is flying around the world, presently presenting presents. The Earth is
-modeled as a perfect sphere with radius precisely 6,371,000 metres. Santa sets
-off from the North Pole along 2°6'57.6" E bearing south and visits various
-locations, leaving an elf behind at each
-location to help unwrap presents.
-
-The problem is to find Santa's route given the distances traveled between locations.
-The constraints are given by the spherical law of cosines:
-sin phi_1 sin phi_2 + cos phi_1 cos phi_2 cos(lam_1 - lam_2) = cos(d/r)
-
-The problem has many local minimizers of the sum of squares of infeasibility, but it is
-only the solution with zero residuals that is of interest.
-
-Source:
-Jens Jensen, SCD Christmas programming challenge 2016
-
-SIF input: Nick Gould, Dec 2016.
-
-classification NOR2-AN-21-23
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractNonlinearEquations
 
 
 class SANTA(AbstractNonlinearEquations):
-    @property
-    def name(self) -> str:
-        return "SANTA"
+    """
+    The Santa problem as suggested in a Christmas competition by Jens Jensen
+    (Scientific Computing, STFC).
+
+    Santa is flying around the world, presently presenting presents. The Earth is
+    modeled as a perfect sphere with radius precisely 6,371,000 metres. Santa sets
+    off from the North Pole along 2°6'57.6" E bearing south and visits various
+    locations, leaving an elf behind at each
+    location to help unwrap presents.
+
+    The problem is to find Santa's route given the distances traveled between locations.
+    The constraints are given by the spherical law of cosines:
+    sin phi_1 sin phi_2 + cos phi_1 cos phi_2 cos(lam_1 - lam_2) = cos(d/r)
+
+    The problem has many local minimizers of the sum of squares of infeasibility,
+    but only the solution with zero residuals is of interest.
+
+    Source:
+    Jens Jensen, SCD Christmas programming challenge 2016
+
+    SIF input: Nick Gould, Dec 2016.
+
+    classification NOR2-AN-21-23
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})

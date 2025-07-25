@@ -30,10 +30,6 @@ class DIXMAANM1(AbstractUnconstrainedMinimisation):
 
     n: int = 3000  # Default dimension
 
-    def __init__(self, n=None):
-        if n is not None:
-            self.n = n
-
     def objective(self, y, args):
         del args
         n = y.shape[0]

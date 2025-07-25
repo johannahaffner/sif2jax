@@ -35,6 +35,7 @@ class CUBE(AbstractUnconstrainedMinimisation):
         term1 = (y[0] - 1.0) ** 2
 
         # Second term: 100 * (x_2 - x_1^3)^2
+        # Note: SIF shows scale 0.01 but pycutest uses 100.0
         term2 = 100.0 * (y[1] - y[0] ** 3) ** 2
 
         return term1 + term2

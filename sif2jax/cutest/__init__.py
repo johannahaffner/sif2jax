@@ -378,6 +378,7 @@ from ._unconstrained_minimisation import (
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
     BENNETT5LS as BENNETT5LS,
+    BIGGS3 as BIGGS3,
     BIGGS5 as BIGGS5,
     BIGGS6 as BIGGS6,
     BOX as BOX,
@@ -557,6 +558,7 @@ from ._unconstrained_minimisation import (
     WATSON as WATSON,
     WAYSEA1 as WAYSEA1,
     WAYSEA2 as WAYSEA2,
+    WOODS as WOODS,
     ZANGWIL2 as ZANGWIL2,
 )
 
@@ -781,6 +783,7 @@ problems_dict = {
     "BDQRTIC": BDQRTIC(),
     "BEALE": BEALE(),
     "BENNETT5LS": BENNETT5LS(),
+    "BIGGS3": BIGGS3(),
     "BIGGS5": BIGGS5(),
     "BIGGS6": BIGGS6(),
     "BOX": BOX(),
@@ -986,6 +989,7 @@ problems_dict = {
     "WATSON": WATSON(),
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
+    "WOODS": WOODS(),
     # "YATP2LS": YATP2LS(),  # TODO: Fix dimension mismatch
     "ZANGWIL2": ZANGWIL2(),
     "TRIGON1": TRIGON1(),

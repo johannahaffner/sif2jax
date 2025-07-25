@@ -13,6 +13,7 @@ from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
 from .bennett5ls import BENNETT5LS as BENNETT5LS
+from .biggs3 import BIGGS3 as BIGGS3
 from .biggs5 import BIGGS5 as BIGGS5
 from .biggs6 import BIGGS6 as BIGGS6
 from .box import BOX as BOX
@@ -251,6 +252,7 @@ from .vardim import VARDIM as VARDIM
 from .watson import WATSON as WATSON
 from .waysea1 import WAYSEA1 as WAYSEA1
 from .waysea2 import WAYSEA2 as WAYSEA2
+from .woods import WOODS as WOODS
 from .zangwil2 import ZANGWIL2 as ZANGWIL2
 
 
@@ -271,6 +273,7 @@ unconstrained_minimisation_problems = (
     BDQRTIC(),
     BEALE(),
     BENNETT5LS(),
+    BIGGS3(),
     BIGGS5(),
     BIGGS6(),
     BOX(),
@@ -445,6 +448,7 @@ unconstrained_minimisation_problems = (
     WATSON(),
     WAYSEA1(),
     WAYSEA2(),
+    WOODS(),
     # YATP2LS(),  # TODO: Fix dimension mismatch
     ZANGWIL2(),
     TRIGON1(),

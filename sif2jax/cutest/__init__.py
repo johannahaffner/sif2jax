@@ -1,4 +1,5 @@
 from ._bounded_minimisation import (
+    BDEXP as BDEXP,
     bounded_minimisation_problems as bounded_minimisation_problems,
     BRANIN as BRANIN,
     CAMEL6 as CAMEL6,
@@ -20,6 +21,7 @@ from ._bounded_minimisation import (
     HS45 as HS45,
     HS110 as HS110,
     # LEVYMONT as LEVYMONT,  # TODO: Fix SCALE interpretation
+    LOGROS as LOGROS,
     PALMER1 as PALMER1,
     PALMER2 as PALMER2,
     PALMER3B as PALMER3B,
@@ -371,6 +373,18 @@ from ._nonlinear_equations import (
     VANDERM1 as VANDERM1,
     VANDERM2 as VANDERM2,
 )
+from ._quadratic_problems import (
+    CHENHARK as CHENHARK,
+    DEGDIAG as DEGDIAG,
+    HATFLDH as HATFLDH,
+    HS44NEW as HS44NEW,
+    QPBAND as QPBAND,
+    quadratic_problems as quadratic_problems,
+    QUDLIN as QUDLIN,
+    TAME as TAME,
+    TORSIOND as TORSIOND,
+    YAO as YAO,
+)
 
 # VANDERM3 as VANDERM3,  # TODO: Human review needed - originally had issues
 # VANDERM4 as VANDERM4,  # TODO: Human review needed - originally had issues
@@ -385,7 +399,6 @@ from ._unconstrained_minimisation import (
     # BA_L1LS as BA_L1LS,  # TODO: BA_L family needs human review - removed from imports
     # BA_L1SPLS as BA_L1SPLS,  # TODO: BA_L family needs human review
     BARD as BARD,
-    BDEXP as BDEXP,
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
     BENNETT5LS as BENNETT5LS,
@@ -438,6 +451,7 @@ from ._unconstrained_minimisation import (
     DENSCHNF as DENSCHNF,
     DEVGLA1 as DEVGLA1,
     DEVGLA2 as DEVGLA2,
+    DIAMON3DLS as DIAMON3DLS,
     DIXMAANA1 as DIXMAANA1,
     DIXMAANB as DIXMAANB,
     DIXMAANC as DIXMAANC,
@@ -555,6 +569,7 @@ from ._unconstrained_minimisation import (
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     PRICE3 as PRICE3,
     PRICE4 as PRICE4,
+    QUARTC as QUARTC,
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
     S308 as S308,
@@ -689,6 +704,7 @@ problems_dict = {
     "HS109": HS109(),
     "HS110": HS110(),
     # "LEVYMONT": LEVYMONT(),  # TODO: Fix SCALE interpretation
+    "LOGROS": LOGROS(),
     "HS111": HS111(),
     "HS112": HS112(),
     "HS113": HS113(),
@@ -862,6 +878,7 @@ problems_dict = {
     "DENSCHNE": DENSCHNE(),
     "DENSCHNF": DENSCHNF(),
     "DEVGLA1": DEVGLA1(),
+    "DIAMON3DLS": DIAMON3DLS(),
     "DEVGLA2": DEVGLA2(),
     "DIXMAANA1": DIXMAANA1(),
     "DIXMAANB": DIXMAANB(),
@@ -997,6 +1014,7 @@ problems_dict = {
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "PRICE3": PRICE3(),
     "PRICE4": PRICE4(),
+    "QUARTC": QUARTC(),
     "ROSENBR": ROSENBR(),
     "ROSZMAN1LS": ROSZMAN1LS(),
     "S308": S308(),
@@ -1019,7 +1037,16 @@ problems_dict = {
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
+    "TORSIOND": TORSIOND(),
     # "TQUARTIC": TQUARTIC(),  # TODO: Human review - objective calculation incorrect
+    "YAO": YAO(),
+    "QPBAND": QPBAND(),
+    "CHENHARK": CHENHARK(),
+    "DEGDIAG": DEGDIAG(),
+    "QUDLIN": QUDLIN(),
+    "TAME": TAME(),
+    "HATFLDH": HATFLDH(),
+    "HS44NEW": HS44NEW(),
     "VARDIM": VARDIM(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
     "AIRCRFTA": AIRCRFTA(),
@@ -1154,4 +1181,5 @@ problems = (
     + bounded_minimisation_problems
     + constrained_minimisation_problems
     + nonlinear_equations_problems
+    + quadratic_problems
 )

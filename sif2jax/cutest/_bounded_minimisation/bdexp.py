@@ -1,9 +1,10 @@
 import jax.numpy as jnp
+from jaxtyping import Array, Float
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class BDEXP(AbstractUnconstrainedMinimisation):
+class BDEXP(AbstractBoundedMinimisation):
     """BDEXP problem.
 
     A banded exponential problem.
@@ -75,3 +76,13 @@ class BDEXP(AbstractUnconstrainedMinimisation):
     def n(self):
         """Number of variables."""
         return self.N
+
+    @property
+    def bounds(self) -> tuple[Float[Array, "n"], Float[Array, "n"]]:
+        """Lower and upper bounds for variables.
+
+        All variables have lower bound 0.0 and no upper bound.
+        """
+        lower = jnp.zeros(self.N)
+        upper = jnp.full(self.N, jnp.inf)
+        return lower, upper

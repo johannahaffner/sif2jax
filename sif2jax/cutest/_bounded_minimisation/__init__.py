@@ -1,3 +1,4 @@
+from .bdexp import BDEXP as BDEXP
 from .branin import BRANIN as BRANIN
 from .camel6 import CAMEL6 as CAMEL6
 from .dgospec import DGOSPEC as DGOSPEC
@@ -7,8 +8,6 @@ from .explin2 import EXPLIN2 as EXPLIN2
 from .expquad import EXPQUAD as EXPQUAD
 from .hart6 import HART6 as HART6
 from .hatfldc import HATFLDC as HATFLDC
-
-# from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
 from .hs1 import HS1 as HS1
 from .hs2 import HS2 as HS2
 from .hs3 import HS3 as HS3
@@ -18,6 +17,9 @@ from .hs25 import HS25 as HS25
 from .hs38 import HS38 as HS38
 from .hs45 import HS45 as HS45
 from .hs110 import HS110 as HS110
+
+# from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
+from .logros import LOGROS as LOGROS
 from .palmer1 import PALMER1 as PALMER1
 from .palmer2 import PALMER2 as PALMER2
 from .palmer3b import PALMER3B as PALMER3B
@@ -26,6 +28,7 @@ from .price4b import PRICE4B as PRICE4B
 
 
 bounded_minimisation_problems = (
+    BDEXP(),
     BRANIN(),
     CAMEL6(),
     DGOSPEC(),
@@ -46,6 +49,7 @@ bounded_minimisation_problems = (
     HS45(),
     HS110(),
     # LEVYMONT(),  # TODO: Fix SCALE interpretation
+    LOGROS(),
     PALMER1(),
     PALMER2(),
     PALMER3B(),

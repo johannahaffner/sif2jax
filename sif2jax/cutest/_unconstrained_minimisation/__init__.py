@@ -10,7 +10,6 @@ from .arwhead import ARWHEAD as ARWHEAD
 # from .ba_l1ls import BA_L1LS as BA_L1LS  # TODO: BA_L family needs human review
 # from .ba_l1spls import BA_L1SPLS as BA_L1SPLS  # TODO: Human review - Hessian fails
 from .bard import BARD as BARD
-from .bdexp import BDEXP as BDEXP
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
 from .bennett5ls import BENNETT5LS as BENNETT5LS
@@ -79,6 +78,7 @@ from .denschne import DENSCHNE as DENSCHNE
 from .denschnf import DENSCHNF as DENSCHNF
 from .devgla1 import DEVGLA1 as DEVGLA1
 from .devgla2 import DEVGLA2 as DEVGLA2
+from .diamon3dls import DIAMON3DLS as DIAMON3DLS
 from .dixmaana1 import DIXMAANA1 as DIXMAANA1
 from .dixmaanb import DIXMAANB as DIXMAANB
 from .dixmaanc import DIXMAANC as DIXMAANC
@@ -237,6 +237,7 @@ from .price4 import PRICE4 as PRICE4
 
 # TODO: Human review - objective off by factor of 4.15
 # from .powellsg import POWELLSG as POWELLSG
+from .quartc import QUARTC as QUARTC
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .s308 import S308 as S308
@@ -283,7 +284,6 @@ unconstrained_minimisation_problems = (
     # BA_L1LS(),  # TODO: BA_L family needs human review
     # BA_L1SPLS(),  # TODO: Human review - Hessian test fails
     BARD(),
-    BDEXP(),
     BDQRTIC(),
     BEALE(),
     BENNETT5LS(),
@@ -333,6 +333,7 @@ unconstrained_minimisation_problems = (
     DENSCHNE(),
     DENSCHNF(),
     DEVGLA1(),
+    DIAMON3DLS(),
     DEVGLA2(),
     DIXMAANA1(),
     DIXMAANB(),
@@ -456,6 +457,7 @@ unconstrained_minimisation_problems = (
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     PRICE3(),
     PRICE4(),
+    QUARTC(),
     ROSENBR(),
     ROSZMAN1LS(),
     S308(),

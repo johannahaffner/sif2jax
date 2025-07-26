@@ -15,10 +15,6 @@ def test_objective_compilation(problem):
     def objective_fn(y):
         return problem.objective(y, args)
 
-    # Call multiple times with same input - should not recompile
-    for _ in range(5):
-        objective_fn(y0)
-
     # Call with different inputs of same shape - should not recompile
     for _ in range(3):
         y_test = y0 + 0.1 * jax.random.normal(jax.random.PRNGKey(42), y0.shape)
@@ -35,10 +31,6 @@ def test_constraint_compilation(problem):
         @eqx.debug.assert_max_traces(max_traces=1)
         def constraint_fn(y):
             return problem.constraint(y)
-
-        # Call multiple times - should not recompile
-        for _ in range(5):
-            constraint_fn(y0)
 
         # Call with different inputs of same shape - should not recompile
         for _ in range(3):

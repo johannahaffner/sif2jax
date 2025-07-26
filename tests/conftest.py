@@ -7,18 +7,20 @@ jax.config.update("jax_numpy_rank_promotion", "raise")
 jax.config.update("jax_numpy_dtype_promotion", "strict")
 
 
-@pytest.fixture(autouse=True)
-def clear_caches():
-    """Clear JAX and Equinox caches after each test to prevent memory issues.
+def pytest_configure(config):
+    """Register custom markers."""
+    config.addinivalue_line(
+        "markers", "local_only: mark test to run only with --local-tests flag"
+    )
 
-    This helps prevent error code 137 (OOM kill) in CI environments by
-    releasing compiled function caches between tests.
-    """
-    yield
-    jax.clear_caches()
-    import equinox as eqx
 
-    eqx.clear_caches()
+def pytest_collection_modifyitems(config, items):
+    """Skip tests marked as local_only unless --local-tests is passed."""
+    if not config.getoption("--local-tests"):
+        skip_local = pytest.mark.skip(reason="need --local-tests option to run")
+        for item in items:
+            if "local_only" in item.keywords:
+                item.add_marker(skip_local)
 
 
 def pytest_addoption(parser):
@@ -44,6 +46,14 @@ def pytest_addoption(parser):
         help=(
             "Skip problems starting with letters before the specified letter "
             "(e.g., --start-at-letter=M skips A-L)"
+        ),
+    )
+    parser.addoption(
+        "--local-tests",
+        action="store_true",
+        help=(
+            "Run local-only tests (e.g., compilation tests that may use "
+            "excessive memory)"
         ),
     )
 

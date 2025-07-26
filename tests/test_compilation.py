@@ -2,8 +2,22 @@
 
 import equinox as eqx
 import jax
+import pytest
 
 
+@pytest.fixture(autouse=True)
+def clear_caches():
+    """Clear JAX and Equinox caches after each test to prevent memory issues.
+
+    This helps prevent error code 137 (OOM kill) in CI environments by
+    releasing compiled function caches between tests.
+    """
+    yield
+    jax.clear_caches()
+    eqx.clear_caches()
+
+
+@pytest.mark.local_only
 def test_objective_compilation(problem):
     """Test that objective functions don't recompile unnecessarily."""
     y0 = problem.y0
@@ -21,6 +35,7 @@ def test_objective_compilation(problem):
         objective_fn(y_test)
 
 
+@pytest.mark.local_only
 def test_constraint_compilation(problem):
     """Test that constraint functions don't recompile unnecessarily."""
     if hasattr(problem, "constraint"):

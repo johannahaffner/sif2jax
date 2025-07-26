@@ -5,58 +5,54 @@ interface to the CUTEst collection of benchmark problems.
 
 ## Test Files
 
-- `test_problem.py` - Tests problem implementations against pycutest
-- `test_runtime.py` - Tests runtime performance comparisons  
-- `test_compilation.py` - Tests JAX compilation behavior (local-only)
+- `test_problem.py` - Verifies problem implementations match pycutest
+- `test_runtime.py` - Benchmarks JAX vs Fortran performance
+- `test_compilation.py` - Ensures JAX doesn't recompile unnecessarily (local-only)
 
-## Running Tests
-
-### Basic Usage
+## Quick Start
 
 ```bash
-# Run all tests (except local-only tests)
+# Run all CI-safe tests
 bash run_tests.sh
 
-# Run tests for specific problems
-bash run_tests.sh --test-case "AKIVA,ALLINITU"
+# Test specific problems
+bash run_tests.sh --test-case "ROSENBR,ARWHEAD"
 
-# Run tests starting from a specific letter
-bash run_tests.sh --start-at-letter M
+# Run memory-intensive tests locally
+bash run_tests.sh --local-tests
 ```
 
-### Local-Only Tests
+## Runtime Benchmarks
 
-Some tests are marked as "local-only" because they may use excessive memory or are not suitable for CI environments. These tests are skipped by default.
-
-To run local-only tests (including compilation tests):
+Compare JAX performance against Fortran implementations:
 
 ```bash
-# Run all tests including local-only
-bash run_tests.sh --local-tests
+# Run all benchmarks with output
+bash run_tests.sh -k test_runtime -s
 
-# Run only compilation tests locally
-bash run_tests.sh --local-tests -k test_compilation
+# Test specific benchmark types
+bash run_tests.sh -k "test_objective_runtime" -s
+bash run_tests.sh -k "test_gradient_runtime" -s
+
+# Set custom performance threshold (default: 5.0x slower)
+bash run_tests.sh --runtime-threshold=10
 ```
 
-The `@local_only` decorator is used to mark tests that should only run when the `--local-tests` flag is passed. This is particularly useful for:
+### Performance Expectations
 
-- Compilation tests that verify JAX doesn't recompile functions unnecessarily
-- Tests that use significant memory and might cause OOM errors in CI
-- Performance benchmarks that need consistent hardware
+- **Small problems (< 100 vars)**: JAX typically 1.5-3x slower (Python overhead)
+- **Medium problems (100-1000 vars)**: Comparable performance
+- **Large problems (> 1000 vars)**: JAX often 10-100x faster (JIT compilation)
 
-## Test Configuration
+## Configuration Options
 
-The test suite uses several pytest options configured in `conftest.py`:
+- `--test-case`: Comma-separated list of problems to test
+- `--runtime-threshold`: Maximum allowed JAX/Fortran time ratio (default: 5.0)
+- `--start-at-letter`: Skip problems before specified letter
+- `--local-tests`: Enable memory-intensive tests (e.g., compilation tests)
 
-- `--test-case`: Run only specified test cases (comma-separated)
-- `--runtime-threshold`: Set threshold for runtime comparison tests
-- `--start-at-letter`: Skip problems before the specified letter
-- `--local-tests`: Enable local-only tests
+## Notes
 
-## Memory Management
-
-The compilation tests include an autouse fixture that clears JAX and Equinox caches after each test to prevent memory buildup. This is only active in the compilation test module to avoid slowing down other tests.
-
-## TODO
-
-- Tests for documentation: input, classification number, source, dates
+- Compilation tests use `@pytest.mark.local_only` to prevent CI OOM errors
+- Each runtime benchmark runs 3 warmups + 10 timed iterations
+- JAX caches are cleared between problems for fair comparison

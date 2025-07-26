@@ -7,11 +7,16 @@ from collections import OrderedDict
 from collections.abc import Callable
 from datetime import datetime
 
+import equinox as eqx
 import jax
 import jax.numpy as jnp
 import jax.tree_util as jtu
 import pycutest  # pyright: ignore[reportMissingImports]  - runs in container
 import sif2jax
+
+
+# Enable 64-bit precision
+jax.config.update("jax_enable_x64", True)
 
 
 def benchmark_pycutest(
@@ -72,8 +77,6 @@ def benchmark_problem(problem):
     Returns:
         OrderedDict with benchmark results
     """
-    jax.clear_caches()  # Fair comparison
-
     result = OrderedDict()
     result["problem_name"] = problem.name
     result["dimensionality"] = problem.y0.size
@@ -87,8 +90,6 @@ def benchmark_problem(problem):
 
     # Benchmark constraint function if it exists
     if hasattr(problem, "constraint"):
-        jax.clear_caches()  # Fair comparison
-
         pycutest_cons_time = benchmark_pycutest(pycutest_problem.cons, problem.y0)
         jax_cons_time = benchmark_jax(jax.jit(problem.constraint), (problem.y0,))
 
@@ -98,6 +99,9 @@ def benchmark_problem(problem):
         result["sif2jax_constraint_runtime"] = jnp.nan
         result["pycutest_constraint_runtime"] = jnp.nan
 
+    jax.clear_caches()  # Fair comparison
+    eqx.clear_caches()  # Clear Equinox cache too (should be redundant here)
+    pycutest.clear_cache(problem.name)  # Clear pycutest cache
     return result
 
 
@@ -122,8 +126,20 @@ def write_csv(results, filename):
 
 
 def main():
+    """Run benchmarks on all sif2jax problems.
+
+    NOTE: This script assumes all problems have been fully tested and verified.
+    It should only be run on branches where all tests pass, as it assumes:
+    - All problems have corresponding pycutest implementations
+    - All objective/constraint functions run without errors
+    - Runtimes are within acceptable bounds (5x of Fortran)
+
+    For partial or experimental branches, manually select specific problems
+    or add error handling as needed.
+    """
     results = []
-    for problem in sif2jax.problems:
+    for i, problem in enumerate(sif2jax.problems):
+        print(f"Benchmarking problem {i + 1}/{len(sif2jax.problems)}: {problem.name}")
         result = benchmark_problem(problem)
         results.append(result)
 

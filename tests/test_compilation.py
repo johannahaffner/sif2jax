@@ -2,6 +2,19 @@
 
 import equinox as eqx
 import jax
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def clear_caches():
+    """Clear JAX and Equinox caches after each test to prevent memory issues.
+
+    This helps prevent error code 137 (OOM kill) in CI environments by
+    releasing compiled function caches between tests.
+    """
+    yield
+    jax.clear_caches()
+    eqx.clear_caches()
 
 
 def test_objective_compilation(problem):

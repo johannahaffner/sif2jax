@@ -79,6 +79,7 @@ from .hs1ne import HS1NE as HS1NE
 from .hs2ne import HS2NE as HS2NE
 from .hs25ne import HS25NE as HS25NE
 from .hydcar6 import HYDCAR6 as HYDCAR6
+from .hypcir import HYPCIR as HYPCIR
 from .inteqne import INTEQNE as INTEQNE
 from .jensmpne import JENSMPNE as JENSMPNE
 from .judgene import JUDGENE as JUDGENE
@@ -97,6 +98,8 @@ from .mgh09 import MGH09 as MGH09
 from .misra1d import MISRA1D as MISRA1D
 from .modbealene import MODBEALENE as MODBEALENE
 from .morebvne import MOREBVNE as MOREBVNE
+from .msqrta import MSQRTA as MSQRTA
+from .msqrtb import MSQRTB as MSQRTB
 from .muonsine import MUONSINE as MUONSINE
 from .nondiane import NONDIANE as NONDIANE
 from .nonmsqrtne import NONMSQRTNE as NONMSQRTNE
@@ -161,6 +164,9 @@ nonlinear_equations_problems = (
     BROYDN3D(),
     BROYDNBD(),
     BRYBNDNE(),
+    HYPCIR(),
+    MSQRTA(),
+    MSQRTB(),
     CERI651A(),
     CERI651B(),
     CERI651C(),

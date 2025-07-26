@@ -4,6 +4,7 @@ from .dgospec import DGOSPEC as DGOSPEC
 from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
+from .expquad import EXPQUAD as EXPQUAD
 from .hart6 import HART6 as HART6
 from .hatfldc import HATFLDC as HATFLDC
 
@@ -31,6 +32,7 @@ bounded_minimisation_problems = (
     EXP2B(),
     EXPLIN(),
     EXPLIN2(),
+    EXPQUAD(),
     HART6(),
     HATFLDC(),
     # HIMMELP1(),  # TODO: Human review needed - OBNL element issues

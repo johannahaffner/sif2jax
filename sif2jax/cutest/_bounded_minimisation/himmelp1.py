@@ -1,9 +1,9 @@
 """Himmelblau problem 1 - nonlinear bounded optimization.
 
 # TODO: Human review needed
-# Attempts made: 
+# Attempts made:
 # 1. Fixed B1 calculation from multiplication to addition
-# 2. Corrected group coefficient interpretation (-B2, -B6)  
+# 2. Corrected group coefficient interpretation (-B2, -B6)
 # 3. Verified element function calculation
 # Suspected issues: SIF format interpretation, objective function structure
 # Additional resources needed: OBNL element type clarification

@@ -6,6 +6,7 @@ from ._bounded_minimisation import (
     EXP2B as EXP2B,
     EXPLIN as EXPLIN,
     EXPLIN2 as EXPLIN2,
+    EXPQUAD as EXPQUAD,
     HART6 as HART6,
     HATFLDC as HATFLDC,
     # HIMMELP1 as HIMMELP1,  # TODO: Human review needed - OBNL element issues
@@ -316,6 +317,7 @@ from ._nonlinear_equations import (
     HS2NE as HS2NE,
     HS25NE as HS25NE,
     HYDCAR6 as HYDCAR6,
+    HYPCIR as HYPCIR,
     INTEQNE as INTEQNE,
     JENSMPNE as JENSMPNE,
     JUDGENE as JUDGENE,
@@ -334,6 +336,8 @@ from ._nonlinear_equations import (
     MISRA1D as MISRA1D,
     MODBEALENE as MODBEALENE,
     MOREBVNE as MOREBVNE,
+    MSQRTA as MSQRTA,
+    MSQRTB as MSQRTB,
     MUONSINE as MUONSINE,
     NONDIANE as NONDIANE,
     nonlinear_equations_problems as nonlinear_equations_problems,
@@ -393,6 +397,7 @@ from ._unconstrained_minimisation import (
     BOX3 as BOX3,
     BOXBODLS as BOXBODLS,
     # BOXPOWER as BOXPOWER,  # TODO: Human review - minor gradient discrepancy
+    BRATU1D as BRATU1D,
     # BRKMCC as BRKMCC,  # TODO: Human review - significant discrepancies
     # BROWNAL as BROWNAL,  # TODO: Human review - small Hessian discrepancies
     BROWNBS as BROWNBS,
@@ -522,6 +527,7 @@ from ._unconstrained_minimisation import (
     LSC1LS as LSC1LS,
     LSC2LS as LSC2LS,
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
+    MARATOSB as MARATOSB,
     MEXHAT as MEXHAT,
     MGH10LS as MGH10LS,
     # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
@@ -553,6 +559,7 @@ from ._unconstrained_minimisation import (
     ROSZMAN1LS as ROSZMAN1LS,
     S308 as S308,
     SISSER as SISSER,
+    SISSER2 as SISSER2,
     # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
@@ -804,6 +811,7 @@ problems_dict = {
     "BOXBODLS": BOXBODLS(),
     # "BOXPOWER": BOXPOWER(),  # TODO: Human review - minor gradient discrepancy
     "BRANIN": BRANIN(),
+    "BRATU1D": BRATU1D(),
     # "BRKMCC": BRKMCC(),  # TODO: Human review - significant discrepancies
     "CAMEL6": CAMEL6(),
     # "BROWNAL": BROWNAL(),  # TODO: Human review - small Hessian discrepancies
@@ -890,6 +898,7 @@ problems_dict = {
     "DGOSPEC": DGOSPEC(),
     "EXPLIN": EXPLIN(),
     "EXPLIN2": EXPLIN2(),
+    "EXPQUAD": EXPQUAD(),
     # "ERRINRSM": ERRINRSM(),  # TODO: Human review - significant discrepancies
     "EXP2": EXP2(),
     "EXP2B": EXP2B(),
@@ -961,6 +970,7 @@ problems_dict = {
     # "MEXHAT": MEXHAT(),  # TODO: Human review - complex scaling issues
     # "MODBEALE": MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     "MGH10LS": MGH10LS(),
+    "MARATOSB": MARATOSB(),
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
     # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
@@ -991,6 +1001,7 @@ problems_dict = {
     "ROSZMAN1LS": ROSZMAN1LS(),
     "S308": S308(),
     "SISSER": SISSER(),
+    "SISSER2": SISSER2(),
     # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     "TENBARS4": TENBARS4(),
     "TENFOLDTRLS": TENFOLDTRLS(),
@@ -1035,6 +1046,9 @@ problems_dict = {
     "BROYDN3D": BROYDN3D(),
     "BROYDNBD": BROYDNBD(),
     "BRYBNDNE": BRYBNDNE(),
+    "HYPCIR": HYPCIR(),
+    "MSQRTA": MSQRTA(),
+    "MSQRTB": MSQRTB(),
     "CERI651A": CERI651A(),
     "CERI651B": CERI651B(),
     "CERI651C": CERI651C(),

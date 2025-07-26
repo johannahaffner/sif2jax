@@ -12,7 +12,7 @@ SIF input: Ph. Toint, Dec 1989.
 
 classification NLR2-AN-V-V
 
-This is a(n infeasible) linear feasibility problem 
+This is a(n infeasible) linear feasibility problem
 N is the number of free variables
 M is the number of equations ( M .ge. N)
 """

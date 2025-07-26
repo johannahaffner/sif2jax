@@ -24,6 +24,8 @@ from .boxbodls import BOXBODLS as BOXBODLS
 
 # TODO: BOXPOWER needs human review - minor gradient discrepancy at last element
 # from .boxpower import BOXPOWER as BOXPOWER
+from .bratu1d import BRATU1D as BRATU1D
+
 # TODO: BRKMCC needs human review - significant discrepancies
 # from .brkmcc import BRKMCC as BRKMCC
 # TODO: BROWNAL needs human review - small Hessian discrepancies
@@ -197,6 +199,7 @@ from .lsc2ls import LSC2LS as LSC2LS
 # from .luksan22ls import LUKSAN22LS as LUKSAN22LS  # TODO: Fix objective calculation
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
+from .maratosb import MARATOSB as MARATOSB
 from .mexhat import MEXHAT as MEXHAT
 from .mgh10ls import MGH10LS as MGH10LS
 
@@ -238,6 +241,7 @@ from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .s308 import S308 as S308
 from .sisser import SISSER as SISSER
+from .sisser2 import SISSER2 as SISSER2
 
 # TODO: Human review needed - complex matrix multiplication formulation
 # from .spmsrtls import SPMSRTLS as SPMSRTLS
@@ -291,6 +295,7 @@ unconstrained_minimisation_problems = (
     BOX3(),
     BOXBODLS(),
     # BOXPOWER(),  # TODO: Human review - minor gradient discrepancy at last element
+    BRATU1D(),
     # BRKMCC(),  # TODO: Human review - significant discrepancies
     # BROWNAL(),  # TODO: Human review - small Hessian discrepancies
     BROWNBS(),
@@ -423,6 +428,7 @@ unconstrained_minimisation_problems = (
     LSC2LS(),
     # LUKSAN22LS(),  # TODO: Fix objective calculation
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
+    MARATOSB(),
     MEXHAT(),
     MGH10LS(),
     # MOREBV(),  # TODO: Human review - minor gradient precision differences
@@ -454,6 +460,7 @@ unconstrained_minimisation_problems = (
     ROSZMAN1LS(),
     S308(),
     SISSER(),
+    SISSER2(),
     # SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS(),
     # WATSON(),  # TODO: Human review - Hessian computation issues

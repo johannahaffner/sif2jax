@@ -1,7 +1,3 @@
-from __future__ import annotations
-
-from typing import Any
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
@@ -31,7 +27,7 @@ class HIMMELBB(AbstractUnconstrainedMinimisation):
 
     n: int = 2  # Number of variables
 
-    def objective(self, y: Any, args: Any) -> Any:
+    def objective(self, y, args):
         """Compute the objective function."""
         x1, x2 = y
 
@@ -49,7 +45,7 @@ class HIMMELBB(AbstractUnconstrainedMinimisation):
 
     @property
     def y0(self):
-        return jnp.array([-1.2, 1.0], dtype=jnp.float64)
+        return jnp.array([-1.2, 1.0])
 
     @property
     def args(self):
@@ -65,4 +61,4 @@ class HIMMELBB(AbstractUnconstrainedMinimisation):
     def expected_objective_value(self):
         """Expected optimal objective value."""
         # From the SIF file: SOLTN 0.0
-        return jnp.array(0.0, dtype=jnp.float64)
+        return jnp.array(0.0)

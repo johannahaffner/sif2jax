@@ -49,28 +49,25 @@ class WOODS(AbstractUnconstrainedMinimisation):
         f = 100*(x2 - x1^2)^2 + (1 - x1)^2 + 90*(x4 - x3^2)^2 + (1 - x3)^2
             + 10.1*((x2 - 1)^2 + (x4 - 1)^2) + 19.8*(x2 - 1)*(x4 - 1)
         """
-        obj = 0.0
+        # Reshape into sets of 4 variables
+        y_reshaped = y.reshape(-1, 4)
 
-        # Iterate over sets
-        for i in range(self.ns):
-            # Get the 4 variables for this set
-            idx = 4 * i
-            x1 = y[idx]
-            x2 = y[idx + 1]
-            x3 = y[idx + 2]
-            x4 = y[idx + 3]
+        # Extract each variable type
+        x1 = y_reshaped[:, 0]
+        x2 = y_reshaped[:, 1]
+        x3 = y_reshaped[:, 2]
+        x4 = y_reshaped[:, 3]
 
-            # Standard Woods function terms
-            term1 = 100.0 * (x2 - x1**2) ** 2
-            term2 = (1.0 - x1) ** 2
-            term3 = 90.0 * (x4 - x3**2) ** 2
-            term4 = (1.0 - x3) ** 2
-            term5 = 10.1 * ((x2 - 1.0) ** 2 + (x4 - 1.0) ** 2)
-            term6 = 19.8 * (x2 - 1.0) * (x4 - 1.0)
+        # Compute all terms vectorized
+        term1 = 100.0 * (x2 - x1**2) ** 2
+        term2 = (1.0 - x1) ** 2
+        term3 = 90.0 * (x4 - x3**2) ** 2
+        term4 = (1.0 - x3) ** 2
+        term5 = 10.1 * ((x2 - 1.0) ** 2 + (x4 - 1.0) ** 2)
+        term6 = 19.8 * (x2 - 1.0) * (x4 - 1.0)
 
-            obj = obj + term1 + term2 + term3 + term4 + term5 + term6
-
-        return obj
+        # Sum all terms for all sets
+        return jnp.sum(term1 + term2 + term3 + term4 + term5 + term6)
 
     @property
     def y0(self):

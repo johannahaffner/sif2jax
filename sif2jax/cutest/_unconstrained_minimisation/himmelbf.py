@@ -1,9 +1,3 @@
-"""Himmelblau 4 variable data fitting problem."""
-
-from __future__ import annotations
-
-from typing import Any
-
 import equinox as eqx
 import jax.numpy as jnp
 
@@ -43,7 +37,7 @@ class HIMMELBF(AbstractUnconstrainedMinimisation):
         default=(7.391, 11.18, 16.44, 16.20, 22.20, 24.02, 31.32), init=False
     )
 
-    def objective(self, y: Any, args: Any) -> Any:
+    def objective(self, y, args):
         """Compute the objective function (vectorized).
 
         The objective is a sum of squared ratios.
@@ -62,12 +56,12 @@ class HIMMELBF(AbstractUnconstrainedMinimisation):
         # Vectorized group evaluation with constant 1.0 and scale 0.0001
         g_i = (f_i - 1.0) ** 2
 
-        # Sum of all groups divided by scale
-        return jnp.sum(g_i) / 0.0001  # SCALE means division
+        # Sum of all groups with scale (SCALE in SIF means multiply by 1/scale)
+        return jnp.sum(g_i) / 0.0001
 
     @property
     def y0(self):
-        return jnp.array([2.7, 90.0, 1500.0, 10.0], dtype=jnp.float64)
+        return jnp.array([2.7, 90.0, 1500.0, 10.0])
 
     @property
     def args(self):
@@ -79,4 +73,4 @@ class HIMMELBF(AbstractUnconstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        return jnp.array(318.572, dtype=jnp.float64)
+        return jnp.array(318.572)

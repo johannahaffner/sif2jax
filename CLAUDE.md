@@ -51,7 +51,7 @@ You can check any work against the original Fortran implementations. For this pu
 Without this container, you cannot run any tests. 
 Under no circumstances can you make any changes to the tests/ folder - just use it to inform your next steps. Never make edits to run_tests.sh.
 
-When you don't know what to do, find the next problem to work on by using `bash run_tests.sh -x` and start fixing the first problem for which the tests fail.
+When you don't know what to do, find the next problem to work on by examining the missing_problems.md for problems that are not ticked off ([] SOMEPROBLEM) and checking `sif2jax/cutest/__init__.py` to see if the prblem is already being imported.
 When you make any change to a file, please run the tests again. You can run problem-specific tests with `bash run_tests.sh --test-case "PROBLEM1,PROBLEM2"`. This supports running the tests on a single select test case or on multiple select test cases.
 Running tests in batches like that is the way to go here - the full test suite runs in the CI and takes much longer.
 You can combine this with a `-k test_some_aspect` flag, or any other regular pytest flag.

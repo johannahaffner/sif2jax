@@ -223,7 +223,7 @@ class TestProblem:
             # Check that the problem is not mistakenly classified as constrained
             # If both elements of the tuple are None, the problem is unconstrained or
             # bound constrained, and should inherit from a different parent class.
-            assert equalities is not None and inequalities is not None
+            assert equalities is not None or inequalities is not None
 
     def test_nontrivial_bounds(self, problem):
         if (

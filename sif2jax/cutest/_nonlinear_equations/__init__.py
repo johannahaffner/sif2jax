@@ -2,7 +2,10 @@ from .aircrfta import AIRCRFTA as AIRCRFTA
 from .argauss import ARGAUSS as ARGAUSS
 from .arglale import ARGLALE as ARGLALE
 from .arglble import ARGLBLE as ARGLBLE
-from .arglcle import ARGLCLE as ARGLCLE
+
+# TODO: Human review needed - should be least squares, not nonlinear equations
+# pycutest returns -1.0 objective, but nonlinear equations expect 0.0
+# from .arglcle import ARGLCLE as ARGLCLE
 from .argtrig import ARGTRIG as ARGTRIG
 from .artif import ARTIF as ARTIF
 
@@ -143,7 +146,7 @@ nonlinear_equations_problems = (
     ARGAUSS(),
     ARGLALE(),
     ARGLBLE(),
-    ARGLCLE(),
+    # ARGLCLE(),  # TODO: should be least squares, not nonlinear equations
     ARGTRIG(),
     ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch

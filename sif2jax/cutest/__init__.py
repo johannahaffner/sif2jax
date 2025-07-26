@@ -249,7 +249,7 @@ from ._nonlinear_equations import (
     ARGAUSS as ARGAUSS,
     ARGLALE as ARGLALE,
     ARGLBLE as ARGLBLE,
-    ARGLCLE as ARGLCLE,
+    # ARGLCLE as ARGLCLE,  # TODO: should be least squares, not nonlinear equations
     ARGTRIG as ARGTRIG,
     ARTIF as ARTIF,
     # TODO: Human review needed - constraint dimension mismatch
@@ -1051,7 +1051,7 @@ problems_dict = {
     "ARGAUSS": ARGAUSS(),
     "ARGLALE": ARGLALE(),
     "ARGLBLE": ARGLBLE(),
-    "ARGLCLE": ARGLCLE(),
+    # "ARGLCLE": ARGLCLE(),  # TODO: should be least squares, not nonlinear equations
     "ARGTRIG": ARGTRIG(),
     "ARTIF": ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch

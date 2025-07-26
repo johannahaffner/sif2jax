@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedQuadraticProblem
+from ..._problem import AbstractBoundedMinimisation
 
 
-class DEGDIAG(AbstractConstrainedQuadraticProblem):
+class DEGDIAG(AbstractBoundedMinimisation):
     """A degenerate bound constrained convex quadratic program with a diagonal Hessian.
 
     SIF input: Nick Gould, August 2011
@@ -44,10 +44,6 @@ class DEGDIAG(AbstractConstrainedQuadraticProblem):
         lower = i_vals / (self.n_minus_1 + 1.0)
         upper = jnp.full(self.n, jnp.inf)
         return lower, upper
-
-    def constraint(self, y):
-        """No additional constraints beyond bounds."""
-        return None, None
 
     @property
     def expected_result(self):

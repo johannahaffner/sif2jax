@@ -15,6 +15,9 @@ class YAO(AbstractConstrainedQuadraticProblem):
 
     We choose f(t) = sin(t), x(1) >= 0.08 and fix x(n+i) = 0
 
+    Note: The SIF file has P+k variables, but the last k are fixed at 0.
+    pycutest removes these fixed variables, so it only has P variables.
+
     SIF input: Aixiang Yao, Virginia Tech., May 1995
     modifications by Nick Gould
 
@@ -29,7 +32,8 @@ class YAO(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return self.p  # pycutest uses p, not p+k
+        # pycutest removes the k fixed variables, so n = p
+        return self.p
 
     @property
     def y0(self):
@@ -43,16 +47,24 @@ class YAO(AbstractConstrainedQuadraticProblem):
     def objective(self, y, args):
         """Quadratic objective function: (1/2) || f(t) - x ||^2.
 
-        The objective is sum_i (x_i - sin(i/(p+k)))^2.
+        The objective includes all p+k terms, where the last k are fixed at 0.
         """
         del args
 
-        # Target function values
-        i_vals = jnp.arange(1, self.n + 1, dtype=jnp.float64)
-        f_vals = jnp.sin(i_vals / (self.p + self.k))
+        # Contribution from the p free variables
+        i_vals_free = jnp.arange(1, self.p + 1, dtype=jnp.float64)
+        f_vals_free = jnp.sin(i_vals_free / (self.p + self.k))
+        contrib_free = jnp.sum((y - f_vals_free) ** 2)
 
-        # Objective: (1/2) sum (x_i - f_i)^2
-        return 0.5 * jnp.sum((y - f_vals) ** 2)
+        # Contribution from the k fixed variables (fixed at 0)
+        # These are x_{p+1} = 0, ..., x_{p+k} = 0
+        i_vals_fixed = jnp.arange(self.p + 1, self.p + self.k + 1, dtype=jnp.float64)
+        f_vals_fixed = jnp.sin(i_vals_fixed / (self.p + self.k))
+        contrib_fixed = jnp.sum((0.0 - f_vals_fixed) ** 2)
+
+        # The SIF file has 'SCALE' 2.0 on each group, which means
+        # each group is multiplied by 1/2
+        return 0.5 * (contrib_free + contrib_fixed)
 
     @property
     def bounds(self):
@@ -63,7 +75,8 @@ class YAO(AbstractConstrainedQuadraticProblem):
         # x(1) >= 0.08
         lower = lower.at[0].set(0.08)
 
-        # Note: With n=p, there are no fixed variables at the end
+        # Note: The last k variables in the SIF file are fixed at 0,
+        # but pycutest removes them, so we don't need to handle them
 
         return lower, upper
 
@@ -71,18 +84,36 @@ class YAO(AbstractConstrainedQuadraticProblem):
         """k-convex constraints: ∇^k x >= 0.
 
         For k=2, this means x_i - 2*x_{i+1} + x_{i+2} >= 0 for i=1 to p.
+        Since pycutest removes the fixed variables, we need to handle the
+        constraints that involve them by treating those variables as 0.
         """
-        # Inequality constraints B(i): x_i - 2*x_{i+1} + x_{i+2} >= 0
-        # Vectorized: compute all constraints at once
-        # We need constraints for i from 0 to n-3 (so i+2 < n)
-        max_i = self.n - 2
+        p = self.p
 
-        if max_i > 0:
-            # Use slicing to compute all constraints vectorially
-            inequalities = y[:max_i] - 2.0 * y[1 : max_i + 1] + y[2 : max_i + 2]
-            return None, inequalities
+        # For constraints B(i) where i goes from 1 to P (SIF 1-based)
+        # B(i): x(i) - 2*x(i+1) + x(i+2) >= 0
+
+        # Most constraints use three consecutive variables
+        # For i=1 to p-2: normal constraints with all variables present
+        if p > 2:
+            # Standard constraints for i in range(p-2)
+            inequalities = y[:-2] - 2.0 * y[1:-1] + y[2:]
+
+            # For the last two constraints (i=p-1 and i=p), we need the fixed variables
+            # B(p-1): x(p-1) - 2*x(p) + x(p+1) >= 0, where x(p+1)=0
+            constraint_p_minus_1 = y[-2] - 2.0 * y[-1] + 0.0
+
+            # B(p): x(p) - 2*x(p+1) + x(p+2) >= 0, where x(p+1)=0 and x(p+2)=0
+            constraint_p = y[-1] - 2.0 * 0.0 + 0.0
+
+            # Concatenate all constraints
+            all_inequalities = jnp.concatenate(
+                [inequalities, jnp.array([constraint_p_minus_1, constraint_p])]
+            )
+
+            return None, all_inequalities
         else:
-            return None, None
+            # Handle edge case for very small p
+            return None, jnp.array([])
 
     @property
     def expected_result(self):
@@ -91,5 +122,8 @@ class YAO(AbstractConstrainedQuadraticProblem):
 
     @property
     def expected_objective_value(self):
-        """Expected objective value not provided."""
+        """Expected objective value from SIF file."""
+        # From the SIF file: SOLUTION 1.97705D+02 (p=2000)
+        if self.p == 2000:
+            return jnp.array(197.705)
         return None

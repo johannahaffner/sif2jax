@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedQuadraticProblem
+from ..._problem import AbstractBoundedMinimisation
 
 
-class QUDLIN(AbstractConstrainedQuadraticProblem):
+class QUDLIN(AbstractBoundedMinimisation):
     """A simple quadratic programming problem.
 
     The objective consists of linear terms and product terms x_i * x_{i+1}.
@@ -31,17 +31,18 @@ class QUDLIN(AbstractConstrainedQuadraticProblem):
     def objective(self, y, args):
         """Quadratic objective function.
 
-        Linear terms: (i-10) * x_i for i=1 to n
+        Linear terms: -10 * i * x_i for i=1 to n
         Quadratic terms: x_i * x_{i+1} for i=1 to m
         """
         del args
 
-        # Linear terms
+        # Linear terms - the SIF file has RM C RI -10.0 which means C = RI * (-10.0)
         i_vals = jnp.arange(1, self.n + 1, dtype=jnp.float64)
-        coeffs = i_vals - 10.0
+        coeffs = -10.0 * i_vals
         linear_term = jnp.dot(coeffs, y)
 
         # Quadratic terms: sum of x_i * x_{i+1} for i=1 to m
+        # From the SIF file: ELEMENT uses 2PR type which computes X*Y
         quad_term = 0.0
         if self.m > 0 and self.n > 1:
             # Ensure we don't exceed array bounds
@@ -56,10 +57,6 @@ class QUDLIN(AbstractConstrainedQuadraticProblem):
         lower = jnp.zeros(self.n)
         upper = jnp.full(self.n, 10.0)
         return lower, upper
-
-    def constraint(self, y):
-        """No additional constraints beyond bounds."""
-        return None, None
 
     @property
     def expected_result(self):

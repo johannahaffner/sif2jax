@@ -44,8 +44,10 @@ class TAME(AbstractConstrainedQuadraticProblem):
 
     @property
     def bounds(self):
-        """No bounds on variables."""
-        return None
+        """Lower bounds of 0 on both variables."""
+        lower = jnp.zeros(2, dtype=jnp.float64)
+        upper = jnp.full(2, jnp.inf, dtype=jnp.float64)
+        return lower, upper
 
     def constraint(self, y):
         """Linear equality constraint: x + y = 1."""

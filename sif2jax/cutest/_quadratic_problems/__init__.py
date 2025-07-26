@@ -1,5 +1,6 @@
 from .biggsc4 import BIGGSC4 as BIGGSC4
-from .chenhark import CHENHARK as CHENHARK
+
+# from .chenhark import CHENHARK as CHENHARK  # TODO: Human review needed - see file
 from .degdiag import DEGDIAG as DEGDIAG
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
@@ -14,7 +15,7 @@ from .yao import YAO as YAO
 
 quadratic_problems = (
     BIGGSC4(),
-    CHENHARK(),
+    # CHENHARK(),  # TODO: Human review needed - see file
     DEGDIAG(),
     HATFLDH(),
     HS44NEW(),

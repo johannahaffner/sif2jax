@@ -1,3 +1,11 @@
+# TODO: Human review needed
+# Attempts made: [multiple test failures - starting values, objective,
+#                 gradient, Hessian]
+# Suspected issues: [complex diamond powder diffraction model may have indexing
+#                    or formulation errors]
+# Additional resources needed: [primary literature on diffraction fitting,
+#                               verification of data arrays and parameters]
+
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation

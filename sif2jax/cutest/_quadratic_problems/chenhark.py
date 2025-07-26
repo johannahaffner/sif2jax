@@ -1,5 +1,13 @@
 """CHENHARK problem."""
 
+# TODO: Human review needed
+# Attempts made: [close objective values but gradient mismatch, complex
+#                 pentadiagonal structure]
+# Suspected issues: [boundary condition handling in pentadiagonal matrix,
+#                    possible indexing issues]
+# Additional resources needed: [clarification on exact SIF formulation,
+#                               verification of matrix structure]
+
 import jax.numpy as jnp
 
 from ..._problem import AbstractBoundedMinimisation

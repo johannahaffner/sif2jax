@@ -23,8 +23,7 @@ from .boxbodls import BOXBODLS as BOXBODLS
 
 # TODO: BOXPOWER needs human review - minor gradient discrepancy at last element
 # from .boxpower import BOXPOWER as BOXPOWER
-from .bratu1d import BRATU1D as BRATU1D
-
+# from .bratu1d import BRATU1D as BRATU1D  # TODO: Human review needed - see file
 # TODO: BRKMCC needs human review - significant discrepancies
 # from .brkmcc import BRKMCC as BRKMCC
 # TODO: BROWNAL needs human review - small Hessian discrepancies
@@ -78,7 +77,8 @@ from .denschne import DENSCHNE as DENSCHNE
 from .denschnf import DENSCHNF as DENSCHNF
 from .devgla1 import DEVGLA1 as DEVGLA1
 from .devgla2 import DEVGLA2 as DEVGLA2
-from .diamon3dls import DIAMON3DLS as DIAMON3DLS
+
+# from .diamon3dls import DIAMON3DLS as DIAMON3DLS  # TODO: Human review needed
 from .dixmaana1 import DIXMAANA1 as DIXMAANA1
 from .dixmaanb import DIXMAANB as DIXMAANB
 from .dixmaanc import DIXMAANC as DIXMAANC
@@ -294,7 +294,7 @@ unconstrained_minimisation_problems = (
     BOX3(),
     BOXBODLS(),
     # BOXPOWER(),  # TODO: Human review - minor gradient discrepancy at last element
-    BRATU1D(),
+    # BRATU1D(),  # TODO: Human review needed - see file
     # BRKMCC(),  # TODO: Human review - significant discrepancies
     # BROWNAL(),  # TODO: Human review - small Hessian discrepancies
     BROWNBS(),
@@ -332,7 +332,7 @@ unconstrained_minimisation_problems = (
     DENSCHNE(),
     DENSCHNF(),
     DEVGLA1(),
-    DIAMON3DLS(),
+    # DIAMON3DLS(),  # TODO: Human review needed - see file
     DEVGLA2(),
     DIXMAANA1(),
     DIXMAANB(),

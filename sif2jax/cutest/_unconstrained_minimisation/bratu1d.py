@@ -1,4 +1,11 @@
 import equinox as eqx
+
+# TODO: Human review needed
+# Attempts made: [fixed dtype promotion error, but significant gradient
+#                 discrepancies remain]
+# Suspected issues: [boundary condition implementation, discretization scheme,
+#                    max gradient difference 0.41, last elements inconsistent]
+# Additional resources needed: [verification of PDE discretization, boundary handling]
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
@@ -75,7 +82,7 @@ class BRATU1D(AbstractUnconstrainedMinimisation):
         h = 1.0 / (n + 1)
 
         # Vectorized computation
-        i_values = jnp.arange(1, n + 1)
+        i_values = jnp.arange(1, n + 1, dtype=jnp.float64)
         x0 = -0.1 * h * (i_values * i_values)
 
         return x0

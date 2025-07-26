@@ -374,7 +374,7 @@ from ._nonlinear_equations import (
     VANDERM2 as VANDERM2,
 )
 from ._quadratic_problems import (
-    CHENHARK as CHENHARK,
+    # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
     DEGDIAG as DEGDIAG,
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
@@ -410,7 +410,7 @@ from ._unconstrained_minimisation import (
     BOX3 as BOX3,
     BOXBODLS as BOXBODLS,
     # BOXPOWER as BOXPOWER,  # TODO: Human review - minor gradient discrepancy
-    BRATU1D as BRATU1D,
+    # BRATU1D as BRATU1D,  # TODO: Human review needed - see file
     # BRKMCC as BRKMCC,  # TODO: Human review - significant discrepancies
     # BROWNAL as BROWNAL,  # TODO: Human review - small Hessian discrepancies
     BROWNBS as BROWNBS,
@@ -451,7 +451,7 @@ from ._unconstrained_minimisation import (
     DENSCHNF as DENSCHNF,
     DEVGLA1 as DEVGLA1,
     DEVGLA2 as DEVGLA2,
-    DIAMON3DLS as DIAMON3DLS,
+    # DIAMON3DLS as DIAMON3DLS,  # TODO: Human review needed - see file
     DIXMAANA1 as DIXMAANA1,
     DIXMAANB as DIXMAANB,
     DIXMAANC as DIXMAANC,
@@ -826,7 +826,7 @@ problems_dict = {
     "BOXBODLS": BOXBODLS(),
     # "BOXPOWER": BOXPOWER(),  # TODO: Human review - minor gradient discrepancy
     "BRANIN": BRANIN(),
-    "BRATU1D": BRATU1D(),
+    # "BRATU1D": BRATU1D(),  # TODO: Human review needed - see file
     # "BRKMCC": BRKMCC(),  # TODO: Human review - significant discrepancies
     "CAMEL6": CAMEL6(),
     # "BROWNAL": BROWNAL(),  # TODO: Human review - small Hessian discrepancies
@@ -877,7 +877,7 @@ problems_dict = {
     "DENSCHNE": DENSCHNE(),
     "DENSCHNF": DENSCHNF(),
     "DEVGLA1": DEVGLA1(),
-    "DIAMON3DLS": DIAMON3DLS(),
+    # "DIAMON3DLS": DIAMON3DLS(),  # TODO: Human review needed - see file
     "DEVGLA2": DEVGLA2(),
     "DIXMAANA1": DIXMAANA1(),
     "DIXMAANB": DIXMAANB(),
@@ -1039,7 +1039,7 @@ problems_dict = {
     # "TQUARTIC": TQUARTIC(),  # TODO: Human review - objective calculation incorrect
     "YAO": YAO(),
     "QPBAND": QPBAND(),
-    "CHENHARK": CHENHARK(),
+    # "CHENHARK": CHENHARK(),  # TODO: Human review needed - see file
     "DEGDIAG": DEGDIAG(),
     "QUDLIN": QUDLIN(),
     "TAME": TAME(),

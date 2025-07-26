@@ -52,8 +52,10 @@ class HS44NEW(AbstractConstrainedQuadraticProblem):
 
     @property
     def bounds(self):
-        """No bounds on variables."""
-        return None
+        """Lower bounds of 0 on all variables."""
+        lower = jnp.zeros(4, dtype=jnp.float64)
+        upper = jnp.full(4, jnp.inf, dtype=jnp.float64)
+        return lower, upper
 
     def constraint(self, y):
         """Linear inequality constraints.

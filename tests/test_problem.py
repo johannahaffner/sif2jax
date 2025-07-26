@@ -225,6 +225,25 @@ class TestProblem:
             # bound constrained, and should inherit from a different parent class.
             assert equalities is not None and inequalities is not None
 
+    def test_nontrivial_bounds(self, problem):
+        if (
+            isinstance(problem, sif2jax.AbstractConstrainedMinimisation)
+            # AbstractConstrainedMinimisation includes subclass for quadratic problems
+            or isinstance(problem, sif2jax.AbstractBoundedMinimisation)
+            or isinstance(problem, sif2jax.AbstractNonlinearEquations)
+        ):
+            bounds = problem.bounds
+            if bounds is not None:
+                lower, upper = bounds
+                assert lower is not None and upper is not None
+
+                # If bounds are not None, then at least one element of `y` should have
+                # a nontrivial (finite) bound.
+                # Otherwise the bounds method should return None.
+                finite_lower = jnp.any(jnp.isfinite(lower))
+                finite_upper = jnp.any(jnp.isfinite(upper))
+                assert finite_lower or finite_upper
+
     def test_correct_number_of_finite_bounds(self, problem, pycutest_problem):
         _, _, num_finite_bounds = problem.num_constraints()
 

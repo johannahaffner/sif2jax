@@ -41,7 +41,8 @@ class QPBAND(AbstractConstrainedQuadraticProblem):
         del args
 
         # Linear terms
-        i_vals = jnp.arange(1, self.n + 1, dtype=jnp.float64)
+        i_vals = jnp.arange(1, self.n + 1)
+        i_vals = jnp.asarray(i_vals, dtype=y.dtype)
         linear_term = -jnp.sum((i_vals / self.n) * y)
 
         # Quadratic terms: x^T Q x / 2

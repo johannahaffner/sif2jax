@@ -58,7 +58,8 @@ class MOREBV(AbstractUnconstrainedMinimisation):
         halfh2 = 0.5 * h2
 
         # Create indices for vectorized computation
-        indices = jnp.arange(1, self.n + 1, dtype=jnp.float64)
+        indices = jnp.arange(1, self.n + 1)
+        indices = jnp.asarray(indices, dtype=y.dtype)
         ih_values = indices * h
 
         # Compute all cubic terms (x_i + i*h + 1)^3
@@ -91,8 +92,9 @@ class MOREBV(AbstractUnconstrainedMinimisation):
         # Starting point: x(i) = t(i) * (t(i) - 1)
         # where t(i) = i * h and h = 1/(n+1)
         h = 1.0 / (self.n + 1)
-        indices = jnp.arange(1, self.n + 1, dtype=jnp.float64)
-        ti = indices * h
+        indices = jnp.arange(1, self.n + 1)
+        # Create y0 with default float type first
+        ti = jnp.asarray(indices, dtype=jnp.float32) * h
         return ti * (ti - 1.0)
 
     @property
@@ -108,4 +110,4 @@ class MOREBV(AbstractUnconstrainedMinimisation):
     def expected_objective_value(self):
         # The optimal value is not provided in the SIF file
         # However, from the comments it should be 0.0 for the exact solution
-        return jnp.array(0.0, dtype=jnp.float64)
+        return jnp.array(0.0)

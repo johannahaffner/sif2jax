@@ -40,7 +40,8 @@ class DEGDIAG(AbstractBoundedMinimisation):
     @property
     def bounds(self):
         """Variable bounds: x_i >= i/(n+1)."""
-        i_vals = jnp.arange(self.n, dtype=jnp.float64)
+        i_vals = jnp.arange(self.n)
+        i_vals = jnp.asarray(i_vals, dtype=self.y0.dtype)
         lower = i_vals / (self.n_minus_1 + 1.0)
         upper = jnp.full(self.n, jnp.inf)
         return lower, upper
@@ -48,7 +49,8 @@ class DEGDIAG(AbstractBoundedMinimisation):
     @property
     def expected_result(self):
         """Expected result: x_i = i/(n+1)."""
-        i_vals = jnp.arange(self.n, dtype=jnp.float64)
+        i_vals = jnp.arange(self.n)
+        i_vals = jnp.asarray(i_vals, dtype=self.y0.dtype)
         return i_vals / (self.n_minus_1 + 1.0)
 
     @property

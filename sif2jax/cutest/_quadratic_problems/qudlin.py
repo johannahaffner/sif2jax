@@ -37,7 +37,8 @@ class QUDLIN(AbstractBoundedMinimisation):
         del args
 
         # Linear terms - the SIF file has RM C RI -10.0 which means C = RI * (-10.0)
-        i_vals = jnp.arange(1, self.n + 1, dtype=jnp.float64)
+        i_vals = jnp.arange(1, self.n + 1)
+        i_vals = jnp.asarray(i_vals, dtype=y.dtype)
         coeffs = -10.0 * i_vals
         linear_term = jnp.dot(coeffs, y)
 

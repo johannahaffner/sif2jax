@@ -52,13 +52,15 @@ class YAO(AbstractConstrainedQuadraticProblem):
         del args
 
         # Contribution from the p free variables
-        i_vals_free = jnp.arange(1, self.p + 1, dtype=jnp.float64)
+        i_vals_free = jnp.arange(1, self.p + 1)
+        i_vals_free = jnp.asarray(i_vals_free, dtype=y.dtype)
         f_vals_free = jnp.sin(i_vals_free / (self.p + self.k))
         contrib_free = jnp.sum((y - f_vals_free) ** 2)
 
         # Contribution from the k fixed variables (fixed at 0)
         # These are x_{p+1} = 0, ..., x_{p+k} = 0
-        i_vals_fixed = jnp.arange(self.p + 1, self.p + self.k + 1, dtype=jnp.float64)
+        i_vals_fixed = jnp.arange(self.p + 1, self.p + self.k + 1)
+        i_vals_fixed = jnp.asarray(i_vals_fixed, dtype=y.dtype)
         f_vals_fixed = jnp.sin(i_vals_fixed / (self.p + self.k))
         contrib_fixed = jnp.sum((0.0 - f_vals_fixed) ** 2)
 

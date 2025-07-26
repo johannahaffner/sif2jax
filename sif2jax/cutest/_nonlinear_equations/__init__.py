@@ -9,6 +9,7 @@ from .artif import ARTIF as ARTIF
 # TODO: Human review needed - constraint dimension mismatch
 # from .arwhdne import ARWHDNE as ARWHDNE
 from .bardne import BARDNE as BARDNE
+from .bdvalues import BDVALUES as BDVALUES
 
 # from .bdqrticne import BDQRTICNE as BDQRTICNE  # TODO: Human review needed
 from .bealene import BEALENE as BEALENE
@@ -145,6 +146,7 @@ nonlinear_equations_problems = (
     # TODO: Human review needed - constraint dimension mismatch
     # ARWHDNE(),
     BARDNE(),
+    BDVALUES(),
     # BDQRTICNE(),  # TODO: Human review needed
     BEALENE(),
     BENNETT5(),

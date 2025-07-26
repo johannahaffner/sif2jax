@@ -32,6 +32,7 @@ from ._constrained_minimisation import (
     ALLINITC as ALLINITC,
     ALSOTAME as ALSOTAME,
     # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
+    # AUG2D as AUG2D,  # TODO: needs human review - edge variable structure
     AVGASA as AVGASA,
     AVGASB as AVGASB,
     # AVION2 as AVION2,  # TODO: Human review - gradient discrepancies
@@ -251,6 +252,7 @@ from ._nonlinear_equations import (
     # TODO: Human review needed - constraint dimension mismatch
     # ARWHDNE as ARWHDNE,
     BARDNE as BARDNE,
+    BDVALUES as BDVALUES,
     # BDQRTICNE as BDQRTICNE,  # TODO: Human review needed
     BEALENE as BEALENE,
     BENNETT5 as BENNETT5,
@@ -379,6 +381,7 @@ from ._unconstrained_minimisation import (
     # BA_L1LS as BA_L1LS,  # TODO: BA_L family needs human review - removed from imports
     # BA_L1SPLS as BA_L1SPLS,  # TODO: BA_L family needs human review
     BARD as BARD,
+    BDEXP as BDEXP,
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
     BENNETT5LS as BENNETT5LS,
@@ -780,12 +783,14 @@ problems_dict = {
     "ARGLINC": ARGLINC(),
     "ARGTRIGLS": ARGTRIGLS(),
     "ARWHEAD": ARWHEAD(),
+    # "AUG2D": AUG2D(),  # TODO: needs human review - edge variable structure
     "AVGASA": AVGASA(),
     "AVGASB": AVGASB(),
     # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
     # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs human review
     "BARD": BARD(),
+    "BDEXP": BDEXP(),
     "BDQRTIC": BDQRTIC(),
     "BEALE": BEALE(),
     "BENNETT5LS": BENNETT5LS(),
@@ -1016,6 +1021,7 @@ problems_dict = {
     # TODO: Human review needed - constraint dimension mismatch
     # "ARWHDNE": ARWHDNE(),
     "BARDNE": BARDNE(),
+    "BDVALUES": BDVALUES(),
     # "BDQRTICNE": BDQRTICNE(),  # TODO: Human review needed
     "BEALENE": BEALENE(),
     "BENNETT5": BENNETT5(),

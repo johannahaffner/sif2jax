@@ -10,6 +10,7 @@ from .arwhead import ARWHEAD as ARWHEAD
 # from .ba_l1ls import BA_L1LS as BA_L1LS  # TODO: BA_L family needs human review
 # from .ba_l1spls import BA_L1SPLS as BA_L1SPLS  # TODO: Human review - Hessian fails
 from .bard import BARD as BARD
+from .bdexp import BDEXP as BDEXP
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
 from .bennett5ls import BENNETT5LS as BENNETT5LS
@@ -274,6 +275,7 @@ unconstrained_minimisation_problems = (
     # BA_L1LS(),  # TODO: BA_L family needs human review
     # BA_L1SPLS(),  # TODO: Human review - Hessian test fails
     BARD(),
+    BDEXP(),
     BDQRTIC(),
     BEALE(),
     BENNETT5LS(),

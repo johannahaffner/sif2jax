@@ -10,6 +10,8 @@ from .alsotame import ALSOTAME as ALSOTAME
 
 # TODO: ANTWERP needs human review - initial value calculation issues
 # from .antwerp import ANTWERP as ANTWERP
+# TODO: AUG2D needs human review - edge variable structure
+# from .aug2d import AUG2D as AUG2D
 from .avgasa import AVGASA as AVGASA
 from .avgasb import AVGASB as AVGASB
 

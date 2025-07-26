@@ -13,8 +13,8 @@ def test_objective_compilation(problem):
     args = problem.args
 
     # Wrap objective function for compilation tracking
-    @eqx.debug.assert_max_traces(max_traces=1)
     @jax.jit
+    @eqx.debug.assert_max_traces(max_traces=1)
     def objective_fn(y):
         return problem.objective(y, args)
 
@@ -34,8 +34,8 @@ def test_constraint_compilation(problem):
         y0 = problem.y0
 
         # Wrap constraint function for compilation tracking
-        @eqx.debug.assert_max_traces(max_traces=1)
         @jax.jit
+        @eqx.debug.assert_max_traces(max_traces=1)
         def constraint_fn(y):
             return problem.constraint(y)
 
@@ -55,8 +55,8 @@ def test_gradient_compilation(problem):
     args = problem.args
 
     # Wrap gradient function for compilation tracking
-    @eqx.debug.assert_max_traces(max_traces=1)
     @jax.jit
+    @eqx.debug.assert_max_traces(max_traces=1)
     def grad_fn(y):
         return jax.grad(problem.objective)(y, args)
 
@@ -78,8 +78,8 @@ def test_hessian_compilation(problem):
         args = problem.args
 
         # Wrap Hessian function for compilation tracking
-        @eqx.debug.assert_max_traces(max_traces=1)
         @jax.jit
+        @eqx.debug.assert_max_traces(max_traces=1)
         def hess_fn(y):
             return jax.hessian(problem.objective)(y, args)
 
@@ -99,8 +99,8 @@ def test_bounded_inputs_compilation(problem):
         args = problem.args
 
         # Test objective compilation
-        @eqx.debug.assert_max_traces(max_traces=1)
         @jax.jit
+        @eqx.debug.assert_max_traces(max_traces=1)
         def objective_fn(y):
             return problem.objective(y, args)
 

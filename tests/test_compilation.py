@@ -3,8 +3,6 @@
 import equinox as eqx
 import jax
 import jax.numpy as jnp
-import pytest
-import sif2jax
 
 
 def test_objective_compilation(problem):
@@ -114,34 +112,7 @@ def test_bounded_inputs_compilation(problem):
         objective_fn(y_bounded)
 
 
-def test_mixed_input_shapes_trigger_recompilation():
-    """Test that different input shapes properly trigger recompilation."""
-    try:
-        problem = sif2jax.cutest.get_problem("ROSENBR")
-    except Exception:
-        pytest.skip("ROSENBR problem not available")
-
-    # This should trigger recompilation for each different shape
-    call_count = 0
-
-    def counting_objective(y, args):
-        nonlocal call_count
-        call_count += 1
-        return problem.objective(y, args)  # type: ignore
-
-    @jax.jit
-    def jit_objective(y):
-        return counting_objective(y, problem.args)  # type: ignore
-
-    # Different shapes should trigger recompilation
-    y1 = jnp.array([1.0, 2.0])  # Original shape
-    y2 = jnp.array([1.0, 2.0, 3.0])  # Different shape
-
-    jit_objective(y1)
-    first_count = call_count
-
-    jit_objective(y2)  # Should recompile due to different shape
-    second_count = call_count
-
-    # The function should have been called during both compilations
-    assert second_count > first_count
+# TODO: Add test for mixed input shapes triggering recompilation
+# This will be needed once we support variably dimensioned problems.
+# The test should verify that different input shapes properly trigger
+# recompilation, while same shapes don't cause unnecessary recompilation.

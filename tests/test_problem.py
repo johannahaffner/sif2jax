@@ -236,7 +236,6 @@ class TestProblem:
             if bounds is not None:
                 lower, upper = bounds
                 assert lower is not None and upper is not None
-
                 # If bounds are not None, then at least one element of `y` should have
                 # a nontrivial (finite) bound.
                 # Otherwise the bounds method should return None.

@@ -23,8 +23,8 @@ class QPBAND(AbstractConstrainedQuadraticProblem):
 
     @property
     def y0(self):
-        """Initial guess - default to ones."""
-        return jnp.ones(self.n)
+        """Initial guess - default to zeros."""
+        return jnp.zeros(self.n)
 
     @property
     def args(self):
@@ -64,16 +64,14 @@ class QPBAND(AbstractConstrainedQuadraticProblem):
         return lower, upper
 
     def constraint(self, y):
-        """Linear equality constraints: x_i + x_{m+i} = 1 for i=1 to m."""
+        """Linear inequality constraints: x_i + x_{m+i} >= 1 for i=1 to m."""
         m = self.m
 
-        # Equality constraints: x_i + x_{m+i} - 1 = 0
-        equalities = []
-        for i in range(m):
-            eq = y[i] + y[m + i] - 1.0
-            equalities.append(eq)
+        # Inequality constraints: x_i + x_{m+i} >= 1
+        # Convert to form g(x) >= 0: x_i + x_{m+i} - 1 >= 0
+        inequalities = y[:m] + y[m : 2 * m] - 1.0
 
-        return jnp.array(equalities), None
+        return None, inequalities
 
     @property
     def expected_result(self):

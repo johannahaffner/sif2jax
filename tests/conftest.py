@@ -1,9 +1,24 @@
 import jax
+import pytest
 
 
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_numpy_rank_promotion", "raise")
 jax.config.update("jax_numpy_dtype_promotion", "strict")
+
+
+@pytest.fixture(autouse=True)
+def clear_caches():
+    """Clear JAX and Equinox caches after each test to prevent memory issues.
+
+    This helps prevent error code 137 (OOM kill) in CI environments by
+    releasing compiled function caches between tests.
+    """
+    yield
+    jax.clear_caches()
+    import equinox as eqx
+
+    eqx.clear_caches()
 
 
 def pytest_addoption(parser):

@@ -1,9 +1,11 @@
+"""CHENHARK problem."""
+
 import jax.numpy as jnp
 
-from ..._problem import AbstractConstrainedQuadraticProblem
+from ..._problem import AbstractBoundedMinimisation
 
 
-class CHENHARK(AbstractConstrainedQuadraticProblem):
+class CHENHARK(AbstractBoundedMinimisation):
     """A bound-constrained version of the Linear Complementarity problem.
 
     Find x such that w = M x + q, x and w nonnegative and x^T w = 0,
@@ -35,78 +37,93 @@ class CHENHARK(AbstractConstrainedQuadraticProblem):
 
     @property
     def y0(self):
-        """Initial guess - zeros."""
-        return jnp.zeros(self.n)
+        """Initial guess - 0.5 everywhere."""
+        return jnp.full(self.n, 0.5)
 
     @property
     def args(self):
         return None
 
-    def _compute_q(self):
-        """Compute the q vector based on the solution structure."""
-        # From the SIF file, x values are defined as:
-        # x(-1) = x(0) = 0
-        # x(i) = 1 for i = 1 to nfree
-        # x(i) = 0 for i = nfree+1 to n+2
-
-        # Create extended x array with boundary conditions
-        x_ext = jnp.zeros(self.n + 4)  # x(-1) to x(n+2)
-
-        # Set x(1) to x(nfree) = 1
-        for i in range(1, self.nfree + 1):
-            x_ext[i + 1] = 1.0  # Shift by 2 due to x(-1), x(0)
-
-        # Compute q = -M*x
-        q = jnp.zeros(self.n + 2)
-
-        # Q(0) = x(1)
-        q = q.at[0].set(x_ext[3])  # x(1) is at index 3
-
-        # Q(1) = 2*x(1) - x(2)
-        q = q.at[1].set(2.0 * x_ext[3] - x_ext[4])
-
-        # Q(i) = x(i+1) + x(i-1) - 2*x(i) for i = 2 to n-1
-        for i in range(2, self.n):
-            idx = i + 1  # Shift for x indexing
-            q = q.at[i].set(x_ext[idx + 2] + x_ext[idx] - 2.0 * x_ext[idx + 1])
-
-        # Q(n) = 2*x(n) - x(n-1)
-        q = q.at[self.n].set(2.0 * x_ext[self.n + 1] - x_ext[self.n])
-
-        # Q(n+1) = x(n)
-        q = q.at[self.n + 1].set(x_ext[self.n + 1])
-
-        return -q[: self.n]  # Return negative since we defined q = -M*x
-
     def objective(self, y, args):
-        """Quadratic objective function.
-
-        The objective is (1/2) x^T M x + q^T x where M is the pentadiagonal matrix
-        and q is computed based on the solution structure.
-        """
+        """Quadratic objective function."""
         del args
 
-        q = self._compute_q()
+        # Create padded array for boundary conditions
+        # x(-1) = x(0) = 0, then x(1) to x(n), then x(n+1) = x(n+2) = 0
+        x_pad = jnp.concatenate([jnp.zeros(2), y, jnp.zeros(2)])
 
-        # Linear term: q^T x
-        linear_term = jnp.dot(q, y)
+        # Compute the quadratic groups Q(i) for i = 0 to n+1
+        # Each group has the HALFL2 type: 0.5 * value^2
 
-        # Quadratic term: (1/2) x^T M x
-        # M is pentadiagonal with pattern:
-        # M[i,i] = 6, M[i,i±1] = -4, M[i,i±2] = 1
+        # Q(0) = x(1)
+        q0 = 0.5 * x_pad[3] ** 2  # x(1) is at index 3
 
-        # Diagonal terms: 6 * x_i^2
-        quad_term = 6.0 * jnp.sum(y**2)
+        # Q(1) = 2*x(1) - x(2)
+        q1 = 0.5 * (2.0 * x_pad[3] - x_pad[4]) ** 2
 
-        # First off-diagonal: -4 * x_i * x_{i+1}
-        if self.n > 1:
-            quad_term += -8.0 * jnp.sum(y[:-1] * y[1:])
+        # Q(i) = x(i+1) + x(i-1) - 2*x(i) for i = 2 to n-1
+        # Vectorized computation
+        i_indices = jnp.arange(2, self.n)
+        # x_pad indices: i+2 for x(i), i+3 for x(i+1), i+1 for x(i-1)
+        q_middle = (
+            0.5
+            * (x_pad[i_indices + 3] + x_pad[i_indices + 1] - 2.0 * x_pad[i_indices + 2])
+            ** 2
+        )
 
-        # Second off-diagonal: 1 * x_i * x_{i+2}
+        # Q(n) = 2*x(n) - x(n-1)
+        qn = 0.5 * (2.0 * x_pad[self.n + 1] - x_pad[self.n]) ** 2
+
+        # Q(n+1) = x(n)
+        qn1 = 0.5 * x_pad[self.n + 1] ** 2
+
+        # Sum all quadratic terms
+        quad_sum = q0 + q1 + jnp.sum(q_middle) + qn + qn1
+
+        # Compute linear terms L (vectorized)
+        # Based on the SIF file, for each i in 1 to NF+ND (nfree + ndegen):
+        # Q = -6*x(i) + 4*x(i+1) + 4*x(i-1) - x(i+2) - x(i-2)
+        # L contributes x(i) * Q
+
+        # For i in NF+ND+1 to N:
+        # Q = -6*x(i) + 4*x(i+1) + 4*x(i-1) - x(i+2) - x(i-2) + 1
+        # L contributes x(i) * Q
+
+        nf_nd = self.nfree + self.ndegen
+
+        # Vectorized computation for all variables
+        # Create coefficient array for pentadiagonal matrix multiplication
+        q_coeffs = jnp.zeros(self.n)
+
+        # For each variable i (1 to n), compute:
+        # -6*x(i) + 4*x(i+1) + 4*x(i-1) - x(i+2) - x(i-2)
+
+        # Main diagonal: -6
+        q_coeffs = -6.0 * y
+
+        # First off-diagonal: +4 from both sides
+        q_coeffs = q_coeffs.at[:-1].add(4.0 * y[1:])  # x(i+1) contribution to x(i)
+        q_coeffs = q_coeffs.at[1:].add(4.0 * y[:-1])  # x(i-1) contribution to x(i)
+
+        # Second off-diagonal: -1 from both sides
         if self.n > 2:
-            quad_term += 2.0 * jnp.sum(y[:-2] * y[2:])
+            q_coeffs = q_coeffs.at[:-2].add(-1.0 * y[2:])  # x(i+2) contribution to x(i)
+            q_coeffs = q_coeffs.at[2:].add(-1.0 * y[:-2])  # x(i-2) contribution to x(i)
 
-        return linear_term + 0.5 * quad_term
+        # Handle boundary terms from padding
+        # x(1) gets contribution from x(-1)=0 and x(0)=0
+        # x(2) gets contribution from x(0)=0
+        # x(n-1) gets contribution from x(n+1)=0
+        # x(n) gets contribution from x(n+1)=0 and x(n+2)=0
+
+        # Add constant +1 for indices > nf_nd
+        if nf_nd < self.n:
+            q_coeffs = q_coeffs.at[nf_nd:].add(1.0)
+
+        # Linear sum: x(i) * q_coeff(i)
+        linear_sum = jnp.dot(y, q_coeffs)
+
+        return quad_sum + linear_sum
 
     @property
     def bounds(self):
@@ -114,10 +131,6 @@ class CHENHARK(AbstractConstrainedQuadraticProblem):
         lower = jnp.zeros(self.n)
         upper = jnp.full(self.n, jnp.inf)
         return lower, upper
-
-    def constraint(self, y):
-        """No additional constraints beyond bounds."""
-        return None, None
 
     @property
     def expected_result(self):

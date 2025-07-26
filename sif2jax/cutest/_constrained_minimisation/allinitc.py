@@ -8,6 +8,11 @@ N. Gould: private communication.
 SIF input: Nick Gould, June 1990.
 
 classification OOR2-AY-4-1
+
+TODO: Human review needed
+Attempts made: Fixed L2 group type application (FT groups TRIVIAL, FNT groups L2)
+Suspected issues: Dimension mismatch - pycutest removes fixed variable X4
+Additional resources needed: Clarification on fixed variable handling
 """
 
 import jax.numpy as jnp
@@ -24,7 +29,7 @@ class ALLINITC(AbstractConstrainedMinimisation):
     def objective(self, y, args):
         """Compute the objective function."""
         del args
-        x1, x2, x3, x4 = y[0], y[1], y[2], y[3]
+        x1, x2, x3, x4 = y
 
         # Group FT1 (TRIVIAL)
         ft1 = 0.0
@@ -70,7 +75,7 @@ class ALLINITC(AbstractConstrainedMinimisation):
         fnt6 = sinx4 * sinx4
         fnt6_l2 = fnt6 * fnt6
 
-        # Sum all groups with L2 norm for FNT groups
+        # Sum groups - FT groups are TRIVIAL (not squared), FNT groups are L2
         obj = (
             ft1
             + ft2
@@ -111,7 +116,7 @@ class ALLINITC(AbstractConstrainedMinimisation):
         # UP ALLINITC  X3        1.0
         # FX ALLINITC  X4        2.0
 
-        y_lwr = jnp.array([-jnp.inf, 1.0, -1.0e20, 2.0])
+        y_lwr = jnp.array([-jnp.inf, 1.0, -jnp.inf, 2.0])
         y_upr = jnp.array([jnp.inf, jnp.inf, 1.0, 2.0])
 
         return y_lwr, y_upr
@@ -119,17 +124,8 @@ class ALLINITC(AbstractConstrainedMinimisation):
     @property
     def y0(self):
         """Return the initial point."""
-        return jnp.zeros(4)
-
-    @property
-    def n(self):
-        """Number of variables."""
-        return 4
-
-    @property
-    def m(self):
-        """Number of constraints."""
-        return 1
+        # X4 is fixed at 2.0, so we need to respect that in the initial guess
+        return jnp.array([0.0, 0.0, 0.0, 2.0])
 
     @property
     def args(self):

@@ -29,7 +29,7 @@ class YAO(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return self.p + self.k
+        return self.p  # pycutest uses p, not p+k
 
     @property
     def y0(self):
@@ -63,10 +63,7 @@ class YAO(AbstractConstrainedQuadraticProblem):
         # x(1) >= 0.08
         lower = lower.at[0].set(0.08)
 
-        # x(p+1) to x(p+k) are fixed at 0
-        for i in range(self.p, self.n):
-            lower = lower.at[i].set(0.0)
-            upper = upper.at[i].set(0.0)
+        # Note: With n=p, there are no fixed variables at the end
 
         return lower, upper
 
@@ -76,14 +73,14 @@ class YAO(AbstractConstrainedQuadraticProblem):
         For k=2, this means x_i - 2*x_{i+1} + x_{i+2} >= 0 for i=1 to p.
         """
         # Inequality constraints B(i): x_i - 2*x_{i+1} + x_{i+2} >= 0
-        inequalities = []
-        for i in range(self.p):
-            if i + 2 < self.n:
-                ineq = y[i] - 2.0 * y[i + 1] + y[i + 2]
-                inequalities.append(ineq)
+        # Vectorized: compute all constraints at once
+        # We need constraints for i from 0 to n-3 (so i+2 < n)
+        max_i = self.n - 2
 
-        if len(inequalities) > 0:
-            return None, jnp.array(inequalities)
+        if max_i > 0:
+            # Use slicing to compute all constraints vectorially
+            inequalities = y[:max_i] - 2.0 * y[1 : max_i + 1] + y[2 : max_i + 2]
+            return None, inequalities
         else:
             return None, None
 

@@ -1,29 +1,27 @@
-"""ARGLBLE problem.
-
-Variable dimension rank one linear problem
-
-Source: Problem 33 in
-J.J. More', B.S. Garbow and K.E. Hillstrom,
-"Testing Unconstrained Optimization Software",
-ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
-
-See also Buckley#93 (with different N and M)
-SIF input: Ph. Toint, Dec 1989.
-
-classification NLR2-AN-V-V
-
-This is a(n infeasible) linear feasibility problem
-N is the number of free variables
-M is the number of equations ( M .ge. N)
-"""
-
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class ARGLBLE(AbstractUnconstrainedMinimisation):
-    """ARGLBLE problem implementation."""
+class ARGLBLE(AbstractNonlinearEquations):
+    """ARGLBLE problem implementation.
+
+    Variable dimension rank one linear problem
+
+    Source: Problem 33 in
+    J.J. More', B.S. Garbow and K.E. Hillstrom,
+    "Testing Unconstrained Optimization Software",
+    ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+    See also Buckley#93 (with different N and M)
+    SIF input: Ph. Toint, Dec 1989.
+
+    classification NLR2-AN-V-V
+
+    This is a(n infeasible) linear feasibility problem
+    N is the number of free variables
+    M is the number of equations ( M .ge. N)
+    """
 
     # Default parameters
     N: int = 200  # Number of variables
@@ -32,41 +30,39 @@ class ARGLBLE(AbstractUnconstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    def objective(self, y, args):
-        """Compute the objective function."""
-        del args
-
-        # This is formulated as a nonlinear least squares problem
-        # Compute the residuals
+    def constraint(self, y):
+        """Return the equality constraints (residuals) for the nonlinear system."""
         residuals = self.residual(y)
-
-        # Sum of squares
-        return 0.5 * jnp.sum(residuals**2)
+        # Return (equality_constraints, inequality_constraints)
+        # For nonlinear equations, we have only equality constraints
+        return residuals, None
 
     def residual(self, y):
-        """Compute the residuals for the system."""
+        """Compute the residuals for the system (vectorized)."""
         n = self.N
         m = self.M
         x = y  # Variables
 
-        # Initialize residual array
-        residuals = []
+        # Vectorized computation
+        # Create coefficient matrix A where A[i,j] = (i+1)*(j+1)
+        i_indices = jnp.arange(1, m + 1).reshape(-1, 1)
+        j_indices = jnp.arange(1, n + 1).reshape(1, -1)
+        A = (i_indices * j_indices).astype(x.dtype)
 
-        # For each equation i = 1 to M
-        for i in range(1, m + 1):
-            # G(i) = sum_{j=1}^{N} (i * j) * x_j - 1
-            res = 0.0
-            for j in range(1, n + 1):
-                res += float(i * j) * x[j - 1]  # Convert to 0-based indexing
-            res -= 1.0
-            residuals.append(res)
+        # Compute residuals: A @ x - 1
+        residuals = A @ x - 1.0
 
-        return jnp.array(residuals)
+        return residuals
 
     @property
     def y0(self):
         """Initial guess for variables."""
         return jnp.ones(self.N)
+
+    @property
+    def bounds(self):
+        """Returns None as this problem has no bounds."""
+        return None
 
     @property
     def args(self):
@@ -81,18 +77,6 @@ class ARGLBLE(AbstractUnconstrainedMinimisation):
     @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
-        # From SIF file:
-        # SOLTN(10)  = 4.6341D+00
-        # SOLTN(50)  = 24.6268657
-        # SOLTN(100) = 49.6259352
-        return None
-
-    @property
-    def n(self):
-        """Number of variables."""
-        return self.N
-
-    @property
-    def m(self):
-        """Number of equations/residuals."""
-        return self.M
+        # For nonlinear equations, the objective is always zero
+        # Note: The SIF file values (SOLTN) refer to least squares objective
+        return jnp.array(0.0)

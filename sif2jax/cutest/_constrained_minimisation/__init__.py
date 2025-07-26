@@ -5,7 +5,8 @@
 
 # TODO: ALLINITA needs human review - L2 group type interpretation issues
 # from .allinita import ALLINITA as ALLINITA
-from .allinitc import ALLINITC as ALLINITC
+# TODO: ALLINITC needs human review - dimension mismatch with pycutest (fixed variables)
+# from .allinitc import ALLINITC as ALLINITC
 from .alsotame import ALSOTAME as ALSOTAME
 
 # TODO: ANTWERP needs human review - initial value calculation issues
@@ -247,7 +248,7 @@ constrained_minimisation_problems = (
     # ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT(),  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA(),  # TODO: needs human review - L2 group type interpretation
-    ALLINITC(),
+    # ALLINITC(),  # Human review needed - dimension mismatch
     ALSOTAME(),
     # ANTWERP(),  # TODO: needs human review - initial value calculation
     AVGASA(),

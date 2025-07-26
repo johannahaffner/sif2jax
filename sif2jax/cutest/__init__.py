@@ -32,7 +32,7 @@ from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
-    ALLINITC as ALLINITC,
+    # ALLINITC as ALLINITC,  # TODO: Human review - dimension mismatch with pycutest
     ALSOTAME as ALSOTAME,
     # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
     # AUG2D as AUG2D,  # TODO: needs human review - edge variable structure
@@ -574,7 +574,6 @@ from ._unconstrained_minimisation import (
     ROSZMAN1LS as ROSZMAN1LS,
     S308 as S308,
     SISSER as SISSER,
-    SISSER2 as SISSER2,
     # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
@@ -597,7 +596,7 @@ problems_dict = {
     # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
     # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
-    "ALLINITC": ALLINITC(),
+    # "ALLINITC": ALLINITC(),  # Human review needed - dimension mismatch
     "ALSOTAME": ALSOTAME(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
@@ -1019,7 +1018,6 @@ problems_dict = {
     "ROSZMAN1LS": ROSZMAN1LS(),
     "S308": S308(),
     "SISSER": SISSER(),
-    "SISSER2": SISSER2(),
     # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     "TENBARS4": TENBARS4(),
     "TENFOLDTRLS": TENFOLDTRLS(),

@@ -73,12 +73,10 @@ class BRATU1D(AbstractUnconstrainedMinimisation):
         """Starting point."""
         n = self.n
         h = 1.0 / (n + 1)
-        x0 = jnp.zeros(n)
 
-        for i in range(1, n + 1):
-            minus_i_squared = -i * i
-            val = 0.1 * minus_i_squared * h
-            x0 = x0.at[i - 1].set(val)
+        # Vectorized computation
+        i_values = jnp.arange(1, n + 1)
+        x0 = -0.1 * h * (i_values * i_values)
 
         return x0
 

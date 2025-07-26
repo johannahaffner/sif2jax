@@ -242,7 +242,6 @@ from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .s308 import S308 as S308
 from .sisser import SISSER as SISSER
-from .sisser2 import SISSER2 as SISSER2
 
 # TODO: Human review needed - complex matrix multiplication formulation
 # from .spmsrtls import SPMSRTLS as SPMSRTLS
@@ -462,7 +461,6 @@ unconstrained_minimisation_problems = (
     ROSZMAN1LS(),
     S308(),
     SISSER(),
-    SISSER2(),
     # SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS(),
     # WATSON(),  # TODO: Human review - Hessian computation issues

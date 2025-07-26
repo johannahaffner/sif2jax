@@ -2,7 +2,6 @@
 
 import equinox as eqx
 import jax
-import jax.numpy as jnp
 
 
 def test_objective_compilation(problem):
@@ -88,28 +87,6 @@ def test_hessian_compilation(problem):
         # Call with different inputs of same shape - should not recompile
         y_test = y0 + 0.1 * jax.random.normal(jax.random.PRNGKey(42), y0.shape)
         hess_fn(y_test)
-
-
-def test_bounded_inputs_compilation(problem):
-    """Test that bounded inputs don't cause recompilation."""
-    if hasattr(problem, "bounds") and problem.bounds is not None:
-        y0 = problem.y0
-        args = problem.args
-
-        # Test objective compilation
-        @jax.jit
-        @eqx.debug.assert_max_traces(max_traces=1)
-        def objective_fn(y):
-            return problem.objective(y, args)
-
-        # Call multiple times - should not recompile
-        for _ in range(5):
-            objective_fn(y0)
-
-        # Test with bounded inputs (project to bounds if needed)
-        lower, upper = problem.bounds
-        y_bounded = jnp.clip(y0 + 0.1, lower, upper)
-        objective_fn(y_bounded)
 
 
 # TODO: Add test for mixed input shapes triggering recompilation

@@ -239,9 +239,9 @@ class TestProblem:
                 # If bounds are not None, then at least one element of `y` should have
                 # a nontrivial (finite) bound.
                 # Otherwise the bounds method should return None.
-                finite_lower = jnp.any(jnp.isfinite(lower))
-                finite_upper = jnp.any(jnp.isfinite(upper))
-                assert finite_lower or finite_upper
+                has_finite_lower = jnp.any(jnp.isfinite(lower))
+                has_finite_upper = jnp.any(jnp.isfinite(upper))
+                assert has_finite_lower or has_finite_upper
 
     def test_correct_number_of_finite_bounds(self, problem, pycutest_problem):
         _, _, num_finite_bounds = problem.num_constraints()

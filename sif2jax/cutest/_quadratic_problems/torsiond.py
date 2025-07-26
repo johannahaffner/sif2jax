@@ -28,6 +28,30 @@ class TORSIOND(AbstractBoundedMinimisation):
     modified by Peihuang Chen, according to MINPACK-2, Apr 1992.
 
     classification QBR2-MY-V-0
+
+    TODO: Human review needed
+    Attempts made:
+    1. Implemented vectorized objective function following SIF file structure
+    2. Fixed dimension to q=36 (p=72, n=5184) to match pycutest
+    3. Implemented distance-based bounds (not fixing boundaries at 0)
+    4. Verified GL/GR groups compute forward/backward differences correctly
+    5. Verified linear G groups apply -c0 coefficient to interior points
+
+    Suspected issues:
+    1. Objective mismatch at ones vector: our implementation gives -9.72 while
+       pycutest gives 134.27. The difference is ~144 = 2*p which suggests a
+       systematic difference in formulation.
+    2. With all ones input, all differences are 0, so only linear terms contribute
+       (negative). Pycutest's positive value suggests different computation.
+    3. Grid spacing mismatch: pycutest bounds suggest h=1/73 while SIF file
+       clearly specifies h=1/(p-1)=1/71 for p=72.
+    4. All test cases pass except objective/gradient tests at non-zero vectors.
+
+    Additional resources needed:
+    1. Examine pycutest Fortran source to understand objective computation
+    2. Verify if pycutest adds constant terms or uses different scaling
+    3. Check if there's a transformation applied to test inputs
+    4. Clarify the h calculation discrepancy
     """
 
     y0_iD: int = 0
@@ -105,58 +129,37 @@ class TORSIOND(AbstractBoundedMinimisation):
 
     @property
     def bounds(self):
-        """Variable bounds based on distance to boundary."""
+        """Variable bounds based on distance to boundary.
+
+        Unlike what the SIF comments might suggest, the boundary variables
+        are NOT fixed at 0 - they have bounds based on distance too.
+        """
         p = self.p
         h = self.h
 
-        # Initialize bounds as 2D grids
-        lower_grid = jnp.full((p, p), -jnp.inf)
-        upper_grid = jnp.full((p, p), jnp.inf)
+        # Create 2D coordinate grids
+        i_grid, j_grid = jnp.meshgrid(jnp.arange(p), jnp.arange(p), indexing="ij")
 
-        # Boundary variables are fixed at 0
-        # Set all edges to 0
-        lower_grid = lower_grid.at[0, :].set(0.0)  # Bottom edge
-        upper_grid = upper_grid.at[0, :].set(0.0)
-        lower_grid = lower_grid.at[p - 1, :].set(0.0)  # Top edge
-        upper_grid = upper_grid.at[p - 1, :].set(0.0)
-        lower_grid = lower_grid.at[:, 0].set(0.0)  # Left edge
-        upper_grid = upper_grid.at[:, 0].set(0.0)
-        lower_grid = lower_grid.at[:, p - 1].set(0.0)  # Right edge
-        upper_grid = upper_grid.at[:, p - 1].set(0.0)
+        # Compute distance to each edge
+        dist_to_bottom = i_grid  # Distance to i=0
+        dist_to_top = p - 1 - i_grid  # Distance to i=p-1
+        dist_to_left = j_grid  # Distance to j=0
+        dist_to_right = p - 1 - j_grid  # Distance to j=p-1
 
-        # Create coordinate grids for vectorized distance computation
-        i_grid, j_grid = jnp.meshgrid(
-            jnp.arange(p, dtype=jnp.float64),
-            jnp.arange(p, dtype=jnp.float64),
-            indexing="ij",
-        )
-
-        # Compute distance to nearest boundary for each point
-        dist_to_left = j_grid
-        dist_to_right = float(p - 1) - j_grid
-        dist_to_bottom = i_grid
-        dist_to_top = float(p - 1) - i_grid
-
-        # Minimum distance to any boundary
+        # Minimum distance to any edge
         min_dist = jnp.minimum(
-            jnp.minimum(dist_to_left, dist_to_right),
             jnp.minimum(dist_to_bottom, dist_to_top),
+            jnp.minimum(dist_to_left, dist_to_right),
         )
 
         # Scale by h
         dist_scaled = min_dist * h
 
-        # Apply bounds based on distance, but preserve boundary zeros
-        # Create mask for interior points
-        interior_mask = (
-            (i_grid > 0) & (i_grid < p - 1) & (j_grid > 0) & (j_grid < p - 1)
-        )
+        # Bounds are +/- the scaled distance
+        lower_grid = -dist_scaled
+        upper_grid = dist_scaled
 
-        # Apply distance-based bounds only to interior points
-        lower_grid = jnp.where(interior_mask, -dist_scaled, lower_grid)
-        upper_grid = jnp.where(interior_mask, dist_scaled, upper_grid)
-
-        # Flatten back to 1D using column-major order
+        # Flatten to 1D using column-major order
         lower = lower_grid.flatten(order="F")
         upper = upper_grid.flatten(order="F")
 

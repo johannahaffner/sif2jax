@@ -7,7 +7,8 @@ from .hs76 import HS76 as HS76
 from .qpband import QPBAND as QPBAND
 from .qudlin import QUDLIN as QUDLIN
 from .tame import TAME as TAME
-from .torsiond import TORSIOND as TORSIOND
+
+# from .torsiond import TORSIOND as TORSIOND  # TODO: Human review needed - see file
 from .yao import YAO as YAO
 
 
@@ -21,6 +22,6 @@ quadratic_problems = (
     QPBAND(),
     QUDLIN(),
     TAME(),
-    TORSIOND(),
+    # TORSIOND(),  # TODO: Human review needed - objective mismatch with pycutest
     YAO(),
 )

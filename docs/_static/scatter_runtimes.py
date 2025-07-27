@@ -12,7 +12,7 @@ colormap, such as jet or Spectral.
 
 Usage:
     python scatter_runtimes.py path/to/benchmark_results.json
-    
+
     # Or to use the most recent saved benchmark:
     python scatter_runtimes.py
 """

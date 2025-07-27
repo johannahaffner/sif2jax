@@ -9,6 +9,8 @@ from ._bounded_minimisation import (
     EXPLIN2 as EXPLIN2,
     EXPQUAD as EXPQUAD,
     HART6 as HART6,
+    HATFLDA as HATFLDA,
+    HATFLDB as HATFLDB,
     HATFLDC as HATFLDC,
     # HIMMELP1 as HIMMELP1,  # TODO: Human review needed - OBNL element issues
     HS1 as HS1,
@@ -23,9 +25,29 @@ from ._bounded_minimisation import (
     # LEVYMONT as LEVYMONT,  # TODO: Fix SCALE interpretation
     LOGROS as LOGROS,
     PALMER1 as PALMER1,
+    PALMER1A as PALMER1A,
+    # PALMER1B as PALMER1B,  # TODO: Fix Hessian issues
+    # PALMER1E as PALMER1E,  # TODO: Fix Hessian issues
     PALMER2 as PALMER2,
+    PALMER2A as PALMER2A,
+    PALMER2B as PALMER2B,
+    PALMER2E as PALMER2E,
+    PALMER3 as PALMER3,
+    PALMER3A as PALMER3A,
     PALMER3B as PALMER3B,
+    PALMER3E as PALMER3E,
+    PALMER4 as PALMER4,
+    # PALMER4A as PALMER4A,  # TODO: Fix Hessian issues
+    PALMER4B as PALMER4B,
     PALMER4E as PALMER4E,
+    # PALMER5A as PALMER5A,  # TODO: Fix Chebyshev polynomial calculation
+    PALMER5B as PALMER5B,
+    PALMER6A as PALMER6A,
+    PALMER6E as PALMER6E,
+    # PALMER7A as PALMER7A,  # TODO: Fix Hessian issues
+    PALMER7E as PALMER7E,
+    PALMER8A as PALMER8A,
+    PALMER8E as PALMER8E,
     PRICE4B as PRICE4B,
 )
 from ._constrained_minimisation import (
@@ -249,7 +271,7 @@ from ._nonlinear_equations import (
     ARGAUSS as ARGAUSS,
     ARGLALE as ARGLALE,
     ARGLBLE as ARGLBLE,
-    # ARGLCLE as ARGLCLE,  # TODO: should be least squares, not nonlinear equations
+    ARGLCLE as ARGLCLE,
     ARGTRIG as ARGTRIG,
     ARTIF as ARTIF,
     # TODO: Human review needed - constraint dimension mismatch
@@ -311,7 +333,11 @@ from ._nonlinear_equations import (
     HATFLDANE as HATFLDANE,
     HATFLDBNE as HATFLDBNE,
     HATFLDCNE as HATFLDCNE,
+    HATFLDDNE as HATFLDDNE,
+    HATFLDENE as HATFLDENE,
+    HATFLDF as HATFLDF,
     HATFLDFLNE as HATFLDFLNE,
+    HATFLDG as HATFLDG,
     HELIXNE as HELIXNE,
     HIMMELBA as HIMMELBA,
     HIMMELBFNE as HIMMELBFNE,
@@ -355,11 +381,23 @@ from ._nonlinear_equations import (
     PALMER2BNE as PALMER2BNE,
     PALMER2ENE as PALMER2ENE,
     PALMER2NE as PALMER2NE,
+    PALMER3ANE as PALMER3ANE,
+    PALMER3BNE as PALMER3BNE,
     PALMER3ENE as PALMER3ENE,
+    PALMER3NE as PALMER3NE,
+    PALMER4ANE as PALMER4ANE,
+    PALMER4BNE as PALMER4BNE,
     PALMER4ENE as PALMER4ENE,
+    PALMER4NE as PALMER4NE,
+    # PALMER5ANE as PALMER5ANE,  # TODO: Fix Chebyshev polynomial calculation
     PALMER5BNE as PALMER5BNE,
     PALMER5ENE as PALMER5ENE,
+    PALMER6ANE as PALMER6ANE,
+    PALMER6ENE as PALMER6ENE,
     PALMER7ANE as PALMER7ANE,
+    PALMER7ENE as PALMER7ENE,
+    PALMER8ANE as PALMER8ANE,
+    PALMER8ENE as PALMER8ENE,
     PFIT4 as PFIT4,
     POWELLBS as POWELLBS,
     POWELLSE as POWELLSE,
@@ -509,11 +547,11 @@ from ._unconstrained_minimisation import (
     # GULF as GULF,  # TODO: Human review - issues reported by user
     HAHN1LS as HAHN1LS,
     HAIRY as HAIRY,
-    # HATFLDD as HATFLDD,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDE as HATFLDE,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFL as HATFLDFL,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFLS as HATFLDFLS,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDGLS as HATFLDGLS,  # TODO: HATFLD family needs human review - discrepancies
+    HATFLDD as HATFLDD,
+    HATFLDE as HATFLDE,
+    HATFLDFL as HATFLDFL,
+    HATFLDFLS as HATFLDFLS,
+    # HATFLDGLS as HATFLDGLS,  # TODO: Known gradient/Hessian discrepancies
     # HEART6LS as HEART6LS,  # TODO: Human review - significant discrepancies
     # HEART8LS as HEART8LS,  # TODO: Human review - significant discrepancies
     HELIX as HELIX,
@@ -559,6 +597,7 @@ from ._unconstrained_minimisation import (
     PALMER3C as PALMER3C,
     PALMER4C as PALMER4C,
     PALMER5C as PALMER5C,
+    PALMER5D as PALMER5D,
     PALMER6C as PALMER6C,
     PALMER7C as PALMER7C,
     PALMER8C as PALMER8C,
@@ -943,12 +982,14 @@ problems_dict = {
     "HAHN1LS": HAHN1LS(),
     "HAIRY": HAIRY(),
     "HART6": HART6(),
+    "HATFLDA": HATFLDA(),
+    "HATFLDB": HATFLDB(),
     "HATFLDC": HATFLDC(),
-    # "HATFLDD": HATFLDD(),  # TODO: HATFLD family needs human review - discrepancies
-    # "HATFLDE": HATFLDE(),  # TODO: HATFLD family needs human review - discrepancies
-    # "HATFLDFL": HATFLDFL(),  # TODO: HATFLD family needs human review - discrepancies
-    # "HATFLDFLS": HATFLDFLS(),  # TODO: HATFLD family needs human review
-    # "HATFLDGLS": HATFLDGLS(),  # TODO: HATFLD family needs human review
+    "HATFLDD": HATFLDD(),
+    "HATFLDE": HATFLDE(),
+    "HATFLDFL": HATFLDFL(),
+    "HATFLDFLS": HATFLDFLS(),
+    # "HATFLDGLS": HATFLDGLS(),  # TODO: Known gradient/Hessian discrepancies
     # "HEART6LS": HEART6LS(),  # TODO: Human review - significant discrepancies
     # "HEART8LS": HEART8LS(),  # TODO: Human review - significant discrepancies
     "HELIX": HELIX(),
@@ -1002,10 +1043,23 @@ problems_dict = {
     "PALMER3C": PALMER3C(),
     "PALMER4C": PALMER4C(),
     "PALMER5C": PALMER5C(),
+    "PALMER5D": PALMER5D(),
     "PALMER6C": PALMER6C(),
     "PALMER7C": PALMER7C(),
     "PALMER8C": PALMER8C(),
+    # "PALMER4A": PALMER4A(),  # TODO: Fix Hessian issues
     "PALMER4E": PALMER4E(),
+    # "PALMER5A": PALMER5A(),  # TODO: Fix Chebyshev polynomial calculation
+    "PALMER5B": PALMER5B(),
+    "PALMER6A": PALMER6A(),
+    "PALMER6E": PALMER6E(),
+    # "PALMER7A": PALMER7A(),  # TODO: Fix Hessian issues
+    "PALMER7E": PALMER7E(),
+    "PALMER8A": PALMER8A(),
+    "PALMER8E": PALMER8E(),
+    "PALMER2A": PALMER2A(),
+    "PALMER2B": PALMER2B(),
+    "PALMER2E": PALMER2E(),
     # "PENALTY1": PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # "PENALTY2": PENALTY2(),  # TODO: Human review - SCALE factor issue
     "POWER": POWER(),
@@ -1051,7 +1105,7 @@ problems_dict = {
     "ARGAUSS": ARGAUSS(),
     "ARGLALE": ARGLALE(),
     "ARGLBLE": ARGLBLE(),
-    # "ARGLCLE": ARGLCLE(),  # TODO: should be least squares, not nonlinear equations
+    "ARGLCLE": ARGLCLE(),
     "ARGTRIG": ARGTRIG(),
     "ARTIF": ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch
@@ -1112,7 +1166,11 @@ problems_dict = {
     "HATFLDANE": HATFLDANE(),
     "HATFLDBNE": HATFLDBNE(),
     "HATFLDCNE": HATFLDCNE(),
+    "HATFLDDNE": HATFLDDNE(),
+    "HATFLDENE": HATFLDENE(),
+    "HATFLDF": HATFLDF(),
     "HATFLDFLNE": HATFLDFLNE(),
+    "HATFLDG": HATFLDG(),
     "HELIXNE": HELIXNE(),
     "HIMMELBA": HIMMELBA(),
     "HIMMELBFNE": HIMMELBFNE(),
@@ -1152,13 +1210,33 @@ problems_dict = {
     "PALMER2ENE": PALMER2ENE(),
     "PALMER2NE": PALMER2NE(),
     "PALMER1": PALMER1(),
+    "PALMER1A": PALMER1A(),
+    # "PALMER1B": PALMER1B(),  # TODO: Fix Hessian issues
+    # "PALMER1E": PALMER1E(),  # TODO: Fix Hessian issues
     "PALMER2": PALMER2(),
+    "PALMER3": PALMER3(),
+    "PALMER3A": PALMER3A(),
     "PALMER3B": PALMER3B(),
+    "PALMER3E": PALMER3E(),
+    "PALMER4": PALMER4(),
+    "PALMER4B": PALMER4B(),
+    "PALMER3ANE": PALMER3ANE(),
+    "PALMER3BNE": PALMER3BNE(),
     "PALMER3ENE": PALMER3ENE(),
+    "PALMER3NE": PALMER3NE(),
+    "PALMER4ANE": PALMER4ANE(),
+    "PALMER4BNE": PALMER4BNE(),
     "PALMER4ENE": PALMER4ENE(),
+    "PALMER4NE": PALMER4NE(),
+    # "PALMER5ANE": PALMER5ANE(),  # TODO: Fix Chebyshev polynomial calculation
     "PALMER5BNE": PALMER5BNE(),
     "PALMER5ENE": PALMER5ENE(),
+    "PALMER6ANE": PALMER6ANE(),
+    "PALMER6ENE": PALMER6ENE(),
     "PALMER7ANE": PALMER7ANE(),
+    "PALMER7ENE": PALMER7ENE(),
+    "PALMER8ANE": PALMER8ANE(),
+    "PALMER8ENE": PALMER8ENE(),
     "PFIT4": PFIT4(),
     "POWERSUMNE": POWERSUMNE(),
     "RES": RES(),

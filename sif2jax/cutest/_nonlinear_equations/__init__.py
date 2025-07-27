@@ -2,10 +2,7 @@ from .aircrfta import AIRCRFTA as AIRCRFTA
 from .argauss import ARGAUSS as ARGAUSS
 from .arglale import ARGLALE as ARGLALE
 from .arglble import ARGLBLE as ARGLBLE
-
-# TODO: Human review needed - should be least squares, not nonlinear equations
-# pycutest returns -1.0 objective, but nonlinear equations expect 0.0
-# from .arglcle import ARGLCLE as ARGLCLE
+from .arglcle import ARGLCLE as ARGLCLE
 from .argtrig import ARGTRIG as ARGTRIG
 from .artif import ARTIF as ARTIF
 
@@ -74,7 +71,11 @@ from .gulfne import GULFNE as GULFNE
 from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
 from .hatfldcne import HATFLDCNE as HATFLDCNE
+from .hatflddne import HATFLDDNE as HATFLDDNE
+from .hatfldene import HATFLDENE as HATFLDENE
+from .hatfldf import HATFLDF as HATFLDF
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
+from .hatfldg import HATFLDG as HATFLDG
 from .helixne import HELIXNE as HELIXNE
 from .himmelba import HIMMELBA as HIMMELBA
 from .himmelbfne import HIMMELBFNE as HIMMELBFNE
@@ -117,11 +118,25 @@ from .palmer2ane import PALMER2ANE as PALMER2ANE
 from .palmer2bne import PALMER2BNE as PALMER2BNE
 from .palmer2ene import PALMER2ENE as PALMER2ENE
 from .palmer2ne import PALMER2NE as PALMER2NE
+from .palmer3ane import PALMER3ANE as PALMER3ANE
+from .palmer3bne import PALMER3BNE as PALMER3BNE
 from .palmer3ene import PALMER3ENE as PALMER3ENE
+from .palmer3ne import PALMER3NE as PALMER3NE
+from .palmer4ane import PALMER4ANE as PALMER4ANE
+from .palmer4bne import PALMER4BNE as PALMER4BNE
 from .palmer4ene import PALMER4ENE as PALMER4ENE
+from .palmer4ne import PALMER4NE as PALMER4NE
+
+# TODO: Fix Chebyshev polynomial calculation
+# from .palmer5ane import PALMER5ANE as PALMER5ANE
 from .palmer5bne import PALMER5BNE as PALMER5BNE
 from .palmer5ene import PALMER5ENE as PALMER5ENE
+from .palmer6ane import PALMER6ANE as PALMER6ANE
+from .palmer6ene import PALMER6ENE as PALMER6ENE
 from .palmer7ane import PALMER7ANE as PALMER7ANE
+from .palmer7ene import PALMER7ENE as PALMER7ENE
+from .palmer8ane import PALMER8ANE as PALMER8ANE
+from .palmer8ene import PALMER8ENE as PALMER8ENE
 from .pfit4 import PFIT4 as PFIT4
 from .powellbs import POWELLBS as POWELLBS
 from .powellse import POWELLSE as POWELLSE
@@ -146,7 +161,7 @@ nonlinear_equations_problems = (
     ARGAUSS(),
     ARGLALE(),
     ARGLBLE(),
-    # ARGLCLE(),  # TODO: should be least squares, not nonlinear equations
+    ARGLCLE(),
     ARGTRIG(),
     ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch
@@ -206,7 +221,11 @@ nonlinear_equations_problems = (
     HATFLDANE(),
     HATFLDBNE(),
     HATFLDCNE(),
+    HATFLDDNE(),
+    HATFLDENE(),
+    HATFLDF(),
     HATFLDFLNE(),
+    HATFLDG(),
     HELIXNE(),
     HIMMELBA(),
     HIMMELBFNE(),
@@ -245,11 +264,23 @@ nonlinear_equations_problems = (
     PALMER2BNE(),
     PALMER2ENE(),
     PALMER2NE(),
+    PALMER3ANE(),
+    PALMER3BNE(),
     PALMER3ENE(),
+    PALMER3NE(),
+    PALMER4ANE(),
+    PALMER4BNE(),
     PALMER4ENE(),
+    PALMER4NE(),
+    # PALMER5ANE(),  # TODO: Fix Chebyshev polynomial calculation
     PALMER5BNE(),
     PALMER5ENE(),
+    PALMER6ANE(),
+    PALMER6ENE(),
     PALMER7ANE(),
+    PALMER7ENE(),
+    PALMER8ANE(),
+    PALMER8ENE(),
     PFIT4(),
     POWERSUMNE(),
     RES(),

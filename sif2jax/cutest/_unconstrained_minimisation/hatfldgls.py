@@ -5,7 +5,11 @@ from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: human review required
+# TODO: Known issue - gradient and Hessian values differ from pycutest by factors.
+# The objective values match at ones but not at zeros. This suggests a difference in how
+# pycutest handles the L2 group type with element functions in least squares problems.
+# The implementation follows the SIF file specification but may need adjustment to match
+# pycutest's interpretation.
 class HATFLDGLS(AbstractUnconstrainedMinimisation):
     """A test problem from the OPTIMA user manual.
 
@@ -28,8 +32,8 @@ class HATFLDGLS(AbstractUnconstrainedMinimisation):
         del args
 
         # Create residuals for each group
-        # Each group is defined by G(i) = x(i) + x(13) - 1.0 for i=1...n
-        residuals = y + y[12] - 1.0
+        # Each group is defined by G(i) = x(i) - x(13) - 1.0 for i=1...n
+        residuals = y - y[12] - 1.0
 
         # Group element G(1) also involves A(1) with a -1.0 coefficient
         # A(1) is a 2PR element with x1 and x2, computing x1 * x2
@@ -43,7 +47,7 @@ class HATFLDGLS(AbstractUnconstrainedMinimisation):
         def compute_2pri_element(i):
             return (y[i] + 1.0) * (y[i - 1] + 1.0 - y[i + 1])
 
-        indices = inexact_asarray(jnp.arange(1, len(y)) * 1)
+        indices = jnp.arange(1, len(y) - 1, dtype=jnp.int32)
         inner_residuals = jax.vmap(compute_2pri_element)(indices)
         residuals = residuals.at[1:-1].add(inner_residuals)
 

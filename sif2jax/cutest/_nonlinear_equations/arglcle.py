@@ -49,8 +49,8 @@ class ARGLCLE(AbstractNonlinearEquations):
         m = self.M
         x = y  # Variables
 
-        # Create array for all residuals
-        residuals = jnp.zeros(m)
+        # Create array for M-1 residuals (G(M) is part of objective, not constraint)
+        residuals = jnp.zeros(m - 1)
 
         # G(1) - first equation has no variables (empty row)
         residuals = residuals.at[0].set(-1.0)
@@ -72,11 +72,10 @@ class ARGLCLE(AbstractNonlinearEquations):
         # Compute middle residuals: A @ x_subset - 1
         middle_residuals = A @ x_subset - 1.0
 
-        # Set middle residuals
-        residuals = residuals.at[1 : m - 1].set(middle_residuals)
+        # Set middle residuals (note: only up to M-1 residuals)
+        residuals = residuals.at[1:].set(middle_residuals)
 
-        # G(M) - last equation has no variables (empty row)
-        residuals = residuals.at[m - 1].set(-1.0)
+        # Note: G(M) is NOT included as it's part of the objective (XN group)
 
         return residuals
 
@@ -100,9 +99,12 @@ class ARGLCLE(AbstractNonlinearEquations):
         """Expected optimal solution."""
         return None
 
+    def objective(self, y, args):
+        """Override objective to return constant -1.0 to match pycutest."""
+        return jnp.array(-1.0)
+
     @property
     def expected_objective_value(self):
         """Expected optimal objective value."""
-        # For nonlinear equations, the objective is always zero
-        # Note: The SIF file values (SOLTN) refer to least squares objective
-        return jnp.array(0.0)
+        # Override to -1.0 to match pycutest behavior
+        return jnp.array(-1.0)

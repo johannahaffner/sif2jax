@@ -7,5 +7,5 @@ extra_info_local/  # Contains PDF files with problem statements, some are paywal
 S2MPJ
 .DS_Store
 DockerWorkflow.md
-.benchmarks/*  # pytest-benchmark results
+.benchmarks
 

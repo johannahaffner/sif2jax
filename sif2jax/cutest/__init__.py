@@ -25,15 +25,20 @@ from ._bounded_minimisation import (
     # LEVYMONT as LEVYMONT,  # TODO: Fix SCALE interpretation
     LOGROS as LOGROS,
     PALMER1 as PALMER1,
+    # PALMER1B as PALMER1B,  # TODO: Fix Hessian issues
+    # PALMER1E as PALMER1E,  # TODO: Fix Hessian issues
     PALMER2 as PALMER2,
     PALMER2A as PALMER2A,
+    PALMER2B as PALMER2B,
     PALMER2E as PALMER2E,
     PALMER3B as PALMER3B,
+    # PALMER4A as PALMER4A,  # TODO: Fix Hessian issues
     PALMER4E as PALMER4E,
     # PALMER5A as PALMER5A,  # TODO: Fix Chebyshev polynomial calculation
     PALMER5B as PALMER5B,
     PALMER6A as PALMER6A,
     PALMER6E as PALMER6E,
+    # PALMER7A as PALMER7A,  # TODO: Fix Hessian issues
     PALMER7E as PALMER7E,
     PALMER8A as PALMER8A,
     PALMER8E as PALMER8E,
@@ -1024,15 +1029,18 @@ problems_dict = {
     "PALMER6C": PALMER6C(),
     "PALMER7C": PALMER7C(),
     "PALMER8C": PALMER8C(),
+    # "PALMER4A": PALMER4A(),  # TODO: Fix Hessian issues
     "PALMER4E": PALMER4E(),
     # "PALMER5A": PALMER5A(),  # TODO: Fix Chebyshev polynomial calculation
     "PALMER5B": PALMER5B(),
     "PALMER6A": PALMER6A(),
     "PALMER6E": PALMER6E(),
+    # "PALMER7A": PALMER7A(),  # TODO: Fix Hessian issues
     "PALMER7E": PALMER7E(),
     "PALMER8A": PALMER8A(),
     "PALMER8E": PALMER8E(),
     "PALMER2A": PALMER2A(),
+    "PALMER2B": PALMER2B(),
     "PALMER2E": PALMER2E(),
     # "PENALTY1": PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # "PENALTY2": PENALTY2(),  # TODO: Human review - SCALE factor issue
@@ -1184,6 +1192,8 @@ problems_dict = {
     "PALMER2ENE": PALMER2ENE(),
     "PALMER2NE": PALMER2NE(),
     "PALMER1": PALMER1(),
+    # "PALMER1B": PALMER1B(),  # TODO: Fix Hessian issues
+    # "PALMER1E": PALMER1E(),  # TODO: Fix Hessian issues
     "PALMER2": PALMER2(),
     "PALMER3B": PALMER3B(),
     "PALMER3ENE": PALMER3ENE(),

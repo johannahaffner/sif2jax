@@ -23,10 +23,16 @@ from .hs110 import HS110 as HS110
 # from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
 from .logros import LOGROS as LOGROS
 from .palmer1 import PALMER1 as PALMER1
+
+# from .palmer1b import PALMER1B as PALMER1B  # TODO: Fix Hessian issues
+# from .palmer1e import PALMER1E as PALMER1E  # TODO: Fix Hessian issues
 from .palmer2 import PALMER2 as PALMER2
 from .palmer2a import PALMER2A as PALMER2A
+from .palmer2b import PALMER2B as PALMER2B
 from .palmer2e import PALMER2E as PALMER2E
 from .palmer3b import PALMER3B as PALMER3B
+
+# from .palmer4a import PALMER4A as PALMER4A  # TODO: Fix Hessian issues
 from .palmer4e import PALMER4E as PALMER4E
 
 # TODO: Fix Chebyshev polynomial calculation
@@ -34,6 +40,8 @@ from .palmer4e import PALMER4E as PALMER4E
 from .palmer5b import PALMER5B as PALMER5B
 from .palmer6a import PALMER6A as PALMER6A
 from .palmer6e import PALMER6E as PALMER6E
+
+# from .palmer7a import PALMER7A as PALMER7A  # TODO: Fix Hessian issues
 from .palmer7e import PALMER7E as PALMER7E
 from .palmer8a import PALMER8A as PALMER8A
 from .palmer8e import PALMER8E as PALMER8E
@@ -66,15 +74,20 @@ bounded_minimisation_problems = (
     # LEVYMONT(),  # TODO: Fix SCALE interpretation
     LOGROS(),
     PALMER1(),
+    # PALMER1B(),  # TODO: Fix Hessian issues
+    # PALMER1E(),  # TODO: Fix Hessian issues
     PALMER2(),
     PALMER2A(),
+    PALMER2B(),
     PALMER2E(),
     PALMER3B(),
+    # PALMER4A(),  # TODO: Fix Hessian issues
     PALMER4E(),
     # PALMER5A(),  # TODO: Fix Chebyshev polynomial calculation
     PALMER5B(),
     PALMER6A(),
     PALMER6E(),
+    # PALMER7A(),  # TODO: Fix Hessian issues
     PALMER7E(),
     PALMER8A(),
     PALMER8E(),

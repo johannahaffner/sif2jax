@@ -1,4 +1,4 @@
-"""A non-convex problem involving double pseudo-stochastic constraints 
+"""A non-convex problem involving double pseudo-stochastic constraints
 on a square matrix. This is a least-squares formulation.
 
 The problem involves finding a matrix X and vectors Y, Z such that:
@@ -8,7 +8,7 @@ The problem involves finding a matrix X and vectors Y, Z such that:
 
 Note: The SIF file has a complex structure where the linear part includes
 Y(I) and Z(J), but the nonlinear ATP2 element uses Y(I) and Z(I).
-Additionally, the SIF file appears to have a bug where EC(I) is used 
+Additionally, the SIF file appears to have a bug where EC(I) is used
 instead of EC(J) in the group definitions, making both ER and EC compute
 row sums instead of having one compute column sums.
 

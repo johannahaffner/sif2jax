@@ -13,6 +13,7 @@ from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
 from .bennett5ls import BENNETT5LS as BENNETT5LS
+from .biggs3 import BIGGS3 as BIGGS3
 from .biggs5 import BIGGS5 as BIGGS5
 from .biggs6 import BIGGS6 as BIGGS6
 from .box import BOX as BOX
@@ -22,6 +23,7 @@ from .boxbodls import BOXBODLS as BOXBODLS
 
 # TODO: BOXPOWER needs human review - minor gradient discrepancy at last element
 # from .boxpower import BOXPOWER as BOXPOWER
+# from .bratu1d import BRATU1D as BRATU1D  # TODO: Human review needed - see file
 # TODO: BRKMCC needs human review - significant discrepancies
 # from .brkmcc import BRKMCC as BRKMCC
 # TODO: BROWNAL needs human review - small Hessian discrepancies
@@ -75,6 +77,8 @@ from .denschne import DENSCHNE as DENSCHNE
 from .denschnf import DENSCHNF as DENSCHNF
 from .devgla1 import DEVGLA1 as DEVGLA1
 from .devgla2 import DEVGLA2 as DEVGLA2
+
+# from .diamon3dls import DIAMON3DLS as DIAMON3DLS  # TODO: Human review needed
 from .dixmaana1 import DIXMAANA1 as DIXMAANA1
 from .dixmaanb import DIXMAANB as DIXMAANB
 from .dixmaanc import DIXMAANC as DIXMAANC
@@ -165,13 +169,15 @@ from .helix import HELIX as HELIX
 # from .hielow import HIELOW as HIELOW
 from .hilberta import HILBERTA as HILBERTA
 from .hilbertb import HILBERTB as HILBERTB
+
+# TODO: HIMMELBB needs human review - Hessian H[0,0] differs from pycutest
+# from .himmelbb import HIMMELBB as HIMMELBB
 from .himmelbcls import HIMMELBCLS as HIMMELBCLS
+
+# TODO: HIMMELBF needs human review - Hessian cross-derivative H[2,3] differs
+# from .himmelbf import HIMMELBF as HIMMELBF
 from .himmelbg import HIMMELBG as HIMMELBG
 from .himmelbh import HIMMELBH as HIMMELBH
-
-# TODO: Human review - Hessian discrepancies
-# from .himmelbb import HIMMELBB as HIMMELBB
-# from .himmelbf import HIMMELBF as HIMMELBF
 from .humps import HUMPS as HUMPS
 from .indef import INDEF as INDEF
 from .indefm import INDEFM as INDEFM
@@ -193,9 +199,12 @@ from .lsc2ls import LSC2LS as LSC2LS
 # from .luksan22ls import LUKSAN22LS as LUKSAN22LS  # TODO: Fix objective calculation
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
-# from .mexhat import MEXHAT as MEXHAT  # TODO: Human review - complex scaling issues
+from .maratosb import MARATOSB as MARATOSB
+from .mexhat import MEXHAT as MEXHAT
 from .mgh10ls import MGH10LS as MGH10LS
 
+# TODO: Human review needed - Minor gradient precision differences
+# from .morebv import MOREBV as MOREBV
 # TODO: Human review - SCALE interpretation issue
 # from .modbeale import MODBEALE as MODBEALE
 # from .nondia import NONDIA as NONDIA  # TODO: Human review - SCALE factor issue
@@ -203,6 +212,10 @@ from .noncvxu2 import NONCVXU2 as NONCVXU2
 from .noncvxun import NONCVXUN as NONCVXUN
 from .nondquar import NONDQUAR as NONDQUAR
 from .nonmsqrt import NONMSQRT as NONMSQRT
+from .osbornea import OSBORNEA as OSBORNEA
+
+# TODO: Human review - objective discrepancy
+# from .osborneb import OSBORNEB as OSBORNEB
 from .palmer1c import PALMER1C as PALMER1C
 from .palmer1d import PALMER1D as PALMER1D
 from .palmer2c import PALMER2C as PALMER2C
@@ -219,11 +232,15 @@ from .palmer8c import PALMER8C as PALMER8C
 # from .penalty2 import PENALTY2 as PENALTY2
 from .power import POWER as POWER
 from .powersum import POWERSUM as POWERSUM
+from .price3 import PRICE3 as PRICE3
+from .price4 import PRICE4 as PRICE4
 
 # TODO: Human review - objective off by factor of 4.15
 # from .powellsg import POWELLSG as POWELLSG
+from .quartc import QUARTC as QUARTC
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
+from .s308 import S308 as S308
 from .sisser import SISSER as SISSER
 
 # TODO: Human review needed - complex matrix multiplication formulation
@@ -243,8 +260,12 @@ from .trigon1 import TRIGON1 as TRIGON1
 # TODO: TRIGON2 needs human review - Hessian test fails
 # from .trigon2 import TRIGON2 as TRIGON2
 from .vardim import VARDIM as VARDIM
+
+# TODO: Human review needed - Hessian computation issues
+# from .watson import WATSON as WATSON
 from .waysea1 import WAYSEA1 as WAYSEA1
 from .waysea2 import WAYSEA2 as WAYSEA2
+from .woods import WOODS as WOODS
 from .zangwil2 import ZANGWIL2 as ZANGWIL2
 
 
@@ -265,6 +286,7 @@ unconstrained_minimisation_problems = (
     BDQRTIC(),
     BEALE(),
     BENNETT5LS(),
+    BIGGS3(),
     BIGGS5(),
     BIGGS6(),
     BOX(),
@@ -272,6 +294,7 @@ unconstrained_minimisation_problems = (
     BOX3(),
     BOXBODLS(),
     # BOXPOWER(),  # TODO: Human review - minor gradient discrepancy at last element
+    # BRATU1D(),  # TODO: Human review needed - see file
     # BRKMCC(),  # TODO: Human review - significant discrepancies
     # BROWNAL(),  # TODO: Human review - small Hessian discrepancies
     BROWNBS(),
@@ -309,6 +332,7 @@ unconstrained_minimisation_problems = (
     DENSCHNE(),
     DENSCHNF(),
     DEVGLA1(),
+    # DIAMON3DLS(),  # TODO: Human review needed - see file
     DEVGLA2(),
     DIXMAANA1(),
     DIXMAANB(),
@@ -381,9 +405,9 @@ unconstrained_minimisation_problems = (
     # HIELOW(),  # TODO: Human review - significant discrepancies
     HILBERTA(),
     HILBERTB(),
-    # HIMMELBB(),  # TODO: Human review - Hessian discrepancies
+    # HIMMELBB(),  # TODO: needs human review - Hessian issues
     HIMMELBCLS(),
-    # HIMMELBF(),  # TODO: Human review - Hessian discrepancies
+    # HIMMELBF(),  # TODO: needs human review - Hessian issues
     HIMMELBG(),
     HIMMELBH(),
     HUMPS(),
@@ -404,14 +428,18 @@ unconstrained_minimisation_problems = (
     LSC2LS(),
     # LUKSAN22LS(),  # TODO: Fix objective calculation
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
-    # MEXHAT(),  # TODO: Human review - complex scaling issues
+    MARATOSB(),
+    MEXHAT(),
     MGH10LS(),
+    # MOREBV(),  # TODO: Human review - minor gradient precision differences
     # MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     # NONDIA(),  # TODO: Human review - SCALE factor issue
     NONCVXU2(),
     NONCVXUN(),
     NONDQUAR(),
     NONMSQRT(),
+    OSBORNEA(),
+    # OSBORNEB(),  # TODO: Human review - objective discrepancy
     PALMER1C(),
     PALMER1D(),
     PALMER2C(),
@@ -426,13 +454,19 @@ unconstrained_minimisation_problems = (
     POWER(),
     POWERSUM(),
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
+    PRICE3(),
+    PRICE4(),
+    QUARTC(),
     ROSENBR(),
     ROSZMAN1LS(),
+    S308(),
     SISSER(),
     # SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS(),
+    # WATSON(),  # TODO: Human review - Hessian computation issues
     WAYSEA1(),
     WAYSEA2(),
+    WOODS(),
     # YATP2LS(),  # TODO: Fix dimension mismatch
     ZANGWIL2(),
     TRIGON1(),

@@ -220,6 +220,21 @@ class AbstractConstrainedMinimisation(AbstractProblem[_Y]):
         return num_equalities, num_inequalities, num_bounds
 
 
+class AbstractConstrainedQuadraticProblem(AbstractConstrainedMinimisation[_Y]):
+    """Abstract base class for quadratic programming problems.
+
+    These are problems where:
+    - The objective function is quadratic: f(x) = 0.5 * x^T Q x + c^T x + d
+    - All constraints are linear: A_eq x = b_eq, A_ineq x >= b_ineq
+
+    This class inherits all methods from AbstractConstrainedMinimisation
+    and doesn't add any new requirements, but provides a clear type
+    distinction for quadratic problems.
+    """
+
+    pass
+
+
 class AbstractNonlinearEquations(AbstractProblem[_Y]):
     """Abstract base class for nonlinear equations problems. These problems seek to
     find a solution y such that the equality constraints are zero.

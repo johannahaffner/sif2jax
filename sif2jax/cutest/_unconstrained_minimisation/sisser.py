@@ -6,12 +6,13 @@ from ..._problem import AbstractUnconstrainedMinimisation
 class SISSER(AbstractUnconstrainedMinimisation):
     """Sisser's simple problem in 2 variables.
 
-    A simple constrained problem in 2 variables.
+    A simple unconstrained problem in 2 variables.
 
-    IMPORTANT NOTE: This implementation follows the corrected SISSER2 formulation,
-    not the original SISSER which was noted as "incorrectly decoded" in the SIF file.
-    The key difference is that all groups use the L2 group type (not ML2 for G2).
-    This matches what pycutest provides under the name "SISSER".
+    IMPORTANT NOTE: The original SISSER problem in the SIF file contained a mistake
+    and was noted as "incorrectly decoded". This problem should not be used.
+
+    This implementation follows the corrected SISSER2 formulation. Note that pycutest
+    makes the SISSER2 definition available through the name "SISSER".
 
     The objective function is:
     f(x) = 3*x1^4 + 2*(x1*x2)^2 + 3*x2^4
@@ -25,7 +26,7 @@ class SISSER(AbstractUnconstrainedMinimisation):
     See also Buckley#216 (p. 91)
 
     SIF input: Ph. Toint, Dec 1989.
-    Original SISSER was incorrectly decoded; this follows SISSER2 (corrected May 2024)
+    Modified: Formulation corrected May 2024 (SISSER2)
 
     classification: OUR2-AN-2-0
     """

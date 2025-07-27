@@ -1,4 +1,5 @@
 from ._bounded_minimisation import (
+    BDEXP as BDEXP,
     bounded_minimisation_problems as bounded_minimisation_problems,
     BRANIN as BRANIN,
     CAMEL6 as CAMEL6,
@@ -6,7 +7,10 @@ from ._bounded_minimisation import (
     EXP2B as EXP2B,
     EXPLIN as EXPLIN,
     EXPLIN2 as EXPLIN2,
+    EXPQUAD as EXPQUAD,
+    HART6 as HART6,
     HATFLDC as HATFLDC,
+    # HIMMELP1 as HIMMELP1,  # TODO: Human review needed - OBNL element issues
     HS1 as HS1,
     HS2 as HS2,
     HS3 as HS3,
@@ -17,19 +21,21 @@ from ._bounded_minimisation import (
     HS45 as HS45,
     HS110 as HS110,
     # LEVYMONT as LEVYMONT,  # TODO: Fix SCALE interpretation
+    LOGROS as LOGROS,
     PALMER1 as PALMER1,
     PALMER2 as PALMER2,
     PALMER3B as PALMER3B,
     PALMER4E as PALMER4E,
-    PALMER3B as PALMER3B,
     PRICE4B as PRICE4B,
 )
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
+    # ALLINITC as ALLINITC,  # TODO: Human review - dimension mismatch with pycutest
     ALSOTAME as ALSOTAME,
     # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
+    # AUG2D as AUG2D,  # TODO: needs human review - edge variable structure
     AVGASA as AVGASA,
     AVGASB as AVGASB,
     # AVION2 as AVION2,  # TODO: Human review - gradient discrepancies
@@ -69,7 +75,11 @@ from ._constrained_minimisation import (
     HIMMELBC as HIMMELBC,
     HIMMELBD as HIMMELBD,
     HIMMELBE as HIMMELBE,
-    GIGOMEZ2 as GIGOMEZ2,
+    # HIMMELP2 as HIMMELP2,  # TODO: Human review needed - OBNL element issues
+    # HIMMELP3 as HIMMELP3,  # TODO: Human review needed - OBNL element issues
+    # HIMMELP4 as HIMMELP4,  # TODO: Human review needed - OBNL element issues
+    # HIMMELP5 as HIMMELP5,  # TODO: Human review needed - OBNL element issues
+    # HIMMELP6 as HIMMELP6,  # TODO: Human review needed - OBNL element issues
     HS6 as HS6,
     HS7 as HS7,
     HS8 as HS8,
@@ -237,11 +247,15 @@ from ._constrained_minimisation import (
 from ._nonlinear_equations import (
     AIRCRFTA as AIRCRFTA,
     ARGAUSS as ARGAUSS,
+    ARGLALE as ARGLALE,
+    ARGLBLE as ARGLBLE,
+    # ARGLCLE as ARGLCLE,  # TODO: should be least squares, not nonlinear equations
     ARGTRIG as ARGTRIG,
     ARTIF as ARTIF,
     # TODO: Human review needed - constraint dimension mismatch
     # ARWHDNE as ARWHDNE,
     BARDNE as BARDNE,
+    BDVALUES as BDVALUES,
     # BDQRTICNE as BDQRTICNE,  # TODO: Human review needed
     BEALENE as BEALENE,
     BENNETT5 as BENNETT5,
@@ -292,6 +306,7 @@ from ._nonlinear_equations import (
     FREURONE as FREURONE,
     GENROSEBNE as GENROSEBNE,
     GENROSENE as GENROSENE,
+    GOTTFR as GOTTFR,
     GULFNE as GULFNE,
     HATFLDANE as HATFLDANE,
     HATFLDBNE as HATFLDBNE,
@@ -304,6 +319,7 @@ from ._nonlinear_equations import (
     HS2NE as HS2NE,
     HS25NE as HS25NE,
     HYDCAR6 as HYDCAR6,
+    HYPCIR as HYPCIR,
     INTEQNE as INTEQNE,
     JENSMPNE as JENSMPNE,
     JUDGENE as JUDGENE,
@@ -322,6 +338,8 @@ from ._nonlinear_equations import (
     MISRA1D as MISRA1D,
     MODBEALENE as MODBEALENE,
     MOREBVNE as MOREBVNE,
+    MSQRTA as MSQRTA,
+    MSQRTB as MSQRTB,
     MUONSINE as MUONSINE,
     NONDIANE as NONDIANE,
     nonlinear_equations_problems as nonlinear_equations_problems,
@@ -355,6 +373,18 @@ from ._nonlinear_equations import (
     VANDERM1 as VANDERM1,
     VANDERM2 as VANDERM2,
 )
+from ._quadratic_problems import (
+    # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
+    DEGDIAG as DEGDIAG,
+    HATFLDH as HATFLDH,
+    HS44NEW as HS44NEW,
+    QPBAND as QPBAND,
+    quadratic_problems as quadratic_problems,
+    QUDLIN as QUDLIN,
+    TAME as TAME,
+    # TORSIOND as TORSIOND,  # TODO: Human review - objective mismatch with pycutest
+    YAO as YAO,
+)
 
 # VANDERM3 as VANDERM3,  # TODO: Human review needed - originally had issues
 # VANDERM4 as VANDERM4,  # TODO: Human review needed - originally had issues
@@ -372,6 +402,7 @@ from ._unconstrained_minimisation import (
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
     BENNETT5LS as BENNETT5LS,
+    BIGGS3 as BIGGS3,
     BIGGS5 as BIGGS5,
     BIGGS6 as BIGGS6,
     BOX as BOX,
@@ -379,6 +410,7 @@ from ._unconstrained_minimisation import (
     BOX3 as BOX3,
     BOXBODLS as BOXBODLS,
     # BOXPOWER as BOXPOWER,  # TODO: Human review - minor gradient discrepancy
+    # BRATU1D as BRATU1D,  # TODO: Human review needed - see file
     # BRKMCC as BRKMCC,  # TODO: Human review - significant discrepancies
     # BROWNAL as BROWNAL,  # TODO: Human review - small Hessian discrepancies
     BROWNBS as BROWNBS,
@@ -419,6 +451,7 @@ from ._unconstrained_minimisation import (
     DENSCHNF as DENSCHNF,
     DEVGLA1 as DEVGLA1,
     DEVGLA2 as DEVGLA2,
+    # DIAMON3DLS as DIAMON3DLS,  # TODO: Human review needed - see file
     DIXMAANA1 as DIXMAANA1,
     DIXMAANB as DIXMAANB,
     DIXMAANC as DIXMAANC,
@@ -487,9 +520,9 @@ from ._unconstrained_minimisation import (
     # HIELOW as HIELOW,  # TODO: Human review - significant discrepancies
     HILBERTA as HILBERTA,
     HILBERTB as HILBERTB,
-    # HIMMELBB as HIMMELBB,  # TODO: Human review - Hessian discrepancies
+    # HIMMELBB as HIMMELBB,  # TODO: needs human review - Hessian issues
     HIMMELBCLS as HIMMELBCLS,
-    # HIMMELBF as HIMMELBF,  # TODO: Human review - Hessian discrepancies
+    # HIMMELBF as HIMMELBF,  # TODO: needs human review - Hessian issues
     HIMMELBG as HIMMELBG,
     HIMMELBH as HIMMELBH,
     HUMPS as HUMPS,
@@ -507,15 +540,19 @@ from ._unconstrained_minimisation import (
     LOGHAIRY as LOGHAIRY,
     LSC1LS as LSC1LS,
     LSC2LS as LSC2LS,
-    MGH10LS as MGH10LS,
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
-    # MEXHAT as MEXHAT,  # TODO: Human review - complex scaling issues
+    MARATOSB as MARATOSB,
+    MEXHAT as MEXHAT,
+    MGH10LS as MGH10LS,
+    # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
     # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
     NONCVXU2 as NONCVXU2,
     NONCVXUN as NONCVXUN,
     NONDQUAR as NONDQUAR,
     NONMSQRT as NONMSQRT,
+    OSBORNEA as OSBORNEA,
+    # OSBORNEB as OSBORNEB,  # TODO: Human review - objective discrepancy
     PALMER1C as PALMER1C,
     PALMER1D as PALMER1D,
     PALMER2C as PALMER2C,
@@ -530,8 +567,12 @@ from ._unconstrained_minimisation import (
     POWER as POWER,
     POWERSUM as POWERSUM,
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
+    PRICE3 as PRICE3,
+    PRICE4 as PRICE4,
+    QUARTC as QUARTC,
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
+    S308 as S308,
     SISSER as SISSER,
     # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
@@ -543,8 +584,10 @@ from ._unconstrained_minimisation import (
     # TRIGON2 as TRIGON2,  # TODO: Human review - Hessian test fails
     unconstrained_minimisation_problems as unconstrained_minimisation_problems,
     VARDIM as VARDIM,
+    # WATSON as WATSON,  # TODO: Human review - Hessian computation issues
     WAYSEA1 as WAYSEA1,
     WAYSEA2 as WAYSEA2,
+    WOODS as WOODS,
     ZANGWIL2 as ZANGWIL2,
 )
 
@@ -553,6 +596,7 @@ problems_dict = {
     # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
     # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
+    # "ALLINITC": ALLINITC(),  # Human review needed - dimension mismatch
     "ALSOTAME": ALSOTAME(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
@@ -659,6 +703,7 @@ problems_dict = {
     "HS109": HS109(),
     "HS110": HS110(),
     # "LEVYMONT": LEVYMONT(),  # TODO: Fix SCALE interpretation
+    "LOGROS": LOGROS(),
     "HS111": HS111(),
     "HS112": HS112(),
     "HS113": HS113(),
@@ -760,15 +805,18 @@ problems_dict = {
     "ARGLINC": ARGLINC(),
     "ARGTRIGLS": ARGTRIGLS(),
     "ARWHEAD": ARWHEAD(),
+    # "AUG2D": AUG2D(),  # TODO: needs human review - edge variable structure
     "AVGASA": AVGASA(),
     "AVGASB": AVGASB(),
     # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
     # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs human review
     "BARD": BARD(),
+    "BDEXP": BDEXP(),
     "BDQRTIC": BDQRTIC(),
     "BEALE": BEALE(),
     "BENNETT5LS": BENNETT5LS(),
+    "BIGGS3": BIGGS3(),
     "BIGGS5": BIGGS5(),
     "BIGGS6": BIGGS6(),
     "BOX": BOX(),
@@ -778,6 +826,7 @@ problems_dict = {
     "BOXBODLS": BOXBODLS(),
     # "BOXPOWER": BOXPOWER(),  # TODO: Human review - minor gradient discrepancy
     "BRANIN": BRANIN(),
+    # "BRATU1D": BRATU1D(),  # TODO: Human review needed - see file
     # "BRKMCC": BRKMCC(),  # TODO: Human review - significant discrepancies
     "CAMEL6": CAMEL6(),
     # "BROWNAL": BROWNAL(),  # TODO: Human review - small Hessian discrepancies
@@ -828,6 +877,7 @@ problems_dict = {
     "DENSCHNE": DENSCHNE(),
     "DENSCHNF": DENSCHNF(),
     "DEVGLA1": DEVGLA1(),
+    # "DIAMON3DLS": DIAMON3DLS(),  # TODO: Human review needed - see file
     "DEVGLA2": DEVGLA2(),
     "DIXMAANA1": DIXMAANA1(),
     "DIXMAANB": DIXMAANB(),
@@ -864,6 +914,7 @@ problems_dict = {
     "DGOSPEC": DGOSPEC(),
     "EXPLIN": EXPLIN(),
     "EXPLIN2": EXPLIN2(),
+    "EXPQUAD": EXPQUAD(),
     # "ERRINRSM": ERRINRSM(),  # TODO: Human review - significant discrepancies
     "EXP2": EXP2(),
     "EXP2B": EXP2B(),
@@ -891,6 +942,7 @@ problems_dict = {
     # "GULF": GULF(),  # TODO: Human review - issues reported by user
     "HAHN1LS": HAHN1LS(),
     "HAIRY": HAIRY(),
+    "HART6": HART6(),
     "HATFLDC": HATFLDC(),
     # "HATFLDD": HATFLDD(),  # TODO: HATFLD family needs human review - discrepancies
     # "HATFLDE": HATFLDE(),  # TODO: HATFLD family needs human review - discrepancies
@@ -903,11 +955,17 @@ problems_dict = {
     # "HIELOW": HIELOW(),  # TODO: Human review - significant discrepancies
     "HILBERTA": HILBERTA(),
     "HILBERTB": HILBERTB(),
-    # "HIMMELBB": HIMMELBB(),  # TODO: Human review - Hessian discrepancies
+    # "HIMMELBB": HIMMELBB(),  # TODO: needs human review - Hessian issues
     "HIMMELBCLS": HIMMELBCLS(),
-    # "HIMMELBF": HIMMELBF(),  # TODO: Human review - Hessian discrepancies
+    # "HIMMELBF": HIMMELBF(),  # TODO: needs human review - Hessian issues
     "HIMMELBG": HIMMELBG(),
     "HIMMELBH": HIMMELBH(),
+    # "HIMMELP1": HIMMELP1(),  # TODO: Human review needed - OBNL element issues
+    # "HIMMELP2": HIMMELP2(),  # TODO: Human review needed - OBNL element issues
+    # "HIMMELP3": HIMMELP3(),  # TODO: Human review needed - OBNL element issues
+    # "HIMMELP4": HIMMELP4(),  # TODO: Human review needed - OBNL element issues
+    # "HIMMELP5": HIMMELP5(),  # TODO: Human review needed - OBNL element issues
+    # "HIMMELP6": HIMMELP6(),  # TODO: Human review needed - OBNL element issues
     "HUMPS": HUMPS(),
     "HYDROELL": HYDROELL(),
     "INDEF": INDEF(),
@@ -928,11 +986,16 @@ problems_dict = {
     # "MEXHAT": MEXHAT(),  # TODO: Human review - complex scaling issues
     # "MODBEALE": MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     "MGH10LS": MGH10LS(),
+    "MARATOSB": MARATOSB(),
+    "MEXHAT": MEXHAT(),
+    # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
     # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),
     "NONDQUAR": NONDQUAR(),
     "NONMSQRT": NONMSQRT(),
+    "OSBORNEA": OSBORNEA(),
+    # "OSBORNEB": OSBORNEB(),  # TODO: Human review - objective discrepancy
     "PALMER1C": PALMER1C(),
     "PALMER1D": PALMER1D(),
     "PALMER2C": PALMER2C(),
@@ -948,8 +1011,12 @@ problems_dict = {
     "POWER": POWER(),
     "POWERSUM": POWERSUM(),
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
+    "PRICE3": PRICE3(),
+    "PRICE4": PRICE4(),
+    "QUARTC": QUARTC(),
     "ROSENBR": ROSENBR(),
     "ROSZMAN1LS": ROSZMAN1LS(),
+    "S308": S308(),
     "SISSER": SISSER(),
     # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     "TENBARS4": TENBARS4(),
@@ -958,24 +1025,39 @@ problems_dict = {
     "POWELLSE": POWELLSE(),
     "POWELLSQ": POWELLSQ(),
     "PRICE4B": PRICE4B(),
+    # "WATSON": WATSON(),  # TODO: Human review - Hessian computation issues
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
+    "WOODS": WOODS(),
     # "YATP2LS": YATP2LS(),  # TODO: Fix dimension mismatch
     "ZANGWIL2": ZANGWIL2(),
     "TRIGON1": TRIGON1(),
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
+    # "TORSIOND": TORSIOND(),  # TODO: Human review - objective mismatch
     # "TQUARTIC": TQUARTIC(),  # TODO: Human review - objective calculation incorrect
+    "YAO": YAO(),
+    "QPBAND": QPBAND(),
+    # "CHENHARK": CHENHARK(),  # TODO: Human review needed - see file
+    "DEGDIAG": DEGDIAG(),
+    "QUDLIN": QUDLIN(),
+    "TAME": TAME(),
+    "HATFLDH": HATFLDH(),
+    "HS44NEW": HS44NEW(),
     "VARDIM": VARDIM(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
     "AIRCRFTA": AIRCRFTA(),
     "ARGAUSS": ARGAUSS(),
+    "ARGLALE": ARGLALE(),
+    "ARGLBLE": ARGLBLE(),
+    # "ARGLCLE": ARGLCLE(),  # TODO: should be least squares, not nonlinear equations
     "ARGTRIG": ARGTRIG(),
     "ARTIF": ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch
     # "ARWHDNE": ARWHDNE(),
     "BARDNE": BARDNE(),
+    "BDVALUES": BDVALUES(),
     # "BDQRTICNE": BDQRTICNE(),  # TODO: Human review needed
     "BEALENE": BEALENE(),
     "BENNETT5": BENNETT5(),
@@ -989,6 +1071,9 @@ problems_dict = {
     "BROYDN3D": BROYDN3D(),
     "BROYDNBD": BROYDNBD(),
     "BRYBNDNE": BRYBNDNE(),
+    "HYPCIR": HYPCIR(),
+    "MSQRTA": MSQRTA(),
+    "MSQRTB": MSQRTB(),
     "CERI651A": CERI651A(),
     "CERI651B": CERI651B(),
     "CERI651C": CERI651C(),
@@ -1022,6 +1107,7 @@ problems_dict = {
     "FREURONE": FREURONE(),
     "GENROSEBNE": GENROSEBNE(),
     "GENROSENE": GENROSENE(),
+    "GOTTFR": GOTTFR(),
     "GULFNE": GULFNE(),
     "HATFLDANE": HATFLDANE(),
     "HATFLDBNE": HATFLDBNE(),
@@ -1093,4 +1179,5 @@ problems = (
     + bounded_minimisation_problems
     + constrained_minimisation_problems
     + nonlinear_equations_problems
+    + quadratic_problems
 )

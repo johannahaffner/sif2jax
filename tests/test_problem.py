@@ -217,6 +217,32 @@ class TestProblem:
             pycutest_inequalities = jnp.array(pycutest_inequalities).squeeze()
             assert pycutest_inequalities.size == num_inequalities
 
+    def test_nontrivial_constraints(self, problem):
+        if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
+            equalities, inequalities = problem.constraint(problem.y0)
+            # Check that the problem is not mistakenly classified as constrained
+            # If both elements of the tuple are None, the problem is unconstrained or
+            # bound constrained, and should inherit from a different parent class.
+            assert equalities is not None or inequalities is not None
+
+    def test_nontrivial_bounds(self, problem):
+        if (
+            isinstance(problem, sif2jax.AbstractConstrainedMinimisation)
+            # AbstractConstrainedMinimisation includes subclass for quadratic problems
+            or isinstance(problem, sif2jax.AbstractBoundedMinimisation)
+            or isinstance(problem, sif2jax.AbstractNonlinearEquations)
+        ):
+            bounds = problem.bounds
+            if bounds is not None:
+                lower, upper = bounds
+                assert lower is not None and upper is not None
+                # If bounds are not None, then at least one element of `y` should have
+                # a nontrivial (finite) bound.
+                # Otherwise the bounds method should return None.
+                has_finite_lower = jnp.any(jnp.isfinite(lower))
+                has_finite_upper = jnp.any(jnp.isfinite(upper))
+                assert has_finite_lower or has_finite_upper
+
     def test_correct_number_of_finite_bounds(self, problem, pycutest_problem):
         _, _, num_finite_bounds = problem.num_constraints()
 

@@ -5,10 +5,14 @@
 
 # TODO: ALLINITA needs human review - L2 group type interpretation issues
 # from .allinita import ALLINITA as ALLINITA
+# TODO: ALLINITC needs human review - dimension mismatch with pycutest (fixed variables)
+# from .allinitc import ALLINITC as ALLINITC
 from .alsotame import ALSOTAME as ALSOTAME
 
 # TODO: ANTWERP needs human review - initial value calculation issues
 # from .antwerp import ANTWERP as ANTWERP
+# TODO: AUG2D needs human review - edge variable structure
+# from .aug2d import AUG2D as AUG2D
 from .avgasa import AVGASA as AVGASA
 from .avgasb import AVGASB as AVGASB
 
@@ -50,7 +54,12 @@ from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .himmelbc import HIMMELBC as HIMMELBC
 from .himmelbd import HIMMELBD as HIMMELBD
 from .himmelbe import HIMMELBE as HIMMELBE
-from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
+
+# from .himmelp2 import HIMMELP2 as HIMMELP2  # TODO: Human review - OBNL issues
+# from .himmelp3 import HIMMELP3 as HIMMELP3  # TODO: Human review - OBNL issues
+# from .himmelp4 import HIMMELP4 as HIMMELP4  # TODO: Human review - OBNL issues
+# from .himmelp5 import HIMMELP5 as HIMMELP5  # TODO: Human review - OBNL issues
+# from .himmelp6 import HIMMELP6 as HIMMELP6  # TODO: Human review - OBNL issues
 from .hs6 import HS6 as HS6
 from .hs7 import HS7 as HS7
 from .hs8 import HS8 as HS8
@@ -239,6 +248,7 @@ constrained_minimisation_problems = (
     # ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT(),  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA(),  # TODO: needs human review - L2 group type interpretation
+    # ALLINITC(),  # Human review needed - dimension mismatch
     ALSOTAME(),
     # ANTWERP(),  # TODO: needs human review - initial value calculation
     AVGASA(),
@@ -355,6 +365,11 @@ constrained_minimisation_problems = (
     HIMMELBC(),
     HIMMELBD(),
     HIMMELBE(),
+    # HIMMELP2(),  # TODO: Human review needed - OBNL element issues
+    # HIMMELP3(),  # TODO: Human review needed - OBNL element issues
+    # HIMMELP4(),  # TODO: Human review needed - OBNL element issues
+    # HIMMELP5(),  # TODO: Human review needed - OBNL element issues
+    # HIMMELP6(),  # TODO: Human review needed - OBNL element issues
     HYDROELL(),
     LOOTSMA(),
     MARATOS(),

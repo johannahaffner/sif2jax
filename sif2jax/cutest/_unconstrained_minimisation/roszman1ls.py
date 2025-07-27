@@ -1,31 +1,26 @@
-"""
-NIST Data fitting problem ROSZMAN1.
-
-Fit: y = b1 - b2*x - arctan[b3/(x-b4)]/pi + e
-
-Source:
-Problem from the NIST nonlinear regression test set
-http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml
-
-Reference:
-Roszman, L., NIST (1979).
-Quantum Defects for Sulfur I Atom.
-
-SIF input: Nick Gould and Tyrone Rees, Oct 2015
-
-classification SUR2-MN-4-0
-
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class ROSZMAN1LS(AbstractUnconstrainedMinimisation):
-    @property
-    def name(self) -> str:
-        return "ROSZMAN1LS"
+    """
+    NIST Data fitting problem ROSZMAN1.
+
+    Fit: y = b1 - b2*x - arctan[b3/(x-b4)]/pi + e
+
+    Source:
+    Problem from the NIST nonlinear regression test set
+    http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml
+
+    Reference:
+    Roszman, L., NIST (1979).
+    Quantum Defects for Sulfur I Atom.
+
+    SIF input: Nick Gould and Tyrone Rees, Oct 2015
+
+    classification SUR2-MN-4-0
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0, 1})

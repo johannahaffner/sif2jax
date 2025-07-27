@@ -1,11 +1,18 @@
 from .aircrfta import AIRCRFTA as AIRCRFTA
 from .argauss import ARGAUSS as ARGAUSS
+from .arglale import ARGLALE as ARGLALE
+from .arglble import ARGLBLE as ARGLBLE
+
+# TODO: Human review needed - should be least squares, not nonlinear equations
+# pycutest returns -1.0 objective, but nonlinear equations expect 0.0
+# from .arglcle import ARGLCLE as ARGLCLE
 from .argtrig import ARGTRIG as ARGTRIG
 from .artif import ARTIF as ARTIF
 
 # TODO: Human review needed - constraint dimension mismatch
 # from .arwhdne import ARWHDNE as ARWHDNE
 from .bardne import BARDNE as BARDNE
+from .bdvalues import BDVALUES as BDVALUES
 
 # from .bdqrticne import BDQRTICNE as BDQRTICNE  # TODO: Human review needed
 from .bealene import BEALENE as BEALENE
@@ -62,6 +69,7 @@ from .extrosnbne import EXTROSNBNE as EXTROSNBNE
 from .freurone import FREURONE as FREURONE
 from .genrosebne import GENROSEBNE as GENROSEBNE
 from .genrosene import GENROSENE as GENROSENE
+from .gottfr import GOTTFR as GOTTFR
 from .gulfne import GULFNE as GULFNE
 from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
@@ -74,6 +82,7 @@ from .hs1ne import HS1NE as HS1NE
 from .hs2ne import HS2NE as HS2NE
 from .hs25ne import HS25NE as HS25NE
 from .hydcar6 import HYDCAR6 as HYDCAR6
+from .hypcir import HYPCIR as HYPCIR
 from .inteqne import INTEQNE as INTEQNE
 from .jensmpne import JENSMPNE as JENSMPNE
 from .judgene import JUDGENE as JUDGENE
@@ -92,6 +101,8 @@ from .mgh09 import MGH09 as MGH09
 from .misra1d import MISRA1D as MISRA1D
 from .modbealene import MODBEALENE as MODBEALENE
 from .morebvne import MOREBVNE as MOREBVNE
+from .msqrta import MSQRTA as MSQRTA
+from .msqrtb import MSQRTB as MSQRTB
 from .muonsine import MUONSINE as MUONSINE
 from .nondiane import NONDIANE as NONDIANE
 from .nonmsqrtne import NONMSQRTNE as NONMSQRTNE
@@ -133,11 +144,15 @@ from .vanderm2 import VANDERM2 as VANDERM2
 nonlinear_equations_problems = (
     AIRCRFTA(),
     ARGAUSS(),
+    ARGLALE(),
+    ARGLBLE(),
+    # ARGLCLE(),  # TODO: should be least squares, not nonlinear equations
     ARGTRIG(),
     ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch
     # ARWHDNE(),
     BARDNE(),
+    BDVALUES(),
     # BDQRTICNE(),  # TODO: Human review needed
     BEALENE(),
     BENNETT5(),
@@ -152,6 +167,9 @@ nonlinear_equations_problems = (
     BROYDN3D(),
     BROYDNBD(),
     BRYBNDNE(),
+    HYPCIR(),
+    MSQRTA(),
+    MSQRTB(),
     CERI651A(),
     CERI651B(),
     CERI651C(),
@@ -183,6 +201,7 @@ nonlinear_equations_problems = (
     FREURONE(),
     GENROSEBNE(),
     GENROSENE(),
+    GOTTFR(),
     GULFNE(),
     HATFLDANE(),
     HATFLDBNE(),

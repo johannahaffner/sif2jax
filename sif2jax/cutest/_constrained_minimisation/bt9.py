@@ -30,9 +30,6 @@ class BT9(AbstractConstrainedMinimisation):
     """
 
     y0_iD: int = 0
-    provided_y0s: frozenset = frozenset({0})
-
-    y0_id: int = 0
     provided_y0s: frozenset = frozenset({0, 1, 2})
 
     def objective(self, y, args):
@@ -42,11 +39,11 @@ class BT9(AbstractConstrainedMinimisation):
 
     @property
     def y0(self):
-        if self.y0_id == 0:
+        if self.y0_iD == 0:
             return jnp.array([2.0, 2.0, 2.0, 2.0])
-        elif self.y0_id == 1:
+        elif self.y0_iD == 1:
             return jnp.array([20.0, 20.0, 20.0, 20.0])
-        elif self.y0_id == 2:
+        elif self.y0_iD == 2:
             return jnp.array([50.0, 50.0, 50.0, 50.0])
 
     @property

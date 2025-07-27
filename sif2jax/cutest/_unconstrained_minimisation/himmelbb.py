@@ -3,11 +3,12 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Fixed dtype issues, analyzed Hessian computation
+# Suspected issues: H[0,0] differs from pycutest (1780441 vs 1918433)
+# Additional resources needed: Verify exact Hessian formula for L2 group type
 class HIMMELBB(AbstractUnconstrainedMinimisation):
-    """
-    HIMMELBB problem.
-
-    A 2 variables problem by Himmelblau.
+    """A 2 variables problem by Himmelblau.
 
     Source: problem 27 in
     D.H. Himmelblau,
@@ -24,19 +25,23 @@ class HIMMELBB(AbstractUnconstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
+    n: int = 2  # Number of variables
+
     def objective(self, y, args):
-        del args
+        """Compute the objective function."""
         x1, x2 = y
 
-        # Element H function calculation
+        # Element H
         r1 = x1 * x2
         r2 = 1.0 - x1
         r3 = 1.0 - x2 - x1 * r2**5
-        h_element = r1 * r2 * r3
 
-        # Group L2 type
-        # L2 group function: gvar^2
-        return h_element * h_element
+        element_h = r1 * r2 * r3
+
+        # Group G with L2 type
+        obj = element_h * element_h
+
+        return obj
 
     @property
     def y0(self):
@@ -48,10 +53,12 @@ class HIMMELBB(AbstractUnconstrainedMinimisation):
 
     @property
     def expected_result(self):
-        # Solution not provided in SIF file
+        """Expected solution - not provided in SIF file."""
+        # Will be determined by testing
         return None
 
     @property
     def expected_objective_value(self):
-        # Solution value is 0.0
+        """Expected optimal objective value."""
+        # From the SIF file: SOLTN 0.0
         return jnp.array(0.0)

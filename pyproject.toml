@@ -25,6 +25,7 @@ dependencies = [
   "typing_extensions>=4.5.0", 
   "wadler_lindig>=0.1.0", 
   "pytest", 
+  "pytest-benchmark",
   "equinox", 
   "beartype",
 ]
@@ -59,7 +60,7 @@ reportIncompatibleMethodOverride = true
 reportIncompatibleVariableOverride = false # Incompatible with eqx.AbstractVar
 
 [tool.pytest.ini_options]
-addopts = "-Werror --jaxtyping-packages=equinox,beartype.beartype(conf=beartype.BeartypeConf(strategy=beartype.BeartypeStrategy.On))"
+addopts = "-Werror --jaxtyping-packages=equinox,beartype.beartype(conf=beartype.BeartypeConf(strategy=beartype.BeartypeStrategy.On)) --benchmark-skip"
 
 [tool.ruff]
 extend-include = ["*.ipynb"]

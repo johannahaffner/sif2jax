@@ -51,10 +51,34 @@ git push
 
 Finally, open a pull request on GitHub!
 
-*If you want to make changes to the Docker container itself:*
+---
 
-Make your changes to the Dockerfile, and open a PR.
+**Running benchmarks:**
 
+We use `pytest-benchmark` to measure the performance of sif2jax implementations against pycutest (Fortran). Benchmarks are located in the `benchmarks/` folder and are skipped by default during normal test runs. These benchmarks run on ALL problems and are intended for release documentation.
+
+If you need runtime information for specific problems, use the runtime tests in the main test suite instead.
+
+Since benchmarks require pycutest with Fortran libraries, use the provided script:
+
+```bash
+bash benchmarks/run_benchmarks.sh  # Run all benchmarks (sif2jax vs pycutest)
+
+bash benchmarks/run_benchmarks.sh --benchmark-save=release_v1  # Save benchmark results
+```
+
+The script will run the benchmarks in a containerised environment in which pycutest and the Fortran backend are available.
+If you have pycutest installed locally, you can also run them directly without the script.
+
+To compare benchmark results:
+
+```bash
+# Compare runs by their ID numbers
+pytest-benchmark compare 0001 0002
+
+# Compare all saved runs
+pytest-benchmark compare
+```
 ---
 
 **If you're making changes to the documentation:**

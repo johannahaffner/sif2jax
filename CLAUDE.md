@@ -73,6 +73,10 @@ The commit is successful if pre-commit is clean - this means that ruff did not h
 
 You should generally only commit changes to the `sif2jax` folder. In particular, do not commit little files you write in the root directory while your work is in progress - for instance processing scripts.
 
+## Opening PRs
+
+When you open a PR to main, run `git diff main` to see the differences, and summarise these rather than summarising the latest commits only.
+
 ## Finally
 
 You do not need to ask for permission to run `find`, `grep`, `sed`, `ls` `ruff`, `pyright` and `awk` commands. 

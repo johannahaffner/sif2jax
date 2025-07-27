@@ -51,6 +51,49 @@ git push
 
 Finally, open a pull request on GitHub!
 
+---
+
+**Running benchmarks:**
+
+We use `pytest-benchmark` to measure the performance of sif2jax implementations. Benchmarks are located in the `benchmarks/` folder and are skipped by default during normal test runs.
+
+To run benchmarks:
+
+```bash
+# Run all benchmarks
+pytest --benchmark-only
+
+# Run specific benchmark groups
+pytest benchmarks/ --benchmark-only -k "objective"  # Only objective function benchmarks
+pytest benchmarks/ --benchmark-only -k "gradient"   # Only gradient benchmarks
+pytest benchmarks/ --benchmark-only -k "hessian"    # Only Hessian benchmarks
+
+# Run benchmarks for the first 10 problems (quick test)
+pytest benchmarks/test_runtime_benchmark.py::test_objective_benchmark_subset --benchmark-only
+```
+
+To save benchmark results for tracking performance over time:
+
+```bash
+# Save with a custom name (stored in .benchmarks/ directory)
+pytest --benchmark-only --benchmark-save=my_benchmark_run
+
+# Export to a specific JSON file
+pytest --benchmark-only --benchmark-json=benchmarks/results.json
+```
+
+To compare benchmark results:
+
+```bash
+# Compare two saved runs
+pytest-benchmark compare .benchmarks/Linux-*/0001_*.json .benchmarks/Linux-*/0002_*.json
+
+# Compare multiple runs using wildcards
+pytest-benchmark compare .benchmarks/Linux-*/*.json
+```
+
+Benchmark results include timing statistics (min, max, mean, median), standard deviation, and operations per second. This helps track performance improvements or regressions across different commits or optimizations.
+
 *If you want to make changes to the Docker container itself:*
 
 Make your changes to the Dockerfile, and open a PR.

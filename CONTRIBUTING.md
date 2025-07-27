@@ -55,49 +55,30 @@ Finally, open a pull request on GitHub!
 
 **Running benchmarks:**
 
-We use `pytest-benchmark` to measure the performance of sif2jax implementations. Benchmarks are located in the `benchmarks/` folder and are skipped by default during normal test runs.
+We use `pytest-benchmark` to measure the performance of sif2jax implementations against pycutest (Fortran). Benchmarks are located in the `benchmarks/` folder and are skipped by default during normal test runs. These benchmarks run on ALL problems and are intended for release documentation.
 
-To run benchmarks:
+If you need runtime information for specific problems, use the runtime tests in the main test suite instead.
 
-```bash
-# Run all benchmarks
-pytest --benchmark-only
-
-# Run specific benchmark groups
-pytest benchmarks/ --benchmark-only -k "objective"  # Only objective function benchmarks
-pytest benchmarks/ --benchmark-only -k "gradient"   # Only gradient benchmarks
-pytest benchmarks/ --benchmark-only -k "hessian"    # Only Hessian benchmarks
-
-# Run benchmarks for the first 10 problems (quick test)
-pytest benchmarks/test_runtime_benchmark.py::test_objective_benchmark_subset --benchmark-only
-```
-
-To save benchmark results for tracking performance over time:
+Since benchmarks require pycutest with Fortran libraries, use the provided script:
 
 ```bash
-# Save with a custom name (stored in .benchmarks/ directory)
-pytest --benchmark-only --benchmark-save=my_benchmark_run
+bash benchmarks/run_benchmarks.sh  # Run all benchmarks (sif2jax vs pycutest)
 
-# Export to a specific JSON file
-pytest --benchmark-only --benchmark-json=benchmarks/results.json
+bash benchmarks/run_benchmarks.sh --benchmark-save=release_v1  # Save benchmark results
 ```
+
+The script will run the benchmarks in a containerised environment in which pycutest and the Fortran backend are available.
+If you have pycutest installed locally, you can also run them directly without the script.
 
 To compare benchmark results:
 
 ```bash
-# Compare two saved runs
-pytest-benchmark compare .benchmarks/Linux-*/0001_*.json .benchmarks/Linux-*/0002_*.json
+# Compare runs by their ID numbers
+pytest-benchmark compare 0001 0002
 
-# Compare multiple runs using wildcards
-pytest-benchmark compare .benchmarks/Linux-*/*.json
+# Compare all saved runs
+pytest-benchmark compare
 ```
-
-Benchmark results include timing statistics (min, max, mean, median), standard deviation, and operations per second. This helps track performance improvements or regressions across different commits or optimizations.
-
-*If you want to make changes to the Docker container itself:*
-
-Make your changes to the Dockerfile, and open a PR.
-
 ---
 
 **If you're making changes to the documentation:**

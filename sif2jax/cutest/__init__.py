@@ -26,12 +26,17 @@ from ._bounded_minimisation import (
     LOGROS as LOGROS,
     PALMER1 as PALMER1,
     PALMER2 as PALMER2,
+    PALMER2A as PALMER2A,
+    PALMER2E as PALMER2E,
     PALMER3B as PALMER3B,
     PALMER4E as PALMER4E,
     # PALMER5A as PALMER5A,  # TODO: Fix Chebyshev polynomial calculation
     PALMER5B as PALMER5B,
     PALMER6A as PALMER6A,
     PALMER6E as PALMER6E,
+    PALMER7E as PALMER7E,
+    PALMER8A as PALMER8A,
+    PALMER8E as PALMER8E,
     PRICE4B as PRICE4B,
 )
 from ._constrained_minimisation import (
@@ -1024,6 +1029,11 @@ problems_dict = {
     "PALMER5B": PALMER5B(),
     "PALMER6A": PALMER6A(),
     "PALMER6E": PALMER6E(),
+    "PALMER7E": PALMER7E(),
+    "PALMER8A": PALMER8A(),
+    "PALMER8E": PALMER8E(),
+    "PALMER2A": PALMER2A(),
+    "PALMER2E": PALMER2E(),
     # "PENALTY1": PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # "PENALTY2": PENALTY2(),  # TODO: Human review - SCALE factor issue
     "POWER": POWER(),

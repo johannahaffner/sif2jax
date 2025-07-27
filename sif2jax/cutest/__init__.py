@@ -28,6 +28,10 @@ from ._bounded_minimisation import (
     PALMER2 as PALMER2,
     PALMER3B as PALMER3B,
     PALMER4E as PALMER4E,
+    # PALMER5A as PALMER5A,  # TODO: Fix Chebyshev polynomial calculation
+    PALMER5B as PALMER5B,
+    PALMER6A as PALMER6A,
+    PALMER6E as PALMER6E,
     PRICE4B as PRICE4B,
 )
 from ._constrained_minimisation import (
@@ -565,6 +569,7 @@ from ._unconstrained_minimisation import (
     PALMER3C as PALMER3C,
     PALMER4C as PALMER4C,
     PALMER5C as PALMER5C,
+    PALMER5D as PALMER5D,
     PALMER6C as PALMER6C,
     PALMER7C as PALMER7C,
     PALMER8C as PALMER8C,
@@ -1010,10 +1015,15 @@ problems_dict = {
     "PALMER3C": PALMER3C(),
     "PALMER4C": PALMER4C(),
     "PALMER5C": PALMER5C(),
+    "PALMER5D": PALMER5D(),
     "PALMER6C": PALMER6C(),
     "PALMER7C": PALMER7C(),
     "PALMER8C": PALMER8C(),
     "PALMER4E": PALMER4E(),
+    # "PALMER5A": PALMER5A(),  # TODO: Fix Chebyshev polynomial calculation
+    "PALMER5B": PALMER5B(),
+    "PALMER6A": PALMER6A(),
+    "PALMER6E": PALMER6E(),
     # "PENALTY1": PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # "PENALTY2": PENALTY2(),  # TODO: Human review - SCALE factor issue
     "POWER": POWER(),

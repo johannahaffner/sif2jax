@@ -26,6 +26,12 @@ from .palmer1 import PALMER1 as PALMER1
 from .palmer2 import PALMER2 as PALMER2
 from .palmer3b import PALMER3B as PALMER3B
 from .palmer4e import PALMER4E as PALMER4E
+
+# TODO: Fix Chebyshev polynomial calculation
+# from .palmer5a import PALMER5A as PALMER5A
+from .palmer5b import PALMER5B as PALMER5B
+from .palmer6a import PALMER6A as PALMER6A
+from .palmer6e import PALMER6E as PALMER6E
 from .price4b import PRICE4B as PRICE4B
 
 
@@ -58,6 +64,9 @@ bounded_minimisation_problems = (
     PALMER2(),
     PALMER3B(),
     PALMER4E(),
-    PALMER3B(),
+    # PALMER5A(),  # TODO: Fix Chebyshev polynomial calculation
+    PALMER5B(),
+    PALMER6A(),
+    PALMER6E(),
     PRICE4B(),
 )

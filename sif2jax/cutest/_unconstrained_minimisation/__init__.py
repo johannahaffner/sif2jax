@@ -220,6 +220,7 @@ from .palmer2c import PALMER2C as PALMER2C
 from .palmer3c import PALMER3C as PALMER3C
 from .palmer4c import PALMER4C as PALMER4C
 from .palmer5c import PALMER5C as PALMER5C
+from .palmer5d import PALMER5D as PALMER5D
 from .palmer6c import PALMER6C as PALMER6C
 from .palmer7c import PALMER7C as PALMER7C
 from .palmer8c import PALMER8C as PALMER8C
@@ -444,6 +445,7 @@ unconstrained_minimisation_problems = (
     PALMER3C(),
     PALMER4C(),
     PALMER5C(),
+    PALMER5D(),
     PALMER6C(),
     PALMER7C(),
     PALMER8C(),

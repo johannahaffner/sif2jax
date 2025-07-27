@@ -100,11 +100,3 @@ The one thing that has worked for us is to use test-driven development throughou
 Output improves with the granularity of the tests provided, so it is preferable to define a number of very small tests, rather than one large tests. Tests should ideally provide a natural ordering of increasing complexity (e.g. verify the initial point is correct before verifying the objective at the initial point).
 Think of this as automating the feedback-giving portion of human supervision to the greatest extent possible.
 Then ask the model to work in batches of problems, testing and fixing them one by one works best.
-
-## Contributor License Agreement
-
-Contributions to this project must be accompanied by a Contributor License Agreement (CLA). 
-You (or your employer) retain the copyright to your contribution; this simply gives us permission to use and redistribute your contributions as part of the project. Head over to <https://cla.developers.google.com/> 
-to see your current agreements on file or to sign a new one.
-
-You generally only need to submit a CLA once, so if you've already submitted one (even if it was for a different project), you probably don't need to do it again.

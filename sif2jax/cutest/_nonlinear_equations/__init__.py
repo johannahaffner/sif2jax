@@ -74,7 +74,11 @@ from .gulfne import GULFNE as GULFNE
 from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
 from .hatfldcne import HATFLDCNE as HATFLDCNE
+from .hatflddne import HATFLDDNE as HATFLDDNE
+from .hatfldene import HATFLDENE as HATFLDENE
+from .hatfldf import HATFLDF as HATFLDF
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
+from .hatfldg import HATFLDG as HATFLDG
 from .helixne import HELIXNE as HELIXNE
 from .himmelba import HIMMELBA as HIMMELBA
 from .himmelbfne import HIMMELBFNE as HIMMELBFNE
@@ -206,7 +210,11 @@ nonlinear_equations_problems = (
     HATFLDANE(),
     HATFLDBNE(),
     HATFLDCNE(),
+    HATFLDDNE(),
+    HATFLDENE(),
+    HATFLDF(),
     HATFLDFLNE(),
+    HATFLDG(),
     HELIXNE(),
     HIMMELBA(),
     HIMMELBFNE(),

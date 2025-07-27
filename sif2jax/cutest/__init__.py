@@ -9,6 +9,8 @@ from ._bounded_minimisation import (
     EXPLIN2 as EXPLIN2,
     EXPQUAD as EXPQUAD,
     HART6 as HART6,
+    HATFLDA as HATFLDA,
+    HATFLDB as HATFLDB,
     HATFLDC as HATFLDC,
     # HIMMELP1 as HIMMELP1,  # TODO: Human review needed - OBNL element issues
     HS1 as HS1,
@@ -311,7 +313,11 @@ from ._nonlinear_equations import (
     HATFLDANE as HATFLDANE,
     HATFLDBNE as HATFLDBNE,
     HATFLDCNE as HATFLDCNE,
+    HATFLDDNE as HATFLDDNE,
+    HATFLDENE as HATFLDENE,
+    HATFLDF as HATFLDF,
     HATFLDFLNE as HATFLDFLNE,
+    HATFLDG as HATFLDG,
     HELIXNE as HELIXNE,
     HIMMELBA as HIMMELBA,
     HIMMELBFNE as HIMMELBFNE,
@@ -509,11 +515,11 @@ from ._unconstrained_minimisation import (
     # GULF as GULF,  # TODO: Human review - issues reported by user
     HAHN1LS as HAHN1LS,
     HAIRY as HAIRY,
-    # HATFLDD as HATFLDD,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDE as HATFLDE,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFL as HATFLDFL,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFLS as HATFLDFLS,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDGLS as HATFLDGLS,  # TODO: HATFLD family needs human review - discrepancies
+    HATFLDD as HATFLDD,
+    HATFLDE as HATFLDE,
+    HATFLDFL as HATFLDFL,
+    HATFLDFLS as HATFLDFLS,
+    # HATFLDGLS as HATFLDGLS,  # TODO: Known gradient/Hessian discrepancies
     # HEART6LS as HEART6LS,  # TODO: Human review - significant discrepancies
     # HEART8LS as HEART8LS,  # TODO: Human review - significant discrepancies
     HELIX as HELIX,
@@ -943,12 +949,14 @@ problems_dict = {
     "HAHN1LS": HAHN1LS(),
     "HAIRY": HAIRY(),
     "HART6": HART6(),
+    "HATFLDA": HATFLDA(),
+    "HATFLDB": HATFLDB(),
     "HATFLDC": HATFLDC(),
-    # "HATFLDD": HATFLDD(),  # TODO: HATFLD family needs human review - discrepancies
-    # "HATFLDE": HATFLDE(),  # TODO: HATFLD family needs human review - discrepancies
-    # "HATFLDFL": HATFLDFL(),  # TODO: HATFLD family needs human review - discrepancies
-    # "HATFLDFLS": HATFLDFLS(),  # TODO: HATFLD family needs human review
-    # "HATFLDGLS": HATFLDGLS(),  # TODO: HATFLD family needs human review
+    "HATFLDD": HATFLDD(),
+    "HATFLDE": HATFLDE(),
+    "HATFLDFL": HATFLDFL(),
+    "HATFLDFLS": HATFLDFLS(),
+    # "HATFLDGLS": HATFLDGLS(),  # TODO: Known gradient/Hessian discrepancies
     # "HEART6LS": HEART6LS(),  # TODO: Human review - significant discrepancies
     # "HEART8LS": HEART8LS(),  # TODO: Human review - significant discrepancies
     "HELIX": HELIX(),
@@ -1112,7 +1120,11 @@ problems_dict = {
     "HATFLDANE": HATFLDANE(),
     "HATFLDBNE": HATFLDBNE(),
     "HATFLDCNE": HATFLDCNE(),
+    "HATFLDDNE": HATFLDDNE(),
+    "HATFLDENE": HATFLDENE(),
+    "HATFLDF": HATFLDF(),
     "HATFLDFLNE": HATFLDFLNE(),
+    "HATFLDG": HATFLDG(),
     "HELIXNE": HELIXNE(),
     "HIMMELBA": HIMMELBA(),
     "HIMMELBFNE": HIMMELBFNE(),

@@ -78,11 +78,9 @@ class HATFLDE(AbstractUnconstrainedMinimisation):
         )
 
         # Compute model values for each data point
-        # The model is x1 * exp(t * x2) - exp(t * x3)
-        model_values = x1 * jnp.exp(t_values * x2) - jnp.exp(t_values * x3)
-
-        # Compute residuals
-        residuals = model_values - z_values
+        # The model is exp(t * x3) - x1 * exp(t * x2) + z
+        # So the residual is: exp(t * x3) - x1 * exp(t * x2) + z
+        residuals = jnp.exp(t_values * x3) - x1 * jnp.exp(t_values * x2) + z_values
 
         # Objective function is sum of squared residuals
         return jnp.sum(residuals**2)

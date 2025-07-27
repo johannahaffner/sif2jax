@@ -153,14 +153,12 @@ from .growthls import GROWTHLS as GROWTHLS
 # from .gulf import GULF as GULF
 from .hahn1ls import HAHN1LS as HAHN1LS
 from .hairy import HAIRY as HAIRY
-
-# TODO: HATFLD family needs human review - discrepancies in HATFLDGLS
 from .hatfldd import HATFLDD as HATFLDD
 from .hatflde import HATFLDE as HATFLDE
 from .hatfldfl import HATFLDFL as HATFLDFL
 from .hatfldfls import HATFLDFLS as HATFLDFLS
-from .hatfldgls import HATFLDGLS as HATFLDGLS
 
+# from .hatfldgls import HATFLDGLS as HATFLDGLS  # TODO: gradient/Hessian issues
 # TODO: HEART problems need human review - significant discrepancies
 # from .heart import HEART6LS as HEART6LS, HEART8LS as HEART8LS
 from .helix import HELIX as HELIX
@@ -394,11 +392,11 @@ unconstrained_minimisation_problems = (
     HAHN1LS(),
     # HAHN1LS(y0_id=1),  # Non-default starting point - we only test pycutest defaults
     HAIRY(),
-    # HATFLDD(),  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDE(),  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFL(),  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFLS(),  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDGLS(),  # TODO: HATFLD family needs human review - discrepancies
+    HATFLDD(),
+    HATFLDE(),
+    HATFLDFL(),
+    HATFLDFLS(),
+    # HATFLDGLS(),  # TODO: gradient/Hessian issues
     # HEART6LS(),  # TODO: Human review - significant discrepancies
     # HEART8LS(),  # TODO: Human review - significant discrepancies
     HELIX(),

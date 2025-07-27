@@ -7,6 +7,8 @@ from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
 from .expquad import EXPQUAD as EXPQUAD
 from .hart6 import HART6 as HART6
+from .hatflda import HATFLDA as HATFLDA
+from .hatfldb import HATFLDB as HATFLDB
 from .hatfldc import HATFLDC as HATFLDC
 from .hs1 import HS1 as HS1
 from .hs2 import HS2 as HS2
@@ -37,6 +39,8 @@ bounded_minimisation_problems = (
     EXPLIN2(),
     EXPQUAD(),
     HART6(),
+    HATFLDA(),
+    HATFLDB(),
     HATFLDC(),
     # HIMMELP1(),  # TODO: Human review needed - OBNL element issues
     HS1(),

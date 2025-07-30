@@ -71,7 +71,7 @@ def _try_except_evaluate(
     pycutest_failed = False
 
     try:
-        pycutest_value = pycutest_func(point)
+        pycutest_value = pycutest_func(np.asarray(point))
         if check_nan_inf(pycutest_value):
             pycutest_error = ValueError("pycutest returned NaN or Inf.")
             pycutest_value = None

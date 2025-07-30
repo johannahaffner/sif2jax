@@ -16,10 +16,9 @@ class DECONVC(AbstractConstrainedMinimisation):
 
     Classification: SQR2-MN-61-1
 
-    # TODO: Human review needed
-    # Attempts made: Fixed dimension mismatch, adjusted bounds, handled fixed variables
-    # Suspected issues: Gradient/Hessian discrepancy - indexing issue with C variables
-    # Additional resources needed: Clarification on fixed variables C(-LGSG:0)
+    # Fixed: The issue was with the PROD element's IDX parameter handling.
+    # The SIF file sets SCAL=0 when IDX<=0, which zeros out contributions
+    # when K-I+1 <= 0. This is now properly implemented.
     """
 
     y0_iD: int = 0
@@ -113,22 +112,37 @@ class DECONVC(AbstractConstrainedMinimisation):
         def compute_residual(k):
             # For SIF: sum over I=1 to LGSG of SG(I)*C(K-I+1)
             # In 0-indexed: sum over i=0 to lgsg-1 of sg[i]*C(k-i+1)
-            # C(k-i+1) in SIF maps to c_full[k-i+1+lgsg] in our array
+            # IMPORTANT: The SIF file uses a special PR element that sets SCAL=0
+            # when IDX<=0
+            # This means when K-I+1 <= 0, the contribution is zero
 
-            # Use dynamic slicing to get the relevant part of c_full
-            # We need C(k-i+1) for i=0 to lgsg-1
-            # Which is C(k+1), C(k), ..., C(k-lgsg+2)
-            # In c_full indexing: c_full[k+1+lgsg], c_full[k+lgsg], ...,
-            # c_full[k-lgsg+2+lgsg] = c_full[k+lgsg+1], c_full[k+lgsg], ..., c_full[k+2]
-            # So we need to slice from k+2 for lgsg elements and reverse
-            start = k + 2
-            # Use lax.dynamic_slice for gradient-friendly indexing
-            c_slice = jax.lax.dynamic_slice(c_full, (start,), (lgsg,))
-            # Reverse the slice to get the right order
-            c_slice_rev = c_slice[::-1]
+            # For k (0-indexed), I goes from 1 to LGSG
+            # So k-i+1 in 1-indexed goes from k+1 down to k-lgsg+2
+            # We need to check which terms are positive
+
+            # Create indices for i=0 to lgsg-1
+            i_vals = jnp.arange(lgsg)
+            # Calculate k-i+1 in 1-indexed (k is 0-indexed, so k+1 is 1-indexed K)
+            indices_1based = (k + 1) - (i_vals + 1) + 1  # = k - i + 1
+
+            # Only include terms where indices_1based > 0
+            mask = indices_1based > 0
+
+            # Map 1-based indices to 0-based c_full indices
+            # C(-11) to C(0) are at indices 0 to 11
+            # C(1) to C(40) are at indices 12 to 51
+            # So C(idx) in 1-based maps to c_full[idx + lgsg] for idx > 0
+            # and c_full[idx + lgsg] for idx <= 0 (since C(-11) is at index 0)
+            c_indices = indices_1based + lgsg
+
+            # Gather C values
+            c_values = c_full[c_indices]
+
+            # Apply mask (zero out negative index contributions)
+            c_values_masked = jnp.where(mask, c_values, 0.0)
 
             # Compute dot product
-            return jnp.dot(sg, c_slice_rev) - tr[k]
+            return jnp.dot(sg, c_values_masked) - tr[k]
 
         # Vectorize over all k values
         residuals = jax.vmap(compute_residual)(jnp.arange(lgtr))

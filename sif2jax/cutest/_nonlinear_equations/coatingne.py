@@ -4,6 +4,13 @@ from jax import Array
 from ..._problem import AbstractNonlinearEquations
 
 
+# TODO: Human review needed
+# Attempts made: Vectorized the residual computation to avoid for-loops
+# Suspected issues: Large Jacobian differences (max 13.45 at element 7109)
+#   - Element 7109 is Jac[53,7] which is dF(54)/dX8
+#   - Our implementation gives 0.0 (correct based on SIF file analysis)
+#   - Pycutest apparently expects ~13.45
+# Resources needed: Access to pycutest source or MINPACK-2 original formulation
 class COATINGNE(AbstractNonlinearEquations):
     """
     The MINPACK 2 Coating Thickness Standardization problem (section 3.3)
@@ -310,63 +317,58 @@ class COATINGNE(AbstractNonlinearEquations):
         x = y  # Use consistent naming with SIF file
         m_div_4 = self.m // 4
 
-        # Initialize residuals array
-        residuals = jnp.zeros(self.m, dtype=jnp.float64)
+        # Get eta values for first M/4 elements
+        e1 = self.eta1_data[:m_div_4]
+        e2 = self.eta2_data[:m_div_4]
+        e1e2 = e1 * e2
 
-        # Process first M/4 residuals
-        for i in range(m_div_4):
-            e1 = self.eta1_data[i]
-            e2 = self.eta2_data[i]
-            e1e2 = e1 * e2
+        # Index arrays
+        i_vals = jnp.arange(m_div_4)
 
-            # F(i) components from the SIF file
-            f_i = (
-                x[0]
-                + e1 * x[1]
-                + e2 * x[2]
-                + e1e2 * x[3]
-                + x[1] * x[i + 8]
-                + x[2] * x[i + m_div_4 + 8]
-                + e2 * x[3] * x[i + 8]
-                + e1 * x[3] * x[i + m_div_4 + 8]
-                + x[3] * x[i + 8] * x[i + m_div_4 + 8]
-            )
+        # Process first M/4 residuals - vectorized
+        # F(i) components from the SIF file
+        f_i = (
+            x[0]
+            + e1 * x[1]
+            + e2 * x[2]
+            + e1e2 * x[3]
+            + x[1] * x[i_vals + 8]
+            + x[2] * x[i_vals + m_div_4 + 8]
+            + e2 * x[3] * x[i_vals + 8]
+            + e1 * x[3] * x[i_vals + m_div_4 + 8]
+            + x[3] * x[i_vals + 8] * x[i_vals + m_div_4 + 8]
+        )
+        residuals_1 = f_i - self.y_data[:m_div_4]
 
-            residuals = residuals.at[i].set(f_i - self.y_data[i])
+        # Process second M/4 residuals - vectorized
+        # F(i2) components from the SIF file
+        # IMPORTANT: The SIF file shows that F(I2) still uses X(IP8) and X(I2P8)
+        # where IP8 = I+8 and I2P8 = (I+M/4)+8, NOT (I2+8)
+        f_i2 = (
+            x[4]
+            + e1 * x[5]
+            + e2 * x[6]
+            + e1e2 * x[7]
+            + x[5] * x[i_vals + 8]
+            + x[6] * x[i_vals + m_div_4 + 8]
+            + e2 * x[7] * x[i_vals + 8]
+            + e1 * x[7] * x[i_vals + m_div_4 + 8]
+            + x[7] * x[i_vals + 8] * x[i_vals + m_div_4 + 8]
+        )
+        residuals_2 = f_i2 - self.y_data[m_div_4 : 2 * m_div_4]
 
-        # Process second M/4 residuals
-        for i in range(m_div_4):
-            e1 = self.eta1_data[i]
-            e2 = self.eta2_data[i]
-            e1e2 = e1 * e2
-            i2 = i + m_div_4
+        # Process third M/4 residuals - vectorized
+        # For F(127) to F(189), no Y values in SIF file, so RHS = 0
+        residuals_3 = self.scale1 * x[i_vals + 8]
 
-            # F(i2) components from the SIF file
-            f_i2 = (
-                x[4]
-                + e1 * x[5]
-                + e2 * x[6]
-                + e1e2 * x[7]
-                + x[5] * x[i + 8]
-                + x[6] * x[i + m_div_4 + 8]
-                + e2 * x[7] * x[i + 8]
-                + e1 * x[7] * x[i + m_div_4 + 8]
-                + x[7] * x[i + 8] * x[i + m_div_4 + 8]
-            )
+        # Process fourth M/4 residuals - vectorized
+        # For F(190) to F(252), no Y values in SIF file, so RHS = 0
+        residuals_4 = self.scale2 * x[i_vals + m_div_4 + 8]
 
-            residuals = residuals.at[i2].set(f_i2 - self.y_data[i2])
-
-        # Process third M/4 residuals
-        for i in range(m_div_4):
-            i3 = i + 2 * m_div_4
-            # For F(127) to F(189), no Y values in SIF file, so RHS = 0
-            residuals = residuals.at[i3].set(self.scale1 * x[i + 8])
-
-        # Process fourth M/4 residuals
-        for i in range(m_div_4):
-            i4 = i + 3 * m_div_4
-            # For F(190) to F(252), no Y values in SIF file, so RHS = 0
-            residuals = residuals.at[i4].set(self.scale2 * x[i + m_div_4 + 8])
+        # Concatenate all residuals
+        residuals = jnp.concatenate(
+            [residuals_1, residuals_2, residuals_3, residuals_4]
+        )
 
         return residuals
 
@@ -380,11 +382,13 @@ class COATINGNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution is not provided in the SIF file
         return jnp.ones(self.n, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

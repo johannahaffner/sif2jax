@@ -55,33 +55,34 @@ class HATFLDENE(AbstractNonlinearEquations):
         # Data values
         z_values = jnp.array(
             [
-                1.133,
-                1.013,
-                0.903,
-                0.8025,
-                0.7106,
-                0.6268,
-                0.5504,
-                0.4810,
-                0.4182,
-                0.3614,
-                0.3102,
-                0.2644,
-                0.2234,
-                0.1870,
-                0.1548,
-                0.1266,
-                0.1019,
-                0.0805,
-                0.0621,
-                0.0465,
-                0.0334,
+                1.561,
+                1.473,
+                1.391,
+                1.313,
+                1.239,
+                1.169,
+                1.103,
+                1.04,
+                0.981,
+                0.925,
+                0.8721,
+                0.8221,
+                0.7748,
+                0.73,
+                0.6877,
+                0.6477,
+                0.6099,
+                0.5741,
+                0.5403,
+                0.5084,
+                0.4782,
             ]
         )
 
         # Compute residuals for each data point
-        # The model is exp(t * x3) - x1 * exp(t * x2) + z
-        residuals = jnp.exp(t_values * x3) - x1 * jnp.exp(t_values * x2) + z_values
+        # From SIF file: G(I) = -x1 * exp(t * x2) + exp(t * x3) + z
+        # But pycutest returns the negative of this
+        residuals = -x1 * jnp.exp(t_values * x2) + jnp.exp(t_values * x3) + z_values
 
         return residuals
 
@@ -101,9 +102,9 @@ class HATFLDENE(AbstractNonlinearEquations):
 
     @property
     def expected_residual_norm(self):
-        # From the original HATFLDE problem, optimal objective value is 1.472239D-09
-        # Since objective = sum(residuals^2), the residual norm is sqrt(1.472239e-09)
-        return jnp.sqrt(jnp.array(1.472239e-09))
+        # From the SIF file, HATFLDE optimal objective value is 5.120377D-07
+        # Since objective = sum(residuals^2), the residual norm is sqrt(5.120377e-07)
+        return jnp.sqrt(jnp.array(5.120377e-07))
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""

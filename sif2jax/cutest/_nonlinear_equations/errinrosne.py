@@ -90,16 +90,21 @@ class ERRINROSNE(AbstractNonlinearEquations):
         """Compute the residuals of the error in Rosenbrock nonlinear equations"""
         n = self.n
         alpha = self.alpha
-        residuals = jnp.zeros(n - 1, dtype=y.dtype)
+        # There are 2*(n-1) residuals: SQ(2) to SQ(n) and B(2) to B(n)
+        residuals = jnp.zeros(2 * (n - 1), dtype=y.dtype)
 
         # For i = 2 to n:
         # SQ(i): x(i-1) + 16*alpha(i)^2 * (-x(i)^2) = 0
         # B(i): x(i) - 1 = 0
         for i in range(2, n + 1):
-            # The residual combines both constraints
+            idx = 2 * (i - 2)  # Index for SQ(i) and B(i)
+
+            # SQ(i): x(i-1) + 16*alpha(i)^2 * (-x(i)^2)
             ai = 16.0 * alpha[i - 1] ** 2
-            res = y[i - 2] + ai * (-(y[i - 1] ** 2)) + y[i - 1] - 1.0
-            residuals = residuals.at[i - 2].set(res)
+            residuals = residuals.at[idx].set(y[i - 2] + ai * (-(y[i - 1] ** 2)))
+
+            # B(i): x(i) - 1
+            residuals = residuals.at[idx + 1].set(y[i - 1] - 1.0)
 
         return residuals
 
@@ -129,3 +134,8 @@ class ERRINROSNE(AbstractNonlinearEquations):
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
         return self.residual(y, self.args), None
+
+    @property
+    def bounds(self) -> tuple[Array, Array] | None:
+        """No bounds for this problem."""
+        return None

@@ -10,84 +10,32 @@ import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
 
 
-# pytest_generate_tests is now handled in conftest.py
+# Helper function to check if a problem has constraints
+def _has_constraints(problem):
+    return isinstance(
+        problem,
+        (sif2jax.AbstractConstrainedMinimisation, sif2jax.AbstractNonlinearEquations),
+    )
 
 
-def _evaluate_at_other(
-    problem_name, problem_function, pycutest_problem_function, point
-):
-    """Evaluate the problem function at a given point. We don't know if the function is
-    actually defined at that point, or if evaluating it there causes a division by zero,
-    an infinite value or something else. So we handle these cases here.
+from .helpers import _constraints_allclose, _jacobians_allclose, _try_except_evaluate
 
-    These test cases serve to identify issues in the sif2jax problems that cannot be
-    caught by evaluating the problems at a single point.
 
-    To test e.g. the gradient or Hessian, use this pattern:
+def _pycutest_jac_only(pycutest_problem):
+    """Extract just the Jacobian from pycutest cons() function.
 
-    ```python
-    _evaluate_at_other(jax.grad(problem.objective), pycutest_problem.grad, point)
-    ```
+    Returns a function that takes a point and returns only the Jacobian matrix,
+    discarding the constraint values.
     """
-    pycutest_e = None
-    sif2jax_e = None
 
-    try:
-        pycutest_value = pycutest_problem_function(point)
-        pycutest_failed = False
-        if jnp.any(jnp.isnan(pycutest_value)) or jnp.any(jnp.isinf(pycutest_value)):
-            pycutest_failed = True
-            pycutest_e = ValueError("pycutest returned NaN or Inf.")
-            pycutest_value = None
-    except (ZeroDivisionError, ValueError) as e:
-        pycutest_e = e
-        pycutest_value = None
-        pycutest_failed = True
+    def jac_only(point):
+        _, jac = pycutest_problem.cons(point, gradient=True)
+        return jac
 
-    try:
-        sif2jax_value = problem_function(point)
-        sif2jax_failed = False
-        if jnp.any(jnp.isnan(sif2jax_value)) or jnp.any(jnp.isinf(sif2jax_value)):
-            sif2jax_failed = True
-            sif2jax_e = ValueError("sif2jax returned NaN or Inf.")
-            sif2jax_value = None
-    except (ZeroDivisionError, ValueError) as e:
-        sif2jax_e = e
-        sif2jax_value = None
-        sif2jax_failed = True
+    return jac_only
 
-    # Both should either succeed or fail in the same way
-    if pycutest_failed and sif2jax_failed:
-        assert type(pycutest_e) == type(sif2jax_e), (
-            f"Errors differ for problem {problem_name} at point {point}: "
-            f"pycutest_error={type(pycutest_e).__name__}, "
-            f"sif2jax_error={type(sif2jax_e).__name__}"
-        )
-    elif pycutest_failed or sif2jax_failed:
-        msg = (
-            f"One implementation failed at point {point} for problem {problem_name}: "
-            f"pycutest_failed={pycutest_failed}, sif2jax_failed={sif2jax_failed}. "
-        )
-        if pycutest_failed:
-            msg += f"pycutest_error={type(pycutest_e).__name__}"
-            if type(pycutest_e) is ValueError:
-                # Special case: if pycutest fails but sif2jax returns a numerical value,
-                # we assume that we have more robust numerics and that any discrepancy
-                # can hopefully be found with another test. We cannot examine the
-                # Fortran source code from here, so we would not have any information
-                # relevant to fixing this case.
-                assert True
-            else:
-                pytest.fail(msg)
-        else:
-            msg += f"sif2jax_error={type(sif2jax_e).__name__}"
-            pytest.fail(msg)
-    else:
-        assert pycutest_value is not None and sif2jax_value is not None
-        # Absolute tolerance made slightly more permissive here.
-        # TODO: this either needs to be fixed (so we can go back to the default 1e-8)),
-        # or we need to document this as a known issue.
-        assert np.allclose(jnp.asarray(pycutest_value), sif2jax_value, atol=1e-6)
+
+# pytest_generate_tests is now handled in conftest.py
 
 
 @pytest.fixture(scope="class")
@@ -133,7 +81,7 @@ class TestProblem:
         assert np.allclose(pycutest_value, sif2jax_value)
 
     def test_correct_objective_zero_vector(self, problem, pycutest_problem):
-        _evaluate_at_other(
+        _try_except_evaluate(
             problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
@@ -141,7 +89,7 @@ class TestProblem:
         )
 
     def test_correct_objective_ones_vector(self, problem, pycutest_problem):
-        _evaluate_at_other(
+        _try_except_evaluate(
             problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
@@ -154,7 +102,7 @@ class TestProblem:
         assert np.allclose(pycutest_gradient, sif2jax_gradient)
 
     def test_correct_gradient_zero_vector(self, problem, pycutest_problem):
-        _evaluate_at_other(
+        _try_except_evaluate(
             problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
@@ -162,7 +110,7 @@ class TestProblem:
         )
 
     def test_correct_gradient_ones_vector(self, problem, pycutest_problem):
-        _evaluate_at_other(
+        _try_except_evaluate(
             problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
@@ -179,7 +127,7 @@ class TestProblem:
 
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
-            _evaluate_at_other(
+            _try_except_evaluate(
                 problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
@@ -190,7 +138,7 @@ class TestProblem:
 
     def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
-            _evaluate_at_other(
+            _try_except_evaluate(
                 problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
@@ -218,7 +166,7 @@ class TestProblem:
             assert pycutest_inequalities.size == num_inequalities
 
     def test_nontrivial_constraints(self, problem):
-        if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
+        if _has_constraints(problem):
             equalities, inequalities = problem.constraint(problem.y0)
             # Check that the problem is not mistakenly classified as constrained
             # If both elements of the tuple are None, the problem is unconstrained or
@@ -279,23 +227,106 @@ class TestProblem:
             pytest.skip("Problem has no bounds defined.")
 
     def test_correct_constraints_at_start(self, problem, pycutest_problem):
-        if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
+        if _has_constraints(problem):
             assert pycutest_problem.m > 0, "Problem should have constraints."
 
             pycutest_constraints = pycutest_problem.cons(pycutest_problem.x0)
-            pycutest_equalities = pycutest_constraints[pycutest_problem.is_eq_cons]  # pyright: ignore
-            pycutest_equalities = jnp.array(pycutest_equalities).squeeze()
-            pycutest_inequalities = pycutest_constraints[~pycutest_problem.is_eq_cons]  # pyright: ignore
-            pycutest_inequalities = jnp.array(pycutest_inequalities).squeeze()
-
             sif2jax_constraints = problem.constraint(problem.y0)
-            sif2jax_equalities, sif2jax_inequalities = sif2jax_constraints
-            sif2jax_equalities, _ = jfu.ravel_pytree(sif2jax_equalities)
-            sif2jax_inequalities, _ = jfu.ravel_pytree(sif2jax_inequalities)
 
             # Check that the constraints match
-            assert np.allclose(pycutest_equalities, sif2jax_equalities)
-            assert np.allclose(pycutest_inequalities, sif2jax_inequalities)
+            _constraints_allclose(
+                pycutest_constraints,
+                sif2jax_constraints,
+                pycutest_problem.is_eq_cons,
+                atol=1e-6,
+            )
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraints_zero_vector(self, problem, pycutest_problem):
+        if _has_constraints(problem):
+            # Evaluate both functions - error handling is done inside
+            _try_except_evaluate(
+                problem.__class__.__name__,
+                lambda x: problem.constraint(x),
+                pycutest_problem.cons,
+                jnp.zeros_like(problem.y0),
+                allclose_func=lambda p, s, **kwargs: _constraints_allclose(
+                    p, s, pycutest_problem.is_eq_cons, **kwargs
+                ),
+            )
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraints_ones_vector(self, problem, pycutest_problem):
+        if _has_constraints(problem):
+            # Evaluate both functions - error handling is done inside
+            _try_except_evaluate(
+                problem.__class__.__name__,
+                lambda x: problem.constraint(x),
+                pycutest_problem.cons,
+                jnp.ones_like(problem.y0),
+                allclose_func=lambda p, s, **kwargs: _constraints_allclose(
+                    p, s, pycutest_problem.is_eq_cons, **kwargs
+                ),
+            )
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraint_jacobian_at_start(self, problem, pycutest_problem):
+        if _has_constraints(problem):
+            constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
+            if problem.y0.size * constraints.size < 1_000_000:
+                # Evaluate both functions - error handling is done inside
+                _try_except_evaluate(
+                    problem.__class__.__name__,
+                    lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
+                    _pycutest_jac_only(pycutest_problem),
+                    problem.y0,
+                    allclose_func=lambda p, s, **kwargs: _jacobians_allclose(
+                        p, s, pycutest_problem.is_eq_cons, **kwargs
+                    ),
+                )
+            else:
+                pytest.skip("Skip (dense) Jacobian test for large problems.")
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraint_jacobian_zero_vector(self, problem, pycutest_problem):
+        if _has_constraints(problem):
+            constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
+            if problem.y0.size * constraints.size < 1_000_000:
+                # Evaluate both functions - error handling is done inside
+                _try_except_evaluate(
+                    problem.__class__.__name__,
+                    lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
+                    _pycutest_jac_only(pycutest_problem),
+                    jnp.zeros_like(problem.y0),
+                    allclose_func=lambda p, s, **kwargs: _jacobians_allclose(
+                        p, s, pycutest_problem.is_eq_cons, **kwargs
+                    ),
+                )
+            else:
+                pytest.skip("Skip (dense) Jacobian test for large problems.")
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraint_jacobian_ones_vector(self, problem, pycutest_problem):
+        if _has_constraints(problem):
+            constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
+            if problem.y0.size * constraints.size < 1_000_000:
+                # Evaluate both functions - error handling is done inside
+                _try_except_evaluate(
+                    problem.__class__.__name__,
+                    lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
+                    _pycutest_jac_only(pycutest_problem),
+                    jnp.ones_like(problem.y0),
+                    allclose_func=lambda p, s, **kwargs: _jacobians_allclose(
+                        p, s, pycutest_problem.is_eq_cons, **kwargs
+                    ),
+                )
+            else:
+                pytest.skip("Skip (dense) Jacobian test for large problems.")
         else:
             pytest.skip("Problem has no constraints")
 
@@ -347,11 +378,7 @@ class TestProblem:
             raise RuntimeError(f"Vmap failed for {problem.name}") from e
 
     def test_type_annotation_constraint(self, problem):
-        if isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
-            signature = inspect.signature(problem.constraint)
-            # No union types in return type hints of concrete implementations
-            assert str(signature).split("->")[-1].strip().find("|") == -1
-        elif isinstance(problem, sif2jax.AbstractNonlinearEquations):
+        if _has_constraints(problem):
             signature = inspect.signature(problem.constraint)
             # No union types in return type hints of concrete implementations
             assert str(signature).split("->")[-1].strip().find("|") == -1

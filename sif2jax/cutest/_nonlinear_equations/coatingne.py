@@ -319,17 +319,23 @@ class COATINGNE(AbstractNonlinearEquations):
             e2 = self.eta2_data[i]
             e1e2 = e1 * e2
 
-            # F(i) components from the SIF file
+            # F(i) components from GROUP USES in SIF file
+            # Linear part: X1 + E1*X2 + E2*X3 + E1E2*X4
+            # EA(I): X2 * X(I+8)
+            # EB(I): X3 * X(I+M/4+8)
+            # EC(I): X4 * X(I+8) with coefficient ETA2(I)
+            # ED(I): X4 * X(I+M/4+8) with coefficient ETA1(I)
+            # EE(I): X4 * X(I+8) * X(I+M/4+8)
             f_i = (
                 x[0]
                 + e1 * x[1]
                 + e2 * x[2]
                 + e1e2 * x[3]
-                + x[1] * x[i + 8]
-                + x[2] * x[i + m_div_4 + 8]
-                + e2 * x[3] * x[i + 8]
-                + e1 * x[3] * x[i + m_div_4 + 8]
-                + x[3] * x[i + 8] * x[i + m_div_4 + 8]
+                + x[1] * x[i + 8]  # X2 * X(I+8), where I=i+1 in SIF
+                + x[2] * x[i + m_div_4 + 8]  # X3 * X(I+M/4+8)
+                + e2 * x[3] * x[i + 8]  # EC(I) with ETA2 coefficient
+                + e1 * x[3] * x[i + m_div_4 + 8]  # ED(I) with ETA1 coefficient
+                + x[3] * x[i + 8] * x[i + m_div_4 + 8]  # EE(I)
             )
 
             residuals = residuals.at[i].set(f_i - self.y_data[i])
@@ -341,17 +347,18 @@ class COATINGNE(AbstractNonlinearEquations):
             e1e2 = e1 * e2
             i2 = i + m_div_4
 
-            # F(i2) components from the SIF file
+            # F(i2) components from GROUP USES in SIF file
+            # Similar structure to F(i) but with X5-X8 instead of X1-X4
             f_i2 = (
                 x[4]
                 + e1 * x[5]
                 + e2 * x[6]
                 + e1e2 * x[7]
-                + x[5] * x[i + 8]
-                + x[6] * x[i + m_div_4 + 8]
-                + e2 * x[7] * x[i + 8]
-                + e1 * x[7] * x[i + m_div_4 + 8]
-                + x[7] * x[i + 8] * x[i + m_div_4 + 8]
+                + x[5] * x[i + 8]  # EA(I2): X6 * X(I+8)
+                + x[6] * x[i + m_div_4 + 8]  # EB(I2): X7 * X(I+M/4+8)
+                + e2 * x[7] * x[i + 8]  # EC(I2) with ETA2 coefficient
+                + e1 * x[7] * x[i + m_div_4 + 8]  # ED(I2) with ETA1 coefficient
+                + x[7] * x[i + 8] * x[i + m_div_4 + 8]  # EE(I2)
             )
 
             residuals = residuals.at[i2].set(f_i2 - self.y_data[i2])
@@ -360,12 +367,14 @@ class COATINGNE(AbstractNonlinearEquations):
         for i in range(m_div_4):
             i3 = i + 2 * m_div_4
             # For F(127) to F(189), no Y values in SIF file, so RHS = 0
+            # F(I3) = SCALE1 * X(I+8)
             residuals = residuals.at[i3].set(self.scale1 * x[i + 8])
 
         # Process fourth M/4 residuals
         for i in range(m_div_4):
             i4 = i + 3 * m_div_4
             # For F(190) to F(252), no Y values in SIF file, so RHS = 0
+            # F(I4) = SCALE2 * X(I+M/4+8)
             residuals = residuals.at[i4].set(self.scale2 * x[i + m_div_4 + 8])
 
         return residuals

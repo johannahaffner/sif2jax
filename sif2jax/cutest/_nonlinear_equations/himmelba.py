@@ -46,7 +46,9 @@ class HIMMELBA(AbstractNonlinearEquations):
         """
         x1, x2 = y
 
-        g1 = 0.25 * x1 - 5.0
+        # Note: pycutest inverts the scale factor for NLE problems
+        # G1 has SCALE 0.25, so pycutest uses 1/0.25 = 4.0
+        g1 = 4.0 * x1 - 20.0
         g2 = x2 - 6.0
 
         return jnp.array([g1, g2])

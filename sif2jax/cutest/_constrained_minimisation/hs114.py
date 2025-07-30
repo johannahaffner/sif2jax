@@ -28,6 +28,10 @@ class HS114(AbstractConstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
+    n: int = 10  # Number of variables
+    n_equality_constraints: int = 3  # 3 equality constraints
+    n_inequality_constraints: int = 8  # 8 inequality constraints
+
     def objective(self, y, args):
         x1, x2, x3, x4, x5, x6, x7, x8, x9, x10 = y
         return 5.04 * x1 + 0.035 * x2 + 10 * x3 + 3.36 * x5 - 0.063 * x4 * x7

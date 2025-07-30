@@ -3,6 +3,20 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made:
+# 1. Initial implementation based on problem description
+# 2. Fixed sin(0.25) coefficient from 2 to 2*sin(0.25)
+# 3. Fixed constant signs based on SIF file
+# 4. Negated all equality constraints to match pycutest sign convention
+# 5. Simplified double negations
+# Suspected issues:
+# - Sign conventions differ between pycutest and our implementation
+# - Jacobian signs for x8 and x9 derivatives don't match (difference of 100.352 = 2*a)
+# - Constraint values pass some tests but fail at ones vector
+# Resources needed:
+# - Clarification on pycutest sign conventions for this specific problem
+# - Access to pycutest source code or detailed documentation for HS109
 class HS109(AbstractConstrainedMinimisation):
     """Problem 109 from the Hock-Schittkowski test collection.
 
@@ -74,53 +88,59 @@ class HS109(AbstractConstrainedMinimisation):
         ineq4 = 2250000 - x2**2 - x9**2
 
         # Six equality constraints with trigonometric functions
+        # Note: c = cos(0.25) ≈ 0.9689124217106447
+        # From SIF file: 2B = 2*sin(0.25) ≈ 0.49740395925452294
+        b = jnp.sin(0.25)
+
+        # Equality constraints
+        # Simplified after negation
         eq1 = (
-            x5 * x6 * jnp.sin(-x3 - 0.25)
-            + x5 * x7 * jnp.sin(-x4 - 0.25)
-            + 2 * x5**2
-            - a * x1
+            a * x1
+            - x5 * x6 * jnp.sin(-x3 - 0.25)
+            - x5 * x7 * jnp.sin(-x4 - 0.25)
+            - 2 * b * x5**2
             + 400 * a
         )
 
         eq2 = (
-            x5 * x6 * jnp.sin(x3 - 0.25)
-            + x6 * x7 * jnp.sin(x3 - x4 - 0.25)
-            + 2 * x6**2
-            - a * x2
+            a * x2
+            - x5 * x6 * jnp.sin(x3 - 0.25)
+            - x6 * x7 * jnp.sin(x3 - x4 - 0.25)
+            - 2 * b * x6**2
             + 400 * a
         )
 
         eq3 = (
-            x5 * x7 * jnp.sin(x4 - 0.25)
-            + x6 * x7 * jnp.sin(x4 - x3 - 0.25)
-            + 2 * x7**2
+            -x5 * x7 * jnp.sin(x4 - 0.25)
+            - x6 * x7 * jnp.sin(x4 - x3 - 0.25)
+            - 2 * b * x7**2
             + 881.779 * a
         )
 
         eq4 = (
-            a * x8
-            + x5 * x6 * jnp.cos(-x3 - 0.25)
-            + x5 * x7 * jnp.cos(-x4 - 0.25)
+            -a * x8
+            - x5 * x6 * jnp.cos(-x3 - 0.25)
+            - x5 * x7 * jnp.cos(-x4 - 0.25)
+            + 2 * c * x5**2
+            - 0.7533e-3 * a * x5**2
             - 200 * a
-            - 2 * c * x5**2
-            + 0.7533e-3 * a * x5**2
         )
 
         eq5 = (
-            a * x9
-            + x5 * x6 * jnp.cos(x3 - 0.25)
-            + x6 * x7 * jnp.cos(x3 - x4 - 0.25)
-            - 2 * c * x6**2
-            + 0.7533e-3 * a * x6**2
+            -a * x9
+            - x5 * x6 * jnp.cos(x3 - 0.25)
+            - x6 * x7 * jnp.cos(x3 - x4 - 0.25)
+            + 2 * c * x6**2
+            - 0.7533e-3 * a * x6**2
             - 200 * a
         )
 
-        eq6 = -(
-            x5 * x7 * jnp.cos(x4 - 0.25)
-            + x6 * x7 * jnp.cos(x4 - x3 - 0.25)
-            - 2 * c * x7**2
-            + 22.938 * a
-            + 0.7533e-3 * a * x7**2
+        eq6 = (
+            -x5 * x7 * jnp.cos(x4 - 0.25)
+            - x6 * x7 * jnp.cos(x4 - x3 - 0.25)
+            + 2 * c * x7**2
+            - 0.7533e-3 * a * x7**2
+            - 22.938 * a
         )
 
         inequality_constraints = jnp.array([ineq1, ineq2, ineq3, ineq4])

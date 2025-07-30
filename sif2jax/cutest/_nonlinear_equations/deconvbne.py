@@ -117,13 +117,12 @@ class DECONVBNE(AbstractNonlinearEquations):
         for k in range(self.lgtr):
             r_k = 0.0
             for i in range(self.lgsg):
-                k_minus_i_plus_1 = k - i  # This gives index into c_full
-                if k_minus_i_plus_1 >= 0:
-                    # The element PROD(K,I) computes sg[i] * c[k-i+1] when idx > 0
-                    # idx = k-i+1 in 1-based indexing, but we need 0-based
-                    r_k += (
-                        sg[i] * c_full[k_minus_i_plus_1 + 11]
-                    )  # +11 to account for C(-11) offset
+                # IDX = K-I+1 in 1-based indexing
+                idx = (k + 1) - (i + 1) + 1  # Convert to 1-based, compute IDX
+                if idx > 0:
+                    # The element PROD(K,I) computes sg[i] * c[idx] when IDX > 0
+                    # C(idx) is at position idx + 11 in c_full (C(-11) to C(0))
+                    r_k += sg[i] * c_full[idx + 11]
             residuals = residuals.at[k].set(r_k - self.tr_data[k])
 
         return residuals
@@ -138,11 +137,13 @@ class DECONVBNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution is not provided in the SIF file
         return self.starting_point()
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

@@ -31,6 +31,11 @@ class MUONSINE(AbstractNonlinearEquations):
 
     def _get_data(self) -> tuple[Array, Array]:
         """Generate the data points (x_i, y_i)."""
+        # TODO: Human review needed
+        # Attempts made: Tried generating Y values with sin(4*x)
+        # Suspected issues: Y values in SIF are hardcoded, not generated
+        # Resources needed: Extract all 512 X and Y values from SIF file
+
         # Generate x values from 0 to 2*pi
         x = jnp.linspace(0.0, 2 * jnp.pi, self.m, endpoint=False, dtype=jnp.float64)
 
@@ -68,11 +73,13 @@ class MUONSINE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # The true value should be b = 4.0 to match the data generation
         return jnp.array([4.0], dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

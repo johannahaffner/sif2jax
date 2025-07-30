@@ -3,6 +3,8 @@ import jax.numpy as jnp
 from ..._problem import AbstractBoundedMinimisation
 
 
+# TODO(claude): move to folder with bounded minimisation problems. Create new subclass
+# AbstractBoundedQuadraticProblem in sif2jax/_problem.py. Then test, commit and push.
 class QUDLIN(AbstractBoundedMinimisation):
     """A simple quadratic programming problem.
 

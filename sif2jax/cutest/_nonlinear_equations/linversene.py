@@ -98,7 +98,10 @@ class LINVERSENE(AbstractNonlinearEquations):
             - 1.0
         )
 
-        # Continue for remaining groups...
+        # TODO: Human review needed
+        # Attempts made: Partial implementation exists but is incomplete
+        # Suspected issues: Complex group structure with many cases
+        # Resources needed: Complete implementation of all O(i,j) groups
         # This is a simplified implementation focusing on the structure
         # Full implementation would require all group contributions
 
@@ -114,12 +117,14 @@ class LINVERSENE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Not explicitly given
         num_vars = 2 * self.n - 1
         return jnp.zeros(num_vars, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

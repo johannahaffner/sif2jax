@@ -4,6 +4,9 @@ from jax import Array
 from ..._problem import AbstractNonlinearEquations
 
 
+# TODO: Human review needed - Jacobian mismatch with pycutest
+# The last row of the Jacobian (derivatives of product term) differs
+# between automatic differentiation and pycutest's approximation
 class BROWNALE(AbstractNonlinearEquations):
     """
     Brown almost linear least squares problem.
@@ -38,14 +41,18 @@ class BROWNALE(AbstractNonlinearEquations):
         n = self.n
         n_plus_1 = float(n + 1)
 
-        # Vectorized computation for first n-1 residuals
-        # G(i) = sum(y[j] for j != i) + 2*y[i] - (n+1)
-        # This is equivalent to sum(y) + y[i] - (n+1)
-        sum_y = jnp.sum(y)
-        residuals_n_minus_1 = sum_y + y[:-1] - n_plus_1
+        # The problem definition from More et al.:
+        # For i = 1 to n-1: f_i(x) = x_i + sum(x_j) - (n+1)
+        # For i = n: f_n(x) = prod(x_j) - 1
 
-        # For the last group G(n), we have a product of all variables minus 1
-        # G(n) = prod(y[j] for j in range(n)) - 1
+        # Note: The formulation actually uses x_i + sum of ALL x_j (including x_i)
+        # So f_i = x_i + sum(x) - (n+1) for i = 1 to n-1
+        sum_y = jnp.sum(y)
+
+        # First n-1 residuals
+        residuals_n_minus_1 = y[:-1] + sum_y - n_plus_1
+
+        # For the last residual, we have a product of all variables minus 1
         res_n = jnp.prod(y) - 1.0
 
         # Concatenate all residuals

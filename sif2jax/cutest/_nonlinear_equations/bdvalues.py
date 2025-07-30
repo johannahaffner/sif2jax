@@ -53,17 +53,16 @@ class BDVALUES(AbstractNonlinearEquations):
         h2 = h * h
         halfh2 = 0.5 * h2
 
-        # Vectorized computation of interior residuals for i = 2 to NDP-1
-        # G(i) = -x(i-1) + 2*x(i) - x(i+1) + halfh2 * E(i)
-        # where E(i) = (x(i) + (i+1)*h)**3
-
-        # Basic finite difference part
+        # Vectorized computation of interior residuals for i = 1 to NDP-2
+        # Basic finite difference part: -x(i-1) + 2*x(i) - x(i+1)
         residuals = -x[:-2] + 2.0 * x[1:-1] - x[2:]
 
         # Nonlinear part
-        # For element E(i), V = x(i) and B = (i+1)*h
+        # For constraint i (1-indexed), the element parameter B = i*h + 1
+        # The element computes (V + B)**3 where V is x(i)
         i_vals = jnp.arange(1, ndp - 1, dtype=jnp.float64)
-        b_vals = (i_vals + 1.0) * h
+        ih_vals = i_vals * h  # IH = i*h
+        b_vals = ih_vals + 1.0  # B = IH + 1 (from line 107 in SIF)
         vplusb = x[1:-1] + b_vals
         residuals += halfh2 * (vplusb**3)
 

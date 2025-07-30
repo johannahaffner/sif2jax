@@ -74,11 +74,12 @@ class MOREBVNE(AbstractNonlinearEquations):
             res = -y[i - 2] + 2.0 * y[i - 1] - y[i] + halfh2 * ei
             residuals = residuals.at[i - 1].set(res)
 
-        # G(N): -X(N-1) + 2*X(N) + halfh2 * E(N)
+        # G(N): X(N-1) + halfh2 * E(N)
+        # Note: This is a boundary condition, so no X(N+1) term and adjusted coefficients
         # E(N) = (X(N) + (N*h + 1))^3
         ih_plus_1 = n * h + 1.0
         en = self._wcube_element(y[n - 1], ih_plus_1)
-        resn = -y[n - 2] + 2.0 * y[n - 1] + halfh2 * en
+        resn = y[n - 2] + halfh2 * en
         residuals = residuals.at[n - 1].set(resn)
 
         return residuals

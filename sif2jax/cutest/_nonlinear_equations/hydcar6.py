@@ -6,6 +6,11 @@ from ..._problem import AbstractNonlinearEquations
 class HYDCAR6(AbstractNonlinearEquations):
     """The hydrocarbon-6 problem by Fletcher.
 
+    TODO: Human review needed
+    Attempts made: Scale factor inversion for NLE
+    Suspected issues: Complex scaling interactions, may need element-wise scaling
+    Resources needed: Detailed understanding of HYDCAR scaling in pycutest
+
     Source: Problem 2a in
     J.J. More',"A collection of nonlinear model problems"
     Proceedings of the AMS-SIAM Summer Seminar on the Computational
@@ -90,7 +95,7 @@ class HYDCAR6(AbstractNonlinearEquations):
                 * INVPI[0]
                 * jnp.exp(self.A[j] + self.B_param[j] / (T[0] + self.C[j]))
             )
-            residuals.append(eq * 100.0)  # Scaled by 100
+            residuals.append(eq * 0.01)  # pycutest inverts scale 100
 
         # Equations 2.2-(I,J) for I=1..4, J=1,2,3
         for i in range(1, self.N - 1):
@@ -119,7 +124,7 @@ class HYDCAR6(AbstractNonlinearEquations):
                     * INVPI[i]
                     * jnp.exp(self.A[j] + self.B_param[j] / (T[i] + self.C[j]))
                 )
-                residuals.append(eq * 100.0)  # Scaled by 100
+                residuals.append(eq * 0.01)  # pycutest inverts scale 100
 
         # Equations 2.3-(J) for J=1,2,3
         for j in range(self.M):
@@ -249,7 +254,7 @@ class HYDCAR6(AbstractNonlinearEquations):
                 term = -1.0 * X[i, j] * (p2 + V[i]) * poly
                 eq += term
 
-            residuals.append(eq * 1e5)  # Scaled by 1e5
+            residuals.append(eq * 1e-5)  # pycutest inverts scale 1e5
 
         return jnp.array(residuals)
 

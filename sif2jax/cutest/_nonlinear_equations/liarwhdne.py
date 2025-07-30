@@ -42,11 +42,13 @@ class LIARWHDNE(AbstractNonlinearEquations):
         """
         x = y
         residuals = jnp.zeros(2 * self.n, dtype=jnp.float64)
-        roootp25 = jnp.sqrt(0.25)  # sqrt(0.25) = 0.5
+        # Note: Despite the SIF file showing ROOOTP25 scale factor,
+        # pycutest appears to use a factor of 2.0 for NE variants
+        scale_factor = 2.0
 
         for i in range(self.n):
-            # A(i): sqrt(0.25) * (x(i)^2 - x(1))
-            residuals = residuals.at[2 * i].set(roootp25 * (x[i] * x[i] - x[0]))
+            # A(i): scale_factor * (x(i)^2 - x(1))
+            residuals = residuals.at[2 * i].set(scale_factor * (x[i] * x[i] - x[0]))
 
             # B(i): x(i) - 1.0
             residuals = residuals.at[2 * i + 1].set(x[i] - 1.0)

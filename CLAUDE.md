@@ -5,10 +5,11 @@ Convert CUTEST problems to JAX implementations that match Fortran precision and 
 
 ## Quick Reference
 ```bash
-bash run_tests.sh --test-case "PROBLEM1,PROBLEM2"  # Test specific problems
+bash run_tests.sh --test-case "PROBLEM1,PROBLEM2" --local-tests  # Test specific problems
 bash run_tests.sh -k test_objective                 # Test specific aspect
 ruff format . && ruff check .                       # Format and lint
 ```
+The local tests include tests for re-compilation that are not part of the CI.
 
 ## Workflow: Find → Implement → Test → Fix → Commit → Repeat
 
@@ -16,8 +17,8 @@ ruff format . && ruff check .                       # Format and lint
 Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT imported in `sif2jax/__init__.py`
 
 ### 2. Implementation Priority
-1. **AMPL**: `https://github.com/ampl/global-optimization/tree/master/cute` (lowercase.mod files)
-2. **SIF**: For constants, bounds, starting points
+1. **SIF Files**: `archive/mastsif/` folder - Original SIF problem definitions (PRIMARY SOURCE)
+2. **AMPL**: `https://github.com/ampl/global-optimization/tree/master/cute` (lowercase.mod files)
 3. **extra_info/**: Papers, documentation, screenshots
 4. **References**: From SIF file headers
 
@@ -44,6 +45,8 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
   # Suspected issues: [your analysis]
   # Resources needed: [what would help]
   ```
+  If a problem is flagged for human review, its imports should be commented out. 
+  Verify that it cannot be run anymore by trying to run the tests for it, these should then fail during collection with a clear error message.
 
 ### 5. Commit Process
 - ✓ All tests pass

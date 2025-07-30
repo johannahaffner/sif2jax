@@ -3,6 +3,18 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made:
+# 1. Fixed c5 constraint to remove duplicated term
+# 2. Fixed c6 constraint ordering
+# 3. Added conditional logic for c5 based on n >= 5
+# Suspected issues:
+# - Jacobian mismatch at element 39999 (difference of 8.0)
+# - Complex conditional indexing with jnp.where may not differentiate correctly
+# - c4 constraint uses conditional variables that may affect autodiff
+# Resources needed:
+# - Debug why Jacobian has difference of 8.0 at last column
+# - Verify conditional constraints with jnp.where work correctly with JAX autodiff
 class LUKVLI9(AbstractConstrainedMinimisation):
     """LUKVLI9 - Modified Brown function with simplified seven-diagonal inequality
     constraints.
@@ -155,25 +167,38 @@ class LUKVLI9(AbstractConstrainedMinimisation):
         )
 
         # c_5: Another complex constraint
-        y_n_minus_4 = jnp.where(n > 4, y[n - 4], 0.0)
-        c5 = (
-            8 * y[n - 2] * (y[n - 2] ** 2 - y[n - 3])
-            - 2 * (1 - y[n - 2])
-            + 4 * (y[n - 2] - y[n - 1] ** 2)
-            + y[n - 3] ** 2
-            - y_n_minus_4
-            + y[n - 1]
-            + (y[n - 3] ** 2 - y_n_minus_4)
-        )
+        # Fixed based on SIF file analysis for LUKVLE9
+        if n >= 5:
+            c5 = (
+                8 * y[n - 2] * (y[n - 2] ** 2 - y[n - 3])
+                - 2 * (1 - y[n - 2])
+                + 4 * (y[n - 2] - y[n - 1] ** 2)
+                + y[n - 3] ** 2
+                - y[n - 4]
+                + y[n - 1]
+                + y[n - 4] ** 2
+                - y[n - 5]
+            )
+        else:
+            c5 = (
+                8 * y[n - 2] * (y[n - 2] ** 2 - y[n - 3])
+                - 2 * (1 - y[n - 2])
+                + 4 * (y[n - 2] - y[n - 1] ** 2)
+                + y[n - 3] ** 2
+                - y[n - 4]
+                + y[n - 1]
+                + y[n - 4] ** 2
+            )
 
         # c_6: Final constraint
+        # Fixed based on SIF file analysis
         c6 = (
             8 * y[n - 1] * (y[n - 1] ** 2 - y[n - 2])
             + 2 * y[n - 1]
             + y[n - 2] ** 2
             + y[n - 3] ** 2
-            - y[n - 3]
             - y[n - 4]
+            - y[n - 3]
         )
 
         # Stack all constraints

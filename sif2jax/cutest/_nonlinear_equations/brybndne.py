@@ -21,6 +21,9 @@ class BRYBNDNE(AbstractNonlinearEquations):
               Nick Gould (nonlinear equation version), Jan 2019
 
     classification NOR2-AN-V-V
+
+    TODO: Human review needed - constraint values don't match pycutest
+    Same systematic differences as BROYDNBD. Implementation follows SIF file.
     """
 
     n: int = 5000
@@ -55,28 +58,32 @@ class BRYBNDNE(AbstractNonlinearEquations):
 
             # Nonlinear part: kappa2 * (y[i]^3 or y[i]^2 depending on position)
             # The pattern from the SIF file shows:
-            # - For i < lb: use CB (cubic) for y[i]
-            # - For lb <= i < n-ub: use SQ (square) for y[i]
-            # - For i >= n-ub: use CB (cubic) for y[i]
+            # - For i < lb: use Q(i) = CB (cubic) for y[i]
+            # - For lb <= i < n-ub: use E(i) = SQ (square) for y[i]
+            # - For i >= n-ub: use Q(i) = CB (cubic) for y[i]
             use_cubic = jnp.logical_or(i < lb, i >= n - ub)
             nonlinear_part = jnp.where(
                 use_cubic, kappa2 * y[i] ** 3, kappa2 * y[i] ** 2
             )
             res_i += nonlinear_part
 
-            # Add contributions from other variables
+            # Add contributions from other variables based on SIF GROUP USES
             # Lower band contributions
-            # Create a fixed set of offsets relative to i
             j_offsets_lower = jnp.arange(-lb, 0)  # [-lb, -lb+1, ..., -1]
             j_lower_indices = i + j_offsets_lower
             # Mask for valid indices (j >= 0 and j < i)
             lower_mask = jnp.logical_and(j_lower_indices >= 0, j_lower_indices < i)
 
-            # Determine which power to use based on position
-            use_square_lower = jnp.logical_or(i < lb, i >= n - ub)
-            # Compute contributions for all possible j values
+            # Determine which element type to use for lower band
+            # Upper left corner (i < lb): use E(j) = SQ for all j < i
+            # Middle part (lb <= i < n-ub): use Q(j) = CB for j in [i-lb, i-1]
+            # Lower right (i >= n-ub): use E(j) = SQ for j in [i-lb, i-1]
             j_lower_safe = jnp.clip(j_lower_indices, 0, n - 1)
             y_lower = y[j_lower_safe]
+
+            # For upper left and lower right corners, use SQ (square)
+            # For middle part, use CB (cubic)
+            use_square_lower = jnp.logical_or(i < lb, i >= n - ub)
             lower_contrib = jnp.where(
                 use_square_lower, kappa3 * y_lower**2, kappa3 * y_lower**3
             )
@@ -84,13 +91,12 @@ class BRYBNDNE(AbstractNonlinearEquations):
             res_i -= jnp.sum(lower_contrib * lower_mask.astype(y.dtype))
 
             # Upper band contributions
-            # Create a fixed set of offsets relative to i
             j_offsets_upper = jnp.arange(1, ub + 1)  # [1, 2, ..., ub]
             j_upper_indices = i + j_offsets_upper
             # Mask for valid indices (j < n)
             upper_mask = j_upper_indices < n
 
-            # Always use SQ for upper band
+            # For all regions, upper band uses E(j) = SQ
             j_upper_safe = jnp.clip(j_upper_indices, 0, n - 1)
             y_upper = y[j_upper_safe]
             upper_contrib = kappa3 * y_upper**2

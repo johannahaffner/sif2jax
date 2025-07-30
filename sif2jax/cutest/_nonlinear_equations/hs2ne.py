@@ -41,7 +41,8 @@ class HS2NE(AbstractNonlinearEquations):
 
         # G1: 0.1 * (x2 - x1^2) = 0
         # Element E1: -x1^2, scale 0.1
-        residuals = residuals.at[0].set(0.1 * (x2 - x1 * x1))
+        # Note: pycutest inverts the scale factor for NLE problems
+        residuals = residuals.at[0].set(10.0 * (x2 - x1 * x1))
 
         # G2: x1 - 1.0 = 0
         residuals = residuals.at[1].set(x1 - 1.0)
@@ -58,12 +59,14 @@ class HS2NE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution would be x1=1, x2=1, but with bound x2>=1.5
         # the problem may have a different solution
         return self.starting_point()
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

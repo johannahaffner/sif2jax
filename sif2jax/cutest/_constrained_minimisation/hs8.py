@@ -60,4 +60,4 @@ class HS8(AbstractConstrainedMinimisation):
         # Equality constraints: x₁² + x₂² - 25 = 0, x₁x₂ - 9 = 0
         c1 = x1**2 + x2**2 - 25
         c2 = x1 * x2 - 9
-        return (c1, c2), None
+        return jnp.array([c1, c2]), None

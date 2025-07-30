@@ -54,8 +54,8 @@ class MODBEALENE(AbstractNonlinearEquations):
 
         residuals = []
 
-        # Process groups for i = 1 to N/2
-        for i in range(1, n_half + 1):
+        # Process groups for i = 1 to N/2-1 (BA, BB, BC, L interleaved)
+        for i in range(1, n_half):
             # Index calculations
             j = 2 * (i - 1)  # 0-based indexing for array access
 
@@ -74,15 +74,26 @@ class MODBEALENE(AbstractNonlinearEquations):
             ce = self._prodb_element(y[j], y[j + 1], 3.0)
             residuals.append(ce - 2.625)
 
-        # Process linear groups L(i) for i = 1 to N/2-1
-        for i in range(1, n_half):
-            # Index calculations
-            j = 2 * (i - 1)  # 0-based indexing
-
             # L(i) = ralphinv * (6.0 * X(j+1) - X(j+2))
             # Note: j+1 in SIF is j+1 in 0-based, j+2 in SIF is j+2 in 0-based
             l_val = ralphinv * (6.0 * y[j + 1] - y[j + 2])
             residuals.append(l_val)
+
+        # Process final group i = N/2 (BA, BB, BC only, no L)
+        i = n_half
+        j = 2 * (i - 1)
+
+        # BA(N/2)
+        ae = self._prodb_element(y[j], y[j + 1], 1.0)
+        residuals.append(ae - 1.5)
+
+        # BB(N/2)
+        be = self._prodb_element(y[j], y[j + 1], 2.0)
+        residuals.append(be - 2.25)
+
+        # BC(N/2)
+        ce = self._prodb_element(y[j], y[j + 1], 3.0)
+        residuals.append(ce - 2.625)
 
         return jnp.array(residuals, dtype=jnp.float64)
 

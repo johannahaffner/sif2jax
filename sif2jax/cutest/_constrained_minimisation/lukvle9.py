@@ -3,6 +3,18 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made:
+# 1. Fixed c5 constraint to match SIF file formulation
+# 2. Fixed c6 constraint to match SIF file formulation
+# 3. Traced through SIF file element definitions
+# Suspected issues:
+# - Jacobian mismatch at element 39999 (difference of 8.0)
+# - Complex conditional indexing with jnp.where may not differentiate correctly
+# - c4 constraint uses X(N-5) which requires n > 5 check
+# Resources needed:
+# - Debug why Jacobian has difference of 8.0 at last column of c4
+# - Verify conditional constraints are handled correctly in JAX autodiff
 class LUKVLE9(AbstractConstrainedMinimisation):
     """LUKVLE9 - Modified Brown function with simplified seven-diagonal constraints.
 
@@ -149,26 +161,42 @@ class LUKVLE9(AbstractConstrainedMinimisation):
             0.0,
         )
 
-        # c_5: Another complex constraint
-        y_n_minus_4 = jnp.where(n > 4, y[n - 4], 0.0)
-        c5 = (
-            8 * y[n - 2] * (y[n - 2] ** 2 - y[n - 3])
-            - 2 * (1 - y[n - 2])
-            + 4 * (y[n - 2] - y[n - 1] ** 2)
-            + y[n - 3] ** 2
-            - y_n_minus_4
-            + y[n - 1]
-            + (y[n - 3] ** 2 - y_n_minus_4)
-        )
+        # c_5: From SIF file
+        # Linear: 6*X(N-1) - X(N-3) + X(N) - X(N-4) with constant 2
+        # Elements: C1(5)=8*CUBEP(X(N-1),X(N-2)), C2(5)=-4*SQR(X(N)),
+        #          C3(5)=1*SQR(X(N-2)), C4(5)=1*SQR(X(N-3))
+        if n >= 5:
+            c5 = (
+                8 * y[n - 2] * (y[n - 2] ** 2 - y[n - 3])  # 8*CUBEP(X(N-1),X(N-2))
+                - 2 * (1 - y[n - 2])  # Expanding 6*X(N-1) + 2 = 8*X(N-1) - 2*(1-X(N-1))
+                + 4 * (y[n - 2] - y[n - 1] ** 2)  # Expanding 8*X(N-1) - 4*X(N)^2
+                + y[n - 3] ** 2  # SQR(X(N-2))
+                - y[n - 4]  # -X(N-3)
+                + y[n - 1]  # X(N)
+                + y[n - 4] ** 2  # SQR(X(N-3))
+                - y[n - 5]  # -X(N-4)
+            )
+        else:
+            c5 = (
+                8 * y[n - 2] * (y[n - 2] ** 2 - y[n - 3])
+                - 2 * (1 - y[n - 2])
+                + 4 * (y[n - 2] - y[n - 1] ** 2)
+                + y[n - 3] ** 2
+                - y[n - 4]
+                + y[n - 1]
+                + y[n - 4] ** 2
+            )
 
         # c_6: Final constraint
+        # From SIF: 2*X(N) - X(N-3) - X(N-2)
+        # Elements: C1(6)=8*CUBEP(X(N),X(N-1)), C2(6)=1*SQR(X(N-1)), C3(6)=1*SQR(X(N-2))
         c6 = (
-            8 * y[n - 1] * (y[n - 1] ** 2 - y[n - 2])
-            + 2 * y[n - 1]
-            + y[n - 2] ** 2
-            + y[n - 3] ** 2
-            - y[n - 3]
-            - y[n - 4]
+            8 * y[n - 1] * (y[n - 1] ** 2 - y[n - 2])  # 8*CUBEP(X(N),X(N-1))
+            + 2 * y[n - 1]  # 2*X(N)
+            + y[n - 2] ** 2  # SQR(X(N-1))
+            + y[n - 3] ** 2  # SQR(X(N-2))
+            - y[n - 4]  # -X(N-3)
+            - y[n - 3]  # -X(N-2)
         )
 
         # Stack all constraints

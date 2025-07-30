@@ -114,112 +114,84 @@ class SANTA(AbstractNonlinearEquations):
         """Compute residuals for the spherical law of cosines constraints."""
         phi0, lam0, phi12, lam12, lam1, radius, distances = args
 
-        # Extract variables
+        # Extract variables - note the structure:
+        # y[0] = PHI1 (location 1 has only phi, no lambda since lambda1 is fixed)
+        # y[1] = PHI2, y[2] = LAM2 (location 2)
+        # y[3] = PHI3, y[4] = LAM3 (location 3)
+        # ...
+        # y[19] = PHI11, y[20] = LAM11 (location 11)
         phi1 = y[0]
+        # phi[i] = phi_{i+2} for i=0..9
         phi = jnp.array(
             [y[1], y[3], y[5], y[7], y[9], y[11], y[13], y[15], y[17], y[19]]
         )
+        # lam[i] = lam_{i+2} for i=0..9
         lam = jnp.array(
             [y[2], y[4], y[6], y[8], y[10], y[12], y[14], y[16], y[18], y[20]]
         )
 
+        # Helper function to compute spherical law of cosines residual
+        def spherical_residual(phi_i, lam_i, phi_j, lam_j, dist_ij):
+            d_rad = dist_ij / radius
+            cos_d = jnp.cos(d_rad)
+            return (
+                jnp.sin(phi_i) * jnp.sin(phi_j)
+                + jnp.cos(phi_i) * jnp.cos(phi_j) * jnp.cos(lam_j - lam_i)
+                - cos_d
+            )
+
         residuals = []
 
         # Constraint R0,1: between North Pole and location 1
-        d_rad = distances[(0, 1)] / radius
-        cos_d = jnp.cos(d_rad)
-        res = (
-            jnp.sin(phi0) * jnp.sin(phi1)
-            + jnp.cos(phi0) * jnp.cos(phi1) * jnp.cos(lam1 - lam0)
-            - cos_d
-        )
+        res = spherical_residual(phi0, lam0, phi1, lam1, distances[(0, 1)])
         residuals.append(res)
 
         # Constraint R0,2: between North Pole and location 2
-        d_rad = distances[(0, 2)] / radius
-        cos_d = jnp.cos(d_rad)
-        res = (
-            jnp.sin(phi0) * jnp.sin(phi[0])
-            + jnp.cos(phi0) * jnp.cos(phi[0]) * jnp.cos(lam[0] - lam0)
-            - cos_d
-        )
+        res = spherical_residual(phi0, lam0, phi[0], lam[0], distances[(0, 2)])
         residuals.append(res)
 
         # Constraint R1,2: between location 1 and location 2
-        d_rad = distances[(1, 2)] / radius
-        cos_d = jnp.cos(d_rad)
-        res = (
-            jnp.sin(phi1) * jnp.sin(phi[0])
-            + jnp.cos(phi1) * jnp.cos(phi[0]) * jnp.cos(lam[0] - lam1)
-            - cos_d
-        )
+        res = spherical_residual(phi1, lam1, phi[0], lam[0], distances[(1, 2)])
         residuals.append(res)
 
         # Constraint R1,3: between location 1 and location 3
-        d_rad = distances[(1, 3)] / radius
-        cos_d = jnp.cos(d_rad)
-        res = (
-            jnp.sin(phi1) * jnp.sin(phi[1])
-            + jnp.cos(phi1) * jnp.cos(phi[1]) * jnp.cos(lam[1] - lam1)
-            - cos_d
-        )
+        res = spherical_residual(phi1, lam1, phi[1], lam[1], distances[(1, 3)])
         residuals.append(res)
 
         # Constraint R2,3: between location 2 and location 3
-        d_rad = distances[(2, 3)] / radius
-        cos_d = jnp.cos(d_rad)
-        res = (
-            jnp.sin(phi[0]) * jnp.sin(phi[1])
-            + jnp.cos(phi[0]) * jnp.cos(phi[1]) * jnp.cos(lam[1] - lam[0])
-            - cos_d
-        )
+        res = spherical_residual(phi[0], lam[0], phi[1], lam[1], distances[(2, 3)])
         residuals.append(res)
 
-        # Constraints for locations 4-11
+        # Constraints for other edges - following the pattern in the SIF file
+        # Note: phi[i-2] corresponds to location i, lam[i-2] corresponds to location i
         for i in range(2, 10):
             # Constraint R(i,i+2)
             if (i, i + 2) in distances:
-                d_rad = distances[(i, i + 2)] / radius
-                cos_d = jnp.cos(d_rad)
-                res = (
-                    jnp.sin(phi[i - 1]) * jnp.sin(phi[i + 1])
-                    + jnp.cos(phi[i - 1])
-                    * jnp.cos(phi[i + 1])
-                    * jnp.cos(lam[i + 1] - lam[i - 1])
-                    - cos_d
+                phi_i = phi[i - 2]
+                lam_i = lam[i - 2]
+                phi_j = phi[i]  # i+2-2 = i
+                lam_j = lam[i]
+                res = spherical_residual(
+                    phi_i, lam_i, phi_j, lam_j, distances[(i, i + 2)]
                 )
                 residuals.append(res)
 
             # Constraint R(i+1,i+2)
             if (i + 1, i + 2) in distances:
-                d_rad = distances[(i + 1, i + 2)] / radius
-                cos_d = jnp.cos(d_rad)
-                res = (
-                    jnp.sin(phi[i]) * jnp.sin(phi[i + 1])
-                    + jnp.cos(phi[i])
-                    * jnp.cos(phi[i + 1])
-                    * jnp.cos(lam[i + 1] - lam[i])
-                    - cos_d
+                phi_i = phi[i - 1]  # (i+1)-2 = i-1
+                lam_i = lam[i - 1]
+                phi_j = phi[i]  # (i+2)-2 = i
+                lam_j = lam[i]
+                res = spherical_residual(
+                    phi_i, lam_i, phi_j, lam_j, distances[(i + 1, i + 2)]
                 )
                 residuals.append(res)
 
         # Constraints R10,12 and R11,12: connections to final location
-        d_rad = distances[(10, 12)] / radius
-        cos_d = jnp.cos(d_rad)
-        res = (
-            jnp.sin(phi[8]) * jnp.sin(phi12)
-            + jnp.cos(phi[8]) * jnp.cos(phi12) * jnp.cos(lam12 - lam[8])
-            - cos_d
-        )
+        res = spherical_residual(phi[8], lam[8], phi12, lam12, distances[(10, 12)])
         residuals.append(res)
 
-        d_rad = distances[(11, 12)] / radius
-        cos_d = jnp.cos(d_rad)
-        res = (
-            jnp.sin(phi[9]) * jnp.sin(phi12)
-            + jnp.cos(phi[9]) * jnp.cos(phi12) * jnp.cos(lam12 - lam[9])
-            - cos_d
-        )
+        res = spherical_residual(phi[9], lam[9], phi12, lam12, distances[(11, 12)])
         residuals.append(res)
 
         return jnp.array(residuals)

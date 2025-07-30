@@ -6,7 +6,7 @@ Classification: NLR2-MN-20-14
 
 TODO: Human review needed
 Attempts made: Sign convention issues with mixed constraint types
-Suspected issues: This is a constrained optimization problem with mixed 
+Suspected issues: This is a constrained optimization problem with mixed
 equality/inequality constraints, not a pure nonlinear equations problem
 Resources needed: Review constraint formulation and classification
 """

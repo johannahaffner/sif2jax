@@ -28,11 +28,11 @@ class ORTHREGA(AbstractConstrainedMinimisation):
     Default LEVELS = 3 (original value)
     """
 
-    levels: int = 3  # Number of levels in data generation
+    levels: int = 6  # Number of levels in data generation (default from SIF)
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    def __init__(self, levels: int = 3):
+    def __init__(self, levels: int = 6):
         self.levels = levels
 
     @property

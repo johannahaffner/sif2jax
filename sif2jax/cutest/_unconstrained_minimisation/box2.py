@@ -1,10 +1,10 @@
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class BOX2(AbstractUnconstrainedMinimisation):
+class BOX2(AbstractBoundedMinimisation):
     """Box problem in 2 variables, obtained by fixing X3 = 1 in BOX3.
 
     This function is a nonlinear least squares with 10 groups.
@@ -24,12 +24,12 @@ class BOX2(AbstractUnconstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    n: int = 2  # 2 variables (x3 is fixed at 1.0)
+    n: int = 3  # 3 variables (including fixed x3)
 
     @property
     def y0(self):
-        # Starting point from SIF file (only x1, x2)
-        return jnp.array([0.0, 10.0])
+        # Starting point from SIF file (x1, x2, x3)
+        return jnp.array([0.0, 10.0, 1.0])
 
     @property
     def args(self):
@@ -42,12 +42,9 @@ class BOX2(AbstractUnconstrainedMinimisation):
         where G(i) = x3 * COEFF * (exp(-0.1*i*x1) - exp(-0.1*i*x2))
         and COEFF = -exp(-0.1*i) + exp(-i)
 
-        Note: x3 is fixed at 1.0
+        Note: x3 is fixed at 1.0 but included in the variable vector
         """
-        x1, x2 = y
-
-        # x3 is fixed at 1.0 for BOX2
-        x3 = 1.0
+        x1, x2, x3 = y
 
         # Vectorized implementation
         i_vals = jnp.arange(1, 11)  # i = 1 to 10
@@ -76,3 +73,10 @@ class BOX2(AbstractUnconstrainedMinimisation):
     def expected_objective_value(self):
         # From the SIF file comment
         return jnp.array(0.0)
+
+    @property
+    def bounds(self):
+        # X1 and X2 are free, X3 is fixed at 1.0
+        lower = jnp.array([-jnp.inf, -jnp.inf, 1.0])
+        upper = jnp.array([jnp.inf, jnp.inf, 1.0])
+        return lower, upper

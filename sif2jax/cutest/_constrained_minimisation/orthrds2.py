@@ -34,13 +34,13 @@ class ORTHRDS2(AbstractConstrainedMinimisation):
     Default NPTS = 100 (original value)
     """
 
-    npts: int = 100  # Number of data points
+    npts: int = 2500  # Number of data points (default from SIF)
     tdp_lo: int = 5  # First modified data point (1-indexed in SIF, 0-indexed here)
     tdp_hi: int = 5  # Last modified data point (1-indexed in SIF, 0-indexed here)
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    def __init__(self, npts: int = 100, tdp_lo: int = 5, tdp_hi: int = 5):
+    def __init__(self, npts: int = 2500, tdp_lo: int = 5, tdp_hi: int = 5):
         self.npts = npts
         self.tdp_lo = tdp_lo
         self.tdp_hi = tdp_hi

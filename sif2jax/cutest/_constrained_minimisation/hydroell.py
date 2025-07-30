@@ -43,7 +43,7 @@ class HYDROELL(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 1007  # V(1) to V(1007) - V(0) and V(1008) are fixed
+        return 1009  # V(0) to V(1008) - V(0) and V(1008) are fixed but included
 
     @property
     def m(self):
@@ -142,9 +142,15 @@ class HYDROELL(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         """Bounds on the variables."""
-        # Variables are V(1) to V(1007) - boundary conditions are implicit
+        # Variables are V(0) to V(1008)
         lw = jnp.full(self.n, self.VMIN)
         up = jnp.full(self.n, self.VMAX)
+
+        # V(0) and V(1008) are fixed at VMAX
+        lw = lw.at[0].set(self.VMAX)
+        up = up.at[0].set(self.VMAX)
+        lw = lw.at[-1].set(self.VMAX)
+        up = up.at[-1].set(self.VMAX)
 
         return lw, up
 
@@ -165,11 +171,8 @@ class HYDROELL(AbstractConstrainedMinimisation):
         aa = a * dt / 3.0
         bb = 0.5 * b * dt
 
-        # Create extended volume array: [VMAX, y[0], ..., y[1006], VMAX]
-        # This represents V(0), V(1), ..., V(1007), V(1008)
-        v_extended = jnp.concatenate(
-            [jnp.array([self.VMAX]), y, jnp.array([self.VMAX])]
-        )
+        # y now already contains all V(0) to V(1008)
+        v_extended = y
 
         # Extract adjacent pairs
         v_tm1 = v_extended[:-1]  # V(0) to V(1007)
@@ -199,11 +202,8 @@ class HYDROELL(AbstractConstrainedMinimisation):
         influx = self.args["influx"]
         dt = float(self.DT)
 
-        # Create extended volume array: [VMAX, y[0], ..., y[1006], VMAX]
-        # This represents V(0), V(1), ..., V(1007), V(1008)
-        v_extended = jnp.concatenate(
-            [jnp.array([self.VMAX]), y, jnp.array([self.VMAX])]
-        )
+        # y now already contains all V(0) to V(1008)
+        v_extended = y
 
         # Extract adjacent pairs
         v_tm1 = v_extended[:-1]  # V(0) to V(1007)

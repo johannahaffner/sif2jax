@@ -34,11 +34,11 @@ class ORTHRDM2(AbstractConstrainedMinimisation):
     Default NPTS = 2000 (original value)
     """
 
-    npts: int = 2000  # Number of data points
+    npts: int = 4000  # Number of data points (default from SIF)
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    def __init__(self, npts: int = 2000):
+    def __init__(self, npts: int = 4000):
         self.npts = npts
 
     @property

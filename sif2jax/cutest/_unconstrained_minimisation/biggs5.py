@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class BIGGS5(AbstractUnconstrainedMinimisation):
+class BIGGS5(AbstractBoundedMinimisation):
     """Biggs EXP problem in 5 variables.
 
     Source: Problem 74 in
@@ -32,13 +32,13 @@ class BIGGS5(AbstractUnconstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    n: int = 5  # X6 is fixed at 3.0 so we only have 5 variables
+    n: int = 6  # 6 variables including fixed X6
     m: int = 13  # Number of groups (residuals)
 
     @property
     def y0(self):
-        # Only 5 variables since X6 is fixed at 3.0
-        return jnp.array([1.0, 2.0, 1.0, 1.0, 4.0])
+        # All 6 variables including X6 fixed at 3.0
+        return jnp.array([1.0, 2.0, 1.0, 1.0, 4.0, 3.0])
 
     @property
     def args(self):
@@ -50,8 +50,7 @@ class BIGGS5(AbstractUnconstrainedMinimisation):
 
     def objective(self, y, args):
         del args
-        x1, x2, x3, x4, x5 = y
-        x6 = 3.0  # X6 is fixed at 3.0 in BIGGS5
+        x1, x2, x3, x4, x5, x6 = y
 
         # Vectorized computation for all groups
         i_vals = jnp.arange(1, self.m + 1, dtype=jnp.float64)
@@ -84,3 +83,10 @@ class BIGGS5(AbstractUnconstrainedMinimisation):
         # According to the SIF file comment (line 137),
         # the optimal objective value is 0.0
         return jnp.array(0.0)
+
+    @property
+    def bounds(self):
+        # X1 to X5 are free, X6 is fixed at 3.0
+        lower = jnp.array([-jnp.inf, -jnp.inf, -jnp.inf, -jnp.inf, -jnp.inf, 3.0])
+        upper = jnp.array([jnp.inf, jnp.inf, jnp.inf, jnp.inf, jnp.inf, 3.0])
+        return lower, upper

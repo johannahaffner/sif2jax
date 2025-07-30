@@ -28,11 +28,11 @@ class DECONVC(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        # Variables are C(1:LGTR) and SG(1:LGSG)
-        # C(-LGSG:0) are fixed to 0 and not included
+        # Variables are C(-LGSG:LGTR) and SG(1:LGSG)
+        # C(-LGSG:0) are fixed to 0 but included
         lgtr = 40
         lgsg = 11
-        return lgtr + lgsg  # 40 + 11 = 51
+        return lgtr + lgsg + 12  # 40 + 11 + 12 = 63
 
     @property
     def m(self):
@@ -47,10 +47,12 @@ class DECONVC(AbstractConstrainedMinimisation):
         lgsg = 11
 
         # Extract variables
-        # C(1:LGTR) are the first 40 variables
-        c_positive = y[:lgtr]  # 40 values
-        # SG(1:LGSG) are the next 11 variables
-        sg = y[lgtr:]  # 11 values
+        # C(-LGSG:0) are the first 12 variables (fixed at 0)
+        # C(1:LGTR) are the next 40 variables
+        c_fixed = y[:12]  # 12 values (C(-11:0))
+        c_positive = y[12 : 12 + lgtr]  # 40 values (C(1:40))
+        # SG(1:LGSG) are the last 11 variables
+        sg = y[12 + lgtr :]  # 11 values
 
         # Data values TR
         tr = jnp.array(
@@ -99,9 +101,9 @@ class DECONVC(AbstractConstrainedMinimisation):
         )
 
         # Create full C array
-        # C(-LGSG:0) = 0 (fixed), C(1:LGTR) = c_positive
-        # In array indexing: c[0:lgsg+1] = 0, c[lgsg+1:lgsg+1+lgtr] = c_positive
-        c_full = jnp.concatenate([jnp.zeros(lgsg + 1), c_positive])
+        # C(-LGSG:0) = c_fixed, C(1:LGTR) = c_positive
+        # In array indexing: c[0:lgsg+1] = c_fixed, c[lgsg+1:lgsg+1+lgtr] = c_positive
+        c_full = jnp.concatenate([c_fixed, c_positive])
 
         # Compute residuals using proper indexing
         # R(K) = sum(SG(I) * C(K-I+1) for I=1 to LGSG) - TR(K)
@@ -138,10 +140,8 @@ class DECONVC(AbstractConstrainedMinimisation):
 
     def constraint(self, y):
         """Compute the energy constraint."""
-        lgtr = 40
-
         # Extract SG variables (last 11 variables)
-        sg = y[lgtr:]
+        sg = y[52:]  # After 12 fixed C values and 40 free C values
 
         # Energy constraint: sum(SG(I)^2) = PIC
         pic = 12.35
@@ -158,6 +158,8 @@ class DECONVC(AbstractConstrainedMinimisation):
         """Initial guess."""
         lgtr = 40
 
+        # Initial C values for C(-11:0) (all zeros, fixed)
+        c_fixed_init = jnp.zeros(12)
         # Initial C values for C(1:40) (all zeros as given)
         c_init = jnp.zeros(lgtr)
 
@@ -166,7 +168,7 @@ class DECONVC(AbstractConstrainedMinimisation):
             [1e-2, 2e-2, 0.4, 0.6, 0.8, 3.0, 0.8, 0.6, 0.44, 1e-2, 1e-2]
         )
 
-        return inexact_asarray(jnp.concatenate([c_init, sg_init]))
+        return inexact_asarray(jnp.concatenate([c_fixed_init, c_init, sg_init]))
 
     @property
     def args(self):
@@ -179,6 +181,9 @@ class DECONVC(AbstractConstrainedMinimisation):
         # From pycutest behavior, all variables have lower bound 0
         lower = jnp.zeros(self.n)
         upper = jnp.full(self.n, jnp.inf)
+
+        # C(-11:0) are fixed at 0.0 (first 12 variables)
+        upper = upper.at[:12].set(0.0)
 
         return lower, upper
 

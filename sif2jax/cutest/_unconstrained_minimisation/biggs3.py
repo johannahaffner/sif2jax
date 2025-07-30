@@ -6,10 +6,10 @@ from typing import Any
 
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class BIGGS3(AbstractUnconstrainedMinimisation):
+class BIGGS3(AbstractBoundedMinimisation):
     """Biggs EXP problem in 3 variables.
 
     This function is a nonlinear least squares with 13 groups. Each
@@ -30,16 +30,12 @@ class BIGGS3(AbstractUnconstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    n: int = 3  # Number of free variables
+    n: int = 6  # 6 variables including fixed ones
     m: int = 13  # Number of groups
 
     def objective(self, y: Any, args: Any) -> Any:
         """Compute the objective function."""
-        x1, x2, x4 = y
-        # Fixed values
-        x3 = 1.0
-        x5 = 4.0
-        x6 = 3.0
+        x1, x2, x3, x4, x5, x6 = y
 
         obj = 0.0
 
@@ -70,8 +66,8 @@ class BIGGS3(AbstractUnconstrainedMinimisation):
 
     @property
     def y0(self):
-        # Only free variables: x1, x2, x4
-        return jnp.array([1.0, 2.0, 1.0])
+        # All 6 variables including fixed ones
+        return jnp.array([1.0, 2.0, 1.0, 1.0, 4.0, 3.0])
 
     @property
     def args(self):
@@ -84,3 +80,10 @@ class BIGGS3(AbstractUnconstrainedMinimisation):
     @property
     def expected_objective_value(self):
         return jnp.array(0.0)
+
+    @property
+    def bounds(self):
+        # X1, X2, X4 are free; X3, X5, X6 are fixed
+        lower = jnp.array([-jnp.inf, -jnp.inf, 1.0, -jnp.inf, 4.0, 3.0])
+        upper = jnp.array([jnp.inf, jnp.inf, 1.0, jnp.inf, 4.0, 3.0])
+        return lower, upper

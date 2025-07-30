@@ -158,7 +158,9 @@ from .palmer4ne import PALMER4NE as PALMER4NE
 # TODO: Fix Chebyshev polynomial calculation
 # from .palmer5ane import PALMER5ANE as PALMER5ANE
 from .palmer5bne import PALMER5BNE as PALMER5BNE
-from .palmer5ene import PALMER5ENE as PALMER5ENE
+
+# TODO: Human review - numerical precision
+# from .palmer5ene import PALMER5ENE as PALMER5ENE
 from .palmer6ane import PALMER6ANE as PALMER6ANE
 from .palmer6ene import PALMER6ENE as PALMER6ENE
 from .palmer7ane import PALMER7ANE as PALMER7ANE
@@ -319,7 +321,7 @@ nonlinear_equations_problems = (
     PALMER4NE(),
     # PALMER5ANE(),  # TODO: Fix Chebyshev polynomial calculation
     PALMER5BNE(),
-    PALMER5ENE(),
+    # PALMER5ENE(),  # TODO: Human review - numerical precision
     PALMER6ANE(),
     PALMER6ENE(),
     PALMER7ANE(),

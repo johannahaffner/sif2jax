@@ -19,7 +19,7 @@ class DECONVNE(AbstractNonlinearEquations):
 
     lgsg: int = 11
     lgtr: int = 40
-    n: int = 51  # 40 + 11 variables: C(1:40) and SG(1:11)
+    n: int = 63  # 52 C variables (C(-11:40)) + 11 SG variables (SG(1:11))
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
@@ -87,12 +87,13 @@ class DECONVNE(AbstractNonlinearEquations):
     )
 
     def starting_point(self) -> Array:
-        # C(-11) to C(0) are fixed at 0, so not included as variables
-        # Only C(1) to C(40) are free variables, plus SG(1) to SG(11)
-        # That's 40 + 11 = 51 free variables
+        # C(-11) to C(0) are fixed at 0, but included as variables
+        # C(-11) to C(40) gives 52 variables, plus SG(1) to SG(11) gives 11 more
+        # That's 52 + 11 = 63 total variables
+        c_fixed = jnp.zeros(12, dtype=jnp.float64)  # C(-11) to C(0), fixed at 0
         c_free = jnp.zeros(40, dtype=jnp.float64)  # C(1) to C(40)
         sg_values = self.ssg_data  # SG(1) to SG(11)
-        return jnp.concatenate([c_free, sg_values])
+        return jnp.concatenate([c_fixed, c_free, sg_values])
 
     def num_residuals(self) -> int:
         return self.lgtr
@@ -100,11 +101,8 @@ class DECONVNE(AbstractNonlinearEquations):
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the deconvolution problem"""
         # Split variables
-        c = y[:40]  # C(1) to C(40)
-        sg = y[40:]  # SG(1) to SG(11)
-
-        # Create full C array with zeros for C(-11) to C(0)
-        c_full = jnp.concatenate([jnp.zeros(12, dtype=jnp.float64), c])
+        c_full = y[:52]  # C(-11) to C(40), all 52 C variables
+        sg = y[52:]  # SG(1) to SG(11)
 
         # Initialize residuals
         residuals = jnp.zeros(self.lgtr, dtype=jnp.float64)
@@ -117,7 +115,8 @@ class DECONVNE(AbstractNonlinearEquations):
                 idx = (k + 1) - (i + 1) + 1  # Convert to 1-based, compute IDX
                 if idx > 0:
                     # The element PROD(K,I) computes sg[i] * c[idx] when IDX > 0
-                    # C(idx) is at position idx + 11 in c_full (C(-11) to C(0))
+                    # C(idx) is at position idx + 11 in c_full
+                    # (since C(-11) is at index 0)
                     r_k += sg[i] * c_full[idx + 11]
             residuals = residuals.at[k].set(r_k - self.tr_data[k])
 

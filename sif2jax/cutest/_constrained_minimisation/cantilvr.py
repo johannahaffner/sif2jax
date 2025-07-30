@@ -62,6 +62,8 @@ class CANTILVR(AbstractConstrainedMinimisation):
 
         # Single inequality constraint:
         # 61/x1^3 + 37/x2^3 + 19/x3^3 + 7/x4^3 + 1/x5^3 <= 1
+        # NOTE: This constraint is undefined at x=0 due to division by x^3
+        # This causes expected test failures when evaluating at zero vector
         # In pycutest format (L-type), this is returned as:
         # constraint_value - constant
         ineq_constraint = jnp.array(

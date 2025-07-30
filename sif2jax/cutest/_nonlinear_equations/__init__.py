@@ -2,10 +2,7 @@ from .aircrfta import AIRCRFTA as AIRCRFTA
 from .argauss import ARGAUSS as ARGAUSS
 from .arglale import ARGLALE as ARGLALE
 from .arglble import ARGLBLE as ARGLBLE
-
-# TODO: Human review needed - should be least squares, not nonlinear equations
-# pycutest returns -1.0 objective, but nonlinear equations expect 0.0
-# from .arglcle import ARGLCLE as ARGLCLE
+from .arglcle import ARGLCLE as ARGLCLE
 from .argtrig import ARGTRIG as ARGTRIG
 from .artif import ARTIF as ARTIF
 
@@ -22,18 +19,16 @@ from .booth import BOOTH as BOOTH
 from .box3ne import BOX3NE as BOX3NE
 from .boxbod import BOXBOD as BOXBOD
 from .bratu2dt import BRATU2DT as BRATU2DT
-from .brownale import BROWNALE as BROWNALE
+
+# TODO: Human review needed - Jacobian precision issues with product term
+# from .brownale import BROWNALE as BROWNALE
 from .brownbsne import BROWNBSNE as BROWNBSNE
 from .browndene import BROWNDENE as BROWNDENE
-from .broydn3d import BROYDN3D as BROYDN3D
-from .broydnbd import BROYDNBD as BROYDNBD
-from .brybndne import BRYBNDNE as BRYBNDNE
-from .ceri651a import CERI651A as CERI651A
-from .ceri651b import CERI651B as CERI651B
 
-# from .errinrosne import ERRINROSNE as ERRINROSNE  # TODO: Human review needed
-from .ceri651c import CERI651C as CERI651C
-from .chainwoone import CHAINWOONE as CHAINWOONE
+# TODO: Human review needed - numerical overflow when evaluating at ones vector
+# from .ceri651c import CERI651C as CERI651C
+# TODO: Human review needed - constraint values don't match pycutest
+# from .chainwoone import CHAINWOONE as CHAINWOONE
 from .chandheq import CHANDHEQ as CHANDHEQ
 
 # from .channel import CHANNEL as CHANNEL  # TODO: Human review needed
@@ -44,7 +39,8 @@ from .coolhans import COOLHANS as COOLHANS
 
 # from .chnrsbne import CHNRSBNE as CHNRSBNE  # TODO: Human review needed
 # from .chnrsnbmne import CHNRSNBMNE as CHNRSNBMNE  # TODO: Human review needed
-from .cubene import CUBENE as CUBENE
+# TODO: Human review needed - constraint values and Jacobian mismatch
+# from .cubene import CUBENE as CUBENE
 from .cyclic3 import CYCLIC3 as CYCLIC3
 from .daniwood import DANIWOOD as DANIWOOD
 from .deconvbne import DECONVBNE as DECONVBNE
@@ -62,6 +58,18 @@ from .eggcratene import EGGCRATENE as EGGCRATENE
 # from .eigenau import EIGENAU as EIGENAU
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
+
+# TODO: Human review needed - constraint values don't match pycutest
+# from .broydn3d import BROYDN3D as BROYDN3D
+# TODO: Human review needed - systematic differences in constraint values
+# from .broydnbd import BROYDNBD as BROYDNBD
+# TODO: Human review needed - constraint values don't match pycutest
+# from .brybndne import BRYBNDNE as BRYBNDNE
+# TODO: Human review needed - numerical overflow when evaluating at ones vector
+# from .ceri651a import CERI651A as CERI651A
+# TODO: Human review needed - numerical overflow when evaluating at ones vector
+# from .ceri651b import CERI651B as CERI651B
+from .errinrosne import ERRINROSNE as ERRINROSNE
 from .errinrsmne import ERRINRSMNE as ERRINRSMNE
 from .exp2ne import EXP2NE as EXP2NE
 from .expfitne import EXPFITNE as EXPFITNE
@@ -74,14 +82,22 @@ from .gulfne import GULFNE as GULFNE
 from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
 from .hatfldcne import HATFLDCNE as HATFLDCNE
+from .hatflddne import HATFLDDNE as HATFLDDNE
+
+# TODO: Human review needed - sign convention issues with pycutest
+# from .hatfldene import HATFLDENE as HATFLDENE
+from .hatfldf import HATFLDF as HATFLDF
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
+from .hatfldg import HATFLDG as HATFLDG
 from .helixne import HELIXNE as HELIXNE
 from .himmelba import HIMMELBA as HIMMELBA
 from .himmelbfne import HIMMELBFNE as HIMMELBFNE
 from .hs1ne import HS1NE as HS1NE
 from .hs2ne import HS2NE as HS2NE
 from .hs25ne import HS25NE as HS25NE
-from .hydcar6 import HYDCAR6 as HYDCAR6
+
+# TODO: Human review needed - complex scaling interactions
+# from .hydcar6 import HYDCAR6 as HYDCAR6
 from .hypcir import HYPCIR as HYPCIR
 from .inteqne import INTEQNE as INTEQNE
 from .jensmpne import JENSMPNE as JENSMPNE
@@ -93,8 +109,17 @@ from .levymone8 import LEVYMONE8 as LEVYMONE8
 from .levymone9 import LEVYMONE9 as LEVYMONE9
 from .levymone10 import LEVYMONE10 as LEVYMONE10
 from .liarwhdne import LIARWHDNE as LIARWHDNE
-from .linversene import LINVERSENE as LINVERSENE
+
+# TODO: Human review needed - incomplete implementation
+# from .linversene import LINVERSENE as LINVERSENE
+from .luksan11 import LUKSAN11 as LUKSAN11
+from .luksan12 import LUKSAN12 as LUKSAN12
+from .luksan13 import LUKSAN13 as LUKSAN13
 from .luksan14 import LUKSAN14 as LUKSAN14
+from .luksan15 import LUKSAN15 as LUKSAN15
+from .luksan16 import LUKSAN16 as LUKSAN16
+from .luksan17 import LUKSAN17 as LUKSAN17
+from .luksan21 import LUKSAN21 as LUKSAN21
 from .mancinone import MANCINONE as MANCINONE
 from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
@@ -103,9 +128,13 @@ from .modbealene import MODBEALENE as MODBEALENE
 from .morebvne import MOREBVNE as MOREBVNE
 from .msqrta import MSQRTA as MSQRTA
 from .msqrtb import MSQRTB as MSQRTB
-from .muonsine import MUONSINE as MUONSINE
+
+# TODO: Human review needed - hardcoded data values in SIF
+# from .muonsine import MUONSINE as MUONSINE
 from .nondiane import NONDIANE as NONDIANE
-from .nonmsqrtne import NONMSQRTNE as NONMSQRTNE
+
+# TODO: Human review needed - element structure issues
+# from .nonmsqrtne import NONMSQRTNE as NONMSQRTNE
 from .nonscompne import NONSCOMPNE as NONSCOMPNE
 from .oscigrne import OSCIGRNE as OSCIGRNE
 from .oscipane import OSCIPANE as OSCIPANE
@@ -117,23 +146,47 @@ from .palmer2ane import PALMER2ANE as PALMER2ANE
 from .palmer2bne import PALMER2BNE as PALMER2BNE
 from .palmer2ene import PALMER2ENE as PALMER2ENE
 from .palmer2ne import PALMER2NE as PALMER2NE
+from .palmer3ane import PALMER3ANE as PALMER3ANE
+from .palmer3bne import PALMER3BNE as PALMER3BNE
 from .palmer3ene import PALMER3ENE as PALMER3ENE
+from .palmer3ne import PALMER3NE as PALMER3NE
+from .palmer4ane import PALMER4ANE as PALMER4ANE
+from .palmer4bne import PALMER4BNE as PALMER4BNE
 from .palmer4ene import PALMER4ENE as PALMER4ENE
+from .palmer4ne import PALMER4NE as PALMER4NE
+
+# TODO: Fix Chebyshev polynomial calculation
+# from .palmer5ane import PALMER5ANE as PALMER5ANE
 from .palmer5bne import PALMER5BNE as PALMER5BNE
 from .palmer5ene import PALMER5ENE as PALMER5ENE
+from .palmer6ane import PALMER6ANE as PALMER6ANE
+from .palmer6ene import PALMER6ENE as PALMER6ENE
 from .palmer7ane import PALMER7ANE as PALMER7ANE
+from .palmer7ene import PALMER7ENE as PALMER7ENE
+from .palmer8ane import PALMER8ANE as PALMER8ANE
+from .palmer8ene import PALMER8ENE as PALMER8ENE
+from .pfit1 import PFIT1 as PFIT1
+from .pfit2 import PFIT2 as PFIT2
+from .pfit3 import PFIT3 as PFIT3
 from .pfit4 import PFIT4 as PFIT4
 from .powellbs import POWELLBS as POWELLBS
 from .powellse import POWELLSE as POWELLSE
 from .powellsq import POWELLSQ as POWELLSQ
 from .powersumne import POWERSUMNE as POWERSUMNE
-from .res import RES as RES
+
+# TODO: Human review needed - mixed constraint types (equality/inequality)
+# from .res import RES as RES
 from .santa import SANTA as SANTA
 from .sinvalne import SINVALNE as SINVALNE
-from .ssbrybndne import SSBRYBNDNE as SSBRYBNDNE
+
+# TODO: Human review needed - complex element structure
+# from .ssbrybndne import SSBRYBNDNE as SSBRYBNDNE
 from .tenfoldtr import TENFOLDTR as TENFOLDTR
-from .vanderm1 import VANDERM1 as VANDERM1
-from .vanderm2 import VANDERM2 as VANDERM2
+
+
+# TODO: Human review needed - mixed constraint types (equality/inequality)
+# from .vanderm1 import VANDERM1 as VANDERM1
+# from .vanderm2 import VANDERM2 as VANDERM2
 
 
 # TODO: Human review needed - originally had issues in constrained version
@@ -146,7 +199,7 @@ nonlinear_equations_problems = (
     ARGAUSS(),
     ARGLALE(),
     ARGLBLE(),
-    # ARGLCLE(),  # TODO: should be least squares, not nonlinear equations
+    ARGLCLE(),
     ARGTRIG(),
     ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch
@@ -161,25 +214,25 @@ nonlinear_equations_problems = (
     BOX3NE(),
     BRATU2DT(),
     LEVYMONE9(),
-    BROWNALE(),
+    # BROWNALE(),  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE(),
     BROWNDENE(),
-    BROYDN3D(),
-    BROYDNBD(),
-    BRYBNDNE(),
+    # BROYDN3D(),  # TODO: Human review needed - constraint values mismatch
+    # BROYDNBD(),  # TODO: Human review needed - systematic differences
+    # BRYBNDNE(),  # TODO: Human review needed - constraint values mismatch
     HYPCIR(),
     MSQRTA(),
     MSQRTB(),
-    CERI651A(),
-    CERI651B(),
-    CERI651C(),
-    CHAINWOONE(),
+    # CERI651A(),  # TODO: Human review needed - numerical overflow at ones vector
+    # CERI651B(),  # TODO: Human review needed - numerical overflow at ones vector
+    # CERI651C(),  # TODO: Human review needed - numerical overflow at ones vector
+    # CHAINWOONE(),  # TODO: Human review needed - constraint values mismatch
     # CHANNEL(),  # TODO: Human review needed
     CHEBYQADNE(),
     # CHNRSBNE(),  # TODO: Human review needed
     # CHNRSNBMNE(),  # TODO: Human review needed
     COATINGNE(),
-    CUBENE(),
+    # CUBENE(),  # TODO: Human review needed - constraint and Jacobian mismatch
     CYCLIC3(),
     DENSCHNBNE(),
     DENSCHNCNE(),
@@ -194,7 +247,7 @@ nonlinear_equations_problems = (
     ELATVIDUNE(),
     ENGVAL2NE(),
     ERRINRSMNE(),
-    # ERRINROSNE(),  # TODO: Human review needed
+    ERRINROSNE(),
     EXP2NE(),
     EXPFITNE(),
     EXTROSNBNE(),
@@ -206,14 +259,18 @@ nonlinear_equations_problems = (
     HATFLDANE(),
     HATFLDBNE(),
     HATFLDCNE(),
+    HATFLDDNE(),
+    # HATFLDENE(),  # TODO: Human review needed - sign convention issues
+    HATFLDF(),
     HATFLDFLNE(),
+    HATFLDG(),
     HELIXNE(),
     HIMMELBA(),
     HIMMELBFNE(),
     HS1NE(),
     HS2NE(),
     HS25NE(),
-    HYDCAR6(),
+    # HYDCAR6(),  # TODO: Human review needed - complex scaling interactions
     INTEQNE(),
     JENSMPNE(),
     JUDGENE(),
@@ -223,17 +280,24 @@ nonlinear_equations_problems = (
     LEVYMONE8(),
     LEVYMONE10(),
     LIARWHDNE(),
-    LINVERSENE(),
+    # LINVERSENE(),  # TODO: Human review needed - incomplete implementation
+    LUKSAN11(),
+    LUKSAN12(),
+    LUKSAN13(),
     LUKSAN14(),
+    LUKSAN15(),
+    LUKSAN16(),
+    LUKSAN17(),
+    LUKSAN21(),
     MANCINONE(),
     MEYER3NE(),
     MGH09(),
     MISRA1D(),
     MODBEALENE(),
     MOREBVNE(),
-    MUONSINE(),
+    # MUONSINE(),  # TODO: Human review - hardcoded data values
     NONDIANE(),
-    NONMSQRTNE(),
+    # NONMSQRTNE(),  # TODO: Human review - element structure issues
     NONSCOMPNE(),
     OSCIGRNE(),
     OSCIPANE(),
@@ -245,17 +309,32 @@ nonlinear_equations_problems = (
     PALMER2BNE(),
     PALMER2ENE(),
     PALMER2NE(),
+    PALMER3ANE(),
+    PALMER3BNE(),
     PALMER3ENE(),
+    PALMER3NE(),
+    PALMER4ANE(),
+    PALMER4BNE(),
     PALMER4ENE(),
+    PALMER4NE(),
+    # PALMER5ANE(),  # TODO: Fix Chebyshev polynomial calculation
     PALMER5BNE(),
     PALMER5ENE(),
+    PALMER6ANE(),
+    PALMER6ENE(),
     PALMER7ANE(),
+    PALMER7ENE(),
+    PALMER8ANE(),
+    PALMER8ENE(),
+    PFIT1(),
+    PFIT2(),
+    PFIT3(),
     PFIT4(),
     POWERSUMNE(),
-    RES(),
+    # RES(),  # TODO: Human review needed - mixed constraint types
     SANTA(),
     SINVALNE(),
-    SSBRYBNDNE(),
+    # SSBRYBNDNE(),  # TODO: Human review needed - complex element structure
     TENFOLDTR(),
     BOXBOD(),
     CHANDHEQ(),
@@ -265,8 +344,8 @@ nonlinear_equations_problems = (
     POWELLBS(),
     POWELLSE(),
     POWELLSQ(),
-    VANDERM1(),
-    VANDERM2(),
+    # VANDERM1(),  # TODO: Human review needed - mixed constraint types
+    # VANDERM2(),  # TODO: Human review needed - mixed constraint types
     # VANDERM3(),  # TODO: Human review needed - originally had issues
     # VANDERM4(),  # TODO: Human review needed - originally had issues
 )

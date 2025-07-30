@@ -3,6 +3,10 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Same formulation issues as HS74 (constraints differ from pycutest)
+# Suspected issues: Constraint values and Jacobians differ significantly from pycutest
+# Resources needed: Access to original Hock-Schittkowski formulation or pycutest source
 class HS75(AbstractConstrainedMinimisation):
     """Problem 75 from the Hock-Schittkowski test collection.
 
@@ -14,10 +18,10 @@ class HS75(AbstractConstrainedMinimisation):
     Subject to:
         x₄ - x₃ + a₂ ≥ 0
         x₃ - x₄ + a₂ ≥ 0
-        1000*sin(-x₂ - 0.25) + 1000*sin(-x₄ - 0.25) + 894.8 - x₁ = 0
-        1000*sin(x₃ - 0.25) + 1000*sin(x₃ - x₄ - 0.25) + 894.8 - x₂ = 0
-        1000*sin(x₄ - 0.25) + 1000*sin(x₄ - x₃ - 0.25) + 1294.8 = 0
-        0 ≤ x₁ ≤ 1200, i=1,2
+        -x₁ - 894.8 - 1000*sin(x₃ + 0.25) - 1000*sin(x₄ + 0.25) = 0
+        -x₂ - 894.8 + 1000*sin(x₃ - 0.25) + 1000*sin(x₃ - x₄ - 0.25) = 0
+        -1294.8 + 1000*sin(x₄ - 0.25) + 1000*sin(x₄ - x₃ - 0.25) = 0
+        0 ≤ xᵢ ≤ 1200, i=1,2
         -a₂ ≤ xᵢ ≤ a₂, i=3,4
 
     where a₂ = 0.48
@@ -77,17 +81,18 @@ class HS75(AbstractConstrainedMinimisation):
         ineq2 = x3 - x4 + a2
 
         # Precompute common trigonometric values for efficiency
-        sin_neg_x2_025 = jnp.sin(-x2 - 0.25)
-        sin_neg_x4_025 = jnp.sin(-x4 - 0.25)
         sin_x3_025 = jnp.sin(x3 - 0.25)
         sin_x4_025 = jnp.sin(x4 - 0.25)
         sin_x3_x4_025 = jnp.sin(x3 - x4 - 0.25)
         sin_x4_x3_025 = jnp.sin(x4 - x3 - 0.25)
 
-        # Equality constraints
-        eq1 = 1000.0 * sin_neg_x2_025 + 1000.0 * sin_neg_x4_025 + 894.8 - x1
-        eq2 = 1000.0 * sin_x3_025 + 1000.0 * sin_x3_x4_025 + 894.8 - x2
-        eq3 = 1000.0 * sin_x4_025 + 1000.0 * sin_x4_x3_025 + 1294.8
+        # Equality constraints (from SIF file)
+        # C3: -X1 - 894.8 - 1000*sin(X3+0.25) - 1000*sin(X4+0.25) = 0
+        # C4: -X2 - 894.8 + 1000*sin(X3-0.25) + 1000*sin((X3-X4)-0.25) = 0
+        # C5: -1294.8 + 1000*sin(X4-0.25) + 1000*sin((X4-X3)-0.25) = 0
+        eq1 = -x1 - 894.8 - 1000.0 * jnp.sin(x3 + 0.25) - 1000.0 * jnp.sin(x4 + 0.25)
+        eq2 = -x2 - 894.8 + 1000.0 * sin_x3_025 + 1000.0 * sin_x3_x4_025
+        eq3 = -1294.8 + 1000.0 * sin_x4_025 + 1000.0 * sin_x4_x3_025
 
         equality_constraints = jnp.array([eq1, eq2, eq3])
         inequality_constraints = jnp.array([ineq1, ineq2])

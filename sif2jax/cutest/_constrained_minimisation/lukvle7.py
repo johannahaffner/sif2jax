@@ -109,14 +109,15 @@ class LUKVLE7(AbstractConstrainedMinimisation):
             constraints.append(c2)
 
         # c_3: 8x_{n-1}(x_{n-1}^2 - x_{n-2}) - 2(1 - x_{n-1}) + 4(x_{n-1} - x_n^2)
-        #       + x_{n-2} - x_{n-3} = 0
+        #       + x_{n-2}^2 - x_{n-3} = 0
+        # Note: From SIF file, the term is x_{n-2}^2, not x_{n-2} - x_{n-3}
         if n >= 4:
             c3 = (
                 8 * y[n - 2] * (y[n - 2] ** 2 - y[n - 3])
                 - 2 * (1 - y[n - 2])
                 + 4 * (y[n - 2] - y[n - 1] ** 2)
-                + y[n - 3]
-                - (y[n - 4] if n > 4 else y[n - 3])
+                + y[n - 3] ** 2
+                - y[n - 4]
             )
             constraints.append(c3)
 
@@ -126,7 +127,7 @@ class LUKVLE7(AbstractConstrainedMinimisation):
                 8 * y[n - 1] * (y[n - 1] ** 2 - y[n - 2])
                 + 2 * y[n - 1]
                 + y[n - 2] ** 2
-                - y[n - 2]
+                - y[n - 3]
             )
             constraints.append(c4)
 

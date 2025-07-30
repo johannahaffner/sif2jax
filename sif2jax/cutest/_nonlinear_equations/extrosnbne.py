@@ -45,13 +45,13 @@ class EXTROSNBNE(AbstractNonlinearEquations):
         # First equation: SQ1 = x1 - 1.0
         residuals = residuals.at[0].set(x[0] - 1.0)
 
-        # Remaining equations: SQ(i) = 0.1 * (x(i) - x(i-1)^2)
+        # Remaining equations: SQ(i) with SCALE 0.1
         # Element type ETYPE: -V1^2
         for i in range(1, n):
             # SQ(i) has x(i) with coefficient 1.0 and scale 0.1
             # ELA(i) uses x(i-1) as V1, contributing -V1^2
-            # So: SQ(i) = 0.1 * (x(i) - x(i-1)^2) = 0
-            residuals = residuals.at[i].set(0.1 * (x[i] - x[i - 1] ** 2))
+            # SCALE parameter divides the residual, so: SQ(i) = (x(i) - x(i-1)^2) / 0.1
+            residuals = residuals.at[i].set((x[i] - x[i - 1] ** 2) / 0.1)
 
         return residuals
 
@@ -65,11 +65,13 @@ class EXTROSNBNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution would be all ones for this problem
         return jnp.ones(self.n, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

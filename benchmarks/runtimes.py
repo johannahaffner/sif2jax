@@ -81,7 +81,7 @@ def benchmark_problem(problem):
     result["problem_name"] = problem.name
     result["dimensionality"] = problem.y0.size
 
-    pycutest_problem = pycutest.import_problem(problem.name)
+    pycutest_problem = pycutest.import_problem(problem.name, drop_fixed_variables=False)
     pycutest_obj_time = benchmark_pycutest(pycutest_problem.obj, problem.y0)
     jax_obj_time = benchmark_jax(jax.jit(problem.objective), (problem.y0, problem.args))
 

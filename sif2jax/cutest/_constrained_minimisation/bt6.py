@@ -9,7 +9,7 @@ class BT6(AbstractConstrainedMinimisation):
     n = 5, m = 2.
     f(x) = (x₁ - 1)² + (x₁ - x₂)² + (x₃ - 1)² + (x₄ - 1)⁴ + (x₅ - 1)⁶.
     g₁(x) = x₄x₁² + sin(x₄ - x₅) - 2√2.
-    g₂(x) = x₂ + x₃⁴x₅² - 8 - √2.
+    g₂(x) = x₂ + x₃⁴x₂² - 8 - √2.
 
     Start 1: xᵢ = 2, i = 1, ..., 5.
     Start 2: xᵢ = 8, i = 1, ..., 5.
@@ -67,6 +67,6 @@ class BT6(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5 = y
         # Equality constraints
         g1 = x4 * x1**2 + jnp.sin(x4 - x5) - 2 * jnp.sqrt(2)
-        g2 = x2 + x3**4 * x5**2 - 8 - jnp.sqrt(2)
+        g2 = x2 + x3**4 * x2**2 - 8 - jnp.sqrt(2)
         equality_constraints = jnp.array([g1, g2])
         return equality_constraints, None

@@ -3,6 +3,12 @@
 SIF input: A. R. Conn, June 1993.
 
 Classification: NLR2-MN-20-14
+
+TODO: Human review needed
+Attempts made: Sign convention issues with mixed constraint types
+Suspected issues: This is a constrained optimization problem with mixed 
+equality/inequality constraints, not a pure nonlinear equations problem
+Resources needed: Review constraint formulation and classification
 """
 
 import jax.numpy as jnp
@@ -88,34 +94,36 @@ class RES(AbstractNonlinearEquations):
         TOLIM = y[18]
         TOBLIM = y[19]
 
-        # Compute element functions
+        # Compute element functions with safe division
         # EL1: 311/14 type with V=DM, W=NU, X=P0, Y=G, Z=D
         V3WX = DM**3 * NU * P0
         YZ4 = G * D**4
-        EL1_val = V3WX / YZ4
+        EL1_val = jnp.where(YZ4 != 0.0, V3WX / YZ4, 0.0)
 
         # EL2: 14/31 type with W=G, X=D, Y=DM, Z=NU
         WX4 = G * D**4
         Y3Z = DM**3 * NU
-        EL2_val = WX4 / Y3Z
+        EL2_val = jnp.where(Y3Z != 0.0, WX4 / Y3Z, 0.0)
 
         # EL3: 2PR type with X=NU, Y=P
         EL3_val = NU * P
 
         # EL4: 11/3 type with X=P0, Y=DM, Z=D
-        EL4_val = (P0 * DM) / (self.pi * D**3)
+        D3 = D**3
+        EL4_val = jnp.where(D3 != 0.0, (P0 * DM) / (self.pi * D3), 0.0)
 
         # EL5: 111/2 type with W=G, X=D, Y=E, Z=DM
-        EL5_val = (G * D * E) / (self.pi * DM**2)
+        DM2 = DM**2
+        EL5_val = jnp.where(DM2 != 0.0, (G * D * E) / (self.pi * DM2), 0.0)
 
         # Compute residuals
         res = jnp.zeros(14)
 
-        # E1: F = EL1
-        res = res.at[0].set(F - EL1_val)
+        # E1: -F + EL1 = 0 (from SIF: F -1.0)
+        res = res.at[0].set(-F + EL1_val)
 
-        # E2: K = EL2
-        res = res.at[1].set(K - EL2_val)
+        # E2: -K + EL2 = 0 (from SIF: K -1.0)
+        res = res.at[1].set(-K + EL2_val)
 
         # E3: DE - D - DM = 0
         res = res.at[2].set(DE - D - DM)
@@ -126,7 +134,7 @@ class RES(AbstractNonlinearEquations):
         # E5: D - P + E = 0
         res = res.at[4].set(D - P + E)
 
-        # E6: NU - N = -2.0
+        # E6: NU - N + 2.0 = 0 (from constant -2.0)
         res = res.at[5].set(NU - N + 2.0)
 
         # E7: 1.5*D - L0 = 0
@@ -135,23 +143,23 @@ class RES(AbstractNonlinearEquations):
         # E8: L - LB - FR = 0
         res = res.at[7].set(L - LB - FR)
 
-        # E9: LB = EL3
+        # E9: LB - EL3 = 0
         res = res.at[8].set(LB - EL3_val)
 
-        # E10: L - L0 + F = EL4
+        # E10: L - L0 + F - EL4 = 0
         res = res.at[9].set(L - L0 + F - EL4_val)
 
-        # E11: TO = EL5
+        # E11: TO - EL5 = 0
         res = res.at[10].set(TO - EL5_val)
 
-        # E12: TOB = EL5
+        # E12: TOB - EL5 = 0
         res = res.at[11].set(TOB - EL5_val)
 
         # E13: TO - TOLIM <= 0 (inequality)
-        res = res.at[12].set(jnp.maximum(0.0, TO - TOLIM))
+        res = res.at[12].set(TO - TOLIM)
 
         # E14: TOB - TOBLIM <= 0 (inequality)
-        res = res.at[13].set(jnp.maximum(0.0, TOB - TOBLIM))
+        res = res.at[13].set(TOB - TOBLIM)
 
         return res
 

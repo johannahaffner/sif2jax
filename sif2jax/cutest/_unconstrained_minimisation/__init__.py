@@ -153,14 +153,12 @@ from .growthls import GROWTHLS as GROWTHLS
 # from .gulf import GULF as GULF
 from .hahn1ls import HAHN1LS as HAHN1LS
 from .hairy import HAIRY as HAIRY
-
-# TODO: HATFLD family needs human review - discrepancies in HATFLDGLS
 from .hatfldd import HATFLDD as HATFLDD
 from .hatflde import HATFLDE as HATFLDE
 from .hatfldfl import HATFLDFL as HATFLDFL
 from .hatfldfls import HATFLDFLS as HATFLDFLS
-from .hatfldgls import HATFLDGLS as HATFLDGLS
 
+# from .hatfldgls import HATFLDGLS as HATFLDGLS  # TODO: gradient/Hessian issues
 # TODO: HEART problems need human review - significant discrepancies
 # from .heart import HEART6LS as HEART6LS, HEART8LS as HEART8LS
 from .helix import HELIX as HELIX
@@ -222,6 +220,7 @@ from .palmer2c import PALMER2C as PALMER2C
 from .palmer3c import PALMER3C as PALMER3C
 from .palmer4c import PALMER4C as PALMER4C
 from .palmer5c import PALMER5C as PALMER5C
+from .palmer5d import PALMER5D as PALMER5D
 from .palmer6c import PALMER6C as PALMER6C
 from .palmer7c import PALMER7C as PALMER7C
 from .palmer8c import PALMER8C as PALMER8C
@@ -230,6 +229,7 @@ from .palmer8c import PALMER8C as PALMER8C
 # from .penalty1 import PENALTY1 as PENALTY1
 # TODO: Human review - SCALE factor issue
 # from .penalty2 import PENALTY2 as PENALTY2
+from .penalty3 import PENALTY3 as PENALTY3
 from .power import POWER as POWER
 from .powersum import POWERSUM as POWERSUM
 from .price3 import PRICE3 as PRICE3
@@ -394,11 +394,11 @@ unconstrained_minimisation_problems = (
     HAHN1LS(),
     # HAHN1LS(y0_id=1),  # Non-default starting point - we only test pycutest defaults
     HAIRY(),
-    # HATFLDD(),  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDE(),  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFL(),  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFLS(),  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDGLS(),  # TODO: HATFLD family needs human review - discrepancies
+    HATFLDD(),
+    HATFLDE(),
+    HATFLDFL(),
+    HATFLDFLS(),
+    # HATFLDGLS(),  # TODO: gradient/Hessian issues
     # HEART6LS(),  # TODO: Human review - significant discrepancies
     # HEART8LS(),  # TODO: Human review - significant discrepancies
     HELIX(),
@@ -446,11 +446,13 @@ unconstrained_minimisation_problems = (
     PALMER3C(),
     PALMER4C(),
     PALMER5C(),
+    PALMER5D(),
     PALMER6C(),
     PALMER7C(),
     PALMER8C(),
     # PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # PENALTY2(),  # TODO: Human review - SCALE factor issue
+    PENALTY3(),
     POWER(),
     POWERSUM(),
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15

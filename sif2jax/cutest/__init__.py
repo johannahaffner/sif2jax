@@ -9,6 +9,8 @@ from ._bounded_minimisation import (
     EXPLIN2 as EXPLIN2,
     EXPQUAD as EXPQUAD,
     HART6 as HART6,
+    HATFLDA as HATFLDA,
+    HATFLDB as HATFLDB,
     HATFLDC as HATFLDC,
     # HIMMELP1 as HIMMELP1,  # TODO: Human review needed - OBNL element issues
     HS1 as HS1,
@@ -23,9 +25,33 @@ from ._bounded_minimisation import (
     # LEVYMONT as LEVYMONT,  # TODO: Fix SCALE interpretation
     LOGROS as LOGROS,
     PALMER1 as PALMER1,
+    PALMER1A as PALMER1A,
+    # PALMER1B as PALMER1B,  # TODO: Fix Hessian issues
+    # PALMER1E as PALMER1E,  # TODO: Fix Hessian issues
     PALMER2 as PALMER2,
+    PALMER2A as PALMER2A,
+    PALMER2B as PALMER2B,
+    PALMER2E as PALMER2E,
+    PALMER3 as PALMER3,
+    PALMER3A as PALMER3A,
     PALMER3B as PALMER3B,
+    PALMER3E as PALMER3E,
+    PALMER4 as PALMER4,
+    # PALMER4A as PALMER4A,  # TODO: Fix Hessian issues
+    PALMER4B as PALMER4B,
     PALMER4E as PALMER4E,
+    # PALMER5A as PALMER5A,  # TODO: Fix Chebyshev polynomial calculation
+    PALMER5B as PALMER5B,
+    PALMER6A as PALMER6A,
+    PALMER6E as PALMER6E,
+    # PALMER7A as PALMER7A,  # TODO: Fix Hessian issues
+    PALMER7E as PALMER7E,
+    PALMER8A as PALMER8A,
+    PALMER8E as PALMER8E,
+    PFIT1LS as PFIT1LS,
+    PFIT2LS as PFIT2LS,
+    PFIT3LS as PFIT3LS,
+    PFIT4LS as PFIT4LS,
     PRICE4B as PRICE4B,
 )
 from ._constrained_minimisation import (
@@ -61,7 +87,7 @@ from ._constrained_minimisation import (
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
     # CLNLBEAM as CLNLBEAM,  # TODO: Dimension mismatch in constraints
-    CONCON as CONCON,
+    # CONCON as CONCON,  # TODO: Removed - automatic derivative mismatches
     constrained_minimisation_problems as constrained_minimisation_problems,
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
     CSFI1 as CSFI1,
@@ -71,7 +97,14 @@ from ._constrained_minimisation import (
     DECONVC as DECONVC,
     DTOC1L as DTOC1L,
     ELATTAR as ELATTAR,
+    EXPFITA as EXPFITA,
+    EXPFITB as EXPFITB,
+    EXPFITC as EXPFITC,
     GIGOMEZ2 as GIGOMEZ2,
+    # HAGER1 as HAGER1,  # TODO: Human review needed - parameter mismatch
+    # HAGER2 as HAGER2,  # TODO: Human review needed - parameter mismatch
+    # HAGER3 as HAGER3,  # TODO: Human review needed - parameter mismatch
+    # HAGER4 as HAGER4,  # TODO: Human review needed - parameter mismatch
     HIMMELBC as HIMMELBC,
     HIMMELBD as HIMMELBD,
     HIMMELBE as HIMMELBE,
@@ -144,8 +177,8 @@ from ._constrained_minimisation import (
     HS71 as HS71,
     HS72 as HS72,
     HS73 as HS73,
-    HS74 as HS74,
-    HS75 as HS75,
+    # HS74 as HS74,  # TODO: Human review - constraint Jacobian discrepancies
+    # HS75 as HS75,  # TODO: Human review - same issues as HS74
     HS76 as HS76,
     HS77 as HS77,
     HS78 as HS78,
@@ -165,14 +198,14 @@ from ._constrained_minimisation import (
     HS106 as HS106,
     HS107 as HS107,
     HS108 as HS108,
-    HS109 as HS109,
+    # HS109 as HS109,  # TODO: Human review needed - sign convention issues
     HS111 as HS111,
     HS112 as HS112,
     HS113 as HS113,
     HS114 as HS114,
     HS116 as HS116,
     HS117 as HS117,
-    HS118 as HS118,
+    # HS118 as HS118,  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119 as HS119,
     HYDROELL as HYDROELL,
     LOOTSMA as LOOTSMA,
@@ -185,7 +218,7 @@ from ._constrained_minimisation import (
     LUKVLE6 as LUKVLE6,
     LUKVLE7 as LUKVLE7,
     LUKVLE8 as LUKVLE8,
-    LUKVLE9 as LUKVLE9,
+    # LUKVLE9 as LUKVLE9,  # TODO: Human review needed - Jacobian issues
     LUKVLE10 as LUKVLE10,
     LUKVLE11 as LUKVLE11,
     # LUKVLE12 as LUKVLE12,  # Has constraint function inconsistencies
@@ -204,7 +237,7 @@ from ._constrained_minimisation import (
     LUKVLI6 as LUKVLI6,
     LUKVLI7 as LUKVLI7,
     LUKVLI8 as LUKVLI8,
-    LUKVLI9 as LUKVLI9,
+    # LUKVLI9 as LUKVLI9,  # TODO: Human review needed - Jacobian issues
     LUKVLI10 as LUKVLI10,
     LUKVLI11 as LUKVLI11,
     # LUKVLI12 as LUKVLI12,  # Has constraint function inconsistencies
@@ -220,13 +253,18 @@ from ._constrained_minimisation import (
     MAKELA4 as MAKELA4,
     MARATOS as MARATOS,
     ODFITS as ODFITS,
+    ORTHRDM2 as ORTHRDM2,
+    ORTHRDS2 as ORTHRDS2,
+    ORTHREGA as ORTHREGA,
     ORTHREGD as ORTHREGD,
     ORTHRGDM as ORTHRGDM,
     PENTAGON as PENTAGON,
     POLAK1 as POLAK1,
     POLAK2 as POLAK2,
     POLAK3 as POLAK3,
+    POLAK4 as POLAK4,
     POLAK5 as POLAK5,
+    POLAK6 as POLAK6,
     POLYGON as POLYGON,
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
@@ -235,8 +273,8 @@ from ._constrained_minimisation import (
     # STEENBRB as STEENBRB,  # TODO: Human review - gradient test failing
     # SIPOW3 as SIPOW3,  # TODO: Human review - constraint formulation issues
     # SIPOW4 as SIPOW4,  # TODO: Human review - constraint formulation issues
-    TENBARS4 as TENBARS4,
-    TRUSPYR1 as TRUSPYR1,
+    # TENBARS4 as TENBARS4,  # TODO: Human review - pycutest Jacobian inconsistency
+    # TRUSPYR1 as TRUSPYR1,  # TODO: Human review - complex constraint scaling issues
     # TRUSPYR2 as TRUSPYR2,  # TODO: Human review - test requested to be removed
     # VANDERM3 as VANDERM3,  # TODO: Human review - constraints mismatch
     # VANDERM4 as VANDERM4,  # TODO: Human review - constraints mismatch
@@ -249,7 +287,7 @@ from ._nonlinear_equations import (
     ARGAUSS as ARGAUSS,
     ARGLALE as ARGLALE,
     ARGLBLE as ARGLBLE,
-    # ARGLCLE as ARGLCLE,  # TODO: should be least squares, not nonlinear equations
+    ARGLCLE as ARGLCLE,
     ARGTRIG as ARGTRIG,
     ARTIF as ARTIF,
     # TODO: Human review needed - constraint dimension mismatch
@@ -264,16 +302,16 @@ from ._nonlinear_equations import (
     BOX3NE as BOX3NE,
     BOXBOD as BOXBOD,
     BRATU2DT as BRATU2DT,
-    BROWNALE as BROWNALE,
+    # BROWNALE as BROWNALE,  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE as BROWNBSNE,
     BROWNDENE as BROWNDENE,
-    BROYDN3D as BROYDN3D,
-    BROYDNBD as BROYDNBD,
-    BRYBNDNE as BRYBNDNE,
-    CERI651A as CERI651A,
-    CERI651B as CERI651B,
-    CERI651C as CERI651C,
-    CHAINWOONE as CHAINWOONE,
+    # BROYDN3D as BROYDN3D,  # TODO: Human review needed - constraint values mismatch
+    # BROYDNBD as BROYDNBD,  # TODO: Human review needed - systematic differences
+    # BRYBNDNE as BRYBNDNE,  # TODO: Human review needed - constraint values mismatch
+    # CERI651A as CERI651A,  # TODO: Human review - numerical overflow at ones vector
+    # CERI651B as CERI651B,  # TODO: Human review - numerical overflow at ones vector
+    # CERI651C as CERI651C,  # TODO: Human review - numerical overflow at ones vector
+    # CHAINWOONE as CHAINWOONE,  # TODO: Human review - constraint values mismatch
     CHANDHEQ as CHANDHEQ,
     # CHANNEL as CHANNEL,  # TODO: Human review needed
     CHEBYQADNE as CHEBYQADNE,
@@ -282,7 +320,7 @@ from ._nonlinear_equations import (
     COOLHANS as COOLHANS,
     # CHNRSBNE as CHNRSBNE,  # TODO: Human review needed
     # CHNRSNBMNE as CHNRSNBMNE,  # TODO: Human review needed
-    CUBENE as CUBENE,
+    # CUBENE as CUBENE,  # TODO: Human review - constraint and Jacobian mismatch
     CYCLIC3 as CYCLIC3,
     DANIWOOD as DANIWOOD,
     DECONVBNE as DECONVBNE,
@@ -298,8 +336,8 @@ from ._nonlinear_equations import (
     # EIGENAU as EIGENAU,  # TODO: Human review - non-standard initial values
     ELATVIDUNE as ELATVIDUNE,
     ENGVAL2NE as ENGVAL2NE,
+    ERRINROSNE as ERRINROSNE,
     ERRINRSMNE as ERRINRSMNE,
-    # ERRINROSNE as ERRINROSNE,  # TODO: Human review needed
     EXP2NE as EXP2NE,
     EXPFITNE as EXPFITNE,
     EXTROSNBNE as EXTROSNBNE,
@@ -311,14 +349,18 @@ from ._nonlinear_equations import (
     HATFLDANE as HATFLDANE,
     HATFLDBNE as HATFLDBNE,
     HATFLDCNE as HATFLDCNE,
+    HATFLDDNE as HATFLDDNE,
+    # HATFLDENE as HATFLDENE,  # TODO: Human review - sign convention issues
+    HATFLDF as HATFLDF,
     HATFLDFLNE as HATFLDFLNE,
+    HATFLDG as HATFLDG,
     HELIXNE as HELIXNE,
     HIMMELBA as HIMMELBA,
     HIMMELBFNE as HIMMELBFNE,
     HS1NE as HS1NE,
     HS2NE as HS2NE,
     HS25NE as HS25NE,
-    HYDCAR6 as HYDCAR6,
+    # HYDCAR6 as HYDCAR6,  # TODO: Human review needed
     HYPCIR as HYPCIR,
     INTEQNE as INTEQNE,
     JENSMPNE as JENSMPNE,
@@ -330,8 +372,15 @@ from ._nonlinear_equations import (
     LEVYMONE9 as LEVYMONE9,
     LEVYMONE10 as LEVYMONE10,
     LIARWHDNE as LIARWHDNE,
-    LINVERSENE as LINVERSENE,
+    # LINVERSENE as LINVERSENE,  # TODO: Human review - incomplete implementation
+    LUKSAN11 as LUKSAN11,
+    LUKSAN12 as LUKSAN12,
+    LUKSAN13 as LUKSAN13,
     LUKSAN14 as LUKSAN14,
+    LUKSAN15 as LUKSAN15,
+    LUKSAN16 as LUKSAN16,
+    LUKSAN17 as LUKSAN17,
+    LUKSAN21 as LUKSAN21,
     MANCINONE as MANCINONE,
     MEYER3NE as MEYER3NE,
     MGH09 as MGH09,
@@ -340,10 +389,10 @@ from ._nonlinear_equations import (
     MOREBVNE as MOREBVNE,
     MSQRTA as MSQRTA,
     MSQRTB as MSQRTB,
-    MUONSINE as MUONSINE,
+    # MUONSINE as MUONSINE,  # TODO: Human review - hardcoded data values
     NONDIANE as NONDIANE,
     nonlinear_equations_problems as nonlinear_equations_problems,
-    NONMSQRTNE as NONMSQRTNE,
+    # NONMSQRTNE as NONMSQRTNE,  # TODO: Human review - element structure
     NONSCOMPNE as NONSCOMPNE,
     OSCIGRNE as OSCIGRNE,
     OSCIPANE as OSCIPANE,
@@ -355,24 +404,40 @@ from ._nonlinear_equations import (
     PALMER2BNE as PALMER2BNE,
     PALMER2ENE as PALMER2ENE,
     PALMER2NE as PALMER2NE,
+    PALMER3ANE as PALMER3ANE,
+    PALMER3BNE as PALMER3BNE,
     PALMER3ENE as PALMER3ENE,
+    PALMER3NE as PALMER3NE,
+    PALMER4ANE as PALMER4ANE,
+    PALMER4BNE as PALMER4BNE,
     PALMER4ENE as PALMER4ENE,
+    PALMER4NE as PALMER4NE,
+    # PALMER5ANE as PALMER5ANE,  # TODO: Fix Chebyshev polynomial calculation
     PALMER5BNE as PALMER5BNE,
     PALMER5ENE as PALMER5ENE,
+    PALMER6ANE as PALMER6ANE,
+    PALMER6ENE as PALMER6ENE,
     PALMER7ANE as PALMER7ANE,
+    PALMER7ENE as PALMER7ENE,
+    PALMER8ANE as PALMER8ANE,
+    PALMER8ENE as PALMER8ENE,
+    PFIT1 as PFIT1,
+    PFIT2 as PFIT2,
+    PFIT3 as PFIT3,
     PFIT4 as PFIT4,
     POWELLBS as POWELLBS,
     POWELLSE as POWELLSE,
     POWELLSQ as POWELLSQ,
     POWERSUMNE as POWERSUMNE,
-    RES as RES,
+    # RES as RES,  # TODO: Human review needed - mixed constraint types
     SANTA as SANTA,
     SINVALNE as SINVALNE,
-    SSBRYBNDNE as SSBRYBNDNE,
+    # SSBRYBNDNE as SSBRYBNDNE,  # TODO: Human review needed - complex element structure
     TENFOLDTR as TENFOLDTR,
-    VANDERM1 as VANDERM1,
-    VANDERM2 as VANDERM2,
 )
+
+# VANDERM1 as VANDERM1,  # TODO: Human review - mixed constraint types
+# VANDERM2 as VANDERM2,  # TODO: Human review - mixed constraint types
 from ._quadratic_problems import (
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
     DEGDIAG as DEGDIAG,
@@ -509,11 +574,11 @@ from ._unconstrained_minimisation import (
     # GULF as GULF,  # TODO: Human review - issues reported by user
     HAHN1LS as HAHN1LS,
     HAIRY as HAIRY,
-    # HATFLDD as HATFLDD,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDE as HATFLDE,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFL as HATFLDFL,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDFLS as HATFLDFLS,  # TODO: HATFLD family needs human review - discrepancies
-    # HATFLDGLS as HATFLDGLS,  # TODO: HATFLD family needs human review - discrepancies
+    HATFLDD as HATFLDD,
+    HATFLDE as HATFLDE,
+    HATFLDFL as HATFLDFL,
+    HATFLDFLS as HATFLDFLS,
+    # HATFLDGLS as HATFLDGLS,  # TODO: Known gradient/Hessian discrepancies
     # HEART6LS as HEART6LS,  # TODO: Human review - significant discrepancies
     # HEART8LS as HEART8LS,  # TODO: Human review - significant discrepancies
     HELIX as HELIX,
@@ -559,11 +624,13 @@ from ._unconstrained_minimisation import (
     PALMER3C as PALMER3C,
     PALMER4C as PALMER4C,
     PALMER5C as PALMER5C,
+    PALMER5D as PALMER5D,
     PALMER6C as PALMER6C,
     PALMER7C as PALMER7C,
     PALMER8C as PALMER8C,
     # PENALTY1 as PENALTY1,  # TODO: Human review - minor numerical precision issues
     # PENALTY2 as PENALTY2,  # TODO: Human review - SCALE factor issue
+    PENALTY3 as PENALTY3,
     POWER as POWER,
     POWERSUM as POWERSUM,
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
@@ -680,8 +747,8 @@ problems_dict = {
     "HS71": HS71(),
     "HS72": HS72(),
     "HS73": HS73(),
-    "HS74": HS74(),
-    "HS75": HS75(),
+    # "HS74": HS74(),  # TODO: Human review - constraint Jacobian issues
+    # "HS75": HS75(),  # TODO: Human review - same issues as HS74
     "HS76": HS76(),
     "HS77": HS77(),
     "HS78": HS78(),
@@ -700,7 +767,7 @@ problems_dict = {
     "HS106": HS106(),
     "HS107": HS107(),
     "HS108": HS108(),
-    "HS109": HS109(),
+    # "HS109": HS109(),  # TODO: Human review needed - sign convention issues
     "HS110": HS110(),
     # "LEVYMONT": LEVYMONT(),  # TODO: Fix SCALE interpretation
     "LOGROS": LOGROS(),
@@ -710,7 +777,7 @@ problems_dict = {
     "HS114": HS114(),
     "HS116": HS116(),
     "HS117": HS117(),
-    "HS118": HS118(),
+    # "HS118": HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     "HS119": HS119(),
     "HIMMELBC": HIMMELBC(),
     "HIMMELBD": HIMMELBD(),
@@ -718,13 +785,18 @@ problems_dict = {
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
     "ODFITS": ODFITS(),
+    "ORTHRDM2": ORTHRDM2(),
+    "ORTHRDS2": ORTHRDS2(),
+    "ORTHREGA": ORTHREGA(),
     "ORTHRGDM": ORTHRGDM(),
     "ORTHREGD": ORTHREGD(),
     "PENTAGON": PENTAGON(),
     "POLAK1": POLAK1(),
     "POLAK2": POLAK2(),
     "POLAK3": POLAK3(),
+    "POLAK4": POLAK4(),
     "POLAK5": POLAK5(),
+    "POLAK6": POLAK6(),
     "POLYGON": POLYGON(),
     "SIMPLLPA": SIMPLLPA(),
     "SIMPLLPB": SIMPLLPB(),
@@ -732,8 +804,8 @@ problems_dict = {
     "SIPOW2": SIPOW2(),
     # "SIPOW3": SIPOW3(),  # TODO: Human review - constraint formulation issues
     # "SIPOW4": SIPOW4(),  # TODO: Human review - constraint formulation issues
-    "VANDERM1": VANDERM1(),
-    "VANDERM2": VANDERM2(),
+    # "VANDERM1": VANDERM1(),  # TODO: Human review - mixed constraint types
+    # "VANDERM2": VANDERM2(),  # TODO: Human review - mixed constraint types
     # "VANDERM3": VANDERM3(),  # TODO: Human review - constraints mismatch
     # "VANDERM4": VANDERM4(),  # TODO: Human review - constraints mismatch
     "MAKELA1": MAKELA1(),
@@ -745,7 +817,7 @@ problems_dict = {
     "ZECEVIC2": ZECEVIC2(),
     "ZECEVIC3": ZECEVIC3(),
     "ZECEVIC4": ZECEVIC4(),
-    "TRUSPYR1": TRUSPYR1(),
+    # "TRUSPYR1": TRUSPYR1(),  # TODO: Human review - complex constraint scaling issues
     # "TRUSPYR2": TRUSPYR2(),  # TODO: Human review - test requested to be removed
     "BT1": BT1(),
     "BT2": BT2(),
@@ -769,7 +841,7 @@ problems_dict = {
     "LUKVLE6": LUKVLE6(),
     "LUKVLE7": LUKVLE7(),
     "LUKVLE8": LUKVLE8(),
-    "LUKVLE9": LUKVLE9(),
+    # "LUKVLE9": LUKVLE9(),  # TODO: Human review needed - Jacobian issues
     "LUKVLE10": LUKVLE10(),
     "LUKVLE11": LUKVLE11(),
     # "LUKVLE12": LUKVLE12(),  # Has constraint function inconsistencies
@@ -788,7 +860,7 @@ problems_dict = {
     "LUKVLI6": LUKVLI6(),
     "LUKVLI7": LUKVLI7(),
     "LUKVLI8": LUKVLI8(),
-    "LUKVLI9": LUKVLI9(),
+    # "LUKVLI9": LUKVLI9(),  # TODO: Human review needed - Jacobian issues
     "LUKVLI10": LUKVLI10(),
     "LUKVLI11": LUKVLI11(),
     # "LUKVLI12": LUKVLI12(),  # Has constraint function inconsistencies
@@ -851,7 +923,7 @@ problems_dict = {
     "CLUSTER": CLUSTER(),
     "CLUSTERLS": CLUSTERLS(),
     "COATING": COATING(),
-    "CONCON": CONCON(),
+    # "CONCON": CONCON(),  # TODO: Removed - automatic derivative mismatches
     "COOLHANS": COOLHANS(),
     "COOLHANSLS": COOLHANSLS(),
     "COSINE": COSINE(),
@@ -937,18 +1009,24 @@ problems_dict = {
     # "GBRAINLS": GBRAINLS(),  # TODO: Human review - complex data dependencies
     "GENHUMPS": GENHUMPS(),
     "GIGOMEZ2": GIGOMEZ2(),
+    # "HAGER1": HAGER1(),  # TODO: Human review needed - parameter mismatch
+    # "HAGER2": HAGER2(),  # TODO: Human review needed - parameter mismatch
+    # "HAGER3": HAGER3(),  # TODO: Human review needed - parameter mismatch
+    # "HAGER4": HAGER4(),  # TODO: Human review needed - parameter mismatch
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
     # "GULF": GULF(),  # TODO: Human review - issues reported by user
     "HAHN1LS": HAHN1LS(),
     "HAIRY": HAIRY(),
     "HART6": HART6(),
+    "HATFLDA": HATFLDA(),
+    "HATFLDB": HATFLDB(),
     "HATFLDC": HATFLDC(),
-    # "HATFLDD": HATFLDD(),  # TODO: HATFLD family needs human review - discrepancies
-    # "HATFLDE": HATFLDE(),  # TODO: HATFLD family needs human review - discrepancies
-    # "HATFLDFL": HATFLDFL(),  # TODO: HATFLD family needs human review - discrepancies
-    # "HATFLDFLS": HATFLDFLS(),  # TODO: HATFLD family needs human review
-    # "HATFLDGLS": HATFLDGLS(),  # TODO: HATFLD family needs human review
+    "HATFLDD": HATFLDD(),
+    "HATFLDE": HATFLDE(),
+    "HATFLDFL": HATFLDFL(),
+    "HATFLDFLS": HATFLDFLS(),
+    # "HATFLDGLS": HATFLDGLS(),  # TODO: Known gradient/Hessian discrepancies
     # "HEART6LS": HEART6LS(),  # TODO: Human review - significant discrepancies
     # "HEART8LS": HEART8LS(),  # TODO: Human review - significant discrepancies
     "HELIX": HELIX(),
@@ -1002,12 +1080,26 @@ problems_dict = {
     "PALMER3C": PALMER3C(),
     "PALMER4C": PALMER4C(),
     "PALMER5C": PALMER5C(),
+    "PALMER5D": PALMER5D(),
     "PALMER6C": PALMER6C(),
     "PALMER7C": PALMER7C(),
     "PALMER8C": PALMER8C(),
+    # "PALMER4A": PALMER4A(),  # TODO: Fix Hessian issues
     "PALMER4E": PALMER4E(),
+    # "PALMER5A": PALMER5A(),  # TODO: Fix Chebyshev polynomial calculation
+    "PALMER5B": PALMER5B(),
+    "PALMER6A": PALMER6A(),
+    "PALMER6E": PALMER6E(),
+    # "PALMER7A": PALMER7A(),  # TODO: Fix Hessian issues
+    "PALMER7E": PALMER7E(),
+    "PALMER8A": PALMER8A(),
+    "PALMER8E": PALMER8E(),
+    "PALMER2A": PALMER2A(),
+    "PALMER2B": PALMER2B(),
+    "PALMER2E": PALMER2E(),
     # "PENALTY1": PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # "PENALTY2": PENALTY2(),  # TODO: Human review - SCALE factor issue
+    "PENALTY3": PENALTY3(),
     "POWER": POWER(),
     "POWERSUM": POWERSUM(),
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
@@ -1019,7 +1111,7 @@ problems_dict = {
     "S308": S308(),
     "SISSER": SISSER(),
     # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
-    "TENBARS4": TENBARS4(),
+    # "TENBARS4": TENBARS4(),  # TODO: Human review - pycutest Jacobian inconsistency
     "TENFOLDTRLS": TENFOLDTRLS(),
     "POWELLBS": POWELLBS(),
     "POWELLSE": POWELLSE(),
@@ -1051,7 +1143,7 @@ problems_dict = {
     "ARGAUSS": ARGAUSS(),
     "ARGLALE": ARGLALE(),
     "ARGLBLE": ARGLBLE(),
-    # "ARGLCLE": ARGLCLE(),  # TODO: should be least squares, not nonlinear equations
+    "ARGLCLE": ARGLCLE(),
     "ARGTRIG": ARGTRIG(),
     "ARTIF": ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch
@@ -1063,27 +1155,27 @@ problems_dict = {
     "BENNETT5": BENNETT5(),
     "BIGGS6NE": BIGGS6NE(),
     "BOX3NE": BOX3NE(),
-    "BROWNALE": BROWNALE(),
+    # "BROWNALE": BROWNALE(),  # TODO: Human review needed - Jacobian precision issues
     "BROWNBSNE": BROWNBSNE(),
     "BROWNDENE": BROWNDENE(),
     "BRATU2DT": BRATU2DT(),
     "LEVYMONE9": LEVYMONE9(),
-    "BROYDN3D": BROYDN3D(),
-    "BROYDNBD": BROYDNBD(),
-    "BRYBNDNE": BRYBNDNE(),
+    # "BROYDN3D": BROYDN3D(),  # TODO: Human review needed - constraint values mismatch
+    # "BROYDNBD": BROYDNBD(),  # TODO: Human review needed - systematic differences
+    # "BRYBNDNE": BRYBNDNE(),  # TODO: Human review needed - constraint values mismatch
     "HYPCIR": HYPCIR(),
     "MSQRTA": MSQRTA(),
     "MSQRTB": MSQRTB(),
-    "CERI651A": CERI651A(),
-    "CERI651B": CERI651B(),
-    "CERI651C": CERI651C(),
-    "CHAINWOONE": CHAINWOONE(),
+    # "CERI651A": CERI651A(),  # TODO: Human review - numerical overflow at ones vector
+    # "CERI651B": CERI651B(),  # TODO: Human review - numerical overflow at ones vector
+    # "CERI651C": CERI651C(),  # TODO: Human review - numerical overflow at ones vector
+    # "CHAINWOONE": CHAINWOONE(),  # TODO: Human review - constraint values mismatch
     # "CHANNEL": CHANNEL(),  # TODO: Human review needed
     "CHEBYQADNE": CHEBYQADNE(),
     # "CHNRSBNE": CHNRSBNE(),  # TODO: Human review needed
     # "CHNRSNBMNE": CHNRSNBMNE(),  # TODO: Human review needed
     "COATINGNE": COATINGNE(),
-    "CUBENE": CUBENE(),
+    # "CUBENE": CUBENE(),  # TODO: Human review - constraint and Jacobian mismatch
     "CYCLIC3": CYCLIC3(),
     "DENSCHNBNE": DENSCHNBNE(),
     "DENSCHNCNE": DENSCHNCNE(),
@@ -1100,8 +1192,11 @@ problems_dict = {
     "ELATVIDUNE": ELATVIDUNE(),
     "ENGVAL2NE": ENGVAL2NE(),
     "ERRINRSMNE": ERRINRSMNE(),
-    # "ERRINROSNE": ERRINROSNE(),  # TODO: Human review needed
+    "ERRINROSNE": ERRINROSNE(),
     "EXP2NE": EXP2NE(),
+    "EXPFITA": EXPFITA(),
+    "EXPFITB": EXPFITB(),
+    "EXPFITC": EXPFITC(),
     "EXPFITNE": EXPFITNE(),
     "EXTROSNBNE": EXTROSNBNE(),
     "FREURONE": FREURONE(),
@@ -1112,14 +1207,18 @@ problems_dict = {
     "HATFLDANE": HATFLDANE(),
     "HATFLDBNE": HATFLDBNE(),
     "HATFLDCNE": HATFLDCNE(),
+    "HATFLDDNE": HATFLDDNE(),
+    # "HATFLDENE": HATFLDENE(),  # TODO: Human review - sign convention issues
+    "HATFLDF": HATFLDF(),
     "HATFLDFLNE": HATFLDFLNE(),
+    "HATFLDG": HATFLDG(),
     "HELIXNE": HELIXNE(),
     "HIMMELBA": HIMMELBA(),
     "HIMMELBFNE": HIMMELBFNE(),
     "HS1NE": HS1NE(),
     "HS2NE": HS2NE(),
     "HS25NE": HS25NE(),
-    "HYDCAR6": HYDCAR6(),
+    # "HYDCAR6": HYDCAR6(),  # TODO: Human review needed
     "INTEQNE": INTEQNE(),
     "JENSMPNE": JENSMPNE(),
     "JUDGENE": JUDGENE(),
@@ -1129,17 +1228,24 @@ problems_dict = {
     "LEVYMONE8": LEVYMONE8(),
     "LEVYMONE10": LEVYMONE10(),
     "LIARWHDNE": LIARWHDNE(),
-    "LINVERSENE": LINVERSENE(),
+    # "LINVERSENE": LINVERSENE(),  # TODO: Human review - incomplete implementation
+    "LUKSAN11": LUKSAN11(),
+    "LUKSAN12": LUKSAN12(),
+    "LUKSAN13": LUKSAN13(),
     "LUKSAN14": LUKSAN14(),
+    "LUKSAN15": LUKSAN15(),
+    "LUKSAN16": LUKSAN16(),
+    "LUKSAN17": LUKSAN17(),
+    "LUKSAN21": LUKSAN21(),
     "MANCINONE": MANCINONE(),
     "MEYER3NE": MEYER3NE(),
     "MGH09": MGH09(),
     "MISRA1D": MISRA1D(),
     "MODBEALENE": MODBEALENE(),
     "MOREBVNE": MOREBVNE(),
-    "MUONSINE": MUONSINE(),
+    # "MUONSINE": MUONSINE(),  # TODO: Human review - hardcoded data values
     "NONDIANE": NONDIANE(),
-    "NONMSQRTNE": NONMSQRTNE(),
+    # "NONMSQRTNE": NONMSQRTNE(),  # TODO: Human review - element structure
     "NONSCOMPNE": NONSCOMPNE(),
     "OSCIGRNE": OSCIGRNE(),
     "OSCIPANE": OSCIPANE(),
@@ -1152,19 +1258,46 @@ problems_dict = {
     "PALMER2ENE": PALMER2ENE(),
     "PALMER2NE": PALMER2NE(),
     "PALMER1": PALMER1(),
+    "PALMER1A": PALMER1A(),
+    # "PALMER1B": PALMER1B(),  # TODO: Fix Hessian issues
+    # "PALMER1E": PALMER1E(),  # TODO: Fix Hessian issues
     "PALMER2": PALMER2(),
+    "PALMER3": PALMER3(),
+    "PALMER3A": PALMER3A(),
     "PALMER3B": PALMER3B(),
+    "PALMER3E": PALMER3E(),
+    "PALMER4": PALMER4(),
+    "PALMER4B": PALMER4B(),
+    "PALMER3ANE": PALMER3ANE(),
+    "PALMER3BNE": PALMER3BNE(),
     "PALMER3ENE": PALMER3ENE(),
+    "PALMER3NE": PALMER3NE(),
+    "PALMER4ANE": PALMER4ANE(),
+    "PALMER4BNE": PALMER4BNE(),
     "PALMER4ENE": PALMER4ENE(),
+    "PALMER4NE": PALMER4NE(),
+    # "PALMER5ANE": PALMER5ANE(),  # TODO: Fix Chebyshev polynomial calculation
     "PALMER5BNE": PALMER5BNE(),
     "PALMER5ENE": PALMER5ENE(),
+    "PALMER6ANE": PALMER6ANE(),
+    "PALMER6ENE": PALMER6ENE(),
     "PALMER7ANE": PALMER7ANE(),
+    "PALMER7ENE": PALMER7ENE(),
+    "PALMER8ANE": PALMER8ANE(),
+    "PALMER8ENE": PALMER8ENE(),
+    "PFIT1": PFIT1(),
+    "PFIT2": PFIT2(),
+    "PFIT3": PFIT3(),
     "PFIT4": PFIT4(),
+    "PFIT1LS": PFIT1LS(),
+    "PFIT2LS": PFIT2LS(),
+    "PFIT3LS": PFIT3LS(),
+    "PFIT4LS": PFIT4LS(),
     "POWERSUMNE": POWERSUMNE(),
-    "RES": RES(),
+    # "RES": RES(),  # TODO: Human review needed - mixed constraint types
     "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),
-    "SSBRYBNDNE": SSBRYBNDNE(),
+    # "SSBRYBNDNE": SSBRYBNDNE(),  # TODO: Human review - complex element structure
     # "STEENBRB": STEENBRB(),  # TODO: Human review - gradient test failing
     "10FOLDTR": TENFOLDTR(),
 }

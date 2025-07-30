@@ -66,7 +66,8 @@ class HIMMELBFNE(AbstractNonlinearEquations):
             hf = u / v
 
             # G(i) = 0.0001 * (HF - 1.0)
-            residuals = residuals.at[i].set(0.0001 * (hf - 1.0))
+            # Note: pycutest inverts the scale factor for NLE problems
+            residuals = residuals.at[i].set(10000.0 * (hf - 1.0))
 
         return residuals
 
@@ -80,11 +81,13 @@ class HIMMELBFNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Not explicitly given in the SIF file
         return jnp.array([0.0, 0.0, 0.0, 0.0])
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

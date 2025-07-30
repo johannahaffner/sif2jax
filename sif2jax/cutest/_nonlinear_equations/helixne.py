@@ -53,11 +53,13 @@ class HELIXNE(AbstractNonlinearEquations):
         theta = jnp.arctan2(x2, x1) * twopii
 
         # A: 0.1 * (x3 - 10.0 * theta) = 0
-        residuals = residuals.at[0].set(0.1 * (x3 - 10.0 * theta))
+        # Note: pycutest inverts the 0.1 scale to 10.0 for NLE problems
+        residuals = residuals.at[0].set(10.0 * (x3 - 10.0 * theta))
 
         # B: 0.1 * (sqrt(x1^2 + x2^2) - 1.0) = 0
+        # Note: pycutest scales the Jacobian by 10 for NLE problems
         r = jnp.sqrt(x1 * x1 + x2 * x2)
-        residuals = residuals.at[1].set(0.1 * (r - 1.0))
+        residuals = residuals.at[1].set(10.0 * (r - 1.0))
 
         # C: x3 = 0
         residuals = residuals.at[2].set(x3)
@@ -74,11 +76,13 @@ class HELIXNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution is x1 = 1.0, x2 = 0.0, x3 = 0.0
         return jnp.array([1.0, 0.0, 0.0])
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

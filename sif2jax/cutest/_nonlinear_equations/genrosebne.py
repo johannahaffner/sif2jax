@@ -45,9 +45,10 @@ class GENROSEBNE(AbstractNonlinearEquations):
 
         # For each i from 2 to n, we have 2 equations
         for i in range(1, n):  # i = 2 to n in 1-based indexing
-            # Q(i) equation: 0.1 * (x(i) - x(i-1)^2) = 0
+            # Q(i) equation with SCALE 0.1
             # Element MSQR: -V^2 where V = x(i-1)
-            residuals = residuals.at[2 * (i - 1)].set(0.1 * (x[i] - x[i - 1] ** 2))
+            # SCALE parameter divides the residual
+            residuals = residuals.at[2 * (i - 1)].set((x[i] - x[i - 1] ** 2) / 0.1)
 
             # L(i) equation: x(i) - 1.0 = 0
             residuals = residuals.at[2 * (i - 1) + 1].set(x[i] - 1.0)
@@ -64,11 +65,13 @@ class GENROSEBNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution would be all ones
         return jnp.ones(self.n, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

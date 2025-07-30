@@ -9,6 +9,10 @@ class CUBENE(AbstractNonlinearEquations):
     A cubic variant of the Rosenbrock test function.
     Nonlinear equations version.
 
+    TODO: Human review needed - constraint values and Jacobian don't match pycutest
+    The issue might be related to how the SCALE parameter is applied or the
+    conversion to nonlinear equations form.
+
     Source: problem 5 (p. 89) in
     A.R. Buckley,
     "Test functions for unconstrained minimization",

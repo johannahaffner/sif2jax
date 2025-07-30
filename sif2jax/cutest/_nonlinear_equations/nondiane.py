@@ -45,10 +45,11 @@ class NONDIANE(AbstractNonlinearEquations):
         # SQ(1) = X(1) - 1.0
         res1 = y[0] - 1.0
 
-        # SQ(i) = 0.1 * (X(1) - X(i-1)^gamma) for i = 2 to N
+        # SQ(i) = (X(1) - X(i-1)^gamma) with SCALE 0.1 for i = 2 to N
+        # Note: pycutest inverts the SCALE 0.1 to 10.0 for NLE problems
         # Element ELA(i) contributes -X(i-1)^gamma
         # X(i-1) for i=2..N corresponds to y[0..n-2]
-        res_rest = 0.1 * (y[0] - y[:-1] ** gamma)
+        res_rest = 10.0 * (y[0] - y[:-1] ** gamma)
 
         # Combine results
         residuals = jnp.concatenate([jnp.array([res1]), res_rest])
@@ -65,6 +66,7 @@ class NONDIANE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution should satisfy F(x*) = 0
@@ -72,6 +74,7 @@ class NONDIANE(AbstractNonlinearEquations):
         # Which gives x[i] = 1 for all i
         return jnp.ones(self.n, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

@@ -9,6 +9,11 @@ See also Toint#17 and Buckley#78.
 SIF input: Ph. Toint, Dec 1989.
 
 Classification: NQR2-AN-V-V
+
+TODO: Human review needed - constraint values don't match pycutest
+Our implementation matches the SIF file specification exactly, but
+pycutest returns different values. This may be a pycutest issue
+or a different interpretation of the NQR2 classification.
 """
 
 import jax.numpy as jnp

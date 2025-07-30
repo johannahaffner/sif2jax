@@ -8,8 +8,8 @@ class BT7(AbstractConstrainedMinimisation):
 
     n = 5, m = 3.
     f(x) = 100(x₂ - x₁²)² + (1 - x₁)².
-    g₁(x) = x₁x₂ - 1 - x₅.
-    g₂(x) = x₂² + x₁ - x₃².
+    g₁(x) = x₁x₂ - x₃² - 1.
+    g₂(x) = x₂² - x₄² + x₁.
     g₃(x) = x₁ + x₅² - ½.
 
     Start 1: x₁ = -2, x₂ = 1, x₃ = 1, x₄ = 1, x₅ = 1.
@@ -61,8 +61,8 @@ class BT7(AbstractConstrainedMinimisation):
     def constraint(self, y):
         x1, x2, x3, x4, x5 = y
         # Equality constraints
-        g1 = x1 * x2 - 1 - x5
-        g2 = x2**2 + x1 - x3**2
+        g1 = x1 * x2 - x3**2 - 1
+        g2 = x2**2 - x4**2 + x1
         g3 = x1 + x5**2 - 0.5
         equality_constraints = jnp.array([g1, g2, g3])
         return equality_constraints, None

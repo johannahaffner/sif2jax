@@ -20,16 +20,17 @@ class ARTIF(AbstractNonlinearEquations):
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
-    n: int = 5000  # Problem dimension (number of equations)
+    n: int = 5002  # Total number of variables including fixed boundary values
+    n_eq: int = 5000  # Number of equations
 
     def residual(self, y, args) -> Float[Array, "5000"]:
         """Residual function for the nonlinear equations."""
-        # Add fixed boundary values (0 at both ends)
-        x = jnp.concatenate([jnp.array([0.0]), y, jnp.array([0.0])])
+        # y already contains all variables including fixed boundary values
+        x = y
 
         # Compute residuals for each equation
         residuals = []
-        for i in range(1, self.n + 1):
+        for i in range(1, self.n_eq + 1):
             # Linear part: -0.05 * (X(i-1) + X(i) + X(i+1))
             linear_part = -0.05 * (x[i - 1] + x[i] + x[i + 1])
 
@@ -42,10 +43,14 @@ class ARTIF(AbstractNonlinearEquations):
         return jnp.array(residuals)
 
     @property
-    def y0(self) -> Float[Array, "5000"]:
+    def y0(self) -> Float[Array, "5002"]:
         """Initial guess for the optimization problem."""
-        # All variables start at 1.0 (except fixed boundary values)
-        return jnp.ones(self.n)
+        # All variables start at 1.0, including fixed boundary values
+        y = jnp.ones(self.n)
+        # Set boundary values to 0
+        y = y.at[0].set(0.0)
+        y = y.at[-1].set(0.0)
+        return y
 
     @property
     def args(self):
@@ -70,5 +75,15 @@ class ARTIF(AbstractNonlinearEquations):
 
     @property
     def bounds(self) -> tuple[Array, Array] | None:
-        """No bounds for this problem."""
-        return None
+        """Bounds for the variables."""
+        # X(0) and X(N+1) are fixed at 0
+        lower = jnp.full(self.n, -jnp.inf)
+        upper = jnp.full(self.n, jnp.inf)
+
+        # Fix boundary values
+        lower = lower.at[0].set(0.0)
+        upper = upper.at[0].set(0.0)
+        lower = lower.at[-1].set(0.0)
+        upper = upper.at[-1].set(0.0)
+
+        return lower, upper

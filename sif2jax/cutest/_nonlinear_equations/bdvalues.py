@@ -37,16 +37,11 @@ class BDVALUES(AbstractNonlinearEquations):
     def residual(self, y):
         """Compute the residuals for the system.
 
-        y contains only the free variables x(2) to x(NDP-1).
+        y contains all NDP variables including fixed boundary conditions.
         x(1) = 0 and x(NDP) = 0 are fixed boundary conditions.
         """
         ndp = self.NDP
-
-        # Construct full x vector with boundary conditions
-        x = jnp.zeros(ndp)
-        # x[0] = 0.0 (already zero)
-        x = x.at[1 : ndp - 1].set(y)  # Set free variables
-        # x[ndp-1] = 0.0 (already zero)
+        x = y  # y already contains all variables
 
         # Useful parameters
         h = 1.0 / (ndp - 1)
@@ -76,20 +71,20 @@ class BDVALUES(AbstractNonlinearEquations):
 
     @property
     def y0(self):
-        """Initial guess for free variables only."""
+        """Initial guess for all variables."""
         ndp = self.NDP
         h = 1.0 / (ndp - 1)
         x0scale = self.X0SCALE
 
-        # Only the free variables
-        y = jnp.zeros(ndp - 2)
+        # All variables including fixed boundary values
+        y = jnp.zeros(ndp)
 
-        # Set interior values
+        # Set all values (boundary values remain 0)
         for i in range(1, ndp - 1):
             # From SIF: TI = IH * (IH - 1) where IH = i * h
             ih = float(i) * h
             ti = ih * (ih - 1.0)
-            y = y.at[i - 1].set(ti * x0scale)  # Note: y[i-1] corresponds to x[i]
+            y = y.at[i].set(ti * x0scale)
 
         return y
 
@@ -111,8 +106,8 @@ class BDVALUES(AbstractNonlinearEquations):
 
     @property
     def n(self):
-        """Number of free variables."""
-        return self.NDP - 2
+        """Number of variables (including fixed ones)."""
+        return self.NDP
 
     @property
     def m(self):
@@ -122,5 +117,14 @@ class BDVALUES(AbstractNonlinearEquations):
     @property
     def bounds(self):
         """Returns the bounds on the variable y."""
-        # No bounds for this problem
-        return None
+        # X(1) and X(NDP) are fixed at 0
+        lower = jnp.full(self.NDP, -jnp.inf)
+        upper = jnp.full(self.NDP, jnp.inf)
+
+        # Fix boundary values
+        lower = lower.at[0].set(0.0)
+        upper = upper.at[0].set(0.0)
+        lower = lower.at[-1].set(0.0)
+        upper = upper.at[-1].set(0.0)
+
+        return lower, upper

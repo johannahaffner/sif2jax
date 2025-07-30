@@ -93,12 +93,9 @@ class ORTHRDS2(AbstractConstrainedMinimisation):
         yd = r2 * pert
 
         # Modify specified data points to force singularity
-        # Convert 1-indexed to 0-indexed
-        tdp_lo_idx = self.tdp_lo - 1
-        tdp_hi_idx = self.tdp_hi - 1
-
-        # Create mask for modified points
-        mask = (i_vals >= tdp_lo_idx) & (i_vals <= tdp_hi_idx)
+        # Note: In SIF, indices are 1-based, but the loop generates indices 0-based
+        # So TDP_lo=5 means the 5th point (index 4 in 0-based)
+        mask = ((i_vals + 1) >= self.tdp_lo) & ((i_vals + 1) <= self.tdp_hi)
         xd = jnp.where(mask, 1.1, xd)
         yd = jnp.where(mask, 0.1, yd)
 

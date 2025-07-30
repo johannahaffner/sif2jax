@@ -4,6 +4,10 @@ from jax import Array
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Verified implementation against SIF file
+# Suspected issues: Large Jacobian differences (max 92.82) suggest fundamental issue
+# Resources needed: Deep analysis of constraint formulation differences
 class EXPFITC(AbstractConstrainedMinimisation):
     """One-sided rational approximation to the exponential function.
 

@@ -28,29 +28,27 @@ class ARTIF(AbstractNonlinearEquations):
         # y already contains all variables including fixed boundary values
         x = y
 
-        # Compute residuals for each equation
-        residuals = []
-        for i in range(1, self.n_eq + 1):
-            # Linear part: -0.05 * (X(i-1) + X(i) + X(i+1))
-            linear_part = -0.05 * (x[i - 1] + x[i] + x[i + 1])
+        # Vectorized computation
+        # Create index arrays
+        i = jnp.arange(1, self.n_eq + 1)
 
-            # Nonlinear part: arctan(sin(i * X(i)))
-            fact = float(i % 100)
-            nonlinear_part = jnp.arctan(jnp.sin(fact * x[i]))
+        # Linear part: -0.05 * (X(i-1) + X(i) + X(i+1))
+        linear_part = -0.05 * (x[i - 1] + x[i] + x[i + 1])
 
-            residuals.append(linear_part + nonlinear_part)
+        # Nonlinear part: arctan(sin(fact * X(i)))
+        # fact = i % 100
+        fact = (i % 100).astype(x.dtype)
+        nonlinear_part = jnp.arctan(jnp.sin(fact * x[i]))
 
-        return jnp.array(residuals)
+        return linear_part + nonlinear_part
 
     @property
     def y0(self) -> Float[Array, "5002"]:
         """Initial guess for the optimization problem."""
         # All variables start at 1.0, including fixed boundary values
-        y = jnp.ones(self.n)
-        # Set boundary values to 0
-        y = y.at[0].set(0.0)
-        y = y.at[-1].set(0.0)
-        return y
+        # Note: pycutest keeps boundary values at 1.0 in initial guess
+        # even though they are fixed to 0.0 in bounds
+        return jnp.ones(self.n)
 
     @property
     def args(self):

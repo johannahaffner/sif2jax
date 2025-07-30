@@ -3,6 +3,11 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Multiple attempts to handle fixed variables and constraint signs
+# Suspected issues: pycutest vs sif2jax convention differences for fixed variables
+#                   and constraint signs
+# Resources needed: Understanding of how pycutest handles fixed boundary values
 class POLYGON(AbstractConstrainedMinimisation):
     """Find the polygon of maximal area with fixed diameter.
 
@@ -50,7 +55,7 @@ class POLYGON(AbstractConstrainedMinimisation):
             i_1based = i + 1
             ratri = nv_plus_1 - i_1based  # RATRI = NV+1 - I
             ratri = ratri * i_1based  # RATRI = RATRI * I
-            ratri = ratri / ratr  # RATRI = RATRI / RATR (division, not multiplication)
+            ratri = ratri / ratr  # RATRI = RATRI / RATR
             ratti = ratt * i_1based  # RATTI = RATT * I
 
             y0 = y0.at[2 * i].set(ratri)  # R(i+1)
@@ -123,7 +128,7 @@ class POLYGON(AbstractConstrainedMinimisation):
         theta_j = theta[j_vals]
 
         dist_sq = r_i**2 + r_j**2 - 2.0 * r_i * r_j * jnp.cos(theta_j - theta_i)
-        distance_constraints = dist_sq - 1.0
+        distance_constraints = dist_sq - 1.0  # <= 1 constraint
 
         # No equality constraints
         equalities = None

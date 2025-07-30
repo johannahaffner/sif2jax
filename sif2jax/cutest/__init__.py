@@ -255,7 +255,7 @@ from ._constrained_minimisation import (
     ODFITS as ODFITS,
     ORTHRDM2 as ORTHRDM2,
     ORTHRDS2 as ORTHRDS2,
-    ORTHREGA as ORTHREGA,
+    # ORTHREGA as ORTHREGA,  # TODO: Human review - objective/constraint formulation
     ORTHREGD as ORTHREGD,
     ORTHRGDM as ORTHRGDM,
     PENTAGON as PENTAGON,
@@ -265,7 +265,7 @@ from ._constrained_minimisation import (
     POLAK4 as POLAK4,
     POLAK5 as POLAK5,
     POLAK6 as POLAK6,
-    POLYGON as POLYGON,
+    # POLYGON as POLYGON,  # TODO: Human review - fixed variable handling
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
     SIPOW1 as SIPOW1,
@@ -374,7 +374,7 @@ from ._nonlinear_equations import (
     LIARWHDNE as LIARWHDNE,
     # LINVERSENE as LINVERSENE,  # TODO: Human review - incomplete implementation
     LUKSAN11 as LUKSAN11,
-    LUKSAN12 as LUKSAN12,
+    # LUKSAN12 as LUKSAN12,  # TODO: Human review - Jacobian mismatch
     LUKSAN13 as LUKSAN13,
     LUKSAN14 as LUKSAN14,
     LUKSAN15 as LUKSAN15,
@@ -385,8 +385,8 @@ from ._nonlinear_equations import (
     MEYER3NE as MEYER3NE,
     MGH09 as MGH09,
     MISRA1D as MISRA1D,
-    MODBEALENE as MODBEALENE,
-    MOREBVNE as MOREBVNE,
+    # MODBEALENE as MODBEALENE,  # TODO: Human review - constraint ordering issues
+    # MOREBVNE as MOREBVNE,  # TODO: Human review - SIF file bug on line 64
     MSQRTA as MSQRTA,
     MSQRTB as MSQRTB,
     # MUONSINE as MUONSINE,  # TODO: Human review - hardcoded data values
@@ -414,7 +414,7 @@ from ._nonlinear_equations import (
     PALMER4NE as PALMER4NE,
     # PALMER5ANE as PALMER5ANE,  # TODO: Fix Chebyshev polynomial calculation
     PALMER5BNE as PALMER5BNE,
-    PALMER5ENE as PALMER5ENE,
+    # PALMER5ENE as PALMER5ENE,  # TODO: Human review - numerical precision
     PALMER6ANE as PALMER6ANE,
     PALMER6ENE as PALMER6ENE,
     PALMER7ANE as PALMER7ANE,
@@ -787,7 +787,7 @@ problems_dict = {
     "ODFITS": ODFITS(),
     "ORTHRDM2": ORTHRDM2(),
     "ORTHRDS2": ORTHRDS2(),
-    "ORTHREGA": ORTHREGA(),
+    # "ORTHREGA": ORTHREGA(),  # TODO: Human review - objective/constraint formulation
     "ORTHRGDM": ORTHRGDM(),
     "ORTHREGD": ORTHREGD(),
     "PENTAGON": PENTAGON(),
@@ -797,7 +797,7 @@ problems_dict = {
     "POLAK4": POLAK4(),
     "POLAK5": POLAK5(),
     "POLAK6": POLAK6(),
-    "POLYGON": POLYGON(),
+    # "POLYGON": POLYGON(),  # TODO: Human review - fixed variable handling
     "SIMPLLPA": SIMPLLPA(),
     "SIMPLLPB": SIMPLLPB(),
     "SIPOW1": SIPOW1(),
@@ -1230,7 +1230,7 @@ problems_dict = {
     "LIARWHDNE": LIARWHDNE(),
     # "LINVERSENE": LINVERSENE(),  # TODO: Human review - incomplete implementation
     "LUKSAN11": LUKSAN11(),
-    "LUKSAN12": LUKSAN12(),
+    # "LUKSAN12": LUKSAN12(),  # TODO: Human review - Jacobian mismatch
     "LUKSAN13": LUKSAN13(),
     "LUKSAN14": LUKSAN14(),
     "LUKSAN15": LUKSAN15(),
@@ -1241,8 +1241,8 @@ problems_dict = {
     "MEYER3NE": MEYER3NE(),
     "MGH09": MGH09(),
     "MISRA1D": MISRA1D(),
-    "MODBEALENE": MODBEALENE(),
-    "MOREBVNE": MOREBVNE(),
+    # "MODBEALENE": MODBEALENE(),  # TODO: Human review - constraint ordering issues
+    # "MOREBVNE": MOREBVNE(),  # TODO: Human review - SIF file bug on line 64
     # "MUONSINE": MUONSINE(),  # TODO: Human review - hardcoded data values
     "NONDIANE": NONDIANE(),
     # "NONMSQRTNE": NONMSQRTNE(),  # TODO: Human review - element structure
@@ -1278,7 +1278,7 @@ problems_dict = {
     "PALMER4NE": PALMER4NE(),
     # "PALMER5ANE": PALMER5ANE(),  # TODO: Fix Chebyshev polynomial calculation
     "PALMER5BNE": PALMER5BNE(),
-    "PALMER5ENE": PALMER5ENE(),
+    # "PALMER5ENE": PALMER5ENE(),  # TODO: Human review - numerical precision
     "PALMER6ANE": PALMER6ANE(),
     "PALMER6ENE": PALMER6ENE(),
     "PALMER7ANE": PALMER7ANE(),

@@ -37,19 +37,22 @@ class LIARWHDNE(AbstractNonlinearEquations):
         """Compute the residual vector.
 
         The problem has residuals of the form:
-        A(i): sqrt(0.25) * (x(i)^2 - x(1)) = 0
+        A(i): 2 * (x(i)^2 - x(1)) = 0  (pycutest uses 2.0 instead of 0.5)
         B(i): x(i) - 1.0 = 0
         """
         x = y
-        residuals = jnp.zeros(2 * self.n, dtype=jnp.float64)
-        roootp25 = jnp.sqrt(0.25)  # sqrt(0.25) = 0.5
 
-        for i in range(self.n):
-            # A(i): sqrt(0.25) * (x(i)^2 - x(1))
-            residuals = residuals.at[2 * i].set(roootp25 * (x[i] * x[i] - x[0]))
+        # Vectorized implementation
+        # A(i) residuals: appears pycutest uses factor 2 instead of 0.5
+        a_residuals = 2.0 * (x * x - x[0])
 
-            # B(i): x(i) - 1.0
-            residuals = residuals.at[2 * i + 1].set(x[i] - 1.0)
+        # B(i) residuals: x(i) - 1.0
+        b_residuals = x - 1.0
+
+        # Interleave A and B residuals
+        residuals = jnp.zeros(2 * self.n, dtype=x.dtype)
+        residuals = residuals.at[0::2].set(a_residuals)  # Even indices: A residuals
+        residuals = residuals.at[1::2].set(b_residuals)  # Odd indices: B residuals
 
         return residuals
 
@@ -63,11 +66,13 @@ class LIARWHDNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution should be all ones
         return jnp.ones(self.n, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

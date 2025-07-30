@@ -4,6 +4,10 @@ from jax import Array
 from ..._problem import AbstractNonlinearEquations
 
 
+# TODO: Human review needed
+# Attempts made: Vectorized implementation, fixed ordering to match SIF
+# Suspected issues: Complex constraint ordering or off-by-one indexing
+# Resources needed: Detailed comparison with Fortran implementation
 class MODBEALENE(AbstractNonlinearEquations):
     """
     A variation on Beale's problem in 2 variables
@@ -52,39 +56,47 @@ class MODBEALENE(AbstractNonlinearEquations):
         n_half = self.n_half
         ralphinv = jnp.sqrt(1.0 / self.alpha)
 
-        residuals = []
+        # Extract odd and even indexed elements
+        x_odd = y[0::2]  # X(1), X(3), X(5), ... (0-based: y[0], y[2], y[4], ...)
+        x_even = y[1::2]  # X(2), X(4), X(6), ... (0-based: y[1], y[3], y[5], ...)
 
-        # Process groups for i = 1 to N/2
-        for i in range(1, n_half + 1):
-            # Index calculations
-            j = 2 * (i - 1)  # 0-based indexing for array access
+        # Vectorized computation of BA, BB, BC groups
+        # BA(i): X(2i-1) * (1 - X(2i)^1) - 1.5
+        ba_residuals = x_odd * (1.0 - x_even) - 1.5
 
-            # BA(i) group: AE(i) - 1.5
-            # AE(i) = X(2i-1) * (1 - X(2i)^1)
-            ae = self._prodb_element(y[j], y[j + 1], 1.0)
-            residuals.append(ae - 1.5)
+        # BB(i): X(2i-1) * (1 - X(2i)^2) - 2.25
+        bb_residuals = x_odd * (1.0 - x_even**2) - 2.25
 
-            # BB(i) group: BE(i) - 2.25
-            # BE(i) = X(2i-1) * (1 - X(2i)^2)
-            be = self._prodb_element(y[j], y[j + 1], 2.0)
-            residuals.append(be - 2.25)
+        # BC(i): X(2i-1) * (1 - X(2i)^3) - 2.625
+        bc_residuals = x_odd * (1.0 - x_even**3) - 2.625
 
-            # BC(i) group: CE(i) - 2.625
-            # CE(i) = X(2i-1) * (1 - X(2i)^3)
-            ce = self._prodb_element(y[j], y[j + 1], 3.0)
-            residuals.append(ce - 2.625)
+        # Vectorized computation of L groups for i = 1 to N/2-1
+        # L(i) = ralphinv * (6.0 * X(2i) - X(2i+2))
+        # In 0-based: ralphinv * (6.0 * y[2i-1] - y[2i+1])
+        # Which is: ralphinv * (6.0 * x_even[i-1] - x_even[i])
+        l_residuals = ralphinv * (6.0 * x_even[:-1] - x_even[1:])
 
-        # Process linear groups L(i) for i = 1 to N/2-1
-        for i in range(1, n_half):
-            # Index calculations
-            j = 2 * (i - 1)  # 0-based indexing
+        # Build residuals in the correct order
+        # For i = 1 to N/2-1: BA(i), BB(i), BC(i), L(i)
+        # For i = N/2: BA(N/2), BB(N/2), BC(N/2)
 
-            # L(i) = ralphinv * (6.0 * X(j+1) - X(j+2))
-            # Note: j+1 in SIF is j+1 in 0-based, j+2 in SIF is j+2 in 0-based
-            l_val = ralphinv * (6.0 * y[j + 1] - y[j + 2])
-            residuals.append(l_val)
+        # Create array for first n_half-1 groups (each with 4 residuals)
+        # Stack BA, BB, BC, L for each i into shape (n_half-1, 4)
+        first_groups = jnp.stack(
+            [ba_residuals[:-1], bb_residuals[:-1], bc_residuals[:-1], l_residuals],
+            axis=1,
+        ).flatten()
 
-        return jnp.array(residuals, dtype=jnp.float64)
+        # Add last group (BA, BB, BC for i=n_half)
+        last_group = jnp.array(
+            [
+                ba_residuals[n_half - 1],
+                bb_residuals[n_half - 1],
+                bc_residuals[n_half - 1],
+            ]
+        )
+
+        return jnp.concatenate([first_groups, last_group])
 
     @property
     def y0(self) -> Array:
@@ -96,11 +108,13 @@ class MODBEALENE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Not explicitly given, but for nonlinear equations should satisfy F(x*) = 0
         return jnp.zeros(self.n, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

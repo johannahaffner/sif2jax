@@ -4,6 +4,10 @@ from jax import Array
 from ..._problem import AbstractNonlinearEquations
 
 
+# TODO: Human review needed
+# Attempts made: Vectorized implementation
+# Suspected issues: Jacobian mismatch in last constraint row
+# Resources needed: Detailed comparison of constraint derivatives
 class LUKSAN12(AbstractNonlinearEquations):
     """
     Problem 12 (chained and modified HS47) in the paper
@@ -41,46 +45,42 @@ class LUKSAN12(AbstractNonlinearEquations):
         """Compute the residual vector."""
         x = y
         s = self.s
-        residuals = []
 
-        # Process S blocks, each contributing 6 equations
-        i = 0  # Variable index (0-based)
-        for j in range(s):
-            # Extract relevant variables for this block
-            x0 = x[i]
-            x1 = x[i + 1]
-            x2 = x[i + 2]
-            x3 = x[i + 3]
-            x4 = x[i + 4]
+        # Vectorized approach
+        # Create indices for all blocks
+        i_indices = jnp.arange(s) * 3  # [0, 3, 6, ..., 3*(s-1)]
 
-            # E(k): 10*x0^2 - 10*x1
-            res1 = 10.0 * x0**2 - 10.0 * x1
-            residuals.append(res1)
+        # Extract variables for all blocks
+        x0 = x[i_indices]  # X(I) in SIF
+        x1 = x[i_indices + 1]  # X(I+1) in SIF
+        x2 = x[i_indices + 2]  # X(I+2) in SIF
+        x3 = x[i_indices + 3]  # X(I+3) in SIF
+        x4 = x[i_indices + 4]  # X(I+4) in SIF
 
-            # E(k+1): x2 - 1.0 (constant RHS = 1.0)
-            res2 = x2 - 1.0
-            residuals.append(res2)
+        # Compute all residuals for each type
+        # E(k): 10*x0^2 - 10*x1
+        res1 = 10.0 * x0**2 - 10.0 * x1
 
-            # E(k+2): (x3 - 1)^2
-            res3 = (x3 - 1.0) ** 2
-            residuals.append(res3)
+        # E(k+1): x2 - 1.0
+        res2 = x2 - 1.0
 
-            # E(k+3): (x4 - 1)^3
-            res4 = (x4 - 1.0) ** 3
-            residuals.append(res4)
+        # E(k+2): (x3 - 1)^2
+        res3 = (x3 - 1.0) ** 2
 
-            # E(k+4): x3*x0^2 + sin(x3-x4) - 10.0
-            res5 = x3 * x0**2 + jnp.sin(x3 - x4) - 10.0
-            residuals.append(res5)
+        # E(k+3): (x4 - 1)^3
+        res4 = (x4 - 1.0) ** 3
 
-            # E(k+5): x2*x3 + x1 - 20.0
-            res6 = x2 * x3 + x1 - 20.0
-            residuals.append(res6)
+        # E(k+4): x3*x0^2 + sin(x3-x4) - 10.0
+        res5 = x3 * x0**2 + jnp.sin(x3 - x4) - 10.0
 
-            # Move to next block (3 variables per block)
-            i += 3
+        # E(k+5): x2*x3 + x1 - 20.0
+        res6 = x2 * x3 + x1 - 20.0
 
-        return jnp.array(residuals, dtype=jnp.float64)
+        # Stack residuals in the correct order
+        # Each block contributes 6 residuals in sequence
+        residuals = jnp.stack([res1, res2, res3, res4, res5, res6], axis=1).flatten()
+
+        return residuals
 
     @property
     def y0(self) -> Array:

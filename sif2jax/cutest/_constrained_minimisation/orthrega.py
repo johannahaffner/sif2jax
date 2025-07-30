@@ -4,6 +4,10 @@ from jax import Array
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Multiple attempts to fix data generation and constraint formulation
+# Suspected issues: Complex differences in objective/constraint formulation vs pycutest
+# Resources needed: Deep understanding of how pycutest handles orthogonal regression
 class ORTHREGA(AbstractConstrainedMinimisation):
     """
     An orthogonal regression problem.
@@ -69,28 +73,24 @@ class ORTHREGA(AbstractConstrainedMinimisation):
             xd = []
             yd = []
 
-            # Scale factors for this level
-            a_scaled = a / pi
-            b_scaled = b / pi
-
             # Generate 4 new points for each existing point
             for j in range(len(xz)):
                 # Add 4 points around (xz[j], yz[j])
-                xd.append(xz[j] + a_scaled)
-                yd.append(yz[j] + a_scaled)
+                xd.append(xz[j] + a)
+                yd.append(yz[j] + a)
 
-                xd.append(xz[j] + b_scaled)
-                yd.append(yz[j] - b_scaled)
+                xd.append(xz[j] + b)
+                yd.append(yz[j] - b)
 
-                xd.append(xz[j] - a_scaled)
-                yd.append(yz[j] - a_scaled)
+                xd.append(xz[j] - a)
+                yd.append(yz[j] - a)
 
-                xd.append(xz[j] - b_scaled)
-                yd.append(yz[j] + b_scaled)
+                xd.append(xz[j] - b)
+                yd.append(yz[j] + b)
 
-            # Update scaling for next level
-            a = a_scaled
-            b = b_scaled
+            # Update a and b for next level (divide by pi)
+            a = a / pi
+            b = b / pi
 
         return jnp.array(xd, dtype=jnp.float64), jnp.array(yd, dtype=jnp.float64)
 

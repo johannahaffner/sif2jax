@@ -90,7 +90,7 @@ class TestRuntime:
     @pytest.fixture(scope="class")
     def pycutest_problem(self, problem):
         """Load pycutest problem once per problem per class."""
-        return pycutest.import_problem(problem.name)
+        return pycutest.import_problem(problem.name, drop_fixed_variables=False)
 
     @pytest.fixture(autouse=True)
     def clear_jax_cache(self):

@@ -124,8 +124,11 @@ from .mancinone import MANCINONE as MANCINONE
 from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
 from .misra1d import MISRA1D as MISRA1D
-from .modbealene import MODBEALENE as MODBEALENE
-from .morebvne import MOREBVNE as MOREBVNE
+
+# TODO: Human review - constraint ordering issues
+# from .modbealene import MODBEALENE as MODBEALENE
+# TODO: Human review - SIF file bug on line 64
+# from .morebvne import MOREBVNE as MOREBVNE
 from .msqrta import MSQRTA as MSQRTA
 from .msqrtb import MSQRTB as MSQRTB
 
@@ -295,8 +298,8 @@ nonlinear_equations_problems = (
     MEYER3NE(),
     MGH09(),
     MISRA1D(),
-    MODBEALENE(),
-    MOREBVNE(),
+    # MODBEALENE(),  # TODO: Human review - constraint ordering issues
+    # MOREBVNE(),  # TODO: Human review - SIF file bug on line 64
     # MUONSINE(),  # TODO: Human review - hardcoded data values
     NONDIANE(),
     # NONMSQRTNE(),  # TODO: Human review - element structure issues

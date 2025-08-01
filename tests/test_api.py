@@ -24,27 +24,27 @@ def test_get_problem2():
     assert problems_in_dict.difference(problems_in_sif2jax) == set()
 
 
-@pytest.mark.parametrize("problem", sif2jax.quadratic_problems)
-def test_quadratic_category(problem):
-    assert isinstance(problem, sif2jax.AbstractConstrainedQuadraticProblem)
-    assert isinstance(problem, sif2jax.AbstractConstrainedMinimisation)
+@pytest.mark.parametrize("problem_", sif2jax.quadratic_problems)
+def test_quadratic_category(problem_):
+    assert isinstance(problem_, sif2jax.AbstractConstrainedQuadraticProblem)
+    assert isinstance(problem_, sif2jax.AbstractConstrainedMinimisation)
 
 
-@pytest.mark.parametrize("problem", sif2jax.unconstrained_minimisation_problems)
-def test_unconstrained_category(problem):
-    assert isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation)
+@pytest.mark.parametrize("problem_", sif2jax.unconstrained_minimisation_problems)
+def test_unconstrained_category(problem_):
+    assert isinstance(problem_, sif2jax.AbstractUnconstrainedMinimisation)
 
 
-@pytest.mark.parametrize("problem", sif2jax.bounded_minimisation_problems)
-def test_bounded_category(problem):
-    assert isinstance(problem, sif2jax.AbstractBoundedMinimisation)
+@pytest.mark.parametrize("problem_", sif2jax.bounded_minimisation_problems)
+def test_bounded_category(problem_):
+    assert isinstance(problem_, sif2jax.AbstractBoundedMinimisation)
 
 
-@pytest.mark.parametrize("problem", sif2jax.constrained_minimisation_problems)
-def test_constrained_category(problem):
-    assert isinstance(problem, sif2jax.AbstractConstrainedMinimisation)
+@pytest.mark.parametrize("problem_", sif2jax.constrained_minimisation_problems)
+def test_constrained_category(problem_):
+    assert isinstance(problem_, sif2jax.AbstractConstrainedMinimisation)
 
 
-@pytest.mark.parametrize("problem", sif2jax.nonlinear_equations_problems)
-def test_nonlinear_equations_category(problem):
-    assert isinstance(problem, sif2jax.AbstractNonlinearEquations)
+@pytest.mark.parametrize("problem_", sif2jax.nonlinear_equations_problems)
+def test_nonlinear_equations_category(problem_):
+    assert isinstance(problem_, sif2jax.AbstractNonlinearEquations)

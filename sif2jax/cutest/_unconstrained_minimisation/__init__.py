@@ -193,8 +193,16 @@ from .liarwhd import LIARWHD as LIARWHD
 from .loghairy import LOGHAIRY as LOGHAIRY
 from .lsc1ls import LSC1LS as LSC1LS
 from .lsc2ls import LSC2LS as LSC2LS
+from .luksan11ls import LUKSAN11LS as LUKSAN11LS
+from .luksan12ls import LUKSAN12LS as LUKSAN12LS
+from .luksan13ls import LUKSAN13LS as LUKSAN13LS
+from .luksan14ls import LUKSAN14LS as LUKSAN14LS
+from .luksan15ls import LUKSAN15LS as LUKSAN15LS
+from .luksan16ls import LUKSAN16LS as LUKSAN16LS
+from .luksan17ls import LUKSAN17LS as LUKSAN17LS
+from .luksan21ls import LUKSAN21LS as LUKSAN21LS
+from .luksan22ls import LUKSAN22LS as LUKSAN22LS
 
-# from .luksan22ls import LUKSAN22LS as LUKSAN22LS  # TODO: Fix objective calculation
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
 from .maratosb import MARATOSB as MARATOSB
@@ -426,7 +434,15 @@ unconstrained_minimisation_problems = (
     # LR(),
     LSC1LS(),
     LSC2LS(),
-    # LUKSAN22LS(),  # TODO: Fix objective calculation
+    LUKSAN11LS(),
+    LUKSAN12LS(),
+    LUKSAN13LS(),
+    LUKSAN14LS(),
+    LUKSAN15LS(),
+    LUKSAN16LS(),
+    LUKSAN17LS(),
+    LUKSAN21LS(),
+    LUKSAN22LS(),
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     MARATOSB(),
     MEXHAT(),

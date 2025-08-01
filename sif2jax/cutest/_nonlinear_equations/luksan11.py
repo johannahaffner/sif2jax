@@ -41,27 +41,28 @@ class LUKSAN11(AbstractNonlinearEquations):
         """Compute the residual vector."""
         x = y
         s = self.s
-        residuals = []
 
-        # Build residuals in pairs
-        for i in range(s):
-            # First residual of pair: 20*x[i]/(1+x[i]^2) - 10*x[i+1]
-            xi = x[i]
-            d = 1.0 + xi * xi
-            res1 = 20.0 * xi / d - 10.0 * x[i + 1]
-            residuals.append(res1)
+        # Vectorized computation
+        # Extract x[0:s] and x[1:s+1] for vectorized operations
+        x_i = x[:-1]  # x[0] to x[s-1]
+        x_ip1 = x[1:]  # x[1] to x[s]
 
-            # Second residual of pair: x[i] (constant RHS = 0 for even indices)
-            # Note: Only odd indices have RHS = 1.0
-            res2 = x[i]
-            residuals.append(res2)
+        # First residuals: 20*x[i]/(1+x[i]^2) - 10*x[i+1]
+        d = 1.0 + x_i * x_i
+        res1 = 20.0 * x_i / d - 10.0 * x_ip1
 
-        residuals = jnp.array(residuals, dtype=jnp.float64)
+        # Second residuals: x[i] with RHS adjustment
+        res2 = x_i.copy()
 
-        # Apply constants: E(i+1) = 1.0 for i that are multiples of 2
-        # In 0-indexed, this means residuals at indices 1, 3, 5, ... have RHS = 1.0
-        for i in range(1, 2 * s, 2):
-            residuals = residuals.at[i].add(-1.0)
+        # Create residuals array by interleaving res1 and res2
+        residuals = jnp.zeros(2 * s, dtype=jnp.float64)
+        residuals = residuals.at[::2].set(res1)  # Even indices: 0, 2, 4, ...
+        residuals = residuals.at[1::2].set(res2)  # Odd indices: 1, 3, 5, ...
+
+        # Apply constants: subtract 1.0 from odd indices (1, 3, 5, ...)
+        # This corresponds to RHS = 1.0 for alternating equations
+        odd_mask = jnp.arange(2 * s) % 2 == 1
+        residuals = residuals - odd_mask.astype(jnp.float64)
 
         return residuals
 

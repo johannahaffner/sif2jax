@@ -1,20 +1,22 @@
 import jax.numpy as jnp
 from jax import Array
 
-from ..._problem import AbstractNonlinearEquations
+from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class LUKSAN16(AbstractNonlinearEquations):
+class LUKSAN16LS(AbstractUnconstrainedMinimisation):
     """Problem 16 (sparse exponential) from Luksan.
 
-    This is a system of nonlinear equations from the paper:
+    This is a least squares problem from the paper:
     L. Luksan
     "Hybrid methods in large sparse nonlinear least squares"
     J. Optimization Theory & Applications 89(3) 575-595 (1996)
 
     SIF input: Nick Gould, June 2017.
 
-    classification NOR2-AN-V-V
+    least-squares version
+
+    classification SUR2-AN-V-0
     """
 
     y0_iD: int = 0
@@ -25,11 +27,6 @@ class LUKSAN16(AbstractNonlinearEquations):
     def n(self) -> int:
         """Number of variables: 2*S + 2."""
         return 2 * self.s + 2
-
-    @property
-    def m(self) -> int:
-        """Number of equations: 4*S."""
-        return 4 * self.s
 
     @property
     def y0(self) -> Array:
@@ -44,21 +41,25 @@ class LUKSAN16(AbstractNonlinearEquations):
         """No additional arguments."""
         return None
 
-    def residual(self, y: Array, args) -> Array:
-        """Compute the residual vector."""
+    def objective(self, y: Array, args) -> Array:
+        """Compute the least squares objective function.
+
+        The objective is the sum of squares of M = 4*S residuals.
+        Each block contributes 4 residuals corresponding to data values Y1-Y4.
+        Each residual is the sum over p=1,2,3 of exponential terms minus the data value.
+        """
         del args  # Not used
 
         x = y
         s = self.s
 
         # Data values
-        Y = jnp.array([35.8, 11.2, 6.2, 4.4], dtype=jnp.float64)
+        Y = jnp.array([35.8, 11.2, 6.2, 4.4], dtype=x.dtype)
 
-        # Create indices for vectorized computation
-        # For each block j in range(s), variables are at i = 2*j, so:
-        # x1 = x[2*j], x2 = x[2*j+1], x3 = x[2*j+2], x4 = x[2*j+3]
+        # Vectorized computation
+        # Create indices for all blocks
         j_indices = jnp.arange(s)
-        i_indices = 2 * j_indices
+        i_indices = 2 * j_indices  # Variable indices for each block
 
         # Extract variables for all blocks
         x1 = x[i_indices]  # x[i] for all blocks
@@ -70,8 +71,8 @@ class LUKSAN16(AbstractNonlinearEquations):
         s_vals = x1 + 2.0 * x2 + 3.0 * x3 + 4.0 * x4  # shape: (s,)
 
         # Create arrays for p and l values
-        p_vals = jnp.array([1, 2, 3], dtype=jnp.float64)  # p = 1, 2, 3
-        l_vals = jnp.array([1, 2, 3, 4], dtype=jnp.float64)  # l = 1, 2, 3, 4
+        p_vals = jnp.array([1, 2, 3], dtype=x.dtype)  # p = 1, 2, 3
+        l_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)  # l = 1, 2, 3, 4
 
         # Create meshgrids for vectorized computation
         P, L, J = jnp.meshgrid(
@@ -100,7 +101,8 @@ class LUKSAN16(AbstractNonlinearEquations):
         # residuals_matrix is (l, j), so we need to transpose and flatten
         residuals = residuals_matrix.T.flatten()  # shape: (4*s,)
 
-        return residuals
+        # Sum of squares (L2 group type in SIF)
+        return jnp.sum(residuals**2)
 
     @property
     def expected_result(self) -> Array | None:
@@ -110,15 +112,6 @@ class LUKSAN16(AbstractNonlinearEquations):
 
     @property
     def expected_objective_value(self) -> Array | None:
-        """Expected objective value (sum of squares)."""
-        # For nonlinear equations, the expected value is 0
+        """Expected objective value."""
+        # For least squares, the expected value is 0
         return jnp.array(0.0)
-
-    def constraint(self, y: Array):
-        """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args), None
-
-    @property
-    def bounds(self) -> tuple[Array, Array] | None:
-        """No bounds for this problem."""
-        return None

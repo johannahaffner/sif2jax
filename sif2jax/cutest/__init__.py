@@ -1,8 +1,12 @@
 from ._bounded_minimisation import (
     BDEXP as BDEXP,
+    BIGGS3 as BIGGS3,
+    BIGGS5 as BIGGS5,
     bounded_minimisation_problems as bounded_minimisation_problems,
+    BOX2 as BOX2,
     BRANIN as BRANIN,
     CAMEL6 as CAMEL6,
+    DEGDIAG as DEGDIAG,
     DGOSPEC as DGOSPEC,
     EXP2B as EXP2B,
     EXPLIN as EXPLIN,
@@ -22,7 +26,13 @@ from ._bounded_minimisation import (
     HS38 as HS38,
     HS45 as HS45,
     HS110 as HS110,
-    # LEVYMONT as LEVYMONT,  # TODO: Fix SCALE interpretation
+    LEVYMONT as LEVYMONT,
+    LEVYMONT5 as LEVYMONT5,
+    LEVYMONT6 as LEVYMONT6,
+    LEVYMONT7 as LEVYMONT7,
+    LEVYMONT8 as LEVYMONT8,
+    LEVYMONT9 as LEVYMONT9,
+    LEVYMONT10 as LEVYMONT10,
     LOGROS as LOGROS,
     PALMER1 as PALMER1,
     PALMER1A as PALMER1A,
@@ -53,6 +63,7 @@ from ._bounded_minimisation import (
     PFIT3LS as PFIT3LS,
     PFIT4LS as PFIT4LS,
     PRICE4B as PRICE4B,
+    QUDLIN as QUDLIN,
 )
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
@@ -367,7 +378,10 @@ from ._nonlinear_equations import (
     JUDGENE as JUDGENE,
     KOEBHELBNE as KOEBHELBNE,
     KOWOSBNE as KOWOSBNE,
+    LEVYMONE as LEVYMONE,
     LEVYMONE5 as LEVYMONE5,
+    LEVYMONE6 as LEVYMONE6,
+    LEVYMONE7 as LEVYMONE7,
     LEVYMONE8 as LEVYMONE8,
     LEVYMONE9 as LEVYMONE9,
     LEVYMONE10 as LEVYMONE10,
@@ -381,6 +395,7 @@ from ._nonlinear_equations import (
     LUKSAN16 as LUKSAN16,
     LUKSAN17 as LUKSAN17,
     LUKSAN21 as LUKSAN21,
+    LUKSAN22 as LUKSAN22,
     MANCINONE as MANCINONE,
     MEYER3NE as MEYER3NE,
     MGH09 as MGH09,
@@ -440,12 +455,10 @@ from ._nonlinear_equations import (
 # VANDERM2 as VANDERM2,  # TODO: Human review - mixed constraint types
 from ._quadratic_problems import (
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
-    DEGDIAG as DEGDIAG,
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
     QPBAND as QPBAND,
     quadratic_problems as quadratic_problems,
-    QUDLIN as QUDLIN,
     TAME as TAME,
     # TORSIOND as TORSIOND,  # TODO: Human review - objective mismatch with pycutest
     YAO as YAO,
@@ -467,11 +480,8 @@ from ._unconstrained_minimisation import (
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
     BENNETT5LS as BENNETT5LS,
-    BIGGS3 as BIGGS3,
-    BIGGS5 as BIGGS5,
     BIGGS6 as BIGGS6,
     BOX as BOX,
-    BOX2 as BOX2,
     BOX3 as BOX3,
     BOXBODLS as BOXBODLS,
     # BOXPOWER as BOXPOWER,  # TODO: Human review - minor gradient discrepancy
@@ -605,6 +615,15 @@ from ._unconstrained_minimisation import (
     LOGHAIRY as LOGHAIRY,
     LSC1LS as LSC1LS,
     LSC2LS as LSC2LS,
+    LUKSAN11LS as LUKSAN11LS,
+    LUKSAN12LS as LUKSAN12LS,
+    LUKSAN13LS as LUKSAN13LS,
+    LUKSAN14LS as LUKSAN14LS,
+    LUKSAN15LS as LUKSAN15LS,
+    LUKSAN16LS as LUKSAN16LS,
+    LUKSAN17LS as LUKSAN17LS,
+    LUKSAN21LS as LUKSAN21LS,
+    # LUKSAN22LS as LUKSAN22LS,  # TODO: Human review needed - gradient issues
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     MARATOSB as MARATOSB,
     MEXHAT as MEXHAT,
@@ -769,7 +788,13 @@ problems_dict = {
     "HS108": HS108(),
     # "HS109": HS109(),  # TODO: Human review needed - sign convention issues
     "HS110": HS110(),
-    # "LEVYMONT": LEVYMONT(),  # TODO: Fix SCALE interpretation
+    "LEVYMONT": LEVYMONT(),
+    "LEVYMONT5": LEVYMONT5(),
+    "LEVYMONT6": LEVYMONT6(),
+    "LEVYMONT7": LEVYMONT7(),
+    "LEVYMONT8": LEVYMONT8(),
+    "LEVYMONT9": LEVYMONT9(),
+    "LEVYMONT10": LEVYMONT10(),
     "LOGROS": LOGROS(),
     "HS111": HS111(),
     "HS112": HS112(),
@@ -1224,7 +1249,10 @@ problems_dict = {
     "JUDGENE": JUDGENE(),
     "KOEBHELBNE": KOEBHELBNE(),
     "KOWOSBNE": KOWOSBNE(),
+    "LEVYMONE": LEVYMONE(),
     "LEVYMONE5": LEVYMONE5(),
+    "LEVYMONE6": LEVYMONE6(),
+    "LEVYMONE7": LEVYMONE7(),
     "LEVYMONE8": LEVYMONE8(),
     "LEVYMONE10": LEVYMONE10(),
     "LIARWHDNE": LIARWHDNE(),
@@ -1237,6 +1265,16 @@ problems_dict = {
     "LUKSAN16": LUKSAN16(),
     "LUKSAN17": LUKSAN17(),
     "LUKSAN21": LUKSAN21(),
+    "LUKSAN22": LUKSAN22(),
+    "LUKSAN11LS": LUKSAN11LS(),
+    "LUKSAN12LS": LUKSAN12LS(),
+    "LUKSAN13LS": LUKSAN13LS(),
+    "LUKSAN14LS": LUKSAN14LS(),
+    "LUKSAN15LS": LUKSAN15LS(),
+    "LUKSAN16LS": LUKSAN16LS(),
+    "LUKSAN17LS": LUKSAN17LS(),
+    "LUKSAN21LS": LUKSAN21LS(),
+    # "LUKSAN22LS": LUKSAN22LS(),  # TODO: Human review needed - gradient issues
     "MANCINONE": MANCINONE(),
     "MEYER3NE": MEYER3NE(),
     "MGH09": MGH09(),
@@ -1306,6 +1344,8 @@ problems_dict = {
 def get_problem(name: str):
     return problems_dict.get(name, None)  # TODO: try except with nicer error message
 
+
+constrained_minimisation_problems += quadratic_problems
 
 problems = (
     unconstrained_minimisation_problems

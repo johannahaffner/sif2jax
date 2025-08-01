@@ -1,6 +1,10 @@
 from .bdexp import BDEXP as BDEXP
+from .biggs3 import BIGGS3 as BIGGS3
+from .biggs5 import BIGGS5 as BIGGS5
+from .box2 import BOX2 as BOX2
 from .branin import BRANIN as BRANIN
 from .camel6 import CAMEL6 as CAMEL6
+from .degdiag import DEGDIAG as DEGDIAG
 from .dgospec import DGOSPEC as DGOSPEC
 from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
@@ -21,6 +25,13 @@ from .hs45 import HS45 as HS45
 from .hs110 import HS110 as HS110
 
 # from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
+from .levymont import LEVYMONT as LEVYMONT
+from .levymont5 import LEVYMONT5 as LEVYMONT5
+from .levymont6 import LEVYMONT6 as LEVYMONT6
+from .levymont7 import LEVYMONT7 as LEVYMONT7
+from .levymont8 import LEVYMONT8 as LEVYMONT8
+from .levymont9 import LEVYMONT9 as LEVYMONT9
+from .levymont10 import LEVYMONT10 as LEVYMONT10
 from .logros import LOGROS as LOGROS
 from .palmer1 import PALMER1 as PALMER1
 from .palmer1a import PALMER1A as PALMER1A
@@ -59,12 +70,17 @@ from .pfit2ls import PFIT2LS as PFIT2LS
 from .pfit3ls import PFIT3LS as PFIT3LS
 from .pfit4ls import PFIT4LS as PFIT4LS
 from .price4b import PRICE4B as PRICE4B
+from .qudlin import QUDLIN as QUDLIN
 
 
 bounded_minimisation_problems = (
     BDEXP(),
+    BIGGS3(),
+    BIGGS5(),
+    BOX2(),
     BRANIN(),
     CAMEL6(),
+    DEGDIAG(),
     DGOSPEC(),
     EXP2B(),
     EXPLIN(),
@@ -84,7 +100,13 @@ bounded_minimisation_problems = (
     HS38(),
     HS45(),
     HS110(),
-    # LEVYMONT(),  # TODO: Fix SCALE interpretation
+    LEVYMONT(),
+    LEVYMONT5(),
+    LEVYMONT6(),
+    LEVYMONT7(),
+    LEVYMONT8(),
+    LEVYMONT9(),
+    LEVYMONT10(),
     LOGROS(),
     PALMER1(),
     PALMER1A(),
@@ -115,4 +137,5 @@ bounded_minimisation_problems = (
     PFIT3LS(),
     PFIT4LS(),
     PRICE4B(),
+    QUDLIN(),
 )

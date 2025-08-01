@@ -1,20 +1,22 @@
 import jax.numpy as jnp
 from jax import Array
 
-from ..._problem import AbstractNonlinearEquations
+from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class LUKSAN13(AbstractNonlinearEquations):
+class LUKSAN13LS(AbstractUnconstrainedMinimisation):
     """Problem 13 (chained and modified HS48) from Luksan.
 
-    This is a system of nonlinear equations from the paper:
+    This is a least squares problem from the paper:
     L. Luksan
     "Hybrid methods in large sparse nonlinear least squares"
     J. Optimization Theory & Applications 89(3) 575-595 (1996)
 
     SIF input: Nick Gould, June 2017.
 
-    classification NOR2-AN-V-V
+    least-squares version
+
+    classification SUR2-AN-V-0
     """
 
     y0_iD: int = 0
@@ -27,11 +29,6 @@ class LUKSAN13(AbstractNonlinearEquations):
         return 3 * self.s + 2
 
     @property
-    def m(self) -> int:
-        """Number of equations: 7*S."""
-        return 7 * self.s
-
-    @property
     def y0(self) -> Array:
         """Initial guess: x(i) = -1.0 for all i."""
         return -jnp.ones(self.n, dtype=jnp.float64)
@@ -41,8 +38,19 @@ class LUKSAN13(AbstractNonlinearEquations):
         """No additional arguments."""
         return None
 
-    def residual(self, y: Array, args) -> Array:
-        """Compute the residual vector."""
+    def objective(self, y: Array, args) -> Array:
+        """Compute the least squares objective function.
+
+        The objective is the sum of squares of M = 7*S residuals.
+        Each block of S generates 7 residuals:
+        - E(k): -10*x(i+1) + 10*x(i)^2
+        - E(k+1): -10*x(i+2) + 10*x(i+1)^2
+        - E(k+2): (x(i+2) - x(i+3))^2
+        - E(k+3): (x(i+3) - x(i+4))^2
+        - E(k+4): x(i) + x(i+2) + x(i+1)^2 - 30
+        - E(k+5): x(i+1) + x(i+3) - x(i+2)^2 - 10
+        - E(k+6): x(i) * x(i+4) - 10
+        """
         del args  # Not used
 
         x = y
@@ -87,7 +95,8 @@ class LUKSAN13(AbstractNonlinearEquations):
             [res1, res2, res3, res4, res5, res6, res7], axis=1
         ).flatten()
 
-        return residuals
+        # Sum of squares (L2 group type in SIF)
+        return jnp.sum(residuals**2)
 
     @property
     def expected_result(self) -> Array | None:
@@ -97,15 +106,6 @@ class LUKSAN13(AbstractNonlinearEquations):
 
     @property
     def expected_objective_value(self) -> Array | None:
-        """Expected objective value (sum of squares)."""
-        # For nonlinear equations, the expected value is 0
+        """Expected objective value."""
+        # For least squares, the expected value is 0
         return jnp.array(0.0)
-
-    def constraint(self, y: Array):
-        """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args), None
-
-    @property
-    def bounds(self) -> tuple[Array, Array] | None:
-        """No bounds for this problem."""
-        return None

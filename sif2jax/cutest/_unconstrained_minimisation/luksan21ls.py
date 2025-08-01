@@ -1,30 +1,27 @@
 import jax.numpy as jnp
 from jax import Array
 
-from ..._problem import AbstractNonlinearEquations
+from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class LUKSAN21(AbstractNonlinearEquations):
+class LUKSAN21LS(AbstractUnconstrainedMinimisation):
     """Problem 21 (modified discrete boundary value) from Luksan.
 
-    This is a system of nonlinear equations from the paper:
+    This is a least squares problem from the paper:
     L. Luksan
     "Hybrid methods in large sparse nonlinear least squares"
     J. Optimization Theory & Applications 89(3) 575-595 (1996)
 
     SIF input: Nick Gould, June 2017.
 
-    classification NOR2-AN-V-V
+    least-squares version
+
+    classification SUR2-AN-V-0
     """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
     n: int = 100  # Number of variables (default from SIF)
-
-    @property
-    def m(self) -> int:
-        """Number of equations: M = N."""
-        return self.n
 
     @property
     def y0(self) -> Array:
@@ -39,8 +36,15 @@ class LUKSAN21(AbstractNonlinearEquations):
         """No additional arguments."""
         return None
 
-    def residual(self, y: Array, args) -> Array:
-        """Compute the residual vector."""
+    def objective(self, y: Array, args) -> Array:
+        """Compute the least squares objective function.
+
+        The objective is the sum of squares of M = N residuals.
+        The residuals come from a discretized boundary value problem:
+        - E(1): 2*x(1) - x(2) + h^2/2 * (x(1) + h + 1)^3 + 1
+        - E(i): 2*x(i) - x(i-1) - x(i+1) + h^2/2 * (x(i) + h*i + 1)^3 + 1  (i=2,...,N-1)
+        - E(N): 2*x(N) - x(N-1) + h^2/2 * (x(N) + h*N + 1)^3 + 1
+        """
         del args  # Not used
 
         x = y
@@ -66,16 +70,17 @@ class LUKSAN21(AbstractNonlinearEquations):
         # Case 2: Middle eqs (2 <= i <= n-1): 2*x(i) - x(i-1) - x(i+1) + cubic + 1
         # Case 3: Last equation (i=n): 2*x(n) - x(n-1) + cubic_term + 1
 
-        # Initialize all with 2*x(i) + cubic_term + 1
+        # Initialize residuals with 2*x(i) + cubic_term + 1 for all i
         residuals = 2.0 * x + cubic_terms + 1.0
 
-        # Subtract x(i-1) for equations 2 to n (indices 1 to n-1)
-        residuals = residuals.at[1:].add(-x[:-1])
-
-        # Subtract x(i+1) for equations 1 to n-1 (indices 0 to n-2)
+        # Subtract x(i+1) from equations 1 to n-1
         residuals = residuals.at[:-1].add(-x[1:])
 
-        return residuals
+        # Subtract x(i-1) from equations 2 to n
+        residuals = residuals.at[1:].add(-x[:-1])
+
+        # Sum of squares (L2 group type in SIF)
+        return jnp.sum(residuals**2)
 
     @property
     def expected_result(self) -> Array | None:
@@ -85,15 +90,6 @@ class LUKSAN21(AbstractNonlinearEquations):
 
     @property
     def expected_objective_value(self) -> Array | None:
-        """Expected objective value (sum of squares)."""
-        # For nonlinear equations, the expected value is 0
+        """Expected objective value."""
+        # For least squares, the expected value is 0
         return jnp.array(0.0)
-
-    def constraint(self, y: Array):
-        """Returns the residuals as equality constraints."""
-        return self.residual(y, self.args), None
-
-    @property
-    def bounds(self) -> tuple[Array, Array] | None:
-        """No bounds for this problem."""
-        return None

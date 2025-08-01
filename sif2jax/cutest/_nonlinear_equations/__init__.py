@@ -84,6 +84,7 @@ from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
 from .hatfldcne import HATFLDCNE as HATFLDCNE
 from .hatflddne import HATFLDDNE as HATFLDDNE
+
 # TODO: Human review needed - sign convention issues with pycutest
 # from .hatfldene import HATFLDENE as HATFLDENE
 from .hatfldf import HATFLDF as HATFLDF
@@ -104,7 +105,10 @@ from .jensmpne import JENSMPNE as JENSMPNE
 from .judgene import JUDGENE as JUDGENE
 from .koebhelbne import KOEBHELBNE as KOEBHELBNE
 from .kowosbne import KOWOSBNE as KOWOSBNE
+from .levymone import LEVYMONE as LEVYMONE
 from .levymone5 import LEVYMONE5 as LEVYMONE5
+from .levymone6 import LEVYMONE6 as LEVYMONE6
+from .levymone7 import LEVYMONE7 as LEVYMONE7
 from .levymone8 import LEVYMONE8 as LEVYMONE8
 from .levymone9 import LEVYMONE9 as LEVYMONE9
 from .levymone10 import LEVYMONE10 as LEVYMONE10
@@ -120,6 +124,7 @@ from .luksan15 import LUKSAN15 as LUKSAN15
 from .luksan16 import LUKSAN16 as LUKSAN16
 from .luksan17 import LUKSAN17 as LUKSAN17
 from .luksan21 import LUKSAN21 as LUKSAN21
+from .luksan22 import LUKSAN22 as LUKSAN22
 from .mancinone import MANCINONE as MANCINONE
 from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
@@ -161,6 +166,7 @@ from .palmer4ne import PALMER4NE as PALMER4NE
 # TODO: Fix Chebyshev polynomial calculation
 # from .palmer5ane import PALMER5ANE as PALMER5ANE
 from .palmer5bne import PALMER5BNE as PALMER5BNE
+
 # TODO: Human review - numerical precision
 # from .palmer5ene import PALMER5ENE as PALMER5ENE
 from .palmer6ane import PALMER6ANE as PALMER6ANE
@@ -280,7 +286,10 @@ nonlinear_equations_problems = (
     JUDGENE(),
     KOEBHELBNE(),
     KOWOSBNE(),
+    LEVYMONE(),
     LEVYMONE5(),
+    LEVYMONE6(),
+    LEVYMONE7(),
     LEVYMONE8(),
     LEVYMONE10(),
     LIARWHDNE(),
@@ -293,6 +302,7 @@ nonlinear_equations_problems = (
     LUKSAN16(),
     LUKSAN17(),
     LUKSAN21(),
+    LUKSAN22(),
     MANCINONE(),
     MEYER3NE(),
     MGH09(),

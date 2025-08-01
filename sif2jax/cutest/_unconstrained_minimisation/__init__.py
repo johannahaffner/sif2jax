@@ -13,11 +13,8 @@ from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
 from .bennett5ls import BENNETT5LS as BENNETT5LS
-from .biggs3 import BIGGS3 as BIGGS3
-from .biggs5 import BIGGS5 as BIGGS5
 from .biggs6 import BIGGS6 as BIGGS6
 from .box import BOX as BOX
-from .box2 import BOX2 as BOX2
 from .box3 import BOX3 as BOX3
 from .boxbodls import BOXBODLS as BOXBODLS
 
@@ -193,8 +190,16 @@ from .liarwhd import LIARWHD as LIARWHD
 from .loghairy import LOGHAIRY as LOGHAIRY
 from .lsc1ls import LSC1LS as LSC1LS
 from .lsc2ls import LSC2LS as LSC2LS
+from .luksan11ls import LUKSAN11LS as LUKSAN11LS
+from .luksan12ls import LUKSAN12LS as LUKSAN12LS
+from .luksan13ls import LUKSAN13LS as LUKSAN13LS
+from .luksan14ls import LUKSAN14LS as LUKSAN14LS
+from .luksan15ls import LUKSAN15LS as LUKSAN15LS
+from .luksan16ls import LUKSAN16LS as LUKSAN16LS
+from .luksan17ls import LUKSAN17LS as LUKSAN17LS
+from .luksan21ls import LUKSAN21LS as LUKSAN21LS
 
-# from .luksan22ls import LUKSAN22LS as LUKSAN22LS  # TODO: Fix objective calculation
+# from .luksan22ls import LUKSAN22LS as LUKSAN22LS  # TODO: Human review - gradients
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
 from .maratosb import MARATOSB as MARATOSB
@@ -286,11 +291,8 @@ unconstrained_minimisation_problems = (
     BDQRTIC(),
     BEALE(),
     BENNETT5LS(),
-    BIGGS3(),
-    BIGGS5(),
     BIGGS6(),
     BOX(),
-    BOX2(),
     BOX3(),
     BOXBODLS(),
     # BOXPOWER(),  # TODO: Human review - minor gradient discrepancy at last element
@@ -426,7 +428,15 @@ unconstrained_minimisation_problems = (
     # LR(),
     LSC1LS(),
     LSC2LS(),
-    # LUKSAN22LS(),  # TODO: Fix objective calculation
+    LUKSAN11LS(),
+    LUKSAN12LS(),
+    LUKSAN13LS(),
+    LUKSAN14LS(),
+    LUKSAN15LS(),
+    LUKSAN16LS(),
+    LUKSAN17LS(),
+    LUKSAN21LS(),
+    # LUKSAN22LS(),  # TODO: Human review needed - gradient issues
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     MARATOSB(),
     MEXHAT(),

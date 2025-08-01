@@ -55,7 +55,8 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
   # Resources needed: [what would help]
   ```
   If a problem is flagged for human review, its imports should be commented out. 
-  Verify that it cannot be run anymore by trying to run the tests for it, these should then fail during collection with a clear error message.
+  Verify that it cannot be run anymore by trying to run the tests for it, these should then fail during collection with a clear error message. 
+  When commenting out a problem that is marked for human review, also try running `python -c import sif2jax` to confirm that the removal still permits importing the library as a whole and does not result in errata.
 - **Checking results of CI runs**: Numbers of problems correspond to positions (indices) in `sif2jax.problems`. 
 
 ### 5. Commit Process
@@ -65,7 +66,6 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
 - ✓ Re-test if any changes made
 - ✓ Success = clean pre-commit (no reformatting, no warnings)
 - ✓ Commit after implementing a few problems, to keep commits compact
-
 ## Work Mode
 - Add 20+ problems to TODO list
 - Work systematically without stopping
@@ -76,5 +76,6 @@ Run `git diff main` and summarize the diff, not just latest commits.
 
 ## Performance Target
 JAX implementation must be within 5x of Fortran runtime. For larger problems JAX is expected to be faster.
-Avoid using for-loops, vectorise implementations wherever possible. 
+You can use for-loops to write an initial implementation that passes the tests, but please convert to a vectorised implementation once you have achieved this step.
+Production-ready problems should always be vectorised.
 If a sequential operation is needed, use a jax-native option such as a scan.

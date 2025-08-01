@@ -3,27 +3,27 @@ import jax.numpy as jnp
 from ..._problem import AbstractBoundedMinimisation
 
 
-class LEVYMONT(AbstractBoundedMinimisation):
-    """The Levy and Montalvo global optimization test problem.
-
-    A global optimization example due to Levy & Montalvo
+class LEVYMONT9(AbstractBoundedMinimisation):
+    """A global optimization example due to Levy & Montalvo
     This problem is one of the parameterised set LEVYMONT5-LEVYMONT10
 
-    Source:  A. V. Levy and A. Montalvo
+    Source:  problem 9 in
+
+    A. V. Levy and A. Montalvo
     "The Tunneling Algorithm for the Global Minimization of Functions"
     SIAM J. Sci. Stat. Comp. 6(1) 1985 15:29
     https://doi.org/10.1137/0906002
 
     SIF input: Nick Gould, August 2021
 
-    classification SBR2-AY-V-0
+    classification SBR2-AY-8-0
     """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    # Parameters (for larger N, L=1.0, C=0.0)
-    N: int = 100  # Number of variables
+    # Parameters
+    N: int = 8  # Number of variables
     A: float = 1.0
     K: float = 10.0
     L: float = 1.0
@@ -39,10 +39,8 @@ class LEVYMONT(AbstractBoundedMinimisation):
         """Initial guess (LEVYMONTA starting point)."""
         # Default: x1 = -8.0, x2 = 8.0, others = 8.0
         y0 = 8.0 * jnp.ones(self.n)
-        if self.n >= 1:
-            y0 = y0.at[0].set(-8.0)
-        if self.n >= 2:
-            y0 = y0.at[1].set(8.0)
+        y0 = y0.at[0].set(-8.0)
+        y0 = y0.at[1].set(8.0)
         return y0
 
     @property

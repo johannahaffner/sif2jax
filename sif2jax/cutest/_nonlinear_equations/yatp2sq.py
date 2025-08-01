@@ -1,5 +1,5 @@
 """Another test problem involving double pseudo-stochastic constraints
-on a square matrix. This is a least-squares formulation.
+on a square matrix. This is a nonlinear equations formulation.
 
 The problem involves finding a matrix X and vectors Y, Z such that:
 - x_{ij} - (y_i + z_i)(1 + cos(x_{ij})) = A for all i,j
@@ -12,32 +12,37 @@ Source: a late evening idea by Ph. Toint
 
 SIF input: Ph. Toint, June 2003.
 
-Classification: SUR2-AN-V-V
+Classification: NOR2-AN-V-V
 """
 
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class YATP2LS(AbstractUnconstrainedMinimisation):
-    """Yet Another Toint Problem 2 - Least Squares version."""
+class YATP2SQ(AbstractNonlinearEquations):
+    """YATP2SQ - nonlinear equations version."""
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
     # Parameters
-    N: int = 350  # Matrix dimension (default from SIF)
+    _N: int = 350  # Matrix dimension (default from SIF)
     A: float = 1.0  # Constant in equations (default from SIF)
 
     def __init__(self, N: int = 350, A: float = 1.0):
-        self.N = N
+        self._N = N
         self.A = A
 
     @property
     def n(self):
         """Number of variables: N^2 + 2N."""
-        return self.N * self.N + 2 * self.N
+        return self._N * self._N + 2 * self._N
+
+    @property
+    def m(self):
+        """Number of equations: N^2 + 2N."""
+        return self._N * self._N + 2 * self._N
 
     @property
     def y0(self):
@@ -45,7 +50,7 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
         # All X(i,j) = 1.0, Y(i) = 0.0, Z(i) = 0.0 (from START POINT section)
         y0 = jnp.zeros(self.n, dtype=jnp.float64)
         # Set X values (first N^2 elements) to 1.0
-        y0 = y0.at[: self.N * self.N].set(1.0)
+        y0 = y0.at[: self._N * self._N].set(1.0)
         return y0
 
     @property
@@ -55,24 +60,22 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
 
     def _get_indices(self):
         """Get indices for X matrix, Y and Z vectors."""
-        n_sq = self.N * self.N
+        n_sq = self._N * self._N
         x_end = n_sq
         y_start = n_sq
-        y_end = n_sq + self.N
+        y_end = n_sq + self._N
         z_start = y_end
-        z_end = n_sq + 2 * self.N
+        z_end = n_sq + 2 * self._N
         return x_end, y_start, y_end, z_start, z_end
 
-    def objective(self, y, args):
-        """Compute the least squares objective function.
+    def constraint(self, y):
+        """Compute the nonlinear equations.
 
-        The objective is the sum of squares of:
-        1. x_{ij} - (y_i + z_i)*(1 + cos(x_{ij})) - A for all i,j
-        2. sum_i (x_{ij} + sin(x_{ij})) - 1 for all j (column sums)
-        3. sum_j (x_{ij} + sin(x_{ij})) - 1 for all i (row sums)
+        The equations are:
+        1. x_{ij} - (y_i + z_i)*(1 + cos(x_{ij})) - A = 0 for all i,j
+        2. sum_i (x_{ij} + sin(x_{ij})) - 1 = 0 for all j (column sums)
+        3. sum_j (x_{ij} + sin(x_{ij})) - 1 = 0 for all i (row sums)
         """
-        del args  # Not used
-
         x_end, y_start, y_end, z_start, z_end = self._get_indices()
 
         # Extract variables
@@ -81,43 +84,46 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
         z_vec = y[z_start:z_end]  # Z vector
 
         # Reshape X to matrix form
-        X = x_flat.reshape((self.N, self.N))
+        X = x_flat.reshape((self._N, self._N))
 
-        # Compute residuals for E(i,j) groups
-        e_residuals = []
-        for i in range(self.N):
-            for j in range(self.N):
+        equations = []
+
+        # E(i,j) equations: x_{ij} - (y_i + z_i)*(1 + cos(x_{ij})) - A = 0
+        for i in range(self._N):
+            for j in range(self._N):
                 x_ij = X[i, j]
                 y_i = y_vec[i]
                 z_i = z_vec[i]
 
-                # x_{ij} - (y_i + z_i)*(1 + cos(x_{ij})) - A = 0
-                residual = x_ij - (y_i + z_i) * (1.0 + jnp.cos(x_ij)) - self.A
-                e_residuals.append(residual)
+                equation = x_ij - (y_i + z_i) * (1.0 + jnp.cos(x_ij)) - self.A
+                equations.append(equation)
 
-        # Compute residuals for EC(j) groups (column sums)
-        ec_residuals = []
-        for j in range(self.N):
+        # EC(j) equations: sum_i (x_{ij} + sin(x_{ij})) - 1 = 0 for all j (column sums)
+        for j in range(self._N):
             col_sum = jnp.array(0.0)
-            for i in range(self.N):
+            for i in range(self._N):
                 x_ij = X[i, j]
                 col_sum += x_ij + jnp.sin(x_ij)
-            ec_residuals.append(col_sum - 1.0)
+            equations.append(col_sum - 1.0)
 
-        # Compute residuals for ER(i) groups (row sums)
-        er_residuals = []
-        for i in range(self.N):
+        # ER(i) equations: sum_j (x_{ij} + sin(x_{ij})) - 1 = 0 for all i (row sums)
+        for i in range(self._N):
             row_sum = jnp.array(0.0)
-            for j in range(self.N):
+            for j in range(self._N):
                 x_ij = X[i, j]
                 row_sum += x_ij + jnp.sin(x_ij)
-            er_residuals.append(row_sum - 1.0)
+            equations.append(row_sum - 1.0)
 
-        # Combine all residuals
-        all_residuals = jnp.array(e_residuals + ec_residuals + er_residuals)
+        # Convert to JAX array
+        eq_constraints = jnp.array(equations)
+        ineq_constraints = None
 
-        # Return sum of squares
-        return jnp.sum(all_residuals**2)
+        return eq_constraints, ineq_constraints
+
+    @property
+    def bounds(self):
+        """No explicit bounds."""
+        return None
 
     @property
     def expected_result(self):

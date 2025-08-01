@@ -201,7 +201,10 @@ from .tenfoldtr import TENFOLDTR as TENFOLDTR
 # from .vanderm4 import VANDERM4 as VANDERM4
 from .trigon1ne import TRIGON1NE as TRIGON1NE
 from .trigon2ne import TRIGON2NE as TRIGON2NE
+from .yatp1cne import YATP1CNE as YATP1CNE
 from .yatp1ne import YATP1NE as YATP1NE
+from .yatp2cne import YATP2CNE as YATP2CNE
+from .yatp2sq import YATP2SQ as YATP2SQ
 
 
 nonlinear_equations_problems = (
@@ -360,7 +363,10 @@ nonlinear_equations_problems = (
     POWELLSQ(),
     TRIGON1NE(),
     TRIGON2NE(),
+    YATP1CNE(),
     YATP1NE(),
+    YATP2CNE(),
+    YATP2SQ(),
     # VANDERM1(),  # TODO: Human review needed - mixed constraint types
     # VANDERM2(),  # TODO: Human review needed - mixed constraint types
     # VANDERM3(),  # TODO: Human review needed - originally had issues

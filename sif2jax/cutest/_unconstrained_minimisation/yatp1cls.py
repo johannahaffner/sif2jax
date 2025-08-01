@@ -1,16 +1,19 @@
-"""Another test problem involving double pseudo-stochastic constraints
-on a square matrix. This is a least-squares formulation.
+"""Yet another test problem involving double pseudo-stochastic constraints
+on a square matrix. This is a corrected least-squares formulation.
 
 The problem involves finding a matrix X and vectors Y, Z such that:
-- x_{ij} - (y_i + z_i)(1 + cos(x_{ij})) = A for all i,j
-- sum_i (x_{ij} + sin(x_{ij})) = 1 for all j (column sums)
-- sum_j (x_{ij} + sin(x_{ij})) = 1 for all i (row sums)
+- x_{ij}^3 - A x_{ij}^2 - (y_i + z_j)(x_{ij}cos(x_{ij}) - sin(x_{ij})) = 0
+- sum_j sin(x_{ij})/x_{ij} = 1 for all i (row sums)
+- sum_i sin(x_{ij})/x_{ij} = 1 for all j (column sums)
+
+Key correction from YATP1LS: z_j instead of z_i in the first equation.
 
 The problem is non convex.
 
 Source: a late evening idea by Ph. Toint
 
 SIF input: Ph. Toint, June 2003.
+           corrected Nick Gould, March 2019
 
 Classification: SUR2-AN-V-V
 """
@@ -20,17 +23,17 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class YATP2LS(AbstractUnconstrainedMinimisation):
-    """Yet Another Toint Problem 2 - Least Squares version."""
+class YATP1CLS(AbstractUnconstrainedMinimisation):
+    """Yet Another Toint Problem 1 - Corrected Least Squares version."""
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
     # Parameters
     N: int = 350  # Matrix dimension (default from SIF)
-    A: float = 1.0  # Constant in equations (default from SIF)
+    A: float = 10.0  # Constant in equations
 
-    def __init__(self, N: int = 350, A: float = 1.0):
+    def __init__(self, N: int = 350, A: float = 10.0):
         self.N = N
         self.A = A
 
@@ -67,9 +70,10 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
         """Compute the least squares objective function.
 
         The objective is the sum of squares of:
-        1. x_{ij} - (y_i + z_i)*(1 + cos(x_{ij})) - A for all i,j
-        2. sum_i (x_{ij} + sin(x_{ij})) - 1 for all j (column sums)
-        3. sum_j (x_{ij} + sin(x_{ij})) - 1 for all i (row sums)
+        1. x_{ij}^3 - A*x_{ij}^2 - (y_i + z_j)*(x_{ij}*cos(x_{ij}) - sin(x_{ij}))
+           for all i,j (corrected: z_j instead of z_i)
+        2. sum_j sin(x_{ij})/x_{ij} - 1 for all i (row sums)
+        3. sum_i sin(x_{ij})/x_{ij} - 1 for all j (column sums)
         """
         del args  # Not used
 
@@ -89,20 +93,15 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
             for j in range(self.N):
                 x_ij = X[i, j]
                 y_i = y_vec[i]
-                z_i = z_vec[i]
+                z_j = z_vec[j]  # Key correction: z_j instead of z_i
 
-                # x_{ij} - (y_i + z_i)*(1 + cos(x_{ij})) - A = 0
-                residual = x_ij - (y_i + z_i) * (1.0 + jnp.cos(x_ij)) - self.A
+                # x_{ij}^3 - A*x_{ij}^2 - (y_i + z_j)*(x_{ij}*cos(x_{ij}) - sin(x_{ij}))
+                term1 = x_ij**3
+                term2 = -self.A * x_ij**2
+                term3 = -(y_i + z_j) * (x_ij * jnp.cos(x_ij) - jnp.sin(x_ij))
+
+                residual = term1 + term2 + term3
                 e_residuals.append(residual)
-
-        # Compute residuals for EC(j) groups (column sums)
-        ec_residuals = []
-        for j in range(self.N):
-            col_sum = jnp.array(0.0)
-            for i in range(self.N):
-                x_ij = X[i, j]
-                col_sum += x_ij + jnp.sin(x_ij)
-            ec_residuals.append(col_sum - 1.0)
 
         # Compute residuals for ER(i) groups (row sums)
         er_residuals = []
@@ -110,11 +109,24 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
             row_sum = jnp.array(0.0)
             for j in range(self.N):
                 x_ij = X[i, j]
-                row_sum += x_ij + jnp.sin(x_ij)
+                # Avoid division by zero
+                ratio = jnp.where(jnp.abs(x_ij) < 1e-15, 0.0, jnp.sin(x_ij) / x_ij)
+                row_sum += ratio
             er_residuals.append(row_sum - 1.0)
 
+        # Compute residuals for EC(j) groups (column sums)
+        ec_residuals = []
+        for j in range(self.N):
+            col_sum = jnp.array(0.0)
+            for i in range(self.N):
+                x_ij = X[i, j]
+                # Avoid division by zero
+                ratio = jnp.where(jnp.abs(x_ij) < 1e-15, 0.0, jnp.sin(x_ij) / x_ij)
+                col_sum += ratio
+            ec_residuals.append(col_sum - 1.0)
+
         # Combine all residuals
-        all_residuals = jnp.array(e_residuals + ec_residuals + er_residuals)
+        all_residuals = jnp.array(e_residuals + er_residuals + ec_residuals)
 
         # Return sum of squares
         return jnp.sum(all_residuals**2)

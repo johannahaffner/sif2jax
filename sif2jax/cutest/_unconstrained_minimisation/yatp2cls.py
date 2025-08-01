@@ -1,16 +1,19 @@
 """Another test problem involving double pseudo-stochastic constraints
-on a square matrix. This is a least-squares formulation.
+on a square matrix. This is a corrected least-squares formulation.
 
 The problem involves finding a matrix X and vectors Y, Z such that:
-- x_{ij} - (y_i + z_i)(1 + cos(x_{ij})) = A for all i,j
+- x_{ij} - (y_i + z_j)(1 + cos(x_{ij})) = A for all i,j (corrected: z_j)
 - sum_i (x_{ij} + sin(x_{ij})) = 1 for all j (column sums)
 - sum_j (x_{ij} + sin(x_{ij})) = 1 for all i (row sums)
+
+Key correction from YATP2LS: z_j instead of z_i in the first equation.
 
 The problem is non convex.
 
 Source: a late evening idea by Ph. Toint
 
 SIF input: Ph. Toint, June 2003.
+           corrected Nick Gould, March 2019
 
 Classification: SUR2-AN-V-V
 """
@@ -20,8 +23,8 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-class YATP2LS(AbstractUnconstrainedMinimisation):
-    """Yet Another Toint Problem 2 - Least Squares version."""
+class YATP2CLS(AbstractUnconstrainedMinimisation):
+    """Yet Another Toint Problem 2 - Corrected Least Squares version."""
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -67,7 +70,7 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
         """Compute the least squares objective function.
 
         The objective is the sum of squares of:
-        1. x_{ij} - (y_i + z_i)*(1 + cos(x_{ij})) - A for all i,j
+        1. x_{ij} - (y_i + z_j)*(1 + cos(x_{ij})) - A for all i,j (corrected)
         2. sum_i (x_{ij} + sin(x_{ij})) - 1 for all j (column sums)
         3. sum_j (x_{ij} + sin(x_{ij})) - 1 for all i (row sums)
         """
@@ -89,10 +92,10 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
             for j in range(self.N):
                 x_ij = X[i, j]
                 y_i = y_vec[i]
-                z_i = z_vec[i]
+                z_j = z_vec[j]  # Key correction: z_j instead of z_i
 
-                # x_{ij} - (y_i + z_i)*(1 + cos(x_{ij})) - A = 0
-                residual = x_ij - (y_i + z_i) * (1.0 + jnp.cos(x_ij)) - self.A
+                # x_{ij} - (y_i + z_j)*(1 + cos(x_{ij})) - A = 0
+                residual = x_ij - (y_i + z_j) * (1.0 + jnp.cos(x_ij)) - self.A
                 e_residuals.append(residual)
 
         # Compute residuals for EC(j) groups (column sums)

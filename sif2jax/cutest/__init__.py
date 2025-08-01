@@ -459,7 +459,10 @@ from ._nonlinear_equations import (
     TENFOLDTR as TENFOLDTR,
     TRIGON1NE as TRIGON1NE,
     TRIGON2NE as TRIGON2NE,
+    YATP1CNE as YATP1CNE,
     YATP1NE as YATP1NE,
+    YATP2CNE as YATP2CNE,
+    YATP2SQ as YATP2SQ,
 )
 
 # VANDERM1 as VANDERM1,  # TODO: Human review - mixed constraint types
@@ -685,7 +688,10 @@ from ._unconstrained_minimisation import (
     WAYSEA1 as WAYSEA1,
     WAYSEA2 as WAYSEA2,
     WOODS as WOODS,
+    YATP1CLS as YATP1CLS,
     YATP1LS as YATP1LS,
+    YATP2CLS as YATP2CLS,
+    YATP2LS as YATP2LS,
     ZANGWIL2 as ZANGWIL2,
 )
 
@@ -1164,9 +1170,14 @@ problems_dict = {
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
     "WOODS": WOODS(),
+    "YATP1CLS": YATP1CLS(),
+    "YATP1CNE": YATP1CNE(),
     "YATP1LS": YATP1LS(),
     "YATP1NE": YATP1NE(),
-    # "YATP2LS": YATP2LS(),  # TODO: Fix dimension mismatch
+    "YATP2CLS": YATP2CLS(),
+    "YATP2CNE": YATP2CNE(),
+    "YATP2LS": YATP2LS(),
+    "YATP2SQ": YATP2SQ(),
     "ZANGWIL2": ZANGWIL2(),
     "TRIGON1": TRIGON1(),
     "TRIGON1B": TRIGON1B(),

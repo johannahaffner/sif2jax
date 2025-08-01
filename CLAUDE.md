@@ -43,7 +43,6 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
     Problems that are commented (due to requiring additional review) must be commented 
     in these tuples as well. Example: unconstrained_problems = (PROBLEM1, PROBLEM2, ...)
 
-
 ### 4. Testing Requirements
 - **Container Required**: Tests need pycutest/Fortran libs
 - **Test After EVERY Change**: Even minor edits

@@ -55,7 +55,8 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
   # Resources needed: [what would help]
   ```
   If a problem is flagged for human review, its imports should be commented out. 
-  Verify that it cannot be run anymore by trying to run the tests for it, these should then fail during collection with a clear error message.
+  Verify that it cannot be run anymore by trying to run the tests for it, these should then fail during collection with a clear error message. 
+  When commenting out a problem that is marked for human review, also try running `python -c import sif2jax` to confirm that the removal still permits importing the library as a whole and does not result in errata.
 - **Checking results of CI runs**: Numbers of problems correspond to positions (indices) in `sif2jax.problems`. 
 
 ### 5. Commit Process

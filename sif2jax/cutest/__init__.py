@@ -1343,6 +1343,8 @@ def get_problem(name: str):
     return problems_dict.get(name, None)  # TODO: try except with nicer error message
 
 
+constrained_minimisation_problems += quadratic_problems
+
 problems = (
     unconstrained_minimisation_problems
     + bounded_minimisation_problems

@@ -39,6 +39,9 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
     folder for their respective class. From there, CUTEst problems are imported in 
     `sif2jax/cutest/__init__.py`. `sif2jax/__init__.py` does not import specific 
     problems, it imports collections of problems (e.g. CUTEst).
+    Each folder defines a tuple of problems - the sum of these is then `sif2jax.problems`. 
+    Problems that are commented (due to requiring additional review) must be commented 
+    in these tuples as well. Example: unconstrained_problems = (PROBLEM1, PROBLEM2, ...)
 
 
 ### 4. Testing Requirements
@@ -54,6 +57,7 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
   ```
   If a problem is flagged for human review, its imports should be commented out. 
   Verify that it cannot be run anymore by trying to run the tests for it, these should then fail during collection with a clear error message.
+- **Checking results of CI runs**: Numbers of problems correspond to positions (indices) in `sif2jax.problems`. 
 
 ### 5. Commit Process
 - ✓ All tests pass

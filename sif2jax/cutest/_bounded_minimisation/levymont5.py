@@ -65,11 +65,11 @@ class LEVYMONT5(AbstractBoundedMinimisation):
         n_over_pi = self.N / pi
         sqrt_k_pi_over_n = jnp.sqrt(self.K * pi / self.N)
 
-        # Q(i) groups: coefficient L is scaled by N/π - vectorized
+        # Q(i) groups: group has scale factor N/π applied after squaring - vectorized
         a_minus_c = self.A - self.C
-        scaled_L = n_over_pi * self.L
-        q_values = scaled_L * y - a_minus_c
-        q_sum_of_squares = jnp.sum(q_values**2)
+        q_values = self.L * y + a_minus_c  # L * X(i) + (A-C)
+        q_squared = q_values**2  # Square first
+        q_sum_of_squares = n_over_pi * jnp.sum(q_squared)  # Then apply scale
 
         # N(1) group: sin(π(L*x1 + C))
         lx1_c = self.L * y[0] + self.C

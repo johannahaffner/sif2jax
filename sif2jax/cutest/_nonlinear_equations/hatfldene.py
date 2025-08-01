@@ -12,7 +12,7 @@ class HATFLDENE(AbstractNonlinearEquations):
     Attempts made: Multiple sign conventions tried
     Suspected issues: PyCUTEst may have different NLE convention than SIF file
     Resources needed: Understanding of how PyCUTEst interprets NLE problems
-    
+
     Source:
     "The OPTIMA user manual (issue No.8, p. 37)",
     Numerical Optimization Centre, Hatfield Polytechnic (UK), 1989.

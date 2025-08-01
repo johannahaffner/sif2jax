@@ -21,6 +21,13 @@ from .hs45 import HS45 as HS45
 from .hs110 import HS110 as HS110
 
 # from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
+from .levymont import LEVYMONT as LEVYMONT
+from .levymont5 import LEVYMONT5 as LEVYMONT5
+from .levymont6 import LEVYMONT6 as LEVYMONT6
+from .levymont7 import LEVYMONT7 as LEVYMONT7
+from .levymont8 import LEVYMONT8 as LEVYMONT8
+from .levymont9 import LEVYMONT9 as LEVYMONT9
+from .levymont10 import LEVYMONT10 as LEVYMONT10
 from .logros import LOGROS as LOGROS
 from .palmer1 import PALMER1 as PALMER1
 from .palmer1a import PALMER1A as PALMER1A
@@ -84,7 +91,13 @@ bounded_minimisation_problems = (
     HS38(),
     HS45(),
     HS110(),
-    # LEVYMONT(),  # TODO: Fix SCALE interpretation
+    LEVYMONT(),
+    LEVYMONT5(),
+    LEVYMONT6(),
+    LEVYMONT7(),
+    LEVYMONT8(),
+    LEVYMONT9(),
+    LEVYMONT10(),
     LOGROS(),
     PALMER1(),
     PALMER1A(),

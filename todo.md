@@ -25,7 +25,6 @@ Give either one or zero points according to the criteria above. Then annotate th
 - (2) GAUSS* - Score: 3 (moderate complexity, several implemented, small data, family size: 6)
 - (2) HEART* - Score: 3 (moderate complexity, HEART6LS/HEART8LS implemented, small data, family size: 4)
 - (2) MGH* - Score: 3 (moderate complexity, MGH09/MGH10LS implemented, no data, family size: 5+)
-- (2) LUKSAN* - Score: 3 (moderate complexity, LUKSAN14/LUKSAN22LS implemented, no data, family size: 17)
 - (2) LANCZOS* - Score: 3 (moderate complexity, no subset, small data, family size: 3)
 - (2) SYNTHE* - Score: 3 (synthetic test problems, no subset, no data, family size: 3)
 - (2) TABLE* - Score: 3 (simple table lookup problems, no subset, small data, family size: 6)

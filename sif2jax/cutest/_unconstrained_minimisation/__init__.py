@@ -13,11 +13,8 @@ from .bard import BARD as BARD
 from .bdqrtic import BDQRTIC as BDQRTIC
 from .beale import BEALE as BEALE
 from .bennett5ls import BENNETT5LS as BENNETT5LS
-from .biggs3 import BIGGS3 as BIGGS3
-from .biggs5 import BIGGS5 as BIGGS5
 from .biggs6 import BIGGS6 as BIGGS6
 from .box import BOX as BOX
-from .box2 import BOX2 as BOX2
 from .box3 import BOX3 as BOX3
 from .boxbodls import BOXBODLS as BOXBODLS
 
@@ -294,11 +291,8 @@ unconstrained_minimisation_problems = (
     BDQRTIC(),
     BEALE(),
     BENNETT5LS(),
-    BIGGS3(),
-    BIGGS5(),
     BIGGS6(),
     BOX(),
-    BOX2(),
     BOX3(),
     BOXBODLS(),
     # BOXPOWER(),  # TODO: Human review - minor gradient discrepancy at last element

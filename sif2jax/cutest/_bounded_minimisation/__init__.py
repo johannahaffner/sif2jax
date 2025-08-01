@@ -1,6 +1,10 @@
 from .bdexp import BDEXP as BDEXP
+from .biggs3 import BIGGS3 as BIGGS3
+from .biggs5 import BIGGS5 as BIGGS5
+from .box2 import BOX2 as BOX2
 from .branin import BRANIN as BRANIN
 from .camel6 import CAMEL6 as CAMEL6
+from .degdiag import DEGDIAG as DEGDIAG
 from .dgospec import DGOSPEC as DGOSPEC
 from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
@@ -66,12 +70,17 @@ from .pfit2ls import PFIT2LS as PFIT2LS
 from .pfit3ls import PFIT3LS as PFIT3LS
 from .pfit4ls import PFIT4LS as PFIT4LS
 from .price4b import PRICE4B as PRICE4B
+from .qudlin import QUDLIN as QUDLIN
 
 
 bounded_minimisation_problems = (
     BDEXP(),
+    BIGGS3(),
+    BIGGS5(),
+    BOX2(),
     BRANIN(),
     CAMEL6(),
+    DEGDIAG(),
     DGOSPEC(),
     EXP2B(),
     EXPLIN(),
@@ -128,4 +137,5 @@ bounded_minimisation_problems = (
     PFIT3LS(),
     PFIT4LS(),
     PRICE4B(),
+    QUDLIN(),
 )

@@ -1,8 +1,12 @@
 from ._bounded_minimisation import (
     BDEXP as BDEXP,
+    BIGGS3 as BIGGS3,
+    BIGGS5 as BIGGS5,
     bounded_minimisation_problems as bounded_minimisation_problems,
+    BOX2 as BOX2,
     BRANIN as BRANIN,
     CAMEL6 as CAMEL6,
+    DEGDIAG as DEGDIAG,
     DGOSPEC as DGOSPEC,
     EXP2B as EXP2B,
     EXPLIN as EXPLIN,
@@ -59,6 +63,7 @@ from ._bounded_minimisation import (
     PFIT3LS as PFIT3LS,
     PFIT4LS as PFIT4LS,
     PRICE4B as PRICE4B,
+    QUDLIN as QUDLIN,
 )
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
@@ -449,12 +454,10 @@ from ._nonlinear_equations import (
 # VANDERM2 as VANDERM2,  # TODO: Human review - mixed constraint types
 from ._quadratic_problems import (
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
-    DEGDIAG as DEGDIAG,
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
     QPBAND as QPBAND,
     quadratic_problems as quadratic_problems,
-    QUDLIN as QUDLIN,
     TAME as TAME,
     # TORSIOND as TORSIOND,  # TODO: Human review - objective mismatch with pycutest
     YAO as YAO,
@@ -476,11 +479,8 @@ from ._unconstrained_minimisation import (
     BDQRTIC as BDQRTIC,
     BEALE as BEALE,
     BENNETT5LS as BENNETT5LS,
-    BIGGS3 as BIGGS3,
-    BIGGS5 as BIGGS5,
     BIGGS6 as BIGGS6,
     BOX as BOX,
-    BOX2 as BOX2,
     BOX3 as BOX3,
     BOXBODLS as BOXBODLS,
     # BOXPOWER as BOXPOWER,  # TODO: Human review - minor gradient discrepancy

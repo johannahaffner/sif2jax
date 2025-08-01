@@ -271,6 +271,7 @@ from .vardim import VARDIM as VARDIM
 from .waysea1 import WAYSEA1 as WAYSEA1
 from .waysea2 import WAYSEA2 as WAYSEA2
 from .woods import WOODS as WOODS
+from .yatp1ls import YATP1LS as YATP1LS
 from .zangwil2 import ZANGWIL2 as ZANGWIL2
 
 
@@ -479,6 +480,7 @@ unconstrained_minimisation_problems = (
     WAYSEA1(),
     WAYSEA2(),
     WOODS(),
+    YATP1LS(),
     # YATP2LS(),  # TODO: Fix dimension mismatch
     ZANGWIL2(),
     TRIGON1(),

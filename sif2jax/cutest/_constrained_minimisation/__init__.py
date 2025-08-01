@@ -237,9 +237,16 @@ from .odfits import ODFITS as ODFITS
 
 # from .orthrdm2 import ORTHRDM2 as ORTHRDM2  # TODO: Human review - singular Jacobian
 # from .orthrds2 import ORTHRDS2 as ORTHRDS2  # TODO: Human review - singular Jacobian
+from .orthrds2c import ORTHRDS2C as ORTHRDS2C
+
 # from .orthrega import ORTHREGA as ORTHREGA  # TODO: Human review - formulation diffs
+from .orthregb import ORTHREGB as ORTHREGB
+from .orthregc import ORTHREGC as ORTHREGC
 from .orthregd import ORTHREGD as ORTHREGD
+from .orthrege import ORTHREGE as ORTHREGE
+from .orthregf import ORTHREGF as ORTHREGF
 from .orthrgdm import ORTHRGDM as ORTHRGDM
+from .orthrgds import ORTHRGDS as ORTHRGDS
 from .pentagon import PENTAGON as PENTAGON
 from .polak1 import POLAK1 as POLAK1
 from .polak2 import POLAK2 as POLAK2
@@ -415,9 +422,15 @@ constrained_minimisation_problems = (
     ODFITS(),
     # ORTHRDM2(),  # TODO: Human review - singular Jacobian issues
     # ORTHRDS2(),  # TODO: Human review - singular Jacobian issues
+    ORTHRDS2C(),
     # ORTHREGA(),  # TODO: Human review - fundamental formulation differences
-    ORTHRGDM(),
+    ORTHREGB(),
+    ORTHREGC(),
     ORTHREGD(),
+    ORTHREGE(),
+    ORTHREGF(),
+    ORTHRGDM(),
+    ORTHRGDS(),
     PENTAGON(),
     POLAK1(),
     POLAK2(),

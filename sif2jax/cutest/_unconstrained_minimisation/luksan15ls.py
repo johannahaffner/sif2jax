@@ -1,17 +1,3 @@
-"""Problem 15 (sparse signomial) from Luksan.
-
-This is a least squares problem from the paper:
-L. Luksan
-"Hybrid methods in large sparse nonlinear least squares"
-J. Optimization Theory & Applications 89(3) 575-595 (1996)
-
-SIF input: Nick Gould, June 2017.
-
-least-squares version
-
-classification SUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 from jax import Array
 
@@ -19,7 +5,19 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class LUKSAN15LS(AbstractUnconstrainedMinimisation):
-    """Problem 15 (sparse signomial) from Luksan - least squares version."""
+    """Problem 15 (sparse signomial) from Luksan.
+
+    This is a least squares problem from the paper:
+    L. Luksan
+    "Hybrid methods in large sparse nonlinear least squares"
+    J. Optimization Theory & Applications 89(3) 575-595 (1996)
+
+    SIF input: Nick Gould, June 2017.
+
+    least-squares version
+
+    classification SUR2-AN-V-0
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -33,11 +31,10 @@ class LUKSAN15LS(AbstractUnconstrainedMinimisation):
     @property
     def y0(self) -> Array:
         """Initial guess: pattern (-0.8, 1.2, -1.2, 0.8) repeated."""
-        x = jnp.zeros(self.n, dtype=jnp.float64)
         pattern = jnp.array([-0.8, 1.2, -1.2, 0.8], dtype=jnp.float64)
-        for i in range(self.n):
-            x = x.at[i].set(pattern[i % 4])
-        return x
+        # Repeat pattern to cover all n variables
+        full_pattern = jnp.tile(pattern, (self.n + 3) // 4)[: self.n]
+        return full_pattern
 
     @property
     def args(self):
@@ -57,55 +54,59 @@ class LUKSAN15LS(AbstractUnconstrainedMinimisation):
         s = self.s
 
         # Data values
-        Y = jnp.array([35.8, 11.2, 6.2, 4.4], dtype=jnp.float64)
+        Y = jnp.array([35.8, 11.2, 6.2, 4.4], dtype=x.dtype)
 
-        # Initialize residual vector
-        residuals = []
+        # Vectorized computation
+        # Create indices for all blocks
+        j_indices = jnp.arange(s)
+        i_indices = 2 * j_indices  # Variable indices for each block
 
-        # Loop over S blocks
-        i = 0  # Variable index (0-based)
+        # Extract variables for all blocks
+        x1 = x[i_indices]  # x[i] for all blocks
+        x2 = x[i_indices + 1]  # x[i+1] for all blocks
+        x3 = x[i_indices + 2]  # x[i+2] for all blocks
+        x4 = x[i_indices + 3]  # x[i+3] for all blocks
 
-        for j in range(s):
-            # Each block contributes 4 equations
-            # Variables involved: x[i], x[i+1], x[i+2], x[i+3]
+        # Compute signomial term for all blocks: x1 * x2^2 * x3^3 * x4^4
+        signom_vals = x1 * (x2**2) * (x3**3) * (x4**4)  # shape: (s,)
 
-            for l in range(1, 5):  # l = 1, 2, 3, 4
-                # For each equation, sum over p = 1, 2, 3
-                eq_sum = 0.0
+        # Create arrays for p and l values
+        p_vals = jnp.array([1, 2, 3], dtype=x.dtype)  # p = 1, 2, 3
+        l_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)  # l = 1, 2, 3, 4
 
-                for p in range(1, 4):  # p = 1, 2, 3
-                    # P2OL = p^2 / l
-                    # PLI = 1 / (p * l)
-                    p2ol = float(p * p) / float(l)
-                    pli = 1.0 / (float(p) * float(l))
+        # Create meshgrids for vectorized computation
+        P, L, J = jnp.meshgrid(
+            p_vals, l_vals, j_indices, indexing="ij"
+        )  # shapes: (3, 4, s)
 
-                    # Compute signomial term: x1 * x2^2 * x3^3 * x4^4
-                    x1 = x[i]
-                    x2 = x[i + 1]
-                    x3 = x[i + 2]
-                    x4 = x[i + 3]
+        # Compute p2ol and pli for all combinations
+        P2OL = P**2 / L  # shape: (3, 4, s)
+        PLI = 1.0 / (P * L)  # shape: (3, 4, s)
 
-                    signom_val = x1 * (x2**2) * (x3**3) * (x4**4)
+        # Expand signom_vals to match the shape
+        signom_expanded = signom_vals[None, None, :]  # shape: (1, 1, s)
 
-                    # Apply sign based on whether signom_val is positive
-                    sign_p = jnp.where(signom_val > 0, 1.0, -1.0)
-                    p_val = signom_val * sign_p  # This gives |signom_val|
+        # Apply sign based on whether signom_val is positive
+        sign_p = jnp.where(signom_expanded > 0, 1.0, -1.0)
+        p_val = signom_expanded * sign_p  # This gives |signom_val|, shape: (1, 1, s)
 
-                    # F = p2ol * p^pli
-                    f_val = p2ol * (p_val**pli)
+        # Compute F = p2ol * p_val^pli for all combinations
+        F_vals = P2OL * (p_val**PLI)  # shape: (3, 4, s)
 
-                    eq_sum += f_val
+        # Sum over p (axis=0) to get equation sums for each (l, j)
+        eq_sums = jnp.sum(F_vals, axis=0)  # shape: (4, s)
 
-                # Residual: sum - Y[l-1]
-                residual = eq_sum - Y[l - 1]
-                residuals.append(residual)
+        # Subtract Y values (broadcast Y to match shape)
+        Y_expanded = Y[:, None]  # shape: (4, 1)
+        residuals_matrix = eq_sums - Y_expanded  # shape: (4, s)
 
-            # Move to next block of variables (stride 2)
-            i += 2
+        # Flatten in the correct order: for each j, then for each l
+        # The original order is: j=0,l=1; j=0,l=2; j=0,l=3; j=0,l=4; j=1,l=1; ...
+        # residuals_matrix is (l, j), so we need to transpose and flatten
+        residuals = residuals_matrix.T.flatten()  # shape: (4*s,)
 
         # Sum of squares (L2 group type in SIF)
-        residuals_array = jnp.array(residuals)
-        return jnp.sum(residuals_array**2)
+        return jnp.sum(residuals**2)
 
     @property
     def expected_result(self) -> Array | None:

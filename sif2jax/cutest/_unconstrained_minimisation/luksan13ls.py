@@ -1,17 +1,3 @@
-"""Problem 13 (chained and modified HS48) from Luksan.
-
-This is a least squares problem from the paper:
-L. Luksan
-"Hybrid methods in large sparse nonlinear least squares"
-J. Optimization Theory & Applications 89(3) 575-595 (1996)
-
-SIF input: Nick Gould, June 2017.
-
-least-squares version
-
-classification SUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 from jax import Array
 
@@ -19,7 +5,19 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class LUKSAN13LS(AbstractUnconstrainedMinimisation):
-    """Problem 13 (chained and modified HS48) from Luksan - least squares version."""
+    """Problem 13 (chained and modified HS48) from Luksan.
+
+    This is a least squares problem from the paper:
+    L. Luksan
+    "Hybrid methods in large sparse nonlinear least squares"
+    J. Optimization Theory & Applications 89(3) 575-595 (1996)
+
+    SIF input: Nick Gould, June 2017.
+
+    least-squares version
+
+    classification SUR2-AN-V-0
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -58,52 +56,47 @@ class LUKSAN13LS(AbstractUnconstrainedMinimisation):
         x = y
         s = self.s
 
-        # Initialize residual vector
-        residuals = []
+        # Vectorized computation
+        # Create indices for all blocks at once
+        i_indices = jnp.arange(s) * 3  # [0, 3, 6, ..., 3*(s-1)]
 
-        # Loop over S blocks
-        i = 0  # Variable index (0-based)
+        # Extract all variables needed for vectorized operations
+        x0 = x[i_indices]  # x[i] for each block
+        x1 = x[i_indices + 1]  # x[i+1] for each block
+        x2 = x[i_indices + 2]  # x[i+2] for each block
+        x3 = x[i_indices + 3]  # x[i+3] for each block
+        x4 = x[i_indices + 4]  # x[i+4] for each block
 
-        for j in range(s):
-            # Each block has 7 equations
-            # Variables involved: x[i], x[i+1], x[i+2], x[i+3], x[i+4]
+        # Compute all 7 types of residuals for all blocks at once
+        # E(k): -10*x(i+1) + 10*x(i)^2
+        res1 = -10.0 * x1 + 10.0 * x0 * x0
 
-            # E(k): -10*x(i+1) + 10*x(i)^2
-            res1 = -10.0 * x[i + 1] + 10.0 * x[i] * x[i]
-            residuals.append(res1)
+        # E(k+1): -10*x(i+2) + 10*x(i+1)^2
+        res2 = -10.0 * x2 + 10.0 * x1 * x1
 
-            # E(k+1): -10*x(i+2) + 10*x(i+1)^2
-            res2 = -10.0 * x[i + 2] + 10.0 * x[i + 1] * x[i + 1]
-            residuals.append(res2)
+        # E(k+2): (x(i+2) - x(i+3))^2
+        res3 = (x2 - x3) ** 2
 
-            # E(k+2): (x(i+2) - x(i+3))^2
-            diff = x[i + 2] - x[i + 3]
-            res3 = diff * diff
-            residuals.append(res3)
+        # E(k+3): (x(i+3) - x(i+4))^2
+        res4 = (x3 - x4) ** 2
 
-            # E(k+3): (x(i+3) - x(i+4))^2
-            diff = x[i + 3] - x[i + 4]
-            res4 = diff * diff
-            residuals.append(res4)
+        # E(k+4): x(i) + x(i+2) + x(i+1)^2 - 30
+        res5 = x0 + x2 + x1 * x1 - 30.0
 
-            # E(k+4): x(i) + x(i+2) + x(i+1)^2 - 30
-            res5 = x[i] + x[i + 2] + x[i + 1] * x[i + 1] - 30.0
-            residuals.append(res5)
+        # E(k+5): x(i+1) + x(i+3) - x(i+2)^2 - 10
+        res6 = x1 + x3 - x2 * x2 - 10.0
 
-            # E(k+5): x(i+1) + x(i+3) - x(i+2)^2 - 10
-            res6 = x[i + 1] + x[i + 3] - x[i + 2] * x[i + 2] - 10.0
-            residuals.append(res6)
+        # E(k+6): x(i) * x(i+4) - 10
+        res7 = x0 * x4 - 10.0
 
-            # E(k+6): x(i) * x(i+4) - 10
-            res7 = x[i] * x[i + 4] - 10.0
-            residuals.append(res7)
-
-            # Update indices
-            i += 3
+        # Stack all residuals in the correct order
+        # Each block contributes 7 residuals in sequence
+        residuals = jnp.stack(
+            [res1, res2, res3, res4, res5, res6, res7], axis=1
+        ).flatten()
 
         # Sum of squares (L2 group type in SIF)
-        residuals_array = jnp.array(residuals)
-        return jnp.sum(residuals_array**2)
+        return jnp.sum(residuals**2)
 
     @property
     def expected_result(self) -> Array | None:

@@ -1,17 +1,3 @@
-"""Problem 21 (modified discrete boundary value) from Luksan.
-
-This is a least squares problem from the paper:
-L. Luksan
-"Hybrid methods in large sparse nonlinear least squares"
-J. Optimization Theory & Applications 89(3) 575-595 (1996)
-
-SIF input: Nick Gould, June 2017.
-
-least-squares version
-
-classification SUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 from jax import Array
 
@@ -19,7 +5,19 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class LUKSAN21LS(AbstractUnconstrainedMinimisation):
-    """Problem 21 (modified discrete boundary value) from Luksan - LS version."""
+    """Problem 21 (modified discrete boundary value) from Luksan.
+
+    This is a least squares problem from the paper:
+    L. Luksan
+    "Hybrid methods in large sparse nonlinear least squares"
+    J. Optimization Theory & Applications 89(3) 575-595 (1996)
+
+    SIF input: Nick Gould, June 2017.
+
+    least-squares version
+
+    classification SUR2-AN-V-0
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -51,39 +49,38 @@ class LUKSAN21LS(AbstractUnconstrainedMinimisation):
 
         x = y
         n = self.n
-        m = n  # Number of residuals equals number of variables
 
         # Parameters
         h = 1.0 / (n + 1)
         h2 = h * h
         h2_half = 0.5 * h2
 
-        # Initialize residual vector
-        residuals = []
+        # Create index arrays for vectorized computation
+        i_vals = jnp.arange(
+            1, n + 1, dtype=x.dtype
+        )  # 1 to n (1-indexed as in original)
+        hi_vals = h * i_vals  # h * i for all i
 
-        # Equation 1: 2*x(1) - x(2) + h^2/2 * (x(1) + h + 1)^3 + 1
-        hi = h  # h * i where i = 1
-        xhip1 = x[0] + hi + 1.0
-        res1 = 2.0 * x[0] - x[1] + h2_half * (xhip1**3) + 1.0
-        residuals.append(res1)
+        # Compute cubic terms for all equations: (x(i) + h*i + 1)^3
+        xhip1_vals = x + hi_vals + 1.0  # x(i) + h*i + 1 for all i
+        cubic_terms = h2_half * (xhip1_vals**3)  # h^2/2 * (x(i) + h*i + 1)^3
 
-        # Equations 2 to M-1: 2*x(i) - x(i-1) - x(i+1) + h^2/2 * (x(i) + h*i + 1)^3 + 1
-        for i in range(2, m):
-            idx = i - 1  # 0-based index
-            hi = h * i
-            xhip1 = x[idx] + hi + 1.0
-            res = 2.0 * x[idx] - x[idx - 1] - x[idx + 1] + h2_half * (xhip1**3) + 1.0
-            residuals.append(res)
+        # Handle the three cases using vectorized operations
+        # Case 1: First equation (i=1): 2*x(1) - x(2) + cubic_term + 1
+        # Case 2: Middle eqs (2 <= i <= n-1): 2*x(i) - x(i-1) - x(i+1) + cubic + 1
+        # Case 3: Last equation (i=n): 2*x(n) - x(n-1) + cubic_term + 1
 
-        # Equation M: 2*x(n) - x(n-1) + h^2/2 * (x(n) + h*n + 1)^3 + 1
-        hi = h * n
-        xhip1 = x[n - 1] + hi + 1.0
-        res_n = 2.0 * x[n - 1] - x[n - 2] + h2_half * (xhip1**3) + 1.0
-        residuals.append(res_n)
+        # Initialize residuals with 2*x(i) + cubic_term + 1 for all i
+        residuals = 2.0 * x + cubic_terms + 1.0
+
+        # Subtract x(i+1) from equations 1 to n-1
+        residuals = residuals.at[:-1].add(-x[1:])
+
+        # Subtract x(i-1) from equations 2 to n
+        residuals = residuals.at[1:].add(-x[:-1])
 
         # Sum of squares (L2 group type in SIF)
-        residuals_array = jnp.array(residuals)
-        return jnp.sum(residuals_array**2)
+        return jnp.sum(residuals**2)
 
     @property
     def expected_result(self) -> Array | None:

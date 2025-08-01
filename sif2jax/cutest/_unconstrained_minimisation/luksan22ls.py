@@ -1,27 +1,25 @@
-"""Problem 22 (attracting-repelling) in the paper L. Luksan: Hybrid methods in
-large sparse nonlinear least squares. J. Optimization Theory and Applications 89,
-pp. 575-595, 1996.
-
-This is a large sparse nonlinear least squares problem with exponential terms,
-designed to test optimization algorithms on problems with attracting-repelling
-behavior due to the combination of exponential terms with different signs.
-
-Source: Luksan, L. (1996)
-Hybrid methods in large sparse nonlinear least squares
-J. Optimization Theory and Applications 89, pp. 575-595.
-
-SIF input: Nick Gould, June 1997.
-
-Classification: SUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class LUKSAN22LS(AbstractUnconstrainedMinimisation):
-    """Luksan's problem 22 - attracting-repelling least squares."""
+    """Problem 22 (attracting-repelling) in the paper L. Luksan: Hybrid methods in
+    large sparse nonlinear least squares. J. Optimization Theory and Applications 89,
+    pp. 575-595, 1996.
+
+    This is a large sparse nonlinear least squares problem with exponential terms,
+    designed to test optimization algorithms on problems with attracting-repelling
+    behavior due to the combination of exponential terms with different signs.
+
+    Source: Luksan, L. (1996)
+    Hybrid methods in large sparse nonlinear least squares
+    J. Optimization Theory and Applications 89, pp. 575-595.
+
+    SIF input: Nick Gould, June 1997.
+
+    Classification: SUR2-AN-V-0
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -62,41 +60,52 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
         """
         del args  # Not used
 
-        equations = []
+        n = self.N
 
+        # Vectorized computation
         # E(1) = X(1) + 1.0
         e1 = y[0] + 1.0
-        equations.append(e1)
 
-        # For k=2 to 2N-3 step 2
-        # Note: we iterate from k=2 to 2N-3 (inclusive) with step 2
-        # This gives us k = 2, 4, 6, ..., 2N-4
-        for k in range(2, 2 * self.N - 2, 2):
-            # i is 1-based in SIF, so i = (k+1)/2 gives i = 2, 3, ..., N-1
-            # Convert to 0-based: i_idx = i - 1 = (k+1)/2 - 1 = (k-1)/2
-            i_idx = (k - 1) // 2
+        # For the middle equations, we have pairs of equations
+        # i ranges from 1 to n-2 (0-based: 0 to n-3)
+        i_indices = jnp.arange(n - 2)
 
-            # E(k) = 10.0 * (X(i)^2 - 10.0*X(i+1))
-            # Note: In SIF groups, E(k) gets coefficient 10.0 from GROUP USES
-            ek = y[i_idx] ** 2 - 10.0 * y[i_idx + 1]
-            equations.append(10.0 * ek)
+        # Extract variables for vectorized operations
+        xi = y[i_indices]  # X(i) for i=1 to n-2
+        xi1 = y[i_indices + 1]  # X(i+1)
+        xi2 = y[i_indices + 2]  # X(i+2)
 
-            # E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
-            # EXPDA: 2 * exp(-(X(i) - X(i+1))^2)
-            # EXPDB: exp(-2*(X(i+1) - X(i+2))^2)
-            term1 = 2.0 * jnp.exp(-((y[i_idx] - y[i_idx + 1]) ** 2))
-            term2 = jnp.exp(-2.0 * ((y[i_idx + 1] - y[i_idx + 2]) ** 2))
-            ek1 = term1 - term2
-            equations.append(ek1)
+        # E(k) equations: 10.0 * (X(i)^2 - 10.0*X(i+1))
+        ek_vals = 10.0 * (xi**2 - 10.0 * xi1)
+
+        # Vectorized computation of E(k+1)
+        # E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
+        term1 = 2.0 * jnp.exp(-((xi - xi1) ** 2))
+        term2 = jnp.exp(-2.0 * ((xi1 - xi2) ** 2))
+        ek1_vals = term1 - term2
 
         # E(2N-2) = 10.0 * (X(N-1)^2 - 10.0*X(N))
-        # Note: In SIF groups, E(2N-2) gets coefficient 10.0 from GROUP USES
-        e_final = y[self.N - 2] ** 2 - 10.0 * y[self.N - 1]
-        equations.append(10.0 * e_final)
+        e_final = 10.0 * (y[n - 2] ** 2 - 10.0 * y[n - 1])
+
+        # Combine all equations
+        # We need to interleave ek_vals and ek1_vals
+        # Create array with space for all equations
+        equations = jnp.zeros(2 * n - 2)
+
+        # Set E(1)
+        equations = equations.at[0].set(e1)
+
+        # Set the middle equations by interleaving
+        # E(2), E(4), E(6), ... are ek_vals[0], ek_vals[1], ...
+        # E(3), E(5), E(7), ... are ek1_vals[0], ek1_vals[1], ...
+        equations = equations.at[1 : 2 * n - 3 : 2].set(ek_vals)
+        equations = equations.at[2 : 2 * n - 3 : 2].set(ek1_vals)
+
+        # Set E(2N-2)
+        equations = equations.at[-1].set(e_final)
 
         # Sum of squares (L2 group type in SIF)
-        equations_array = jnp.array(equations)
-        return jnp.sum(equations_array**2)
+        return jnp.sum(equations**2)
 
     @property
     def expected_result(self):

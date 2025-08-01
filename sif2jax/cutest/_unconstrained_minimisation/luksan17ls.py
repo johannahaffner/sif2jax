@@ -1,17 +1,3 @@
-"""Problem 17 (sparse trigonometric) from Luksan.
-
-This is a least squares problem from the paper:
-L. Luksan
-"Hybrid methods in large sparse nonlinear least squares"
-J. Optimization Theory & Applications 89(3) 575-595 (1996)
-
-SIF input: Nick Gould, June 2017.
-
-least-squares version
-
-classification SUR2-AN-V-0
-"""
-
 import jax.numpy as jnp
 from jax import Array
 
@@ -19,7 +5,19 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class LUKSAN17LS(AbstractUnconstrainedMinimisation):
-    """Problem 17 (sparse trigonometric) from Luksan - least squares version."""
+    """Problem 17 (sparse trigonometric) from Luksan.
+
+    This is a least squares problem from the paper:
+    L. Luksan
+    "Hybrid methods in large sparse nonlinear least squares"
+    J. Optimization Theory & Applications 89(3) 575-595 (1996)
+
+    SIF input: Nick Gould, June 2017.
+
+    least-squares version
+
+    classification SUR2-AN-V-0
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -33,11 +31,10 @@ class LUKSAN17LS(AbstractUnconstrainedMinimisation):
     @property
     def y0(self) -> Array:
         """Initial guess: pattern (-0.8, 1.2, -1.2, 0.8) repeated."""
-        x = jnp.zeros(self.n, dtype=jnp.float64)
         pattern = jnp.array([-0.8, 1.2, -1.2, 0.8], dtype=jnp.float64)
-        for i in range(self.n):
-            x = x.at[i].set(pattern[i % 4])
-        return x
+        # Repeat pattern to cover all n variables
+        full_pattern = jnp.tile(pattern, (self.n + 3) // 4)[: self.n]
+        return full_pattern
 
     @property
     def args(self):
@@ -57,45 +54,55 @@ class LUKSAN17LS(AbstractUnconstrainedMinimisation):
         s = self.s
 
         # Data values
-        Y = jnp.array([30.6, 72.2, 124.4, 187.4], dtype=jnp.float64)
+        Y = jnp.array([30.6, 72.2, 124.4, 187.4], dtype=x.dtype)
 
-        # Initialize residual vector
-        residuals = []
+        # Vectorized computation
+        # Create indices for all blocks
+        j_indices = jnp.arange(s)
 
-        # Loop over S blocks
-        i = 0  # Variable index (0-based)
+        # Create arrays for l and q values
+        l_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)  # l = 1, 2, 3, 4
+        q_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)  # q = 1, 2, 3, 4
 
-        for j in range(s):
-            # Each block contributes 4 equations
-            for l in range(1, 5):  # l = 1, 2, 3, 4
-                # For each equation, sum over q = 1, 2, 3, 4
-                eq_sum = 0.0
+        # Create meshgrids for vectorized computation
+        L, Q, J = jnp.meshgrid(
+            l_vals, q_vals, j_indices, indexing="ij"
+        )  # shapes: (4, 4, s)
 
-                for q in range(1, 5):  # q = 1, 2, 3, 4
-                    # Variable index for x(i+q) in SIF (1-based)
-                    # In 0-based: x[i+q-1]
-                    var_idx = i + q - 1
+        # Variable indices for each combination: var_idx = i + q - 1 = 2*j + q - 1
+        var_indices = (2 * J.astype(x.dtype) + Q - 1).astype(
+            jnp.int32
+        )  # shape: (4, 4, s)
 
-                    # For sine term: a = -l * q^2
-                    a_sin = -float(l) * float(q * q)
-                    sin_term = a_sin * jnp.sin(x[var_idx])
+        # Extract variables for all combinations
+        x_vals = x[var_indices]  # shape: (4, 4, s)
 
-                    # For cosine term: a = l^2 * q
-                    a_cos = float(l * l) * float(q)
-                    cos_term = a_cos * jnp.cos(x[var_idx])
+        # Compute coefficients
+        # For sine term: a = -l * q^2
+        a_sin = -L * (Q**2)  # shape: (4, 4, s)
+        sin_terms = a_sin * jnp.sin(x_vals)  # shape: (4, 4, s)
 
-                    eq_sum += sin_term + cos_term
+        # For cosine term: a = l^2 * q
+        a_cos = (L**2) * Q  # shape: (4, 4, s)
+        cos_terms = a_cos * jnp.cos(x_vals)  # shape: (4, 4, s)
 
-                # Residual: sum - Y[l-1]
-                residual = eq_sum - Y[l - 1]
-                residuals.append(residual)
+        # Total terms for each (l, q, j) combination
+        total_terms = sin_terms + cos_terms  # shape: (4, 4, s)
 
-            # Move to next block of variables (stride 2)
-            i += 2
+        # Sum over q (axis=1) to get equation sums for each (l, j)
+        eq_sums = jnp.sum(total_terms, axis=1)  # shape: (4, s)
+
+        # Subtract Y values (broadcast Y to match shape)
+        Y_expanded = Y[:, None]  # shape: (4, 1)
+        residuals_matrix = eq_sums - Y_expanded  # shape: (4, s)
+
+        # Flatten in the correct order: for each j, then for each l
+        # The original order is: j=0,l=1; j=0,l=2; j=0,l=3; j=0,l=4; j=1,l=1; ...
+        # residuals_matrix is (l, j), so we need to transpose and flatten
+        residuals = residuals_matrix.T.flatten()  # shape: (4*s,)
 
         # Sum of squares (L2 group type in SIF)
-        residuals_array = jnp.array(residuals)
-        return jnp.sum(residuals_array**2)
+        return jnp.sum(residuals**2)
 
     @property
     def expected_result(self) -> Array | None:

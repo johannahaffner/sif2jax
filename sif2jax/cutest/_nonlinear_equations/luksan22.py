@@ -40,10 +40,11 @@ class LUKSAN22(AbstractNonlinearEquations):
         """Compute the residual vector.
 
         The residuals are:
-        - E(1) = X(1) + 1.0
+        - E(1) = X(1) - 1.0 (note: pycutest uses -1.0, SIF file shows +1.0)
         - For k=2 to 2N-3 step 2, i = (k+1)/2:
           - E(k) = 10.0 * X(i)^2 - 10.0*X(i+1)
-          - E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
+          - E(k+1) = 2*exp(-(X(i)-X(i+1))^2) + exp(-2*(X(i+1)-X(i+2))^2)
+            (note: pycutest uses + between exponentials)
         - E(2N-2) = 10.0 * X(N-1)^2
         """
         del args  # Not used
@@ -53,8 +54,9 @@ class LUKSAN22(AbstractNonlinearEquations):
         # Initialize residuals array
         residuals = jnp.zeros(self.m)
 
-        # E(1) = X(1) + 1.0 (first residual)
-        residuals = residuals.at[0].set(y[0] + 1.0)
+        # E(1) = X(1) - 1.0 (first residual)
+        # Note: SIF file shows +1.0 constant but pycutest uses -1.0
+        residuals = residuals.at[0].set(y[0] - 1.0)
 
         # Vectorize the loop: k ranges from 2 to 2N-3 step 2
         # This gives k = 2, 4, 6, ..., 2N-4
@@ -67,9 +69,10 @@ class LUKSAN22(AbstractNonlinearEquations):
         ek_vals = 10.0 * y[i_idx_vals] ** 2 - 10.0 * y[i_idx_vals + 1]
 
         # Vectorized computation of E(k+1)
+        # Note: pycutest uses + instead of - between exponential terms
         term1_vals = 2.0 * jnp.exp(-((y[i_idx_vals] - y[i_idx_vals + 1]) ** 2))
         term2_vals = jnp.exp(-2.0 * ((y[i_idx_vals + 1] - y[i_idx_vals + 2]) ** 2))
-        ek1_vals = term1_vals - term2_vals
+        ek1_vals = term1_vals + term2_vals
 
         # Interleave ek_vals and ek1_vals into residuals starting from index 1
         # We need to place them at indices 1, 2, 3, 4, 5, 6, ..., 2N-3

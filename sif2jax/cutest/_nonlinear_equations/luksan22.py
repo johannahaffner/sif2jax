@@ -42,9 +42,9 @@ class LUKSAN22(AbstractNonlinearEquations):
         The residuals are:
         - E(1) = X(1) + 1.0
         - For k=2 to 2N-3 step 2, i = (k+1)/2:
-          - E(k) = 10.0 * (X(i)^2 - 10.0*X(i+1))
+          - E(k) = 10.0 * X(i)^2 - 10.0*X(i+1)
           - E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
-        - E(2N-2) = 10.0 * (X(N-1)^2 - 10.0*X(N))
+        - E(2N-2) = 10.0 * X(N-1)^2
         """
         del args  # Not used
 
@@ -63,8 +63,8 @@ class LUKSAN22(AbstractNonlinearEquations):
         k_vals = 2 + 2 * jnp.arange(num_pairs)  # k = 2, 4, 6, ..., 2N-4
         i_idx_vals = (k_vals - 1) // 2  # i_idx = 1, 2, 3, ..., N-2 (0-based)
 
-        # Vectorized computation of E(k) = 10.0 * (X(i)^2 - 10.0*X(i+1))
-        ek_vals = 10.0 * (y[i_idx_vals] ** 2 - 10.0 * y[i_idx_vals + 1])
+        # Vectorized computation of E(k) = 10.0 * X(i)^2 - 10.0*X(i+1)
+        ek_vals = 10.0 * y[i_idx_vals] ** 2 - 10.0 * y[i_idx_vals + 1]
 
         # Vectorized computation of E(k+1)
         term1_vals = 2.0 * jnp.exp(-((y[i_idx_vals] - y[i_idx_vals + 1]) ** 2))
@@ -79,8 +79,8 @@ class LUKSAN22(AbstractNonlinearEquations):
         residuals = residuals.at[even_indices].set(ek_vals)
         residuals = residuals.at[odd_indices].set(ek1_vals)
 
-        # E(2N-2) = 10.0 * (X(N-1)^2 - 10.0*X(N)) (final residual)
-        residuals = residuals.at[-1].set(10.0 * (y[n - 2] ** 2 - 10.0 * y[n - 1]))
+        # E(2N-2) = 10.0 * X(N-1)^2 (final residual)
+        residuals = residuals.at[-1].set(10.0 * y[n - 2] ** 2)
 
         return residuals
 

@@ -3,6 +3,20 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made:
+# 1. Added missing factor of 0.5 to objective function
+# 2. Fixed E(k) equations from 10*(X^2 - 10*X) to 10*X^2 - 10*X
+# 3. Verified equation indexing and interleaving
+# 4. Confirmed objective value matches expected (2.0 at zeros for N=5)
+# Suspected issues:
+# - Gradient computation shows sparse pattern [1,0,0,0,0] at zeros
+# - Numerical vs analytical gradient mismatch (~0.596 vs 1.0)
+# - Possible precision or formulation differences with pycutest
+# Resources needed:
+# - Direct comparison with Fortran source code
+# - Verification of gradient computation methodology in pycutest
+# - Check if L2 group type handling differs between implementations
 class LUKSAN22LS(AbstractUnconstrainedMinimisation):
     """Problem 22 (attracting-repelling) in the paper L. Luksan: Hybrid methods in
     large sparse nonlinear least squares. J. Optimization Theory and Applications 89,
@@ -54,9 +68,9 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
         The objective is the sum of squares of M = 2*N-2 equations:
         - E(1) = X(1) + 1.0
         - For k=2 to 2N-3 step 2, i = (k+1)/2:
-          - E(k) = 10.0 * (X(i)^2 - 10.0*X(i+1))
+          - E(k) = 10.0 * X(i)^2 - 10.0*X(i+1)
           - E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
-        - E(2N-2) = 10.0 * (X(N-1)^2 - 10.0*X(N))
+        - E(2N-2) = 10.0 * X(N-1)^2 - 10.0*X(N)
         """
         del args  # Not used
 
@@ -75,8 +89,8 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
         xi1 = y[i_indices + 1]  # X(i+1)
         xi2 = y[i_indices + 2]  # X(i+2)
 
-        # E(k) equations: 10.0 * (X(i)^2 - 10.0*X(i+1))
-        ek_vals = 10.0 * (xi**2 - 10.0 * xi1)
+        # E(k) equations: 10.0 * X(i)^2 - 10.0*X(i+1)
+        ek_vals = 10.0 * xi**2 - 10.0 * xi1
 
         # Vectorized computation of E(k+1)
         # E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
@@ -84,8 +98,8 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
         term2 = jnp.exp(-2.0 * ((xi1 - xi2) ** 2))
         ek1_vals = term1 - term2
 
-        # E(2N-2) = 10.0 * (X(N-1)^2 - 10.0*X(N))
-        e_final = 10.0 * (y[n - 2] ** 2 - 10.0 * y[n - 1])
+        # E(2N-2) = 10.0 * X(N-1)^2 - 10.0*X(N)
+        e_final = 10.0 * y[n - 2] ** 2 - 10.0 * y[n - 1]
 
         # Combine all equations
         # We need to interleave ek_vals and ek1_vals
@@ -105,7 +119,8 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
         equations = equations.at[-1].set(e_final)
 
         # Sum of squares (L2 group type in SIF)
-        return jnp.sum(equations**2)
+        # Note: The objective is (1/2) * sum of squares as per the paper
+        return 0.5 * jnp.sum(equations**2)
 
     @property
     def expected_result(self):

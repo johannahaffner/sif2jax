@@ -26,8 +26,8 @@ class LEVYMONT8(AbstractBoundedMinimisation):
     N: int = 5  # Number of variables
     A: float = 1.0
     K: float = 10.0
-    L: float = 0.25
-    C: float = 0.75
+    L: float = 1.0
+    C: float = 0.0
 
     @property
     def n(self):

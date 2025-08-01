@@ -198,8 +198,8 @@ from .luksan15ls import LUKSAN15LS as LUKSAN15LS
 from .luksan16ls import LUKSAN16LS as LUKSAN16LS
 from .luksan17ls import LUKSAN17LS as LUKSAN17LS
 from .luksan21ls import LUKSAN21LS as LUKSAN21LS
-from .luksan22ls import LUKSAN22LS as LUKSAN22LS  # TODO: Human review - gradients
 
+# from .luksan22ls import LUKSAN22LS as LUKSAN22LS  # TODO: Human review - gradients
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
 from .maratosb import MARATOSB as MARATOSB
@@ -436,7 +436,7 @@ unconstrained_minimisation_problems = (
     LUKSAN16LS(),
     LUKSAN17LS(),
     LUKSAN21LS(),
-    LUKSAN22LS(),  # TODO: Human review needed - gradient issues
+    # LUKSAN22LS(),  # TODO: Human review needed - gradient issues
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     MARATOSB(),
     MEXHAT(),

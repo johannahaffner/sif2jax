@@ -55,7 +55,7 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
         - E(1) = X(1) + 1.0
         - For k=2 to 2N-3 step 2, i = (k+1)/2:
           - E(k) = 10.0 * (X(i)^2 - 10.0*X(i+1))
-          - E(k+1) = 2*exp(-(X(i)-X(i+1))^2) + exp(-2*(X(i+1)-X(i+2))^2)
+          - E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
         - E(2N-2) = 10.0 * (X(N-1)^2 - 10.0*X(N))
         """
         del args  # Not used
@@ -79,10 +79,10 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
         ek_vals = 10.0 * (xi**2 - 10.0 * xi1)
 
         # Vectorized computation of E(k+1)
-        # E(k+1) = 2*exp(-(X(i)-X(i+1))^2) + exp(-2*(X(i+1)-X(i+2))^2)
+        # E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
         term1 = 2.0 * jnp.exp(-((xi - xi1) ** 2))
         term2 = jnp.exp(-2.0 * ((xi1 - xi2) ** 2))
-        ek1_vals = term1 + term2
+        ek1_vals = term1 - term2
 
         # E(2N-2) = 10.0 * (X(N-1)^2 - 10.0*X(N))
         e_final = 10.0 * (y[n - 2] ** 2 - 10.0 * y[n - 1])

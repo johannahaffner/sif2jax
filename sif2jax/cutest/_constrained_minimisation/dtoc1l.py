@@ -39,8 +39,8 @@ class DTOC1L(AbstractConstrainedMinimisation):
     n_states: int = 4  # NY
 
     # Total number of variables and constraints
-    # Fixed variables Y(1,i) are not counted in CUTEst
-    n: int = (n_periods - 1) * n_controls + (n_periods - 1) * n_states  # 5994
+    # Total variables include fixed Y(1,i) variables
+    n: int = (n_periods - 1) * n_controls + n_periods * n_states  # 5998
     m: int = (n_periods - 1) * n_states  # 3996
 
     @property
@@ -69,16 +69,13 @@ class DTOC1L(AbstractConstrainedMinimisation):
     def objective(self, y, args):
         # Extract control and state variables
         # X(t,i) for t=1..N-1, i=1..NX
-        # Y(t,i) for t=2..N, i=1..NY (Y(1,i) are fixed at 0)
+        # Y(t,i) for t=1..N, i=1..NY (Y(1,i) are fixed at 0 but included in y)
         x_vars = y[: (self.n_periods - 1) * self.n_controls].reshape(
             self.n_periods - 1, self.n_controls
         )
-        y_vars_free = y[(self.n_periods - 1) * self.n_controls :].reshape(
-            self.n_periods - 1, self.n_states
+        y_vars = y[(self.n_periods - 1) * self.n_controls :].reshape(
+            self.n_periods, self.n_states
         )
-
-        # Reconstruct full state matrix including fixed initial states
-        y_vars = jnp.vstack([jnp.zeros((1, self.n_states)), y_vars_free])
 
         # Vectorized objective computation
         # Objective terms for control variables: sum (X(t,i) + 0.5)^4
@@ -96,16 +93,13 @@ class DTOC1L(AbstractConstrainedMinimisation):
 
         # Extract control and state variables
         # X(t,i) for t=1..N-1, i=1..NX
-        # Y(t,i) for t=2..N, i=1..NY (Y(1,i) are fixed at 0)
+        # Y(t,i) for t=1..N, i=1..NY (Y(1,i) are fixed at 0 but included in y)
         x_vars = y[: (self.n_periods - 1) * self.n_controls].reshape(
             self.n_periods - 1, self.n_controls
         )
-        y_vars_free = y[(self.n_periods - 1) * self.n_controls :].reshape(
-            self.n_periods - 1, self.n_states
+        y_vars = y[(self.n_periods - 1) * self.n_controls :].reshape(
+            self.n_periods, self.n_states
         )
-
-        # Reconstruct full state matrix including fixed initial states
-        y_vars = jnp.vstack([jnp.zeros((1, self.n_states)), y_vars_free])
 
         # Vectorized constraint computation
         # Shape: (n_periods-1, n_states)
@@ -143,8 +137,20 @@ class DTOC1L(AbstractConstrainedMinimisation):
 
     @property
     def bounds(self):
-        # All variables are free (Y(1,i) are not part of the optimization vector)
-        return None
+        # Y(1,i) variables are fixed at 0, others are free
+        n_x = (self.n_periods - 1) * self.n_controls
+
+        # Lower bounds
+        lb = jnp.full(self.n, -jnp.inf)
+        # Fix Y(1,i) to 0
+        lb = lb.at[n_x : n_x + self.n_states].set(0.0)
+
+        # Upper bounds
+        ub = jnp.full(self.n, jnp.inf)
+        # Fix Y(1,i) to 0
+        ub = ub.at[n_x : n_x + self.n_states].set(0.0)
+
+        return lb, ub
 
     @property
     def expected_result(self):

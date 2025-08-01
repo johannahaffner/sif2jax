@@ -35,6 +35,10 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
 - **Types**: Never hard-code dtypes. Use e.g. y.dtype if one needs to be specified
 - **Style**: Match existing code patterns, imports, conventions
 - **Fields**: Declare all dataclass fields (Equinox.Module inheritance)
+- **Imports**: Problems are imported from their modules in the `__init__.py` of the 
+    folder for their respective class. From there, CUTEst problems are imported in 
+    `sif2jax/cutest/__init__.py`. `sif2jax/__init__.py` does not import specific 
+    problems, it imports collections of problems (e.g. CUTEst).
 
 
 ### 4. Testing Requirements

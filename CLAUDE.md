@@ -25,13 +25,17 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
 - **Name**: Use SIF name as class name (modify if invalid Python)
 - **Metadata**: All references, authors, classification in docstring
 - **Base Class**: Choose correct type:
-  - `UnconstrainedProblem`: objective only
-  - `BoundedProblem`: objective + bounds  
-  - `ConstrainedProblem`: objective + constraints (+ bounds)
-  - `NonlinearEquations`: residual functions
-- **Types**: Never hard-code dtypes
+  - `AbstractUnconstrainedMinimisation`: objective only
+  - `AbstractBoundedMinimisation`: objective + bounds  
+  - `AbstractConstrainedMinimisation`: objective + constraints (+ bounds)
+  - `AbstractConstrainedQuadraticProblem`: objective + constraints (+ bounds). This is
+    a subclass of `AbstractConstrainedMinimisation` with no changes to the interface.
+  - `AbstractNonlinearEquations`: provides default constant objective that may be 
+    overridden; feasibility problem with constraints
+- **Types**: Never hard-code dtypes. Use e.g. y.dtype if one needs to be specified
 - **Style**: Match existing code patterns, imports, conventions
 - **Fields**: Declare all dataclass fields (Equinox.Module inheritance)
+
 
 ### 4. Testing Requirements
 - **Container Required**: Tests need pycutest/Fortran libs

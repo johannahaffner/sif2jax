@@ -1112,7 +1112,7 @@ problems_dict = {
     "SISSER": SISSER(),
     # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     # "TENBARS4": TENBARS4(),  # TODO: Human review - pycutest Jacobian inconsistency
-    "TENFOLDTRLS": TENFOLDTRLS(),
+    "10FOLDTRLS": TENFOLDTRLS(),
     "POWELLBS": POWELLBS(),
     "POWELLSE": POWELLSE(),
     "POWELLSQ": POWELLSQ(),

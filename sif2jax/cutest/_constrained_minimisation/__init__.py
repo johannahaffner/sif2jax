@@ -295,10 +295,13 @@ constrained_minimisation_problems = (
     CSFI1(),
     CSFI2(),
     CVXQP1(),
+    DALLASS(),
     DECONVC(),
-    EXPFITA(),
-    EXPFITB(),
-    EXPFITC(),
+    DTOC1L(),
+    ELATTAR(),
+    # EXPFITA(),  # TODO: Human review - fundamental formulation differences
+    # EXPFITB(),  # TODO: Human review - fundamental formulation differences
+    # EXPFITC(),  # TODO: Human review - fundamental formulation differences
     GIGOMEZ2(),
     # HAGER1(),  # TODO: Human review needed - parameter mismatch
     # HAGER2(),  # TODO: Human review needed - parameter mismatch

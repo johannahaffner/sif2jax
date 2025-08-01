@@ -245,7 +245,6 @@ class TestProblem:
 
     def test_correct_constraints_zero_vector(self, problem, pycutest_problem):
         if _has_constraints(problem):
-            # Evaluate both functions - error handling is done inside
             _try_except_evaluate(
                 problem.__class__.__name__,
                 lambda x: problem.constraint(x),
@@ -277,7 +276,6 @@ class TestProblem:
         if _has_constraints(problem):
             constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
             if problem.y0.size * constraints.size < 1_000_000:
-                # Evaluate both functions - error handling is done inside
                 _try_except_evaluate(
                     problem.__class__.__name__,
                     lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
@@ -296,7 +294,6 @@ class TestProblem:
         if _has_constraints(problem):
             constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
             if problem.y0.size * constraints.size < 1_000_000:
-                # Evaluate both functions - error handling is done inside
                 _try_except_evaluate(
                     problem.__class__.__name__,
                     lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
@@ -315,7 +312,6 @@ class TestProblem:
         if _has_constraints(problem):
             constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
             if problem.y0.size * constraints.size < 1_000_000:
-                # Evaluate both functions - error handling is done inside
                 _try_except_evaluate(
                     problem.__class__.__name__,
                     lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
@@ -329,29 +325,6 @@ class TestProblem:
                 pytest.skip("Skip (dense) Jacobian test for large problems.")
         else:
             pytest.skip("Problem has no constraints")
-
-    # TODO: Add tests that evaluate the constraints at the zero vector, and at a vector
-    # of all ones. This requires a function _evaluate_constraints_at_other that largely
-    # follows the logic of _evaluate_at_other (including the try-except blocks), but
-    # also implements the constraint parsing as in test_correct_constraints_at_start,
-    # which is needed because while sif2jax returns a tuple, pycutest returns an array
-    # of constraint values and marks the ones that are to be treated as equalities with
-    # boolean arrays. This may be done more efficiently by factoring out a small
-    # function that handles the constraint output and the mapping done in
-    # test_correct_constraints_at_start.
-
-    # TODO: add tests for the Jacobian of the constraints. This should be implemented
-    # after we have added support for evaluating the constraints at different points,
-    # since it will require similar machinery (and a verification of how pycutest even
-    # returns constraint Jacobians, I am unsure of their format. This can be checked
-    # directly in the code - the project is open source on Github and the problem class
-    # definition is not only legible, but well documented.). I'm guessing that we will
-    # need to slice the right rows for equality/inequality constraints from one big
-    # Jacobian returned by pycutest, to make them match two jacobians we get returned:
-    # one for each constraint category.
-    # Once this is implemented correctly, we should also add support for testing the
-    # Jacobian of the constraint functions at different points. I suggest sticking with
-    # zeros and ones since they produce very easily interpretable results.
 
     # def test_correct_options(self, problem, pycutest_problem):
     #     """Test for multiple starting points - not yet implemented in pycutest."""

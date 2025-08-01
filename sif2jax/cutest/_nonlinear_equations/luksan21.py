@@ -1,15 +1,3 @@
-"""Problem 21 (modified discrete boundary value) from Luksan.
-
-This is a system of nonlinear equations from the paper:
-L. Luksan
-"Hybrid methods in large sparse nonlinear least squares"
-J. Optimization Theory & Applications 89(3) 575-595 (1996)
-
-SIF input: Nick Gould, June 2017.
-
-classification NOR2-AN-V-V
-"""
-
 import jax.numpy as jnp
 from jax import Array
 
@@ -17,7 +5,17 @@ from ..._problem import AbstractNonlinearEquations
 
 
 class LUKSAN21(AbstractNonlinearEquations):
-    """Problem 21 (modified discrete boundary value) from Luksan."""
+    """Problem 21 (modified discrete boundary value) from Luksan.
+
+    This is a system of nonlinear equations from the paper:
+    L. Luksan
+    "Hybrid methods in large sparse nonlinear least squares"
+    J. Optimization Theory & Applications 89(3) 575-595 (1996)
+
+    SIF input: Nick Gould, June 2017.
+
+    classification NOR2-AN-V-V
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -47,36 +45,35 @@ class LUKSAN21(AbstractNonlinearEquations):
 
         x = y
         n = self.n
-        m = self.m
 
         # Parameters
         h = 1.0 / (n + 1)
         h2 = h * h
         h2_half = 0.5 * h2
 
-        # Initialize residual vector
-        residuals = jnp.zeros(m, dtype=jnp.float64)
+        # Create index arrays for vectorized computation
+        i_vals = jnp.arange(
+            1, n + 1, dtype=x.dtype
+        )  # 1 to n (1-indexed as in original)
+        hi_vals = h * i_vals  # h * i for all i
 
-        # Equation 1: 2*x(1) - x(2) + h^2/2 * (x(1) + h + 1)^3 + 1
-        hi = h  # h * i where i = 1
-        xhip1 = x[0] + hi + 1.0
-        residuals = residuals.at[0].set(2.0 * x[0] - x[1] + h2_half * (xhip1**3) + 1.0)
+        # Compute cubic terms for all equations: (x(i) + h*i + 1)^3
+        xhip1_vals = x + hi_vals + 1.0  # x(i) + h*i + 1 for all i
+        cubic_terms = h2_half * (xhip1_vals**3)  # h^2/2 * (x(i) + h*i + 1)^3
 
-        # Equations 2 to M-1: 2*x(i) - x(i-1) - x(i+1) + h^2/2 * (x(i) + h*i + 1)^3 + 1
-        for i in range(2, m):
-            idx = i - 1  # 0-based index
-            hi = h * i
-            xhip1 = x[idx] + hi + 1.0
-            residuals = residuals.at[idx].set(
-                2.0 * x[idx] - x[idx - 1] - x[idx + 1] + h2_half * (xhip1**3) + 1.0
-            )
+        # Handle the three cases using vectorized operations
+        # Case 1: First equation (i=1): 2*x(1) - x(2) + cubic_term + 1
+        # Case 2: Middle eqs (2 <= i <= n-1): 2*x(i) - x(i-1) - x(i+1) + cubic + 1
+        # Case 3: Last equation (i=n): 2*x(n) - x(n-1) + cubic_term + 1
 
-        # Equation M: 2*x(n) - x(n-1) + h^2/2 * (x(n) + h*n + 1)^3 + 1
-        hi = h * n
-        xhip1 = x[n - 1] + hi + 1.0
-        residuals = residuals.at[m - 1].set(
-            2.0 * x[n - 1] - x[n - 2] + h2_half * (xhip1**3) + 1.0
-        )
+        # Initialize all with 2*x(i) + cubic_term + 1
+        residuals = 2.0 * x + cubic_terms + 1.0
+
+        # Subtract x(i-1) for equations 2 to n (indices 1 to n-1)
+        residuals = residuals.at[1:].add(-x[:-1])
+
+        # Subtract x(i+1) for equations 1 to n-1 (indices 0 to n-2)
+        residuals = residuals.at[:-1].add(-x[1:])
 
         return residuals
 

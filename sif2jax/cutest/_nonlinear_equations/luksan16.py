@@ -1,15 +1,3 @@
-"""Problem 16 (sparse exponential) from Luksan.
-
-This is a system of nonlinear equations from the paper:
-L. Luksan
-"Hybrid methods in large sparse nonlinear least squares"
-J. Optimization Theory & Applications 89(3) 575-595 (1996)
-
-SIF input: Nick Gould, June 2017.
-
-classification NOR2-AN-V-V
-"""
-
 import jax.numpy as jnp
 from jax import Array
 
@@ -17,7 +5,17 @@ from ..._problem import AbstractNonlinearEquations
 
 
 class LUKSAN16(AbstractNonlinearEquations):
-    """Problem 16 (sparse exponential) from Luksan."""
+    """Problem 16 (sparse exponential) from Luksan.
+
+    This is a system of nonlinear equations from the paper:
+    L. Luksan
+    "Hybrid methods in large sparse nonlinear least squares"
+    J. Optimization Theory & Applications 89(3) 575-595 (1996)
+
+    SIF input: Nick Gould, June 2017.
+
+    classification NOR2-AN-V-V
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -36,11 +34,10 @@ class LUKSAN16(AbstractNonlinearEquations):
     @property
     def y0(self) -> Array:
         """Initial guess: pattern (-0.8, 1.2, -1.2, 0.8) repeated."""
-        x = jnp.zeros(self.n, dtype=jnp.float64)
         pattern = jnp.array([-0.8, 1.2, -1.2, 0.8], dtype=jnp.float64)
-        for i in range(self.n):
-            x = x.at[i].set(pattern[i % 4])
-        return x
+        # Repeat pattern to cover all n variables
+        full_pattern = jnp.tile(pattern, (self.n + 3) // 4)[: self.n]
+        return full_pattern
 
     @property
     def args(self):
@@ -53,52 +50,55 @@ class LUKSAN16(AbstractNonlinearEquations):
 
         x = y
         s = self.s
-        m = self.m
 
         # Data values
         Y = jnp.array([35.8, 11.2, 6.2, 4.4], dtype=jnp.float64)
 
-        # Initialize residual vector
-        residuals = jnp.zeros(m, dtype=jnp.float64)
+        # Create indices for vectorized computation
+        # For each block j in range(s), variables are at i = 2*j, so:
+        # x1 = x[2*j], x2 = x[2*j+1], x3 = x[2*j+2], x4 = x[2*j+3]
+        j_indices = jnp.arange(s)
+        i_indices = 2 * j_indices
 
-        # Loop over S blocks
-        k = 0  # Equation index (0-based)
-        i = 0  # Variable index (0-based)
+        # Extract variables for all blocks
+        x1 = x[i_indices]  # x[i] for all blocks
+        x2 = x[i_indices + 1]  # x[i+1] for all blocks
+        x3 = x[i_indices + 2]  # x[i+2] for all blocks
+        x4 = x[i_indices + 3]  # x[i+3] for all blocks
 
-        for j in range(s):
-            # Each block contributes 4 equations
-            # Variables involved: x[i+1], x[i+2], x[i+3], x[i+4] (1-based in SIF)
-            # In 0-based: x[i], x[i+1], x[i+2], x[i+3]
+        # Compute S = x1 + 2*x2 + 3*x3 + 4*x4 for all blocks
+        s_vals = x1 + 2.0 * x2 + 3.0 * x3 + 4.0 * x4  # shape: (s,)
 
-            for l in range(1, 5):  # l = 1, 2, 3, 4
-                # For each equation, sum over p = 1, 2, 3
-                eq_sum = 0.0
+        # Create arrays for p and l values
+        p_vals = jnp.array([1, 2, 3], dtype=jnp.float64)  # p = 1, 2, 3
+        l_vals = jnp.array([1, 2, 3, 4], dtype=jnp.float64)  # l = 1, 2, 3, 4
 
-                for p in range(1, 4):  # p = 1, 2, 3
-                    # P2OL = p^2 / l
-                    # PLI = 1 / (p * l)
-                    p2ol = float(p * p) / float(l)
-                    pli = 1.0 / (float(p) * float(l))
+        # Create meshgrids for vectorized computation
+        P, L, J = jnp.meshgrid(
+            p_vals, l_vals, j_indices, indexing="ij"
+        )  # shapes: (3, 4, s)
 
-                    # Compute S = x1 + 2*x2 + 3*x3 + 4*x4
-                    x1 = x[i]
-                    x2 = x[i + 1]
-                    x3 = x[i + 2]
-                    x4 = x[i + 3]
+        # Compute p2ol and pli for all combinations
+        P2OL = P**2 / L  # shape: (3, 4, s)
+        PLI = 1.0 / (P * L)  # shape: (3, 4, s)
 
-                    s_val = x1 + 2.0 * x2 + 3.0 * x3 + 4.0 * x4
+        # Expand s_vals to match the shape
+        s_expanded = s_vals[None, None, :]  # shape: (1, 1, s)
 
-                    # EXPARG = p2ol * exp(pli * s)
-                    exparg = p2ol * jnp.exp(pli * s_val)
+        # Compute EXPARG = p2ol * exp(pli * s) for all combinations
+        exparg_vals = P2OL * jnp.exp(PLI * s_expanded)  # shape: (3, 4, s)
 
-                    eq_sum += exparg
+        # Sum over p (axis=0) to get equation sums for each (l, j)
+        eq_sums = jnp.sum(exparg_vals, axis=0)  # shape: (4, s)
 
-                # Set residual: sum - Y[l-1]
-                residuals = residuals.at[k].set(eq_sum - Y[l - 1])
-                k += 1
+        # Subtract Y values (broadcast Y to match shape)
+        Y_expanded = Y[:, None]  # shape: (4, 1)
+        residuals_matrix = eq_sums - Y_expanded  # shape: (4, s)
 
-            # Move to next block of variables (stride 2)
-            i += 2
+        # Flatten in the correct order: for each j, then for each l
+        # The original order is: j=0,l=1; j=0,l=2; j=0,l=3; j=0,l=4; j=1,l=1; ...
+        # residuals_matrix is (l, j), so we need to transpose and flatten
+        residuals = residuals_matrix.T.flatten()  # shape: (4*s,)
 
         return residuals
 

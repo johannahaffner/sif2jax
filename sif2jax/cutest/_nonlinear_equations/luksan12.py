@@ -73,8 +73,8 @@ class LUKSAN12(AbstractNonlinearEquations):
         # E(k+4): x3*x0^2 + sin(x3-x4) - 10.0
         res5 = x3 * x0**2 + jnp.sin(x3 - x4) - 10.0
 
-        # E(k+5): x2*x3 + x1 - 20.0
-        res6 = x2 * x3 + x1 - 20.0
+        # E(k+5): (x2^4)*(x3^2) + x1 - 20.0
+        res6 = x2**4 * x3**2 + x1 - 20.0
 
         # Stack residuals in the correct order
         # Each block contributes 6 residuals in sequence

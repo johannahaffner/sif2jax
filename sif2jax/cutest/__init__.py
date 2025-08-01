@@ -97,9 +97,9 @@ from ._constrained_minimisation import (
     DECONVC as DECONVC,
     DTOC1L as DTOC1L,
     ELATTAR as ELATTAR,
-    # EXPFITA as EXPFITA,  # TODO: Human review - constraint Jacobian issues
-    # EXPFITB as EXPFITB,  # TODO: Human review - constraint Jacobian issues
-    # EXPFITC as EXPFITC,  # TODO: Human review - constraint Jacobian issues
+    # EXPFITA as EXPFITA,  # TODO: Human review - fundamental formulation differences
+    # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
+    # EXPFITC as EXPFITC,  # TODO: Human review - fundamental formulation differences
     GIGOMEZ2 as GIGOMEZ2,
     # HAGER1 as HAGER1,  # TODO: Human review needed - parameter mismatch
     # HAGER2 as HAGER2,  # TODO: Human review needed - parameter mismatch
@@ -253,9 +253,9 @@ from ._constrained_minimisation import (
     MAKELA4 as MAKELA4,
     MARATOS as MARATOS,
     ODFITS as ODFITS,
-    ORTHRDM2 as ORTHRDM2,
-    ORTHRDS2 as ORTHRDS2,
-    # ORTHREGA as ORTHREGA,  # TODO: Human review - objective/constraint formulation
+    # ORTHRDM2 as ORTHRDM2,  # TODO: Human review - singular Jacobian issues
+    # ORTHRDS2 as ORTHRDS2,  # TODO: Human review - singular Jacobian issues
+    # ORTHREGA as ORTHREGA,  # TODO: Human review - formulation differences
     ORTHREGD as ORTHREGD,
     ORTHRGDM as ORTHRGDM,
     PENTAGON as PENTAGON,
@@ -265,7 +265,7 @@ from ._constrained_minimisation import (
     POLAK4 as POLAK4,
     POLAK5 as POLAK5,
     POLAK6 as POLAK6,
-    # POLYGON as POLYGON,  # TODO: Human review - fixed variable handling
+    # POLYGON as POLYGON,  # TODO: Human review - fixed variable conventions
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
     SIPOW1 as SIPOW1,
@@ -316,7 +316,7 @@ from ._nonlinear_equations import (
     # CHANNEL as CHANNEL,  # TODO: Human review needed
     CHEBYQADNE as CHEBYQADNE,
     CLUSTER as CLUSTER,
-    # COATINGNE as COATINGNE,  # TODO: Human review needed - Large Jacobian differences
+    # COATINGNE as COATINGNE,  # TODO: Human review - formulation differences
     COOLHANS as COOLHANS,
     # CHNRSBNE as CHNRSBNE,  # TODO: Human review needed
     # CHNRSNBMNE as CHNRSNBMNE,  # TODO: Human review needed
@@ -374,7 +374,7 @@ from ._nonlinear_equations import (
     LIARWHDNE as LIARWHDNE,
     # LINVERSENE as LINVERSENE,  # TODO: Human review - incomplete implementation
     LUKSAN11 as LUKSAN11,
-    # LUKSAN12 as LUKSAN12,  # TODO: Human review - Jacobian mismatch
+    LUKSAN12 as LUKSAN12,
     LUKSAN13 as LUKSAN13,
     LUKSAN14 as LUKSAN14,
     LUKSAN15 as LUKSAN15,
@@ -785,9 +785,9 @@ problems_dict = {
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
     "ODFITS": ODFITS(),
-    "ORTHRDM2": ORTHRDM2(),
-    "ORTHRDS2": ORTHRDS2(),
-    # "ORTHREGA": ORTHREGA(),  # TODO: Human review - objective/constraint formulation
+    # "ORTHRDM2": ORTHRDM2(),  # TODO: Human review - gradient issues
+    # "ORTHRDS2": ORTHRDS2(),  # TODO: Human review - gradient issues
+    # "ORTHREGA": ORTHREGA(),  # TODO: Human review - complex formulation differences
     "ORTHRGDM": ORTHRGDM(),
     "ORTHREGD": ORTHREGD(),
     "PENTAGON": PENTAGON(),
@@ -797,7 +797,7 @@ problems_dict = {
     "POLAK4": POLAK4(),
     "POLAK5": POLAK5(),
     "POLAK6": POLAK6(),
-    # "POLYGON": POLYGON(),  # TODO: Human review - fixed variable handling
+    # "POLYGON": POLYGON(),  # TODO: Human review - fixed variable conventions
     "SIMPLLPA": SIMPLLPA(),
     "SIMPLLPB": SIMPLLPB(),
     "SIPOW1": SIPOW1(),
@@ -1174,7 +1174,7 @@ problems_dict = {
     "CHEBYQADNE": CHEBYQADNE(),
     # "CHNRSBNE": CHNRSBNE(),  # TODO: Human review needed
     # "CHNRSNBMNE": CHNRSNBMNE(),  # TODO: Human review needed
-    # "COATINGNE": COATINGNE(),  # TODO: Human review needed
+    # "COATINGNE": COATINGNE(),  # TODO: Human review - formulation differences
     # "CUBENE": CUBENE(),  # TODO: Human review - constraint and Jacobian mismatch
     "CYCLIC3": CYCLIC3(),
     "DENSCHNBNE": DENSCHNBNE(),
@@ -1194,9 +1194,9 @@ problems_dict = {
     "ERRINRSMNE": ERRINRSMNE(),
     "ERRINROSNE": ERRINROSNE(),
     "EXP2NE": EXP2NE(),
-    # "EXPFITA": EXPFITA(),  # TODO: Human review - constraint Jacobian issues
-    # "EXPFITB": EXPFITB(),  # TODO: Human review - constraint Jacobian issues
-    # "EXPFITC": EXPFITC(),  # TODO: Human review - constraint Jacobian issues
+    # "EXPFITA": EXPFITA(),  # TODO: Human review - fundamental formulation differences
+    # "EXPFITB": EXPFITB(),  # TODO: Human review - fundamental formulation differences
+    # "EXPFITC": EXPFITC(),  # TODO: Human review - fundamental formulation differences
     "EXPFITNE": EXPFITNE(),
     "EXTROSNBNE": EXTROSNBNE(),
     "FREURONE": FREURONE(),
@@ -1230,7 +1230,7 @@ problems_dict = {
     "LIARWHDNE": LIARWHDNE(),
     # "LINVERSENE": LINVERSENE(),  # TODO: Human review - incomplete implementation
     "LUKSAN11": LUKSAN11(),
-    # "LUKSAN12": LUKSAN12(),  # TODO: Human review - Jacobian mismatch
+    "LUKSAN12": LUKSAN12(),
     "LUKSAN13": LUKSAN13(),
     "LUKSAN14": LUKSAN14(),
     "LUKSAN15": LUKSAN15(),

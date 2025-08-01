@@ -59,7 +59,7 @@ class ORTHRDS2(AbstractConstrainedMinimisation):
         """Generate the perturbed data points."""
         tz3 = 1.7
         pseed = 237.1531
-        psize = 0.2
+        psize = 0.2  # Note: ORTHRDS2 uses 0.2, ORTHRDM2 uses 0.1
         pi = jnp.pi
 
         # Increment for angle

@@ -259,7 +259,6 @@ class TestProblem:
 
     def test_correct_constraints_ones_vector(self, problem, pycutest_problem):
         if _has_constraints(problem):
-            # Evaluate both functions - error handling is done inside
             _try_except_evaluate(
                 problem.__class__.__name__,
                 lambda x: problem.constraint(x),

@@ -124,6 +124,7 @@ from .luksan15 import LUKSAN15 as LUKSAN15
 from .luksan16 import LUKSAN16 as LUKSAN16
 from .luksan17 import LUKSAN17 as LUKSAN17
 from .luksan21 import LUKSAN21 as LUKSAN21
+from .luksan22 import LUKSAN22 as LUKSAN22
 from .mancinone import MANCINONE as MANCINONE
 from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
@@ -301,6 +302,7 @@ nonlinear_equations_problems = (
     LUKSAN16(),
     LUKSAN17(),
     LUKSAN21(),
+    LUKSAN22(),
     MANCINONE(),
     MEYER3NE(),
     MGH09(),

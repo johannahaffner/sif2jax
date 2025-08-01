@@ -65,7 +65,6 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
 - ✓ Re-test if any changes made
 - ✓ Success = clean pre-commit (no reformatting, no warnings)
 - ✓ Commit after implementing a few problems, to keep commits compact
-
 ## Work Mode
 - Add 20+ problems to TODO list
 - Work systematically without stopping

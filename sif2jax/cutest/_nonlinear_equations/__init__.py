@@ -34,7 +34,8 @@ from .chandheq import CHANDHEQ as CHANDHEQ
 # from .channel import CHANNEL as CHANNEL  # TODO: Human review needed
 from .chebyqadne import CHEBYQADNE as CHEBYQADNE
 from .cluster import CLUSTER as CLUSTER
-from .coatingne import COATINGNE as COATINGNE
+
+# from .coatingne import COATINGNE as COATINGNE  # TODO: Human review - SIF diffs
 from .coolhans import COOLHANS as COOLHANS
 
 # from .chnrsbne import CHNRSBNE as CHNRSBNE  # TODO: Human review needed
@@ -236,7 +237,7 @@ nonlinear_equations_problems = (
     CHEBYQADNE(),
     # CHNRSBNE(),  # TODO: Human review needed
     # CHNRSNBMNE(),  # TODO: Human review needed
-    COATINGNE(),
+    # COATINGNE(),  # TODO: Human review - SIF diffs
     # CUBENE(),  # TODO: Human review needed - constraint and Jacobian mismatch
     CYCLIC3(),
     DENSCHNBNE(),

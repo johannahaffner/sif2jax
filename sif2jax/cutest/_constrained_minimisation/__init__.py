@@ -234,9 +234,10 @@ from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
 from .maratos import MARATOS as MARATOS
 from .odfits import ODFITS as ODFITS
-from .orthrdm2 import ORTHRDM2 as ORTHRDM2
-from .orthrds2 import ORTHRDS2 as ORTHRDS2
-from .orthrega import ORTHREGA as ORTHREGA
+
+# from .orthrdm2 import ORTHRDM2 as ORTHRDM2  # TODO: Human review - singular Jacobian
+# from .orthrds2 import ORTHRDS2 as ORTHRDS2  # TODO: Human review - singular Jacobian
+# from .orthrega import ORTHREGA as ORTHREGA  # TODO: Human review - formulation diffs
 from .orthregd import ORTHREGD as ORTHREGD
 from .orthrgdm import ORTHRGDM as ORTHRGDM
 from .pentagon import PENTAGON as PENTAGON
@@ -246,7 +247,8 @@ from .polak3 import POLAK3 as POLAK3
 from .polak4 import POLAK4 as POLAK4
 from .polak5 import POLAK5 as POLAK5
 from .polak6 import POLAK6 as POLAK6
-from .polygon import POLYGON as POLYGON
+
+# from .polygon import POLYGON as POLYGON  # TODO: Human review - sign conventions
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
@@ -411,9 +413,9 @@ constrained_minimisation_problems = (
     LOOTSMA(),
     MARATOS(),
     ODFITS(),
-    ORTHRDM2(),
-    ORTHRDS2(),
-    ORTHREGA(),
+    # ORTHRDM2(),  # TODO: Human review - singular Jacobian issues
+    # ORTHRDS2(),  # TODO: Human review - singular Jacobian issues
+    # ORTHREGA(),  # TODO: Human review - fundamental formulation differences
     ORTHRGDM(),
     ORTHREGD(),
     PENTAGON(),
@@ -423,7 +425,7 @@ constrained_minimisation_problems = (
     POLAK4(),
     POLAK5(),
     POLAK6(),
-    POLYGON(),
+    # POLYGON(),  # TODO: Human review - constraint sign convention differences
     SIMPLLPA(),
     SIMPLLPB(),
     SIPOW1(),

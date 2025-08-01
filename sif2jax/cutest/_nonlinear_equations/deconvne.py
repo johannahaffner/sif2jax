@@ -150,5 +150,12 @@ class DECONVNE(AbstractNonlinearEquations):
 
     @property
     def bounds(self) -> tuple[Array, Array] | None:
-        """No bounds for this problem."""
-        return None
+        """C(-11) to C(0) are fixed at 0, others are free."""
+        lb = jnp.full(self.n, -jnp.inf)
+        ub = jnp.full(self.n, jnp.inf)
+
+        # Fix C(-11) to C(0) at 0 (first 12 variables)
+        lb = lb.at[:12].set(0.0)
+        ub = ub.at[:12].set(0.0)
+
+        return lb, ub

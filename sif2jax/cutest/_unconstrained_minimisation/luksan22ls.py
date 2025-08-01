@@ -26,6 +26,12 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
     designed to test optimization algorithms on problems with attracting-repelling
     behavior due to the combination of exponential terms with different signs.
 
+    Note: The implementation follows pycutest conventions which differ from the
+    original SIF file in three ways:
+    1. E(1) uses X(1) - 1.0 instead of X(1) + 1.0
+    2. E(k+1) uses addition between exponential terms instead of subtraction
+    3. E(2N-2) omits the -10.0*X(N) term
+
     Source: Luksan, L. (1996)
     Hybrid methods in large sparse nonlinear least squares
     J. Optimization Theory and Applications 89, pp. 575-595.
@@ -66,19 +72,20 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
         """Compute the least squares objective function.
 
         The objective is the sum of squares of M = 2*N-2 equations:
-        - E(1) = X(1) + 1.0
+        - E(1) = X(1) - 1.0 (note: pycutest uses -1.0, SIF file shows +1.0)
         - For k=2 to 2N-3 step 2, i = (k+1)/2:
           - E(k) = 10.0 * X(i)^2 - 10.0*X(i+1)
-          - E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
-        - E(2N-2) = 10.0 * X(N-1)^2 - 10.0*X(N)
+          - E(k+1) = 2*exp(-(X(i)-X(i+1))^2) + exp(-2*(X(i+1)-X(i+2))^2)
+            (note: pycutest uses + between exponentials, SIF shows -)
+        - E(2N-2) = 10.0 * X(N-1)^2 (note: pycutest omits the -10.0*X(N) term)
         """
         del args  # Not used
 
         n = self.N
 
         # Vectorized computation
-        # E(1) = X(1) + 1.0
-        e1 = y[0] + 1.0
+        # E(1) = X(1) - 1.0 (note: pycutest uses -1.0, SIF file shows +1.0)
+        e1 = y[0] - 1.0
 
         # For the middle equations, we have pairs of equations
         # i ranges from 1 to n-2 (0-based: 0 to n-3)
@@ -93,13 +100,14 @@ class LUKSAN22LS(AbstractUnconstrainedMinimisation):
         ek_vals = 10.0 * xi**2 - 10.0 * xi1
 
         # Vectorized computation of E(k+1)
-        # E(k+1) = 2*exp(-(X(i)-X(i+1))^2) - exp(-2*(X(i+1)-X(i+2))^2)
+        # E(k+1) = 2*exp(-(X(i)-X(i+1))^2) + exp(-2*(X(i+1)-X(i+2))^2)
+        # Note: pycutest uses + between exponentials
         term1 = 2.0 * jnp.exp(-((xi - xi1) ** 2))
         term2 = jnp.exp(-2.0 * ((xi1 - xi2) ** 2))
-        ek1_vals = term1 - term2
+        ek1_vals = term1 + term2
 
-        # E(2N-2) = 10.0 * X(N-1)^2 - 10.0*X(N)
-        e_final = 10.0 * y[n - 2] ** 2 - 10.0 * y[n - 1]
+        # E(2N-2) = 10.0 * X(N-1)^2
+        e_final = 10.0 * y[n - 2] ** 2
 
         # Combine all equations
         # We need to interleave ek_vals and ek1_vals

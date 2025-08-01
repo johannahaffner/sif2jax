@@ -623,7 +623,7 @@ from ._unconstrained_minimisation import (
     LUKSAN16LS as LUKSAN16LS,
     LUKSAN17LS as LUKSAN17LS,
     LUKSAN21LS as LUKSAN21LS,
-    # LUKSAN22LS as LUKSAN22LS,  # TODO: Human review needed - gradient issues
+    LUKSAN22LS as LUKSAN22LS,  # TODO: Human review needed - gradient issues
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     MARATOSB as MARATOSB,
     MEXHAT as MEXHAT,
@@ -1274,7 +1274,7 @@ problems_dict = {
     "LUKSAN16LS": LUKSAN16LS(),
     "LUKSAN17LS": LUKSAN17LS(),
     "LUKSAN21LS": LUKSAN21LS(),
-    # "LUKSAN22LS": LUKSAN22LS(),  # TODO: Human review needed - gradient issues
+    "LUKSAN22LS": LUKSAN22LS(),  # TODO: Human review needed - gradient issues
     "MANCINONE": MANCINONE(),
     "MEYER3NE": MEYER3NE(),
     "MGH09": MGH09(),

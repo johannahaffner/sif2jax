@@ -75,5 +75,6 @@ Run `git diff main` and summarize the diff, not just latest commits.
 
 ## Performance Target
 JAX implementation must be within 5x of Fortran runtime. For larger problems JAX is expected to be faster.
-STRICTLY avoid using for-loops, vectorise implementations wherever possible. 
+You can use for-loops to write an initial implementation that passes the tests, but please convert to a vectorised implementation once you have achieved this step.
+Production-ready problems should always be vectorised.
 If a sequential operation is needed, use a jax-native option such as a scan.

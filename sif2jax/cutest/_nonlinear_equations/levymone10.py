@@ -61,26 +61,30 @@ class LEVYMONE10(AbstractNonlinearEquations):
         pi_over_n = pi / n
         k_pi_over_n = k * pi_over_n
         sqrt_k_pi_over_n = jnp.sqrt(k_pi_over_n)
-        n_over_pi = n / pi
+        # n_over_pi = n / pi  # Not used with inverted scale
         a_minus_c = a - c
 
         # Initialize residuals array
         residuals = jnp.zeros(2 * n)
 
-        # First set of equations: Q(i)
-        for i in range(n):
-            residuals = residuals.at[i].set(n_over_pi * (l * x[i] - a_minus_c))
+        # Interleave Q and N equations: Q(1), N(1), Q(2), N(2), ..., Q(10), N(10)
+        # Note: pycutest inverts the SCALE N/PI to PI/N for NLE problems
 
-        # Second set of equations: N(i)
+        # First pair: Q(1) and N(1)
+        # Q(1): pi/n * (l * x[0] - (a - c))
+        residuals = residuals.at[0].set(pi_over_n * (l * x[0] - a_minus_c))
         # N(1): sqrt(k*pi/n) * sin(pi*(l*x[0] + c))
         v1 = pi * (l * x[0] + c)
-        residuals = residuals.at[n].set(sqrt_k_pi_over_n * jnp.sin(v1))
+        residuals = residuals.at[1].set(sqrt_k_pi_over_n * jnp.sin(v1))
 
-        # N(i) for i=2 to n: sqrt(k*pi/n) * (l*x[i-1] + c - a) * sin(pi*(l*x[i] + c))
+        # Remaining pairs: Q(i) and N(i) for i=2 to n
         for i in range(1, n):
+            # Q(i+1): pi/n * (l * x[i] - (a - c))
+            residuals = residuals.at[2 * i].set(pi_over_n * (l * x[i] - a_minus_c))
+            # N(i+1): sqrt(k*pi/n) * (l*x[i-1] + c - a) * sin(pi*(l*x[i] + c))
             u = l * x[i - 1] + c - a
             v = pi * (l * x[i] + c)
-            residuals = residuals.at[n + i].set(sqrt_k_pi_over_n * u * jnp.sin(v))
+            residuals = residuals.at[2 * i + 1].set(sqrt_k_pi_over_n * u * jnp.sin(v))
 
         return residuals
 
@@ -94,6 +98,7 @@ class LEVYMONE10(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # The solution should make all residuals zero
@@ -104,6 +109,7 @@ class LEVYMONE10(AbstractNonlinearEquations):
         # The closest values in [-10, 10] are x = 1
         return jnp.ones(self.n)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

@@ -59,25 +59,27 @@ class LEVYMONE5(AbstractNonlinearEquations):
         pi_over_n = pi / n
         k_pi_over_n = k * pi_over_n
         sqrt_k_pi_over_n = jnp.sqrt(k_pi_over_n)
-        n_over_pi = n / pi
+        # n_over_pi = n / pi  # Not used with inverted scale
         a_minus_c = a - c
 
         # Initialize residuals array
         residuals = jnp.zeros(2 * n)
 
-        # First set of equations: Q(i)
-        for i in range(n):
-            residuals = residuals.at[i].set(n_over_pi * (l * x[i] - a_minus_c))
+        # Interleave Q and N equations: Q(1), N(1), Q(2), N(2), ...
+        # Q(1): pi/n * (l * x[0] - (a - c))
+        residuals = residuals.at[0].set(pi_over_n * (l * x[0] - a_minus_c))
 
-        # Second set of equations: N(i)
         # N(1): sqrt(k*pi/n) * sin(pi*(l*x[0] + c))
         v1 = pi * (l * x[0] + c)
-        residuals = residuals.at[n].set(sqrt_k_pi_over_n * jnp.sin(v1))
+        residuals = residuals.at[1].set(sqrt_k_pi_over_n * jnp.sin(v1))
+
+        # Q(2): pi/n * (l * x[1] - (a - c))
+        residuals = residuals.at[2].set(pi_over_n * (l * x[1] - a_minus_c))
 
         # N(2): sqrt(k*pi/n) * (l*x[0] + c - a) * sin(pi*(l*x[1] + c))
         u2 = l * x[0] + c - a
         v2 = pi * (l * x[1] + c)
-        residuals = residuals.at[n + 1].set(sqrt_k_pi_over_n * u2 * jnp.sin(v2))
+        residuals = residuals.at[3].set(sqrt_k_pi_over_n * u2 * jnp.sin(v2))
 
         return residuals
 
@@ -91,6 +93,7 @@ class LEVYMONE5(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # The solution should make all residuals zero
@@ -101,6 +104,7 @@ class LEVYMONE5(AbstractNonlinearEquations):
         # The closest values in [-10, 10] are x = 1 (k=1) and x = -3 (k=0)
         return jnp.array([1.0, 1.0])
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

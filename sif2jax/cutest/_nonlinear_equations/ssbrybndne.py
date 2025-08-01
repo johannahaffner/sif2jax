@@ -30,6 +30,11 @@ class SSBRYBNDNE(AbstractNonlinearEquations):
                Nick Gould (nonlinear equation version), Jan 2019
 
     classification NOR2-AN-V-V
+
+    TODO: Human review needed
+    Attempts made: Complex element structure with different patterns for corners
+    Suspected issues: SQ/CB element usage pattern differs by region
+    Resources needed: Verify GROUP USES pattern interpretation
     """
 
     n: int = 5000  # Default to n=5000
@@ -55,40 +60,61 @@ class SSBRYBNDNE(AbstractNonlinearEquations):
         arg = rat * scal
         scale = jnp.exp(arg)
 
-        # Compute nonlinear part for all equations at once
-        x_cubed = x * x * x
-        # Sum of all scale[j] * x[j]^3
-        total_nonlinear = kappa2 * jnp.sum(scale * x_cubed)
-        # Subtract the diagonal part (scale[i] * x[i]^3) for each i
-        nonlinear_parts = total_nonlinear - kappa2 * scale * x_cubed
+        # Element calculations
+        # SQ elements (E): P^2 * V^2 where P = scale[j], V = x[j]
+        scale_squared = scale * scale
+        x_squared = x * x
+        sq_elements = scale_squared * x_squared
 
-        # Compute linear part using vectorized operations
-        def compute_linear_part(i):
+        # CB elements (Q): P^3 * V^3 where P = scale[i], V = x[i]
+        scale_cubed = scale * scale * scale
+        x_cubed = x * x * x
+        cb_elements = scale_cubed * x_cubed
+
+        # Compute residuals for each equation using scan
+        def compute_residual_i(carry, i):
             # Determine the range of j indices
             j_start = jnp.maximum(0, i - lb)
             j_end = jnp.minimum(n - 1, i + ub)
 
-            # Create mask for valid j indices
+            # Create mask for j indices
             j_indices = jnp.arange(n)
-            mask = (j_indices >= j_start) & (j_indices <= j_end)
+            mask = (j_indices >= j_start) & (j_indices <= j_end) & (j_indices != i)
 
-            # Compute linear contributions
-            linear_contrib = jnp.where(
-                j_indices == i,
-                kappa1 * scale[i] * x[i],  # diagonal term
-                -kappa3 * scale * x,  # off-diagonal terms
+            # Linear part: kappa1 * scale[i] * x[i] for diagonal + off-diagonal terms
+            res = kappa1 * scale[i] * x[i] + jnp.sum(-kappa3 * scale * x * mask)
+
+            # Nonlinear part - different patterns for different regions
+            # Upper left corner (i < lb)
+            upper_left_nonlinear = kappa2 * cb_elements[i] + jnp.sum(
+                -kappa3 * sq_elements * mask
             )
 
-            # Apply mask and sum
-            return jnp.sum(linear_contrib * mask.astype(linear_contrib.dtype))
+            # Middle part (lb <= i < n-ub)
+            mask_less = mask & (j_indices < i)
+            mask_greater = mask & (j_indices > i)
+            middle_nonlinear = (
+                kappa2 * sq_elements[i]
+                + jnp.sum(-kappa3 * cb_elements * mask_less)
+                + jnp.sum(-kappa3 * sq_elements * mask_greater)
+            )
 
-        # Vectorize linear part computation over all i
-        linear_parts = jax.vmap(compute_linear_part)(indices)
+            # Lower right corner (i >= n-ub)
+            lower_right_nonlinear = kappa2 * cb_elements[i] + jnp.sum(
+                -kappa3 * sq_elements * mask
+            )
 
-        # Compute final residuals
-        xi_plus_1 = 1.0 + x
-        xi_plus_1_cubed = xi_plus_1 * xi_plus_1 * xi_plus_1
-        residuals = linear_parts + nonlinear_parts + kappa2 * scale * xi_plus_1_cubed
+            # Select appropriate nonlinear part based on region
+            nonlinear_part = jnp.where(
+                i < lb,
+                upper_left_nonlinear,
+                jnp.where(i < n - ub, middle_nonlinear, lower_right_nonlinear),
+            )
+
+            total_res = res + nonlinear_part
+            return None, total_res
+
+        _, residuals = jax.lax.scan(compute_residual_i, None, indices)
 
         return residuals
 

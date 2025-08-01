@@ -3,6 +3,10 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Constraint Jacobian ordering mismatch with pycutest
+# Suspected issues: Constraint ordering mismatch with pycutest
+# Resources needed: Verify constraint order from SIF/pycutest source
 class HS118(AbstractConstrainedMinimisation):
     """Problem 118 from the Hock-Schittkowski test collection.
 
@@ -28,6 +32,10 @@ class HS118(AbstractConstrainedMinimisation):
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
+
+    n: int = 15  # Number of variables
+    n_equality_constraints: int = 0  # No equality constraints
+    n_inequality_constraints: int = 17  # 17 inequality constraints
 
     def objective(self, y, args):
         objective_sum = 0.0

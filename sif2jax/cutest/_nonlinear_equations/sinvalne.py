@@ -33,14 +33,14 @@ class SINVALNE(AbstractNonlinearEquations):
         """Compute the residuals."""
         x1, x2 = y
 
-        # Problem parameter
-        c = 0.1
-
-        # Group G1: c * (x2 - sin(x1))
-        g1 = c * (x2 - jnp.sin(x1))
+        # Group G1: c * (x2 - sin(x1)) where c = 0.1
+        # Note: pycutest inverts SCALE parameters for NLE problems
+        # SCALE C=0.1 becomes 1/0.1 = 10.0
+        g1 = 10.0 * (x2 - jnp.sin(x1))
 
         # Group G2: 2 * x1
-        g2 = 2.0 * x1
+        # Note: SCALE 2.0 becomes 1/2.0 = 0.5
+        g2 = 0.5 * x1
 
         return jnp.array([g1, g2])
 

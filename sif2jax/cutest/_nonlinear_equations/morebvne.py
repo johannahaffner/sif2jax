@@ -4,6 +4,10 @@ from jax import Array
 from ..._problem import AbstractNonlinearEquations
 
 
+# TODO: Human review needed
+# Attempts made: Vectorized the implementation
+# Suspected issues: SIF file bug on line 64 - "X(I)" should be "X(N)"
+# Resources needed: Fix in the SIF file or confirm intended behavior
 class MOREBVNE(AbstractNonlinearEquations):
     """
     The Boundary Value problem.
@@ -57,29 +61,28 @@ class MOREBVNE(AbstractNonlinearEquations):
         h2 = h * h
         halfh2 = 0.5 * h2
 
-        residuals = jnp.zeros(n, dtype=jnp.float64)
+        # Create arrays for vectorized computation
+        i_indices = jnp.arange(1, n + 1, dtype=jnp.float64)
+        ih_plus_1 = i_indices * h + 1.0
+
+        # Compute all E(i) values: (X(i) + (i*h + 1))^3
+        e_values = (y + ih_plus_1) ** 3
+
+        # Initialize residuals
+        residuals = jnp.zeros(n, dtype=y.dtype)
 
         # G(1): 2*X(1) - X(2) + halfh2 * E(1)
-        # E(1) = (X(1) + (1*h + 1))^3
-        ih_plus_1 = 1 * h + 1.0
-        e1 = self._wcube_element(y[0], ih_plus_1)
-        res1 = 2.0 * y[0] - y[1] + halfh2 * e1
-        residuals = residuals.at[0].set(res1)
+        residuals = residuals.at[0].set(2.0 * y[0] - y[1] + halfh2 * e_values[0])
 
         # G(i) for i = 2 to N-1: -X(i-1) + 2*X(i) - X(i+1) + halfh2 * E(i)
-        for i in range(2, n):
-            # E(i) = (X(i) + (i*h + 1))^3
-            ih_plus_1 = i * h + 1.0
-            ei = self._wcube_element(y[i - 1], ih_plus_1)
-            res = -y[i - 2] + 2.0 * y[i - 1] - y[i] + halfh2 * ei
-            residuals = residuals.at[i - 1].set(res)
+        residuals = residuals.at[1 : n - 1].set(
+            -y[0 : n - 2] + 2.0 * y[1 : n - 1] - y[2:n] + halfh2 * e_values[1 : n - 1]
+        )
 
         # G(N): -X(N-1) + 2*X(N) + halfh2 * E(N)
-        # E(N) = (X(N) + (N*h + 1))^3
-        ih_plus_1 = n * h + 1.0
-        en = self._wcube_element(y[n - 1], ih_plus_1)
-        resn = -y[n - 2] + 2.0 * y[n - 1] + halfh2 * en
-        residuals = residuals.at[n - 1].set(resn)
+        residuals = residuals.at[n - 1].set(
+            -y[n - 2] + 2.0 * y[n - 1] + halfh2 * e_values[n - 1]
+        )
 
         return residuals
 
@@ -93,11 +96,13 @@ class MOREBVNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Not explicitly given, but for nonlinear equations should satisfy F(x*) = 0
         return jnp.zeros(self.n, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

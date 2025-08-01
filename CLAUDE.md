@@ -16,8 +16,8 @@ ruff format . && ruff check .                       # Format and lint
 Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT imported in `sif2jax/__init__.py`
 
 ### 2. Implementation Priority
-1. **AMPL**: `https://github.com/ampl/global-optimization/tree/master/cute` (lowercase.mod files)
-2. **SIF**: For constants, bounds, starting points
+1. **SIF Files**: `archive/mastsif/` folder - Original SIF problem definitions (PRIMARY SOURCE)
+2. **AMPL**: `https://github.com/ampl/global-optimization/tree/master/cute` (lowercase.mod files)
 3. **extra_info/**: Papers, documentation, screenshots
 4. **References**: From SIF file headers
 
@@ -25,13 +25,23 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
 - **Name**: Use SIF name as class name (modify if invalid Python)
 - **Metadata**: All references, authors, classification in docstring
 - **Base Class**: Choose correct type:
-  - `UnconstrainedProblem`: objective only
-  - `BoundedProblem`: objective + bounds  
-  - `ConstrainedProblem`: objective + constraints (+ bounds)
-  - `NonlinearEquations`: residual functions
-- **Types**: Never hard-code dtypes
+  - `AbstractUnconstrainedMinimisation`: objective only
+  - `AbstractBoundedMinimisation`: objective + bounds  
+  - `AbstractConstrainedMinimisation`: objective + constraints (+ bounds)
+  - `AbstractConstrainedQuadraticProblem`: objective + constraints (+ bounds). This is
+    a subclass of `AbstractConstrainedMinimisation` with no changes to the interface.
+  - `AbstractNonlinearEquations`: provides default constant objective that may be 
+    overridden; feasibility problem with constraints
+- **Types**: Never hard-code dtypes. Use e.g. y.dtype if one needs to be specified
 - **Style**: Match existing code patterns, imports, conventions
 - **Fields**: Declare all dataclass fields (Equinox.Module inheritance)
+- **Imports**: Problems are imported from their modules in the `__init__.py` of the 
+    folder for their respective class. From there, CUTEst problems are imported in 
+    `sif2jax/cutest/__init__.py`. `sif2jax/__init__.py` does not import specific 
+    problems, it imports collections of problems (e.g. CUTEst).
+    Each folder defines a tuple of problems - the sum of these is then `sif2jax.problems`. 
+    Problems that are commented (due to requiring additional review) must be commented 
+    in these tuples as well. Example: unconstrained_problems = (PROBLEM1, PROBLEM2, ...)
 
 ### 4. Testing Requirements
 - **Container Required**: Tests need pycutest/Fortran libs
@@ -44,6 +54,9 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
   # Suspected issues: [your analysis]
   # Resources needed: [what would help]
   ```
+  If a problem is flagged for human review, its imports should be commented out. 
+  Verify that it cannot be run anymore by trying to run the tests for it, these should then fail during collection with a clear error message.
+- **Checking results of CI runs**: Numbers of problems correspond to positions (indices) in `sif2jax.problems`. 
 
 ### 5. Commit Process
 - ✓ All tests pass

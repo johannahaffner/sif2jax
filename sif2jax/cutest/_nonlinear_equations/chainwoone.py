@@ -9,6 +9,11 @@ class CHAINWOONE(AbstractNonlinearEquations):
     The chained Woods problem, a variant on Woods function
     This is a nonlinear equation variant of CHAINWOO
 
+    TODO: Human review needed - constraint values don't match pycutest
+    The implementation follows the SIF file but pycutest returns very different
+    values (e.g., -100 vs 0.8 for first constraint). This might be related to
+    how pycutest handles the SCALE parameter or the conversion to NE form.
+
     This problem is a sum of n/2 sets of 6 terms, each of which is
     assigned its own group.  For a given set i, the groups are
     A(i), B(i), C(i), D(i), E(i) and F(i). Groups A(i) and C(i) contain 1
@@ -74,14 +79,14 @@ class CHAINWOONE(AbstractNonlinearEquations):
         y_j = y[j]  # y[j] for all sets
 
         # Compute all residuals vectorially
-        # Group A(i): 0.1 * (y[j-2] - y[j-3]^2)
-        a = 0.1 * (y_jm2 - y_jm3**2)
+        # Group A(i): 0.1 * (y[j-2] - y[j-3]^2) -- WRONG! MSQ is -V^2, so + not -
+        a = 0.1 * (y_jm2 + y_jm3**2)
 
         # Group B(i): -y[j-3] - 1.0
         b = -y_jm3 - 1.0
 
-        # Group C(i): (1/sqrt(90)) * (y[j] - y[j-1]^2)
-        c = (1.0 / r90) * (y_j - y_jm1**2)
+        # Group C(i): (1/sqrt(90)) * (y[j] - y[j-1]^2) -- WRONG! MSQ is -V^2, so + not -
+        c = (1.0 / r90) * (y_j + y_jm1**2)
 
         # Group D(i): -y[j-1] - 1.0
         d = -y_jm1 - 1.0

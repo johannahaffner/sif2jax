@@ -6,6 +6,7 @@ from collections.abc import Callable
 import jax
 import jax.numpy as jnp
 import jax.tree_util as jtu
+import numpy as np
 import pycutest  # pyright: ignore[reportMissingImports]  - test runs in container
 import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
@@ -23,24 +24,25 @@ MIN_RUNTIME_SECONDS = 1e-5  # 10 microseconds
 
 
 def benchmark_pycutest(
-    func: Callable, *args, number: int = 100, repeat: int = 5
+    func: Callable, point, number: int = 100, repeat: int = 5
 ) -> float:
     """Benchmark a pycutest function using timeit.
 
-    Args:
-        func: Function to benchmark
-        *args: Arguments to pass to func
-        number: Number of executions per timing (default: 100)
-        repeat: Number of timing repetitions (default: 5)
+    **Arguments**:
+
+    - `func`: Function to benchmark
+    - `point`: Arguments to pass to func. For pycutest, this is always only `x`.
+    - `number`: Number of executions per timing (default: 100)
+    - `repeat`: Number of timing repetitions (default: 5)
 
     Returns:
         Best average time per execution in seconds
     """
     # Warmup run
-    _ = func(*args)
+    _ = func(np.asarray(point))
 
     # Create a timer
-    timer = timeit.Timer(lambda: func(*args))
+    timer = timeit.Timer(lambda: func(np.asarray(point)))
 
     # Run the benchmark
     times = timer.repeat(repeat=repeat, number=number)
@@ -90,7 +92,7 @@ class TestRuntime:
     @pytest.fixture(scope="class")
     def pycutest_problem(self, problem):
         """Load pycutest problem once per problem per class."""
-        return pycutest.import_problem(problem.name)
+        return pycutest.import_problem(problem.name, drop_fixed_variables=False)
 
     @pytest.fixture(autouse=True)
     def clear_jax_cache(self):

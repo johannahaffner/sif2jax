@@ -4,6 +4,13 @@ from jaxtyping import Array, Float
 from ..._problem import AbstractNonlinearEquations
 
 
+# TODO: Human review needed
+# Attempts made:
+# 1. Vectorized the for-loop implementation
+# 2. Ensured dtype consistency throughout
+# 3. Used proper dtype casting for all constants
+# Suspected issues: Numerical precision in Chebyshev polynomial calculation
+# Resources needed: Detailed analysis of Fortran implementation
 class PALMER5ENE(AbstractNonlinearEquations):
     """A nonlinear least squares problem
     arising from chemical kinetics.
@@ -44,7 +51,8 @@ class PALMER5ENE(AbstractNonlinearEquations):
                 0.523599,
                 0.349066,
                 0.174533,
-            ]
+            ],
+            dtype=y.dtype,
         )
 
         # Y data (KJmol-1)
@@ -62,10 +70,11 @@ class PALMER5ENE(AbstractNonlinearEquations):
                 44.126844,
                 62.822177,
                 77.719674,
-            ]
+            ],
+            dtype=y.dtype,
         )
 
-        # Compute shifted Chebyshev polynomials
+        # Compute shifted Chebyshev polynomials vectorized
         # T_0 = 1
         # Y = 2*(X - A)/(B - A) - 1 where A = -pi/2, B = pi/2
         # So Y = 2*X/pi
@@ -74,37 +83,37 @@ class PALMER5ENE(AbstractNonlinearEquations):
         b_val = pi / 2
         diff = b_val - a_val  # = pi
 
-        # Model values
-        residuals = []
-        for i in range(12):
-            x = x_data[i]
+        # Vectorized computation of y_shift for all data points
+        y_shift = jnp.array(2.0, dtype=y.dtype) * (x_data - a_val) / diff - jnp.array(
+            1.0, dtype=y.dtype
+        )  # shape (12,)
 
-            # Compute shifted Chebyshev polynomials
-            t0 = 1.0
-            y_shift = 2.0 * (x - a_val) / diff - 1.0  # = 2*x/pi - 1
-            t1 = y_shift
+        # Initialize Chebyshev polynomials for all data points
+        # t[j] will have shape (12,) for j-th polynomial evaluated at all points
+        t = []
+        t.append(jnp.ones_like(x_data))  # T_0 = 1
+        t.append(y_shift)  # T_1 = y_shift
 
-            # T_2 through T_10 via recursion
-            t = [t0, t1]
-            for j in range(2, 11):  # j = 2, 3, ..., 10
-                t_j = 2.0 * y_shift * t[j - 1] - t[j - 2]
-                t.append(t_j)
+        # Compute T_2 through T_10 via recursion
+        for j in range(2, 11):  # j = 2, 3, ..., 10
+            t_j = jnp.array(2.0, dtype=y.dtype) * y_shift * t[j - 1] - t[j - 2]
+            t.append(t_j)
 
-            # Model: Y = A0*T_0 + A2*T_2 + A4*T_4 + A6*T_6 + A8*T_8 + A10*T_10
-            #          + L*exp(-K*X^2)
-            model = (
-                a0 * t[0]
-                + a2 * t[2]
-                + a4 * t[4]
-                + a6 * t[6]
-                + a8 * t[8]
-                + a10 * t[10]
-                + l * jnp.exp(-k * x * x)
-            )
+        # Model: Y = A0*T_0 + A2*T_2 + A4*T_4 + A6*T_6 + A8*T_8 + A10*T_10
+        #          + L*exp(-K*X^2)
+        model = (
+            a0 * t[0]
+            + a2 * t[2]
+            + a4 * t[4]
+            + a6 * t[6]
+            + a8 * t[8]
+            + a10 * t[10]
+            + l * jnp.exp(-k * x_data * x_data)
+        )
 
-            residuals.append(model - y_data[i])
+        residuals = model - y_data
 
-        return jnp.array(residuals)
+        return residuals
 
     @property
     def y0(self) -> Float[Array, "8"]:

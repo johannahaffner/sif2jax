@@ -7,7 +7,7 @@ from ..._problem import AbstractNonlinearEquations
 class JUDGENE(AbstractNonlinearEquations):
     """SCIPY global optimization benchmark example Judge.
 
-    Fit: y  =  x_1 + a_i x_2 + b_i^2 x_2 + e
+    Fit: y  =  x_1 + a_i x_2 + b_i x_2^2 + e
 
     Source:  Problem from the SCIPY benchmark set
       https://github.com/scipy/scipy/tree/master/benchmarks/ ...
@@ -120,8 +120,8 @@ class JUDGENE(AbstractNonlinearEquations):
             ]
         )
 
-        # Model: x1 + a[i] * x2 + b[i]^2 * x2
-        model = x1 + a * x2 + (b * b) * x2
+        # Model: x1 + a[i] * x2 + b[i] * x2^2
+        model = x1 + a * x2 + b * (x2 * x2)
 
         # Residuals
         residuals = model - y_data
@@ -138,11 +138,13 @@ class JUDGENE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # From the scipy benchmark, the solution is approximately:
         return jnp.array([0.86466, 1.2357])
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

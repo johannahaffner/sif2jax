@@ -54,7 +54,9 @@ def test_pycutest_objective_benchmark(benchmark, problem):
     """
     # Load pycutest problem
     try:
-        pycutest_problem = pycutest.import_problem(problem.name)
+        pycutest_problem = pycutest.import_problem(
+            problem.name, drop_fixed_variables=False
+        )
     except Exception as e:
         pytest.skip(f"Could not load pycutest problem {problem.name}: {e}")
 

@@ -3,6 +3,11 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Multiple attempts to handle fixed variables and constraint signs
+# Suspected issues: pycutest vs sif2jax convention differences for fixed variables
+#                   and constraint signs
+# Resources needed: Understanding of how pycutest handles fixed boundary values
 class POLYGON(AbstractConstrainedMinimisation):
     """Find the polygon of maximal area with fixed diameter.
 
@@ -27,8 +32,8 @@ class POLYGON(AbstractConstrainedMinimisation):
 
     @property
     def n(self):
-        """Number of variables: 2*NV - 2 (excluding fixed R(NV) and THETA(NV))."""
-        return 2 * self.NV - 2
+        """Number of variables: 2*NV (including fixed R(NV) and THETA(NV))."""
+        return 2 * self.NV
 
     @property
     def y0(self):
@@ -43,18 +48,22 @@ class POLYGON(AbstractConstrainedMinimisation):
         y0 = jnp.zeros(self.n)
 
         # Set initial R and THETA values (interleaved: r1, theta1, r2, theta2, ...)
-        # excluding fixed R(NV) and THETA(NV)
+        # including fixed R(NV) and THETA(NV)
         for i in range(
             nv - 1
         ):  # 0 to NV-2 in 0-based, corresponds to 1 to NV-1 in 1-based
             i_1based = i + 1
             ratri = nv_plus_1 - i_1based  # RATRI = NV+1 - I
             ratri = ratri * i_1based  # RATRI = RATRI * I
-            ratri = ratri / ratr  # RATRI = RATRI / RATR (division, not multiplication)
+            ratri = ratri / ratr  # RATRI = RATRI / RATR
             ratti = ratt * i_1based  # RATTI = RATT * I
 
             y0 = y0.at[2 * i].set(ratri)  # R(i+1)
             y0 = y0.at[2 * i + 1].set(ratti)  # THETA(i+1)
+
+        # Set fixed values for R(NV) and THETA(NV)
+        y0 = y0.at[2 * (nv - 1)].set(0.0)  # R(NV) = 0.0
+        y0 = y0.at[2 * (nv - 1) + 1].set(pi)  # THETA(NV) = PI
 
         return y0
 
@@ -73,13 +82,9 @@ class POLYGON(AbstractConstrainedMinimisation):
         nv = self.NV
 
         # Extract interleaved variables - vectorized
-        indices = jnp.arange(nv - 1)
-        r_vars = y[2 * indices]  # R values from variables
-        theta_vars = y[2 * indices + 1]  # THETA values from variables
-
-        # Create full r and theta arrays with fixed values
-        r = jnp.concatenate([r_vars, jnp.array([0.0])])  # R(NV) = 0.0
-        theta = jnp.concatenate([theta_vars, jnp.array([jnp.pi])])  # THETA(NV) = PI
+        indices = jnp.arange(nv)
+        r = y[2 * indices]  # R values (R(1) to R(NV))
+        theta = y[2 * indices + 1]  # THETA values (THETA(1) to THETA(NV))
 
         # Vectorized computation over i from 0 to NV-2
         r1 = r[:-1]  # r[i] for i = 0 to NV-2
@@ -105,13 +110,9 @@ class POLYGON(AbstractConstrainedMinimisation):
         nv = self.NV
 
         # Extract interleaved variables - vectorized
-        indices = jnp.arange(nv - 1)
-        r_vars = y[2 * indices]  # R values from variables
-        theta_vars = y[2 * indices + 1]  # THETA values from variables
-
-        # Create full r and theta arrays with fixed values
-        r = jnp.concatenate([r_vars, jnp.array([0.0])])  # R(NV) = 0.0
-        theta = jnp.concatenate([theta_vars, jnp.array([jnp.pi])])  # THETA(NV) = PI
+        indices = jnp.arange(nv)
+        r = y[2 * indices]  # R values (R(1) to R(NV))
+        theta = y[2 * indices + 1]  # THETA values (THETA(1) to THETA(NV))
 
         # Order constraints (NV-1 constraints) - vectorized
         order_constraints = theta[1:] - theta[:-1]  # theta[i+1] - theta[i] >= 0
@@ -127,7 +128,7 @@ class POLYGON(AbstractConstrainedMinimisation):
         theta_j = theta[j_vals]
 
         dist_sq = r_i**2 + r_j**2 - 2.0 * r_i * r_j * jnp.cos(theta_j - theta_i)
-        distance_constraints = dist_sq - 1.0
+        distance_constraints = dist_sq - 1.0  # <= 1 constraint
 
         # No equality constraints
         equalities = None
@@ -145,10 +146,16 @@ class POLYGON(AbstractConstrainedMinimisation):
         upper = jnp.ones(self.n)
 
         # Variables are interleaved: r1, theta1, r2, theta2, ...
-        # R(i) in [0, 1] and THETA(i) in [0, PI] for i = 1 to NV-1
-        indices = jnp.arange(nv - 1)
-        upper = upper.at[2 * indices].set(1.0)  # R(i+1)
-        upper = upper.at[2 * indices + 1].set(jnp.pi)  # THETA(i+1)
+        # R(i) in [0, 1] and THETA(i) in [0, PI] for i = 1 to NV
+        indices = jnp.arange(nv)
+        upper = upper.at[2 * indices].set(1.0)  # R(i)
+        upper = upper.at[2 * indices + 1].set(jnp.pi)  # THETA(i)
+
+        # Fix R(NV) = 0.0 and THETA(NV) = PI
+        lower = lower.at[2 * (nv - 1)].set(0.0)
+        upper = upper.at[2 * (nv - 1)].set(0.0)
+        lower = lower.at[2 * (nv - 1) + 1].set(jnp.pi)
+        upper = upper.at[2 * (nv - 1) + 1].set(jnp.pi)
 
         return lower, upper
 

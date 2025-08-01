@@ -43,13 +43,14 @@ class OSCIPANE(AbstractNonlinearEquations):
         # For i = 2 to N
         # Q(i) = (1/rho) * (X(i) - P(i))
         # where P(i) is the CHEB element: 2.0 * TAU^2 - 1.0 with TAU = X(i-1)
+        # Note: pycutest inverts SCALE parameters for NLE problems
         if self.n > 1:
             # Chebyshev element for indices 2 to N
             tau = x[:-1]  # X(i-1) for i=2..N
             cheb_vals = 2.0 * tau**2 - 1.0
 
-            # Q(i) = (1/rho) * (X(i) - cheb_vals)
-            residuals = residuals.at[1:].set((1.0 / self.rho) * (x[1:] - cheb_vals))
+            # Q(i) = rho * (X(i) - cheb_vals) - using inverted scale
+            residuals = residuals.at[1:].set(self.rho * (x[1:] - cheb_vals))
 
         return residuals
 
@@ -63,11 +64,13 @@ class OSCIPANE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution should satisfy F(x*) = 0
         return jnp.zeros(self.n, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

@@ -31,10 +31,11 @@ class NONMSQRTNE(AbstractNonlinearEquations):
 
         # Define the matrix B using vectorized operations
         # Create k values: 1, 2, 3, ..., p*p
+        # Note: SIF file fills matrix row by row (I=1,J=1..P, then I=2,J=1..P, etc)
         k_values = jnp.arange(1, p * p + 1, dtype=float)
         # Compute sin(k^2) for all values
         sin_k2 = jnp.sin(k_values * k_values)
-        # Reshape to p x p matrix
+        # Reshape to p x p matrix (row-major order matches SIF)
         b = sin_k2.reshape((p, p))
 
         # B(3,1) = 0.0 for p >= 3
@@ -43,6 +44,13 @@ class NONMSQRTNE(AbstractNonlinearEquations):
 
         # Compute A = B * B
         a = b @ b
+
+        # TODO: Human review needed
+        # Attempts made: Standard matrix multiplication doesn't match
+        # Suspected issues: SIF element assignment may have typo
+        # XTJ is assigned X(I,J) but should probably be X(K,J)
+        # This gives sum_k X(I,K)*X(I,J) instead of proper matrix mult
+        # Resources needed: Verify correct element structure with original source
 
         # Compute X * X
         x_squared = x @ x
@@ -60,10 +68,11 @@ class NONMSQRTNE(AbstractNonlinearEquations):
 
         # Define the matrix B using vectorized operations
         # Create k values: 1, 2, 3, ..., p*p
+        # Note: SIF file fills matrix row by row (I=1,J=1..P, then I=2,J=1..P, etc)
         k_values = jnp.arange(1, p * p + 1, dtype=float)
         # Compute sin(k^2) for all values
         sin_k2 = jnp.sin(k_values * k_values)
-        # Reshape to p x p matrix
+        # Reshape to p x p matrix (row-major order matches SIF)
         b = sin_k2.reshape((p, p))
 
         # B(3,1) = 0.0 for p >= 3

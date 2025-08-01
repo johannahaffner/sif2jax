@@ -54,6 +54,10 @@ from .palmer6e import PALMER6E as PALMER6E
 from .palmer7e import PALMER7E as PALMER7E
 from .palmer8a import PALMER8A as PALMER8A
 from .palmer8e import PALMER8E as PALMER8E
+from .pfit1ls import PFIT1LS as PFIT1LS
+from .pfit2ls import PFIT2LS as PFIT2LS
+from .pfit3ls import PFIT3LS as PFIT3LS
+from .pfit4ls import PFIT4LS as PFIT4LS
 from .price4b import PRICE4B as PRICE4B
 
 
@@ -106,5 +110,9 @@ bounded_minimisation_problems = (
     PALMER7E(),
     PALMER8A(),
     PALMER8E(),
+    PFIT1LS(),
+    PFIT2LS(),
+    PFIT3LS(),
+    PFIT4LS(),
     PRICE4B(),
 )

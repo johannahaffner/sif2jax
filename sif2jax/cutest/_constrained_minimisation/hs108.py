@@ -105,8 +105,8 @@ class HS108(AbstractConstrainedMinimisation):
         # with pycutest output.
         c1 = -(1 - x3**2 - x4**2)  # Negated to match pycutest
         c2 = -(1 - x5**2 - x6**2)  # Negated to match pycutest
-        c3 = 1 - x9**2  # Not negated
-        c4 = 1 - x1**2 - (x2 - x9) ** 2  # Not negated
+        c3 = -(1 - x9**2)  # Negated to match pycutest convention
+        c4 = -(1 - x1**2 - (x2 - x9) ** 2)  # Negated to match pycutest
         c5 = (
             1 - (x1 - x5) ** 2 - (x2 - x6) ** 2
         )  # Negated to match pycutest (next line)
@@ -114,7 +114,7 @@ class HS108(AbstractConstrainedMinimisation):
         c6 = -(1 - (x1 - x7) ** 2 - (x2 - x8) ** 2)  # Negated to match pycutest
         c7 = -(1 - (x3 - x7) ** 2 - (x4 - x8) ** 2)  # Negated to match pycutest
         c8 = -(1 - (x3 - x5) ** 2 - (x4 - x6) ** 2)  # Negated to match pycutest
-        c9 = 1 - x7**2 - (x8 - x9) ** 2  # Not negated
+        c9 = -(1 - x7**2 - (x8 - x9) ** 2)  # Negated to match pycutest
         # Note: The SIF file has a different ordering for c10-c13 than the AMPL/PDF
         c10 = x3 * x9  # SIF: CE26
         c11 = x5 * x8 - x6 * x7  # SIF: CE21 - CE22

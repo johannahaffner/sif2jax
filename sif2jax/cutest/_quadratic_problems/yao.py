@@ -16,7 +16,7 @@ class YAO(AbstractConstrainedQuadraticProblem):
     We choose f(t) = sin(t), x(1) >= 0.08 and fix x(n+i) = 0
 
     Note: The SIF file has P+k variables, but the last k are fixed at 0.
-    pycutest removes these fixed variables, so it only has P variables.
+    pycutest does NOT remove these fixed variables, so it has P+k variables.
 
     SIF input: Aixiang Yao, Virginia Tech., May 1995
     modifications by Nick Gould
@@ -32,12 +32,12 @@ class YAO(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        # pycutest removes the k fixed variables, so n = p
-        return self.p
+        # pycutest keeps all variables including the fixed ones
+        return self.p + self.k
 
     @property
     def y0(self):
-        """Initial guess - zeros."""
+        """Initial guess - zeros for all p+k variables."""
         return jnp.zeros(self.n)
 
     @property
@@ -51,22 +51,14 @@ class YAO(AbstractConstrainedQuadraticProblem):
         """
         del args
 
-        # Contribution from the p free variables
-        i_vals_free = jnp.arange(1, self.p + 1)
-        i_vals_free = jnp.asarray(i_vals_free, dtype=y.dtype)
-        f_vals_free = jnp.sin(i_vals_free / (self.p + self.k))
-        contrib_free = jnp.sum((y - f_vals_free) ** 2)
-
-        # Contribution from the k fixed variables (fixed at 0)
-        # These are x_{p+1} = 0, ..., x_{p+k} = 0
-        i_vals_fixed = jnp.arange(self.p + 1, self.p + self.k + 1)
-        i_vals_fixed = jnp.asarray(i_vals_fixed, dtype=y.dtype)
-        f_vals_fixed = jnp.sin(i_vals_fixed / (self.p + self.k))
-        contrib_fixed = jnp.sum((0.0 - f_vals_fixed) ** 2)
+        # Compute f(t) = sin(t) for all p+k terms
+        i_vals = jnp.arange(1, self.p + self.k + 1)
+        i_vals = jnp.asarray(i_vals, dtype=y.dtype)
+        f_vals = jnp.sin(i_vals / (self.p + self.k))
 
         # The SIF file has 'SCALE' 2.0 on each group, which means
         # each group is multiplied by 1/2
-        return 0.5 * (contrib_free + contrib_fixed)
+        return 0.5 * jnp.sum((y - f_vals) ** 2)
 
     @property
     def bounds(self):
@@ -77,8 +69,10 @@ class YAO(AbstractConstrainedQuadraticProblem):
         # x(1) >= 0.08
         lower = lower.at[0].set(0.08)
 
-        # Note: The last k variables in the SIF file are fixed at 0,
-        # but pycutest removes them, so we don't need to handle them
+        # The last k variables are fixed at 0
+        for i in range(self.p, self.p + self.k):
+            lower = lower.at[i].set(0.0)
+            upper = upper.at[i].set(0.0)
 
         return lower, upper
 
@@ -86,36 +80,17 @@ class YAO(AbstractConstrainedQuadraticProblem):
         """k-convex constraints: ∇^k x >= 0.
 
         For k=2, this means x_i - 2*x_{i+1} + x_{i+2} >= 0 for i=1 to p.
-        Since pycutest removes the fixed variables, we need to handle the
-        constraints that involve them by treating those variables as 0.
+        Since pycutest keeps all variables, we can use the full vector directly.
         """
-        p = self.p
-
         # For constraints B(i) where i goes from 1 to P (SIF 1-based)
         # B(i): x(i) - 2*x(i+1) + x(i+2) >= 0
+        # In 0-based indexing: y[i-1] - 2*y[i] + y[i+1] >= 0 for i=1 to p
 
-        # Most constraints use three consecutive variables
-        # For i=1 to p-2: normal constraints with all variables present
-        if p > 2:
-            # Standard constraints for i in range(p-2)
-            inequalities = y[:-2] - 2.0 * y[1:-1] + y[2:]
+        # Generate all p constraints
+        # For i=0 to p-1: y[i] - 2*y[i+1] + y[i+2] >= 0
+        inequalities = y[: self.p] - 2.0 * y[1 : self.p + 1] + y[2 : self.p + 2]
 
-            # For the last two constraints (i=p-1 and i=p), we need the fixed variables
-            # B(p-1): x(p-1) - 2*x(p) + x(p+1) >= 0, where x(p+1)=0
-            constraint_p_minus_1 = y[-2] - 2.0 * y[-1] + 0.0
-
-            # B(p): x(p) - 2*x(p+1) + x(p+2) >= 0, where x(p+1)=0 and x(p+2)=0
-            constraint_p = y[-1] - 2.0 * 0.0 + 0.0
-
-            # Concatenate all constraints
-            all_inequalities = jnp.concatenate(
-                [inequalities, jnp.array([constraint_p_minus_1, constraint_p])]
-            )
-
-            return None, all_inequalities
-        else:
-            # Handle edge case for very small p
-            return None, jnp.array([])
+        return None, inequalities
 
     @property
     def expected_result(self):

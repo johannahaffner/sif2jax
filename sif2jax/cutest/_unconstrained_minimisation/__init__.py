@@ -229,6 +229,7 @@ from .palmer8c import PALMER8C as PALMER8C
 # from .penalty1 import PENALTY1 as PENALTY1
 # TODO: Human review - SCALE factor issue
 # from .penalty2 import PENALTY2 as PENALTY2
+from .penalty3 import PENALTY3 as PENALTY3
 from .power import POWER as POWER
 from .powersum import POWERSUM as POWERSUM
 from .price3 import PRICE3 as PRICE3
@@ -451,6 +452,7 @@ unconstrained_minimisation_problems = (
     PALMER8C(),
     # PENALTY1(),  # TODO: Human review - minor numerical precision issues
     # PENALTY2(),  # TODO: Human review - SCALE factor issue
+    PENALTY3(),
     POWER(),
     POWERSUM(),
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15

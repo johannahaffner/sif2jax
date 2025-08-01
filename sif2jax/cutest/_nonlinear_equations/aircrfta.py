@@ -1,26 +1,24 @@
-"""The aircraft stability problem by Rheinboldt.
-
-The aircraft stability problem by Rheinboldt, as a function
-of the elevator, aileron and rudder deflection controls.
-
-Source: Problem 9 in
-J.J. More',"A collection of nonlinear model problems"
-Proceedings of the AMS-SIAM Summer Seminar on the Computational
-Solution of Nonlinear Systems of Equations, Colorado, 1988.
-Argonne National Laboratory MCS-P60-0289, 1989.
-
-SIF input: Ph. Toint, Dec 1989.
-
-Classification: NOR2-RN-8-5
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractNonlinearEquations
 
 
 class AIRCRFTA(AbstractNonlinearEquations):
-    """The aircraft stability problem."""
+    """The aircraft stability problem by Rheinboldt.
+
+    The aircraft stability problem by Rheinboldt, as a function
+    of the elevator, aileron and rudder deflection controls.
+
+    Source: Problem 9 in
+    J.J. More',"A collection of nonlinear model problems"
+    Proceedings of the AMS-SIAM Summer Seminar on the Computational
+    Solution of Nonlinear Systems of Equations, Colorado, 1988.
+    Argonne National Laboratory MCS-P60-0289, 1989.
+
+    SIF input: Ph. Toint, Dec 1989.
+
+    Classification: NOR2-RN-8-5
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -32,13 +30,18 @@ class AIRCRFTA(AbstractNonlinearEquations):
 
     @property
     def n(self):
-        """Number of variables (excluding fixed controls)."""
-        return 5
+        """Number of variables (including fixed controls)."""
+        return 8
 
     @property
     def y0(self):
         """Initial guess."""
-        return jnp.zeros(5)
+        y = jnp.zeros(8)
+        # Set control values
+        y = y.at[5].set(self.ELVVAL)  # ELEVATOR
+        y = y.at[6].set(self.AILVAL)  # AILERON
+        y = y.at[7].set(self.RUDVAL)  # RUDDERDF
+        return y
 
     @property
     def args(self):
@@ -54,8 +57,9 @@ class AIRCRFTA(AbstractNonlinearEquations):
         2: YAWRATE
         3: ATTCKANG
         4: SSLIPANG
-
-        Control values are fixed parameters.
+        5: ELEVATOR (fixed)
+        6: AILERON (fixed)
+        7: RUDDERDF (fixed)
         """
         # Extract variables
         rollrate = y[0]
@@ -63,11 +67,9 @@ class AIRCRFTA(AbstractNonlinearEquations):
         yawrate = y[2]
         attckang = y[3]
         sslipang = y[4]
-
-        # Fixed control values
-        elevator = self.ELVVAL
-        aileron = self.AILVAL
-        rudderdf = self.RUDVAL
+        elevator = y[5]
+        aileron = y[6]
+        rudderdf = y[7]
 
         # Define 2PR elements (product of two variables)
         e1a = pitchrat * yawrate
@@ -134,8 +136,20 @@ class AIRCRFTA(AbstractNonlinearEquations):
 
     @property
     def bounds(self):
-        """No bounds on variables."""
-        return None
+        """Bounds on variables."""
+        # All variables are unbounded except the fixed controls
+        lower = jnp.full(8, -jnp.inf)
+        upper = jnp.full(8, jnp.inf)
+
+        # Fix control variables
+        lower = lower.at[5].set(self.ELVVAL)  # ELEVATOR
+        upper = upper.at[5].set(self.ELVVAL)
+        lower = lower.at[6].set(self.AILVAL)  # AILERON
+        upper = upper.at[6].set(self.AILVAL)
+        lower = lower.at[7].set(self.RUDVAL)  # RUDDERDF
+        upper = upper.at[7].set(self.RUDVAL)
+
+        return lower, upper
 
     @property
     def expected_result(self):

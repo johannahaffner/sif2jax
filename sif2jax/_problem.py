@@ -250,8 +250,8 @@ class AbstractNonlinearEquations(AbstractProblem[_Y]):
     """
 
     def objective(self, y: _Y, args) -> Scalar:
-        """For compatibility with pycutest, the objective is typically zero,
-        but may be a constant value for some problems."""
+        """For compatibility with pycutest, the objective is typically zero, but it may
+        be a constant value for some problems."""
         return jnp.array(0.0)
 
     @abc.abstractmethod
@@ -264,17 +264,6 @@ class AbstractNonlinearEquations(AbstractProblem[_Y]):
         should be `None`. (None, None) is not allowed as an output - in that case the
         problem has no constraints and should not be classified as a nonlinear equations
         problem.
-
-        All constraints are assumed to be satisfied when the value is
-        equal to zero for equality constraints and greater than or equal to zero for
-        inequality constraints. Each element of each returned pytree of arrays will be
-        treated as the output of a constraint function (in other words: each constraint
-        function returns a scalar value, a collection of which may be arranged in a
-        pytree.)
-
-        For most nonlinear equations problems, this will return (residuals, None) where
-        residuals come from the residual method. However, some problems may have
-        additional inequality constraints.
         """
 
     @property

@@ -68,6 +68,16 @@ class CONCON(AbstractConstrainedMinimisation):
             return x * jnp.abs(x)
 
         def forq(y):
+            # NOTE: This function y * |y|^0.8539 is not differentiable at y=0
+            # The gradient contains |y|^(-0.1461) which is undefined at y=0
+            # This causes test failures when evaluating constraint Jacobians at zero
+            #
+            # The derivative is: f'(y) = 1.8539 * |y|^0.8539 * sign(y)
+            # - JAX autodiff correctly returns NaN at y=0 (non-differentiable)
+            # - CUTEst/pycutest uses analytical formulas that return 0 at y=0
+            # This is a fundamental difference between autodiff and analytical
+            # derivatives
+            # at singular points, not a bug in either implementation.
             return y * jnp.abs(y) ** 0.8539
 
         pan = []

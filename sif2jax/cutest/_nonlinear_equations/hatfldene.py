@@ -8,6 +8,10 @@ class HATFLDENE(AbstractNonlinearEquations):
 
     Nonlinear-equations version of HATFLDE.
 
+    TODO: Human review needed
+    Attempts made: Multiple sign conventions tried
+    Suspected issues: PyCUTEst may have different NLE convention than SIF file
+    Resources needed: Understanding of how PyCUTEst interprets NLE problems
     Source:
     "The OPTIMA user manual (issue No.8, p. 37)",
     Numerical Optimization Centre, Hatfield Polytechnic (UK), 1989.
@@ -52,36 +56,39 @@ class HATFLDENE(AbstractNonlinearEquations):
             ]
         )
 
-        # Data values
+        # Data values from SIF file
         z_values = jnp.array(
             [
-                1.133,
-                1.013,
-                0.903,
-                0.8025,
-                0.7106,
-                0.6268,
-                0.5504,
-                0.4810,
-                0.4182,
-                0.3614,
-                0.3102,
-                0.2644,
-                0.2234,
-                0.1870,
-                0.1548,
-                0.1266,
-                0.1019,
-                0.0805,
-                0.0621,
-                0.0465,
-                0.0334,
+                1.561,
+                1.473,
+                1.391,
+                1.313,
+                1.239,
+                1.169,
+                1.103,
+                1.04,
+                0.981,
+                0.925,
+                0.8721,
+                0.8221,
+                0.7748,
+                0.73,
+                0.6877,
+                0.6477,
+                0.6099,
+                0.5741,
+                0.5403,
+                0.5084,
+                0.4782,
             ]
         )
 
         # Compute residuals for each data point
-        # The model is exp(t * x3) - x1 * exp(t * x2) + z
-        residuals = jnp.exp(t_values * x3) - x1 * jnp.exp(t_values * x2) + z_values
+        # From SIF: G(I) = B(I) - A(I) with constant -Z(I)
+        # B(I) = exp(t * x3), A(I) = x1 * exp(t * x2) with coefficient -1.0
+        # For nonlinear equations, pycutest returns negative of optimization formulation
+        # The residual is: -x1 * exp(t * x2) + exp(t * x3) - z
+        residuals = -x1 * jnp.exp(t_values * x2) + jnp.exp(t_values * x3) - z_values
 
         return residuals
 

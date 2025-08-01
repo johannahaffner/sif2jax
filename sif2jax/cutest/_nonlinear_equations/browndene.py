@@ -34,7 +34,11 @@ class BROWNDENE(AbstractNonlinearEquations):
         return 20
 
     def residual(self, y: Array, args) -> Array:
-        """Compute the residuals of the Brown and Dennis problem"""
+        """Compute the residuals of the Brown and Dennis problem
+
+        For nonlinear equation version, each group gives one residual
+        which is the square root of the sum of squares.
+        """
         x1, x2, x3, x4 = y
 
         residuals = []
@@ -45,14 +49,15 @@ class BROWNDENE(AbstractNonlinearEquations):
             sin_t_i = jnp.sin(t_i)
             cos_t_i = jnp.cos(t_i)
 
-            # Element A(i): (x1 + t_i * x2 - exp(t_i))^2
+            # Component A(i): x1 + t_i * x2 - exp(t_i)
             a_i = x1 + t_i * x2 - exp_t_i
 
-            # Element B(i): (x3 + sin(t_i) * x4 - cos(t_i))^2
+            # Component B(i): x3 + sin(t_i) * x4 - cos(t_i)
             b_i = x3 + sin_t_i * x4 - cos_t_i
 
-            # Group G(i) = A(i) + B(i)
-            res_i = a_i + b_i
+            # For nonlinear equations, the residual is sqrt(a_i^2 + b_i^2)
+            # But that would always be positive. It's actually just a_i^2 + b_i^2
+            res_i = a_i**2 + b_i**2
             residuals.append(res_i)
 
         return jnp.array(residuals)

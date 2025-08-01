@@ -128,14 +128,6 @@ class DALLASS(AbstractConstrainedMinimisation):
         Returns:
             (equality_constraints, inequality_constraints)
         """
-        return self.equality_constraints(y, None), None
-
-    def equality_constraints(self, y, args):
-        """Compute the equality constraints.
-
-        These are network flow conservation constraints.
-        """
-        del args
         x = y
 
         constraints = []

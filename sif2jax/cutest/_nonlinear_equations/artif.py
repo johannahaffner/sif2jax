@@ -20,31 +20,34 @@ class ARTIF(AbstractNonlinearEquations):
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
-    n: int = 5000  # Problem dimension (number of equations)
+    n: int = 5002  # Total number of variables including fixed boundary values
+    n_eq: int = 5000  # Number of equations
 
     def residual(self, y, args) -> Float[Array, "5000"]:
         """Residual function for the nonlinear equations."""
-        # Add fixed boundary values (0 at both ends)
-        x = jnp.concatenate([jnp.array([0.0]), y, jnp.array([0.0])])
+        # y already contains all variables including fixed boundary values
+        x = y
 
-        # Compute residuals for each equation
-        residuals = []
-        for i in range(1, self.n + 1):
-            # Linear part: -0.05 * (X(i-1) + X(i) + X(i+1))
-            linear_part = -0.05 * (x[i - 1] + x[i] + x[i + 1])
+        # Vectorized computation
+        # Create index arrays
+        i = jnp.arange(1, self.n_eq + 1)
 
-            # Nonlinear part: arctan(sin(i * X(i)))
-            fact = float(i % 100)
-            nonlinear_part = jnp.arctan(jnp.sin(fact * x[i]))
+        # Linear part: -0.05 * (X(i-1) + X(i) + X(i+1))
+        linear_part = -0.05 * (x[i - 1] + x[i] + x[i + 1])
 
-            residuals.append(linear_part + nonlinear_part)
+        # Nonlinear part: arctan(sin(fact * X(i)))
+        # fact = i % 100
+        fact = (i % 100).astype(x.dtype)
+        nonlinear_part = jnp.arctan(jnp.sin(fact * x[i]))
 
-        return jnp.array(residuals)
+        return linear_part + nonlinear_part
 
     @property
-    def y0(self) -> Float[Array, "5000"]:
+    def y0(self) -> Float[Array, "5002"]:
         """Initial guess for the optimization problem."""
-        # All variables start at 1.0 (except fixed boundary values)
+        # All variables start at 1.0, including fixed boundary values
+        # Note: pycutest keeps boundary values at 1.0 in initial guess
+        # even though they are fixed to 0.0 in bounds
         return jnp.ones(self.n)
 
     @property
@@ -70,5 +73,15 @@ class ARTIF(AbstractNonlinearEquations):
 
     @property
     def bounds(self) -> tuple[Array, Array] | None:
-        """No bounds for this problem."""
-        return None
+        """Bounds for the variables."""
+        # X(0) and X(N+1) are fixed at 0
+        lower = jnp.full(self.n, -jnp.inf)
+        upper = jnp.full(self.n, jnp.inf)
+
+        # Fix boundary values
+        lower = lower.at[0].set(0.0)
+        upper = upper.at[0].set(0.0)
+        lower = lower.at[-1].set(0.0)
+        upper = upper.at[-1].set(0.0)
+
+        return lower, upper

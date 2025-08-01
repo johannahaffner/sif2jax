@@ -49,7 +49,7 @@ class CLUSTER(AbstractNonlinearEquations):
         f2_b = x2 - jnp.cos(x1)
         g2 = f1_b * f2_b
 
-        return jnp.array([g1, g2]), None
+        return jnp.array([g1, g2])
 
     @property
     def y0(self):

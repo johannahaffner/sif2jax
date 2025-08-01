@@ -20,6 +20,10 @@ class CERI651A(AbstractNonlinearEquations):
     """ISIS Data fitting problem CERI651A given as an inconsistent set of
     nonlinear equations.
 
+    TODO: Human review needed - numerical overflow when evaluating at ones vector
+    The back-to-back exponential fitting function overflows when all parameters
+    are set to 1.0. The SIF file uses specific initial values that avoid this.
+
     Fit: y = c + l * x + I*A*B/2(A+B) *
                [ exp( A*[A*S^2+2(x-X0)]/2) * erfc( A*S^2+(x-X0)/S*sqrt(2) ) +
                  exp( B*[B*S^2+2(x-X0)]/2) * erfc( B*S^2+(x-X0)/S*sqrt(2) ) ]
@@ -242,27 +246,33 @@ class CERI651A(AbstractNonlinearEquations):
         )
 
         # Compute model values using back-to-back exponential
-        rootp5 = jnp.sqrt(0.5)
+        # From docstring:
+        # y = c + l * x + I*A*B/2(A+B) *
+        #     [ exp( A*[A*S^2+2(x-X0)]/2) * erfc( (A*S^2+(x-X0))/(S*sqrt(2)) ) +
+        #       exp( B*[B*S^2+2(x-X0)]/2) * erfc( (B*S^2+(x-X0))/(S*sqrt(2)) ) ]
+
+        sqrt2 = jnp.sqrt(2.0)
         apb = a + b
         p = 0.5 * i_param * a * b / apb
 
         # Vectorized computation
         xmy = x_data - x0
-        z = xmy / s
 
-        # R term
-        r = jnp.exp(-0.5 * z * z)
+        # Terms for A exponential
+        # Use scaled erfc to avoid overflow
+        a_exp_arg = 0.5 * a * (a * s * s + 2 * xmy)
+        a_erfc_arg = (a * s * s + xmy) / (s * sqrt2)
+        # exp(a_exp_arg) * erfc(a_erfc_arg) =
+        #   exp(a_exp_arg - a_erfc_arg^2) * exp(a_erfc_arg^2) * erfc(a_erfc_arg)
+        qa = jnp.exp(a_exp_arg - a_erfc_arg * a_erfc_arg) * erfc_scaled(a_erfc_arg)
 
-        # AC and BC terms
-        ac = rootp5 * (a * s + xmy / s)
-        bc = rootp5 * (b * s + xmy / s)
-
-        # QA and QB using scaled erfc
-        qa = erfc_scaled(ac)
-        qb = erfc_scaled(bc)
+        # Terms for B exponential
+        b_exp_arg = 0.5 * b * (b * s * s + 2 * xmy)
+        b_erfc_arg = (b * s * s + xmy) / (s * sqrt2)
+        qb = jnp.exp(b_exp_arg - b_erfc_arg * b_erfc_arg) * erfc_scaled(b_erfc_arg)
 
         # Model values
-        model = c + l * x_data + p * r * (qa + qb)
+        model = c + l * x_data + p * (qa + qb)
 
         # Residuals weighted by error
         residuals = (model - y_data) / e_data

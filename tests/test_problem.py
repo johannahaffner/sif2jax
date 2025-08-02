@@ -329,8 +329,8 @@ class TestProblem:
         """This test checks if the nonzero elements of the Hessian matrix match the ones
         given by pycutest in BCOO representation.
         """
-        print(pycutest_problem.ihess(np.asarray(problem.y0)))
-        print(pycutest_problem.isphess(np.asarray(problem.y0)))
+        # print(pycutest_problem.ihess(np.asarray(problem.y0)))
+        # print(pycutest_problem.isphess(np.asarray(problem.y0)))
         pass
 
     # def test_correct_options(self, problem, pycutest_problem):

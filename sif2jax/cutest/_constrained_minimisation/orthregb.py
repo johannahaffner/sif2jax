@@ -100,12 +100,11 @@ class ORTHREGB(AbstractConstrainedMinimisation):
         y = y.at[7].set(0.0)  # G2
         y = y.at[8].set(0.0)  # G3
 
-        # Point projections initialized to data points
+        # Point projections initialized to data points (vectorized)
         xd, yd, zd = self._generate_data_points()
-        for i in range(self.npts):
-            y = y.at[9 + 3 * i].set(xd[i])  # X(i)
-            y = y.at[9 + 3 * i + 1].set(yd[i])  # Y(i)
-            y = y.at[9 + 3 * i + 2].set(zd[i])  # Z(i)
+        y = y.at[9::3].set(xd)  # Set all X values
+        y = y.at[10::3].set(yd)  # Set all Y values
+        y = y.at[11::3].set(zd)  # Set all Z values
 
         return y
 
@@ -114,15 +113,13 @@ class ORTHREGB(AbstractConstrainedMinimisation):
         # Get data points
         xd, yd, zd = self._generate_data_points()
 
-        # Extract projected points
-        obj = jnp.array(0.0)
-        for i in range(self.npts):
-            x_proj = y[9 + 3 * i]
-            y_proj = y[9 + 3 * i + 1]
-            z_proj = y[9 + 3 * i + 2]
+        # Extract projected points (vectorized)
+        x_proj = y[9::3]  # Gets indices 9, 12, 15, ... (all X values)
+        y_proj = y[10::3]  # Gets indices 10, 13, 16, ... (all Y values)
+        z_proj = y[11::3]  # Gets indices 11, 14, 17, ... (all Z values)
 
-            # Sum of squared distances to data points
-            obj += (x_proj - xd[i]) ** 2 + (y_proj - yd[i]) ** 2 + (z_proj - zd[i]) ** 2
+        # Sum of squared distances to data points (vectorized)
+        obj = jnp.sum((x_proj - xd) ** 2 + (y_proj - yd) ** 2 + (z_proj - zd) ** 2)
 
         return obj
 
@@ -133,30 +130,26 @@ class ORTHREGB(AbstractConstrainedMinimisation):
         h22, h23, h33 = y[3], y[4], y[5]
         g1, g2, g3 = y[6], y[7], y[8]
 
-        eq_constraints = []
+        # Extract projected points (vectorized)
+        x = y[9::3]  # Gets indices 9, 12, 15, ... (all X values)
+        y_coord = y[10::3]  # Gets indices 10, 13, 16, ... (all Y values)
+        z = y[11::3]  # Gets indices 11, 14, 17, ... (all Z values)
 
-        for i in range(self.npts):
-            x = y[9 + 3 * i]
-            y_coord = y[9 + 3 * i + 1]
-            z = y[9 + 3 * i + 2]
+        # Ellipse constraint: H11*x^2 + 2*H12*x*y + H22*y^2 + 2*H13*x*z +
+        # 2*H23*y*z + H33*z^2 - 2*G1*x - 2*G2*y - 2*G3*z - 1 = 0
+        eq_constraints = (
+            h11 * x**2
+            + 2.0 * h12 * x * y_coord
+            + h22 * y_coord**2
+            + 2.0 * h13 * x * z
+            + 2.0 * h23 * y_coord * z
+            + h33 * z**2
+            - 2.0 * g1 * x
+            - 2.0 * g2 * y_coord
+            - 2.0 * g3 * z
+            - 1.0
+        )
 
-            # Ellipse constraint: H11*x^2 + 2*H12*x*y + H22*y^2 + 2*H13*x*z +
-            # 2*H23*y*z + H33*z^2 - 2*G1*x - 2*G2*y - 2*G3*z + 1 = 0
-            constraint_val = (
-                h11 * x**2
-                + 2.0 * h12 * x * y_coord
-                + h22 * y_coord**2
-                + 2.0 * h13 * x * z
-                + 2.0 * h23 * y_coord * z
-                + h33 * z**2
-                - 2.0 * g1 * x
-                - 2.0 * g2 * y_coord
-                - 2.0 * g3 * z
-                + 1.0
-            )
-            eq_constraints.append(constraint_val)
-
-        eq_constraints = jnp.array(eq_constraints)
         ineq_constraints = None
 
         return eq_constraints, ineq_constraints

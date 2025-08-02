@@ -103,24 +103,24 @@ class ORTHRGDS(AbstractConstrainedMinimisation):
         y = y.at[1].set(0.0)  # z2
         y = y.at[2].set(1.0)  # z3
 
-        # X and Y projections initialized to data points
+        # X and Y projections initialized to data points (interleaved)
         xd, yd = self._generate_data_points()
-        y = y.at[3 : 3 + self.npts].set(xd)
-        y = y.at[3 + self.npts :].set(yd)
+        y = y.at[3::2].set(xd)  # Set all X values at indices 3, 5, 7, ...
+        y = y.at[4::2].set(yd)  # Set all Y values at indices 4, 6, 8, ...
 
         # Modify certain starting points as specified in SIF
         # From TDP_lo to TDP_hi (1-indexed in SIF, so convert to 0-indexed)
         for i in range(self.tdp_lo - 1, min(self.tdp_hi, self.npts)):
-            y = y.at[3 + i].set(1.8)  # X(I) = 1.8
-            y = y.at[3 + self.npts + i].set(1.0)  # Y(I) = 1.0
+            y = y.at[3 + 2 * i].set(1.8)  # X(I) = 1.8
+            y = y.at[4 + 2 * i].set(1.0)  # Y(I) = 1.0
 
         return y
 
     def objective(self, y: Array, args) -> Array:
         """Compute the objective function."""
-        # Extract variables
-        x = y[3 : 3 + self.npts]
-        y_points = y[3 + self.npts :]
+        # Extract variables (interleaved)
+        x = y[3::2]  # Gets indices 3, 5, 7, ... (all X values)
+        y_points = y[4::2]  # Gets indices 4, 6, 8, ... (all Y values)
 
         # Get data points
         xd, yd = self._generate_data_points()
@@ -136,8 +136,8 @@ class ORTHRGDS(AbstractConstrainedMinimisation):
         z1 = y[0]
         z2 = y[1]
         z3 = y[2]
-        x = y[3 : 3 + self.npts]
-        y_points = y[3 + self.npts :]
+        x = y[3::2]  # Gets indices 3, 5, 7, ... (all X values)
+        y_points = y[4::2]  # Gets indices 4, 6, 8, ... (all Y values)
 
         # Equality constraints from SIF:
         # E(I): ((x[i]-z1)^2+(y[i]-z2)^2)^2 - ((x[i]-z1)^2+(y[i]-z2)^2)*(1+z3^2)^2 = 0

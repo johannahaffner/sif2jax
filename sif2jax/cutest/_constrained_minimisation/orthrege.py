@@ -94,12 +94,11 @@ class ORTHREGE(AbstractConstrainedMinimisation):
         y = y.at[4].set(0.0)  # P5
         y = y.at[5].set(0.25)  # P6
 
-        # Point projections initialized to data points
+        # Point projections initialized to data points (vectorized)
         xd, yd, zd = self._generate_data_points()
-        for i in range(self.npts):
-            y = y.at[6 + 3 * i].set(xd[i])  # X(i)
-            y = y.at[6 + 3 * i + 1].set(yd[i])  # Y(i)
-            y = y.at[6 + 3 * i + 2].set(zd[i])  # Z(i)
+        y = y.at[6::3].set(xd)  # Set all X values
+        y = y.at[7::3].set(yd)  # Set all Y values
+        y = y.at[8::3].set(zd)  # Set all Z values
 
         return y
 
@@ -108,15 +107,13 @@ class ORTHREGE(AbstractConstrainedMinimisation):
         # Get data points
         xd, yd, zd = self._generate_data_points()
 
-        # Extract projected points
-        obj = jnp.array(0.0)
-        for i in range(self.npts):
-            x_proj = y[6 + 3 * i]
-            y_proj = y[6 + 3 * i + 1]
-            z_proj = y[6 + 3 * i + 2]
+        # Extract projected points (vectorized)
+        x_proj = y[6::3]  # Gets indices 6, 9, 12, ... (all X values)
+        y_proj = y[7::3]  # Gets indices 7, 10, 13, ... (all Y values)
+        z_proj = y[8::3]  # Gets indices 8, 11, 14, ... (all Z values)
 
-            # Sum of squared distances to data points
-            obj += (x_proj - xd[i]) ** 2 + (y_proj - yd[i]) ** 2 + (z_proj - zd[i]) ** 2
+        # Sum of squared distances to data points (vectorized)
+        obj = jnp.sum((x_proj - xd) ** 2 + (y_proj - yd) ** 2 + (z_proj - zd) ** 2)
 
         return obj
 
@@ -125,25 +122,29 @@ class ORTHREGE(AbstractConstrainedMinimisation):
         # Extract helix parameters
         p1, p2, p3, p4, p5, p6 = y[0], y[1], y[2], y[3], y[4], y[5]
 
-        eq_constraints = []
+        # Extract projected points (vectorized)
+        x = y[6::3]  # Gets indices 6, 9, 12, ... (all X values)
+        y_coord = y[7::3]  # Gets indices 7, 10, 13, ... (all Y values)
+        z = y[8::3]  # Gets indices 8, 11, 14, ... (all Z values)
 
-        for i in range(self.npts):
-            x = y[6 + 3 * i]
-            y_coord = y[6 + 3 * i + 1]
-            z = y[6 + 3 * i + 2]
+        # Helix constraints from the SIF file:
+        # A(I): X(I) - P1 - P4*cos((Z(I)-P3)/P6) = 0
+        # B(I): Y(I) - P2 - P5*cos((Z(I)-P3)/P6) = 0  (Note: both use cos, not sin!)
 
-            # Helix constraints from the SIF file:
-            # A(I): X(I) - P1 - P4*cos((Z(I)-P3)/P6) = 0
-            # B(I): Y(I) - P2 - P5*sin((Z(I)-P3)/P6) = 0
+        t = (z - p3) / p6
 
-            t = (z - p3) / p6
+        constraint_a = x - p1 - p4 * jnp.cos(t)
+        constraint_b = y_coord - p2 - p5 * jnp.cos(t)
 
-            constraint_a = x - p1 - p4 * jnp.cos(t)
-            constraint_b = y_coord - p2 - p5 * jnp.sin(t)
+        # Interleave constraints: A(1), B(1), A(2), B(2), ...
+        eq_constraints = jnp.zeros(2 * self.npts, dtype=y.dtype)
+        eq_constraints = eq_constraints.at[::2].set(
+            constraint_a
+        )  # A constraints at even indices
+        eq_constraints = eq_constraints.at[1::2].set(
+            constraint_b
+        )  # B constraints at odd indices
 
-            eq_constraints.extend([constraint_a, constraint_b])
-
-        eq_constraints = jnp.array(eq_constraints)
         ineq_constraints = None
 
         return eq_constraints, ineq_constraints

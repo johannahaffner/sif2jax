@@ -73,6 +73,8 @@ class ORTHRDS2C(AbstractConstrainedMinimisation):
         one_plus_z3sq = 1.0 + z3sq
 
         # Generate angles
+        # In SIF: DO I 1 NPTS, then I-1 = I - 1, so theta = (I-1) * incr
+        # This means for I=1..NPTS, we have theta = 0, incr, 2*incr, ..., (NPTS-1)*incr
         i_vals = jnp.arange(self.npts, dtype=jnp.float64)
         theta = i_vals * incr
 
@@ -113,17 +115,20 @@ class ORTHRDS2C(AbstractConstrainedMinimisation):
         y = y.at[2].set(1.0)  # z3
 
         # X and Y projections initialized to data points
+        # Variables are ordered as: Z1, Z2, Z3, X(1), Y(1), X(2), Y(2), ...
         xd, yd = self._generate_data_points()
-        y = y.at[3 : 3 + self.npts].set(xd)
-        y = y.at[3 + self.npts :].set(yd)
+        # Vectorized assignment: interleave X and Y values
+        y = y.at[3::2].set(xd)  # Set all X values
+        y = y.at[4::2].set(yd)  # Set all Y values
 
         return y
 
     def objective(self, y: Array, args) -> Array:
         """Compute the objective function."""
-        # Extract variables
-        x = y[3 : 3 + self.npts]
-        y_points = y[3 + self.npts :]
+        # Extract variables (interleaved X and Y)
+        # Vectorized extraction: slice with step of 2
+        x = y[3::2]  # Gets indices 3, 5, 7, ... (all X values)
+        y_points = y[4::2]  # Gets indices 4, 6, 8, ... (all Y values)
 
         # Get data points
         xd, yd = self._generate_data_points()
@@ -139,8 +144,9 @@ class ORTHRDS2C(AbstractConstrainedMinimisation):
         z1 = y[0]
         z2 = y[1]
         z3 = y[2]
-        x = y[3 : 3 + self.npts]
-        y_points = y[3 + self.npts :]
+        # Extract interleaved X and Y values (vectorized)
+        x = y[3::2]  # Gets indices 3, 5, 7, ... (all X values)
+        y_points = y[4::2]  # Gets indices 4, 6, 8, ... (all Y values)
 
         # Equality constraints
         # ((x[i]-z1)^2+(y[i]-z2)^2)^2 - ((x[i]-z1)^2+(y[i]-z2)^2)*(1+z3^2)^2 = 0

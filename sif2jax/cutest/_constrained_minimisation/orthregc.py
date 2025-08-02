@@ -97,18 +97,18 @@ class ORTHREGC(AbstractConstrainedMinimisation):
         y = y.at[3].set(1.0)  # G1
         y = y.at[4].set(1.0)  # G2
 
-        # Point projections initialized to data points
+        # Point projections initialized to data points (interleaved X,Y)
         xd, yd = self._generate_data_points()
-        y = y.at[5 : 5 + self.npts].set(xd)
-        y = y.at[5 + self.npts :].set(yd)
+        y = y.at[5::2].set(xd)  # Set all X values at indices 5, 7, 9, ...
+        y = y.at[6::2].set(yd)  # Set all Y values at indices 6, 8, 10, ...
 
         return y
 
     def objective(self, y: Array, args) -> Array:
         """Compute the objective function."""
-        # Extract projected points
-        x_proj = y[5 : 5 + self.npts]
-        y_proj = y[5 + self.npts :]
+        # Extract projected points (interleaved X,Y)
+        x_proj = y[5::2]  # Gets indices 5, 7, 9, ... (all X values)
+        y_proj = y[6::2]  # Gets indices 6, 8, 10, ... (all Y values)
 
         # Get data points
         xd, yd = self._generate_data_points()
@@ -123,18 +123,18 @@ class ORTHREGC(AbstractConstrainedMinimisation):
         # Extract ellipse parameters
         h11, h12, h22, g1, g2 = y[0], y[1], y[2], y[3], y[4]
 
-        # Extract projected points
-        x_proj = y[5 : 5 + self.npts]
-        y_proj = y[5 + self.npts :]
+        # Extract projected points (interleaved X,Y)
+        x_proj = y[5::2]  # Gets indices 5, 7, 9, ... (all X values)
+        y_proj = y[6::2]  # Gets indices 6, 8, 10, ... (all Y values)
 
-        # Ellipse constraints: H11*x^2 + 2*H12*x*y + H22*y^2 - 2*G1*x - 2*G2*y + 1 = 0
+        # Ellipse constraints: H11*x^2 + 2*H12*x*y + H22*y^2 - 2*G1*x - 2*G2*y - 1 = 0
         eq_constraints = (
             h11 * x_proj**2
             + 2.0 * h12 * x_proj * y_proj
             + h22 * y_proj**2
             - 2.0 * g1 * x_proj
             - 2.0 * g2 * y_proj
-            + 1.0
+            - 1.0
         )
 
         ineq_constraints = None

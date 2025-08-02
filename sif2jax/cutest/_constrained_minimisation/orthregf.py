@@ -58,39 +58,43 @@ class ORTHREGF(AbstractConstrainedMinimisation):
         # Computed parameters
         incr = 2.0 * pi / self.npts
 
-        # Generate data points for the torus
-        xd_list, yd_list, zd_list = [], [], []
+        # Generate angles using meshgrid
+        i_vals = jnp.arange(self.npts, dtype=jnp.float64)
+        j_vals = jnp.arange(self.npts, dtype=jnp.float64)
+        ii, jj = jnp.meshgrid(i_vals, j_vals, indexing="ij")
 
-        for i in range(self.npts):
-            theta1 = i * incr
-            st1 = jnp.sin(theta1)
-            ct1 = jnp.cos(theta1)
-            p5ct1 = tp5 * ct1
-            p4p5ct1 = tp4 + p5ct1
-            r3 = tp5 * st1
+        # Flatten to match the expected order
+        ii_flat = ii.ravel()
+        jj_flat = jj.ravel()
 
-            for j in range(self.npts):
-                theta2 = j * incr
-                st2 = jnp.sin(theta2)
-                ct2 = jnp.cos(theta2)
+        # Compute angles
+        theta1 = ii_flat * incr
+        theta2 = jj_flat * incr
 
-                r1 = p4p5ct1 * ct2
-                r2 = p4p5ct1 * st2
+        # Trig functions
+        st1 = jnp.sin(theta1)
+        ct1 = jnp.cos(theta1)
+        st2 = jnp.sin(theta2)
+        ct2 = jnp.cos(theta2)
 
-                # Add perturbation
-                xseed = theta2 * pseed
-                sseed = jnp.cos(xseed)
-                pert = 1.0 + psize * sseed
+        # Intermediate values
+        p5ct1 = tp5 * ct1
+        p4p5ct1 = tp4 + p5ct1
+        r3 = tp5 * st1
 
-                xd_list.append(r1 * pert)
-                yd_list.append(r2 * pert)
-                zd_list.append(r3 * pert)
+        r1 = p4p5ct1 * ct2
+        r2 = p4p5ct1 * st2
 
-        return (
-            jnp.array(xd_list, dtype=jnp.float64),
-            jnp.array(yd_list, dtype=jnp.float64),
-            jnp.array(zd_list, dtype=jnp.float64),
-        )
+        # Add perturbation
+        xseed = theta2 * pseed
+        sseed = jnp.cos(xseed)
+        pert = 1.0 + psize * sseed
+
+        xd = r1 * pert
+        yd = r2 * pert
+        zd = r3 * pert
+
+        return xd, yd, zd
 
     def starting_point(self) -> Array:
         """Return the starting point for the problem."""
@@ -103,13 +107,13 @@ class ORTHREGF(AbstractConstrainedMinimisation):
         y = y.at[3].set(1.0)  # P4
         y = y.at[4].set(0.5)  # P5
 
-        # Point projections initialized to data points
+        # Point projections initialized to data points (interleaved X,Y,Z)
         xd, yd, zd = self._generate_data_points()
-        total_points = self.npts * self.npts
 
-        y = y.at[5 : 5 + total_points].set(xd)
-        y = y.at[5 + total_points : 5 + 2 * total_points].set(yd)
-        y = y.at[5 + 2 * total_points :].set(zd)
+        # Variables are ordered as X(1,1), Y(1,1), Z(1,1), X(1,2), Y(1,2), Z(1,2), ...
+        y = y.at[5::3].set(xd)  # Set all X values at indices 5, 8, 11, ...
+        y = y.at[6::3].set(yd)  # Set all Y values at indices 6, 9, 12, ...
+        y = y.at[7::3].set(zd)  # Set all Z values at indices 7, 10, 13, ...
 
         return y
 
@@ -117,12 +121,10 @@ class ORTHREGF(AbstractConstrainedMinimisation):
         """Compute the objective function."""
         # Get data points
         xd, yd, zd = self._generate_data_points()
-        total_points = self.npts * self.npts
-
-        # Extract projected points
-        x_proj = y[5 : 5 + total_points]
-        y_proj = y[5 + total_points : 5 + 2 * total_points]
-        z_proj = y[5 + 2 * total_points :]
+        # Extract projected points (interleaved X,Y,Z)
+        x_proj = y[5::3]  # Gets indices 5, 8, 11, ... (all X values)
+        y_proj = y[6::3]  # Gets indices 6, 9, 12, ... (all Y values)
+        z_proj = y[7::3]  # Gets indices 7, 10, 13, ... (all Z values)
 
         # Sum of squared distances to data points
         obj = jnp.sum((x_proj - xd) ** 2 + (y_proj - yd) ** 2 + (z_proj - zd) ** 2)
@@ -134,12 +136,10 @@ class ORTHREGF(AbstractConstrainedMinimisation):
         # Extract torus parameters
         p1, p2, p3, p4, p5 = y[0], y[1], y[2], y[3], y[4]
 
-        total_points = self.npts * self.npts
-
-        # Extract projected points
-        x_proj = y[5 : 5 + total_points]
-        y_proj = y[5 + total_points : 5 + 2 * total_points]
-        z_proj = y[5 + 2 * total_points :]
+        # Extract projected points (interleaved X,Y,Z)
+        x_proj = y[5::3]  # Gets indices 5, 8, 11, ... (all X values)
+        y_proj = y[6::3]  # Gets indices 6, 9, 12, ... (all Y values)
+        z_proj = y[7::3]  # Gets indices 7, 10, 13, ... (all Z values)
 
         # Torus constraints from the SIF file:
         # A(I,J): ((X(I,J)-P1)^2 + (Y(I,J)-P2)^2)^0.5 * P4^-1 + (Z(I,J)-P3)^2

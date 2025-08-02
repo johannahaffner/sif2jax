@@ -10,6 +10,7 @@ import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
 
 
+# TODO(claude): make this a public function and move it to the helpers module.
 # Helper function to check if a problem has constraints
 def _has_constraints(problem):
     return isinstance(
@@ -21,6 +22,7 @@ def _has_constraints(problem):
 from .helpers import _constraints_allclose, _jacobians_allclose, _try_except_evaluate
 
 
+# TODO(claude): make this a public function and move it to the helpers module.
 def _pycutest_jac_only(pycutest_problem):
     """Extract just the Jacobian from pycutest cons() function.
 
@@ -33,9 +35,6 @@ def _pycutest_jac_only(pycutest_problem):
         return jac
 
     return jac_only
-
-
-# pytest_generate_tests is now handled in conftest.py
 
 
 @pytest.fixture(scope="class")

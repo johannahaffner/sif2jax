@@ -13,10 +13,9 @@ from .helpers import (
     _constraints_allclose,
     _jacobians_allclose,
     _try_except_evaluate,
+    check_hprod_allclose,
     has_constraints,
-    hprod_allclose,
     pycutest_jac_only,
-    sif2jax_hprod,
 )
 
 
@@ -109,9 +108,7 @@ class TestProblem:
                 # Note that if the starting point y0 is all zeros (which is the case for
                 # some problems), then the Hessian-vector product defined as Hess @ y0
                 # is trivial and uninformative.
-                pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))
-                sif2jax_hprod_result = sif2jax_hprod(problem, problem.y0)
-                hprod_allclose(pycutest_hprod, sif2jax_hprod_result, problem.name)
+                check_hprod_allclose(problem, pycutest_problem)
             else:
                 # pycutest implements its hprod method for the Hessian only if the
                 # problem is unconstrained. Otherwise the Hessian used in this method
@@ -148,9 +145,7 @@ class TestProblem:
             )
         else:
             if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
-                pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))
-                sif2jax_hprod_result = sif2jax_hprod(problem, problem.y0)
-                hprod_allclose(pycutest_hprod, sif2jax_hprod_result, problem.name)
+                check_hprod_allclose(problem, pycutest_problem)
             else:
                 # pycutest implements its hprod method for the Hessian only if the
                 # problem is unconstrained. Otherwise the Hessian used in this method

@@ -45,10 +45,10 @@ class YATP1CLS(AbstractUnconstrainedMinimisation):
     @property
     def y0(self):
         """Initial guess."""
-        # All X(i,j) = 1.0, Y(i) = 0.0, Z(i) = 0.0 (from START POINT section)
+        # All X(i,j) = 6.0, Y(i) = 0.0, Z(i) = 0.0 (from START POINT section)
         y0 = jnp.zeros(self.n, dtype=jnp.float64)
-        # Set X values (first N^2 elements) to 1.0
-        y0 = y0.at[: self.N * self.N].set(1.0)
+        # Set X values (first N^2 elements) to 6.0
+        y0 = y0.at[: self.N * self.N].set(6.0)
         return y0
 
     @property
@@ -87,46 +87,29 @@ class YATP1CLS(AbstractUnconstrainedMinimisation):
         # Reshape X to matrix form
         X = x_flat.reshape((self.N, self.N))
 
-        # Compute residuals for E(i,j) groups
-        e_residuals = []
-        for i in range(self.N):
-            for j in range(self.N):
-                x_ij = X[i, j]
-                y_i = y_vec[i]
-                z_j = z_vec[j]  # Key correction: z_j instead of z_i
+        # Vectorized computation of E(i,j) residuals
+        # Broadcast y_i to match X dimensions (rows)
+        y_i_broadcast = y_vec[:, jnp.newaxis]  # Shape: (N, 1)
+        # Broadcast z_j to match X dimensions (columns)
+        z_j_broadcast = z_vec[jnp.newaxis, :]  # Shape: (1, N)
 
-                # x_{ij}^3 - A*x_{ij}^2 - (y_i + z_j)*(x_{ij}*cos(x_{ij}) - sin(x_{ij}))
-                term1 = x_ij**3
-                term2 = -self.A * x_ij**2
-                term3 = -(y_i + z_j) * (x_ij * jnp.cos(x_ij) - jnp.sin(x_ij))
+        # Compute all E(i,j) residuals at once
+        term1 = X**3
+        term2 = -self.A * X**2
+        term3 = -(y_i_broadcast + z_j_broadcast) * (X * jnp.cos(X) - jnp.sin(X))
+        e_residuals = (term1 + term2 + term3).flatten()
 
-                residual = term1 + term2 + term3
-                e_residuals.append(residual)
+        # Vectorized computation of sinc function, avoiding division by zero
+        sinc_X = jnp.where(jnp.abs(X) < 1e-15, 1.0, jnp.sin(X) / X)
 
-        # Compute residuals for ER(i) groups (row sums)
-        er_residuals = []
-        for i in range(self.N):
-            row_sum = jnp.array(0.0)
-            for j in range(self.N):
-                x_ij = X[i, j]
-                # Avoid division by zero
-                ratio = jnp.where(jnp.abs(x_ij) < 1e-15, 0.0, jnp.sin(x_ij) / x_ij)
-                row_sum += ratio
-            er_residuals.append(row_sum - 1.0)
+        # Compute ER(i) residuals (row sums)
+        er_residuals = jnp.sum(sinc_X, axis=1) - 1.0  # type: ignore
 
-        # Compute residuals for EC(j) groups (column sums)
-        ec_residuals = []
-        for j in range(self.N):
-            col_sum = jnp.array(0.0)
-            for i in range(self.N):
-                x_ij = X[i, j]
-                # Avoid division by zero
-                ratio = jnp.where(jnp.abs(x_ij) < 1e-15, 0.0, jnp.sin(x_ij) / x_ij)
-                col_sum += ratio
-            ec_residuals.append(col_sum - 1.0)
+        # Compute EC(j) residuals (column sums)
+        ec_residuals = jnp.sum(sinc_X, axis=0) - 1.0  # type: ignore
 
         # Combine all residuals
-        all_residuals = jnp.array(e_residuals + er_residuals + ec_residuals)
+        all_residuals = jnp.concatenate([e_residuals, er_residuals, ec_residuals])
 
         # Return sum of squares
         return jnp.sum(all_residuals**2)

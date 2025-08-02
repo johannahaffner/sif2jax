@@ -10,7 +10,6 @@ class TRIGON2B(AbstractBoundedMinimisation):
     Fit: y = (0, sqrt(8)*sin(7*(x_i-0.9)^2), sqrt(6)*sin(14*(x_i-0.9)^2), x_i) + e
 
     Version with box-constrained feasible region: -500 <= x_i <= 500
-    (Note: SIF has two bound sets, but appears to use second: 0 <= x_i <= 1)
 
     Source: Problem from the SCIPY benchmark set
     https://github.com/scipy/scipy/tree/master/benchmarks/benchmarks/go_benchmark_functions
@@ -72,10 +71,10 @@ class TRIGON2B(AbstractBoundedMinimisation):
 
     @property
     def bounds(self):
-        """Bounds: 0 <= x_i <= 1 for all i (using BOUNDS2 from SIF)."""
+        """Bounds: -500 <= x_i <= 500 for all i (using BOUNDS from SIF)."""
         n = self.n
-        lower = jnp.zeros(n, dtype=jnp.float64)
-        upper = jnp.ones(n, dtype=jnp.float64)
+        lower = jnp.full(n, -500.0, dtype=jnp.float64)
+        upper = jnp.full(n, 500.0, dtype=jnp.float64)
         return lower, upper
 
     @property

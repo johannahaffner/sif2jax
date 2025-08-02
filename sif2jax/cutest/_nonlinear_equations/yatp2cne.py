@@ -50,10 +50,10 @@ class YATP2CNE(AbstractNonlinearEquations):
     @property
     def y0(self):
         """Initial guess."""
-        # All X(i,j) = 1.0, Y(i) = 0.0, Z(i) = 0.0 (from START POINT section)
+        # All X(i,j) = 10.0, Y(i) = 0.0, Z(i) = 0.0 (from START POINT section)
         y0 = jnp.zeros(self.n, dtype=jnp.float64)
-        # Set X values (first N^2 elements) to 1.0
-        y0 = y0.at[: self._N * self._N].set(1.0)
+        # Set X values (first N^2 elements) to 10.0
+        y0 = y0.at[: self._N * self._N].set(10.0)
         return y0
 
     @property
@@ -89,36 +89,22 @@ class YATP2CNE(AbstractNonlinearEquations):
         # Reshape X to matrix form
         X = x_flat.reshape((self._N, self._N))
 
-        equations = []
-
         # E(i,j) equations: x_{ij} - (y_i + z_j)*(1 + cos(x_{ij})) - A = 0
-        for i in range(self._N):
-            for j in range(self._N):
-                x_ij = X[i, j]
-                y_i = y_vec[i]
-                z_j = z_vec[j]  # Key correction: z_j instead of z_i
-
-                equation = x_ij - (y_i + z_j) * (1.0 + jnp.cos(x_ij)) - self.A
-                equations.append(equation)
+        # Vectorized version
+        y_expanded = y_vec[:, jnp.newaxis]  # Shape (N, 1)
+        z_expanded = z_vec[jnp.newaxis, :]  # Shape (1, N)
+        E_equations = (
+            X - (y_expanded + z_expanded) * (1.0 + jnp.cos(X)) - self.A
+        ).ravel()
 
         # EC(j) equations: sum_i (x_{ij} + sin(x_{ij})) - 1 = 0 for all j (column sums)
-        for j in range(self._N):
-            col_sum = jnp.array(0.0)
-            for i in range(self._N):
-                x_ij = X[i, j]
-                col_sum += x_ij + jnp.sin(x_ij)
-            equations.append(col_sum - 1.0)
+        EC_equations = jnp.sum(X + jnp.sin(X), axis=0) - 1.0
 
         # ER(i) equations: sum_j (x_{ij} + sin(x_{ij})) - 1 = 0 for all i (row sums)
-        for i in range(self._N):
-            row_sum = jnp.array(0.0)
-            for j in range(self._N):
-                x_ij = X[i, j]
-                row_sum += x_ij + jnp.sin(x_ij)
-            equations.append(row_sum - 1.0)
+        ER_equations = jnp.sum(X + jnp.sin(X), axis=1) - 1.0
 
-        # Convert to JAX array
-        eq_constraints = jnp.array(equations)
+        # Concatenate all equations in SIF order: E, ER, EC
+        eq_constraints = jnp.concatenate([E_equations, ER_equations, EC_equations])
         ineq_constraints = None
 
         return eq_constraints, ineq_constraints

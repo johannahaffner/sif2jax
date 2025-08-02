@@ -44,28 +44,19 @@ class TRIGON2NE(AbstractNonlinearEquations):
         sqrt6 = jnp.sqrt(6.0)
         sqrt8 = jnp.sqrt(8.0)
 
-        equations = []
+        # Vectorized computation
+        d = x - 0.9
+        y_val = d * d
+        fb_vals = sqrt8 * jnp.sin(7.0 * y_val) + sqrt6 * jnp.sin(14.0 * y_val)
+        fc_vals = jnp.zeros(n)  # FC(i) = 0
+        fd_vals = d  # FD(i) = x_i - 0.9
 
-        # FA = 0 - 1 = -1
-        equations.append(-1.0)
+        # Interleave FB, FC, FD values: FB(0), FC(0), FD(0), FB(1), FC(1), FD(1), ...
+        interleaved = jnp.stack([fb_vals, fc_vals, fd_vals], axis=1).flatten()
 
-        # FB(i) = sqrt(8)*sin(7*(x_i-0.9)^2) + sqrt(6)*sin(14*(x_i-0.9)^2)
-        for i in range(n):
-            d = x[i] - 0.9
-            y_val = d * d
-            term1 = sqrt8 * jnp.sin(7.0 * y_val)
-            term2 = sqrt6 * jnp.sin(14.0 * y_val)
-            equations.append(term1 + term2)
+        # Prepend FA = -1
+        equations = jnp.concatenate([jnp.array([-1.0]), interleaved])
 
-        # FC(i) = 0 (no elements assigned to FC groups)
-        for i in range(n):
-            equations.append(0.0)
-
-        # FD(i) = x_i - 0.9
-        for i in range(n):
-            equations.append(x[i] - 0.9)
-
-        equations = jnp.array(equations)
         return equations, None  # No inequality constraints
 
     @property

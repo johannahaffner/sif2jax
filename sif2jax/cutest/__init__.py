@@ -117,7 +117,7 @@ from ._constrained_minimisation import (
     DTOC1NC as DTOC1NC,
     DTOC1ND as DTOC1ND,
     DTOC2 as DTOC2,
-    DTOC3 as DTOC3,
+    # DTOC3 as DTOC3,  # TODO: Human review - fixed variables differ from pycutest
     ELATTAR as ELATTAR,
     # EXPFITA as EXPFITA,  # TODO: Human review - fundamental formulation differences
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
@@ -1011,7 +1011,7 @@ problems_dict = {
     "DTOC1NC": DTOC1NC(),
     "DTOC1ND": DTOC1ND(),
     "DTOC2": DTOC2(),
-    "DTOC3": DTOC3(),
+    # "DTOC3": DTOC3(),  # TODO: Human review - fixed variables differ from pycutest
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),

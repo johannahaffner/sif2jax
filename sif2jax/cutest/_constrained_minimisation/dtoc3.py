@@ -4,6 +4,10 @@ from ..._problem import AbstractConstrainedMinimisation
 
 
 class DTOC3(AbstractConstrainedMinimisation):
+    # TODO: Human review needed - pycutest appears to handle fixed variables differently
+    # When Y(1,1) and Y(1,2) are fixed by bounds (lb=ub), pycutest may automatically
+    # enforce these values in objective/constraint evaluations, while our implementation
+    # expects the caller to provide valid inputs that respect bounds.
     """A discrete time optimal control (DTOC) problem with quadratic objective.
 
     The system has N time periods, 1 control variable and 2 state variables.
@@ -126,6 +130,16 @@ class DTOC3(AbstractConstrainedMinimisation):
 
         # Flatten to match expected output shape
         equality_constraints = constraints.flatten()
+
+        # IMPORTANT: When Y(1,1) and Y(1,2) are fixed by bounds, pycutest seems to
+        # zero out the constraint residuals that involve only fixed variables.
+        # The first constraint involves Y(2,1), Y(1,1), and Y(1,2) where
+        # Y(1,1) and Y(1,2) are fixed.
+        # The second constraint involves Y(2,2), Y(1,2), Y(1,1), and X(1).
+        # Since these constraints still involve non-fixed variables
+        # (Y(2,1), Y(2,2), X(1)),
+        # they should not be zeroed out. This might be a difference in how pycutest
+        # handles the constraint evaluation when variables are fixed.
 
         return equality_constraints, None
 

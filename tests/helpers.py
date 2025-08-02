@@ -133,10 +133,11 @@ def _try_except_evaluate(
 
         if allclose_func is None:
             difference = pycutest_value - sif2jax_value
+            abs_difference = jnp.abs(difference)
             msg = (
                 f"Discrepancy for problem {problem_name} at point {point}. "
-                f"The max. difference at element {jnp.argmax(difference)} is "
-                f"{jnp.max(difference)}."
+                f"The max. absolute difference at element "
+                f"{jnp.argmax(abs_difference)} is {jnp.max(abs_difference)}."
             )
             assert np.allclose(pycutest_value, sif2jax_value, atol=atol), msg
         else:
@@ -182,9 +183,11 @@ def _constraints_allclose(
     else:
         sif2jax_equalities = sif2jax_equalities.squeeze()
         difference = pycutest_equalities - sif2jax_equalities
+        abs_difference = jnp.abs(difference)
         msg = (
             f"Discrepancy: sif2jax and pycutest equality constraints differ. The max. "
-            f"difference at element {jnp.argmax(difference)} is {jnp.max(difference)}."
+            f"absolute difference at element {jnp.argmax(abs_difference)} is "
+            f"{jnp.max(abs_difference)}."
         )
         assert np.allclose(pycutest_equalities, sif2jax_equalities, atol=atol), msg
 
@@ -194,9 +197,11 @@ def _constraints_allclose(
     else:
         sif2jax_inequalities = sif2jax_inequalities.squeeze()
         difference = pycutest_inequalities - sif2jax_inequalities
+        abs_difference = jnp.abs(difference)
         msg = (
             f"Discrepancy: sif2jax and pycutest inequality constraints differ. The max."
-            f" difference at element {jnp.argmax(difference)} is {jnp.max(difference)}."
+            f" absolute difference at element {jnp.argmax(abs_difference)} is "
+            f"{jnp.max(abs_difference)}."
         )
         assert np.allclose(pycutest_inequalities, sif2jax_inequalities, atol=atol), msg
 
@@ -231,9 +236,11 @@ def _jacobians_allclose(pycutest_jac, sif2jax_jac, is_eq_cons, *, atol):
     else:
         sif2jax_eq_jac = sif2jax_eq_jac.squeeze()
         difference = pycutest_eq_jac - sif2jax_eq_jac
+        abs_difference = jnp.abs(difference)
         msg = (
             f"Discrepancy: sif2jax and pycutest equality Jacobians differ. The max. "
-            f"difference at element {jnp.argmax(difference)} is {jnp.max(difference)}."
+            f"absolute difference at element {jnp.argmax(abs_difference)} is "
+            f"{jnp.max(abs_difference)}."
         )
         assert np.allclose(pycutest_eq_jac, sif2jax_eq_jac, atol=atol), msg
     if sif2jax_ineq_jac is None:
@@ -242,9 +249,11 @@ def _jacobians_allclose(pycutest_jac, sif2jax_jac, is_eq_cons, *, atol):
     else:
         sif2jax_ineq_jac = sif2jax_ineq_jac.squeeze()
         difference = pycutest_ineq_jac - sif2jax_ineq_jac
+        abs_difference = jnp.abs(difference)
         msg = (
             f"Discrepancy: sif2jax and pycutest inequality Jacobians differ. The max. "
-            f"difference at element {jnp.argmax(difference)} is {jnp.max(difference)}."
+            f"absolute difference at element {jnp.argmax(abs_difference)} is "
+            f"{jnp.max(abs_difference)}."
         )
         assert np.allclose(pycutest_ineq_jac, sif2jax_ineq_jac, atol=atol), msg
 
@@ -341,9 +350,10 @@ def check_hprod_allclose(problem, pycutest_problem, *, atol=1e-6):
 
     # Compare them
     difference = pycutest_hprod - sif2jax_hprod
+    abs_difference = jnp.abs(difference)
     msg = (
         f"Mismatch in Hessian-vector product for {problem.name}. "
-        f"The max. difference is at element {jnp.argmax(difference)} "
-        f"with a value of {jnp.max(difference)}."
+        f"The max. absolute difference is at element {jnp.argmax(abs_difference)} "
+        f"with a value of {jnp.max(abs_difference)}."
     )
     assert np.allclose(pycutest_hprod, sif2jax_hprod, atol=atol), msg

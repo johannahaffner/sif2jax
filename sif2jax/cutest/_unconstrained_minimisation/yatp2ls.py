@@ -2,7 +2,7 @@
 on a square matrix. This is a least-squares formulation.
 
 The problem involves finding a matrix X and vectors Y, Z such that:
-- x_{ij} - (y_i + z_i)(1 + cos(x_{ij})) = A for all i,j
+- x_{ij} - (y_i + z_j)(1 + cos(x_{ij})) = A for all i,j
 - sum_i (x_{ij} + sin(x_{ij})) = 1 for all j (column sums)
 - sum_j (x_{ij} + sin(x_{ij})) = 1 for all i (row sums)
 
@@ -67,7 +67,7 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
         """Compute the least squares objective function.
 
         The objective is the sum of squares of:
-        1. x_{ij} - (y_i + z_i)*(1 + cos(x_{ij})) - A for all i,j
+        1. x_{ij} - (y_i + z_j)*(1 + cos(x_{ij})) - A for all i,j
         2. sum_i (x_{ij} + sin(x_{ij})) - 1 for all j (column sums)
         3. sum_j (x_{ij} + sin(x_{ij})) - 1 for all i (row sums)
         """
@@ -84,13 +84,15 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
         X = x_flat.reshape((self.N, self.N))
 
         # Vectorized computation of E(i,j) residuals
-        # Broadcast y_i and z_i to match X dimensions
-        y_i_broadcast = y_vec[:, jnp.newaxis]  # Shape: (N, 1)
-        z_i_broadcast = z_vec[:, jnp.newaxis]  # Shape: (N, 1)
+        # Broadcast y_i and z_j to match X dimensions
+        y_i_broadcast = y_vec[
+            :, jnp.newaxis
+        ]  # Shape: (N, 1) - broadcasts across columns
+        z_j_broadcast = z_vec[jnp.newaxis, :]  # Shape: (1, N) - broadcasts across rows
 
         # Compute all E(i,j) residuals at once
         e_residuals = (
-            X - (y_i_broadcast + z_i_broadcast) * (1.0 + jnp.cos(X)) - self.A
+            X - (y_i_broadcast + z_j_broadcast) * (1.0 + jnp.cos(X)) - self.A
         ).flatten()
 
         # Vectorized computation of EC(j) residuals (column sums)
@@ -99,8 +101,8 @@ class YATP2LS(AbstractUnconstrainedMinimisation):
         # Vectorized computation of ER(i) residuals (row sums)
         er_residuals = jnp.sum(X + jnp.sin(X), axis=1) - 1.0
 
-        # Combine all residuals
-        all_residuals = jnp.concatenate([e_residuals, ec_residuals, er_residuals])
+        # Combine all residuals - use same order as YATP1LS: E, ER, EC
+        all_residuals = jnp.concatenate([e_residuals, er_residuals, ec_residuals])
 
         # Return sum of squares
         return jnp.sum(all_residuals**2)

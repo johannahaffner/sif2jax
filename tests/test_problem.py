@@ -135,15 +135,30 @@ class TestProblem:
             sif2jax_hessian = jax.hessian(problem.objective)(problem.y0, problem.args)
             assert np.allclose(pycutest_hessian, sif2jax_hessian)
         else:
-            pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))  # noqa: F841
-            sif2jax_hprod = _sif2jax_hprod(problem, problem.y0)
-            difference = pycutest_hprod - sif2jax_hprod
-            msg = (
-                f"Mismatch in Hessian-vector product for {problem.name}. "
-                f"The max. difference is at element {jnp.argmax(difference)} "
-                f"with a value of {jnp.max(difference)}."
-            )
-            assert np.allclose(pycutest_hprod, sif2jax_hprod), msg
+            if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                # Note that if the starting point y0 is all zeros (which is the case for
+                # some problems), then the Hessian-vector product defined as Hess @ y0
+                # is trivial and uninformative.)
+                pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))
+                sif2jax_hprod = _sif2jax_hprod(problem, problem.y0)
+                difference = pycutest_hprod - sif2jax_hprod
+                msg = (
+                    f"Mismatch in Hessian-vector product for {problem.name}. "
+                    f"The max. difference is at element {jnp.argmax(difference)} "
+                    f"with a value of {jnp.max(difference)}."
+                )
+                assert np.allclose(pycutest_hprod, sif2jax_hprod), msg
+            else:
+                # pycutest implements its hprod method for the Hessian only if the
+                # problem is unconstrained. Otherwise the Hessian used in this method
+                # is the Hessian of the Lagrangian, and multuplier values must be
+                # provided. We only test the Hessians in this method here.
+                msg = (
+                    "Hessian-vector product test not implemented for constrained "
+                    "problems that require values for the dual variables to compute "
+                    "the Hessian of the Lagrangian. "
+                )
+                pytest.skip(msg)
 
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
@@ -154,8 +169,10 @@ class TestProblem:
                 jnp.zeros_like(problem.y0),
             )
         else:
-            # TODO(claude): implement Hessian-vector product test (same as above)
-            pytest.skip("Skip Hessian test for large problems to save time and memory")
+            # Hessian-vector product test cannot be run here since the result is trivial
+            # and uninformative. We cannot apply the Hessian to a different vector since
+            # we have to follow the definition of hprod in pycutest.
+            pytest.skip("Hessian-vector product is uninformative at zero vector.")
 
     def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:
@@ -166,8 +183,27 @@ class TestProblem:
                 jnp.ones_like(problem.y0),
             )
         else:
-            # TODO(claude): implement Hessian-vector product test (same as above)
-            pytest.skip("Skip Hessian test for large problems to save time and memory")
+            if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))
+                sif2jax_hprod = _sif2jax_hprod(problem, problem.y0)
+                difference = pycutest_hprod - sif2jax_hprod
+                msg = (
+                    f"Mismatch in Hessian-vector product for {problem.name}. "
+                    f"The max. difference is at element {jnp.argmax(difference)} "
+                    f"with a value of {jnp.max(difference)}."
+                )
+                assert np.allclose(pycutest_hprod, sif2jax_hprod), msg
+            else:
+                # pycutest implements its hprod method for the Hessian only if the
+                # problem is unconstrained. Otherwise the Hessian used in this method
+                # is the Hessian of the Lagrangian, and multuplier values must be
+                # provided. We only test the Hessians in this method here.
+                msg = (
+                    "Hessian-vector product test not implemented for constrained "
+                    "problems that require values for the dual variables to compute "
+                    "the Hessian of the Lagrangian. "
+                )
+                pytest.skip(msg)
 
     def test_correct_constraint_dimensions(self, problem, pycutest_problem):
         num_equalities, num_inequalities, _ = problem.num_constraints()

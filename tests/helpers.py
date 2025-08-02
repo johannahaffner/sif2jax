@@ -3,6 +3,7 @@ import jax.flatten_util as jfu
 import jax.numpy as jnp
 import numpy as np
 import pytest
+import sif2jax
 
 
 def _try_except_evaluate(
@@ -246,3 +247,65 @@ def _jacobians_allclose(pycutest_jac, sif2jax_jac, is_eq_cons, *, atol):
             f"difference at element {jnp.argmax(difference)} is {jnp.max(difference)}."
         )
         assert np.allclose(pycutest_ineq_jac, sif2jax_ineq_jac, atol=atol), msg
+
+
+def has_constraints(problem):
+    """Check if a problem has constraints.
+
+    **Arguments:**
+
+    - `problem`: A sif2jax problem instance
+
+    **Returns:**
+
+    - `bool`: True if the problem has constraints, False otherwise
+    """
+    return isinstance(
+        problem,
+        (sif2jax.AbstractConstrainedMinimisation, sif2jax.AbstractNonlinearEquations),
+    )
+
+
+def pycutest_jac_only(pycutest_problem):
+    """Extract just the Jacobian from pycutest cons() function.
+
+    Returns a function that takes a point and returns only the Jacobian matrix,
+    discarding the constraint values.
+
+    **Arguments:**
+
+    - `pycutest_problem`: A pycutest problem instance
+
+    **Returns:**
+
+    - `function`: A function that takes a point and returns the Jacobian matrix
+    """
+
+    def jac_only(point):
+        _, jac = pycutest_problem.cons(point, gradient=True)
+        return jac
+
+    return jac_only
+
+
+def sif2jax_hprod(problem, y):
+    """AOT compiled Hessian-vector product for sif2jax problems.
+
+    By compiling the evaluation, we avoid the materialisation of the Hessian matrix,
+    which would result in OOM errors for large problems.
+
+    **Arguments:**
+
+    - `problem`: A sif2jax problem instance
+    - `y`: The vector to multiply with the Hessian
+
+    **Returns:**
+
+    - `Array`: The Hessian-vector product H @ y
+    """
+
+    def hprod_(_y):
+        return jax.hessian(problem.objective)(_y, problem.args) @ _y
+
+    hprod = jax.jit(hprod_).lower(y).compile()
+    return hprod(y)

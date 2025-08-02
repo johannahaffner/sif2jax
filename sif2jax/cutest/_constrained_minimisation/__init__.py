@@ -47,6 +47,8 @@ from .chaconn2 import CHACONN2 as CHACONN2
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
 from .cvxqp1 import CVXQP1 as CVXQP1
+from .cvxqp2 import CVXQP2 as CVXQP2
+from .cvxqp3 import CVXQP3 as CVXQP3
 from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
 from .dtoc1l import DTOC1L as DTOC1L
@@ -309,7 +311,6 @@ constrained_minimisation_problems = (
     # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
     CSFI2(),
-    CVXQP1(),
     DALLASS(),
     DECONVC(),
     DTOC1L(),

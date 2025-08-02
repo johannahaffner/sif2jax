@@ -2,10 +2,10 @@ import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractConstrainedMinimisation
+from ..._problem import AbstractConstrainedQuadraticProblem
 
 
-class CVXQP1(AbstractConstrainedMinimisation):
+class CVXQP1(AbstractConstrainedQuadraticProblem):
     """CVXQP1 problem - a convex quadratic program.
 
     A convex quadratic program with sparse structure.

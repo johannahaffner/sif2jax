@@ -235,6 +235,22 @@ class AbstractConstrainedQuadraticProblem(AbstractConstrainedMinimisation[_Y]):
     pass
 
 
+class AbstractBoundedQuadraticMinimisation(AbstractBoundedMinimisation[_Y]):
+    """Abstract base class for bounded quadratic programming problems.
+
+    These are problems where:
+    - The objective function is quadratic: f(x) = 0.5 * x^T Q x + c^T x + d
+    - Only bound constraints are present: l <= x <= u
+    - No equality or inequality constraints
+
+    This class inherits all methods from AbstractBoundedMinimisation
+    and doesn't add any new requirements, but provides a clear type
+    distinction for quadratic problems with only bound constraints.
+    """
+
+    pass
+
+
 class AbstractNonlinearEquations(AbstractProblem[_Y]):
     """Abstract base class for nonlinear equations problems. These problems seek to
     find a solution y such that the equality constraints are zero.

@@ -24,8 +24,14 @@ def test_get_problem2():
     assert problems_in_dict.difference(problems_in_sif2jax) == set()
 
 
-@pytest.mark.parametrize("problem_", sif2jax.quadratic_problems)
-def test_quadratic_category(problem_):
+@pytest.mark.parametrize("problem_", sif2jax.bounded_quadratic_problems)
+def test_bounded_quadratic_category(problem_):
+    assert isinstance(problem_, sif2jax.AbstractBoundedQuadraticMinimisation)
+    assert isinstance(problem_, sif2jax.AbstractBoundedMinimisation)
+
+
+@pytest.mark.parametrize("problem_", sif2jax.constrained_quadratic_problems)
+def test_constrained_quadratic_category(problem_):
     assert isinstance(problem_, sif2jax.AbstractConstrainedQuadraticProblem)
     assert isinstance(problem_, sif2jax.AbstractConstrainedMinimisation)
 

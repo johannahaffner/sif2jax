@@ -9,6 +9,8 @@ import pycutest  # pyright: ignore[reportMissingImports]  - test runs in contain
 import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
 
+from .helpers import _constraints_allclose, _jacobians_allclose, _try_except_evaluate
+
 
 # TODO(claude): make this a public function and move it to the helpers module.
 # Helper function to check if a problem has constraints
@@ -17,9 +19,6 @@ def _has_constraints(problem):
         problem,
         (sif2jax.AbstractConstrainedMinimisation, sif2jax.AbstractNonlinearEquations),
     )
-
-
-from .helpers import _constraints_allclose, _jacobians_allclose, _try_except_evaluate
 
 
 # TODO(claude): make this a public function and move it to the helpers module.
@@ -35,6 +34,13 @@ def _pycutest_jac_only(pycutest_problem):
         return jac
 
     return jac_only
+
+
+def _sif2jax_hprod(problem, y):
+    """AOT compiled Hessian-vector product for sif2jax problems. By compiling the
+    evaluation, we avoid the materialisation of the Hessian matrix, which would result
+    in OOM errors for large problems.
+    """
 
 
 @pytest.fixture(scope="class")

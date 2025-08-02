@@ -271,10 +271,18 @@ from .vardim import VARDIM as VARDIM
 from .waysea1 import WAYSEA1 as WAYSEA1
 from .waysea2 import WAYSEA2 as WAYSEA2
 from .woods import WOODS as WOODS
+from .yatp1cls import YATP1CLS as YATP1CLS
+from .yatp1ls import YATP1LS as YATP1LS
+from .yatp2cls import YATP2CLS as YATP2CLS
+
+# TODO: Human review needed - Hessian test failures
+# Attempted fixes:
+# 1. Corrected z_i vs z_j bug (now uses z_j as per SIF)
+# 2. Verified residual ordering matches YATP1LS
+# 3. Investigated JAX autodiff vs pycutest analytical derivatives
+# Issue: Hessian elements 6, 17, 18 differ significantly (~13.45)
+# from .yatp2ls import YATP2LS as YATP2LS
 from .zangwil2 import ZANGWIL2 as ZANGWIL2
-
-
-# from .yatp2ls import YATP2LS as YATP2LS  # TODO: Fix dimension mismatch
 
 
 unconstrained_minimisation_problems = (
@@ -479,7 +487,10 @@ unconstrained_minimisation_problems = (
     WAYSEA1(),
     WAYSEA2(),
     WOODS(),
-    # YATP2LS(),  # TODO: Fix dimension mismatch
+    YATP1CLS(),
+    YATP1LS(),
+    YATP2CLS(),
+    # YATP2LS(),  # TODO: Human review - Hessian test failures
     ZANGWIL2(),
     TRIGON1(),
     # TRIGON2(),  # TODO: Human review - Hessian test fails

@@ -130,11 +130,14 @@ def _try_except_evaluate(
         # Both succeeded - compare values
         assert pycutest_value is not None and sif2jax_value is not None
 
-        # Use provided allclose function or default to np.allclose
         if allclose_func is None:
-            # Default comparison for simple values
-            # Pass atol to np.allclose, along with any other kwargs
-            assert np.allclose(pycutest_value, sif2jax_value, atol=atol, **kwargs)
+            difference = pycutest_value - sif2jax_value
+            msg = (
+                f"Discrepancy for problem {problem_name} at point {point}. "
+                f"The max. difference at element {jnp.argmax(difference)} is "
+                f"{jnp.max(difference)}."
+            )
+            assert np.allclose(pycutest_value, sif2jax_value, atol=atol), msg
         else:
             # Use custom comparison function (e.g., for constraints, Jacobians)
             # Pass atol along with other kwargs
@@ -171,12 +174,30 @@ def _constraints_allclose(
 
     # Parse sif2jax constraints (already a tuple)
     sif2jax_equalities, sif2jax_inequalities = sif2jax_constraints
-    sif2jax_equalities, _ = jfu.ravel_pytree(sif2jax_equalities)
-    sif2jax_inequalities, _ = jfu.ravel_pytree(sif2jax_inequalities)
 
-    # Check that the constraints match
-    assert np.allclose(pycutest_equalities, sif2jax_equalities, atol=atol)
-    assert np.allclose(pycutest_inequalities, sif2jax_inequalities, atol=atol)
+    if sif2jax_equalities is None:
+        msg = "Discrepancy: sif2jax has no equality constraints but pycutest does."
+        assert pycutest_equalities.size == 0, msg
+    else:
+        sif2jax_equalities = sif2jax_equalities.squeeze()
+        difference = pycutest_equalities - sif2jax_equalities
+        msg = (
+            f"Discrepancy: sif2jax and pycutest equality constraints differ. The max. "
+            f"difference at element {jnp.argmax(difference)} is {jnp.max(difference)}."
+        )
+        assert np.allclose(pycutest_equalities, sif2jax_equalities, atol=atol), msg
+
+    if sif2jax_inequalities is None:
+        msg = "Discrepancy: sif2jax has no inequality constraints but pycutest does."
+        assert pycutest_inequalities.size == 0, msg
+    else:
+        sif2jax_inequalities = sif2jax_inequalities.squeeze()
+        difference = pycutest_inequalities - sif2jax_inequalities
+        msg = (
+            f"Discrepancy: sif2jax and pycutest inequality constraints differ. The max."
+            f" difference at element {jnp.argmax(difference)} is {jnp.max(difference)}."
+        )
+        assert np.allclose(pycutest_inequalities, sif2jax_inequalities, atol=atol), msg
 
 
 def _jacobians_allclose(pycutest_jac, sif2jax_jac, is_eq_cons, *, atol):

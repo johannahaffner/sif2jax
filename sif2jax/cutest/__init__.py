@@ -64,7 +64,10 @@ from ._bounded_minimisation import (
     PFIT4LS as PFIT4LS,
     PRICE4B as PRICE4B,
     QUDLIN as QUDLIN,
+    TRIGON1B as TRIGON1B,
 )
+
+# TRIGON2B as TRIGON2B,  # TODO: Human review - tiny Hessian discrepancies
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
@@ -266,9 +269,15 @@ from ._constrained_minimisation import (
     ODFITS as ODFITS,
     # ORTHRDM2 as ORTHRDM2,  # TODO: Human review - singular Jacobian issues
     # ORTHRDS2 as ORTHRDS2,  # TODO: Human review - singular Jacobian issues
+    ORTHRDS2C as ORTHRDS2C,
     # ORTHREGA as ORTHREGA,  # TODO: Human review - formulation differences
+    ORTHREGB as ORTHREGB,
+    ORTHREGC as ORTHREGC,
     ORTHREGD as ORTHREGD,
+    ORTHREGE as ORTHREGE,
+    ORTHREGF as ORTHREGF,
     ORTHRGDM as ORTHRGDM,
+    ORTHRGDS as ORTHRGDS,
     PENTAGON as PENTAGON,
     POLAK1 as POLAK1,
     POLAK2 as POLAK2,
@@ -449,8 +458,14 @@ from ._nonlinear_equations import (
     SINVALNE as SINVALNE,
     # SSBRYBNDNE as SSBRYBNDNE,  # TODO: Human review needed - complex element structure
     TENFOLDTR as TENFOLDTR,
+    TRIGON1NE as TRIGON1NE,
+    # TRIGON2NE as TRIGON2NE,  # TODO: Human review - Jacobian tolerance 1.26e-05
+    YATP1CNE as YATP1CNE,
+    YATP1NE as YATP1NE,
 )
 
+# YATP2CNE as YATP2CNE,  # TODO: Human review - constraint ordering mismatch
+# YATP2SQ as YATP2SQ,  # TODO: Human review - constraint ordering mismatch
 # VANDERM1 as VANDERM1,  # TODO: Human review - mixed constraint types
 # VANDERM2 as VANDERM2,  # TODO: Human review - mixed constraint types
 from ._quadratic_problems import (
@@ -674,6 +689,10 @@ from ._unconstrained_minimisation import (
     WAYSEA1 as WAYSEA1,
     WAYSEA2 as WAYSEA2,
     WOODS as WOODS,
+    YATP1CLS as YATP1CLS,
+    YATP1LS as YATP1LS,
+    YATP2CLS as YATP2CLS,
+    # YATP2LS as YATP2LS,  # TODO: Human review - Hessian test failures
     ZANGWIL2 as ZANGWIL2,
 )
 
@@ -812,9 +831,15 @@ problems_dict = {
     "ODFITS": ODFITS(),
     # "ORTHRDM2": ORTHRDM2(),  # TODO: Human review - gradient issues
     # "ORTHRDS2": ORTHRDS2(),  # TODO: Human review - gradient issues
+    "ORTHRDS2C": ORTHRDS2C(),
     # "ORTHREGA": ORTHREGA(),  # TODO: Human review - complex formulation differences
-    "ORTHRGDM": ORTHRGDM(),
+    "ORTHREGB": ORTHREGB(),
+    "ORTHREGC": ORTHREGC(),
     "ORTHREGD": ORTHREGD(),
+    "ORTHREGE": ORTHREGE(),
+    "ORTHREGF": ORTHREGF(),
+    "ORTHRGDM": ORTHRGDM(),
+    "ORTHRGDS": ORTHRGDS(),
     "PENTAGON": PENTAGON(),
     "POLAK1": POLAK1(),
     "POLAK2": POLAK2(),
@@ -1146,10 +1171,21 @@ problems_dict = {
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
     "WOODS": WOODS(),
-    # "YATP2LS": YATP2LS(),  # TODO: Fix dimension mismatch
+    "YATP1CLS": YATP1CLS(),
+    "YATP1CNE": YATP1CNE(),
+    "YATP1LS": YATP1LS(),
+    "YATP1NE": YATP1NE(),
+    "YATP2CLS": YATP2CLS(),
+    # "YATP2CNE": YATP2CNE(),  # TODO: Human review - constraint ordering mismatch
+    # "YATP2LS": YATP2LS(),  # TODO: Human review - Hessian test failures
+    # "YATP2SQ": YATP2SQ(),  # TODO: Human review - constraint ordering mismatch
     "ZANGWIL2": ZANGWIL2(),
     "TRIGON1": TRIGON1(),
+    "TRIGON1B": TRIGON1B(),
+    "TRIGON1NE": TRIGON1NE(),
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
+    # "TRIGON2B": TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
+    # "TRIGON2NE": TRIGON2NE(),  # TODO: Human review - Jacobian tolerance 1.26e-05
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
     # "TORSIOND": TORSIOND(),  # TODO: Human review - objective mismatch

@@ -193,15 +193,24 @@ from .sinvalne import SINVALNE as SINVALNE
 # from .ssbrybndne import SSBRYBNDNE as SSBRYBNDNE
 from .tenfoldtr import TENFOLDTR as TENFOLDTR
 
-
 # TODO: Human review needed - mixed constraint types (equality/inequality)
 # from .vanderm1 import VANDERM1 as VANDERM1
 # from .vanderm2 import VANDERM2 as VANDERM2
-
-
 # TODO: Human review needed - originally had issues in constrained version
 # from .vanderm3 import VANDERM3 as VANDERM3
 # from .vanderm4 import VANDERM4 as VANDERM4
+from .trigon1ne import TRIGON1NE as TRIGON1NE
+
+# TODO: Human review needed - minor numerical tolerance issue (Jacobian diff 1.26e-05)
+# from .trigon2ne import TRIGON2NE as TRIGON2NE
+from .yatp1cne import YATP1CNE as YATP1CNE
+from .yatp1ne import YATP1NE as YATP1NE
+
+
+# TODO: Human review needed - constraint ordering mismatch with pycutest
+# from .yatp2cne import YATP2CNE as YATP2CNE
+# TODO: Human review needed - constraint ordering mismatch with pycutest
+# from .yatp2sq import YATP2SQ as YATP2SQ
 
 
 nonlinear_equations_problems = (
@@ -358,6 +367,12 @@ nonlinear_equations_problems = (
     POWELLBS(),
     POWELLSE(),
     POWELLSQ(),
+    TRIGON1NE(),
+    # TRIGON2NE(),  # TODO: Human review - minor Jacobian tolerance (1.26e-05)
+    YATP1CNE(),
+    YATP1NE(),
+    # YATP2CNE(),  # TODO: Human review - constraint ordering mismatch with pycutest
+    # YATP2SQ(),  # TODO: Human review - constraint ordering mismatch with pycutest
     # VANDERM1(),  # TODO: Human review needed - mixed constraint types
     # VANDERM2(),  # TODO: Human review needed - mixed constraint types
     # VANDERM3(),  # TODO: Human review needed - originally had issues

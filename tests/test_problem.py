@@ -10,9 +10,9 @@ import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
 
 from .helpers import (
-    _constraints_allclose,
-    _jacobians_allclose,
-    _try_except_evaluate,
+    _constraints_allclose,  # TODO(claude): remove underscore
+    _jacobians_allclose,  # TODO(claude): remove underscore
+    _try_except_evaluate,  # TODO(claude): remove underscore
     check_hprod_allclose,
     has_constraints,
     pycutest_jac_only,

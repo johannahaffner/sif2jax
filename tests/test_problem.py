@@ -154,6 +154,7 @@ class TestProblem:
                 jnp.zeros_like(problem.y0),
             )
         else:
+            # TODO(claude): implement Hessian-vector product test (same as above)
             pytest.skip("Skip Hessian test for large problems to save time and memory")
 
     def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
@@ -165,6 +166,7 @@ class TestProblem:
                 jnp.ones_like(problem.y0),
             )
         else:
+            # TODO(claude): implement Hessian-vector product test (same as above)
             pytest.skip("Skip Hessian test for large problems to save time and memory")
 
     def test_correct_constraint_dimensions(self, problem, pycutest_problem):

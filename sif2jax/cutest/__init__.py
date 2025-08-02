@@ -460,9 +460,9 @@ from ._nonlinear_equations import (
     TRIGON1NE as TRIGON1NE,
     # TRIGON2NE as TRIGON2NE,  # TODO: Human review - Jacobian tolerance 1.26e-05
     YATP1CNE as YATP1CNE,
+    YATP1NE as YATP1NE,
 )
 
-# YATP1NE as YATP1NE,  # TODO: Human review - segfault in CI
 # YATP2CNE as YATP2CNE,  # TODO: Human review - constraint ordering mismatch
 # YATP2SQ as YATP2SQ,  # TODO: Human review - constraint ordering mismatch
 # VANDERM1 as VANDERM1,  # TODO: Human review - mixed constraint types
@@ -1173,7 +1173,7 @@ problems_dict = {
     "YATP1CLS": YATP1CLS(),
     "YATP1CNE": YATP1CNE(),
     "YATP1LS": YATP1LS(),
-    # "YATP1NE": YATP1NE(),  # TODO: Human review - segfault in CI
+    "YATP1NE": YATP1NE(),
     "YATP2CLS": YATP2CLS(),
     # "YATP2CNE": YATP2CNE(),  # TODO: Human review - constraint ordering mismatch
     # "YATP2LS": YATP2LS(),  # TODO: Human review - Hessian test failures

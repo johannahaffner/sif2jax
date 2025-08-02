@@ -122,7 +122,7 @@ class TestProblem:
             sif2jax_hessian = jax.hessian(problem.objective)(problem.y0, problem.args)
             assert np.allclose(pycutest_hessian, sif2jax_hessian)
         else:
-            pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.x0))  # noqa: F841
+            pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))  # noqa: F841
             pytest.skip("Skip Hessian test for large problems to save time and memory")
 
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):

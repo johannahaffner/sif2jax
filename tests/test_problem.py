@@ -325,6 +325,14 @@ class TestProblem:
         else:
             pytest.skip("Problem has no constraints")
 
+    def test_with_sparse_hessian(self, problem, pycutest_problem):
+        """This test checks if the nonzero elements of the Hessian matrix match the ones
+        given by pycutest in BCOO representation.
+        """
+        print(pycutest_problem.ihess(np.asarray(problem.y0)))
+        print(pycutest_problem.isphess(np.asarray(problem.y0)))
+        pass
+
     # def test_correct_options(self, problem, pycutest_problem):
     #     """Test for multiple starting points - not yet implemented in pycutest."""
     #     print(pycutest.print_available_sif_params(problem.name))

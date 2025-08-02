@@ -309,3 +309,37 @@ def sif2jax_hprod(problem, y):
 
     hprod = jax.jit(hprod_).lower(y).compile()
     return hprod(y)
+
+
+def hprod_allclose(pycutest_hprod, sif2jax_hprod, problem_name, *, atol=1e-6):
+    """Compare pycutest and sif2jax Hessian-vector products for equality.
+
+    This function compares Hessian-vector products between pycutest and sif2jax
+    implementations. It's important to note that if the vector is all zeros
+    (which is the case for some problems' starting points), then the
+    Hessian-vector product H @ 0 = 0 is trivial and uninformative.
+
+    **Arguments:**
+
+    - `pycutest_hprod`: Hessian-vector product from pycutest
+    - `sif2jax_hprod`: Hessian-vector product from sif2jax
+    - `problem_name`: Name of the problem for error messages
+    - `atol`: Absolute tolerance for comparison (default: 1e-6)
+
+    **Raises:**
+
+    - `AssertionError`: If Hessian-vector products don't match within tolerance
+
+    **Note:**
+
+    pycutest implements its hprod method for the Hessian only if the problem
+    is unconstrained. For constrained problems, the Hessian used would be
+    the Hessian of the Lagrangian, which requires multiplier values.
+    """
+    difference = pycutest_hprod - sif2jax_hprod
+    msg = (
+        f"Mismatch in Hessian-vector product for {problem_name}. "
+        f"The max. difference is at element {jnp.argmax(difference)} "
+        f"with a value of {jnp.max(difference)}."
+    )
+    assert np.allclose(pycutest_hprod, sif2jax_hprod, atol=atol), msg

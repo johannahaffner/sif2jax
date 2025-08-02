@@ -14,6 +14,7 @@ from .helpers import (
     _jacobians_allclose,
     _try_except_evaluate,
     has_constraints,
+    hprod_allclose,
     pycutest_jac_only,
     sif2jax_hprod,
 )
@@ -104,23 +105,13 @@ class TestProblem:
             sif2jax_hessian = jax.hessian(problem.objective)(problem.y0, problem.args)
             assert np.allclose(pycutest_hessian, sif2jax_hessian)
         else:
-            # TODO(claude): Factor out this function into an hprod_allclose function
-            # that lives in the helpers module. Add the information in the comments to
-            # its docstring, including the fact that it is uninformative at the zero
-            # vector.
             if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
                 # Note that if the starting point y0 is all zeros (which is the case for
                 # some problems), then the Hessian-vector product defined as Hess @ y0
-                # is trivial and uninformative.)
+                # is trivial and uninformative.
                 pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))
                 sif2jax_hprod_result = sif2jax_hprod(problem, problem.y0)
-                difference = pycutest_hprod - sif2jax_hprod_result
-                msg = (
-                    f"Mismatch in Hessian-vector product for {problem.name}. "
-                    f"The max. difference is at element {jnp.argmax(difference)} "
-                    f"with a value of {jnp.max(difference)}."
-                )
-                assert np.allclose(pycutest_hprod, sif2jax_hprod_result), msg
+                hprod_allclose(pycutest_hprod, sif2jax_hprod_result, problem.name)
             else:
                 # pycutest implements its hprod method for the Hessian only if the
                 # problem is unconstrained. Otherwise the Hessian used in this method
@@ -159,13 +150,7 @@ class TestProblem:
             if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
                 pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))
                 sif2jax_hprod_result = sif2jax_hprod(problem, problem.y0)
-                difference = pycutest_hprod - sif2jax_hprod_result
-                msg = (
-                    f"Mismatch in Hessian-vector product for {problem.name}. "
-                    f"The max. difference is at element {jnp.argmax(difference)} "
-                    f"with a value of {jnp.max(difference)}."
-                )
-                assert np.allclose(pycutest_hprod, sif2jax_hprod_result), msg
+                hprod_allclose(pycutest_hprod, sif2jax_hprod_result, problem.name)
             else:
                 # pycutest implements its hprod method for the Hessian only if the
                 # problem is unconstrained. Otherwise the Hessian used in this method

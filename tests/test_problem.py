@@ -36,11 +36,18 @@ def _pycutest_jac_only(pycutest_problem):
     return jac_only
 
 
+# TODO(claude): make this a public function and move it to the helpers module.
 def _sif2jax_hprod(problem, y):
     """AOT compiled Hessian-vector product for sif2jax problems. By compiling the
     evaluation, we avoid the materialisation of the Hessian matrix, which would result
     in OOM errors for large problems.
     """
+
+    def hprod_(_y):
+        return jax.hessian(problem.objective)(_y, problem.args) @ _y
+
+    hprod = jax.jit(hprod_).lower(y).compile()
+    return hprod(y)
 
 
 @pytest.fixture(scope="class")
@@ -129,7 +136,14 @@ class TestProblem:
             assert np.allclose(pycutest_hessian, sif2jax_hessian)
         else:
             pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))  # noqa: F841
-            pytest.skip("Skip Hessian test for large problems to save time and memory")
+            sif2jax_hprod = _sif2jax_hprod(problem, problem.y0)
+            difference = pycutest_hprod - sif2jax_hprod
+            msg = (
+                f"Mismatch in Hessian-vector product for {problem.name}. "
+                f"The max. difference is at element {jnp.argmax(difference)} "
+                f"with a value of {jnp.max(difference)}."
+            )
+            assert np.allclose(pycutest_hprod, sif2jax_hprod), msg
 
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
         if problem.num_variables() < 1000:

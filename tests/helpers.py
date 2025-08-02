@@ -131,7 +131,13 @@ def _try_except_evaluate(
         assert pycutest_value is not None and sif2jax_value is not None
 
         if allclose_func is None:
-            assert np.allclose(pycutest_value, sif2jax_value, atol=atol)
+            difference = pycutest_value - sif2jax_value
+            msg = (
+                f"Discrepancy for problem {problem_name} at point {point}. "
+                f"The max. difference at element {jnp.argmax(difference)} is "
+                f"{jnp.max(difference)}."
+            )
+            assert np.allclose(pycutest_value, sif2jax_value, atol=atol), msg
         else:
             # Use custom comparison function (e.g., for constraints, Jacobians)
             # Pass atol along with other kwargs

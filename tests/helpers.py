@@ -6,7 +6,7 @@ import pytest
 import sif2jax
 
 
-def _try_except_evaluate(
+def try_except_evaluate(
     problem_name,
     sif2jax_func,
     pycutest_func,
@@ -146,7 +146,7 @@ def _try_except_evaluate(
             allclose_func(pycutest_value, sif2jax_value, atol=atol, **kwargs)
 
 
-def _constraints_allclose(
+def constraints_allclose(
     pycutest_constraints, sif2jax_constraints, is_eq_cons, *, atol
 ):
     """Compare pycutest and sif2jax constraint values for equality.
@@ -206,7 +206,7 @@ def _constraints_allclose(
         assert np.allclose(pycutest_inequalities, sif2jax_inequalities, atol=atol), msg
 
 
-def _jacobians_allclose(pycutest_jac, sif2jax_jac, is_eq_cons, *, atol):
+def jacobians_allclose(pycutest_jac, sif2jax_jac, is_eq_cons, *, atol):
     """Compare pycutest and sif2jax constraint Jacobians for equality.
 
     This function handles the different formats of Jacobians between pycutest and
@@ -306,33 +306,32 @@ def _sif2jax_hprod(problem, y):
     **Arguments:**
 
     - `problem`: A sif2jax problem instance
-    - `y`: The vector to multiply with the Hessian
+    - `y`: The point at which to evaluate the Hessian
 
     **Returns:**
 
-    - `Array`: The Hessian-vector product H @ y
+    - `Array`: The Hessian-vector product H(y) @ ones_like(y)
     """
 
     def hprod_(_y):
-        return jax.hessian(problem.objective)(_y, problem.args) @ _y
+        return jax.hessian(problem.objective)(_y, problem.args) @ jnp.ones_like(_y)
 
     hprod = jax.jit(hprod_).lower(y).compile()
     return hprod(y)
 
 
-def check_hprod_allclose(problem, pycutest_problem, *, atol=1e-6):
+def check_hprod_allclose(problem, pycutest_problem, point, *, atol=1e-6):
     """Compute and compare pycutest and sif2jax Hessian-vector products for equality.
 
-    This function computes Hessian-vector products H(y0) @ y0 for both pycutest and
-    sif2jax implementations and compares them, where H(y0) is the Hessian evaluated
-    at point y0. It's important to note that if the vector y0 is all zeros (which
-    is the case for some problems' starting points), then the Hessian-vector product
-    H(y0) @ 0 = 0 is trivial and uninformative.
+    This function computes Hessian-vector products H(point) @ ones for both pycutest and
+    sif2jax implementations and compares them, where H(point) is the Hessian evaluated
+    at the given point and ones is a vector of all ones.
 
     **Arguments:**
 
     - `problem`: A sif2jax problem instance
     - `pycutest_problem`: A pycutest problem instance
+    - `point`: The point at which to evaluate the Hessian
     - `atol`: Absolute tolerance for comparison (default: 1e-6)
 
     **Raises:**
@@ -341,17 +340,15 @@ def check_hprod_allclose(problem, pycutest_problem, *, atol=1e-6):
 
     **Note:**
 
-    pycutest implements its hprod method for the Hessian only if the problem
-    is unconstrained. For constrained problems, the Hessian used would be
-    the Hessian of the Lagrangian, which requires multiplier values.
+    pycutest implements its hprod method for the Hessian only if the problem is
+    unconstrained. For constrained problems, the Hessian used by pycutest is always the
+    Hessian of the Lagrangian, which requires multiplier values.
     """
     # Compute both hprods
     # Note: pycutest.hprod(p, x) computes H(x) @ p
-    # We need to specify both the vector and the evaluation point
-    pycutest_hprod = pycutest_problem.hprod(
-        np.asarray(problem.y0), np.asarray(problem.y0)
-    )
-    sif2jax_hprod = _sif2jax_hprod(problem, problem.y0)
+    # We use a vector of ones and evaluate the Hessian at the given point
+    pycutest_hprod = pycutest_problem.hprod(np.ones_like(point), np.asarray(point))
+    sif2jax_hprod = _sif2jax_hprod(problem, point)
 
     # Compare them
     difference = pycutest_hprod - sif2jax_hprod

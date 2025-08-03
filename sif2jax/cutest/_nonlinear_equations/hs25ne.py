@@ -73,12 +73,14 @@ class HS25NE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution from AMPL model shows approximately:
         # x1 = 50, x2 = 25, x3 = 1.5
         return jnp.array([50.0, 25.0, 1.5])
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

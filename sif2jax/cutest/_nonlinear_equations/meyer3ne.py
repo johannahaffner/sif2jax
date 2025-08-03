@@ -97,12 +97,14 @@ class MEYER3NE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # For nonlinear equations, the expected result is where residuals are zero
         # The actual solution is not provided in the SIF file
         return jnp.zeros(3, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

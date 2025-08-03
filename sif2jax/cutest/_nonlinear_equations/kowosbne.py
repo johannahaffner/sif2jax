@@ -88,11 +88,13 @@ class KOWOSBNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # From the literature, the solution is approximately:
         return jnp.array([0.192807, 0.191282, 0.123057, 0.136062])
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

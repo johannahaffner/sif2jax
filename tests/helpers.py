@@ -166,7 +166,7 @@ def constraints_allclose(
     Raises:
         AssertionError: If constraints don't match within tolerance
     """
-    import numpy as np
+    import numpy as np  # TODO(claude): move to top of file
 
     # Parse pycutest constraints using boolean mask
     pycutest_equalities = pycutest_constraints[is_eq_cons]  # pyright: ignore
@@ -320,6 +320,7 @@ def _sif2jax_hprod(problem, y):
     return hprod(y)
 
 
+# TODO(johanna): review this change for NaN/Inf handling
 def check_hprod_allclose(problem, pycutest_problem, point, *, atol=1e-6):
     """Compute and compare pycutest and sif2jax Hessian-vector products for equality.
 
@@ -350,13 +351,19 @@ def check_hprod_allclose(problem, pycutest_problem, point, *, atol=1e-6):
     pycutest_hprod = pycutest_problem.hprod(np.ones_like(point), np.asarray(point))
     sif2jax_hprod = _sif2jax_hprod(problem, point)
 
+    # TODO(claude): rename to just pycutest_nonfinite and sif2jax_nonfinite
     # Check for NaN or inf values
     pycutest_has_nonfinite = ~jnp.isfinite(pycutest_hprod)
     sif2jax_has_nonfinite = ~jnp.isfinite(sif2jax_hprod)
 
+    # TODO(claude): this test would be easier to read if we used jnp.any(...) directly
+    # instea of assigning it here. Remove the extra variable and use jnp.any() in the
+    # conditionals below.
     pycutest_any_nonfinite = jnp.any(pycutest_has_nonfinite)
     sif2jax_any_nonfinite = jnp.any(sif2jax_has_nonfinite)
 
+    # TODO(claude): (After jnp.any() change implemented): make this an if-elif-else
+    # structure to avoid the nested ifs and improve readability.
     if pycutest_any_nonfinite or sif2jax_any_nonfinite:
         if pycutest_any_nonfinite and sif2jax_any_nonfinite:
             # Both have NaN/inf - check if they're in the same places

@@ -85,7 +85,17 @@ class SPIN2OP(AbstractConstrainedMinimisation):
         return self.equality_constraints(y), jnp.array([], dtype=y.dtype)
 
     def equality_constraints(self, y: jnp.ndarray) -> jnp.ndarray:
-        """Compute the equality constraints."""
+        """Compute the equality constraints.
+
+        # TODO: Human review needed - vectorization complete but tests fail
+        # Status:
+        # - Fully vectorized implementation (no auxiliary variables)
+        # - Objective function passes all tests
+        # - Constraint tests fail at start and with test vectors
+        # Issues:
+        # - May be numerical precision issues with division by dist_sq
+        # - Could be sign convention differences with pycutest
+        """
         n = self.n
         mu = y[0]
         omega = y[1]

@@ -78,7 +78,16 @@ class SPIN2(AbstractNonlinearEquations):
         return self.equality_constraints(y), jnp.array([], dtype=y.dtype)
 
     def equality_constraints(self, y: jnp.ndarray) -> jnp.ndarray:
-        """Compute the equality constraints."""
+        """Compute the equality constraints.
+
+        # TODO: Human review needed - vectorization complete but tests fail
+        # Status:
+        # - Fully vectorized implementation (no auxiliary variables)
+        # - Constraint tests fail
+        # Issues:
+        # - Similar issues to SPIN2OP (same formulation)
+        # - May need to verify constraint sign conventions
+        """
         n = self.n
         mu = y[0]
         omega = y[1]

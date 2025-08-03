@@ -74,7 +74,20 @@ class SPINLS(AbstractUnconstrainedMinimisation):
         return None
 
     def objective(self, y: jnp.ndarray, args=None) -> jnp.ndarray:
-        """Compute the objective function (sum of squares of constraints)."""
+        """Compute the objective function (sum of squares of constraints).
+
+        # TODO: Human review needed - vectorization attempts
+        # Attempts made:
+        # 1. Full vectorization - failed gradient tests
+        # 2. Partial vectorization with jax.lax.scan - better but gradient fails
+        # Issues:
+        # - Auxiliary variables v_ij create complex gradient dependencies
+        # - Constraints use 1/v_ij^2 terms which cause gradient flow issues
+        # - Hessian-vector product test: large discrepancy (3937.08 at element 1157)
+        # Recommendation:
+        # - Consider reformulating without auxiliary variables (like SPIN2LS)
+        # - Or investigate numerical stabilization techniques for gradient computation
+        """
         n = self.n
         mu = y[0]
         omega = y[1]

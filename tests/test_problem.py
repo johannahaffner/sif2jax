@@ -99,7 +99,7 @@ class TestProblem:
         )
 
     def test_correct_hessian_at_start(self, problem, pycutest_problem):
-        if problem.num_variables() < 1000:
+        if problem.num_variables() <= 1000:
             pycutest_hessian = pycutest_problem.ihess(np.asarray(problem.y0))
             sif2jax_hessian = jax.hessian(problem.objective)(problem.y0, problem.args)
             assert np.allclose(pycutest_hessian, sif2jax_hessian)
@@ -108,7 +108,7 @@ class TestProblem:
                 # Note that if the starting point y0 is all zeros (which is the case for
                 # some problems), then the Hessian-vector product defined as Hess @ y0
                 # is trivial and uninformative.
-                if problem.num_variables() < 10_000:
+                if problem.num_variables() <= 10_000:
                     check_hprod_allclose(problem, pycutest_problem, problem.y0)
                 else:
                     pytest.skip(
@@ -128,7 +128,7 @@ class TestProblem:
                 pytest.skip(msg)
 
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
-        if problem.num_variables() < 1000:
+        if problem.num_variables() <= 1000:
             try_except_evaluate(
                 problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
@@ -137,7 +137,7 @@ class TestProblem:
             )
         else:
             if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
-                if problem.num_variables() < 10_000:
+                if problem.num_variables() <= 10_000:
                     check_hprod_allclose(
                         problem, pycutest_problem, jnp.zeros_like(problem.y0)
                     )
@@ -159,7 +159,7 @@ class TestProblem:
                 pytest.skip(msg)
 
     def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
-        if problem.num_variables() < 1000:
+        if problem.num_variables() <= 1000:
             try_except_evaluate(
                 problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
@@ -168,7 +168,7 @@ class TestProblem:
             )
         else:
             if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
-                if problem.num_variables() < 10_000:
+                if problem.num_variables() <= 10_000:
                     check_hprod_allclose(
                         problem, pycutest_problem, jnp.ones_like(problem.y0)
                     )

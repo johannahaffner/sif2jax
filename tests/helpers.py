@@ -323,10 +323,11 @@ def _sif2jax_hprod(problem, y):
 def check_hprod_allclose(problem, pycutest_problem, *, atol=1e-6):
     """Compute and compare pycutest and sif2jax Hessian-vector products for equality.
 
-    This function computes Hessian-vector products H @ y0 for both pycutest and
-    sif2jax implementations and compares them. It's important to note that if
-    the vector y0 is all zeros (which is the case for some problems' starting
-    points), then the Hessian-vector product H @ 0 = 0 is trivial and uninformative.
+    This function computes Hessian-vector products H(y0) @ y0 for both pycutest and
+    sif2jax implementations and compares them, where H(y0) is the Hessian evaluated
+    at point y0. It's important to note that if the vector y0 is all zeros (which
+    is the case for some problems' starting points), then the Hessian-vector product
+    H(y0) @ 0 = 0 is trivial and uninformative.
 
     **Arguments:**
 
@@ -345,7 +346,11 @@ def check_hprod_allclose(problem, pycutest_problem, *, atol=1e-6):
     the Hessian of the Lagrangian, which requires multiplier values.
     """
     # Compute both hprods
-    pycutest_hprod = pycutest_problem.hprod(np.asarray(problem.y0))
+    # Note: pycutest.hprod(p, x) computes H(x) @ p
+    # We need to specify both the vector and the evaluation point
+    pycutest_hprod = pycutest_problem.hprod(
+        np.asarray(problem.y0), np.asarray(problem.y0)
+    )
     sif2jax_hprod = _sif2jax_hprod(problem, problem.y0)
 
     # Compare them

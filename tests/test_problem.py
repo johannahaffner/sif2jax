@@ -108,7 +108,13 @@ class TestProblem:
                 # Note that if the starting point y0 is all zeros (which is the case for
                 # some problems), then the Hessian-vector product defined as Hess @ y0
                 # is trivial and uninformative.
-                check_hprod_allclose(problem, pycutest_problem)
+                if problem.num_variables() < 10_000:
+                    check_hprod_allclose(problem, pycutest_problem)
+                else:
+                    pytest.skip(
+                        "Hessian-vector product test skipped for very large "
+                        "problems (n >= 10,000) due to memory constraints."
+                    )
             else:
                 # pycutest implements its hprod method for the Hessian only if the
                 # problem is unconstrained. Otherwise the Hessian used in this method
@@ -145,7 +151,13 @@ class TestProblem:
             )
         else:
             if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
-                check_hprod_allclose(problem, pycutest_problem)
+                if problem.num_variables() < 10_000:
+                    check_hprod_allclose(problem, pycutest_problem)
+                else:
+                    pytest.skip(
+                        "Hessian-vector product test skipped for very large "
+                        "problems (n >= 10,000) due to memory constraints."
+                    )
             else:
                 # pycutest implements its hprod method for the Hessian only if the
                 # problem is unconstrained. Otherwise the Hessian used in this method

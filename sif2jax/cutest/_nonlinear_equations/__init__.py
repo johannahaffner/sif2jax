@@ -188,9 +188,9 @@ from .powersumne import POWERSUMNE as POWERSUMNE
 # from .res import RES as RES
 from .santa import SANTA as SANTA
 from .sinvalne import SINVALNE as SINVALNE
+from .spin import SPIN as SPIN
+from .spin2 import SPIN2 as SPIN2
 
-# from .spin import SPIN as SPIN  # TODO: Human review - constraints
-# from .spin2 import SPIN2 as SPIN2  # TODO: Human review - constraints
 # TODO: Human review needed - complex element structure
 # from .ssbrybndne import SSBRYBNDNE as SSBRYBNDNE
 from .tenfoldtr import TENFOLDTR as TENFOLDTR
@@ -359,8 +359,8 @@ nonlinear_equations_problems = (
     # RES(),  # TODO: Human review needed - mixed constraint types
     SANTA(),
     SINVALNE(),
-    # SPIN(),  # TODO: Human review needed - constraint formula issues
-    # SPIN2(),  # TODO: Human review needed - constraint formula issues
+    SPIN(),
+    SPIN2(),
     # SSBRYBNDNE(),  # TODO: Human review needed - complex element structure
     TENFOLDTR(),
     BOXBOD(),

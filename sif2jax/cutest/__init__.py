@@ -295,8 +295,8 @@ from ._constrained_minimisation import (
     SIMPLLPB as SIMPLLPB,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
-    # SPINOP as SPINOP,  # TODO: Human review needed - constraint formula issues
-    # SPIN2OP as SPIN2OP,  # TODO: Human review needed - constraint formula issues
+    SPIN2OP as SPIN2OP,
+    SPINOP as SPINOP,
     # STEENBRB as STEENBRB,  # TODO: Human review - gradient test failing
     # SIPOW3 as SIPOW3,  # TODO: Human review - constraint formulation issues
     # SIPOW4 as SIPOW4,  # TODO: Human review - constraint formulation issues
@@ -463,8 +463,8 @@ from ._nonlinear_equations import (
     # RES as RES,  # TODO: Human review needed - mixed constraint types
     SANTA as SANTA,
     SINVALNE as SINVALNE,
-    # SPIN as SPIN,  # TODO: Human review needed - constraint formula issues
-    # SPIN2 as SPIN2,  # TODO: Human review needed - constraint formula issues
+    SPIN as SPIN,
+    SPIN2 as SPIN2,
     # SSBRYBNDNE as SSBRYBNDNE,  # TODO: Human review needed - complex element structure
     TENFOLDTR as TENFOLDTR,
     TRIGON1NE as TRIGON1NE,
@@ -702,8 +702,8 @@ from ._unconstrained_minimisation import (
     ROSZMAN1LS as ROSZMAN1LS,
     S308 as S308,
     SISSER as SISSER,
-    # SPINLS as SPINLS,  # TODO: Human review needed - constraint formula issues
-    # SPIN2LS as SPIN2LS,  # TODO: Human review needed - constraint formula issues
+    SPIN2LS as SPIN2LS,
+    SPINLS as SPINLS,
     # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
     # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
@@ -881,8 +881,8 @@ problems_dict = {
     "SIMPLLPB": SIMPLLPB(),
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
-    # "SPINOP": SPINOP(),  # TODO: Human review needed - constraint formula issues
-    # "SPIN2OP": SPIN2OP(),  # TODO: Human review needed - constraint formula issues
+    "SPINOP": SPINOP(),
+    "SPIN2OP": SPIN2OP(),
     # "SIPOW3": SIPOW3(),  # TODO: Human review - constraint formulation issues
     # "SIPOW4": SIPOW4(),  # TODO: Human review - constraint formulation issues
     # "VANDERM1": VANDERM1(),  # TODO: Human review - mixed constraint types
@@ -1212,8 +1212,8 @@ problems_dict = {
     "ROSZMAN1LS": ROSZMAN1LS(),
     "S308": S308(),
     "SISSER": SISSER(),
-    # "SPINLS": SPINLS(),  # TODO: Human review needed - constraint formula issues
-    # "SPIN2LS": SPIN2LS(),  # TODO: Human review needed - constraint formula issues
+    "SPINLS": SPINLS(),
+    "SPIN2LS": SPIN2LS(),
     # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     # "TENBARS4": TENBARS4(),  # TODO: Human review - pycutest Jacobian inconsistency
     "10FOLDTRLS": TENFOLDTRLS(),
@@ -1425,8 +1425,8 @@ problems_dict = {
     # "RES": RES(),  # TODO: Human review needed - mixed constraint types
     "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),
-    # "SPIN": SPIN(),  # TODO: Human review needed - constraint formula issues
-    # "SPIN2": SPIN2(),  # TODO: Human review needed - constraint formula issues
+    "SPIN": SPIN(),
+    "SPIN2": SPIN2(),
     # "SSBRYBNDNE": SSBRYBNDNE(),  # TODO: Human review - complex element structure
     # "STEENBRB": STEENBRB(),  # TODO: Human review - gradient test failing
     "10FOLDTR": TENFOLDTR(),

@@ -247,9 +247,9 @@ from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .s308 import S308 as S308
 from .sisser import SISSER as SISSER
+from .spin2ls import SPIN2LS as SPIN2LS
+from .spinls import SPINLS as SPINLS
 
-# from .spinls import SPINLS as SPINLS  # TODO: Human review - constraints
-# from .spin2ls import SPIN2LS as SPIN2LS  # TODO: Human review - constraints
 # TODO: Human review needed - complex matrix multiplication formulation
 # from .spmsrtls import SPMSRTLS as SPMSRTLS
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
@@ -483,8 +483,8 @@ unconstrained_minimisation_problems = (
     ROSZMAN1LS(),
     S308(),
     SISSER(),
-    # SPINLS(),  # TODO: Human review needed - constraint formula issues
-    # SPIN2LS(),  # TODO: Human review needed - constraint formula issues
+    SPINLS(),
+    SPIN2LS(),
     # SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS(),
     # WATSON(),  # TODO: Human review - Hessian computation issues

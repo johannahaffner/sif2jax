@@ -102,23 +102,29 @@ class SPINLS(AbstractUnconstrainedMinimisation):
         r_constraints = jnp.zeros(n, dtype=y.dtype)
         i_constraints = jnp.zeros(n, dtype=y.dtype)
 
-        for j in range(n):
-            r_j = -mu * x[j] + omega * y_coord[j]
-            i_j = -mu * y_coord[j] - omega * x[j]
+        for i in range(n):
+            # Base terms
+            r_i = -mu * x[i] + omega * y_coord[i]
+            i_i = -mu * y_coord[i] - omega * x[i]
 
-            # Sum over k != j
-            for k in range(n):
-                if k != j:
-                    if k < j:
-                        v_jk_sq = v_matrix[j, k] ** 2
-                    else:
-                        v_jk_sq = v_matrix[k, j] ** 2
+            # Sum over j < i
+            for j in range(i):
+                v_ij_sq = v_matrix[i, j] ** 2
+                # RY(i,j) with coefficient +1.0
+                r_i += (y_coord[i] - y_coord[j]) / v_ij_sq
+                # RX(i,j) with coefficient -1.0
+                i_i -= (x[i] - x[j]) / v_ij_sq
 
-                    r_j += (y_coord[j] - y_coord[k]) / v_jk_sq
-                    i_j -= (x[j] - x[k]) / v_jk_sq
+            # Sum over j > i
+            for j in range(i + 1, n):
+                v_ji_sq = v_matrix[j, i] ** 2
+                # RY(j,i) with coefficient -1.0
+                r_i -= (y_coord[j] - y_coord[i]) / v_ji_sq
+                # RX(j,i) with coefficient +1.0
+                i_i += (x[j] - x[i]) / v_ji_sq
 
-            r_constraints = r_constraints.at[j].set(r_j)
-            i_constraints = i_constraints.at[j].set(i_j)
+            r_constraints = r_constraints.at[i].set(r_i)
+            i_constraints = i_constraints.at[i].set(i_i)
 
         # Compute m_ij constraints: -v_ij^2 + (x_i - x_j)^2 + (y_i - y_j)^2 = 0
         m_constraints = []

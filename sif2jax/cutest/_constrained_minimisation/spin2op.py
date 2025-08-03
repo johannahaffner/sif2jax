@@ -104,21 +104,28 @@ class SPIN2OP(AbstractConstrainedMinimisation):
         r_constraints = jnp.zeros(n, dtype=y.dtype)
         i_constraints = jnp.zeros(n, dtype=y.dtype)
 
-        for j in range(n):
-            r_j = -mu * x[j] + omega * y_coord[j]
-            i_j = -mu * y_coord[j] - omega * x[j]
+        for i in range(n):
+            # Base terms
+            r_i = -mu * x[i] + omega * y_coord[i]
+            i_i = -mu * y_coord[i] - omega * x[i]
 
-            # Sum over k != j
-            for k in range(n):
-                if k != j:
-                    dx = x[j] - x[k]
-                    dy = y_coord[j] - y_coord[k]
-                    dist_sq = dx**2 + dy**2
+            # Sum over j < i
+            for j in range(i):
+                dx = x[i] - x[j]
+                dy = y_coord[i] - y_coord[j]
+                dist_sq = dx**2 + dy**2
+                r_i += dy / dist_sq  # +1.0 coefficient
+                i_i -= dx / dist_sq  # -1.0 coefficient
 
-                    r_j += dy / dist_sq
-                    i_j -= dx / dist_sq
+            # Sum over j > i
+            for j in range(i + 1, n):
+                dx = x[j] - x[i]
+                dy = y_coord[j] - y_coord[i]
+                dist_sq = dx**2 + dy**2
+                r_i -= dy / dist_sq  # -1.0 coefficient
+                i_i += dx / dist_sq  # +1.0 coefficient
 
-            r_constraints = r_constraints.at[j].set(r_j)
-            i_constraints = i_constraints.at[j].set(i_j)
+            r_constraints = r_constraints.at[i].set(r_i)
+            i_constraints = i_constraints.at[i].set(i_i)
 
         return jnp.concatenate([r_constraints, i_constraints])

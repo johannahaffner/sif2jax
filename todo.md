@@ -50,7 +50,6 @@ Give either one or zero points according to the criteria above. Then annotate th
 - (3) OET* - Score: 2 (test problems, no subset, no data, family size: 7)
 - (3) OBST* - Score: 2 (obstacle problems, no subset, no data, family size: 5)
 - (3) NET* - Score: 2 (network problems, no subset, no data, family size: 4)
-- (3) NCVX* - Score: 2 (non-convex QP, no subset, no data, family size: 12)
 - (3) MSS* - Score: 2 (mass-spring systems, no subset, no data, family size: 3)
 - (3) MPC* - Score: 2 (MPC problems, no subset, no data, family size: 16)
 - (3) METHAN* - Score: 2 (methane problems, no subset, moderate data, family size: 4)

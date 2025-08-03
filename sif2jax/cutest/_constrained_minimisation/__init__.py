@@ -267,6 +267,8 @@ from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
+# from .spinop import SPINOP as SPINOP  # TODO: Human review - constraints
+# from .spin2op import SPIN2OP as SPIN2OP  # TODO: Human review - constraints
 # TODO: STEENBRB needs human review - gradient test failing
 # from .steenbrb import STEENBRB as STEENBRB
 # TODO: SIPOW3 needs human review - constraint formulation issues
@@ -454,6 +456,8 @@ constrained_minimisation_problems = (
     SIMPLLPB(),
     SIPOW1(),
     SIPOW2(),
+    # SPINOP(),  # TODO: Human review needed - constraint formula issues
+    # SPIN2OP(),  # TODO: Human review needed - constraint formula issues
     # STEENBRB(),  # TODO: Human review - gradient test failing
     # SIPOW3(),  # TODO: Human review - constraint formulation issues
     # SIPOW4(),  # TODO: Human review - constraint formulation issues

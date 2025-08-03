@@ -63,12 +63,14 @@ class EGGCRATENE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # For this problem, the solution would be where all residuals are zero
         # This occurs at x=0, y=0
         return jnp.zeros(self.n, dtype=jnp.float64)
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

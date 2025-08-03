@@ -395,12 +395,14 @@ class KOEBHELBNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # From the original problem, a reasonable solution is around:
         # N = 2.5, A = 0.2, B = 0.7
         return jnp.array([2.5, 0.2, 0.7])
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

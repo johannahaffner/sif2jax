@@ -53,11 +53,13 @@ class DENSCHNDNE(AbstractNonlinearEquations):
         """Additional arguments for the residual function."""
         return None
 
+    @property
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Solution is not provided in the SIF file
         return self.starting_point()
 
+    @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
         # For nonlinear equations with pycutest formulation, this is always zero

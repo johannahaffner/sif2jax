@@ -106,10 +106,15 @@ from ._constrained_minimisation import (
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
     CSFI1 as CSFI1,
     CSFI2 as CSFI2,
-    CVXQP1 as CVXQP1,
     DALLASS as DALLASS,
     DECONVC as DECONVC,
     DTOC1L as DTOC1L,
+    DTOC1NA as DTOC1NA,
+    DTOC1NB as DTOC1NB,
+    DTOC1NC as DTOC1NC,
+    DTOC1ND as DTOC1ND,
+    DTOC2 as DTOC2,
+    # DTOC3 as DTOC3,  # TODO: Human review - fixed variables differ from pycutest
     ELATTAR as ELATTAR,
     # EXPFITA as EXPFITA,  # TODO: Human review - fundamental formulation differences
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
@@ -469,9 +474,27 @@ from ._nonlinear_equations import (
 # VANDERM1 as VANDERM1,  # TODO: Human review - mixed constraint types
 # VANDERM2 as VANDERM2,  # TODO: Human review - mixed constraint types
 from ._quadratic_problems import (
+    bounded_quadratic_problems as bounded_quadratic_problems,
+    constrained_quadratic_problems as constrained_quadratic_problems,
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
+    CVXBQP1 as CVXBQP1,
+    CVXQP1 as CVXQP1,
+    CVXQP2 as CVXQP2,
+    CVXQP3 as CVXQP3,
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
+    NCVXBQP1 as NCVXBQP1,
+    NCVXBQP2 as NCVXBQP2,
+    NCVXBQP3 as NCVXBQP3,
+    NCVXQP1 as NCVXQP1,
+    NCVXQP2 as NCVXQP2,
+    NCVXQP3 as NCVXQP3,
+    NCVXQP4 as NCVXQP4,
+    NCVXQP5 as NCVXQP5,
+    NCVXQP6 as NCVXQP6,
+    NCVXQP7 as NCVXQP7,
+    NCVXQP8 as NCVXQP8,
+    NCVXQP9 as NCVXQP9,
     QPBAND as QPBAND,
     quadratic_problems as quadratic_problems,
     TAME as TAME,
@@ -985,13 +1008,22 @@ problems_dict = {
     "CURLY10": CURLY10(),
     "CURLY20": CURLY20(),
     "CURLY30": CURLY30(),
+    "CVXBQP1": CVXBQP1(),
     "CVXQP1": CVXQP1(),
+    "CVXQP2": CVXQP2(),
+    "CVXQP3": CVXQP3(),
     # "CYCLOOCFLS": CYCLOOCFLS(),  # TODO: Human review - times out with default p=10000
     "DALLASS": DALLASS(),
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
     "DECONVC": DECONVC(),
     "DTOC1L": DTOC1L(),
+    "DTOC1NA": DTOC1NA(),
+    "DTOC1NB": DTOC1NB(),
+    "DTOC1NC": DTOC1NC(),
+    "DTOC1ND": DTOC1ND(),
+    "DTOC2": DTOC2(),
+    # "DTOC3": DTOC3(),  # TODO: Human review - fixed variables differ from pycutest
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),
@@ -1117,6 +1149,18 @@ problems_dict = {
     "MARATOSB": MARATOSB(),
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
+    "NCVXBQP1": NCVXBQP1(),
+    "NCVXBQP2": NCVXBQP2(),
+    "NCVXBQP3": NCVXBQP3(),
+    "NCVXQP1": NCVXQP1(),
+    "NCVXQP2": NCVXQP2(),
+    "NCVXQP3": NCVXQP3(),
+    "NCVXQP4": NCVXQP4(),
+    "NCVXQP5": NCVXQP5(),
+    "NCVXQP6": NCVXQP6(),
+    "NCVXQP7": NCVXQP7(),
+    "NCVXQP8": NCVXQP8(),
+    "NCVXQP9": NCVXQP9(),
     # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),
@@ -1381,12 +1425,29 @@ def get_problem(name: str):
     return problems_dict.get(name, None)  # TODO: try except with nicer error message
 
 
-constrained_minimisation_problems += quadratic_problems
+# Gather problems into categories
+# Note: While mathematically bounds are a type of constraint, we keep bounded problems
+# separate from constrained problems in our API for cleaner problem categorization
+# and to maintain clear inheritance hierarchies.
+#
+# Bounded problems include:
+# - bounded minimisation problems (bounds only)
+# - bounded quadratic problems (quadratic objective with bounds only)
+#
+# Constrained problems include:
+# - constrained minimisation problems (equality/inequality constraints, may have bounds)
+# - constrained quadratic problems (quadratic objective with constraints)
 
+# Add bounded quadratic problems to bounded minimisation problems
+bounded_minimisation_problems += bounded_quadratic_problems
+
+# Add constrained quadratic problems to constrained minimisation problems
+constrained_minimisation_problems += constrained_quadratic_problems
+
+# Combine all problem categories
 problems = (
     unconstrained_minimisation_problems
     + bounded_minimisation_problems
     + constrained_minimisation_problems
     + nonlinear_equations_problems
-    + quadratic_problems
 )

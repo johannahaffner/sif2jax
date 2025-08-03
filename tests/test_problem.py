@@ -9,33 +9,14 @@ import pycutest  # pyright: ignore[reportMissingImports]  - test runs in contain
 import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
 
-
-# Helper function to check if a problem has constraints
-def _has_constraints(problem):
-    return isinstance(
-        problem,
-        (sif2jax.AbstractConstrainedMinimisation, sif2jax.AbstractNonlinearEquations),
-    )
-
-
-from .helpers import _constraints_allclose, _jacobians_allclose, _try_except_evaluate
-
-
-def _pycutest_jac_only(pycutest_problem):
-    """Extract just the Jacobian from pycutest cons() function.
-
-    Returns a function that takes a point and returns only the Jacobian matrix,
-    discarding the constraint values.
-    """
-
-    def jac_only(point):
-        _, jac = pycutest_problem.cons(point, gradient=True)
-        return jac
-
-    return jac_only
-
-
-# pytest_generate_tests is now handled in conftest.py
+from .helpers import (
+    check_hprod_allclose,
+    constraints_allclose,
+    has_constraints,
+    jacobians_allclose,
+    pycutest_jac_only,
+    try_except_evaluate,
+)
 
 
 @pytest.fixture(scope="class")
@@ -81,7 +62,7 @@ class TestProblem:
         assert np.allclose(pycutest_value, sif2jax_value)
 
     def test_correct_objective_zero_vector(self, problem, pycutest_problem):
-        _try_except_evaluate(
+        try_except_evaluate(
             problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
@@ -89,7 +70,7 @@ class TestProblem:
         )
 
     def test_correct_objective_ones_vector(self, problem, pycutest_problem):
-        _try_except_evaluate(
+        try_except_evaluate(
             problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: problem.objective(x, problem.args),
             pycutest_problem.obj,
@@ -102,7 +83,7 @@ class TestProblem:
         assert np.allclose(pycutest_gradient, sif2jax_gradient)
 
     def test_correct_gradient_zero_vector(self, problem, pycutest_problem):
-        _try_except_evaluate(
+        try_except_evaluate(
             problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
@@ -110,7 +91,7 @@ class TestProblem:
         )
 
     def test_correct_gradient_ones_vector(self, problem, pycutest_problem):
-        _try_except_evaluate(
+        try_except_evaluate(
             problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
@@ -118,34 +99,95 @@ class TestProblem:
         )
 
     def test_correct_hessian_at_start(self, problem, pycutest_problem):
-        if problem.num_variables() < 1000:
-            pycutest_hessian = pycutest_problem.ihess(pycutest_problem.x0)
+        if problem.num_variables() <= 1000:
+            pycutest_hessian = pycutest_problem.ihess(np.asarray(problem.y0))
             sif2jax_hessian = jax.hessian(problem.objective)(problem.y0, problem.args)
             assert np.allclose(pycutest_hessian, sif2jax_hessian)
         else:
-            pytest.skip("Skip Hessian test for large problems to save time and memory")
+            if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                # Note that if the starting point y0 is all zeros (which is the case for
+                # some problems), then the Hessian-vector product defined as Hess @ y0
+                # is trivial and uninformative.
+                if problem.num_variables() <= 10_000:
+                    check_hprod_allclose(problem, pycutest_problem, problem.y0)
+                else:
+                    pytest.skip(
+                        "Hessian-vector product test skipped for very large "
+                        "problems (n >= 10,000) due to memory constraints."
+                    )
+            else:
+                # pycutest implements its hprod method for the Hessian only if the
+                # problem is unconstrained. Otherwise the Hessian used in this method
+                # is the Hessian of the Lagrangian, and multiplier values must be
+                # provided. We only test the Hessians in this method here.
+                msg = (
+                    "Hessian-vector product test not implemented for constrained "
+                    "problems that require values for the dual variables to compute "
+                    "the Hessian of the Lagrangian. "
+                )
+                pytest.skip(msg)
 
     def test_correct_hessian_zero_vector(self, problem, pycutest_problem):
-        if problem.num_variables() < 1000:
-            _try_except_evaluate(
+        if problem.num_variables() <= 1000:
+            try_except_evaluate(
                 problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.zeros_like(problem.y0),
             )
         else:
-            pytest.skip("Skip Hessian test for large problems to save time and memory")
+            if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                if problem.num_variables() <= 10_000:
+                    check_hprod_allclose(
+                        problem, pycutest_problem, jnp.zeros_like(problem.y0)
+                    )
+                else:
+                    pytest.skip(
+                        "Hessian-vector product test skipped for very large "
+                        "problems (n >= 10,000) due to memory constraints."
+                    )
+            else:
+                # pycutest implements its hprod method for the Hessian only if the
+                # problem is unconstrained. Otherwise the Hessian used in this method
+                # is the Hessian of the Lagrangian, and multiplier values must be
+                # provided. We only test the Hessians in this method here.
+                msg = (
+                    "Hessian-vector product test not implemented for constrained "
+                    "problems that require values for the dual variables to compute "
+                    "the Hessian of the Lagrangian. "
+                )
+                pytest.skip(msg)
 
     def test_correct_hessian_ones_vector(self, problem, pycutest_problem):
-        if problem.num_variables() < 1000:
-            _try_except_evaluate(
+        if problem.num_variables() <= 1000:
+            try_except_evaluate(
                 problem.__class__.__name__,  # sif2jax name (e.g. TENFOLD not 10FOLD)
                 lambda x: jax.hessian(problem.objective)(x, problem.args),
                 pycutest_problem.ihess,
                 jnp.ones_like(problem.y0),
             )
         else:
-            pytest.skip("Skip Hessian test for large problems to save time and memory")
+            if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                if problem.num_variables() <= 10_000:
+                    check_hprod_allclose(
+                        problem, pycutest_problem, jnp.ones_like(problem.y0)
+                    )
+                else:
+                    pytest.skip(
+                        "Hessian-vector product test skipped for very large "
+                        "problems (n >= 10,000) due to memory constraints."
+                    )
+            else:
+                # pycutest implements its hprod method for the Hessian only if the
+                # problem is unconstrained. Otherwise the Hessian used in this method
+                # is the Hessian of the Lagrangian, and multiplier values must be
+                # provided. We only test the Hessians in this method here.
+                msg = (
+                    "Hessian-vector product test not implemented for constrained "
+                    "problems that require values for the dual variables to compute "
+                    "the Hessian of the Lagrangian. "
+                )
+                pytest.skip(msg)
 
     def test_correct_constraint_dimensions(self, problem, pycutest_problem):
         num_equalities, num_inequalities, _ = problem.num_constraints()
@@ -166,7 +208,7 @@ class TestProblem:
             assert pycutest_inequalities.size == num_inequalities
 
     def test_nontrivial_constraints(self, problem):
-        if _has_constraints(problem):
+        if has_constraints(problem):
             equalities, inequalities = problem.constraint(problem.y0)
             # Check that the problem is not mistakenly classified as constrained
             # If both elements of the tuple are None, the problem is unconstrained or
@@ -227,14 +269,14 @@ class TestProblem:
             pytest.skip("Problem has no bounds defined.")
 
     def test_correct_constraints_at_start(self, problem, pycutest_problem):
-        if _has_constraints(problem):
+        if has_constraints(problem):
             assert pycutest_problem.m > 0, "Problem should have constraints."
 
             pycutest_constraints = pycutest_problem.cons(pycutest_problem.x0)
             sif2jax_constraints = problem.constraint(problem.y0)
 
             # Check that the constraints match
-            _constraints_allclose(
+            constraints_allclose(
                 pycutest_constraints,
                 sif2jax_constraints,
                 pycutest_problem.is_eq_cons,
@@ -244,13 +286,13 @@ class TestProblem:
             pytest.skip("Problem has no constraints")
 
     def test_correct_constraints_zero_vector(self, problem, pycutest_problem):
-        if _has_constraints(problem):
-            _try_except_evaluate(
+        if has_constraints(problem):
+            try_except_evaluate(
                 problem.__class__.__name__,
                 lambda x: problem.constraint(x),
                 pycutest_problem.cons,
                 jnp.zeros_like(problem.y0),
-                allclose_func=lambda p, s, **kwargs: _constraints_allclose(
+                allclose_func=lambda p, s, **kwargs: constraints_allclose(
                     p, s, pycutest_problem.is_eq_cons, **kwargs
                 ),
             )
@@ -258,13 +300,13 @@ class TestProblem:
             pytest.skip("Problem has no constraints")
 
     def test_correct_constraints_ones_vector(self, problem, pycutest_problem):
-        if _has_constraints(problem):
-            _try_except_evaluate(
+        if has_constraints(problem):
+            try_except_evaluate(
                 problem.__class__.__name__,
                 lambda x: problem.constraint(x),
                 pycutest_problem.cons,
                 jnp.ones_like(problem.y0),
-                allclose_func=lambda p, s, **kwargs: _constraints_allclose(
+                allclose_func=lambda p, s, **kwargs: constraints_allclose(
                     p, s, pycutest_problem.is_eq_cons, **kwargs
                 ),
             )
@@ -272,15 +314,15 @@ class TestProblem:
             pytest.skip("Problem has no constraints")
 
     def test_correct_constraint_jacobian_at_start(self, problem, pycutest_problem):
-        if _has_constraints(problem):
+        if has_constraints(problem):
             constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
             if problem.y0.size * constraints.size < 1_000_000:
-                _try_except_evaluate(
+                try_except_evaluate(
                     problem.__class__.__name__,
                     lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
-                    _pycutest_jac_only(pycutest_problem),
+                    pycutest_jac_only(pycutest_problem),
                     problem.y0,
-                    allclose_func=lambda p, s, **kwargs: _jacobians_allclose(
+                    allclose_func=lambda p, s, **kwargs: jacobians_allclose(
                         p, s, pycutest_problem.is_eq_cons, **kwargs
                     ),
                 )
@@ -290,15 +332,15 @@ class TestProblem:
             pytest.skip("Problem has no constraints")
 
     def test_correct_constraint_jacobian_zero_vector(self, problem, pycutest_problem):
-        if _has_constraints(problem):
+        if has_constraints(problem):
             constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
             if problem.y0.size * constraints.size < 1_000_000:
-                _try_except_evaluate(
+                try_except_evaluate(
                     problem.__class__.__name__,
                     lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
-                    _pycutest_jac_only(pycutest_problem),
+                    pycutest_jac_only(pycutest_problem),
                     jnp.zeros_like(problem.y0),
-                    allclose_func=lambda p, s, **kwargs: _jacobians_allclose(
+                    allclose_func=lambda p, s, **kwargs: jacobians_allclose(
                         p, s, pycutest_problem.is_eq_cons, **kwargs
                     ),
                 )
@@ -308,15 +350,15 @@ class TestProblem:
             pytest.skip("Problem has no constraints")
 
     def test_correct_constraint_jacobian_ones_vector(self, problem, pycutest_problem):
-        if _has_constraints(problem):
+        if has_constraints(problem):
             constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
             if problem.y0.size * constraints.size < 1_000_000:
-                _try_except_evaluate(
+                try_except_evaluate(
                     problem.__class__.__name__,
                     lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
-                    _pycutest_jac_only(pycutest_problem),
+                    pycutest_jac_only(pycutest_problem),
                     jnp.ones_like(problem.y0),
-                    allclose_func=lambda p, s, **kwargs: _jacobians_allclose(
+                    allclose_func=lambda p, s, **kwargs: jacobians_allclose(
                         p, s, pycutest_problem.is_eq_cons, **kwargs
                     ),
                 )
@@ -358,7 +400,7 @@ class TestProblem:
             raise RuntimeError(f"Vmap failed for {problem.name}") from e
 
     def test_type_annotation_constraint(self, problem):
-        if _has_constraints(problem):
+        if has_constraints(problem):
             signature = inspect.signature(problem.constraint)
             # No union types in return type hints of concrete implementations
             assert str(signature).split("->")[-1].strip().find("|") == -1

@@ -46,10 +46,16 @@ from .chaconn2 import CHACONN2 as CHACONN2
 # from .concon import CONCON as CONCON
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
-from .cvxqp1 import CVXQP1 as CVXQP1
 from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
 from .dtoc1l import DTOC1L as DTOC1L
+from .dtoc1na import DTOC1NA as DTOC1NA
+from .dtoc1nb import DTOC1NB as DTOC1NB
+from .dtoc1nc import DTOC1NC as DTOC1NC
+from .dtoc1nd import DTOC1ND as DTOC1ND
+from .dtoc2 import DTOC2 as DTOC2
+
+# from .dtoc3 import DTOC3 as DTOC3  # TODO: Human review - fixed variables
 from .elattar import ELATTAR as ELATTAR
 from .expfita import EXPFITA as EXPFITA
 from .expfitb import EXPFITB as EXPFITB
@@ -303,10 +309,15 @@ constrained_minimisation_problems = (
     # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
     CSFI2(),
-    CVXQP1(),
     DALLASS(),
     DECONVC(),
     DTOC1L(),
+    DTOC1NA(),
+    DTOC1NB(),
+    DTOC1NC(),
+    DTOC1ND(),
+    DTOC2(),
+    # DTOC3(),  # TODO: Human review - fixed variables differ from pycutest
     ELATTAR(),
     # EXPFITA(),  # TODO: Human review - fundamental formulation differences
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences

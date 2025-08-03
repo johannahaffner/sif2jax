@@ -26,7 +26,7 @@ def test_get_problem2():
 
 @pytest.mark.parametrize("problem_", sif2jax.bounded_quadratic_problems)
 def test_bounded_quadratic_category(problem_):
-    assert isinstance(problem_, sif2jax.AbstractBoundedQuadraticMinimisation)
+    assert isinstance(problem_, sif2jax.AbstractBoundedQuadraticProblem)
     assert isinstance(problem_, sif2jax.AbstractBoundedMinimisation)
 
 

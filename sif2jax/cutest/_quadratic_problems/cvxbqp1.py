@@ -2,10 +2,10 @@ import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractBoundedQuadraticMinimisation
+from ..._problem import AbstractBoundedQuadraticProblem
 
 
-class CVXBQP1(AbstractBoundedQuadraticMinimisation):
+class CVXBQP1(AbstractBoundedQuadraticProblem):
     """CVXBQP1 problem - a convex bound constrained quadratic program.
 
     A convex bound constrained quadratic program.

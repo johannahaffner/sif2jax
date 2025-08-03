@@ -1,6 +1,6 @@
 from ._problem import (
     AbstractBoundedMinimisation as AbstractBoundedMinimisation,
-    AbstractBoundedQuadraticMinimisation as AbstractBoundedQuadraticMinimisation,
+    AbstractBoundedQuadraticProblem as AbstractBoundedQuadraticProblem,
     AbstractConstrainedMinimisation as AbstractConstrainedMinimisation,
     AbstractConstrainedQuadraticProblem as AbstractConstrainedQuadraticProblem,
     AbstractNonlinearEquations as AbstractNonlinearEquations,

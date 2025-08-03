@@ -235,7 +235,7 @@ class AbstractConstrainedQuadraticProblem(AbstractConstrainedMinimisation[_Y]):
     pass
 
 
-class AbstractBoundedQuadraticMinimisation(AbstractBoundedMinimisation[_Y]):
+class AbstractBoundedQuadraticProblem(AbstractBoundedMinimisation[_Y]):
     """Abstract base class for bounded quadratic programming problems.
 
     These are problems where:

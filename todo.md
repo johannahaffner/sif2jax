@@ -114,3 +114,7 @@ Give either one or zero points according to the criteria above. Then annotate th
 - HAHN1 - Thermal expansion data
 - BENNETT5 - Bennett's data (already implemented)
 - STRATEC - Strategic planning data
+
+## Higher level examples
+
+- SPIN series: illustrate how one optimisation problem can be formulated in different ways to test different aspects of optimisation software.

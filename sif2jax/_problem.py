@@ -63,7 +63,8 @@ class AbstractProblem(eqx.Module, Generic[_Y]):
     @abc.abstractmethod
     def expected_result(self) -> _Y:
         """Expected result of the optimization problem. Should be a PyTree of arrays
-        with the same structure as `y0`."""
+        with the same structure as `y0`.
+        """
 
     @property
     @abc.abstractmethod
@@ -177,12 +178,11 @@ class AbstractConstrainedMinimisation(AbstractProblem[_Y]):
         problem has no constraints and should not be classified as a constrained
         minimisation problem.
 
-        All constraints are assumed to be satisfied when the value is
-        equal to zero for equality constraints and greater than or equal to zero for
-        inequality constraints. Each element of each returned pytree of arrays will be
-        treated as the output of a constraint function (in other words: each constraint
-        function returns a scalar value, a collection of which may be arranged in a
-        pytree.)
+        All constraints are assumed to be satisfied when the value is equal to zero for
+        equality constraints and greater than or equal to zero for inequality
+        constraints. Each element of each returned pytree of arrays will be treated as
+        the output of a constraint function (in other words: each constraint function
+        returns a scalar value, a collection of which may be arranged in a pytree.)
 
         Example:
         ```python
@@ -227,9 +227,8 @@ class AbstractConstrainedQuadraticProblem(AbstractConstrainedMinimisation[_Y]):
     - The objective function is quadratic: f(x) = 0.5 * x^T Q x + c^T x + d
     - All constraints are linear: A_eq x = b_eq, A_ineq x >= b_ineq
 
-    This class inherits all methods from AbstractConstrainedMinimisation
-    and doesn't add any new requirements, but provides a clear type
-    distinction for quadratic problems.
+    This class inherits all methods from AbstractConstrainedMinimisation and doesn't add
+    any changes to the interface.
     """
 
     pass
@@ -243,9 +242,9 @@ class AbstractBoundedQuadraticProblem(AbstractBoundedMinimisation[_Y]):
     - Only bound constraints are present: l <= x <= u
     - No equality or inequality constraints
 
-    This class inherits all methods from AbstractBoundedMinimisation
-    and doesn't add any new requirements, but provides a clear type
-    distinction for quadratic problems with only bound constraints.
+    This class inherits all methods from AbstractBoundedMinimisation and doesn't add any
+    new requirements, but provides a clear type distinction for quadratic problems with
+    only bound constraints.
     """
 
     pass
@@ -255,14 +254,14 @@ class AbstractNonlinearEquations(AbstractProblem[_Y]):
     """Abstract base class for nonlinear equations problems. These problems seek to
     find a solution y such that the equality constraints are zero.
 
-    To match pycutest's formulation, these are implemented as constrained problems
-    with the nonlinear equations as equality constraints. The objective function is
-    typically zero, but may also take a constant value.
+    To match pycutest's formulation, these are implemented as constrained problems with
+    the nonlinear equations as equality constraints. The objective function is typically
+    zero, but may also take a constant value.
     Since the objective is constant, it doesn't affect the solution of the equations.
 
     While most nonlinear equations problems do not have bounds on variables, some
-    problems (e.g., CHEBYQADNE) represent bounded root-finding problems where we
-    seek y ∈ [lower, upper] such that the constraints are satisfied.
+    problems (e.g., CHEBYQADNE) represent bounded root-finding problems where we seek
+    y ∈ [lower, upper] such that the constraints are satisfied.
     """
 
     def objective(self, y: _Y, args) -> Scalar:
@@ -286,7 +285,8 @@ class AbstractNonlinearEquations(AbstractProblem[_Y]):
     @abc.abstractmethod
     def expected_objective_value(self) -> Scalar | None:
         """Expected value of the objective at the solution. For nonlinear equations,
-        this is always zero."""
+        this usually zero.
+        """
 
     def num_constraints(self) -> tuple[Int, Int, Int]:
         """Returns the number of constraints.

@@ -106,9 +106,6 @@ from ._constrained_minimisation import (
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
     CSFI1 as CSFI1,
     CSFI2 as CSFI2,
-    CVXQP1 as CVXQP1,
-    CVXQP2 as CVXQP2,
-    CVXQP3 as CVXQP3,
     DALLASS as DALLASS,
     DECONVC as DECONVC,
     DTOC1L as DTOC1L,
@@ -481,6 +478,9 @@ from ._quadratic_problems import (
     constrained_quadratic_problems as constrained_quadratic_problems,
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
     CVXBQP1 as CVXBQP1,
+    CVXQP1 as CVXQP1,
+    CVXQP2 as CVXQP2,
+    CVXQP3 as CVXQP3,
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
     QPBAND as QPBAND,

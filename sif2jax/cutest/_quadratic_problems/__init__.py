@@ -2,6 +2,9 @@ from .biggsc4 import BIGGSC4 as BIGGSC4
 
 # from .chenhark import CHENHARK as CHENHARK  # TODO: Human review needed - see file
 from .cvxbqp1 import CVXBQP1 as CVXBQP1
+from .cvxqp1 import CVXQP1 as CVXQP1
+from .cvxqp2 import CVXQP2 as CVXQP2
+from .cvxqp3 import CVXQP3 as CVXQP3
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
 from .hs76 import HS76 as HS76
@@ -17,13 +20,6 @@ bounded_quadratic_problems = (
     # CHENHARK(),  # TODO: Human review needed - see file
     CVXBQP1(),
     # TORSIOND(),  # TODO: Human review needed - objective mismatch with pycutest
-)
-
-# Import CVXQP problems from constrained_minimisation
-from .._constrained_minimisation import (
-    CVXQP1 as CVXQP1,
-    CVXQP2 as CVXQP2,
-    CVXQP3 as CVXQP3,
 )
 
 

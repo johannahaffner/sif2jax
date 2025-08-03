@@ -1,31 +1,29 @@
-"""
-SPINOP problem in CUTEst.
-
-Problem definition:
-Given n particles z_j = x_j + i * y_j in the complex plane,
-determine their positions so that the equations
-
-  z'_j = lambda z_j,
-
-where z_j = sum_k \\j i / conj( z_j - z_k ) and i = sqrt(-1)
-for some lamda = mu + i * omega
-
-Pick the solution for which sum_i sum_k\\i |z_i -z_j|^2 is smallest
-
-A problem posed by Nick Trefethen
-
-classification QOR2-AN-V-V
-
-SIF input: Nick Gould, June 2009
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
 
 
 class SPINOP(AbstractConstrainedMinimisation):
-    """SPINOP problem - optimization version of SPIN."""
+    """
+    SPINOP problem in CUTEst.
+
+    Problem definition:
+    Given n particles z_j = x_j + i * y_j in the complex plane,
+    determine their positions so that the equations
+
+      z'_j = lambda z_j,
+
+    where z_j = sum_k \\j i / conj( z_j - z_k ) and i = sqrt(-1)
+    for some lamda = mu + i * omega
+
+    Pick the solution for which sum_i sum_k\\i |z_i -z_j|^2 is smallest
+
+    A problem posed by Nick Trefethen
+
+    classification QOR2-AN-V-V
+
+    SIF input: Nick Gould, June 2009
+    """
 
     n: int = 50
     y0_iD: int = 0
@@ -61,23 +59,17 @@ class SPINOP(AbstractConstrainedMinimisation):
 
         # Extract v_ij variables (for i > j)
         v_start = 2 + 2 * n
+        v_flat = y[v_start:]
 
         # The objective is sum_i sum_k\\i |z_i -z_k|^2
         # which equals sum_i sum_k\\i [(x_i - x_k)^2 + (y_i - y_k)^2]
         # Since v_ij^2 = (x_i - x_j)^2 + (y_i - y_j)^2 in the constraints,
         # the objective is sum of all v_ij^2
 
-        obj = 0.0
-        idx = 0
-        for i in range(1, n):
-            for j in range(i):
-                v_ij = y[v_start + idx]
-                obj += v_ij**2
-                idx += 1
-
-        # Since each pair is counted once and we want sum over all i and k≠i,
-        # we multiply by 2
-        return jnp.asarray(2.0 * obj)
+        # Vectorized: sum all v_ij^2
+        # Each pair is counted once in v_flat, which represents the upper triangle
+        # The objective sums over all pairs, so we don't need to multiply by 2
+        return jnp.sum(v_flat**2)
 
     @property
     def y0(self) -> jnp.ndarray:

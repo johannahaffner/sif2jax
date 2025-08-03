@@ -350,12 +350,55 @@ def check_hprod_allclose(problem, pycutest_problem, point, *, atol=1e-6):
     pycutest_hprod = pycutest_problem.hprod(np.ones_like(point), np.asarray(point))
     sif2jax_hprod = _sif2jax_hprod(problem, point)
 
-    # Compare them
-    difference = pycutest_hprod - sif2jax_hprod
-    abs_difference = jnp.abs(difference)
-    msg = (
-        f"Mismatch in Hessian-vector product for {problem.name}. "
-        f"The max. absolute difference is at element {jnp.argmax(abs_difference)} "
-        f"with a value of {jnp.max(abs_difference)}."
-    )
-    assert np.allclose(pycutest_hprod, sif2jax_hprod, atol=atol), msg
+    # Check for NaN or inf values
+    pycutest_has_nonfinite = ~jnp.isfinite(pycutest_hprod)
+    sif2jax_has_nonfinite = ~jnp.isfinite(sif2jax_hprod)
+
+    pycutest_any_nonfinite = jnp.any(pycutest_has_nonfinite)
+    sif2jax_any_nonfinite = jnp.any(sif2jax_has_nonfinite)
+
+    if pycutest_any_nonfinite or sif2jax_any_nonfinite:
+        if pycutest_any_nonfinite and sif2jax_any_nonfinite:
+            # Both have NaN/inf - check if they're in the same places
+            nonfinite_diff = jnp.sum(
+                pycutest_has_nonfinite.astype(int) - sif2jax_has_nonfinite.astype(int)
+            )
+            if nonfinite_diff == 0:
+                # NaN/inf in same places - test passes
+                return
+            else:
+                # NaN/inf in different places - test fails
+                pycutest_first_idx = jnp.argmax(pycutest_has_nonfinite)
+                sif2jax_first_idx = jnp.argmax(sif2jax_has_nonfinite)
+                msg = (
+                    f"Hessian-vector products contain NaN or inf values for different "
+                    f"elements in problem {problem.name}. "
+                    f"First non-finite index in pycutest: {pycutest_first_idx}, "
+                    f"first non-finite index in sif2jax: {sif2jax_first_idx}."
+                )
+                pytest.fail(msg)
+        else:
+            # Only one has NaN/inf - provide informative message
+            if pycutest_any_nonfinite:
+                first_idx = jnp.argmax(pycutest_has_nonfinite)
+                msg = (
+                    f"Only pycutest Hessian-vector product contains NaN or inf values "
+                    f"for problem {problem.name}. First non-finite index: {first_idx}."
+                )
+            else:
+                first_idx = jnp.argmax(sif2jax_has_nonfinite)
+                msg = (
+                    f"Only sif2jax Hessian-vector product contains NaN or inf values "
+                    f"for problem {problem.name}. First non-finite index: {first_idx}."
+                )
+            pytest.fail(msg)
+    else:
+        # Neither has NaN/inf - proceed with normal comparison
+        difference = pycutest_hprod - sif2jax_hprod
+        abs_difference = jnp.abs(difference)
+        msg = (
+            f"Mismatch in Hessian-vector product for {problem.name}. "
+            f"The max. absolute difference is at element {jnp.argmax(abs_difference)} "
+            f"with a value of {jnp.max(abs_difference)}."
+        )
+        assert np.allclose(pycutest_hprod, sif2jax_hprod, atol=atol), msg

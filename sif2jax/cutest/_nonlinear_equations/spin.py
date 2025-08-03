@@ -1,41 +1,39 @@
-"""
-SPIN problem in CUTEst.
-
-# TODO: Human review needed
-# Attempts made:
-# 1. Implemented based on SIF file formulation
-# 2. Fixed initial guess indexing (1-based to 0-based)
-# Suspected issues:
-# - Constraint formulation may have errors in index handling
-# - The v_ij auxiliary variables might need different initialization
-# - Complex number arithmetic may need careful handling
-# Resources needed:
-# - Verification of constraint formulas against original paper
-# - Comparison with pycutest constraint values at various points
-
-Problem definition:
-Given n particles z_j = x_j + i * y_j in the complex plane,
-determine their positions so that the equations
-
-  z'_j = lambda z_j,
-
-where z_j = sum_k \\j i / conj( z_j - z_k ) and i = sqrt(-1)
-for some lamda = mu + i * omega
-
-A problem posed by Nick Trefethen
-
-classification NOR2-AN-V-V
-
-SIF input: Nick Gould, June 2009
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractNonlinearEquations
 
 
 class SPIN(AbstractNonlinearEquations):
-    """SPIN problem."""
+    """
+    SPIN problem in CUTEst.
+
+    # TODO: Human review needed
+    # Attempts made:
+    # 1. Implemented based on SIF file formulation
+    # 2. Fixed initial guess indexing (1-based to 0-based)
+    # Suspected issues:
+    # - Constraint formulation may have errors in index handling
+    # - The v_ij auxiliary variables might need different initialization
+    # - Complex number arithmetic may need careful handling
+    # Resources needed:
+    # - Verification of constraint formulas against original paper
+    # - Comparison with pycutest constraint values at various points
+
+    Problem definition:
+    Given n particles z_j = x_j + i * y_j in the complex plane,
+    determine their positions so that the equations
+
+      z'_j = lambda z_j,
+
+    where z_j = sum_k \\j i / conj( z_j - z_k ) and i = sqrt(-1)
+    for some lamda = mu + i * omega
+
+    A problem posed by Nick Trefethen
+
+    classification NOR2-AN-V-V
+
+    SIF input: Nick Gould, June 2009
+    """
 
     n: int = 50
     y0_iD: int = 0

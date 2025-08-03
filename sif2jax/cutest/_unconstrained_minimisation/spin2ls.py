@@ -1,31 +1,29 @@
-"""
-SPIN2LS problem in CUTEst.
-
-Problem definition:
-Given n particles z_j = x_j + i * y_j in the complex plane,
-determine their positions so that the equations
-
-  z'_j = lambda z_j,
-
-where z_j = sum_k \\j i / conj( z_j - z_k ) and i = sqrt(-1)
-for some lamda = mu + i * omega
-
-A problem posed by Nick Trefethen; this is a condensed version of SPIN
-
-Least-squares version of SPIN2.SIF, Nick Gould, Jan 2020.
-
-classification SUR2-AN-V-0
-
-SIF input: Nick Gould, June 2009
-"""
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class SPIN2LS(AbstractUnconstrainedMinimisation):
-    """SPIN2LS problem - least-squares condensed version of SPIN."""
+    """
+    SPIN2LS problem in CUTEst.
+
+    Problem definition:
+    Given n particles z_j = x_j + i * y_j in the complex plane,
+    determine their positions so that the equations
+
+      z'_j = lambda z_j,
+
+    where z_j = sum_k \\j i / conj( z_j - z_k ) and i = sqrt(-1)
+    for some lamda = mu + i * omega
+
+    A problem posed by Nick Trefethen; this is a condensed version of SPIN
+
+    Least-squares version of SPIN2.SIF, Nick Gould, Jan 2020.
+
+    classification SUR2-AN-V-0
+
+    SIF input: Nick Gould, June 2009
+    """
 
     n: int = 50
     y0_iD: int = 0
@@ -82,36 +80,31 @@ class SPIN2LS(AbstractUnconstrainedMinimisation):
         x = xy[:, 0]
         y_coord = xy[:, 1]
 
-        # Compute r_j and i_j constraints
+        # Compute r_j and i_j constraints vectorized
         # r_j = - mu * x_j + omega * y_j + sum_k\j (y_j - y_k ) / dist_sq = 0
         # i_j = - mu * y_j - omega * x_j - sum_k\j (x_j - x_k ) / dist_sq = 0
 
-        r_constraints = jnp.zeros(n, dtype=y.dtype)
-        i_constraints = jnp.zeros(n, dtype=y.dtype)
+        # Compute pairwise differences
+        x_diff = x[:, None] - x[None, :]  # x[i] - x[j], shape (n, n)
+        y_diff = y_coord[:, None] - y_coord[None, :]  # y[i] - y[j], shape (n, n)
 
-        for i in range(n):
-            # Base terms
-            r_i = -mu * x[i] + omega * y_coord[i]
-            i_i = -mu * y_coord[i] - omega * x[i]
+        # Compute distances squared
+        dist_sq = x_diff**2 + y_diff**2
 
-            # Sum over j < i
-            for j in range(i):
-                dx = x[i] - x[j]
-                dy = y_coord[i] - y_coord[j]
-                dist_sq = dx**2 + dy**2
-                r_i += dy / dist_sq  # +1.0 coefficient
-                i_i -= dx / dist_sq  # -1.0 coefficient
+        # Avoid division by zero on diagonal
+        dist_sq_safe = jnp.where(jnp.eye(n, dtype=bool), 1.0, dist_sq)
 
-            # Sum over j > i
-            for j in range(i + 1, n):
-                dx = x[j] - x[i]
-                dy = y_coord[j] - y_coord[i]
-                dist_sq = dx**2 + dy**2
-                r_i -= dy / dist_sq  # -1.0 coefficient
-                i_i += dx / dist_sq  # +1.0 coefficient
+        # Mask for off-diagonal elements
+        mask = ~jnp.eye(n, dtype=bool)
 
-            r_constraints = r_constraints.at[i].set(r_i)
-            i_constraints = i_constraints.at[i].set(i_i)
+        # Compute constraints using vectorized operations
+        # r_i = -mu * x[i] + omega * y[i] + sum_{j!=i} (y[i] - y[j]) / dist_sq[i,j]
+        r_terms = jnp.where(mask, y_diff / dist_sq_safe, 0.0)
+        r_constraints = -mu * x + omega * y_coord + jnp.sum(r_terms, axis=1)
+
+        # i_i = -mu * y[i] - omega * x[i] - sum_{j!=i} (x[i] - x[j]) / dist_sq[i,j]
+        i_terms = jnp.where(mask, -x_diff / dist_sq_safe, 0.0)
+        i_constraints = -mu * y_coord - omega * x + jnp.sum(i_terms, axis=1)
 
         # Sum of squares
         return jnp.sum(r_constraints**2) + jnp.sum(i_constraints**2)

@@ -20,6 +20,9 @@ class COSHFUN(AbstractConstrainedMinimisation):
     SIF input: Nick Gould, October 1992.
     """
 
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
     # Number of functions
     m: int = 2000  # Default from SIF, can be 3, 8, 14, 20, 200, 2000
 
@@ -27,9 +30,6 @@ class COSHFUN(AbstractConstrainedMinimisation):
     def n(self) -> int:
         """Number of variables (3 * m)."""
         return 3 * self.m
-
-    y0_iD: int = 0
-    provided_y0s: frozenset = frozenset({0})
 
     @property
     def initial_guess(self) -> jnp.ndarray:
@@ -65,6 +65,7 @@ class COSHFUN(AbstractConstrainedMinimisation):
 
     def objective(self, y: jnp.ndarray, args=None) -> jnp.ndarray:
         """Objective function - minimize f (the last variable)."""
+        del args  # Unused
         return y[-1]
 
     def constraint(self, y: jnp.ndarray):
@@ -100,15 +101,26 @@ class COSHFUN(AbstractConstrainedMinimisation):
         # Linear terms for the first constraint (C1)
         c_vec = c_vec.at[0].add(-2.0 * x[2] - x[5])
 
-        # Linear terms for middle constraints
+        # Vectorized linear terms for middle constraints
         # From SIF: C(I/3) has X(I-5), X(I), X(I+3) terms
         # where I goes from 6 to N-3 in steps of 3
-        for i in range(1, m - 1):
-            idx_base = 3 * (i + 1)  # This gives us 6, 9, 12, ...
-            if idx_base < n - 2:
-                c_vec = c_vec.at[i].add(
-                    x[idx_base - 5] - 2.0 * x[idx_base] - x[idx_base + 3]
-                )
+        middle_indices = jnp.arange(1, m - 1)
+        idx_base = 3 * (middle_indices + 1)  # This gives us 6, 9, 12, ...
+
+        # Create mask for valid middle constraints
+        valid_mask = idx_base < n - 2
+
+        # Compute linear terms for all middle indices, using 0 for invalid ones
+        linear_terms = jnp.where(
+            valid_mask,
+            x[jnp.minimum(idx_base - 5, n - 1)]
+            - 2.0 * x[jnp.minimum(idx_base, n - 1)]
+            - x[jnp.minimum(idx_base + 3, n - 1)],
+            0.0,
+        )
+
+        # Add linear terms to middle constraints
+        c_vec = c_vec.at[middle_indices].add(linear_terms)
 
         # Linear terms for the last constraint (C(M))
         c_vec = c_vec.at[m - 1].add(x[n - 6] - 2.0 * x[n - 1])

@@ -80,13 +80,36 @@ class SPIN2(AbstractNonlinearEquations):
     def equality_constraints(self, y: jnp.ndarray) -> jnp.ndarray:
         """Compute the equality constraints.
 
-        # TODO: Human review needed - vectorization complete but tests fail
-        # Status:
-        # - Fully vectorized implementation (no auxiliary variables)
-        # - Constraint tests fail
-        # Issues:
-        # - Similar issues to SPIN2OP (same formulation)
-        # - May need to verify constraint sign conventions
+        # TODO: Human review needed
+        # Status: FAILS constraint tests
+        #
+        # Problem description:
+        # - This is a condensed version of SPIN without auxiliary variables
+        # - Computes distances directly like SPIN2LS (which works)
+        #
+        # Current implementation:
+        # - Fully vectorized using broadcasting and masking
+        # - No auxiliary variables (v_ij)
+        # - Uses safe division with epsilon to avoid divide by zero
+        #
+        # Test failures:
+        # - Constraint values don't match pycutest
+        # - Similar failures to SPIN2OP (same condensed formulation)
+        #
+        # What works:
+        # - SPIN (with auxiliary variables) passes after index ordering fix
+        # - SPIN2LS (unconstrained version) passes all tests
+        #
+        # Suspected issues:
+        # 1. Sign convention differences in constraint formulation
+        # 2. Possible index ordering issues (like SPIN had)
+        # 3. The condensed formulation may have different conventions than SIF expects
+        #
+        # Recommendations:
+        # 1. Compare constraint values at initial point with pycutest
+        # 2. Verify sign conventions in r_j and i_j constraints
+        # 3. Check if the "condensed" formulation has special requirements
+        # 4. Try the same index ordering fix that worked for SPIN
         """
         n = self.n
         mu = y[0]

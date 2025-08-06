@@ -76,17 +76,37 @@ class SPINLS(AbstractUnconstrainedMinimisation):
     def objective(self, y: jnp.ndarray, args=None) -> jnp.ndarray:
         """Compute the objective function (sum of squares of constraints).
 
-        # TODO: Human review needed - vectorization attempts
+        # TODO: Human review needed
+        # Status: FAILS gradient and Hessian-vector product tests
+        #
         # Attempts made:
         # 1. Full vectorization - failed gradient tests
-        # 2. Partial vectorization with jax.lax.scan - better but gradient fails
-        # Issues:
+        # 2. Partial vectorization with jax.lax.scan for outer loop - better but
+        #    gradient still fails
+        # 3. Added epsilon (1e-10) to avoid division by zero - didn't fix gradient
+        #    issues
+        # 4. Used masks and jnp.where for conditional computations - already implemented
+        #
+        # Test failures:
+        # - Gradient test fails with significant discrepancies
+        # - Hessian-vector product test: large discrepancy (3937.08 at element 1157)
+        #
+        # Root cause:
         # - Auxiliary variables v_ij create complex gradient dependencies
         # - Constraints use 1/v_ij^2 terms which cause gradient flow issues
-        # - Hessian-vector product test: large discrepancy (3937.08 at element 1157)
-        # Recommendation:
-        # - Consider reformulating without auxiliary variables (like SPIN2LS)
-        # - Or investigate numerical stabilization techniques for gradient computation
+        # - The coupling between auxiliary variables and particle positions is
+        #   problematic
+        #
+        # What works:
+        # - SPIN2LS (similar problem) passes all tests by computing distances directly
+        #   without auxiliary variables
+        # - The vectorization itself is correct (constraint values match pycutest)
+        #
+        # Recommendations:
+        # 1. Consider reformulating without auxiliary variables (like SPIN2LS does)
+        # 2. Investigate numerical stabilization for 1/v_ij^2 terms
+        # 3. Try different epsilon values or adaptive scaling
+        # 4. Consider using custom gradient rules for problematic operations
         """
         n = self.n
         mu = y[0]

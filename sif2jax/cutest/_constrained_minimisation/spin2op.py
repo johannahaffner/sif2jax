@@ -87,14 +87,38 @@ class SPIN2OP(AbstractConstrainedMinimisation):
     def equality_constraints(self, y: jnp.ndarray) -> jnp.ndarray:
         """Compute the equality constraints.
 
-        # TODO: Human review needed - vectorization complete but tests fail
-        # Status:
-        # - Fully vectorized implementation (no auxiliary variables)
-        # - Objective function passes all tests
+        # TODO: Human review needed
+        # Status: FAILS constraint tests (objective passes)
+        #
+        # Problem description:
+        # - Condensed version of SPINOP without auxiliary variables
+        # - Minimize x_1^2 subject to SPIN constraints
+        # - Similar to SPIN2 but with different objective
+        #
+        # Current implementation:
+        # - Fully vectorized using broadcasting and masking
+        # - No auxiliary variables (direct distance computation)
+        # - Objective function (x[0]**2) is trivial and PASSES tests
+        #
+        # Test failures:
         # - Constraint tests fail at start and with test vectors
-        # Issues:
-        # - May be numerical precision issues with division by dist_sq
-        # - Could be sign convention differences with pycutest
+        # - Same failures as SPIN2 (both are condensed versions)
+        #
+        # Root cause:
+        # - Sign convention issues in constraint formulation
+        # - The condensed formulation may differ from standard SPIN
+        # - Division by dist_sq may have numerical precision issues
+        #
+        # What works:
+        # - SPIN2LS (similar condensed approach) passes all tests
+        # - The objective function is correct
+        # - The vectorization approach is sound
+        #
+        # Recommendations:
+        # 1. Compare with SPIN2LS implementation (which works)
+        # 2. Verify sign conventions against SIF file
+        # 3. Check if "condensed version" has special requirements
+        # 4. Test with larger epsilon values for numerical stability
         """
         n = self.n
         mu = y[0]

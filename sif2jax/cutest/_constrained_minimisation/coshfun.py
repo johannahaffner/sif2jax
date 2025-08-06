@@ -32,14 +32,14 @@ class COSHFUN(AbstractConstrainedMinimisation):
         return 3 * self.m
 
     @property
-    def initial_guess(self) -> jnp.ndarray:
+    def initial_guess(self):
         """Initial guess - all zeros (default when not specified in SIF)."""
         n = self.n
         y0 = jnp.zeros(n + 1, dtype=jnp.float64)  # n variables + f
         return y0
 
     @property
-    def y0(self) -> jnp.ndarray:
+    def y0(self):
         """Initial guess."""
         return self.initial_guess
 
@@ -63,19 +63,19 @@ class COSHFUN(AbstractConstrainedMinimisation):
         """Variable bounds (unbounded)."""
         return None
 
-    def objective(self, y: jnp.ndarray, args=None) -> jnp.ndarray:
+    def objective(self, y, args):
         """Objective function - minimize f (the last variable)."""
         del args  # Unused
         return y[-1]
 
-    def constraint(self, y: jnp.ndarray):
+    def constraint(self, y):
         """Compute constraints."""
         # For a minmax problem, we have inequalities: c_i(x) <= f
         # Which we express as: c_i(x) - f <= 0
         inequalities = self.inequality_constraints(y)
         return None, inequalities
 
-    def inequality_constraints(self, y: jnp.ndarray) -> jnp.ndarray:
+    def inequality_constraints(self, y):
         """Compute inequality constraints c_i(x) - f <= 0."""
         m = self.m
         n = self.n

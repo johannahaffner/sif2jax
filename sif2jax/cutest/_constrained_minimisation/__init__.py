@@ -44,6 +44,7 @@ from .chaconn2 import CHACONN2 as CHACONN2
 # from .clnlbeam import CLNLBEAM as CLNLBEAM
 # TODO: CONCON - removed from API due to automatic derivative mismatches with pycutest
 # from .concon import CONCON as CONCON
+from .coshfun import COSHFUN as COSHFUN
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
 from .dallass import DALLASS as DALLASS
@@ -310,6 +311,7 @@ constrained_minimisation_problems = (
     CHACONN2(),
     # CLNLBEAM(),  # TODO: Dimension mismatch in constraints
     # CONCON(),  # TODO: Removed - automatic derivative mismatches
+    COSHFUN(),
     # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
     CSFI2(),

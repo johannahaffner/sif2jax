@@ -103,6 +103,7 @@ from ._constrained_minimisation import (
     # CLNLBEAM as CLNLBEAM,  # TODO: Dimension mismatch in constraints
     # CONCON as CONCON,  # TODO: Removed - automatic derivative mismatches
     constrained_minimisation_problems as constrained_minimisation_problems,
+    COSHFUN as COSHFUN,
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
     CSFI1 as CSFI1,
     CSFI2 as CSFI2,
@@ -1005,6 +1006,7 @@ problems_dict = {
     "CLUSTERLS": CLUSTERLS(),
     "COATING": COATING(),
     # "CONCON": CONCON(),  # TODO: Removed - automatic derivative mismatches
+    "COSHFUN": COSHFUN(),
     "COOLHANS": COOLHANS(),
     "COOLHANSLS": COOLHANSLS(),
     "COSINE": COSINE(),

@@ -71,7 +71,6 @@ class NCVXBQP3(AbstractBoundedQuadraticProblem):
         upper = jnp.full(self.n, 10.0)
         return lower, upper
 
-
     @property
     def expected_result(self):
         """Expected result based on problem name."""

@@ -44,6 +44,7 @@ from .chaconn2 import CHACONN2 as CHACONN2
 # from .clnlbeam import CLNLBEAM as CLNLBEAM
 # TODO: CONCON - removed from API due to automatic derivative mismatches with pycutest
 # from .concon import CONCON as CONCON
+from .coshfun import COSHFUN as COSHFUN
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
 from .dallass import DALLASS as DALLASS
@@ -267,6 +268,10 @@ from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
+# TODO: Human review needed - constraint test failures (vectorized but sign issues)
+# from .spin2op import SPIN2OP as SPIN2OP
+# TODO: Human review needed - constraint issues with auxiliary variables
+# from .spinop import SPINOP as SPINOP
 # TODO: STEENBRB needs human review - gradient test failing
 # from .steenbrb import STEENBRB as STEENBRB
 # TODO: SIPOW3 needs human review - constraint formulation issues
@@ -306,6 +311,7 @@ constrained_minimisation_problems = (
     CHACONN2(),
     # CLNLBEAM(),  # TODO: Dimension mismatch in constraints
     # CONCON(),  # TODO: Removed - automatic derivative mismatches
+    COSHFUN(),
     # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
     CSFI2(),
@@ -454,6 +460,8 @@ constrained_minimisation_problems = (
     SIMPLLPB(),
     SIPOW1(),
     SIPOW2(),
+    # SPINOP(),  # TODO: Human review - constraint issues with auxiliary variables
+    # SPIN2OP(),  # TODO: Human review - constraint test failures
     # STEENBRB(),  # TODO: Human review - gradient test failing
     # SIPOW3(),  # TODO: Human review - constraint formulation issues
     # SIPOW4(),  # TODO: Human review - constraint formulation issues

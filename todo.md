@@ -20,7 +20,6 @@ Give either one or zero points according to the criteria above. Then annotate th
 - Up to two points: priority 3
 
 (Priority) NAME
-- (1) SPIN* - Score: 4 (simple problems, 2 already exist (SPINLS/SPINOP), no data, family size: 6)
 - (2) MISRA* - Score: 3 (moderate complexity, MISRA1D implemented, small data, family size: 6+)
 - (2) GAUSS* - Score: 3 (moderate complexity, several implemented, small data, family size: 6)
 - (2) HEART* - Score: 3 (moderate complexity, HEART6LS/HEART8LS implemented, small data, family size: 4)

@@ -113,8 +113,6 @@ def expected_result(self) -> Scalar:
     return expected_value
 ```
 
-Note: Our test suite automatically validates against pycutest, which provides the ground truth from the original Fortran implementations.
-
 ## Common SIF→JAX Mappings
 
 ### 1. Index Patterns
@@ -160,40 +158,10 @@ JAX: jnp.prod or sequential multiplication
 - Print shapes at each step during development
 - Verify index ranges match SIF specifications
 
-### 2. Numerical Precision
-- S2MPJ achieves <10^-14 relative error
-- If larger errors, check:
-  - Index offsetting (0-based vs 1-based)
-  - Accumulation order for sums
-  - Floating point associativity
-
 ### 3. Common Pitfalls
 - **1-based indexing**: SIF uses 1-based, Python uses 0-based
 - **Parameter values**: Some SIF files have implicit parameters
 - **Scaling factors**: May be hidden in GROUP definitions
-
-## Testing Protocol
-
-### Required Tests (Automatic via pycutest)
-1. **Objective value** at x0 - compared to Fortran
-2. **Gradient** computation - validated against Fortran gradients
-3. **Constraint values** - checked against Fortran constraints
-4. **Bounds checking** - verified from SIF specifications
-
-### Test Command
-```bash
-# Test single problem against pycutest
-bash run_tests.sh --test-case "PROBLEM"
-
-# Test with local compilation check
-bash run_tests.sh --test-case "PROBLEM" --local-tests
-```
-
-### Expected Precision vs Fortran
-- Relative error < 1e-10 for most problems
-- Some ill-conditioned problems may have larger errors
-- Tests automatically compare against pycutest (Fortran) results
-- Document any precision issues in comments
 
 ## References for Specific Patterns
 
@@ -224,20 +192,9 @@ bash run_tests.sh --test-case "PROBLEM" --local-tests
 | Product | jnp.prod | Or reduce with * |
 | x(i) | y[i-1] | Mind 0-based indexing |
 
-## Validation Checklist
-
-- [ ] Objective matches pycutest at x0 (< 1e-10 relative error)
-- [ ] Gradient matches pycutest (validated by test suite)
-- [ ] Constraints match pycutest values
-- [ ] Bounds match SIF specifications
-- [ ] No Python loops in hot paths
-- [ ] Pre-computation done in __init__
-- [ ] Tests pass against pycutest
-- [ ] Performance acceptable (< 5x Fortran via pycutest)
-
 ## When to Flag for Review
 
-After 5 attempts, if issues persist:
+After 10 attempts, if issues persist:
 1. Document attempted approaches
 2. Note specific error patterns
 3. Compare pycutest values at multiple points

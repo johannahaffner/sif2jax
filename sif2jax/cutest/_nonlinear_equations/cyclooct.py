@@ -53,11 +53,8 @@ class CYCLOOCT(AbstractNonlinearEquations):
         # Reshape into (p, 3) for easier manipulation - each row is a position vector
         positions = y.reshape(p, 3)
 
-        # Apply fixed variable constraints
-        # v_1 = (0, 0, 0)
-        positions = positions.at[0].set(jnp.zeros(3))
-        # X_2 = 0
-        positions = positions.at[1, 0].set(0.0)
+        # Note: Fixed variables (X1, Y1, Z1 = 0 and X2 = 0) are handled through bounds,
+        # not by modifying the positions here
 
         # Nearest neighbor constraints: ||v_i - v_{i+1}||^2 = c^2
         next_indices = (jnp.arange(p) + 1) % p
@@ -71,11 +68,12 @@ class CYCLOOCT(AbstractNonlinearEquations):
         dist_sq_next2 = jnp.sum(diff_next2**2, axis=1)
         constraints_b = dist_sq_next2 - sc2
 
-        # All constraints are equality constraints
-        eq_constraints = jnp.concatenate([constraints_a, constraints_b])
-        ineq_constraints = jnp.array([])
+        # Interleave constraints as A(1), B(1), A(2), B(2), ..., A(P), B(P)
+        # This matches the SIF file constraint ordering
+        eq_constraints = jnp.stack([constraints_a, constraints_b], axis=1).flatten()
 
-        return eq_constraints, ineq_constraints
+        # No inequality constraints for this problem
+        return eq_constraints, None
 
     @property
     def y0(self) -> Array:
@@ -91,6 +89,9 @@ class CYCLOOCT(AbstractNonlinearEquations):
         # Stack into single array
         initial = jnp.stack([x_coords, y_coords, z_coords], axis=1).flatten()
 
+        # Note: Fixed variables (X1, Y1, Z1 = 0 and X2 = 0) are handled through bounds,
+        # not by modifying the initial point, to match pycutest behavior
+
         return inexact_asarray(initial)
 
     @property
@@ -104,8 +105,20 @@ class CYCLOOCT(AbstractNonlinearEquations):
 
     @property
     def bounds(self):
-        """No bounds for this problem"""
-        return None, None
+        """Bounds with first molecule fixed at origin and x-component of second fixed"""
+        p = self.p
+        lbs = jnp.full(3 * p, -jnp.inf)
+        ubs = jnp.full(3 * p, jnp.inf)
+
+        # Fix first molecule at origin (indices 0, 1, 2 for X1, Y1, Z1)
+        lbs = lbs.at[0:3].set(0.0)
+        ubs = ubs.at[0:3].set(0.0)
+
+        # Fix x-component of second molecule (index 3 for X2)
+        lbs = lbs.at[3].set(0.0)
+        ubs = ubs.at[3].set(0.0)
+
+        return lbs, ubs
 
     @property
     def expected_objective_value(self) -> Array:

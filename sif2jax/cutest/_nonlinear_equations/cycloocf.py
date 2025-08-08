@@ -83,32 +83,35 @@ class CYCLOOCF(AbstractNonlinearEquations):
         dist_sq_next2 = jnp.sum(diff_next2**2, axis=1)
         constraints_b = dist_sq_next2 - sc2
 
-        # All constraints are equality constraints
-        eq_constraints = jnp.concatenate([constraints_a, constraints_b])
-        ineq_constraints = jnp.array([])
+        # Interleave constraints as A(1), B(1), A(2), B(2), ..., A(P), B(P)
+        # This matches the SIF file constraint ordering
+        eq_constraints = jnp.stack([constraints_a, constraints_b], axis=1).flatten()
 
-        return eq_constraints, ineq_constraints
+        # No inequality constraints for this problem
+        return eq_constraints, None
 
     @property
     def y0(self) -> Array:
-        """Initial point: linearly spaced values"""
+        """Initial point: Y2, Z2 = 0, then i/P for molecule i"""
         p = self.p
         n = self.n
 
         # Initialize all variables
         initial = jnp.zeros(n)
 
-        # Y2 and Z2 start at 2/P and 2/P
-        initial = initial.at[0].set(2.0 / p)
-        initial = initial.at[1].set(2.0 / p)
+        # Y2 and Z2 start at 0 (per SIF file START POINT section)
+        # initial[0] and initial[1] are already 0
 
-        # For X3..XP, Y3..YP, Z3..ZP: use i/P for molecule i
-        for i in range(3, p + 1):
-            idx_base = 2 + (i - 3) * 3
-            value = i / p
-            initial = initial.at[idx_base].set(value)  # X(i)
-            initial = initial.at[idx_base + 1].set(value)  # Y(i)
-            initial = initial.at[idx_base + 2].set(value)  # Z(i)
+        # Vectorized initialization for X3..XP, Y3..YP, Z3..ZP
+        # Create values for molecules 3 to p
+        molecule_indices = jnp.arange(3, p + 1)
+        values = molecule_indices / p
+
+        # Each molecule has 3 coordinates (X, Y, Z) all set to the same value
+        remaining_values = jnp.repeat(values, 3)
+
+        # Set all remaining positions at once
+        initial = initial.at[2:].set(remaining_values)
 
         return inexact_asarray(initial)
 
@@ -124,7 +127,7 @@ class CYCLOOCF(AbstractNonlinearEquations):
     @property
     def bounds(self):
         """No bounds for this problem"""
-        return None, None
+        return None
 
     @property
     def expected_objective_value(self) -> Array:

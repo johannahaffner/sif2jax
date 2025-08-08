@@ -6,6 +6,7 @@ from ._bounded_minimisation import (
     BOX2 as BOX2,
     BRANIN as BRANIN,
     CAMEL6 as CAMEL6,
+    CYCLOOCTLS as CYCLOOCTLS,
     DEGDIAG as DEGDIAG,
     DGOSPEC as DGOSPEC,
     EXP2B as EXP2B,
@@ -350,6 +351,8 @@ from ._nonlinear_equations import (
     # CHNRSNBMNE as CHNRSNBMNE,  # TODO: Human review needed
     # CUBENE as CUBENE,  # TODO: Human review - constraint and Jacobian mismatch
     CYCLIC3 as CYCLIC3,
+    CYCLOOCF as CYCLOOCF,
+    CYCLOOCT as CYCLOOCT,
     DANIWOOD as DANIWOOD,
     DECONVBNE as DECONVBNE,
     DECONVNE as DECONVNE,
@@ -567,7 +570,8 @@ from ._unconstrained_minimisation import (
     CURLY10 as CURLY10,
     CURLY20 as CURLY20,
     CURLY30 as CURLY30,
-    # CYCLOOCFLS as CYCLOOCFLS,  # TODO: Human review - times out with default p=10000
+    CYCLIC3LS as CYCLIC3LS,
+    CYCLOOCFLS as CYCLOOCFLS,
     DANIWOODLS as DANIWOODLS,
     DENSCHNA as DENSCHNA,
     DENSCHNB as DENSCHNB,
@@ -1030,7 +1034,7 @@ problems_dict = {
     "CVXQP1": CVXQP1(),
     "CVXQP2": CVXQP2(),
     "CVXQP3": CVXQP3(),
-    # "CYCLOOCFLS": CYCLOOCFLS(),  # TODO: Human review - times out with default p=10000
+    "CYCLOOCFLS": CYCLOOCFLS(),
     "DALLASS": DALLASS(),
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
@@ -1310,6 +1314,10 @@ problems_dict = {
     # "COATINGNE": COATINGNE(),  # TODO: Human review - formulation differences
     # "CUBENE": CUBENE(),  # TODO: Human review - constraint and Jacobian mismatch
     "CYCLIC3": CYCLIC3(),
+    "CYCLIC3LS": CYCLIC3LS(),
+    "CYCLOOCF": CYCLOOCF(),
+    "CYCLOOCT": CYCLOOCT(),
+    "CYCLOOCTLS": CYCLOOCTLS(),
     "DENSCHNBNE": DENSCHNBNE(),
     "DENSCHNCNE": DENSCHNCNE(),
     "DENSCHNDNE": DENSCHNDNE(),

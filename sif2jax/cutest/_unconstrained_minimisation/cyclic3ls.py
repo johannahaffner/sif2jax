@@ -57,8 +57,8 @@ class CYCLIC3LS(AbstractUnconstrainedMinimisation):
             [residuals_n, jnp.array([residual_n_plus_1, residual_n_plus_2])]
         )
 
-        # Return sum of squares
-        return 0.5 * jnp.sum(residuals**2)
+        # Return sum of squares (no 0.5 factor for least squares problems in CUTEst)
+        return jnp.sum(residuals**2)
 
     @property
     def y0(self) -> Array:

@@ -62,6 +62,7 @@ from .cube import CUBE as CUBE
 from .curly10 import CURLY10 as CURLY10
 from .curly20 import CURLY20 as CURLY20
 from .curly30 import CURLY30 as CURLY30
+from .cyclic3ls import CYCLIC3LS as CYCLIC3LS
 
 # TODO: CYCLOOCFLS needs optimization - times out with default p=10000 (30k vars)
 # from .cycloocfls import CYCLOOCFLS as CYCLOOCFLS
@@ -336,6 +337,7 @@ unconstrained_minimisation_problems = (
     CURLY10(),
     CURLY20(),
     CURLY30(),
+    CYCLIC3LS(),
     # CYCLOOCFLS(),  # TODO: Human review - times out with default p=10000 (30k vars)
     DANIWOODLS(),
     DENSCHNA(),

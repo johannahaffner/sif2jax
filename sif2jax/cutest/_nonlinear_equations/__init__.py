@@ -43,6 +43,8 @@ from .coolhans import COOLHANS as COOLHANS
 # TODO: Human review needed - constraint values and Jacobian mismatch
 # from .cubene import CUBENE as CUBENE
 from .cyclic3 import CYCLIC3 as CYCLIC3
+from .cycloocf import CYCLOOCF as CYCLOOCF
+from .cyclooct import CYCLOOCT as CYCLOOCT
 from .daniwood import DANIWOOD as DANIWOOD
 from .deconvbne import DECONVBNE as DECONVBNE
 from .deconvne import DECONVNE as DECONVNE
@@ -256,6 +258,8 @@ nonlinear_equations_problems = (
     # COATINGNE(),  # TODO: Human review - SIF diffs
     # CUBENE(),  # TODO: Human review needed - constraint and Jacobian mismatch
     CYCLIC3(),
+    CYCLOOCF(),
+    CYCLOOCT(),
     DENSCHNBNE(),
     DENSCHNCNE(),
     DENSCHNDNE(),

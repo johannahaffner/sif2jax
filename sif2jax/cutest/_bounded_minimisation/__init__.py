@@ -4,6 +4,7 @@ from .biggs5 import BIGGS5 as BIGGS5
 from .box2 import BOX2 as BOX2
 from .branin import BRANIN as BRANIN
 from .camel6 import CAMEL6 as CAMEL6
+from .cyclooctls import CYCLOOCTLS as CYCLOOCTLS
 from .degdiag import DEGDIAG as DEGDIAG
 from .dgospec import DGOSPEC as DGOSPEC
 from .exp2b import EXP2B as EXP2B
@@ -85,6 +86,7 @@ bounded_minimisation_problems = (
     BOX2(),
     BRANIN(),
     CAMEL6(),
+    CYCLOOCTLS(),
     DEGDIAG(),
     DGOSPEC(),
     EXP2B(),

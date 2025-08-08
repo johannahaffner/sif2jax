@@ -2,12 +2,12 @@ import jax.numpy as jnp
 from jax import Array
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
+class CYCLOOCT(AbstractNonlinearEquations):
     """
-    The cyclooctane molecule configuration problem (least squares, no fixed variables).
+    The cyclooctane molecule configuration problem.
 
     The cyclooctane molecule is comprised of eight carbon atoms aligned
     in an equally spaced ring. When they take a position of minimum
@@ -19,7 +19,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
        ||v_i - v_i+1,mod p||^2 = c^2 for i = 1,..,p, and
        ||v_i - v_i+2,mod p||^2 = 2p/(p-2) c^2
 
-    This is a version of CYCLOOCTLS.SIF without the fixed variables.
+    where (arbitrarily) we have v_1 = 0 and component 1 of v_2 = 0
 
     Source:
     an extension of the cyclooctane molecule configuration space as
@@ -31,7 +31,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
     SIF input: Nick Gould, Feb 2020.
 
-    classification  SUR2-MN-V-0
+    classification  NQR2-MN-V-V
     """
 
     p: int = 10000  # Number of molecules
@@ -44,49 +44,49 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
         """Number of variables is 3*P"""
         return 3 * self.p
 
-    def objective(self, y: Array, args) -> Array:
-        """Compute the least-squares objective for cyclooctane configuration"""
+    def constraint(self, y: Array):
+        """Compute the constraint equations for cyclooctane configuration"""
         p = self.p
         c2 = self.c**2
-
-        # Calculate 2P/(P-2) * c^2
         sc2 = (2.0 * p / (p - 2)) * c2
 
         # Reshape into (p, 3) for easier manipulation - each row is a position vector
         positions = y.reshape(p, 3)
 
-        # Residuals for nearest neighbor constraints: ||v_i - v_{i+1}||^2 = c^2
-        # Use modular arithmetic for cyclic structure
-        next_indices = jnp.arange(p)
-        next_indices = (next_indices + 1) % p
+        # Apply fixed variable constraints
+        # v_1 = (0, 0, 0)
+        positions = positions.at[0].set(jnp.zeros(3))
+        # X_2 = 0
+        positions = positions.at[1, 0].set(0.0)
 
+        # Nearest neighbor constraints: ||v_i - v_{i+1}||^2 = c^2
+        next_indices = (jnp.arange(p) + 1) % p
         diff_next = positions - positions[next_indices]
         dist_sq_next = jnp.sum(diff_next**2, axis=1)
-        residuals_next = dist_sq_next - c2
+        constraints_a = dist_sq_next - c2
 
-        # Residuals for next-next neighbor constraints: ||v_i - v_{i+2}||^2 =
-        # 2p/(p-2)*c^2
+        # Next-next neighbor constraints: ||v_i - v_{i+2}||^2 = 2p/(p-2)*c^2
         next2_indices = (jnp.arange(p) + 2) % p
-
         diff_next2 = positions - positions[next2_indices]
         dist_sq_next2 = jnp.sum(diff_next2**2, axis=1)
-        residuals_next2 = dist_sq_next2 - sc2
+        constraints_b = dist_sq_next2 - sc2
 
-        # Combine all residuals
-        all_residuals = jnp.concatenate([residuals_next, residuals_next2])
+        # All constraints are equality constraints
+        eq_constraints = jnp.concatenate([constraints_a, constraints_b])
+        ineq_constraints = jnp.array([])
 
-        # Return sum of squares
-        return 0.5 * jnp.sum(all_residuals**2)
+        return eq_constraints, ineq_constraints
 
     @property
     def y0(self) -> Array:
-        """Initial point: distributed on unit circle in x-y plane"""
+        """Initial point: i/P for molecule i"""
         p = self.p
-        angles = jnp.linspace(0, 2 * jnp.pi, p, endpoint=False)
+        values = jnp.arange(1, p + 1) / p
 
-        x_coords = self.c * jnp.cos(angles)
-        y_coords = self.c * jnp.sin(angles)
-        z_coords = jnp.zeros(p)
+        # Create initial positions
+        x_coords = values
+        y_coords = values
+        z_coords = values
 
         # Stack into single array
         initial = jnp.stack([x_coords, y_coords, z_coords], axis=1).flatten()
@@ -101,6 +101,11 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
     def expected_result(self) -> None:
         """Solution represents minimum energy configuration"""
         return None
+
+    @property
+    def bounds(self):
+        """No bounds for this problem"""
+        return None, None
 
     @property
     def expected_objective_value(self) -> Array:

@@ -2,12 +2,12 @@ import jax.numpy as jnp
 from jax import Array
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
+class CYCLOOCTLS(AbstractBoundedMinimisation):
     """
-    The cyclooctane molecule configuration problem (least squares, no fixed variables).
+    The cyclooctane molecule configuration problem (least squares version).
 
     The cyclooctane molecule is comprised of eight carbon atoms aligned
     in an equally spaced ring. When they take a position of minimum
@@ -19,7 +19,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
        ||v_i - v_i+1,mod p||^2 = c^2 for i = 1,..,p, and
        ||v_i - v_i+2,mod p||^2 = 2p/(p-2) c^2
 
-    This is a version of CYCLOOCTLS.SIF without the fixed variables.
+    where (arbitrarily) we have v_1 = 0 and component 1 of v_2 = 0
 
     Source:
     an extension of the cyclooctane molecule configuration space as
@@ -31,7 +31,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
     SIF input: Nick Gould, Feb 2020.
 
-    classification  SUR2-MN-V-0
+    classification  SBR2-MN-V-0
     """
 
     p: int = 10000  # Number of molecules
@@ -77,6 +77,23 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
         # Return sum of squares
         return 0.5 * jnp.sum(all_residuals**2)
+
+    @property
+    def bounds(self):
+        """Bounds with first molecule fixed at origin and x-component of second fixed"""
+        p = self.p
+        lbs = jnp.full(3 * p, -jnp.inf)
+        ubs = jnp.full(3 * p, jnp.inf)
+
+        # Fix first molecule at origin (indices 0, 1, 2 for x1, y1, z1)
+        lbs = lbs.at[0:3].set(0.0)
+        ubs = ubs.at[0:3].set(0.0)
+
+        # Fix x-component of second molecule (index 3 for x2)
+        lbs = lbs.at[3].set(0.0)
+        ubs = ubs.at[3].set(0.0)
+
+        return lbs, ubs
 
     @property
     def y0(self) -> Array:

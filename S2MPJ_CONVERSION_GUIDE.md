@@ -1,7 +1,7 @@
 # S2MPJ-Inspired SIF2JAX Conversion Guide
 
 ## Overview
-This guide applies insights from the S2MPJ paper (arXiv:2407.07812) to improve SIF→JAX conversions. S2MPJ successfully converts 1075 CUTEst problems to native Python/Matlab/Julia implementations with <10^-14 relative error.
+This guide applies insights from the S2MPJ paper (arXiv:2407.07812) to improve SIF→JAX conversions.
 
 ## Key Concepts from S2MPJ
 

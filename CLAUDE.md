@@ -13,14 +13,17 @@ ruff format . && ruff check .                       # Format and lint
 
 ## Workflow: Find → Implement → Test → Fix → Commit → Repeat
 
-### 1. Find Next Problem
-Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT imported in `sif2jax/__init__.py`
+### 1. Overall goal
+Problems only count as implemented if they pass the tests against pycutest in the main test suite, accessible through the bash script. 
+This means that `bash run_tests.sh --test-case "PROBLEM1" --local-tests` should pass.
 
 ### 2. Implementation Priority
+SIF problems have a group-separable structure. Identifying this structure helps to identify opportunities for vectorisation and batched operations, as well as to `divide and conquer` complex problems.
+
+Here are the sources relevant to problem implementations:
 1. **SIF Files**: `archive/mastsif/` folder - Original SIF problem definitions (PRIMARY SOURCE)
 2. **AMPL**: `https://github.com/ampl/global-optimization/tree/master/cute` (lowercase.mod files)
-3. **extra_info/**: Papers, documentation, screenshots
-4. **References**: From SIF file headers
+3. **References**: From SIF file headers
 
 ### 3. Implementation Rules
 - **Name**: Use SIF name as class name (modify if invalid Python)
@@ -47,7 +50,8 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
 ### 4. Testing Requirements
 - **Container Required**: Tests need pycutest/Fortran libs
 - **Test After EVERY Change**: Even minor edits
-- **Batch Testing**: Full test suite will result in timeout in devcontainer, test problems individually or in small batches instead
+- **Batch Testing**: Full test suite will result in timeout in devcontainer, test problems individually or in small batches instead. 
+- **Test Timeouts**: If a problem is poorly vectorised, its tests may time out. In this case, vectorise the problem before trying again.
 - **5 Attempts Rule**: After 5 failed attempts, flag for human review:
   ```python
   # TODO: Human review needed
@@ -65,11 +69,12 @@ Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT im
 - ✓ Run pre-commit (NEVER use --no-verify)
 - ✓ Fix all pre-commit issues
 - ✓ Re-test if any changes made
-- ✓ Success = clean pre-commit (no reformatting, no warnings)
+- ✓ Success = clean pre-commit (no reformatting, no warnings) + all tests from bash script pass
 - ✓ Commit after implementing a few problems, to keep commits compact
+
 ## Work Mode
-- Add 20+ problems to TODO list
-- Work systematically without stopping
+- Work systematically without stopping, *DO NOT* provide summaries unless requested
+- Work one problem at a time, and work your way up from passing easier tests to harder ones.
 - Re-read this prompt every 20 completed items
 
 ## PR Guidelines

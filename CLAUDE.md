@@ -4,18 +4,21 @@
 Convert CUTEST problems to JAX implementations that match Fortran precision and are as performant as possible.
 
 ## Quick Reference
+
 ```bash
-bash run_tests.sh --test-case "PROBLEM1,PROBLEM2"   # Test specific problems
-bash run_tests.sh -k test_objective                 # Test specific aspect
-bash run_tests.sh --test-case "PROBLEM1" --local-tests  # Additionally test compilation
+sudo bash run_tests.sh --test-case "PROBLEM1,PROBLEM2"   # Test specific problems
+sudo bash run_tests.sh -k test_objective                 # Test specific aspect
+sudo bash run_tests.sh --test-case "PROBLEM1" --local-tests  # Additionally test compilation
 ruff format . && ruff check .                       # Format and lint
 ```
+
+(The test script may have to be run with `sudo bash` in the container.)
 
 ## Workflow: Find → Implement → Test → Fix → Commit → Repeat
 
 ### 1. Overall goal
 Problems only count as implemented if they pass the tests against pycutest in the main test suite, accessible through the bash script. 
-This means that `bash run_tests.sh --test-case "PROBLEM1" --local-tests` should pass.
+This means that `sudo bash run_tests.sh --test-case "PROBLEM1" --local-tests` should pass.
 
 ### 2. Implementation Priority
 SIF problems have a group-separable structure. Identifying this structure helps to identify opportunities for vectorisation and batched operations, as well as to `divide and conquer` complex problems.

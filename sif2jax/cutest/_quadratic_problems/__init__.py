@@ -9,11 +9,10 @@ from .dual1 import DUAL1 as DUAL1
 from .dual2 import DUAL2 as DUAL2
 from .dual3 import DUAL3 as DUAL3
 from .dual4 import DUAL4 as DUAL4
-
-# from .dualc1 import DUALC1 as DUALC1  # TODO: Parse all 215 constraints from SIF
-# from .dualc2 import DUALC2 as DUALC2  # TODO: Parse all 201 constraints from SIF
-# from .dualc5 import DUALC5 as DUALC5  # TODO: Parse all 278 constraints from SIF
-# from .dualc8 import DUALC8 as DUALC8  # TODO: Parse all 501 constraints from SIF
+from .dualc1 import DUALC1 as DUALC1
+from .dualc2 import DUALC2 as DUALC2
+from .dualc5 import DUALC5 as DUALC5
+from .dualc8 import DUALC8 as DUALC8
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
 from .hs76 import HS76 as HS76
@@ -57,10 +56,10 @@ constrained_quadratic_problems = (
     DUAL2(),
     DUAL3(),
     DUAL4(),
-    # DUALC1(),  # TODO: Need to parse all 215 constraints from SIF
-    # DUALC2(),  # TODO: Need to parse all 201 constraints from SIF
-    # DUALC5(),  # TODO: Need to parse all 278 constraints from SIF
-    # DUALC8(),  # TODO: Need to parse all 501 constraints from SIF
+    DUALC1(),
+    DUALC2(),
+    DUALC5(),
+    DUALC8(),
     HATFLDH(),
     HS44NEW(),
     HS76(),

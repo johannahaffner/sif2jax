@@ -190,6 +190,9 @@ class TestProblem:
                 pytest.skip(msg)
 
     def test_correct_constraint_dimensions(self, problem, pycutest_problem):
+        # TODO: Should we even return something like this for unconstrained problems?
+        # Think about this: perhaps it is better if this method would not exist for the
+        # unconstrained problems at all.
         num_equalities, num_inequalities, _ = problem.num_constraints()
 
         if pycutest_problem.m == 0:
@@ -214,6 +217,18 @@ class TestProblem:
             # If both elements of the tuple are None, the problem is unconstrained or
             # bound constrained, and should inherit from a different parent class.
             assert equalities is not None or inequalities is not None
+
+            # We never return empty arrays, if there are no inequality or equality
+            # constraints then None is returned.
+            if equalities is not None:
+                msg = "Equality constraints should be None if there are no equalities."
+                assert equalities.size > 0, msg
+            if inequalities is not None:
+                msg = (
+                    "Inequality constraints should be None if there are no such "
+                    "constraints."
+                )
+                assert inequalities.size > 0, msg
 
     def test_nontrivial_bounds(self, problem):
         if (

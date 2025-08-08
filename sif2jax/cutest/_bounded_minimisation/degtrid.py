@@ -2,10 +2,10 @@ import jax.numpy as jnp
 from jax import Array
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class DEGTRID(AbstractUnconstrainedMinimisation):
+class DEGTRID(AbstractBoundedMinimisation):
     """
     A degenerate convex quadratic program with a tri-diagonal Hessian.
 
@@ -57,6 +57,15 @@ class DEGTRID(AbstractUnconstrainedMinimisation):
         linear_term = jnp.dot(c, y)
 
         return quad_term + linear_term
+
+    @property
+    def bounds(self):
+        """Bounds: all variables have lower bound of 0"""
+        n = self._n
+        # Based on pycutest tests, DEGTRID has lower bounds of 0
+        lbs = jnp.zeros(n)
+        ubs = jnp.full(n, jnp.inf)
+        return lbs, ubs
 
     @property
     def y0(self) -> Array:

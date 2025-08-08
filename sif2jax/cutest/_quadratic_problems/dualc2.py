@@ -239,8 +239,8 @@ class DUALC2(AbstractConstrainedQuadraticProblem):
 
     @property
     def y0(self):
-        """Initial point: uniform distribution"""
-        return inexact_asarray(jnp.ones(self.n) / self.n)
+        """Initial point: zeros"""
+        return inexact_asarray(jnp.zeros(self.n))
 
     @property
     def args(self):

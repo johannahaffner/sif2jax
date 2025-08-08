@@ -490,10 +490,10 @@ from ._quadratic_problems import (
     DUAL2 as DUAL2,
     DUAL3 as DUAL3,
     DUAL4 as DUAL4,
-    DUALC1 as DUALC1,
-    DUALC2 as DUALC2,
-    DUALC5 as DUALC5,
-    DUALC8 as DUALC8,
+    # DUALC1 as DUALC1,  # TODO: Need to parse all constraints from SIF
+    # DUALC2 as DUALC2,  # TODO: Need to parse all constraints from SIF
+    # DUALC5 as DUALC5,  # TODO: Need to parse all constraints from SIF
+    # DUALC8 as DUALC8,  # TODO: Need to parse all constraints from SIF
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
     NCVXBQP1 as NCVXBQP1,
@@ -1258,6 +1258,14 @@ problems_dict = {
     "QPBAND": QPBAND(),
     # "CHENHARK": CHENHARK(),  # TODO: Human review needed - see file
     "DEGDIAG": DEGDIAG(),
+    "DUAL1": DUAL1(),
+    "DUAL2": DUAL2(),
+    "DUAL3": DUAL3(),
+    "DUAL4": DUAL4(),
+    # "DUALC1": DUALC1(),  # TODO: Need to parse all 215 constraints from SIF
+    # "DUALC2": DUALC2(),  # TODO: Need to parse all 201 constraints from SIF
+    # "DUALC5": DUALC5(),  # TODO: Need to parse all 278 constraints from SIF
+    # "DUALC8": DUALC8(),  # TODO: Need to parse all 501 constraints from SIF
     "QUDLIN": QUDLIN(),
     "TAME": TAME(),
     "HATFLDH": HATFLDH(),

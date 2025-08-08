@@ -14,11 +14,12 @@ ruff format . && ruff check .                       # Format and lint
 
 (The test script may have to be run with `sudo bash` in the container.)
 
-## Workflow: Find → Implement → Test → Fix → Commit → Repeat
+## Workflow: Implement → Test → Fix → Commit → Repeat
 
 ### 1. Overall goal
 Problems only count as implemented if they pass the tests against pycutest in the main test suite, accessible through the bash script. 
 This means that `sudo bash run_tests.sh --test-case "PROBLEM1" --local-tests` should pass.
+The tests are designed to be very informative, and can guide you toward a working implementation.
 
 ### 2. Implementation Priority
 SIF problems have a group-separable structure. Identifying this structure helps to identify opportunities for vectorisation and batched operations, as well as to `divide and conquer` complex problems.

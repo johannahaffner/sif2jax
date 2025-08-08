@@ -8,6 +8,7 @@ from ._bounded_minimisation import (
     CAMEL6 as CAMEL6,
     CYCLOOCTLS as CYCLOOCTLS,
     DEGDIAG as DEGDIAG,
+    DEGTRID2 as DEGTRID2,
     DGOSPEC as DGOSPEC,
     EXP2B as EXP2B,
     EXPLIN as EXPLIN,
@@ -110,6 +111,7 @@ from ._constrained_minimisation import (
     CSFI2 as CSFI2,
     DALLASS as DALLASS,
     DECONVC as DECONVC,
+    DEGTRIDL as DEGTRIDL,
     DTOC1L as DTOC1L,
     DTOC1NA as DTOC1NA,
     DTOC1NB as DTOC1NB,
@@ -573,6 +575,7 @@ from ._unconstrained_minimisation import (
     CYCLIC3LS as CYCLIC3LS,
     CYCLOOCFLS as CYCLOOCFLS,
     DANIWOODLS as DANIWOODLS,
+    DEGTRID as DEGTRID,
     DENSCHNA as DENSCHNA,
     DENSCHNB as DENSCHNB,
     DENSCHNC as DENSCHNC,
@@ -974,6 +977,7 @@ problems_dict = {
     # "AUG2D": AUG2D(),  # TODO: needs human review - edge variable structure
     "AVGASA": AVGASA(),
     "AVGASB": AVGASB(),
+    "DEGTRIDL": DEGTRIDL(),
     # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
     # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs human review
@@ -1038,6 +1042,7 @@ problems_dict = {
     "DALLASS": DALLASS(),
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
+    "DEGTRID": DEGTRID(),
     "DECONVC": DECONVC(),
     "DTOC1L": DTOC1L(),
     "DTOC1NA": DTOC1NA(),
@@ -1318,6 +1323,7 @@ problems_dict = {
     "CYCLOOCF": CYCLOOCF(),
     "CYCLOOCT": CYCLOOCT(),
     "CYCLOOCTLS": CYCLOOCTLS(),
+    "DEGTRID2": DEGTRID2(),
     "DENSCHNBNE": DENSCHNBNE(),
     "DENSCHNCNE": DENSCHNCNE(),
     "DENSCHNDNE": DENSCHNDNE(),

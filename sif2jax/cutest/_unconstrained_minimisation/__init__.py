@@ -65,6 +65,7 @@ from .curly30 import CURLY30 as CURLY30
 from .cyclic3ls import CYCLIC3LS as CYCLIC3LS
 from .cycloocfls import CYCLOOCFLS as CYCLOOCFLS
 from .daniwoodls import DANIWOODLS as DANIWOODLS
+from .degtrid import DEGTRID as DEGTRID
 from .denschna import DENSCHNA as DENSCHNA
 from .denschnb import DENSCHNB as DENSCHNB
 from .denschnc import DENSCHNC as DENSCHNC
@@ -338,6 +339,7 @@ unconstrained_minimisation_problems = (
     CYCLIC3LS(),
     CYCLOOCFLS(),
     DANIWOODLS(),
+    DEGTRID(),
     DENSCHNA(),
     DENSCHNB(),
     DENSCHNC(),

@@ -6,6 +6,7 @@ from .branin import BRANIN as BRANIN
 from .camel6 import CAMEL6 as CAMEL6
 from .cyclooctls import CYCLOOCTLS as CYCLOOCTLS
 from .degdiag import DEGDIAG as DEGDIAG
+from .degtrid2 import DEGTRID2 as DEGTRID2
 from .dgospec import DGOSPEC as DGOSPEC
 from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
@@ -87,6 +88,7 @@ bounded_minimisation_problems = (
     BRANIN(),
     CAMEL6(),
     CYCLOOCTLS(),
+    DEGTRID2(),
     DEGDIAG(),
     DGOSPEC(),
     EXP2B(),

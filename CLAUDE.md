@@ -17,7 +17,7 @@ ruff format . && ruff check .                       # Format and lint
 Check `missing_problems.md` for unchecked items `[] PROBLEMNAME` that are NOT imported in `sif2jax/__init__.py`
 
 ### 2. Implementation Priority
-1. **SIF Files**: `archive/mastsif/` folder - Original SIF problem definitions (PRIMARY SOURCE)
+1. **SIF Files**: `archive/mastsif/` or `../archive/mastsif` folder - Original SIF problem definitions (PRIMARY SOURCE)
 2. **AMPL**: `https://github.com/ampl/global-optimization/tree/master/cute` (lowercase.mod files)
 3. **extra_info/**: Papers, documentation, screenshots
 4. **References**: From SIF file headers

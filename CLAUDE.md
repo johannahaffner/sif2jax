@@ -23,6 +23,7 @@ The tests are designed to be very informative, and can guide you toward a workin
 
 ### 2. Implementation Priority
 SIF problems have a group-separable structure. Identifying this structure helps to identify opportunities for vectorisation and batched operations, as well as to `divide and conquer` complex problems.
+You can look up some guiding principles in the CONVERSION_GUIDE file.
 
 Here are the sources relevant to problem implementations:
 1. **SIF Files**: `archive/mastsif/` folder - Original SIF problem definitions (PRIMARY SOURCE)
@@ -56,7 +57,7 @@ Here are the sources relevant to problem implementations:
 - **Test After EVERY Change**: Even minor edits
 - **Batch Testing**: Full test suite will result in timeout in devcontainer, test problems individually or in small batches instead. 
 - **Test Timeouts**: If a problem is poorly vectorised, its tests may time out. In this case, vectorise the problem before trying again.
-- **5 Attempts Rule**: After 5 failed attempts, flag for human review:
+- **10 Attempts Rule**: After 10 failed attempts, flag for human review:
   ```python
   # TODO: Human review needed
   # Attempts made: [list attempts]

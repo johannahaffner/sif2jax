@@ -53,7 +53,7 @@ Here are the sources relevant to problem implementations:
     in these tuples as well. Example: unconstrained_problems = (PROBLEM1, PROBLEM2, ...)
 
 ### 4. Testing Requirements
-- **Container Required**: Tests need pycutest/Fortran libs
+- **Container Required**: Tests need pycutest/Fortran libs. These are available through the bash script. **ALWAYS USE THIS SCRIPT!**. Use it with `sudo bash run_tests.sh --test-case "PROBLEM1,PROBLEM2"`, look up other handy commands in the "Quick Reference" section above.
 - **Test After EVERY Change**: Even minor edits
 - **Batch Testing**: Full test suite will result in timeout in devcontainer, test problems individually or in small batches instead. 
 - **Test Timeouts**: If a problem is poorly vectorised, its tests may time out. In this case, vectorise the problem before trying again.

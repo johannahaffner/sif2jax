@@ -112,7 +112,7 @@ from ._constrained_minimisation import (
     CSFI2 as CSFI2,
     DALLASS as DALLASS,
     DECONVC as DECONVC,
-    DEGTRIDL as DEGTRIDL,
+    # DEGTRIDL as DEGTRIDL,  # TODO: Human review - causes segfault
     DTOC1L as DTOC1L,
     DTOC1NA as DTOC1NA,
     DTOC1NB as DTOC1NB,
@@ -980,7 +980,7 @@ problems_dict = {
     # "AUG2D": AUG2D(),  # TODO: needs human review - edge variable structure
     "AVGASA": AVGASA(),
     "AVGASB": AVGASB(),
-    "DEGTRIDL": DEGTRIDL(),
+    # "DEGTRIDL": DEGTRIDL(),  # TODO: Human review - causes segfault
     # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
     # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs human review

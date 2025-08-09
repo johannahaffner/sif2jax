@@ -5,6 +5,20 @@ from ..._misc import inexact_asarray
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# TODO: Human review needed
+# This problem causes a segfault in the test suite despite appearing to be
+# correctly implemented.
+# The implementation:
+# - Correctly computes the quadratic objective with tridiagonal Hessian
+# - Correctly implements the linear equality constraint sum(x) = N
+# - Passes basic functionality tests (objective, gradient, constraint, Jacobian)
+# - Is properly vectorized
+# Suspected issues: May be related to the large problem size (100001 variables) or
+# interaction with pycutest's Fortran backend.
+# Attempts made: Verified mathematical correctness, checked vectorization,
+# tested compilation
+
+
 class DEGTRIDL(AbstractConstrainedMinimisation):
     """
     A degenerate convex quadratic program with a tri-diagonal Hessian
@@ -61,6 +75,8 @@ class DEGTRIDL(AbstractConstrainedMinimisation):
 
     def constraint(self, y: Array):
         """Linear equality constraint: sum(x_i) = N"""
+        # N in the SIF file is the parameter, but we have N+1 variables (0 to N)
+        # The constraint is sum(x_i) = N for i=0 to N
         n_param = self._n - 1  # N in the SIF file
 
         # Equality constraint: sum(x_i) - N = 0

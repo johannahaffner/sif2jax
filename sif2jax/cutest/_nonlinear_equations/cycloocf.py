@@ -2,12 +2,12 @@ import jax.numpy as jnp
 from jax import Array
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
+class CYCLOOCF(AbstractNonlinearEquations):
     """
-    The cyclooctane molecule configuration problem (least squares, no fixed variables).
+    The cyclooctane molecule configuration problem (no fixed variables).
 
     The cyclooctane molecule is comprised of eight carbon atoms aligned
     in an equally spaced ring. When they take a position of minimum
@@ -19,7 +19,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
        ||v_i - v_i+1,mod p||^2 = c^2 for i = 1,..,p, and
        ||v_i - v_i+2,mod p||^2 = 2p/(p-2) c^2
 
-    This is a version of CYCLOOCTLS.SIF without the fixed variables.
+    This is a version of CYCLOOCT.SIF without the fixed variables.
 
     Source:
     an extension of the cyclooctane molecule configuration space as
@@ -31,7 +31,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
     SIF input: Nick Gould, Feb 2020.
 
-    classification  SUR2-MN-V-0
+    classification  NQR2-MN-V-V
     """
 
     p: int = 10000  # Number of molecules
@@ -41,7 +41,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
     @property
     def n(self) -> int:
-        """Number of variables: Y2, Z2, then X3..XP, Y3..YP, Z3..ZP
+        """Number of variables: Y2, Z2, and X3..XP, Y3..YP, Z3..ZP
         Total: 2 + 3*(P-2) = 3*P - 4
         """
         return 3 * self.p - 4
@@ -63,33 +63,32 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
         return positions
 
-    def objective(self, y: Array, args) -> Array:
-        """Compute the least-squares objective for cyclooctane configuration"""
+    def constraint(self, y: Array):
+        """Compute the constraint equations for cyclooctane configuration"""
         p = self.p
         c2 = self.c**2
         sc2 = (2.0 * p / (p - 2)) * c2
 
-        # Get full position array
         positions = self._get_positions(y)
 
-        # Residuals for nearest neighbor constraints: ||v_i - v_{i+1}||^2 = c^2
+        # Nearest neighbor constraints: ||v_i - v_{i+1}||^2 = c^2
         next_indices = (jnp.arange(p) + 1) % p
         diff_next = positions - positions[next_indices]
         dist_sq_next = jnp.sum(diff_next**2, axis=1)
-        residuals_a = dist_sq_next - c2
+        constraints_a = dist_sq_next - c2
 
-        # Residuals for next-next neighbor: ||v_i - v_{i+2}||^2 = 2p/(p-2)*c^2
+        # Next-next neighbor constraints: ||v_i - v_{i+2}||^2 = 2p/(p-2)*c^2
         next2_indices = (jnp.arange(p) + 2) % p
         diff_next2 = positions - positions[next2_indices]
         dist_sq_next2 = jnp.sum(diff_next2**2, axis=1)
-        residuals_b = dist_sq_next2 - sc2
+        constraints_b = dist_sq_next2 - sc2
 
-        # Interleave residuals as A(1), B(1), A(2), B(2), ..., A(P), B(P)
+        # Interleave constraints as A(1), B(1), A(2), B(2), ..., A(P), B(P)
         # This matches the SIF file constraint ordering
-        all_residuals = jnp.stack([residuals_a, residuals_b], axis=1).flatten()
+        eq_constraints = jnp.stack([constraints_a, constraints_b], axis=1).flatten()
 
-        # Return sum of squares (no 0.5 factor for least squares problems in CUTEst)
-        return jnp.sum(all_residuals**2)
+        # No inequality constraints for this problem
+        return eq_constraints, None
 
     @property
     def y0(self) -> Array:
@@ -123,6 +122,11 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
     @property
     def expected_result(self) -> None:
         """Solution represents minimum energy configuration"""
+        return None
+
+    @property
+    def bounds(self):
+        """No bounds for this problem"""
         return None
 
     @property

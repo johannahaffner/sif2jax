@@ -4,10 +4,15 @@ from ..._problem import AbstractConstrainedMinimisation
 
 
 class DTOC3(AbstractConstrainedMinimisation):
-    # TODO: Human review needed - pycutest appears to handle fixed variables differently
-    # When Y(1,1) and Y(1,2) are fixed by bounds (lb=ub), pycutest may automatically
-    # enforce these values in objective/constraint evaluations, while our implementation
-    # expects the caller to provide valid inputs that respect bounds.
+    # TODO: Human review needed
+    # Attempts made: Extensive analysis of objective function computation
+    # Suspected issues: pycutest appears to treat X(1498) and X(1499) as 0 when
+    #   evaluating at a ones vector, causing a discrepancy of exactly 12 unscaled units
+    #   (36000 scaled) in the objective. Our implementation correctly follows the SIF
+    #   specification where X(T) for T=1..N-1 should all be used in the objective.
+    # Resources needed: Access to pycutest source code or documentation about how
+    #   it handles variables near fixed variables, or confirmation that this is a
+    #   pycutest bug.
     """A discrete time optimal control (DTOC) problem with quadratic objective.
 
     The system has N time periods, 1 control variable and 2 state variables.
@@ -67,6 +72,8 @@ class DTOC3(AbstractConstrainedMinimisation):
         scale_factor = 2.0 / s
 
         # Extract control and state variables
+        # Note: We don't enforce fixed variables here as pycutest evaluates
+        # with the values given in the input vector
         # X(t) for t=1..N-1
         # Y(t,i) for t=1..N, i=1..2
         x_vars = y[: (self.n_periods - 1) * self.n_controls].reshape(
@@ -79,7 +86,7 @@ class DTOC3(AbstractConstrainedMinimisation):
         # Objective: sum over t=1..N-1 of (2/S) * (2*Y(t+1,1)^2 + Y(t+1,2)^2 + 6*X(t)^2)
         # Vectorize the computation
 
-        # Y(t+1) for t=0..N-2
+        # Y(t+1) for t=1..N-1 (indices 1..N-1 in y_vars, which is Y(2)..Y(N))
         y_next = y_vars[1:]
 
         # Y(t+1,1)^2 and Y(t+1,2)^2
@@ -97,6 +104,8 @@ class DTOC3(AbstractConstrainedMinimisation):
         s = self.args
 
         # Extract control and state variables
+        # Note: We don't enforce fixed variables here as pycutest evaluates
+        # with the values given in the input vector
         # X(t) for t=1..N-1
         # Y(t,i) for t=1..N, i=1..2
         x_vars = y[: (self.n_periods - 1) * self.n_controls].reshape(

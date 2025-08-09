@@ -49,6 +49,9 @@ from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
 from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
+
+# TODO: DEGTRIDL needs human review - causes segfault despite correct implementation
+# from .degtridl import DEGTRIDL as DEGTRIDL
 from .dtoc1l import DTOC1L as DTOC1L
 from .dtoc1na import DTOC1NA as DTOC1NA
 from .dtoc1nb import DTOC1NB as DTOC1NB
@@ -56,7 +59,11 @@ from .dtoc1nc import DTOC1NC as DTOC1NC
 from .dtoc1nd import DTOC1ND as DTOC1ND
 from .dtoc2 import DTOC2 as DTOC2
 
-# from .dtoc3 import DTOC3 as DTOC3  # TODO: Human review - fixed variables
+# TODO: DTOC3 needs human review - X(1498) and X(1499) treated as 0 by pycutest
+# from .dtoc3 import DTOC3 as DTOC3
+from .dtoc4 import DTOC4 as DTOC4
+from .dtoc5 import DTOC5 as DTOC5
+from .dtoc6 import DTOC6 as DTOC6
 from .elattar import ELATTAR as ELATTAR
 from .expfita import EXPFITA as EXPFITA
 from .expfitb import EXPFITB as EXPFITB
@@ -300,6 +307,7 @@ constrained_minimisation_problems = (
     # ANTWERP(),  # TODO: needs human review - initial value calculation
     AVGASA(),
     AVGASB(),
+    # DEGTRIDL(),  # TODO: Human review - causes segfault despite correct implementation
     # AVION2(),  # TODO: Human review - gradient discrepancies
     BIGGSC4(),
     BURKEHAN(),
@@ -323,7 +331,10 @@ constrained_minimisation_problems = (
     DTOC1NC(),
     DTOC1ND(),
     DTOC2(),
-    # DTOC3(),  # TODO: Human review - fixed variables differ from pycutest
+    # DTOC3(),  # Human review needed
+    DTOC4(),
+    DTOC5(),
+    DTOC6(),
     ELATTAR(),
     # EXPFITA(),  # TODO: Human review - fundamental formulation differences
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences

@@ -6,7 +6,10 @@ from ._bounded_minimisation import (
     BOX2 as BOX2,
     BRANIN as BRANIN,
     CAMEL6 as CAMEL6,
+    CYCLOOCTLS as CYCLOOCTLS,
     DEGDIAG as DEGDIAG,
+    DEGTRID as DEGTRID,
+    DEGTRID2 as DEGTRID2,
     DGOSPEC as DGOSPEC,
     EXP2B as EXP2B,
     EXPLIN as EXPLIN,
@@ -109,13 +112,17 @@ from ._constrained_minimisation import (
     CSFI2 as CSFI2,
     DALLASS as DALLASS,
     DECONVC as DECONVC,
+    # DEGTRIDL as DEGTRIDL,  # TODO: Human review - causes segfault
     DTOC1L as DTOC1L,
     DTOC1NA as DTOC1NA,
     DTOC1NB as DTOC1NB,
     DTOC1NC as DTOC1NC,
     DTOC1ND as DTOC1ND,
     DTOC2 as DTOC2,
-    # DTOC3 as DTOC3,  # TODO: Human review - fixed variables differ from pycutest
+    # DTOC3 as DTOC3,  # Human review needed
+    DTOC4 as DTOC4,
+    DTOC5 as DTOC5,
+    DTOC6 as DTOC6,
     ELATTAR as ELATTAR,
     # EXPFITA as EXPFITA,  # TODO: Human review - fundamental formulation differences
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
@@ -350,6 +357,8 @@ from ._nonlinear_equations import (
     # CHNRSNBMNE as CHNRSNBMNE,  # TODO: Human review needed
     # CUBENE as CUBENE,  # TODO: Human review - constraint and Jacobian mismatch
     CYCLIC3 as CYCLIC3,
+    CYCLOOCF as CYCLOOCF,
+    CYCLOOCT as CYCLOOCT,
     DANIWOOD as DANIWOOD,
     DECONVBNE as DECONVBNE,
     DECONVNE as DECONVNE,
@@ -486,6 +495,14 @@ from ._quadratic_problems import (
     CVXQP1 as CVXQP1,
     CVXQP2 as CVXQP2,
     CVXQP3 as CVXQP3,
+    DUAL1 as DUAL1,
+    DUAL2 as DUAL2,
+    DUAL3 as DUAL3,
+    DUAL4 as DUAL4,
+    DUALC1 as DUALC1,
+    DUALC2 as DUALC2,
+    DUALC5 as DUALC5,
+    DUALC8 as DUALC8,
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
     NCVXBQP1 as NCVXBQP1,
@@ -559,7 +576,8 @@ from ._unconstrained_minimisation import (
     CURLY10 as CURLY10,
     CURLY20 as CURLY20,
     CURLY30 as CURLY30,
-    # CYCLOOCFLS as CYCLOOCFLS,  # TODO: Human review - times out with default p=10000
+    CYCLIC3LS as CYCLIC3LS,
+    CYCLOOCFLS as CYCLOOCFLS,
     DANIWOODLS as DANIWOODLS,
     DENSCHNA as DENSCHNA,
     DENSCHNB as DENSCHNB,
@@ -962,6 +980,7 @@ problems_dict = {
     # "AUG2D": AUG2D(),  # TODO: needs human review - edge variable structure
     "AVGASA": AVGASA(),
     "AVGASB": AVGASB(),
+    # "DEGTRIDL": DEGTRIDL(),  # TODO: Human review - causes segfault
     # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
     # "BA_L1SPLS": BA_L1SPLS(),  # TODO: BA_L family needs human review
@@ -1022,10 +1041,11 @@ problems_dict = {
     "CVXQP1": CVXQP1(),
     "CVXQP2": CVXQP2(),
     "CVXQP3": CVXQP3(),
-    # "CYCLOOCFLS": CYCLOOCFLS(),  # TODO: Human review - times out with default p=10000
+    "CYCLOOCFLS": CYCLOOCFLS(),
     "DALLASS": DALLASS(),
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
+    "DEGTRID": DEGTRID(),
     "DECONVC": DECONVC(),
     "DTOC1L": DTOC1L(),
     "DTOC1NA": DTOC1NA(),
@@ -1033,7 +1053,10 @@ problems_dict = {
     "DTOC1NC": DTOC1NC(),
     "DTOC1ND": DTOC1ND(),
     "DTOC2": DTOC2(),
-    # "DTOC3": DTOC3(),  # TODO: Human review - fixed variables differ from pycutest
+    # "DTOC3": DTOC3(),  # Human review needed
+    "DTOC4": DTOC4(),
+    "DTOC5": DTOC5(),
+    "DTOC6": DTOC6(),
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),
@@ -1250,6 +1273,14 @@ problems_dict = {
     "QPBAND": QPBAND(),
     # "CHENHARK": CHENHARK(),  # TODO: Human review needed - see file
     "DEGDIAG": DEGDIAG(),
+    "DUAL1": DUAL1(),
+    "DUAL2": DUAL2(),
+    "DUAL3": DUAL3(),
+    "DUAL4": DUAL4(),
+    "DUALC1": DUALC1(),
+    "DUALC2": DUALC2(),
+    "DUALC5": DUALC5(),
+    "DUALC8": DUALC8(),
     "QUDLIN": QUDLIN(),
     "TAME": TAME(),
     "HATFLDH": HATFLDH(),
@@ -1294,6 +1325,11 @@ problems_dict = {
     # "COATINGNE": COATINGNE(),  # TODO: Human review - formulation differences
     # "CUBENE": CUBENE(),  # TODO: Human review - constraint and Jacobian mismatch
     "CYCLIC3": CYCLIC3(),
+    "CYCLIC3LS": CYCLIC3LS(),
+    "CYCLOOCF": CYCLOOCF(),
+    "CYCLOOCT": CYCLOOCT(),
+    "CYCLOOCTLS": CYCLOOCTLS(),
+    "DEGTRID2": DEGTRID2(),
     "DENSCHNBNE": DENSCHNBNE(),
     "DENSCHNCNE": DENSCHNCNE(),
     "DENSCHNDNE": DENSCHNDNE(),

@@ -20,7 +20,6 @@ Give either one or zero points according to the criteria above. Then annotate th
 - Up to two points: priority 3
 
 (Priority) NAME
-- (1) SPIN* - Score: 4 (simple problems, 2 already exist (SPINLS/SPINOP), no data, family size: 6)
 - (2) MISRA* - Score: 3 (moderate complexity, MISRA1D implemented, small data, family size: 6+)
 - (2) GAUSS* - Score: 3 (moderate complexity, several implemented, small data, family size: 6)
 - (2) HEART* - Score: 3 (moderate complexity, HEART6LS/HEART8LS implemented, small data, family size: 4)
@@ -65,7 +64,6 @@ Give either one or zero points according to the criteria above. Then annotate th
 - (3) GMNCASE* - Score: 1 (complex cases, no subset, large data, family size: 4)
 - (3) FLOS* - Score: 1 (flow shop problems, no subset, large data, family size: 6)
 - (3) EIG* - Score: 1 (eigenvalue problems, no subset, large structure, family size: 15)
-- (3) DUAL* - Score: 1 (dual formulations, no subset, large structure, family size: 8)
 - (3) DRCAV* - Score: 1 (driven cavity problems, no subset, large data, family size: 6)
 - (3) DMN* - Score: 0 (complex problems, no subset, large data, family size: 12)
 - (3) DIAG* - Score: 0 (diagonal problems, no subset, large structure, family size: 9)

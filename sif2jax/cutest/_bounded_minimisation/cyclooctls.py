@@ -2,12 +2,12 @@ import jax.numpy as jnp
 from jax import Array
 
 from ..._misc import inexact_asarray
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
+class CYCLOOCTLS(AbstractBoundedMinimisation):
     """
-    The cyclooctane molecule configuration problem (least squares, no fixed variables).
+    The cyclooctane molecule configuration problem (least squares version).
 
     The cyclooctane molecule is comprised of eight carbon atoms aligned
     in an equally spaced ring. When they take a position of minimum
@@ -19,7 +19,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
        ||v_i - v_i+1,mod p||^2 = c^2 for i = 1,..,p, and
        ||v_i - v_i+2,mod p||^2 = 2p/(p-2) c^2
 
-    This is a version of CYCLOOCTLS.SIF without the fixed variables.
+    where (arbitrarily) we have v_1 = 0 and component 1 of v_2 = 0
 
     Source:
     an extension of the cyclooctane molecule configuration space as
@@ -31,7 +31,7 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
     SIF input: Nick Gould, Feb 2020.
 
-    classification  SUR2-MN-V-0
+    classification  SBR2-MN-V-0
     """
 
     p: int = 10000  # Number of molecules
@@ -41,27 +41,8 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
 
     @property
     def n(self) -> int:
-        """Number of variables: Y2, Z2, then X3..XP, Y3..YP, Z3..ZP
-        Total: 2 + 3*(P-2) = 3*P - 4
-        """
-        return 3 * self.p - 4
-
-    def _get_positions(self, y: Array) -> Array:
-        """Convert variable vector to full position array (p, 3)"""
-        p = self.p
-        positions = jnp.zeros((p, 3))
-
-        # v_1 = (0, 0, 0) - fixed
-        # v_2 = (0, Y2, Z2) where X2=0 is fixed
-        positions = positions.at[1, 1].set(y[0])  # Y2
-        positions = positions.at[1, 2].set(y[1])  # Z2
-
-        # v_3 to v_p: X(i), Y(i), Z(i) for i = 3 to P
-        # Variables y[2:] contain [X3, Y3, Z3, X4, Y4, Z4, ...]
-        remaining_positions = y[2:].reshape(p - 2, 3)
-        positions = positions.at[2:].set(remaining_positions)
-
-        return positions
+        """Number of variables is 3*P"""
+        return 3 * self.p
 
     def objective(self, y: Array, args) -> Array:
         """Compute the least-squares objective for cyclooctane configuration"""
@@ -69,50 +50,58 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
         c2 = self.c**2
         sc2 = (2.0 * p / (p - 2)) * c2
 
-        # Get full position array
-        positions = self._get_positions(y)
+        # Reshape into (p, 3) for easier manipulation - each row is a position vector
+        positions = y.reshape(p, 3)
 
         # Residuals for nearest neighbor constraints: ||v_i - v_{i+1}||^2 = c^2
         next_indices = (jnp.arange(p) + 1) % p
         diff_next = positions - positions[next_indices]
         dist_sq_next = jnp.sum(diff_next**2, axis=1)
-        residuals_a = dist_sq_next - c2
+        residuals_next = dist_sq_next - c2
 
         # Residuals for next-next neighbor: ||v_i - v_{i+2}||^2 = 2p/(p-2)*c^2
         next2_indices = (jnp.arange(p) + 2) % p
         diff_next2 = positions - positions[next2_indices]
         dist_sq_next2 = jnp.sum(diff_next2**2, axis=1)
-        residuals_b = dist_sq_next2 - sc2
+        residuals_next2 = dist_sq_next2 - sc2
 
-        # Interleave residuals as A(1), B(1), A(2), B(2), ..., A(P), B(P)
-        # This matches the SIF file constraint ordering
-        all_residuals = jnp.stack([residuals_a, residuals_b], axis=1).flatten()
+        # Combine all residuals
+        all_residuals = jnp.concatenate([residuals_next, residuals_next2])
 
         # Return sum of squares (no 0.5 factor for least squares problems in CUTEst)
         return jnp.sum(all_residuals**2)
 
     @property
-    def y0(self) -> Array:
-        """Initial point: Y2, Z2 = 0, then i/P for molecule i"""
+    def bounds(self):
+        """Bounds with first molecule fixed at origin and x-component of second fixed"""
         p = self.p
-        n = self.n
+        lbs = jnp.full(3 * p, -jnp.inf)
+        ubs = jnp.full(3 * p, jnp.inf)
 
-        # Initialize all variables
-        initial = jnp.zeros(n)
+        # Fix first molecule at origin (indices 0, 1, 2 for X1, Y1, Z1)
+        lbs = lbs.at[0:3].set(0.0)
+        ubs = ubs.at[0:3].set(0.0)
 
-        # Y2 and Z2 start at 0 (per SIF file START POINT section)
-        # initial[0] and initial[1] are already 0
+        # Fix x-component of second molecule (index 3 for X2)
+        lbs = lbs.at[3].set(0.0)
+        ubs = ubs.at[3].set(0.0)
 
-        # Vectorized initialization for X3..XP, Y3..YP, Z3..ZP
-        # Create values for molecules 3 to p
-        molecule_indices = jnp.arange(3, p + 1)
-        values = molecule_indices / p
+        return lbs, ubs
 
-        # Each molecule has 3 coordinates (X, Y, Z) all set to the same value
-        remaining_values = jnp.repeat(values, 3)
+    @property
+    def y0(self) -> Array:
+        """Initial point: X(i) = Y(i) = Z(i) = i/P for molecule i"""
+        p = self.p
+        # As per SIF file: each molecule i has all coordinates set to i/P
+        values = jnp.arange(1, p + 1) / p
 
-        # Set all remaining positions at once
-        initial = initial.at[2:].set(remaining_values)
+        # Each molecule has the same value for all 3 coordinates
+        x_coords = values
+        y_coords = values
+        z_coords = values
+
+        # Stack into single array
+        initial = jnp.stack([x_coords, y_coords, z_coords], axis=1).flatten()
 
         return inexact_asarray(initial)
 

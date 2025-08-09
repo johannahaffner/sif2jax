@@ -80,6 +80,12 @@ from .errinrsmne import ERRINRSMNE as ERRINRSMNE
 from .exp2ne import EXP2NE as EXP2NE
 from .expfitne import EXPFITNE as EXPFITNE
 from .extrosnbne import EXTROSNBNE as EXTROSNBNE
+from .flosp2hh import FLOSP2HH as FLOSP2HH
+from .flosp2hl import FLOSP2HL as FLOSP2HL
+from .flosp2hm import FLOSP2HM as FLOSP2HM
+from .flosp2th import FLOSP2TH as FLOSP2TH
+from .flosp2tl import FLOSP2TL as FLOSP2TL
+from .flosp2tm import FLOSP2TM as FLOSP2TM
 from .freurone import FREURONE as FREURONE
 from .genrosebne import GENROSEBNE as GENROSEBNE
 from .genrosene import GENROSENE as GENROSENE
@@ -283,6 +289,12 @@ nonlinear_equations_problems = (
     EXP2NE(),
     EXPFITNE(),
     EXTROSNBNE(),
+    FLOSP2HH(),
+    FLOSP2HL(),
+    FLOSP2HM(),
+    FLOSP2TH(),
+    FLOSP2TL(),
+    FLOSP2TM(),
     FREURONE(),
     GENROSEBNE(),
     GENROSENE(),

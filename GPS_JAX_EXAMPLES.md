@@ -292,18 +292,3 @@ def gps_aggregate_scatter(element_values, element_indices, group_indices, weight
 4. **Avoid explicit loops** - use JAX primitives
 5. **Share element computations** between objective and constraints
 6. **Leverage sparsity** with index arrays rather than masks
-
-## Performance Comparison
-
-| Pattern | Loop Version | Vectorized Version | Speedup |
-|---------|--------------|-------------------|---------|
-| Chain structure | O(n) sequential | O(n) parallel | 10-100x |
-| Star structure | O(n) sequential | O(n) parallel | 10-50x |
-| Dense quadratic | O(n²) sequential | O(n²) parallel | 100-1000x |
-| Sparse products | O(n) sequential | O(n/k) parallel | 5-20x |
-
-The vectorized versions also benefit from:
-- XLA compilation
-- Better cache utilization  
-- SIMD instructions
-- GPU acceleration (when available)

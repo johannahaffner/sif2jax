@@ -9,6 +9,15 @@ from .degdiag import DEGDIAG as DEGDIAG
 from .degtrid import DEGTRID as DEGTRID
 from .degtrid2 import DEGTRID2 as DEGTRID2
 from .dgospec import DGOSPEC as DGOSPEC
+from .diagiqb import DIAGIQB as DIAGIQB
+from .diagiqe import DIAGIQE as DIAGIQE
+from .diagiqt import DIAGIQT as DIAGIQT
+from .diagnqb import DIAGNQB as DIAGNQB
+from .diagnqe import DIAGNQE as DIAGNQE
+from .diagnqt import DIAGNQT as DIAGNQT
+from .diagpqb import DIAGPQB as DIAGPQB
+from .diagpqe import DIAGPQE as DIAGPQE
+from .diagpqt import DIAGPQT as DIAGPQT
 from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
@@ -91,6 +100,15 @@ bounded_minimisation_problems = (
     CYCLOOCTLS(),
     DEGDIAG(),
     DEGTRID(),
+    DIAGIQB(),
+    DIAGIQE(),
+    DIAGIQT(),
+    DIAGNQB(),
+    DIAGNQE(),
+    DIAGNQT(),
+    DIAGPQB(),
+    DIAGPQE(),
+    DIAGPQT(),
     DEGTRID2(),
     DGOSPEC(),
     EXP2B(),

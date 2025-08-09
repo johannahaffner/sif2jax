@@ -303,6 +303,13 @@ from ._constrained_minimisation import (
     SIMPLLPB as SIMPLLPB,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
+    TRO3X3 as TRO3X3,
+    TRO4X4 as TRO4X4,
+    TRO5X5 as TRO5X5,
+    TRO6X2 as TRO6X2,
+    TRO11X3 as TRO11X3,
+    TRO21X5 as TRO21X5,
+    TRO41X9 as TRO41X9,
     # SPIN2OP as SPIN2OP,  # TODO: Human review - constraint test failures
     # SPINOP as SPINOP,  # TODO: Human review - auxiliary variable constraint issues
     # STEENBRB as STEENBRB,  # TODO: Human review - gradient test failing
@@ -751,6 +758,13 @@ problems_dict = {
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
     # "ALLINITC": ALLINITC(),  # Human review needed - dimension mismatch
     "ALSOTAME": ALSOTAME(),
+    "TRO3X3": TRO3X3(),
+    "TRO4X4": TRO4X4(),
+    "TRO5X5": TRO5X5(),
+    "TRO6X2": TRO6X2(),
+    "TRO11X3": TRO11X3(),
+    "TRO21X5": TRO21X5(),
+    "TRO41X9": TRO41X9(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
     "BOOTH": BOOTH(),

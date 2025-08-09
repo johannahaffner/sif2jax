@@ -57,7 +57,11 @@ from .dtoc1nc import DTOC1NC as DTOC1NC
 from .dtoc1nd import DTOC1ND as DTOC1ND
 from .dtoc2 import DTOC2 as DTOC2
 
-# from .dtoc3 import DTOC3 as DTOC3  # TODO: Human review - fixed variables
+# TODO: DTOC3 needs human review - X(1498) and X(1499) treated as 0 by pycutest
+# from .dtoc3 import DTOC3 as DTOC3
+from .dtoc4 import DTOC4 as DTOC4
+from .dtoc5 import DTOC5 as DTOC5
+from .dtoc6 import DTOC6 as DTOC6
 from .elattar import ELATTAR as ELATTAR
 from .expfita import EXPFITA as EXPFITA
 from .expfitb import EXPFITB as EXPFITB
@@ -325,7 +329,10 @@ constrained_minimisation_problems = (
     DTOC1NC(),
     DTOC1ND(),
     DTOC2(),
-    # DTOC3(),  # TODO: Human review - fixed variables differ from pycutest
+    # DTOC3(),  # Human review needed
+    DTOC4(),
+    DTOC5(),
+    DTOC6(),
     ELATTAR(),
     # EXPFITA(),  # TODO: Human review - fundamental formulation differences
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences

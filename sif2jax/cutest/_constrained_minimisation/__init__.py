@@ -274,6 +274,13 @@ from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
+from .tro3x3 import TRO3X3 as TRO3X3
+from .tro4x4 import TRO4X4 as TRO4X4
+from .tro5x5 import TRO5X5 as TRO5X5
+from .tro6x2 import TRO6X2 as TRO6X2
+from .tro11x3 import TRO11X3 as TRO11X3
+from .tro21x5 import TRO21X5 as TRO21X5
+from .tro41x9 import TRO41X9 as TRO41X9
 
 # TODO: Human review needed - constraint test failures (vectorized but sign issues)
 # from .spin2op import SPIN2OP as SPIN2OP
@@ -304,6 +311,13 @@ constrained_minimisation_problems = (
     # ALLINITA(),  # TODO: needs human review - L2 group type interpretation
     # ALLINITC(),  # Human review needed - dimension mismatch
     ALSOTAME(),
+    TRO3X3(),
+    TRO4X4(),
+    TRO5X5(),
+    TRO6X2(),
+    TRO11X3(),
+    TRO21X5(),
+    TRO41X9(),
     # ANTWERP(),  # TODO: needs human review - initial value calculation
     AVGASA(),
     AVGASB(),

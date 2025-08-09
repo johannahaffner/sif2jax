@@ -45,74 +45,6 @@ grep -E "GROUP TYPE|ELEMENT TYPE|DO " archive/mastsif/PROBLEM.SIF
 - **Repeated GROUPS** → `vmap` over group indices
 - **Element evaluations** → Batch compute all elements
 
-### Step 3: Implementation Patterns
-
-#### Pattern A: Separable Sum
-```python
-# SIF: Sum of element functions
-def objective(self, y: ArrayLike) -> Scalar:
-    # Vectorized element evaluation
-    elements = self._compute_elements(y)  # Shape: (n_elements,)
-    return jnp.sum(elements)
-    
-def _compute_elements(self, y: ArrayLike) -> Array:
-    # Example: squared differences
-    indices = self.element_indices  # Pre-computed in __init__
-    values = y[indices]
-    return (values - self.targets) ** 2
-```
-
-#### Pattern B: Group Structure
-```python
-# SIF: Groups with weighted elements
-def objective(self, y: ArrayLike) -> Scalar:
-    # Compute nonlinear elements
-    elements = self._compute_elements(y)
-    
-    # Vectorized group aggregation using scatter
-    # Pre-computed in __init__: 
-    # self.group_indices: which group each element belongs to
-    # self.weights: element weights
-    weighted_elements = elements * self.weights
-    
-    # Sum elements by group using segment_sum or scatter
-    group_values = jax.ops.segment_sum(
-        weighted_elements, 
-        self.group_indices,
-        num_segments=self.n_groups
-    )
-    
-    # Apply group scaling
-    scaled_groups = group_values * self.group_scales
-    
-    # Add linear/quadratic terms if present
-    return jnp.sum(scaled_groups) + self._quadratic_term(y)
-```
-
-#### Pattern C: Constraint Handling
-```python
-def constraints(self, y: ArrayLike) -> Array:
-    # Vectorize constraint evaluation
-    # Similar GPS structure as objective
-    return self._compute_constraint_groups(y)
-```
-
-### Step 4: Validation Against pycutest
-
-Validate directly against the native Fortran implementation via pycutest:
-1. Compare objective values at x0
-2. Compare gradient values  
-3. Check constraint evaluations
-
-```python
-# Validation template
-def expected_result(self) -> Scalar:
-    """Compare with pycutest Fortran result"""
-    # From pycutest evaluation at x0
-    # This is computed during test generation
-    return expected_value
-```
-
 ## Common SIF→JAX Mappings
 
 ### 1. Index Patterns
@@ -191,12 +123,3 @@ JAX: jnp.prod or sequential multiplication
 | Sum | jnp.sum | Check axis parameter |
 | Product | jnp.prod | Or reduce with * |
 | x(i) | y[i-1] | Mind 0-based indexing |
-
-## When to Flag for Review
-
-After 10 attempts, if issues persist:
-1. Document attempted approaches
-2. Note specific error patterns
-3. Compare pycutest values at multiple points
-4. Consider if problem needs special numerics
-5. Add TODO comment with findings and pycutest comparison

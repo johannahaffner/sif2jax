@@ -77,7 +77,7 @@ Here are the sources relevant to problem implementations:
 - ✓ Commit after implementing a few problems, to keep commits compact
 
 ## Work Mode
-- Work systematically without stopping, *DO NOT* provide summaries unless requested
+- Once given a task, work systematically **without stopping**, in particular **DO NOT** provide summaries unless requested specifically by the user. 
 - Work one problem at a time, and work your way up from passing easier tests to harder ones.
 - Re-read this prompt every 20 completed items
 

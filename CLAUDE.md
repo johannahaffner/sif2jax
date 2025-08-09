@@ -26,7 +26,7 @@ SIF problems have a group-separable structure. Identifying this structure helps 
 You can look up some guiding principles in the CONVERSION_GUIDE file.
 
 Here are the sources relevant to problem implementations:
-1. **SIF Files**: `archive/mastsif/` folder - Original SIF problem definitions (PRIMARY SOURCE)
+1. **SIF Files**: `archive/mastsif/` folder - Original SIF problem definitions (PRIMARY SOURCE). Look in this folder whenever you are asked to find problems of any series - e.g. search for "TRO" in this folder to find problems from the "TRO" series of problems. You can also consult the missing_problems.md file.
 2. **AMPL**: `https://github.com/ampl/global-optimization/tree/master/cute` (lowercase.mod files)
 3. **References**: From SIF file headers
 

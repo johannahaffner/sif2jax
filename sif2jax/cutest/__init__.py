@@ -450,6 +450,10 @@ from ._nonlinear_equations import (
     MANCINONE as MANCINONE,
     MEYER3NE as MEYER3NE,
     MGH09 as MGH09,
+    MGH10 as MGH10,
+    MGH10S as MGH10S,
+    MGH17 as MGH17,
+    MGH17S as MGH17S,
     MISRA1D as MISRA1D,
     # MODBEALENE as MODBEALENE,  # TODO: Human review - constraint ordering issues
     # MOREBVNE as MOREBVNE,  # TODO: Human review - SIF file bug on line 64
@@ -725,7 +729,11 @@ from ._unconstrained_minimisation import (
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     MARATOSB as MARATOSB,
     MEXHAT as MEXHAT,
+    MGH09LS as MGH09LS,
     MGH10LS as MGH10LS,
+    MGH10SLS as MGH10SLS,
+    MGH17LS as MGH17LS,
+    MGH17SLS as MGH17SLS,
     # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
     # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
@@ -1234,7 +1242,11 @@ problems_dict = {
     # "MANCINO": MANCINO(),  # TODO: Human review - significant discrepancies in all
     # "MEXHAT": MEXHAT(),  # TODO: Human review - complex scaling issues
     # "MODBEALE": MODBEALE(),  # TODO: Human review - SCALE interpretation issue
+    "MGH09LS": MGH09LS(),
     "MGH10LS": MGH10LS(),
+    "MGH10SLS": MGH10SLS(),
+    "MGH17LS": MGH17LS(),
+    "MGH17SLS": MGH17SLS(),
     "MARATOSB": MARATOSB(),
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
@@ -1492,6 +1504,10 @@ problems_dict = {
     "MANCINONE": MANCINONE(),
     "MEYER3NE": MEYER3NE(),
     "MGH09": MGH09(),
+    "MGH10": MGH10(),
+    "MGH10S": MGH10S(),
+    "MGH17": MGH17(),
+    "MGH17S": MGH17S(),
     "MISRA1D": MISRA1D(),
     # "MODBEALENE": MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # "MOREBVNE": MOREBVNE(),  # TODO: Human review - SIF file bug on line 64

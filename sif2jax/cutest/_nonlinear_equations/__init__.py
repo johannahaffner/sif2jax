@@ -140,6 +140,10 @@ from .luksan22 import LUKSAN22 as LUKSAN22
 from .mancinone import MANCINONE as MANCINONE
 from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
+from .mgh10 import MGH10 as MGH10
+from .mgh10s import MGH10S as MGH10S
+from .mgh17 import MGH17 as MGH17
+from .mgh17s import MGH17S as MGH17S
 from .misra1d import MISRA1D as MISRA1D
 
 # TODO: Human review - constraint ordering issues
@@ -347,6 +351,10 @@ nonlinear_equations_problems = (
     MANCINONE(),
     MEYER3NE(),
     MGH09(),
+    MGH10(),
+    MGH10S(),
+    MGH17(),
+    MGH17S(),
     MISRA1D(),
     # MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # MOREBVNE(),  # TODO: Human review - SIF file bug on line 64

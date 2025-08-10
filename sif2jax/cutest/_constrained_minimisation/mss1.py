@@ -11,12 +11,6 @@ class MSS1(MSSBase):
     Source: N. Gould, March 2002
 
     Classification: QQR2-AN-90-73
-
-    TODO: Human review needed - constraint Jacobian has minor discrepancies with
-    pycutest.
-    Most tests pass (668/673) but Hessian and Jacobian tests show differences.
-    The implementation follows the SIF file structure correctly but may need
-    adjustment in edge constraint ordering or formulation.
     """
 
     def _get_n_vertices(self) -> int:

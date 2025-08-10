@@ -62,8 +62,9 @@ class MSSBase(AbstractConstrainedMinimisation):
     def objective(self, y: Array, args) -> Float[Array, ""]:
         """Compute the objective function -sum(x_i)^2 - sum(y_i)^2."""
         del args
-        x = y[: self.n_vertices]
-        y_vars = y[self.n_vertices :]
+        # Variables are arranged as: [X(1), Y(1), X(2), Y(2), ..., X(n), Y(n)]
+        x = y[::2]  # Extract X variables (every even index)
+        y_vars = y[1::2]  # Extract Y variables (every odd index)
 
         # The objective is to maximize sum(x_i) + sum(y_i)
         # But with the group type -L2, it becomes -sum(x_i)^2 - sum(y_i)^2
@@ -73,8 +74,9 @@ class MSSBase(AbstractConstrainedMinimisation):
 
     def constraint(self, y: Array):
         """Compute the constraints."""
-        x = y[: self.n_vertices]
-        y_vars = y[self.n_vertices :]
+        # Variables are arranged as: [X(1), Y(1), X(2), Y(2), ..., X(n), Y(n)]
+        x = y[::2]  # Extract X variables (every even index)
+        y_vars = y[1::2]  # Extract Y variables (every odd index)
 
         # Spherical constraint: sum(x_i^2 + y_i^2) = 1
         spherical = jnp.sum(x**2 + y_vars**2) - 1.0

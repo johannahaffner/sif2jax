@@ -250,6 +250,8 @@ from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
 from .maratos import MARATOS as MARATOS
 from .mss1 import MSS1 as MSS1
+from .mss2 import MSS2 as MSS2
+from .mss3 import MSS3 as MSS3
 from .odfits import ODFITS as ODFITS
 
 # from .orthrdm2 import ORTHRDM2 as ORTHRDM2  # TODO: Human review - singular Jacobian
@@ -465,6 +467,8 @@ constrained_minimisation_problems = (
     LOOTSMA(),
     MARATOS(),
     MSS1(),
+    MSS2(),
+    MSS3(),
     ODFITS(),
     # ORTHRDM2(),  # TODO: Human review - singular Jacobian issues
     # ORTHRDS2(),  # TODO: Human review - singular Jacobian issues

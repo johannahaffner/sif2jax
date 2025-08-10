@@ -504,6 +504,9 @@ from ._nonlinear_equations import (
     TENFOLDTR as TENFOLDTR,
     TRIGON1NE as TRIGON1NE,
     # TRIGON2NE as TRIGON2NE,  # TODO: Human review - Jacobian tolerance 1.26e-05
+    VESUVIA as VESUVIA,
+    VESUVIO as VESUVIO,
+    VESUVIOU as VESUVIOU,
     YATP1CNE as YATP1CNE,
     YATP1NE as YATP1NE,
 )
@@ -764,6 +767,9 @@ from ._unconstrained_minimisation import (
     # TRIGON2 as TRIGON2,  # TODO: Human review - Hessian test fails
     unconstrained_minimisation_problems as unconstrained_minimisation_problems,
     VARDIM as VARDIM,
+    VESUVIALS as VESUVIALS,
+    VESUVIOLS as VESUVIOLS,
+    VESUVIOULS as VESUVIOULS,
     # WATSON as WATSON,  # TODO: Human review - Hessian computation issues
     WAYSEA1 as WAYSEA1,
     WAYSEA2 as WAYSEA2,
@@ -1318,6 +1324,9 @@ problems_dict = {
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TRIGON2B": TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
     # "TRIGON2NE": TRIGON2NE(),  # TODO: Human review - Jacobian tolerance 1.26e-05
+    "VESUVIA": VESUVIA(),
+    "VESUVIO": VESUVIO(),
+    "VESUVIOU": VESUVIOU(),
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
     # "TORSIOND": TORSIOND(),  # TODO: Human review - objective mismatch
@@ -1342,6 +1351,9 @@ problems_dict = {
     "HATFLDH": HATFLDH(),
     "HS44NEW": HS44NEW(),
     "VARDIM": VARDIM(),
+    "VESUVIALS": VESUVIALS(),
+    "VESUVIOLS": VESUVIOLS(),
+    "VESUVIOULS": VESUVIOULS(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
     "AIRCRFTA": AIRCRFTA(),
     "ARGAUSS": ARGAUSS(),

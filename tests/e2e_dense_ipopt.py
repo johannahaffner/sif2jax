@@ -152,7 +152,7 @@ if __name__ == "__main__":
     obj_grad_ref = p_ref.grad
     obj_hess_ref = p_ref.ihess
 
-    obj = lambda x: p.objective(x, p.args())
+    obj = lambda x: p.objective(x, p.args)
     obj_grad = jax.jacobian(obj)
     obj_hess = jax.hessian(obj)
 
@@ -166,7 +166,7 @@ if __name__ == "__main__":
         with pipes(stdout=buf, stderr=buf):
             result = cyipopt.minimize_ipopt(
                 fun=obj,
-                x0=p.y0(),
+                x0=p.y0,
                 jac=obj_grad,
                 hess=obj_hess,
                 tol=tol,

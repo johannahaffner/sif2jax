@@ -132,6 +132,7 @@ from ._constrained_minimisation import (
     DTOC4 as DTOC4,
     DTOC5 as DTOC5,
     DTOC6 as DTOC6,
+    # EIGENACO as EIGENACO,  # TODO: Human review needed
     ELATTAR as ELATTAR,
     # EXPFITA as EXPFITA,  # TODO: Human review - fundamental formulation differences
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
@@ -415,7 +416,8 @@ from ._nonlinear_equations import (
     DRCAVTY2 as DRCAVTY2,
     DRCAVTY3 as DRCAVTY3,
     EGGCRATENE as EGGCRATENE,
-    # EIGENAU as EIGENAU,  # TODO: Human review - non-standard initial values
+    # EIGENA as EIGENA,  # TODO: Human review needed
+    # EIGENAU as EIGENAU,  # TODO: Human review needed
     ELATVIDUNE as ELATVIDUNE,
     ENGVAL2NE as ENGVAL2NE,
     ERRINROSNE as ERRINROSNE,
@@ -564,6 +566,7 @@ from ._quadratic_problems import (
     DUALC2 as DUALC2,
     DUALC5 as DUALC5,
     DUALC8 as DUALC8,
+    # EIGENA2 as EIGENA2,  # TODO: Human review needed
     GOULDQP1 as GOULDQP1,
     GOULDQP2 as GOULDQP2,
     GOULDQP3 as GOULDQP3,
@@ -1177,6 +1180,7 @@ problems_dict = {
     "DTOC4": DTOC4(),
     "DTOC5": DTOC5(),
     "DTOC6": DTOC6(),
+    # "EIGENACO": EIGENACO(),  # TODO: Human review needed
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),
@@ -1431,6 +1435,7 @@ problems_dict = {
     "DUALC2": DUALC2(),
     "DUALC5": DUALC5(),
     "DUALC8": DUALC8(),
+    # "EIGENA2": EIGENA2(),  # TODO: Human review needed
     "GOULDQP1": GOULDQP1(),
     "GOULDQP2": GOULDQP2(),
     "GOULDQP3": GOULDQP3(),
@@ -1504,7 +1509,8 @@ problems_dict = {
     "DEVGLA1NE": DEVGLA1NE(),
     "DEVGLA2NE": DEVGLA2NE(),
     "EGGCRATENE": EGGCRATENE(),
-    # "EIGENAU": EIGENAU(),  # TODO: Human review - non-standard initial values
+    # "EIGENA": EIGENA(),  # TODO: Human review needed
+    # "EIGENAU": EIGENAU(),  # TODO: Human review needed
     "ELATTAR": ELATTAR(),
     "ELATVIDUNE": ELATVIDUNE(),
     "ENGVAL2NE": ENGVAL2NE(),

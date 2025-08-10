@@ -1,8 +1,10 @@
+import os
+
 import jax
 import jax.numpy as jnp
+import numpy as np
 
 from ..._problem import AbstractConstrainedQuadraticProblem
-from .table_utils import parse_table_sif
 
 
 # Cache the parsed data at module level
@@ -10,10 +12,41 @@ _cached_data = None
 
 
 def _get_cached_data():
-    """Get cached parsed data, parsing if needed."""
+    """Get cached parsed data, loading from numpy files if needed."""
     global _cached_data
     if _cached_data is None:
-        _cached_data = parse_table_sif("archive/mastsif/TABLE6.SIF")
+        # Get the directory containing this file
+        current_dir = os.path.dirname(__file__)
+        data_dir = os.path.join(current_dir, "data")
+
+        # Load data directly as JAX arrays
+        A_rows = jnp.asarray(
+            np.load(os.path.join(data_dir, "table6_A_rows.npy")), dtype=jnp.int32
+        )
+        A_cols = jnp.asarray(
+            np.load(os.path.join(data_dir, "table6_A_cols.npy")), dtype=jnp.int32
+        )
+        A_vals = jnp.asarray(np.load(os.path.join(data_dir, "table6_A_vals.npy")))
+        lower_bounds = jnp.asarray(
+            np.load(os.path.join(data_dir, "table6_lower_bounds.npy"))
+        )
+        upper_bounds = jnp.asarray(
+            np.load(os.path.join(data_dir, "table6_upper_bounds.npy"))
+        )
+        Q_diag_vals = jnp.asarray(
+            np.load(os.path.join(data_dir, "table6_Q_diag_vals.npy"))
+        )
+        m_val = int(np.load(os.path.join(data_dir, "table6_m.npy")))
+
+        _cached_data = (
+            A_rows,
+            A_cols,
+            A_vals,
+            lower_bounds,
+            upper_bounds,
+            Q_diag_vals,
+            m_val,
+        )
     return _cached_data
 
 
@@ -68,7 +101,8 @@ class TABLE6(AbstractConstrainedQuadraticProblem):
             m_val,
         ) = _get_cached_data()
 
-        Q_diag_vals = jnp.array(Q_diag_vals, dtype=y.dtype)
+        # Cast to match y's dtype if needed
+        Q_diag_vals = Q_diag_vals.astype(y.dtype)
         # The QMATRIX values need to be halved for the standard form 0.5 * y^T Q y
         # since the SIF file specifies the full coefficient
         return 0.5 * jnp.sum(Q_diag_vals * y * y)
@@ -85,7 +119,7 @@ class TABLE6(AbstractConstrainedQuadraticProblem):
             Q_diag_vals,
             m_val,
         ) = _get_cached_data()
-        return jnp.array(lower_bounds), jnp.array(upper_bounds)
+        return lower_bounds, upper_bounds
 
     def constraint(self, y):
         """Linear equality constraints: Ay = 0."""
@@ -100,9 +134,8 @@ class TABLE6(AbstractConstrainedQuadraticProblem):
             m_val,
         ) = _get_cached_data()
 
-        A_rows = jnp.array(A_rows, dtype=jnp.int32)
-        A_cols = jnp.array(A_cols, dtype=jnp.int32)
-        A_vals = jnp.array(A_vals, dtype=y.dtype)
+        # Cast A_vals to match y's dtype if needed
+        A_vals = A_vals.astype(y.dtype)
 
         # Vectorized sparse matrix-vector multiplication
         selected_y = y[A_cols]

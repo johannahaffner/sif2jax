@@ -95,6 +95,9 @@ from .dixon3dq import DIXON3DQ as DIXON3DQ
 from .djtl import DJTL as DJTL
 from .dqdrtic import DQDRTIC as DQDRTIC
 from .dqrtic import DQRTIC as DQRTIC
+from .drcav1lq import DRCAV1LQ as DRCAV1LQ
+from .drcav2lq import DRCAV2LQ as DRCAV2LQ
+from .drcav3lq import DRCAV3LQ as DRCAV3LQ
 
 # TODO: ECKERLE4LS needs human review - significant discrepancies
 # from .eckerle4ls import ECKERLE4LS as ECKERLE4LS
@@ -364,6 +367,9 @@ unconstrained_minimisation_problems = (
     DIXMAANO(),
     DIXMAANP(),
     DIXON3DQ(),
+    DRCAV1LQ(),
+    DRCAV2LQ(),
+    DRCAV3LQ(),
     DJTL(),
     DQDRTIC(),
     DQRTIC(),

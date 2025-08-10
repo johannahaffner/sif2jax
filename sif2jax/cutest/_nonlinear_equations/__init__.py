@@ -55,6 +55,9 @@ from .denschnene import DENSCHNENE as DENSCHNENE
 from .denschnfne import DENSCHNFNE as DENSCHNFNE
 from .devgla1ne import DEVGLA1NE as DEVGLA1NE
 from .devgla2ne import DEVGLA2NE as DEVGLA2NE
+from .drcavty1 import DRCAVTY1 as DRCAVTY1
+from .drcavty2 import DRCAVTY2 as DRCAVTY2
+from .drcavty3 import DRCAVTY3 as DRCAVTY3
 from .eggcratene import EGGCRATENE as EGGCRATENE
 
 # TODO: Human review - pycutest has non-standard initial values
@@ -244,6 +247,9 @@ nonlinear_equations_problems = (
     # BROYDN3D(),  # TODO: Human review needed - constraint values mismatch
     # BROYDNBD(),  # TODO: Human review needed - systematic differences
     # BRYBNDNE(),  # TODO: Human review needed - constraint values mismatch
+    DRCAVTY1(),
+    DRCAVTY2(),
+    DRCAVTY3(),
     HYPCIR(),
     MSQRTA(),
     MSQRTB(),

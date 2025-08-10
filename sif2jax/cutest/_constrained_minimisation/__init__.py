@@ -302,6 +302,10 @@ from .tro41x9 import TRO41X9 as TRO41X9
 # from .truspyr2 import TRUSPYR2 as TRUSPYR2
 # from .vanderm3 import VANDERM3 as VANDERM3  # TODO: Human review needed
 # from .vanderm4 import VANDERM4 as VANDERM4  # TODO: Human review needed
+# TODO: TWIR problems need human review - complex trilinear constraint formulation
+# from .twirism1 import TWIRISM1 as TWIRISM1
+# from .twirimd1 import TWIRIMD1 as TWIRIMD1
+# from .twiribg1 import TWIRIBG1 as TWIRIBG1
 from .zecevic2 import ZECEVIC2 as ZECEVIC2
 from .zecevic3 import ZECEVIC3 as ZECEVIC3
 from .zecevic4 import ZECEVIC4 as ZECEVIC4
@@ -502,6 +506,10 @@ constrained_minimisation_problems = (
     MAKELA4(),
     # HS70(),  # TODO: Human review - test failures
     # HS84(),  # TODO: Human review - objective value discrepancy
+    # TODO: TWIR problems need human review - complex trilinear constraint formulation
+    # TWIRISM1(),
+    # TWIRIMD1(),
+    # TWIRIBG1(),
     ZECEVIC2(),
     ZECEVIC3(),
     ZECEVIC4(),

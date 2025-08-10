@@ -38,6 +38,11 @@ from .qpnband import QPNBAND as QPNBAND
 # from .qpnboei1 import QPNBOEI1 as QPNBOEI1  # TODO: Human review - Boeing constraints
 # from .qpnboei2 import QPNBOEI2 as QPNBOEI2  # TODO: Human review - Boeing constraints
 # from .qpnstair import QPNSTAIR as QPNSTAIR  # TODO: Human review - constraint dims
+from .table1 import TABLE1 as TABLE1
+from .table3 import TABLE3 as TABLE3
+from .table6 import TABLE6 as TABLE6
+from .table7 import TABLE7 as TABLE7
+from .table8 import TABLE8 as TABLE8
 from .tame import TAME as TAME
 
 # from .torsiond import TORSIOND as TORSIOND  # TODO: Human review needed - see file
@@ -90,6 +95,11 @@ constrained_quadratic_problems = (
     # QPNBOEI1(),  # TODO: Human review - Boeing routing constraints
     # QPNBOEI2(),  # TODO: Human review - Boeing routing constraints
     # QPNSTAIR(),  # TODO: Human review - complex constraint dimensions
+    TABLE1(),
+    TABLE3(),
+    TABLE6(),
+    TABLE7(),
+    TABLE8(),
     TAME(),
     YAO(),
 )

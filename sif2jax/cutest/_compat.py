@@ -62,11 +62,13 @@ class PyCUTEstCompatibilityWrapper(AbstractConstrainedMinimisation):
     def args(self) -> Any:
         return self.problem.args
 
+    @property
     def expected_result(self) -> Array | None:
-        return self.problem.expected_result()
+        return self.problem.expected_result
 
+    @property
     def expected_objective_value(self) -> Array | None:
-        return self.problem.expected_objective_value()
+        return self.problem.expected_objective_value
 
     @property
     def bounds(self) -> tuple[Array, Array] | None:

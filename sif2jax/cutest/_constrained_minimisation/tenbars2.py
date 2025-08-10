@@ -1,5 +1,5 @@
 r"""
-The "ten bar truss" structural optimization problem, version P4.
+The "ten bar truss" structural optimization problem, version P2.
 
 The problem is to minimize the cross section areas of the bars
 in the structure
@@ -18,11 +18,6 @@ in the structure
 submitted to vertical forces of equal magnitude (P0) applied at
 the two free lower nodes, subject to limits of nodal displacements.
 
-NOTE: The SIF file specifies that EF should be included in C3 and C4.
-However, testing shows pycutest omits it from constraint values but
-includes its derivatives in the Jacobian. We match pycutest's behavior
-for consistency. This inconsistency affects all four TENBARS problems.
-
 Source:
 K. Svanberg,
 private communication,  August 1990.
@@ -33,9 +28,8 @@ in "New directions in optimum structural design" (Atrek, Ragsdell
 and Zienkiwewicz, eds.), Wiley, 1984.
 
 SIF input: Ph. Toint, August 1990.
-correction by S. Gratton & Ph. Toint, May 2024
 
-classification LOR2-MY-18-9
+classification LOR2-MY-18-8
 """
 
 import jax.numpy as jnp
@@ -43,17 +37,17 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
-class TENBARS4(AbstractConstrainedMinimisation):
+class TENBARS2(AbstractConstrainedMinimisation):
     @property
     def name(self) -> str:
-        return "TENBARS4"
+        return "TENBARS2"
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
     n: int = 18  # 8 nodal displacements (U1-U8) + 10 bar cross sections (X1-X10)
     n_equality_constraints: int = 8  # 8 equilibrium conditions
-    n_inequality_constraints: int = 1  # 1 strain condition
+    n_inequality_constraints: int = 0  # No inequality constraints
 
     @property
     def y0(self):
@@ -135,22 +129,33 @@ class TENBARS4(AbstractConstrainedMinimisation):
         c5 = minus_inv_sq8 * eh - ec
         c6 = minus_inv_sq8 * eh + ej
         c7 = minus_inv_sq8 * ed - ei
-        c8 = inv_sq8 * ed - ej + p0  # RHS moved to LHS
+        c8 = inv_sq8 * ed - ej + p0
 
         equality_constraints = jnp.array([c1, c2, c3, c4, c5, c6, c7, c8])
 
-        # Inequality constraint: U4 + U8 >= -76.2
-        strain = u[3] + u[7] + 76.2
-        inequality_constraints = jnp.array([strain])
+        # No inequality constraints for TENBARS2
+        inequality_constraints = None
 
         return equality_constraints, inequality_constraints
 
     @property
     def bounds(self):
-        # Lower bounds on cross section areas (X1 to X10)
+        # Lower bounds on U (even indices 2,4,6,8 have -50.8 lower bound)
+        # and on cross sections (0.645)
         lower = jnp.concatenate(
             [
-                jnp.full(8, -jnp.inf),  # No bounds on nodal displacements
+                jnp.array(
+                    [
+                        -jnp.inf,  # U1
+                        -50.8,  # U2
+                        -jnp.inf,  # U3
+                        -50.8,  # U4
+                        -jnp.inf,  # U5
+                        -50.8,  # U6
+                        -jnp.inf,  # U7
+                        -50.8,  # U8
+                    ]
+                ),
                 jnp.full(10, 0.645),  # Lower bound 0.645 on cross sections
             ]
         )
@@ -164,6 +169,8 @@ class TENBARS4(AbstractConstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        # According to the SIF file comment (line 229),
-        # the optimal objective value is 2247.1290
-        return jnp.array(2247.1290)
+        # According to the SIF file comments, two solution values are given:
+        # SOLTN-A: 2302.55
+        # SOLTN-B: 2277.9458
+        # We'll use the B solution as the expected value
+        return jnp.array(2277.9458)

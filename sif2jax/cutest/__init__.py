@@ -329,6 +329,11 @@ from ._constrained_minimisation import (
     SIMPLLPB as SIMPLLPB,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
+    # TAX13322 as TAX13322,  # TODO: Human review - complex objective
+    TENBARS1 as TENBARS1,
+    TENBARS2 as TENBARS2,
+    TENBARS3 as TENBARS3,
+    TENBARS4 as TENBARS4,
     TRO3X3 as TRO3X3,
     TRO4X4 as TRO4X4,
     TRO5X5 as TRO5X5,
@@ -583,6 +588,11 @@ from ._quadratic_problems import (
     # QPNBOEI2 as QPNBOEI2,  # TODO: Human review - Boeing routing constraints
     # QPNSTAIR as QPNSTAIR,  # TODO: Human review - complex constraint dimensions
     quadratic_problems as quadratic_problems,
+    TABLE1 as TABLE1,
+    TABLE3 as TABLE3,
+    TABLE6 as TABLE6,
+    TABLE7 as TABLE7,
+    TABLE8 as TABLE8,
     TAME as TAME,
     # TORSIOND as TORSIOND,  # TODO: Human review - objective mismatch with pycutest
     YAO as YAO,
@@ -1001,6 +1011,11 @@ problems_dict = {
     "SIMPLLPB": SIMPLLPB(),
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
+    # "TAX13322": TAX13322(),  # TODO: Human review - complex objective
+    "TENBARS1": TENBARS1(),
+    "TENBARS2": TENBARS2(),
+    "TENBARS3": TENBARS3(),
+    "TENBARS4": TENBARS4(),
     # "SPINOP": SPINOP(),  # TODO: Human review - auxiliary variable constraint issues
     # "SPIN2OP": SPIN2OP(),  # TODO: Human review - constraint test failures
     # "SIPOW3": SIPOW3(),  # TODO: Human review - constraint formulation issues
@@ -1420,6 +1435,11 @@ problems_dict = {
     "GOULDQP2": GOULDQP2(),
     "GOULDQP3": GOULDQP3(),
     "QUDLIN": QUDLIN(),
+    "TABLE1": TABLE1(),
+    "TABLE3": TABLE3(),
+    "TABLE6": TABLE6(),
+    "TABLE7": TABLE7(),
+    "TABLE8": TABLE8(),
     "TAME": TAME(),
     "HATFLDH": HATFLDH(),
     "HS44NEW": HS44NEW(),

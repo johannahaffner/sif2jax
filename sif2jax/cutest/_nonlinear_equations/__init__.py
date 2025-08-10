@@ -219,9 +219,11 @@ from .trigon1ne import TRIGON1NE as TRIGON1NE
 # TODO: Human review needed - minor numerical tolerance issue (Jacobian diff 1.26e-05)
 # from .trigon2ne import TRIGON2NE as TRIGON2NE
 from .vandaniums import VANDANIUMS as VANDANIUMS
+from .vardimne import VARDIMNE as VARDIMNE
 from .vesuvia import VESUVIA as VESUVIA
 from .vesuvio import VESUVIO as VESUVIO
 from .vesuviou import VESUVIOU as VESUVIOU
+from .vibrbeamne import VIBRBEAMNE as VIBRBEAMNE
 from .yatp1cne import YATP1CNE as YATP1CNE
 from .yatp1ne import YATP1NE as YATP1NE
 
@@ -402,9 +404,11 @@ nonlinear_equations_problems = (
     TRIGON1NE(),
     # TRIGON2NE(),  # TODO: Human review - minor Jacobian tolerance (1.26e-05)
     VANDANIUMS(),
+    VARDIMNE(),
     VESUVIA(),
     VESUVIO(),
     VESUVIOU(),
+    VIBRBEAMNE(),
     YATP1CNE(),
     YATP1NE(),
     # YATP2CNE(),  # TODO: Human review - constraint ordering mismatch with pycutest

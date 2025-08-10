@@ -271,9 +271,11 @@ from .trigon1 import TRIGON1 as TRIGON1
 # from .trigon2 import TRIGON2 as TRIGON2
 from .vandanmsls import VANDANMSLS as VANDANMSLS
 from .vardim import VARDIM as VARDIM
+from .vareigvl import VAREIGVL as VAREIGVL
 from .vesuvials import VESUVIALS as VESUVIALS
 from .vesuviols import VESUVIOLS as VESUVIOLS
 from .vesuviouls import VESUVIOULS as VESUVIOULS
+from .vibrbeam import VIBRBEAM as VIBRBEAM
 
 # TODO: Human review needed - Hessian computation issues
 # from .watson import WATSON as WATSON
@@ -515,7 +517,9 @@ unconstrained_minimisation_problems = (
     # TQUARTIC(),  # TODO: Human review - objective calculation incorrect
     VANDANMSLS(),
     VARDIM(),
+    VAREIGVL(),
     VESUVIALS(),
+    VIBRBEAM(),
     VESUVIOLS(),
     VESUVIOULS(),
 )

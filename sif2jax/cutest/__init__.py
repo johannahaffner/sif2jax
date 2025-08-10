@@ -288,6 +288,7 @@ from ._constrained_minimisation import (
     MAKELA3 as MAKELA3,
     MAKELA4 as MAKELA4,
     MARATOS as MARATOS,
+    MSS1 as MSS1,
     ODFITS as ODFITS,
     # ORTHRDM2 as ORTHRDM2,  # TODO: Human review - singular Jacobian issues
     # ORTHRDS2 as ORTHRDS2,  # TODO: Human review - singular Jacobian issues
@@ -934,6 +935,7 @@ problems_dict = {
     "HIMMELBE": HIMMELBE(),
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
+    "MSS1": MSS1(),
     "ODFITS": ODFITS(),
     # "ORTHRDM2": ORTHRDM2(),  # TODO: Human review - gradient issues
     # "ORTHRDS2": ORTHRDS2(),  # TODO: Human review - gradient issues

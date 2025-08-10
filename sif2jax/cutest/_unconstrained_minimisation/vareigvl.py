@@ -4,6 +4,10 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
+# TODO: Human review needed
+# Attempts made: Fixed ConcretizationTypeError by using masks and dynamic_slice
+# Suspected issues: Matrix computation discrepancy - obj/grad/Hessian all fail
+# Resources needed: Check original SIF file, verify banded matrix computation
 class VAREIGVL(AbstractUnconstrainedMinimisation):
     """Variational eigenvalue problem by Auchmuty.
 
@@ -31,7 +35,7 @@ class VAREIGVL(AbstractUnconstrainedMinimisation):
 
     # Problem dimension
     N: int = 4999  # Default from SIF file
-    M: int = 6  # Half bandwidth (must be at most N)
+    M: int = 4  # Half bandwidth (2M+1 = 9 from description)
     Q: float = 1.5  # Power parameter (must be in (1,2])
 
     @property
@@ -62,28 +66,41 @@ class VAREIGVL(AbstractUnconstrainedMinimisation):
 
         # Vectorized computation of Ax - mu*x
         n2 = self.N * self.N
-        residuals = []
 
-        # Create index arrays for vectorization
+        # Create index arrays
         i_indices = jnp.arange(self.N)
 
-        # For each row i, compute (Ax)_i - mu * x_i
+        # Create a padded version of x for easier indexing
+        # Pad with zeros on both sides for the band computation
+        x_padded = jnp.pad(x, (self.M, self.M), mode="constant", constant_values=0.0)
+
+        # For each row i, compute (Ax)_i - mu * x_i using a sliding window
         def compute_row_residual(i):
-            # Determine the band range for row i
-            j_start = jnp.maximum(0, i - self.M)
-            j_end = jnp.minimum(self.N, i + self.M + 1)
+            # Create relative indices for the band (from -M to M)
+            relative_j = jnp.arange(-self.M, self.M + 1)
+
+            # Get actual j indices (clipped to valid range)
+            j_indices = i + relative_j
+
+            # Create mask for valid indices
+            mask = (j_indices >= 0) & (j_indices < self.N)
 
             # Compute matrix elements for the band
-            j_indices = jnp.arange(j_start, j_end)
+            # Use (i+1) for 1-based indexing in formula
             ij = (i + 1) * (j_indices + 1)
             sij = jnp.sin(ij)
-            j_minus_i = j_indices - i
+            j_minus_i = relative_j
             arg = -(j_minus_i**2) / n2
             exp_arg = jnp.exp(arg)
-            aij = sij * exp_arg
+            aij = jnp.where(mask, sij * exp_arg, 0.0)
+
+            # Get corresponding x values from padded array using dynamic_slice
+            # In padded array, index i corresponds to position i
+            # (since we padded with M on left)
+            x_band = jax.lax.dynamic_slice(x_padded, [i], [2 * self.M + 1])
 
             # Compute row sum
-            row_sum = jnp.sum(aij * x[j_start:j_end])
+            row_sum = jnp.sum(aij * x_band)
 
             # Return residual
             return row_sum - mu * x[i]

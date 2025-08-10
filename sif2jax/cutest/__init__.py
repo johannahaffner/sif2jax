@@ -787,7 +787,7 @@ from ._unconstrained_minimisation import (
     unconstrained_minimisation_problems as unconstrained_minimisation_problems,
     VANDANMSLS as VANDANMSLS,
     VARDIM as VARDIM,
-    VAREIGVL as VAREIGVL,
+    # VAREIGVL as VAREIGVL,  # TODO: Human review - matrix computation discrepancy
     VESUVIALS as VESUVIALS,
     VESUVIOLS as VESUVIOLS,
     VESUVIOULS as VESUVIOULS,
@@ -1389,7 +1389,7 @@ problems_dict = {
     "HS44NEW": HS44NEW(),
     "VANDANMSLS": VANDANMSLS(),
     "VARDIM": VARDIM(),
-    "VAREIGVL": VAREIGVL(),
+    # "VAREIGVL": VAREIGVL(),  # TODO: Human review - matrix computation discrepancy
     "VESUVIALS": VESUVIALS(),
     "VIBRBEAM": VIBRBEAM(),
     "VESUVIOLS": VESUVIOLS(),

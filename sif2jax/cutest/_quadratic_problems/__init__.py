@@ -13,6 +13,8 @@ from .dualc1 import DUALC1 as DUALC1
 from .dualc2 import DUALC2 as DUALC2
 from .dualc5 import DUALC5 as DUALC5
 from .dualc8 import DUALC8 as DUALC8
+# TODO: Human review needed - same constraint issues as EIGENA
+# from .eigena2 import EIGENA2 as EIGENA2
 from .gouldqp1 import GOULDQP1 as GOULDQP1
 from .gouldqp2 import GOULDQP2 as GOULDQP2
 from .gouldqp3 import GOULDQP3 as GOULDQP3
@@ -63,6 +65,7 @@ constrained_quadratic_problems = (
     DUALC2(),
     DUALC5(),
     DUALC8(),
+    # EIGENA2(),  # TODO: Human review needed - same constraint issues as EIGENA
     GOULDQP1(),
     GOULDQP2(),
     GOULDQP3(),

@@ -1,9 +1,10 @@
 import jax.numpy as jnp
 
+from ..._misc import inexact_asarray
 from ..._problem import AbstractNonlinearEquations
 
 
-class EIGENAU(AbstractNonlinearEquations):
+class EIGENA(AbstractNonlinearEquations):
     """Solving symmetric eigenvalue problems as systems of nonlinear equations.
 
     The problem is, given a symmetric matrix A, to find an orthogonal
@@ -19,8 +20,25 @@ class EIGENAU(AbstractNonlinearEquations):
 
     Classification: NOR2-AN-V-V
     
-    TODO: Human review needed - same constraint issues as EIGENA
-    Related to systematic constraint value discrepancies in EIGENA implementation.
+    TODO: Human review needed
+    
+    Attempts made:
+    1. Fixed initial values to match pycutest pattern (D[0]=D[1]=1.0, rest 0; Q sparse pattern)
+    2. Added bounds property (lower=0 for all variables, interpreting SIF "nonnegative eigenvalues")
+    3. Tested multiple constraint orderings (eigen-first vs ortho-first, interleaved, SIF loop order)
+    4. Special handling for diagonal constraints with unused eigenvalues
+    
+    Current status: ~18/21 tests passing, systematic 50.0 constraint value discrepancies remain
+    
+    Suspected issues:
+    - pycutest may interpret SIF constraint formulation differently than mathematical A = Q^T D Q
+    - Constraint values differ by exactly eigenvalue magnitudes (50.0, 49.0, etc.)
+    - Issue appears at diagonal elements of eigen-equation constraints
+    
+    Resources needed:
+    - Deep investigation into pycutest's SIF constraint parsing
+    - Understanding of how pycutest handles GROUPS and CONSTANTS sections
+    - Possible consultation with pycutest maintainers
     """
 
     y0_iD: int = 0
@@ -52,7 +70,7 @@ class EIGENAU(AbstractNonlinearEquations):
         q = y[self.N :].reshape(self.N, self.N)  # Eigenvectors Q(i,j)
 
         # Define matrix A: diagonal with eigenvalues 1, ..., N
-        a = jnp.diag(jnp.arange(1, self.N + 1, dtype=y.dtype))
+        a = inexact_asarray(jnp.diag(jnp.arange(1, self.N + 1)))
 
         # Vectorized computation
         # Compute Q^T D Q
@@ -66,19 +84,18 @@ class EIGENAU(AbstractNonlinearEquations):
 
         residuals = []
 
-        # Eigen-equations: Q^T D Q - A = 0
-        # For upper triangular part only (i <= j)
+        # Use the most successful ordering found: eigen constraints first, then orthogonality
+        # All eigen equations E(I,J) first
         for j in range(self.N):
             for i in range(j + 1):
                 residuals.append(qtdq[i, j] - a[i, j])
-
-        # Orthogonality equations: Q^T Q - I = 0
-        # For upper triangular part only (i <= j)
+                
+        # All orthogonality equations O(I,J) second
         for j in range(self.N):
             for i in range(j + 1):
                 residuals.append(qtq[i, j] - eye[i, j])
 
-        return jnp.array(residuals)
+        return inexact_asarray(jnp.array(residuals))
 
     @property
     def y0(self):
@@ -90,7 +107,9 @@ class EIGENAU(AbstractNonlinearEquations):
         y0 = y0.at[0].set(1.0)
         y0 = y0.at[1].set(1.0)
         
-        # pycutest sets Q matrix with same pattern as EIGENA
+        # pycutest sets Q matrix with a specific pattern:
+        # Row i has non-zeros at columns (i+1) mod 50 and (2*i+3) mod 50
+        # with special handling for certain rows
         q_start = self.N
         for i in range(self.N):
             if i == 24:
@@ -123,7 +142,7 @@ class EIGENAU(AbstractNonlinearEquations):
                     idx = q_start + i * self.N + (2 * i + 3)
                     y0 = y0.at[idx].set(1.0)
 
-        return y0
+        return inexact_asarray(y0)
 
     @property
     def args(self):
@@ -135,14 +154,14 @@ class EIGENAU(AbstractNonlinearEquations):
         """Expected optimal solution: eigenvalues 1, ..., N and identity matrix."""
         # For diagonal matrix A with eigenvalues 1, ..., N,
         # the solution is D = diag(1, ..., N) and Q = I
-        d_expected = jnp.arange(1, self.N + 1, dtype=jnp.float64)
-        q_expected = jnp.eye(self.N).flatten()
+        d_expected = inexact_asarray(jnp.arange(1, self.N + 1))
+        q_expected = inexact_asarray(jnp.eye(self.N).flatten())
         return jnp.concatenate([d_expected, q_expected])
 
     @property
     def expected_objective_value(self):
         """Expected optimal objective value (0 for constrained formulation)."""
-        return jnp.array(0.0)
+        return inexact_asarray(jnp.array(0.0))
 
     def constraint(self, y):
         """Returns the residuals as equality constraints."""
@@ -150,5 +169,9 @@ class EIGENAU(AbstractNonlinearEquations):
 
     @property
     def bounds(self) -> tuple[jnp.ndarray, jnp.ndarray] | None:
-        """No bounds for this problem."""
-        return None
+        """Nonnegative bounds on all variables as per SIF comment."""
+        # The SIF file has comment "nonnegative eigenvalues" which pycutest
+        # interprets as lower bounds of 0.0 on ALL variables
+        lower = jnp.zeros(self.n)
+        upper = jnp.full(self.n, jnp.inf)
+        return lower, upper

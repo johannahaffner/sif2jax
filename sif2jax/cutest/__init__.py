@@ -11,6 +11,15 @@ from ._bounded_minimisation import (
     DEGTRID as DEGTRID,
     DEGTRID2 as DEGTRID2,
     DGOSPEC as DGOSPEC,
+    DIAGIQB as DIAGIQB,
+    DIAGIQE as DIAGIQE,
+    DIAGIQT as DIAGIQT,
+    DIAGNQB as DIAGNQB,
+    DIAGNQE as DIAGNQE,
+    DIAGNQT as DIAGNQT,
+    DIAGPQB as DIAGPQB,
+    DIAGPQE as DIAGPQE,
+    DIAGPQT as DIAGPQT,
     EXP2B as EXP2B,
     EXPLIN as EXPLIN,
     EXPLIN2 as EXPLIN2,
@@ -128,10 +137,10 @@ from ._constrained_minimisation import (
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
     # EXPFITC as EXPFITC,  # TODO: Human review - fundamental formulation differences
     GIGOMEZ2 as GIGOMEZ2,
-    # HAGER1 as HAGER1,  # TODO: Human review needed - parameter mismatch
-    # HAGER2 as HAGER2,  # TODO: Human review needed - parameter mismatch
-    # HAGER3 as HAGER3,  # TODO: Human review needed - parameter mismatch
-    # HAGER4 as HAGER4,  # TODO: Human review needed - parameter mismatch
+    HAGER1 as HAGER1,
+    HAGER2 as HAGER2,
+    # HAGER3 as HAGER3,  # TODO: HAGER3 needs human review - marked for future import
+    HAGER4 as HAGER4,
     HIMMELBC as HIMMELBC,
     HIMMELBD as HIMMELBD,
     HIMMELBE as HIMMELBE,
@@ -388,6 +397,12 @@ from ._nonlinear_equations import (
     EXP2NE as EXP2NE,
     EXPFITNE as EXPFITNE,
     EXTROSNBNE as EXTROSNBNE,
+    # FLOSP2HH as FLOSP2HH,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2HL as FLOSP2HL,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2HM as FLOSP2HM,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2TH as FLOSP2TH,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2TL as FLOSP2TL,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2TM as FLOSP2TM,  # TODO: Human review needed - NQR constraint handling
     FREURONE as FREURONE,
     GENROSEBNE as GENROSEBNE,
     GENROSENE as GENROSENE,
@@ -1153,10 +1168,10 @@ problems_dict = {
     # "GBRAINLS": GBRAINLS(),  # TODO: Human review - complex data dependencies
     "GENHUMPS": GENHUMPS(),
     "GIGOMEZ2": GIGOMEZ2(),
-    # "HAGER1": HAGER1(),  # TODO: Human review needed - parameter mismatch
-    # "HAGER2": HAGER2(),  # TODO: Human review needed - parameter mismatch
-    # "HAGER3": HAGER3(),  # TODO: Human review needed - parameter mismatch
-    # "HAGER4": HAGER4(),  # TODO: Human review needed - parameter mismatch
+    "HAGER1": HAGER1(),
+    "HAGER2": HAGER2(),
+    # "HAGER3": HAGER3(),  # TODO: HAGER3 needs human review - marked for future import
+    "HAGER4": HAGER4(),
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
     # "GULF": GULF(),  # TODO: Human review - issues reported by user
@@ -1263,6 +1278,15 @@ problems_dict = {
     "PRICE4": PRICE4(),
     "QUARTC": QUARTC(),
     "ROSENBR": ROSENBR(),
+    "DIAGIQB": DIAGIQB(),
+    "DIAGIQE": DIAGIQE(),
+    "DIAGIQT": DIAGIQT(),
+    "DIAGNQB": DIAGNQB(),
+    "DIAGNQE": DIAGNQE(),
+    "DIAGNQT": DIAGNQT(),
+    "DIAGPQB": DIAGPQB(),
+    "DIAGPQE": DIAGPQE(),
+    "DIAGPQT": DIAGPQT(),
     "ROSZMAN1LS": ROSZMAN1LS(),
     "S308": S308(),
     "SISSER": SISSER(),
@@ -1384,6 +1408,12 @@ problems_dict = {
     # "EXPFITC": EXPFITC(),  # TODO: Human review - fundamental formulation differences
     "EXPFITNE": EXPFITNE(),
     "EXTROSNBNE": EXTROSNBNE(),
+    # "FLOSP2HH": FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2HL": FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2HM": FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2TH": FLOSP2TH(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2TL": FLOSP2TL(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2TM": FLOSP2TM(),  # TODO: Human review needed - NQR constraint handling
     "FREURONE": FREURONE(),
     "GENROSEBNE": GENROSEBNE(),
     "GENROSENE": GENROSENE(),

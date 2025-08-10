@@ -3,7 +3,7 @@
 # Configuration
 CONTAINER_IMAGE="johannahaffner/pycutest:latest"
 MOUNT_PATH="/workspace"  # Path inside container where your code will be mounted
-LOCAL_PATH=/Users/jhaffner/Desktop/sif2jax  # For docker-in-docker setup
+LOCAL_PATH= # Add hard local path For docker-in-docker setup (needed for tests)
 
 # Run tests in container
 docker run --rm \

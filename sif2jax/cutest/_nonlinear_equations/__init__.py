@@ -80,6 +80,13 @@ from .errinrsmne import ERRINRSMNE as ERRINRSMNE
 from .exp2ne import EXP2NE as EXP2NE
 from .expfitne import EXPFITNE as EXPFITNE
 from .extrosnbne import EXTROSNBNE as EXTROSNBNE
+
+# from .flosp2hh import FLOSP2HH as FLOSP2HH  # TODO: Human review - NQR constraints
+# from .flosp2hl import FLOSP2HL as FLOSP2HL  # TODO: Human review - NQR constraints
+# from .flosp2hm import FLOSP2HM as FLOSP2HM  # TODO: Human review - NQR constraints
+# from .flosp2th import FLOSP2TH as FLOSP2TH  # TODO: Human review - NQR constraints
+# from .flosp2tl import FLOSP2TL as FLOSP2TL  # TODO: Human review - NQR constraints
+# from .flosp2tm import FLOSP2TM as FLOSP2TM  # TODO: Human review - NQR constraints
 from .freurone import FREURONE as FREURONE
 from .genrosebne import GENROSEBNE as GENROSEBNE
 from .genrosene import GENROSENE as GENROSENE
@@ -283,6 +290,12 @@ nonlinear_equations_problems = (
     EXP2NE(),
     EXPFITNE(),
     EXTROSNBNE(),
+    # FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2TH(),  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2TL(),  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2TM(),  # TODO: Human review needed - NQR constraint handling
     FREURONE(),
     GENROSEBNE(),
     GENROSENE(),

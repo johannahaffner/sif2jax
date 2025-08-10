@@ -292,6 +292,12 @@ from .sipow2 import SIPOW2 as SIPOW2
 # from .sipow4 import SIPOW4 as SIPOW4
 # TODO: TAX13322 needs human review - complex objective structure, off by ~80x
 # from .tax13322 import TAX13322 as TAX13322
+from .tenbars1 import TENBARS1 as TENBARS1
+from .tenbars2 import TENBARS2 as TENBARS2
+from .tenbars3 import TENBARS3 as TENBARS3
+
+# TODO: TENBARS4 needs human review - pycutest Jacobian inconsistency
+# from .tenbars4 import TENBARS4 as TENBARS4
 from .tro3x3 import TRO3X3 as TRO3X3
 from .tro4x4 import TRO4X4 as TRO4X4
 from .tro5x5 import TRO5X5 as TRO5X5
@@ -300,8 +306,6 @@ from .tro11x3 import TRO11X3 as TRO11X3
 from .tro21x5 import TRO21X5 as TRO21X5
 from .tro41x9 import TRO41X9 as TRO41X9
 
-# TODO: TENBARS4 needs human review - pycutest Jacobian inconsistency
-# from .tenbars4 import TENBARS4 as TENBARS4
 # TODO: TRUSPYR1 needs human review - complex constraint scaling issues
 # from .truspyr1 import TRUSPYR1 as TRUSPYR1
 # TODO: TRUSPYR2 needs human review - test requested to be removed
@@ -501,6 +505,10 @@ constrained_minimisation_problems = (
     SIPOW1(),
     SIPOW2(),
     # TAX13322(),  # TODO: Human review - complex objective structure
+    TENBARS1(),
+    TENBARS2(),
+    TENBARS3(),
+    # TENBARS4(),  # TODO: Human review - pycutest Jacobian inconsistency
     # SPINOP(),  # TODO: Human review - constraint issues with auxiliary variables
     # SPIN2OP(),  # TODO: Human review - constraint test failures
     # STEENBRB(),  # TODO: Human review - gradient test failing
@@ -523,7 +531,6 @@ constrained_minimisation_problems = (
     ZECEVIC2(),
     ZECEVIC3(),
     ZECEVIC4(),
-    # TENBARS4(),  # TODO: Human review - pycutest Jacobian inconsistency
     # TRUSPYR1(),  # TODO: Human review - complex constraint scaling issues
     # TRUSPYR2(),  # TODO: Human review - test requested to be removed
     BT1(),

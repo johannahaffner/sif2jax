@@ -5,7 +5,7 @@ This is the smallest problem in the TAX series with NA=1.
 
 TODO: Human review needed
 - Complex SIF objective structure with nested loops and multiple assignments
-- Current objective gives -3.78 vs expected -313.07 from pycutest  
+- Current objective gives -3.78 vs expected -313.07 from pycutest
 - Constraint structure appears correct (1261 constraints)
 - SIF comment: "If ever there was an example that exhibited the stupidity of SIF,
   this is it"
@@ -16,7 +16,7 @@ Attempts made:
 3. Objective attempted with RA and RB coefficient calculations
 4. Multiple iterations on RB formula interpretation
 
-Resources needed: 
+Resources needed:
 - Detailed analysis of nested SIF loop structure
 - Access to original AMPL model or paper for validation
 - Expert review of optimal taxation problem formulation

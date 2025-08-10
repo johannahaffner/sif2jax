@@ -19,10 +19,11 @@ class EIGENA2(AbstractConstrainedQuadraticProblem):
     SIF input: Nick Gould, Nov 1992.
 
     Classification: QQR2-AN-V-V
-    
+
     TODO: Human review needed - same constraint issues as EIGENA
     Related to systematic constraint value discrepancies in EIGENA implementation.
-    This quadratic formulation likely has the same underlying constraint interpretation issues.
+    This quadratic formulation likely has the same underlying
+    constraint interpretation issues.
     """
 
     y0_iD: int = 0
@@ -44,7 +45,7 @@ class EIGENA2(AbstractConstrainedQuadraticProblem):
 
     def objective(self, y, args):
         """Quadratic least squares objective function.
-        
+
         The SIF uses L2 group type which creates a quadratic objective.
         Minimize ||Q^T D - A Q^T||_F^2 (Frobenius norm squared)
         """
@@ -62,18 +63,18 @@ class EIGENA2(AbstractConstrainedQuadraticProblem):
         # This suggests: sum_k Q(J,I) * Q(K,J) * D(K) which is (Q^T diag(D) Q)_{I,J}
         # But the SIF says "Q(T) D - A Q(T) = 0" so let's use that form
         qtd = q.T @ jnp.diag(d)  # Q^T D
-        aqt = a @ q.T            # A Q^T
-        
+        aqt = a @ q.T  # A Q^T
+
         residual_matrix = qtd - aqt
-        
+
         # L2 objective: sum of squared residuals for all elements
-        return inexact_asarray(jnp.sum(residual_matrix ** 2))
+        return inexact_asarray(jnp.sum(residual_matrix**2))
 
     def constraint(self, y):
         """Orthogonality constraints: Q^T Q - I = 0."""
         # Extract eigenvectors
         q = y[self.N :].reshape(self.N, self.N)
-        
+
         # Compute Q^T Q - I
         qtq = q.T @ q
         eye = jnp.eye(self.N)
@@ -84,7 +85,7 @@ class EIGENA2(AbstractConstrainedQuadraticProblem):
         for j in range(self.N):
             for i in range(j + 1):
                 constraints.append(ortho_residuals[i, j])
-        
+
         return inexact_asarray(jnp.array(constraints)), None
 
     @property
@@ -96,7 +97,7 @@ class EIGENA2(AbstractConstrainedQuadraticProblem):
         # Set D[0] and D[1] to 1.0
         y0 = y0.at[0].set(1.0)
         y0 = y0.at[1].set(1.0)
-        
+
         # pycutest sets Q matrix with same pattern as EIGENA
         q_start = self.N
         for i in range(self.N):
@@ -105,7 +106,7 @@ class EIGENA2(AbstractConstrainedQuadraticProblem):
                 idx = q_start + i * self.N + 25
                 y0 = y0.at[idx].set(1.0)
             elif i == 49:
-                # Row 49 only has Q[49,49] = 1.0 
+                # Row 49 only has Q[49,49] = 1.0
                 idx = q_start + i * self.N + 49
                 y0 = y0.at[idx].set(1.0)
             elif i >= 25 and i < 49:
@@ -124,7 +125,7 @@ class EIGENA2(AbstractConstrainedQuadraticProblem):
                 if i + 1 < self.N:
                     idx = q_start + i * self.N + (i + 1)
                     y0 = y0.at[idx].set(1.0)
-                
+
                 # Q[i, 2*i+3] = 1.0
                 if 2 * i + 3 < self.N:
                     idx = q_start + i * self.N + (2 * i + 3)

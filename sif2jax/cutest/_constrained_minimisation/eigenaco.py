@@ -19,10 +19,11 @@ class EIGENACO(AbstractConstrainedMinimisation):
     SIF input: Nick Gould, Nov 1992.
 
     Classification: SQR2-AN-V-V
-    
+
     TODO: Human review needed - same constraint issues as EIGENA
     Related to systematic constraint value discrepancies in EIGENA implementation.
-    This constrained optimization formulation likely has the same underlying constraint interpretation issues.
+    This constrained optimization formulation likely has the same underlying
+    constraint interpretation issues.
     """
 
     y0_iD: int = 0
@@ -44,7 +45,7 @@ class EIGENACO(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         """Least squares objective function.
-        
+
         The SIF uses L2 group type for eigen-equations E(I,J).
         Minimize ||Q^T D Q - A||_F^2 (Frobenius norm squared for upper triangular part)
         """
@@ -61,21 +62,21 @@ class EIGENACO(AbstractConstrainedMinimisation):
         # Based on SIF: E(I,J) has elements Q1*Q2*D where Q1=Q(K,I), Q2=Q(K,J), D=D(K)
         # This represents (Q^T D Q)_{I,J} = sum_k Q(K,I) * D(K) * Q(K,J)
         qtdq = q.T @ jnp.diag(d) @ q
-        
+
         # Compute residuals for upper triangular part
         obj = 0.0
         for j in range(self.N):
             for i in range(j + 1):
                 residual = qtdq[i, j] - a[i, j]
                 obj += residual * residual
-        
+
         return inexact_asarray(obj)
 
     def constraint(self, y):
         """Orthogonality constraints: Q^T Q - I = 0."""
         # Extract eigenvectors
         q = y[self.N :].reshape(self.N, self.N)
-        
+
         # Compute Q^T Q - I
         qtq = q.T @ q
         eye = jnp.eye(self.N)
@@ -86,7 +87,7 @@ class EIGENACO(AbstractConstrainedMinimisation):
         for j in range(self.N):
             for i in range(j + 1):
                 constraints.append(ortho_residuals[i, j])
-        
+
         return inexact_asarray(jnp.array(constraints)), None
 
     @property
@@ -98,7 +99,7 @@ class EIGENACO(AbstractConstrainedMinimisation):
         # Set D[0] and D[1] to 1.0
         y0 = y0.at[0].set(1.0)
         y0 = y0.at[1].set(1.0)
-        
+
         # pycutest sets Q matrix with same pattern as EIGENA
         q_start = self.N
         for i in range(self.N):
@@ -107,7 +108,7 @@ class EIGENACO(AbstractConstrainedMinimisation):
                 idx = q_start + i * self.N + 25
                 y0 = y0.at[idx].set(1.0)
             elif i == 49:
-                # Row 49 only has Q[49,49] = 1.0 
+                # Row 49 only has Q[49,49] = 1.0
                 idx = q_start + i * self.N + 49
                 y0 = y0.at[idx].set(1.0)
             elif i >= 25 and i < 49:
@@ -126,7 +127,7 @@ class EIGENACO(AbstractConstrainedMinimisation):
                 if i + 1 < self.N:
                     idx = q_start + i * self.N + (i + 1)
                     y0 = y0.at[idx].set(1.0)
-                
+
                 # Q[i, 2*i+3] = 1.0
                 if 2 * i + 3 < self.N:
                     idx = q_start + i * self.N + (2 * i + 3)

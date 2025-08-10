@@ -62,6 +62,7 @@ from .dtoc2 import DTOC2 as DTOC2
 # TODO: DTOC3 needs human review - X(1498) and X(1499) treated as 0 by pycutest
 # from .dtoc3 import DTOC3 as DTOC3
 from .dtoc4 import DTOC4 as DTOC4
+
 # TODO: Human review needed - same constraint issues as EIGENA
 # from .eigenaco import EIGENACO as EIGENACO
 from .dtoc5 import DTOC5 as DTOC5

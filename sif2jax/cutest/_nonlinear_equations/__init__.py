@@ -60,7 +60,7 @@ from .drcavty2 import DRCAVTY2 as DRCAVTY2
 from .drcavty3 import DRCAVTY3 as DRCAVTY3
 from .eggcratene import EGGCRATENE as EGGCRATENE
 
-# TODO: Human review needed - systematic constraint value discrepancies (50.0 differences)
+# TODO: Human review needed - systematic constraint value discrepancies
 # from .eigena import EIGENA as EIGENA
 # TODO: Human review needed - same constraint issues as EIGENA
 # from .eigenau import EIGENAU as EIGENAU

@@ -19,22 +19,28 @@ class EIGENA(AbstractNonlinearEquations):
     SIF input: Nick Gould, Nov 1992.
 
     Classification: NOR2-AN-V-V
-    
+
     TODO: Human review needed
-    
+
     Attempts made:
-    1. Fixed initial values to match pycutest pattern (D[0]=D[1]=1.0, rest 0; Q sparse pattern)
-    2. Added bounds property (lower=0 for all variables, interpreting SIF "nonnegative eigenvalues")
-    3. Tested multiple constraint orderings (eigen-first vs ortho-first, interleaved, SIF loop order)
+    1. Fixed initial values to match pycutest pattern
+       (D[0]=D[1]=1.0, rest 0; Q sparse pattern)
+    2. Added bounds property (lower=0 for all variables,
+       interpreting SIF "nonnegative eigenvalues")
+    3. Tested multiple constraint orderings
+       (eigen-first vs ortho-first, interleaved, SIF loop order)
     4. Special handling for diagonal constraints with unused eigenvalues
-    
-    Current status: ~18/21 tests passing, systematic 50.0 constraint value discrepancies remain
-    
+
+    Current status: ~18/21 tests passing, systematic 50.0 constraint
+    value discrepancies remain
+
     Suspected issues:
-    - pycutest may interpret SIF constraint formulation differently than mathematical A = Q^T D Q
-    - Constraint values differ by exactly eigenvalue magnitudes (50.0, 49.0, etc.)
+    - pycutest may interpret SIF constraint formulation differently
+      than mathematical A = Q^T D Q
+    - Constraint values differ by exactly eigenvalue magnitudes
+      (50.0, 49.0, etc.)
     - Issue appears at diagonal elements of eigen-equation constraints
-    
+
     Resources needed:
     - Deep investigation into pycutest's SIF constraint parsing
     - Understanding of how pycutest handles GROUPS and CONSTANTS sections
@@ -75,21 +81,21 @@ class EIGENA(AbstractNonlinearEquations):
         # Vectorized computation
         # Compute Q^T D Q
         qtdq = q.T @ jnp.diag(d) @ q
-        
-        # Compute Q^T Q  
+
+        # Compute Q^T Q
         qtq = q.T @ q
-        
+
         # Identity matrix
         eye = jnp.eye(self.N)
 
         residuals = []
 
-        # Use the most successful ordering found: eigen constraints first, then orthogonality
+        # Use the most successful ordering: eigen constraints first, ortho second
         # All eigen equations E(I,J) first
         for j in range(self.N):
             for i in range(j + 1):
                 residuals.append(qtdq[i, j] - a[i, j])
-                
+
         # All orthogonality equations O(I,J) second
         for j in range(self.N):
             for i in range(j + 1):
@@ -106,7 +112,7 @@ class EIGENA(AbstractNonlinearEquations):
         # Set D[0] and D[1] to 1.0
         y0 = y0.at[0].set(1.0)
         y0 = y0.at[1].set(1.0)
-        
+
         # pycutest sets Q matrix with a specific pattern:
         # Row i has non-zeros at columns (i+1) mod 50 and (2*i+3) mod 50
         # with special handling for certain rows
@@ -117,7 +123,7 @@ class EIGENA(AbstractNonlinearEquations):
                 idx = q_start + i * self.N + 25
                 y0 = y0.at[idx].set(1.0)
             elif i == 49:
-                # Row 49 only has Q[49,49] = 1.0 
+                # Row 49 only has Q[49,49] = 1.0
                 idx = q_start + i * self.N + 49
                 y0 = y0.at[idx].set(1.0)
             elif i >= 25 and i < 49:
@@ -136,7 +142,7 @@ class EIGENA(AbstractNonlinearEquations):
                 if i + 1 < self.N:
                     idx = q_start + i * self.N + (i + 1)
                     y0 = y0.at[idx].set(1.0)
-                
+
                 # Q[i, 2*i+3] = 1.0
                 if 2 * i + 3 < self.N:
                     idx = q_start + i * self.N + (2 * i + 3)

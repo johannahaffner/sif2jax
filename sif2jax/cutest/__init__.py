@@ -574,6 +574,11 @@ from ._quadratic_problems import (
     # QPNBOEI2 as QPNBOEI2,  # TODO: Human review - Boeing routing constraints
     # QPNSTAIR as QPNSTAIR,  # TODO: Human review - complex constraint dimensions
     quadratic_problems as quadratic_problems,
+    TABLE1 as TABLE1,
+    TABLE3 as TABLE3,
+    TABLE6 as TABLE6,
+    TABLE7 as TABLE7,
+    TABLE8 as TABLE8,
     TAME as TAME,
     # TORSIOND as TORSIOND,  # TODO: Human review - objective mismatch with pycutest
     YAO as YAO,
@@ -1402,6 +1407,11 @@ problems_dict = {
     "GOULDQP2": GOULDQP2(),
     "GOULDQP3": GOULDQP3(),
     "QUDLIN": QUDLIN(),
+    "TABLE1": TABLE1(),
+    "TABLE3": TABLE3(),
+    "TABLE6": TABLE6(),
+    "TABLE7": TABLE7(),
+    "TABLE8": TABLE8(),
     "TAME": TAME(),
     "HATFLDH": HATFLDH(),
     "HS44NEW": HS44NEW(),

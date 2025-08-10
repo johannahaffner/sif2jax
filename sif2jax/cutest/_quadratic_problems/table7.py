@@ -68,7 +68,7 @@ class TABLE7(AbstractConstrainedQuadraticProblem):
             m_val,
         ) = _get_cached_data()
 
-        Q_diag_vals = jnp.array(Q_diag_vals)
+        Q_diag_vals = jnp.array(Q_diag_vals, dtype=y.dtype)
         # The QMATRIX values need to be halved for the standard form 0.5 * y^T Q y
         # since the SIF file specifies the full coefficient
         return 0.5 * jnp.sum(Q_diag_vals * y * y)
@@ -102,7 +102,7 @@ class TABLE7(AbstractConstrainedQuadraticProblem):
 
         A_rows = jnp.array(A_rows, dtype=jnp.int32)
         A_cols = jnp.array(A_cols, dtype=jnp.int32)
-        A_vals = jnp.array(A_vals)
+        A_vals = jnp.array(A_vals, dtype=y.dtype)
 
         # Vectorized sparse matrix-vector multiplication
         selected_y = y[A_cols]

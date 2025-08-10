@@ -347,9 +347,6 @@ from ._nonlinear_equations import (
     # BROWNALE as BROWNALE,  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE as BROWNBSNE,
     BROWNDENE as BROWNDENE,
-    # BROYDN3D as BROYDN3D,  # TODO: Human review needed - constraint values mismatch
-    # BROYDNBD as BROYDNBD,  # TODO: Human review needed - systematic differences
-    # BRYBNDNE as BRYBNDNE,  # TODO: Human review needed - constraint values mismatch
     # CERI651A as CERI651A,  # TODO: Human review - numerical overflow at ones vector
     # CERI651B as CERI651B,  # TODO: Human review - numerical overflow at ones vector
     # CERI651C as CERI651C,  # TODO: Human review - numerical overflow at ones vector
@@ -376,6 +373,12 @@ from ._nonlinear_equations import (
     DENSCHNFNE as DENSCHNFNE,
     DEVGLA1NE as DEVGLA1NE,
     DEVGLA2NE as DEVGLA2NE,
+    # BROYDN3D as BROYDN3D,  # TODO: Human review needed - constraint values mismatch
+    # BROYDNBD as BROYDNBD,  # TODO: Human review needed - systematic differences
+    # BRYBNDNE as BRYBNDNE,  # TODO: Human review needed - constraint values mismatch
+    DRCAVTY1 as DRCAVTY1,
+    DRCAVTY2 as DRCAVTY2,
+    DRCAVTY3 as DRCAVTY3,
     EGGCRATENE as EGGCRATENE,
     # EIGENAU as EIGENAU,  # TODO: Human review - non-standard initial values
     ELATVIDUNE as ELATVIDUNE,
@@ -618,6 +621,9 @@ from ._unconstrained_minimisation import (
     DJTL as DJTL,
     DQDRTIC as DQDRTIC,
     DQRTIC as DQRTIC,
+    DRCAV1LQ as DRCAV1LQ,
+    DRCAV2LQ as DRCAV2LQ,
+    DRCAV3LQ as DRCAV3LQ,
     # ECKERLE4LS as ECKERLE4LS,  # TODO: Human review - significant discrepancies
     EDENSCH as EDENSCH,
     EG2 as EG2,
@@ -1100,6 +1106,12 @@ problems_dict = {
     "DIXMAANO": DIXMAANO(),
     "DIXMAANP": DIXMAANP(),
     "DIXON3DQ": DIXON3DQ(),
+    "DRCAV1LQ": DRCAV1LQ(),
+    "DRCAV2LQ": DRCAV2LQ(),
+    "DRCAV3LQ": DRCAV3LQ(),
+    "DRCAVTY1": DRCAVTY1(),
+    "DRCAVTY2": DRCAVTY2(),
+    "DRCAVTY3": DRCAVTY3(),
     "DJTL": DJTL(),
     "DQDRTIC": DQDRTIC(),
     "DQRTIC": DQRTIC(),

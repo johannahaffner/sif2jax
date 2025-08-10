@@ -37,13 +37,15 @@ class TROBase(AbstractConstrainedMinimisation):
         u = y[self.m_bars :]
 
         # Vectorized constraint computation
-        # Extract arrays from elements using tuple unpacking
-        elements_array = jnp.array(elements)
-        x_indices, u_indices, p_values = elements_array.T
+        # Extract arrays from elements (already jnp.array)
+        x_indices, u_indices, p_values = elements.T
+        x_indices = x_indices.astype(jnp.int32)
+        u_indices = u_indices.astype(jnp.int32)
 
-        # Extract constraint indices from group_uses using tuple unpacking
-        group_uses_array = jnp.array(group_uses, dtype=jnp.array(self.m).dtype)
-        c_indices, e_indices = group_uses_array.T
+        # Extract constraint indices from group_uses (already jnp.array)
+        c_indices, e_indices = group_uses.T
+        c_indices = c_indices.astype(jnp.int32)
+        e_indices = e_indices.astype(jnp.int32)
 
         # Compute element contributions: p * x[x_idx] * u[u_idx]
         x_vals = x[x_indices[e_indices]]

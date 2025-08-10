@@ -58,13 +58,11 @@ class OPTCTRL3(AbstractConstrainedMinimisation):
         # Variables are interleaved: x(0), y(0), x(1), y(1), ..., x(T), y(T)
         # Then u(0), ..., u(T-1)
 
-        # Extract x and y_vel from interleaved section
-        x = jnp.zeros(self.T + 1)
-        y_vel = jnp.zeros(self.T + 1)
-
-        for t in range(self.T + 1):
-            x = x.at[t].set(y[2 * t])  # x(t) at position 2*t
-            y_vel = y_vel.at[t].set(y[2 * t + 1])  # y(t) at position 2*t + 1
+        # Extract x and y_vel from interleaved section using slicing
+        # Reshape to (T+1, 2) to get pairs, then extract columns
+        interleaved = y[: 2 * (self.T + 1)].reshape(self.T + 1, 2)
+        x = interleaved[:, 0]  # x(t) values
+        y_vel = interleaved[:, 1]  # y(t) values
 
         # Extract u from the end
         u_start = 2 * (self.T + 1)
@@ -79,8 +77,9 @@ class OPTCTRL3(AbstractConstrainedMinimisation):
 
         # Set y(t) = -1.0 for t=1 to T-1 in interleaved positions
         # y(t) is at position 2*t + 1
-        for t in range(1, self.T):  # t=1 to T-1
-            y0_vals = y0_vals.at[2 * t + 1].set(-1.0)
+        # Create indices for positions where y(t) should be -1.0
+        indices = 2 * jnp.arange(1, self.T) + 1
+        y0_vals = y0_vals.at[indices].set(-1.0)
 
         return y0_vals
 
@@ -124,12 +123,10 @@ class OPTCTRL3(AbstractConstrainedMinimisation):
         )
 
         # Interleave constraints as B(0), C(0), B(1), C(1), ...
-        equality_constraints = jnp.zeros(2 * self.T)
-        for t in range(self.T):
-            equality_constraints = equality_constraints.at[2 * t].set(B_constraints[t])
-            equality_constraints = equality_constraints.at[2 * t + 1].set(
-                C_constraints[t]
-            )
+        # Stack B and C constraints and reshape to interleave them
+        equality_constraints = jnp.stack(
+            [B_constraints, C_constraints], axis=1
+        ).reshape(2 * self.T)
 
         return equality_constraints, None
 

@@ -2,8 +2,8 @@
 
 # Configuration
 CONTAINER_IMAGE="johannahaffner/pycutest:latest"
-MOUNT_PATH="/workspace/t"  # Path inside container where your code will be mounted  
-LOCAL_PATH=$(pwd) # Use current working directory
+MOUNT_PATH="/workspace"  # Path inside container where your code will be mounted  
+LOCAL_PATH="/Users/jhaffner/Desktop/projects/benchmarks/sif2jax"
 
 # Run tests in container
 docker run --rm \

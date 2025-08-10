@@ -295,9 +295,7 @@ from .sipow2 import SIPOW2 as SIPOW2
 from .tenbars1 import TENBARS1 as TENBARS1
 from .tenbars2 import TENBARS2 as TENBARS2
 from .tenbars3 import TENBARS3 as TENBARS3
-
-# TODO: TENBARS4 needs human review - pycutest Jacobian inconsistency
-# from .tenbars4 import TENBARS4 as TENBARS4
+from .tenbars4 import TENBARS4 as TENBARS4
 from .tro3x3 import TRO3X3 as TRO3X3
 from .tro4x4 import TRO4X4 as TRO4X4
 from .tro5x5 import TRO5X5 as TRO5X5
@@ -508,7 +506,7 @@ constrained_minimisation_problems = (
     TENBARS1(),
     TENBARS2(),
     TENBARS3(),
-    # TENBARS4(),  # TODO: Human review - pycutest Jacobian inconsistency
+    TENBARS4(),
     # SPINOP(),  # TODO: Human review - constraint issues with auxiliary variables
     # SPIN2OP(),  # TODO: Human review - constraint test failures
     # STEENBRB(),  # TODO: Human review - gradient test failing

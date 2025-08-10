@@ -319,7 +319,7 @@ from ._constrained_minimisation import (
     TENBARS1 as TENBARS1,
     TENBARS2 as TENBARS2,
     TENBARS3 as TENBARS3,
-    # TENBARS4 as TENBARS4,  # TODO: Human review - pycutest Jacobian inconsistency
+    TENBARS4 as TENBARS4,
     TRO3X3 as TRO3X3,
     TRO4X4 as TRO4X4,
     TRO5X5 as TRO5X5,
@@ -982,7 +982,7 @@ problems_dict = {
     "TENBARS1": TENBARS1(),
     "TENBARS2": TENBARS2(),
     "TENBARS3": TENBARS3(),
-    # "TENBARS4": TENBARS4(),  # TODO: Human review - pycutest Jacobian inconsistency
+    "TENBARS4": TENBARS4(),
     # "SPINOP": SPINOP(),  # TODO: Human review - auxiliary variable constraint issues
     # "SPIN2OP": SPIN2OP(),  # TODO: Human review - constraint test failures
     # "SIPOW3": SIPOW3(),  # TODO: Human review - constraint formulation issues

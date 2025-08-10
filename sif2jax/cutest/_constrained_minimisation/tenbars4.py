@@ -1,5 +1,5 @@
 r"""
-The "ten bar truss" structural optimization problem, version P3.
+The "ten bar truss" structural optimization problem, version P4.
 
 The problem is to minimize the cross section areas of the bars
 in the structure
@@ -18,16 +18,10 @@ in the structure
 submitted to vertical forces of equal magnitude (P0) applied at
 the two free lower nodes, subject to limits of nodal displacements.
 
-NOTE: This implementation follows pycutest rather than the SIF file.
-Specifically, constraints C3 and C4 do not include the EF term
-(element X2*(U3+U4)) even though the SIF file specifies it should be
-included. This discrepancy was discovered during testing and we chose
-to match pycutest's behavior for consistency.
-
-IMPORTANT: There is an inconsistency in pycutest where the EF term is
-omitted from constraint values but its derivatives are included in the
-Jacobian computation. This causes the Jacobian test to fail at the ones
-vector. This appears to be a bug in pycutest's implementation.
+NOTE: The SIF file specifies that EF should be included in C3 and C4.
+However, testing shows pycutest omits it from constraint values but
+includes its derivatives in the Jacobian. We match pycutest's behavior
+for consistency. This inconsistency affects all four TENBARS problems.
 
 Source:
 K. Svanberg,
@@ -115,8 +109,8 @@ class TENBARS4(AbstractConstrainedMinimisation):
 
         # EF: X2 * (U3 + U4)
         # NOTE: The SIF file specifies that EF should be included in C3 and C4.
-        # Testing shows pycutest omits it from constraint values but includes its
-        # derivatives in the Jacobian. We compute it to enable custom Jacobian handling.
+        # However, testing shows pycutest omits it from constraint values.
+        # We match pycutest's behavior for consistency.
         ef = x[1] * (u[2] + u[3])  # noqa: F841 - computed for documentation
 
         # EG: X4 * U3
@@ -134,12 +128,10 @@ class TENBARS4(AbstractConstrainedMinimisation):
         # Equality constraints (C1 to C8)
         c1 = ea + ec + inv_sq8 * eb + inv_sq8 * ed
         c2 = inv_sq8 * eb + ee + minus_inv_sq8 * ed
-        c3 = (
-            inv_sq8 * eh + ei + eg
-        )  # Deviation from SIF: omits +inv_sq8*ef term to match pycutest
-        c4 = (
-            inv_sq8 * eh - ee + p0
-        )  # Deviation from SIF: omits -inv_sq8*ef term to match pycutest
+        # Deviation from SIF: omits +inv_sq8*ef term to match pycutest
+        c3 = inv_sq8 * eh + ei + eg
+        # Deviation from SIF: omits -inv_sq8*ef term to match pycutest
+        c4 = inv_sq8 * eh - ee + p0
         c5 = minus_inv_sq8 * eh - ec
         c6 = minus_inv_sq8 * eh + ej
         c7 = minus_inv_sq8 * ed - ei
@@ -152,31 +144,6 @@ class TENBARS4(AbstractConstrainedMinimisation):
         inequality_constraints = jnp.array([strain])
 
         return equality_constraints, inequality_constraints
-
-    def constraint_with_ef_jacobian(self, y):
-        """
-        Special method that returns constraints without EF term in values
-        but includes EF derivatives in the Jacobian, matching pycutest behavior.
-
-        This is a workaround for what appears to be inconsistent behavior in pycutest
-        where the EF term is omitted from constraint values but included in Jacobian.
-        """
-        # Get regular constraints (without EF term)
-        eq_cons, ineq_cons = self.constraint(y)
-
-        # For Jacobian computation, we need constraints WITH the EF term
-        u = y[:8]
-        x = y[8:]
-
-        # Recompute with EF term included
-        inv_sq8 = 1.0 / jnp.sqrt(8.0)
-        ef = x[1] * (u[2] + u[3])
-
-        # Create modified constraints for Jacobian calculation only
-        eq_cons_for_jac = eq_cons.at[2].add(inv_sq8 * ef)  # C3 with EF
-        eq_cons_for_jac = eq_cons_for_jac.at[3].add(-inv_sq8 * ef)  # C4 with EF
-
-        return eq_cons, ineq_cons, eq_cons_for_jac
 
     @property
     def bounds(self):

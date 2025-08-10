@@ -329,6 +329,10 @@ from ._constrained_minimisation import (
     # TRUSPYR2 as TRUSPYR2,  # TODO: Human review - test requested to be removed
     # VANDERM3 as VANDERM3,  # TODO: Human review - constraints mismatch
     # VANDERM4 as VANDERM4,  # TODO: Human review - constraints mismatch
+    # TODO: TWIR problems need human review - complex trilinear constraint formulation
+    # TWIRISM1 as TWIRISM1,
+    # TWIRIMD1 as TWIRIMD1,
+    # TWIRIBG1 as TWIRIBG1,
     ZECEVIC2 as ZECEVIC2,
     ZECEVIC3 as ZECEVIC3,
     ZECEVIC4 as ZECEVIC4,
@@ -952,6 +956,10 @@ problems_dict = {
     "MAKELA4": MAKELA4(),
     # "HS70": HS70(),  # TODO: Human review - test failures
     # "HS84": HS84(),  # TODO: Human review - objective value discrepancy
+    # TODO: TWIR problems need human review - complex trilinear constraint formulation
+    # "TWIRISM1": TWIRISM1(),
+    # "TWIRIMD1": TWIRIMD1(),
+    # "TWIRIBG1": TWIRIBG1(),
     "ZECEVIC2": ZECEVIC2(),
     "ZECEVIC3": ZECEVIC3(),
     "ZECEVIC4": ZECEVIC4(),

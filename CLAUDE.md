@@ -25,6 +25,8 @@ The tests are designed to be very informative, and can guide you toward a workin
 SIF problems have a group-separable structure. Identifying this structure helps to identify opportunities for vectorisation and batched operations, as well as to `divide and conquer` complex problems.
 You can look up some guiding principles in the CONVERSION_GUIDE file.
 
+**Background on partially separable functions:** Griewank, A., Toint, Ph.L.: "On the unconstrained optimization of partially separable functions" in Powell, M.J.D. (ed.) Nonlinear Optimization 1981, pp. 301–312, Academic Press, London (1982). This foundational paper introduces the concept of functions that can be expressed as sums of element functions, enabling efficient derivative computation through the chain rule on separable components.
+
 Here are the sources relevant to problem implementations:
 1. **SIF Files**: `archive/mastsif/` folder - Original SIF problem definitions (PRIMARY SOURCE). Look in this folder whenever you are asked to find problems of any series - e.g. search for "TRO" in this folder to find problems from the "TRO" series of problems. You can also consult the missing_problems.md file, but this won't always be 100 % up to date.
 2. **AMPL**: `https://github.com/ampl/global-optimization/tree/master/cute` (lowercase.mod files)

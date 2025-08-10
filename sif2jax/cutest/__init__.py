@@ -559,6 +559,11 @@ from ._quadratic_problems import (
     NCVXQP8 as NCVXQP8,
     NCVXQP9 as NCVXQP9,
     QPBAND as QPBAND,
+    QPNBAND as QPNBAND,
+    # QPNBLEND as QPNBLEND,  # TODO: Human review - complex constraint matrix
+    # QPNBOEI1 as QPNBOEI1,  # TODO: Human review - Boeing routing constraints
+    # QPNBOEI2 as QPNBOEI2,  # TODO: Human review - Boeing routing constraints
+    # QPNSTAIR as QPNSTAIR,  # TODO: Human review - complex constraint dimensions
     quadratic_problems as quadratic_problems,
     TAME as TAME,
     # TORSIOND as TORSIOND,  # TODO: Human review - objective mismatch with pycutest
@@ -1360,6 +1365,11 @@ problems_dict = {
     # "TQUARTIC": TQUARTIC(),  # TODO: Human review - objective calculation incorrect
     "YAO": YAO(),
     "QPBAND": QPBAND(),
+    "QPNBAND": QPNBAND(),
+    # "QPNBLEND": QPNBLEND(),  # TODO: Human review - complex constraint matrix
+    # "QPNBOEI1": QPNBOEI1(),  # TODO: Human review - Boeing routing constraints
+    # "QPNBOEI2": QPNBOEI2(),  # TODO: Human review - Boeing routing constraints
+    # "QPNSTAIR": QPNSTAIR(),  # TODO: Human review - complex constraint dimensions
     # "CHENHARK": CHENHARK(),  # TODO: Human review needed - see file
     "DEGDIAG": DEGDIAG(),
     "DUAL1": DUAL1(),

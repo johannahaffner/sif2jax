@@ -117,7 +117,7 @@ class TABLE6(AbstractConstrainedQuadraticProblem):
     @property
     def expected_objective_value(self):
         """Expected objective value at y0."""
-        return 0.0  # Starting at zero, objective is 0
+        return jnp.array(0.0)  # Starting at zero, objective is 0
 
     @property
     def expected_result(self):

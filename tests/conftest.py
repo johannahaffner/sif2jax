@@ -74,9 +74,9 @@ def pytest_generate_tests(metafunc):
             for name in test_case_names:
                 try:
                     test_case = sif2jax.cutest.get_problem(name)
-                    assert test_case is not None, (
-                        f"Test case '{name}' not found in sif2jax.cutest problems."
-                    )
+                    assert (
+                        test_case is not None
+                    ), f"Test case '{name}' not found in sif2jax.cutest problems."
                     test_cases.append(test_case)
                 except Exception as e:
                     raise RuntimeError(

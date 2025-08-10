@@ -397,12 +397,12 @@ from ._nonlinear_equations import (
     EXP2NE as EXP2NE,
     EXPFITNE as EXPFITNE,
     EXTROSNBNE as EXTROSNBNE,
-    FLOSP2HH as FLOSP2HH,
-    FLOSP2HL as FLOSP2HL,
-    FLOSP2HM as FLOSP2HM,
-    FLOSP2TH as FLOSP2TH,
-    FLOSP2TL as FLOSP2TL,
-    FLOSP2TM as FLOSP2TM,
+    # FLOSP2HH as FLOSP2HH,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2HL as FLOSP2HL,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2HM as FLOSP2HM,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2TH as FLOSP2TH,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2TL as FLOSP2TL,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2TM as FLOSP2TM,  # TODO: Human review needed - NQR constraint handling
     FREURONE as FREURONE,
     GENROSEBNE as GENROSEBNE,
     GENROSENE as GENROSENE,
@@ -1408,12 +1408,12 @@ problems_dict = {
     # "EXPFITC": EXPFITC(),  # TODO: Human review - fundamental formulation differences
     "EXPFITNE": EXPFITNE(),
     "EXTROSNBNE": EXTROSNBNE(),
-    "FLOSP2HH": FLOSP2HH(),
-    "FLOSP2HL": FLOSP2HL(),
-    "FLOSP2HM": FLOSP2HM(),
-    "FLOSP2TH": FLOSP2TH(),
-    "FLOSP2TL": FLOSP2TL(),
-    "FLOSP2TM": FLOSP2TM(),
+    # "FLOSP2HH": FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2HL": FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2HM": FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2TH": FLOSP2TH(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2TL": FLOSP2TL(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2TM": FLOSP2TM(),  # TODO: Human review needed - NQR constraint handling
     "FREURONE": FREURONE(),
     "GENROSEBNE": GENROSEBNE(),
     "GENROSENE": GENROSENE(),

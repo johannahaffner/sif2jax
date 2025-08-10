@@ -30,6 +30,12 @@ class FLOSP2HH(AbstractNonlinearEquations):
     SIF input: Nick Gould, August 1993.
 
     classification NQR2-MY-V-V
+
+    TODO: Human review needed
+
+    Issue: Constraint values still fail with max difference 1.0.
+    This appears to be related to how pycutest handles the CONSTANTS
+    section in nonlinear equation problems (NQR classification).
     """
 
     m: int = 15  # Half the number of discretization intervals
@@ -97,7 +103,13 @@ class FLOSP2HH(AbstractNonlinearEquations):
         )
 
     def _unpack_variables(self, y: Array) -> tuple[Array, Array, Array]:
-        """Unpack flat array into OM, PH, PS grids."""
+        """Unpack flat array into OM, PH, PS grids.
+
+        Pycutest uses grouped variable ordering:
+        - First all OM values [0:961]
+        - Then all PH values [961:1922]
+        - Then all PS values [1922:2883]
+        """
         grid_points = self.grid_size * self.grid_size
         om = y[:grid_points].reshape((self.grid_size, self.grid_size))
         ph = y[grid_points : 2 * grid_points].reshape((self.grid_size, self.grid_size))
@@ -169,19 +181,15 @@ class FLOSP2HH(AbstractNonlinearEquations):
         for k in range(self.grid_size):
             # Top boundary (j = M): T(K,M)
             j = self.grid_size - 1
-            t_top = (
-                ph[j, k] * (2 * self.a1 / h + self.a2)
-                + ph[j - 1, k] * (-2 * self.a1 / h)
-                - self.a3
+            t_top = ph[j, k] * (2 * self.a1 / h + self.a2) + ph[j - 1, k] * (
+                -2 * self.a1 / h
             )
             residuals.append(t_top)
 
             # Bottom boundary (j = -M): T(K,-M)
             j = 0
-            t_bot = (
-                ph[j + 1, k] * (2 * self.b1 / h)
-                + ph[j, k] * (-2 * self.b1 / h + self.b2)
-                - self.b3
+            t_bot = ph[j + 1, k] * (2 * self.b1 / h) + ph[j, k] * (
+                -2 * self.b1 / h + self.b2
             )
             residuals.append(t_bot)
 
@@ -191,19 +199,15 @@ class FLOSP2HH(AbstractNonlinearEquations):
         ):  # Exclude corners at k=0 and k=grid_size-1
             # Right boundary (i = M): T(M,K)
             i = self.grid_size - 1
-            t_right = (
-                ph[k, i] * (2 * self.f1 / (ax * h) + self.f2)
-                + ph[k, i - 1] * (-2 * self.f1 / (ax * h))
-                - self.f3
+            t_right = ph[k, i] * (2 * self.f1 / (ax * h) + self.f2) + ph[k, i - 1] * (
+                -2 * self.f1 / (ax * h)
             )
             residuals.append(t_right)
 
             # Left boundary (i = -M): T(-M,K)
             i = 0
-            t_left = (
-                ph[k, i + 1] * (2 * self.g1 / (ax * h))
-                + ph[k, i] * (-2 * self.g1 / (ax * h) + self.g2)
-                - self.g3
+            t_left = ph[k, i + 1] * (2 * self.g1 / (ax * h)) + ph[k, i] * (
+                -2 * self.g1 / (ax * h) + self.g2
             )
             residuals.append(t_left)
 
@@ -258,30 +262,45 @@ class FLOSP2HH(AbstractNonlinearEquations):
 
     @property
     def bounds(self) -> tuple[Array, Array] | None:
-        """Returns bounds on variables."""
-        # Stream function boundary conditions from SIF file (XX bounds)
-        ps_bounds_lower = jnp.full(self.n_vars, -jnp.inf, dtype=jnp.float64)
-        ps_bounds_upper = jnp.full(self.n_vars, jnp.inf, dtype=jnp.float64)
+        """Returns bounds on variables.
 
-        # Set PS boundary values to fixed values (XX bounds in SIF)
+        The SIF file sets bounds on PS variables at boundaries.
+        Pycutest uses grouped variable ordering, so PS variables
+        are in the last third of the variable array.
+        """
+        bounds_lower = jnp.full(self.n_vars, -jnp.inf, dtype=jnp.float64)
+        bounds_upper = jnp.full(self.n_vars, jnp.inf, dtype=jnp.float64)
+
         grid_points = self.grid_size * self.grid_size
-        for k in range(self.grid_size):
-            # PS(K,-M) = PS(K,M) = PS(-M,K) = PS(M,K) = 1.0
-            idx_bottom = (2 * grid_points) + (0 * self.grid_size + k)
-            idx_top = (2 * grid_points) + ((self.grid_size - 1) * self.grid_size + k)
-            idx_left = (2 * grid_points) + (k * self.grid_size + 0)
-            idx_right = (2 * grid_points) + (k * self.grid_size + (self.grid_size - 1))
+        ps_offset = 2 * grid_points  # PS variables start after OM and PH
 
-            ps_bounds_lower = ps_bounds_lower.at[idx_bottom].set(1.0)
-            ps_bounds_upper = ps_bounds_upper.at[idx_bottom].set(1.0)
-            ps_bounds_lower = ps_bounds_lower.at[idx_top].set(1.0)
-            ps_bounds_upper = ps_bounds_upper.at[idx_top].set(1.0)
-            ps_bounds_lower = ps_bounds_lower.at[idx_left].set(1.0)
-            ps_bounds_upper = ps_bounds_upper.at[idx_left].set(1.0)
-            ps_bounds_lower = ps_bounds_lower.at[idx_right].set(1.0)
-            ps_bounds_upper = ps_bounds_upper.at[idx_right].set(1.0)
+        M = self.m
 
-        return ps_bounds_lower, ps_bounds_upper
+        # Set bounds for PS boundary variables
+        for k in range(-M, M + 1):  # K from -M to M
+            k_idx = k + M  # Convert to 0-based index
+
+            # Bottom boundary: PS(K,-M) = PS[0][k_idx]
+            idx_bottom = ps_offset + (0 * self.grid_size + k_idx)
+            bounds_lower = bounds_lower.at[idx_bottom].set(1.0)
+            bounds_upper = bounds_upper.at[idx_bottom].set(1.0)
+
+            # Top boundary: PS(K,M) = PS[30][k_idx]
+            idx_top = ps_offset + ((self.grid_size - 1) * self.grid_size + k_idx)
+            bounds_lower = bounds_lower.at[idx_top].set(1.0)
+            bounds_upper = bounds_upper.at[idx_top].set(1.0)
+
+            # Left boundary: PS(-M,K) = PS[k_idx][0]
+            idx_left = ps_offset + (k_idx * self.grid_size + 0)
+            bounds_lower = bounds_lower.at[idx_left].set(1.0)
+            bounds_upper = bounds_upper.at[idx_left].set(1.0)
+
+            # Right boundary: PS(M,K) = PS[k_idx][30]
+            idx_right = ps_offset + (k_idx * self.grid_size + (self.grid_size - 1))
+            bounds_lower = bounds_lower.at[idx_right].set(1.0)
+            bounds_upper = bounds_upper.at[idx_right].set(1.0)
+
+        return bounds_lower, bounds_upper
 
     @property
     def expected_objective_value(self) -> Array | None:

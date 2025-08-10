@@ -13,6 +13,9 @@ from .dualc1 import DUALC1 as DUALC1
 from .dualc2 import DUALC2 as DUALC2
 from .dualc5 import DUALC5 as DUALC5
 from .dualc8 import DUALC8 as DUALC8
+from .gouldqp1 import GOULDQP1 as GOULDQP1
+from .gouldqp2 import GOULDQP2 as GOULDQP2
+from .gouldqp3 import GOULDQP3 as GOULDQP3
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
 from .hs76 import HS76 as HS76
@@ -60,6 +63,9 @@ constrained_quadratic_problems = (
     DUALC2(),
     DUALC5(),
     DUALC8(),
+    GOULDQP1(),
+    GOULDQP2(),
+    GOULDQP3(),
     HATFLDH(),
     HS44NEW(),
     HS76(),

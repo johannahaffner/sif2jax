@@ -504,6 +504,7 @@ from ._nonlinear_equations import (
     TENFOLDTR as TENFOLDTR,
     TRIGON1NE as TRIGON1NE,
     # TRIGON2NE as TRIGON2NE,  # TODO: Human review - Jacobian tolerance 1.26e-05
+    VANDANIUMS as VANDANIUMS,
     VESUVIA as VESUVIA,
     VESUVIO as VESUVIO,
     VESUVIOU as VESUVIOU,
@@ -766,6 +767,7 @@ from ._unconstrained_minimisation import (
     TRIGON1 as TRIGON1,
     # TRIGON2 as TRIGON2,  # TODO: Human review - Hessian test fails
     unconstrained_minimisation_problems as unconstrained_minimisation_problems,
+    VANDANMSLS as VANDANMSLS,
     VARDIM as VARDIM,
     VESUVIALS as VESUVIALS,
     VESUVIOLS as VESUVIOLS,
@@ -1324,6 +1326,7 @@ problems_dict = {
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TRIGON2B": TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
     # "TRIGON2NE": TRIGON2NE(),  # TODO: Human review - Jacobian tolerance 1.26e-05
+    "VANDANIUMS": VANDANIUMS(),
     "VESUVIA": VESUVIA(),
     "VESUVIO": VESUVIO(),
     "VESUVIOU": VESUVIOU(),
@@ -1350,6 +1353,7 @@ problems_dict = {
     "TAME": TAME(),
     "HATFLDH": HATFLDH(),
     "HS44NEW": HS44NEW(),
+    "VANDANMSLS": VANDANMSLS(),
     "VARDIM": VARDIM(),
     "VESUVIALS": VESUVIALS(),
     "VESUVIOLS": VESUVIOLS(),

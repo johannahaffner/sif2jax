@@ -218,6 +218,7 @@ from .trigon1ne import TRIGON1NE as TRIGON1NE
 
 # TODO: Human review needed - minor numerical tolerance issue (Jacobian diff 1.26e-05)
 # from .trigon2ne import TRIGON2NE as TRIGON2NE
+from .vandaniums import VANDANIUMS as VANDANIUMS
 from .vesuvia import VESUVIA as VESUVIA
 from .vesuvio import VESUVIO as VESUVIO
 from .vesuviou import VESUVIOU as VESUVIOU
@@ -400,6 +401,7 @@ nonlinear_equations_problems = (
     POWELLSQ(),
     TRIGON1NE(),
     # TRIGON2NE(),  # TODO: Human review - minor Jacobian tolerance (1.26e-05)
+    VANDANIUMS(),
     VESUVIA(),
     VESUVIO(),
     VESUVIOU(),

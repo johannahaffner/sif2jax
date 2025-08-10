@@ -269,6 +269,7 @@ from .trigon1 import TRIGON1 as TRIGON1
 
 # TODO: TRIGON2 needs human review - Hessian test fails
 # from .trigon2 import TRIGON2 as TRIGON2
+from .vandanmsls import VANDANMSLS as VANDANMSLS
 from .vardim import VARDIM as VARDIM
 from .vesuvials import VESUVIALS as VESUVIALS
 from .vesuviols import VESUVIOLS as VESUVIOLS
@@ -512,6 +513,7 @@ unconstrained_minimisation_problems = (
     TOINTGSS(),
     # TOINTPSP(),  # TODO: Human review - gradient test fails
     # TQUARTIC(),  # TODO: Human review - objective calculation incorrect
+    VANDANMSLS(),
     VARDIM(),
     VESUVIALS(),
     VESUVIOLS(),

@@ -74,10 +74,12 @@ from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 # JAX implementation uses correct SIF parameters (N=10 → 21 variables)
 # But pycutest expects 5001 variables, suggesting different problem variant
 # Issue persists even with drop_fixed_variables=False
-# from .hager1 import HAGER1 as HAGER1
-# from .hager2 import HAGER2 as HAGER2
+from .hager1 import HAGER1 as HAGER1
+from .hager2 import HAGER2 as HAGER2
+
+# TODO: HAGER3 needs human review - marked for future import
 # from .hager3 import HAGER3 as HAGER3
-# from .hager4 import HAGER4 as HAGER4
+from .hager4 import HAGER4 as HAGER4
 from .himmelbc import HIMMELBC as HIMMELBC
 from .himmelbd import HIMMELBD as HIMMELBD
 from .himmelbe import HIMMELBE as HIMMELBE
@@ -354,10 +356,10 @@ constrained_minimisation_problems = (
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences
     # EXPFITC(),  # TODO: Human review - fundamental formulation differences
     GIGOMEZ2(),
-    # HAGER1(),  # TODO: Human review needed - parameter mismatch
-    # HAGER2(),  # TODO: Human review needed - parameter mismatch
-    # HAGER3(),  # TODO: Human review needed - parameter mismatch
-    # HAGER4(),  # TODO: Human review needed - parameter mismatch
+    HAGER1(),
+    HAGER2(),
+    # HAGER3(),  # TODO: Human review needed - marked for future import
+    HAGER4(),
     HS6(),
     HS7(),
     HS8(),

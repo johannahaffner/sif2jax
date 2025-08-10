@@ -137,10 +137,10 @@ from ._constrained_minimisation import (
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
     # EXPFITC as EXPFITC,  # TODO: Human review - fundamental formulation differences
     GIGOMEZ2 as GIGOMEZ2,
-    # HAGER1 as HAGER1,  # TODO: Human review needed - parameter mismatch
-    # HAGER2 as HAGER2,  # TODO: Human review needed - parameter mismatch
-    # HAGER3 as HAGER3,  # TODO: Human review needed - parameter mismatch
-    # HAGER4 as HAGER4,  # TODO: Human review needed - parameter mismatch
+    HAGER1 as HAGER1,
+    HAGER2 as HAGER2,
+    # HAGER3 as HAGER3,  # TODO: HAGER3 needs human review - marked for future import
+    HAGER4 as HAGER4,
     HIMMELBC as HIMMELBC,
     HIMMELBD as HIMMELBD,
     HIMMELBE as HIMMELBE,
@@ -1168,10 +1168,10 @@ problems_dict = {
     # "GBRAINLS": GBRAINLS(),  # TODO: Human review - complex data dependencies
     "GENHUMPS": GENHUMPS(),
     "GIGOMEZ2": GIGOMEZ2(),
-    # "HAGER1": HAGER1(),  # TODO: Human review needed - parameter mismatch
-    # "HAGER2": HAGER2(),  # TODO: Human review needed - parameter mismatch
-    # "HAGER3": HAGER3(),  # TODO: Human review needed - parameter mismatch
-    # "HAGER4": HAGER4(),  # TODO: Human review needed - parameter mismatch
+    "HAGER1": HAGER1(),
+    "HAGER2": HAGER2(),
+    # "HAGER3": HAGER3(),  # TODO: HAGER3 needs human review - marked for future import
+    "HAGER4": HAGER4(),
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
     # "GULF": GULF(),  # TODO: Human review - issues reported by user

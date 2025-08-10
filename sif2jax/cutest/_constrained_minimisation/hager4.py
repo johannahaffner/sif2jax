@@ -21,36 +21,20 @@ class HAGER4(AbstractConstrainedMinimisation):
 
     classification OLR2-AN-V-V
 
-    Default N = 5000 (original Hager value)
+    Default N = 2500 from SIF file
     """
 
-    n_param: int = 5000  # Number of discretized points in [0,1]
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    def __init__(self, n_param: int = 5000):
-        self.n_param = n_param
+    # Problem parameters - using the default value from SIF
+    n_param: int = 2500  # Number of discretized points in [0,1]
 
-    @property
-    def n(self) -> int:
-        """Total number of variables: x(0) to x(N) plus u(1) to u(N)."""
-        return 2 * self.n_param + 1
+    # Total number of variables: x(0) to x(N) plus u(1) to u(N)
+    n: int = 2 * n_param + 1  # 5001
 
-    @property
-    def m(self) -> int:
-        """Number of constraints: N constraints S(i) plus fixed x(0)."""
-        return self.n_param + 1
-
-    def starting_point(self) -> Array:
-        """Return the starting point for the problem."""
-        y = jnp.zeros(self.n, dtype=jnp.float64)
-
-        # x(0) starts at specific value based on constants
-        e = jnp.exp(1.0)
-        xx0 = (1.0 + 3.0 * e) / (2.0 - 2.0 * e)
-        y = y.at[0].set(xx0)
-
-        return y
+    # Number of constraints: N constraints S(i) (x(0) is fixed, not a constraint)
+    m: int = n_param  # 2500
 
     def objective(self, y: Array, args) -> Array:
         """Compute the objective function."""
@@ -75,26 +59,27 @@ class HAGER4(AbstractConstrainedMinimisation):
         db = b[1] - b[0]
         dc = c[1] - c[0]
 
+        # From SIF: 1/H = N, so SCDB = DB * (1/H) = DB * N
+        # and SCDC = DC * (1/2HSQ) = DC * 0.5 * N^2
         scda = 0.5 * da
-        scdb = db / h
-        scdc = dc / (0.5 * h * h)
+        scdb = db * n  # DB * (1/H) where 1/H = N
+        scdc = dc * (0.5 * n * n)  # DC * (1/2HSQ) where 1/2HSQ = 0.5*N^2
 
-        obj = 0.0
+        # ELT elements (vectorized)
+        # Element parameters - use z[i-1] for element i
+        # For elements 1 to N, we need z[0] to z[n-1]
+        d = scda * z[:-1]  # z[0] to z[n-1]
+        e = scdb * z[:-1]
+        f = scdc * z[:-1]
 
-        # ELT elements
-        for i in range(1, n + 1):
-            # Element parameters
-            d = scda * z[i - 1]
-            e = scdb * z[i - 1]
-            f = scdc * z[i - 1]
+        # ELT: D*X*X + E*X*(Y-X) + F*(Y-X)**2
+        # where X = x(i), Y = x(i-1)
+        x_curr = x[1:]  # x[1] to x[n] - this is X in the element
+        x_prev = x[:-1]  # x[0] to x[n-1] - this is Y in the element
+        diff = x_prev - x_curr  # Y - X
 
-            # ELT: D*X*X + E*X*(Y-X) + F*(Y-X)**2
-            x_i = x[i]
-            y_i = x[i - 1]
-            diff = y_i - x_i
-
-            elt = d * x_i * x_i + e * x_i * diff + f * diff * diff
-            obj += elt
+        elt = d * x_curr * x_curr + e * x_curr * diff + f * diff * diff
+        obj = jnp.sum(elt)
 
         # u[i]^2 terms scaled by h/2
         obj += jnp.sum(u**2) * (h / 2.0)
@@ -114,21 +99,11 @@ class HAGER4(AbstractConstrainedMinimisation):
         t = jnp.arange(n + 1, dtype=jnp.float64) * h
 
         # Equality constraints
-        eq_constraints = []
-
-        # x(0) = XX0 constraint
-        e = jnp.exp(1.0)
-        xx0 = (1.0 + 3.0 * e) / (2.0 - 2.0 * e)
-        eq_constraints.append(x[0] - xx0)
-
-        # S(i) constraints for i = 1 to N
+        # S(i) constraints for i = 1 to N (vectorized)
         # S(i): (1/h - 1)*x(i) + (-1/h)*x(i-1) - exp(t(i))*u(i) = 0
-        for i in range(1, n + 1):
-            eti = jnp.exp(t[i])
-            s_i = (1.0 / h - 1.0) * x[i] + (-1.0 / h) * x[i - 1] - eti * u[i - 1]
-            eq_constraints.append(s_i)
-
-        eq_constraints = jnp.array(eq_constraints, dtype=jnp.float64)
+        # Note: x(0) is fixed to XX0, not handled as a constraint
+        eti = jnp.exp(t[1:])  # exp(t(1)) to exp(t(N))
+        eq_constraints = (1.0 / h - 1.0) * x[1:] + (-1.0 / h) * x[:-1] - eti * u
 
         # No inequality constraints
         ineq_constraints = None
@@ -137,10 +112,16 @@ class HAGER4(AbstractConstrainedMinimisation):
 
     @property
     def bounds(self) -> tuple[Array, Array] | None:
-        """u(i) bounded above by 1.0, x variables are free."""
+        """x(0) is fixed to XX0 via bounds, u(i) bounded above by 1.0."""
         n = self.n_param
-        lower = jnp.full(self.n, -jnp.inf, dtype=jnp.float64)
-        upper = jnp.full(self.n, jnp.inf, dtype=jnp.float64)
+        lower = jnp.full(self.n, -jnp.inf)
+        upper = jnp.full(self.n, jnp.inf)
+
+        # Fix x(0) to XX0 using bounds
+        e = jnp.exp(1.0)
+        xx0 = (1.0 + 3.0 * e) / (2.0 - 2.0 * e)
+        lower = lower.at[0].set(xx0)
+        upper = upper.at[0].set(xx0)
 
         # u(i) <= 1.0 for i = 1 to N
         upper = upper.at[n + 1 :].set(1.0)
@@ -150,7 +131,12 @@ class HAGER4(AbstractConstrainedMinimisation):
     @property
     def y0(self) -> Array:
         """Initial guess for the optimization problem."""
-        return self.starting_point()
+        y = jnp.zeros(self.n)
+        # x(0) starts at specific value based on constants
+        e = jnp.exp(1.0)
+        xx0 = (1.0 + 3.0 * e) / (2.0 - 2.0 * e)
+        y = y.at[0].set(jnp.array(xx0, dtype=y.dtype))
+        return y
 
     @property
     def args(self):
@@ -161,11 +147,10 @@ class HAGER4(AbstractConstrainedMinimisation):
     def expected_result(self) -> Array:
         """Expected result of the optimization problem."""
         # Not explicitly given in the SIF file
-        return jnp.zeros(self.n, dtype=jnp.float64)
+        return jnp.zeros(self.n)
 
     @property
     def expected_objective_value(self) -> Array:
         """Expected value of the objective at the solution."""
-        # From SIF file comments:
-        # SOLTN(10) = 2.833914199
-        return jnp.array(2.833914199)
+        # From SIF file comments: SOLTN(1000) = 2.794244187
+        return jnp.array(2.794244187)

@@ -250,6 +250,20 @@ from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
 from .maratos import MARATOS as MARATOS
 from .odfits import ODFITS as ODFITS
+from .oet1 import OET1 as OET1
+from .oet2 import OET2 as OET2
+from .oet3 import OET3 as OET3
+from .oet4 import OET4 as OET4
+from .oet5 import OET5 as OET5
+from .oet6 import OET6 as OET6
+from .oet7 import OET7 as OET7
+from .optcdeg2 import OPTCDEG2 as OPTCDEG2
+from .optcdeg3 import OPTCDEG3 as OPTCDEG3
+from .optcntrl import OPTCNTRL as OPTCNTRL
+from .optctrl3 import OPTCTRL3 as OPTCTRL3
+from .optctrl6 import OPTCTRL6 as OPTCTRL6
+from .optmass import OPTMASS as OPTMASS
+from .optprloc import OPTPRLOC as OPTPRLOC
 
 # from .orthrdm2 import ORTHRDM2 as ORTHRDM2  # TODO: Human review - singular Jacobian
 # from .orthrds2 import ORTHRDS2 as ORTHRDS2  # TODO: Human review - singular Jacobian
@@ -464,6 +478,20 @@ constrained_minimisation_problems = (
     LOOTSMA(),
     MARATOS(),
     ODFITS(),
+    OET1(),
+    OET2(),
+    OET3(),
+    OET4(),
+    OET5(),
+    OET6(),
+    OET7(),
+    OPTCDEG2(),
+    OPTCDEG3(),
+    OPTCNTRL(),
+    OPTCTRL3(),
+    OPTCTRL6(),
+    OPTMASS(),
+    OPTPRLOC(),
     # ORTHRDM2(),  # TODO: Human review - singular Jacobian issues
     # ORTHRDS2(),  # TODO: Human review - singular Jacobian issues
     ORTHRDS2C(),

@@ -140,6 +140,10 @@ from .luksan22 import LUKSAN22 as LUKSAN22
 from .mancinone import MANCINONE as MANCINONE
 from .meyer3ne import MEYER3NE as MEYER3NE
 from .mgh09 import MGH09 as MGH09
+from .mgh10 import MGH10 as MGH10
+from .mgh10s import MGH10S as MGH10S
+from .mgh17 import MGH17 as MGH17
+from .mgh17s import MGH17S as MGH17S
 from .misra1d import MISRA1D as MISRA1D
 
 # TODO: Human review - constraint ordering issues
@@ -218,6 +222,12 @@ from .trigon1ne import TRIGON1NE as TRIGON1NE
 
 # TODO: Human review needed - minor numerical tolerance issue (Jacobian diff 1.26e-05)
 # from .trigon2ne import TRIGON2NE as TRIGON2NE
+from .vandaniums import VANDANIUMS as VANDANIUMS
+from .vardimne import VARDIMNE as VARDIMNE
+from .vesuvia import VESUVIA as VESUVIA
+from .vesuvio import VESUVIO as VESUVIO
+from .vesuviou import VESUVIOU as VESUVIOU
+from .vibrbeamne import VIBRBEAMNE as VIBRBEAMNE
 from .yatp1cne import YATP1CNE as YATP1CNE
 from .yatp1ne import YATP1NE as YATP1NE
 
@@ -341,6 +351,10 @@ nonlinear_equations_problems = (
     MANCINONE(),
     MEYER3NE(),
     MGH09(),
+    MGH10(),
+    MGH10S(),
+    MGH17(),
+    MGH17S(),
     MISRA1D(),
     # MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # MOREBVNE(),  # TODO: Human review - SIF file bug on line 64
@@ -397,6 +411,12 @@ nonlinear_equations_problems = (
     POWELLSQ(),
     TRIGON1NE(),
     # TRIGON2NE(),  # TODO: Human review - minor Jacobian tolerance (1.26e-05)
+    VANDANIUMS(),
+    VARDIMNE(),
+    VESUVIA(),
+    VESUVIO(),
+    VESUVIOU(),
+    VIBRBEAMNE(),
     YATP1CNE(),
     YATP1NE(),
     # YATP2CNE(),  # TODO: Human review - constraint ordering mismatch with pycutest

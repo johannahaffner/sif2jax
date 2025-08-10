@@ -32,6 +32,12 @@ from .ncvxqp7 import NCVXQP7 as NCVXQP7
 from .ncvxqp8 import NCVXQP8 as NCVXQP8
 from .ncvxqp9 import NCVXQP9 as NCVXQP9
 from .qpband import QPBAND as QPBAND
+from .qpnband import QPNBAND as QPNBAND
+
+# from .qpnblend import QPNBLEND as QPNBLEND  # TODO: Human review - constraint matrix
+# from .qpnboei1 import QPNBOEI1 as QPNBOEI1  # TODO: Human review - Boeing constraints
+# from .qpnboei2 import QPNBOEI2 as QPNBOEI2  # TODO: Human review - Boeing constraints
+# from .qpnstair import QPNSTAIR as QPNSTAIR  # TODO: Human review - constraint dims
 from .tame import TAME as TAME
 
 # from .torsiond import TORSIOND as TORSIOND  # TODO: Human review needed - see file
@@ -79,6 +85,11 @@ constrained_quadratic_problems = (
     NCVXQP8(),
     NCVXQP9(),
     QPBAND(),
+    QPNBAND(),
+    # QPNBLEND(),  # TODO: Human review - complex constraint matrix
+    # QPNBOEI1(),  # TODO: Human review - Boeing routing constraints
+    # QPNBOEI2(),  # TODO: Human review - Boeing routing constraints
+    # QPNSTAIR(),  # TODO: Human review - complex constraint dimensions
     TAME(),
     YAO(),
 )

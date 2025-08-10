@@ -288,6 +288,9 @@ from ._constrained_minimisation import (
     MAKELA3 as MAKELA3,
     MAKELA4 as MAKELA4,
     MARATOS as MARATOS,
+    MSS1 as MSS1,
+    MSS2 as MSS2,
+    MSS3 as MSS3,
     ODFITS as ODFITS,
     # ORTHRDM2 as ORTHRDM2,  # TODO: Human review - singular Jacobian issues
     # ORTHRDS2 as ORTHRDS2,  # TODO: Human review - singular Jacobian issues
@@ -454,6 +457,10 @@ from ._nonlinear_equations import (
     MANCINONE as MANCINONE,
     MEYER3NE as MEYER3NE,
     MGH09 as MGH09,
+    MGH10 as MGH10,
+    MGH10S as MGH10S,
+    MGH17 as MGH17,
+    MGH17S as MGH17S,
     MISRA1D as MISRA1D,
     # MODBEALENE as MODBEALENE,  # TODO: Human review - constraint ordering issues
     # MOREBVNE as MOREBVNE,  # TODO: Human review - SIF file bug on line 64
@@ -508,6 +515,12 @@ from ._nonlinear_equations import (
     TENFOLDTR as TENFOLDTR,
     TRIGON1NE as TRIGON1NE,
     # TRIGON2NE as TRIGON2NE,  # TODO: Human review - Jacobian tolerance 1.26e-05
+    VANDANIUMS as VANDANIUMS,
+    VARDIMNE as VARDIMNE,
+    VESUVIA as VESUVIA,
+    VESUVIO as VESUVIO,
+    VESUVIOU as VESUVIOU,
+    VIBRBEAMNE as VIBRBEAMNE,
     YATP1CNE as YATP1CNE,
     YATP1NE as YATP1NE,
 )
@@ -550,6 +563,11 @@ from ._quadratic_problems import (
     NCVXQP8 as NCVXQP8,
     NCVXQP9 as NCVXQP9,
     QPBAND as QPBAND,
+    QPNBAND as QPNBAND,
+    # QPNBLEND as QPNBLEND,  # TODO: Human review - complex constraint matrix
+    # QPNBOEI1 as QPNBOEI1,  # TODO: Human review - Boeing routing constraints
+    # QPNBOEI2 as QPNBOEI2,  # TODO: Human review - Boeing routing constraints
+    # QPNSTAIR as QPNSTAIR,  # TODO: Human review - complex constraint dimensions
     quadratic_problems as quadratic_problems,
     TAME as TAME,
     # TORSIOND as TORSIOND,  # TODO: Human review - objective mismatch with pycutest
@@ -723,7 +741,11 @@ from ._unconstrained_minimisation import (
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     MARATOSB as MARATOSB,
     MEXHAT as MEXHAT,
+    MGH09LS as MGH09LS,
     MGH10LS as MGH10LS,
+    MGH10SLS as MGH10SLS,
+    MGH17LS as MGH17LS,
+    MGH17SLS as MGH17SLS,
     # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
     # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
@@ -767,7 +789,13 @@ from ._unconstrained_minimisation import (
     TRIGON1 as TRIGON1,
     # TRIGON2 as TRIGON2,  # TODO: Human review - Hessian test fails
     unconstrained_minimisation_problems as unconstrained_minimisation_problems,
+    VANDANMSLS as VANDANMSLS,
     VARDIM as VARDIM,
+    # VAREIGVL as VAREIGVL,  # TODO: Human review - matrix computation discrepancy
+    VESUVIALS as VESUVIALS,
+    VESUVIOLS as VESUVIOLS,
+    VESUVIOULS as VESUVIOULS,
+    VIBRBEAM as VIBRBEAM,
     # WATSON as WATSON,  # TODO: Human review - Hessian computation issues
     WAYSEA1 as WAYSEA1,
     WAYSEA2 as WAYSEA2,
@@ -918,6 +946,9 @@ problems_dict = {
     "HIMMELBE": HIMMELBE(),
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
+    "MSS1": MSS1(),
+    "MSS2": MSS2(),
+    "MSS3": MSS3(),
     "ODFITS": ODFITS(),
     # "ORTHRDM2": ORTHRDM2(),  # TODO: Human review - gradient issues
     # "ORTHRDS2": ORTHRDS2(),  # TODO: Human review - gradient issues
@@ -1230,7 +1261,11 @@ problems_dict = {
     # "MANCINO": MANCINO(),  # TODO: Human review - significant discrepancies in all
     # "MEXHAT": MEXHAT(),  # TODO: Human review - complex scaling issues
     # "MODBEALE": MODBEALE(),  # TODO: Human review - SCALE interpretation issue
+    "MGH09LS": MGH09LS(),
     "MGH10LS": MGH10LS(),
+    "MGH10SLS": MGH10SLS(),
+    "MGH17LS": MGH17LS(),
+    "MGH17SLS": MGH17SLS(),
     "MARATOSB": MARATOSB(),
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
@@ -1326,12 +1361,23 @@ problems_dict = {
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TRIGON2B": TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
     # "TRIGON2NE": TRIGON2NE(),  # TODO: Human review - Jacobian tolerance 1.26e-05
+    "VANDANIUMS": VANDANIUMS(),
+    "VARDIMNE": VARDIMNE(),
+    "VESUVIA": VESUVIA(),
+    "VESUVIO": VESUVIO(),
+    "VESUVIOU": VESUVIOU(),
+    "VIBRBEAMNE": VIBRBEAMNE(),
     # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
     "TOINTGSS": TOINTGSS(),
     # "TORSIOND": TORSIOND(),  # TODO: Human review - objective mismatch
     # "TQUARTIC": TQUARTIC(),  # TODO: Human review - objective calculation incorrect
     "YAO": YAO(),
     "QPBAND": QPBAND(),
+    "QPNBAND": QPNBAND(),
+    # "QPNBLEND": QPNBLEND(),  # TODO: Human review - complex constraint matrix
+    # "QPNBOEI1": QPNBOEI1(),  # TODO: Human review - Boeing routing constraints
+    # "QPNBOEI2": QPNBOEI2(),  # TODO: Human review - Boeing routing constraints
+    # "QPNSTAIR": QPNSTAIR(),  # TODO: Human review - complex constraint dimensions
     # "CHENHARK": CHENHARK(),  # TODO: Human review needed - see file
     "DEGDIAG": DEGDIAG(),
     "DUAL1": DUAL1(),
@@ -1349,7 +1395,13 @@ problems_dict = {
     "TAME": TAME(),
     "HATFLDH": HATFLDH(),
     "HS44NEW": HS44NEW(),
+    "VANDANMSLS": VANDANMSLS(),
     "VARDIM": VARDIM(),
+    # "VAREIGVL": VAREIGVL(),  # TODO: Human review - matrix computation discrepancy
+    "VESUVIALS": VESUVIALS(),
+    "VIBRBEAM": VIBRBEAM(),
+    "VESUVIOLS": VESUVIOLS(),
+    "VESUVIOULS": VESUVIOULS(),
     # "TOINTPSP": TOINTPSP(),  # TODO: Human review - gradient test fails
     "AIRCRFTA": AIRCRFTA(),
     "ARGAUSS": ARGAUSS(),
@@ -1476,6 +1528,10 @@ problems_dict = {
     "MANCINONE": MANCINONE(),
     "MEYER3NE": MEYER3NE(),
     "MGH09": MGH09(),
+    "MGH10": MGH10(),
+    "MGH10S": MGH10S(),
+    "MGH17": MGH17(),
+    "MGH17S": MGH17S(),
     "MISRA1D": MISRA1D(),
     # "MODBEALENE": MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # "MOREBVNE": MOREBVNE(),  # TODO: Human review - SIF file bug on line 64

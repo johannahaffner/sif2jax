@@ -206,7 +206,11 @@ from .luksan21ls import LUKSAN21LS as LUKSAN21LS
 # from .mancino import MANCINO as MANCINO
 from .maratosb import MARATOSB as MARATOSB
 from .mexhat import MEXHAT as MEXHAT
+from .mgh09ls import MGH09LS as MGH09LS
 from .mgh10ls import MGH10LS as MGH10LS
+from .mgh10sls import MGH10SLS as MGH10SLS
+from .mgh17ls import MGH17LS as MGH17LS
+from .mgh17sls import MGH17SLS as MGH17SLS
 
 # TODO: Human review needed - Minor gradient precision differences
 # from .morebv import MOREBV as MOREBV
@@ -269,7 +273,15 @@ from .trigon1 import TRIGON1 as TRIGON1
 
 # TODO: TRIGON2 needs human review - Hessian test fails
 # from .trigon2 import TRIGON2 as TRIGON2
+from .vandanmsls import VANDANMSLS as VANDANMSLS
 from .vardim import VARDIM as VARDIM
+
+# TODO: Human review - matrix computation discrepancy
+# from .vareigvl import VAREIGVL as VAREIGVL
+from .vesuvials import VESUVIALS as VESUVIALS
+from .vesuviols import VESUVIOLS as VESUVIOLS
+from .vesuviouls import VESUVIOULS as VESUVIOULS
+from .vibrbeam import VIBRBEAM as VIBRBEAM
 
 # TODO: Human review needed - Hessian computation issues
 # from .watson import WATSON as WATSON
@@ -457,7 +469,11 @@ unconstrained_minimisation_problems = (
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     MARATOSB(),
     MEXHAT(),
+    MGH09LS(),
     MGH10LS(),
+    MGH10SLS(),
+    MGH17LS(),
+    MGH17SLS(),
     # MOREBV(),  # TODO: Human review - minor gradient precision differences
     # MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     # NONDIA(),  # TODO: Human review - SCALE factor issue
@@ -509,5 +525,11 @@ unconstrained_minimisation_problems = (
     TOINTGSS(),
     # TOINTPSP(),  # TODO: Human review - gradient test fails
     # TQUARTIC(),  # TODO: Human review - objective calculation incorrect
+    VANDANMSLS(),
     VARDIM(),
+    # VAREIGVL(),  # TODO: Human review - matrix computation discrepancy
+    VESUVIALS(),
+    VIBRBEAM(),
+    VESUVIOLS(),
+    VESUVIOULS(),
 )

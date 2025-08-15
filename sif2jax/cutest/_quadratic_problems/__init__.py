@@ -13,6 +13,9 @@ from .dualc1 import DUALC1 as DUALC1
 from .dualc2 import DUALC2 as DUALC2
 from .dualc5 import DUALC5 as DUALC5
 from .dualc8 import DUALC8 as DUALC8
+
+# TODO: Human review needed - same constraint issues as EIGENA
+# from .eigena2 import EIGENA2 as EIGENA2
 from .gouldqp1 import GOULDQP1 as GOULDQP1
 from .gouldqp2 import GOULDQP2 as GOULDQP2
 from .gouldqp3 import GOULDQP3 as GOULDQP3
@@ -38,6 +41,11 @@ from .qpnband import QPNBAND as QPNBAND
 # from .qpnboei1 import QPNBOEI1 as QPNBOEI1  # TODO: Human review - Boeing constraints
 # from .qpnboei2 import QPNBOEI2 as QPNBOEI2  # TODO: Human review - Boeing constraints
 # from .qpnstair import QPNSTAIR as QPNSTAIR  # TODO: Human review - constraint dims
+from .table1 import TABLE1 as TABLE1
+from .table3 import TABLE3 as TABLE3
+from .table6 import TABLE6 as TABLE6
+from .table7 import TABLE7 as TABLE7
+from .table8 import TABLE8 as TABLE8
 from .tame import TAME as TAME
 
 # from .torsiond import TORSIOND as TORSIOND  # TODO: Human review needed - see file
@@ -69,6 +77,7 @@ constrained_quadratic_problems = (
     DUALC2(),
     DUALC5(),
     DUALC8(),
+    # EIGENA2(),  # TODO: Human review needed - same constraint issues as EIGENA
     GOULDQP1(),
     GOULDQP2(),
     GOULDQP3(),
@@ -90,6 +99,11 @@ constrained_quadratic_problems = (
     # QPNBOEI1(),  # TODO: Human review - Boeing routing constraints
     # QPNBOEI2(),  # TODO: Human review - Boeing routing constraints
     # QPNSTAIR(),  # TODO: Human review - complex constraint dimensions
+    TABLE1(),
+    TABLE3(),
+    TABLE6(),
+    TABLE7(),
+    TABLE8(),
     TAME(),
     YAO(),
 )

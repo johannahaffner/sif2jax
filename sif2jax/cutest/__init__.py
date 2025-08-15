@@ -132,6 +132,7 @@ from ._constrained_minimisation import (
     DTOC4 as DTOC4,
     DTOC5 as DTOC5,
     DTOC6 as DTOC6,
+    # EIGENACO as EIGENACO,  # TODO: Human review needed
     ELATTAR as ELATTAR,
     # EXPFITA as EXPFITA,  # TODO: Human review - fundamental formulation differences
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
@@ -292,6 +293,20 @@ from ._constrained_minimisation import (
     MSS2 as MSS2,
     MSS3 as MSS3,
     ODFITS as ODFITS,
+    OET1 as OET1,
+    OET2 as OET2,
+    OET3 as OET3,
+    OET4 as OET4,
+    OET5 as OET5,
+    OET6 as OET6,
+    OET7 as OET7,
+    OPTCDEG2 as OPTCDEG2,
+    OPTCDEG3 as OPTCDEG3,
+    OPTCNTRL as OPTCNTRL,
+    OPTCTRL3 as OPTCTRL3,
+    OPTCTRL6 as OPTCTRL6,
+    OPTMASS as OPTMASS,
+    OPTPRLOC as OPTPRLOC,
     # ORTHRDM2 as ORTHRDM2,  # TODO: Human review - singular Jacobian issues
     # ORTHRDS2 as ORTHRDS2,  # TODO: Human review - singular Jacobian issues
     ORTHRDS2C as ORTHRDS2C,
@@ -315,6 +330,11 @@ from ._constrained_minimisation import (
     SIMPLLPB as SIMPLLPB,
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
+    # TAX13322 as TAX13322,  # TODO: Human review - complex objective
+    TENBARS1 as TENBARS1,
+    TENBARS2 as TENBARS2,
+    TENBARS3 as TENBARS3,
+    TENBARS4 as TENBARS4,
     TRO3X3 as TRO3X3,
     TRO4X4 as TRO4X4,
     TRO5X5 as TRO5X5,
@@ -396,7 +416,8 @@ from ._nonlinear_equations import (
     DRCAVTY2 as DRCAVTY2,
     DRCAVTY3 as DRCAVTY3,
     EGGCRATENE as EGGCRATENE,
-    # EIGENAU as EIGENAU,  # TODO: Human review - non-standard initial values
+    # EIGENA as EIGENA,  # TODO: Human review needed
+    # EIGENAU as EIGENAU,  # TODO: Human review needed
     ELATVIDUNE as ELATVIDUNE,
     ENGVAL2NE as ENGVAL2NE,
     ERRINROSNE as ERRINROSNE,
@@ -545,6 +566,7 @@ from ._quadratic_problems import (
     DUALC2 as DUALC2,
     DUALC5 as DUALC5,
     DUALC8 as DUALC8,
+    # EIGENA2 as EIGENA2,  # TODO: Human review needed
     GOULDQP1 as GOULDQP1,
     GOULDQP2 as GOULDQP2,
     GOULDQP3 as GOULDQP3,
@@ -569,6 +591,11 @@ from ._quadratic_problems import (
     # QPNBOEI2 as QPNBOEI2,  # TODO: Human review - Boeing routing constraints
     # QPNSTAIR as QPNSTAIR,  # TODO: Human review - complex constraint dimensions
     quadratic_problems as quadratic_problems,
+    TABLE1 as TABLE1,
+    TABLE3 as TABLE3,
+    TABLE6 as TABLE6,
+    TABLE7 as TABLE7,
+    TABLE8 as TABLE8,
     TAME as TAME,
     # TORSIOND as TORSIOND,  # TODO: Human review - objective mismatch with pycutest
     YAO as YAO,
@@ -950,6 +977,20 @@ problems_dict = {
     "MSS2": MSS2(),
     "MSS3": MSS3(),
     "ODFITS": ODFITS(),
+    "OET1": OET1(),
+    "OET2": OET2(),
+    "OET3": OET3(),
+    "OET4": OET4(),
+    "OET5": OET5(),
+    "OET6": OET6(),
+    "OET7": OET7(),
+    "OPTCDEG2": OPTCDEG2(),
+    "OPTCDEG3": OPTCDEG3(),
+    "OPTCNTRL": OPTCNTRL(),
+    "OPTCTRL3": OPTCTRL3(),
+    "OPTCTRL6": OPTCTRL6(),
+    "OPTMASS": OPTMASS(),
+    "OPTPRLOC": OPTPRLOC(),
     # "ORTHRDM2": ORTHRDM2(),  # TODO: Human review - gradient issues
     # "ORTHRDS2": ORTHRDS2(),  # TODO: Human review - gradient issues
     "ORTHRDS2C": ORTHRDS2C(),
@@ -973,6 +1014,11 @@ problems_dict = {
     "SIMPLLPB": SIMPLLPB(),
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
+    # "TAX13322": TAX13322(),  # TODO: Human review - complex objective
+    "TENBARS1": TENBARS1(),
+    "TENBARS2": TENBARS2(),
+    "TENBARS3": TENBARS3(),
+    "TENBARS4": TENBARS4(),
     # "SPINOP": SPINOP(),  # TODO: Human review - auxiliary variable constraint issues
     # "SPIN2OP": SPIN2OP(),  # TODO: Human review - constraint test failures
     # "SIPOW3": SIPOW3(),  # TODO: Human review - constraint formulation issues
@@ -1134,6 +1180,7 @@ problems_dict = {
     "DTOC4": DTOC4(),
     "DTOC5": DTOC5(),
     "DTOC6": DTOC6(),
+    # "EIGENACO": EIGENACO(),  # TODO: Human review needed
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),
@@ -1388,10 +1435,16 @@ problems_dict = {
     "DUALC2": DUALC2(),
     "DUALC5": DUALC5(),
     "DUALC8": DUALC8(),
+    # "EIGENA2": EIGENA2(),  # TODO: Human review needed
     "GOULDQP1": GOULDQP1(),
     "GOULDQP2": GOULDQP2(),
     "GOULDQP3": GOULDQP3(),
     "QUDLIN": QUDLIN(),
+    "TABLE1": TABLE1(),
+    "TABLE3": TABLE3(),
+    "TABLE6": TABLE6(),
+    "TABLE7": TABLE7(),
+    "TABLE8": TABLE8(),
     "TAME": TAME(),
     "HATFLDH": HATFLDH(),
     "HS44NEW": HS44NEW(),
@@ -1456,7 +1509,8 @@ problems_dict = {
     "DEVGLA1NE": DEVGLA1NE(),
     "DEVGLA2NE": DEVGLA2NE(),
     "EGGCRATENE": EGGCRATENE(),
-    # "EIGENAU": EIGENAU(),  # TODO: Human review - non-standard initial values
+    # "EIGENA": EIGENA(),  # TODO: Human review needed
+    # "EIGENAU": EIGENAU(),  # TODO: Human review needed
     "ELATTAR": ELATTAR(),
     "ELATVIDUNE": ELATVIDUNE(),
     "ENGVAL2NE": ENGVAL2NE(),

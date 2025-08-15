@@ -60,7 +60,9 @@ from .drcavty2 import DRCAVTY2 as DRCAVTY2
 from .drcavty3 import DRCAVTY3 as DRCAVTY3
 from .eggcratene import EGGCRATENE as EGGCRATENE
 
-# TODO: Human review - pycutest has non-standard initial values
+# TODO: Human review needed - systematic constraint value discrepancies
+# from .eigena import EIGENA as EIGENA
+# TODO: Human review needed - same constraint issues as EIGENA
 # from .eigenau import EIGENAU as EIGENAU
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
@@ -293,6 +295,8 @@ nonlinear_equations_problems = (
     DEVGLA1NE(),
     DEVGLA2NE(),
     EGGCRATENE(),
+    # EIGENA(),  # TODO: Human review needed - systematic constraint value discrepancies
+    # EIGENAU(),  # TODO: Human review needed - same constraint issues as EIGENA
     ELATVIDUNE(),
     ENGVAL2NE(),
     ERRINRSMNE(),

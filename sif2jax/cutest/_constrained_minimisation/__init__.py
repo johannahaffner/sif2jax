@@ -62,6 +62,9 @@ from .dtoc2 import DTOC2 as DTOC2
 # TODO: DTOC3 needs human review - X(1498) and X(1499) treated as 0 by pycutest
 # from .dtoc3 import DTOC3 as DTOC3
 from .dtoc4 import DTOC4 as DTOC4
+
+# TODO: Human review needed - same constraint issues as EIGENA
+# from .eigenaco import EIGENACO as EIGENACO
 from .dtoc5 import DTOC5 as DTOC5
 from .dtoc6 import DTOC6 as DTOC6
 from .elattar import ELATTAR as ELATTAR
@@ -253,6 +256,20 @@ from .mss1 import MSS1 as MSS1
 from .mss2 import MSS2 as MSS2
 from .mss3 import MSS3 as MSS3
 from .odfits import ODFITS as ODFITS
+from .oet1 import OET1 as OET1
+from .oet2 import OET2 as OET2
+from .oet3 import OET3 as OET3
+from .oet4 import OET4 as OET4
+from .oet5 import OET5 as OET5
+from .oet6 import OET6 as OET6
+from .oet7 import OET7 as OET7
+from .optcdeg2 import OPTCDEG2 as OPTCDEG2
+from .optcdeg3 import OPTCDEG3 as OPTCDEG3
+from .optcntrl import OPTCNTRL as OPTCNTRL
+from .optctrl3 import OPTCTRL3 as OPTCTRL3
+from .optctrl6 import OPTCTRL6 as OPTCTRL6
+from .optmass import OPTMASS as OPTMASS
+from .optprloc import OPTPRLOC as OPTPRLOC
 
 # from .orthrdm2 import ORTHRDM2 as ORTHRDM2  # TODO: Human review - singular Jacobian
 # from .orthrds2 import ORTHRDS2 as ORTHRDS2  # TODO: Human review - singular Jacobian
@@ -279,13 +296,6 @@ from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
-from .tro3x3 import TRO3X3 as TRO3X3
-from .tro4x4 import TRO4X4 as TRO4X4
-from .tro5x5 import TRO5X5 as TRO5X5
-from .tro6x2 import TRO6X2 as TRO6X2
-from .tro11x3 import TRO11X3 as TRO11X3
-from .tro21x5 import TRO21X5 as TRO21X5
-from .tro41x9 import TRO41X9 as TRO41X9
 
 # TODO: Human review needed - constraint test failures (vectorized but sign issues)
 # from .spin2op import SPIN2OP as SPIN2OP
@@ -297,8 +307,20 @@ from .tro41x9 import TRO41X9 as TRO41X9
 # from .sipow3 import SIPOW3 as SIPOW3
 # TODO: SIPOW4 needs human review - constraint formulation issues
 # from .sipow4 import SIPOW4 as SIPOW4
-# TODO: TENBARS4 needs human review - pycutest Jacobian inconsistency
-# from .tenbars4 import TENBARS4 as TENBARS4
+# TODO: TAX13322 needs human review - complex objective structure, off by ~80x
+# from .tax13322 import TAX13322 as TAX13322
+from .tenbars1 import TENBARS1 as TENBARS1
+from .tenbars2 import TENBARS2 as TENBARS2
+from .tenbars3 import TENBARS3 as TENBARS3
+from .tenbars4 import TENBARS4 as TENBARS4
+from .tro3x3 import TRO3X3 as TRO3X3
+from .tro4x4 import TRO4X4 as TRO4X4
+from .tro5x5 import TRO5X5 as TRO5X5
+from .tro6x2 import TRO6X2 as TRO6X2
+from .tro11x3 import TRO11X3 as TRO11X3
+from .tro21x5 import TRO21X5 as TRO21X5
+from .tro41x9 import TRO41X9 as TRO41X9
+
 # TODO: TRUSPYR1 needs human review - complex constraint scaling issues
 # from .truspyr1 import TRUSPYR1 as TRUSPYR1
 # TODO: TRUSPYR2 needs human review - test requested to be removed
@@ -358,6 +380,7 @@ constrained_minimisation_problems = (
     DTOC4(),
     DTOC5(),
     DTOC6(),
+    # EIGENACO(),  # TODO: Human review needed - same constraint issues as EIGENA
     ELATTAR(),
     # EXPFITA(),  # TODO: Human review - fundamental formulation differences
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences
@@ -474,6 +497,20 @@ constrained_minimisation_problems = (
     MSS2(),
     MSS3(),
     ODFITS(),
+    OET1(),
+    OET2(),
+    OET3(),
+    OET4(),
+    OET5(),
+    OET6(),
+    OET7(),
+    OPTCDEG2(),
+    OPTCDEG3(),
+    OPTCNTRL(),
+    OPTCTRL3(),
+    OPTCTRL6(),
+    OPTMASS(),
+    OPTPRLOC(),
     # ORTHRDM2(),  # TODO: Human review - singular Jacobian issues
     # ORTHRDS2(),  # TODO: Human review - singular Jacobian issues
     ORTHRDS2C(),
@@ -497,6 +534,11 @@ constrained_minimisation_problems = (
     SIMPLLPB(),
     SIPOW1(),
     SIPOW2(),
+    # TAX13322(),  # TODO: Human review - complex objective structure
+    TENBARS1(),
+    TENBARS2(),
+    TENBARS3(),
+    TENBARS4(),
     # SPINOP(),  # TODO: Human review - constraint issues with auxiliary variables
     # SPIN2OP(),  # TODO: Human review - constraint test failures
     # STEENBRB(),  # TODO: Human review - gradient test failing
@@ -519,7 +561,6 @@ constrained_minimisation_problems = (
     ZECEVIC2(),
     ZECEVIC3(),
     ZECEVIC4(),
-    # TENBARS4(),  # TODO: Human review - pycutest Jacobian inconsistency
     # TRUSPYR1(),  # TODO: Human review - complex constraint scaling issues
     # TRUSPYR2(),  # TODO: Human review - test requested to be removed
     BT1(),

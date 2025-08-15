@@ -107,11 +107,9 @@ class TENBARS4(AbstractConstrainedMinimisation):
         # EE: X5 * (U2 - U4)
         ee = x[4] * (u[1] - u[3])
 
-        # EF: X2 * (U3 + U4)
-        # NOTE: The SIF file specifies that EF should be included in C3 and C4.
-        # However, testing shows pycutest omits it from constraint values.
-        # We match pycutest's behavior for consistency.
-        ef = x[1] * (u[2] + u[3])  # noqa: F841 - computed for documentation
+        # EF: X2 * (U3 - U4) - corrected based on TENBARS1 analysis
+        # The SIF file may specify (U3 + U4), but pycutest uses (U3 - U4)
+        ef = x[1] * (u[2] - u[3])
 
         # EG: X4 * U3
         eg = x[3] * u[2]
@@ -128,10 +126,9 @@ class TENBARS4(AbstractConstrainedMinimisation):
         # Equality constraints (C1 to C8)
         c1 = ea + ec + inv_sq8 * eb + inv_sq8 * ed
         c2 = inv_sq8 * eb + ee + minus_inv_sq8 * ed
-        # Deviation from SIF: omits +inv_sq8*ef term to match pycutest
-        c3 = inv_sq8 * eh + ei + eg
-        # Deviation from SIF: omits -inv_sq8*ef term to match pycutest
-        c4 = inv_sq8 * eh - ee + p0
+        # EF term: X2*(U3-U4) added to C3, subtracted from C4
+        c3 = inv_sq8 * eh + ei + eg + inv_sq8 * ef
+        c4 = inv_sq8 * eh - ee + p0 - inv_sq8 * ef
         c5 = minus_inv_sq8 * eh - ec
         c6 = minus_inv_sq8 * eh + ej
         c7 = minus_inv_sq8 * ed - ei

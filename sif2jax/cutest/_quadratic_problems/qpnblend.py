@@ -179,15 +179,35 @@ class QPNBLEND(AbstractConstrainedQuadraticProblem):
 
         return eq_constraints, ineq_constraints
 
-    def _get_constraint_matrices(self):
+    def _get_constraint_matrices(self) -> tuple[jnp.ndarray, jnp.ndarray, jnp.ndarray]:
         """Return complete constraint matrices from full COLUMNS parsing.
 
         All coefficients manually implemented from the parsed SIF data.
+
+        Returns:
+            tuple of (A_eq, A_ineq, b_ineq) constraint matrices
         """
         # Initialize matrices
         A_eq = jnp.zeros((43, 83))  # 43 equality constraints, 83 variables
         A_ineq = jnp.zeros((31, 83))  # 31 inequality constraints, 83 variables
 
+        # Build equality constraints
+        A_eq = self._build_equality_constraints(A_eq)
+
+        # Build inequality constraints
+        A_ineq, b_ineq = self._build_inequality_constraints(A_ineq)
+
+        return A_eq, A_ineq, b_ineq
+
+    def _build_equality_constraints(self, A_eq: jnp.ndarray) -> jnp.ndarray:
+        """Build equality constraint matrix A_eq.
+
+        Args:
+            A_eq: Initialized equality constraint matrix
+
+        Returns:
+            Populated equality constraint matrix
+        """
         # === EQUALITY CONSTRAINTS (A_eq) ===
         # Build complete A_eq matrix from all parsed COLUMNS entries
 
@@ -663,6 +683,19 @@ class QPNBLEND(AbstractConstrainedQuadraticProblem):
         # Variable 83 (index 82) - rows 43,C
         A_eq = A_eq.at[42, 82].set(-1.0)  # SIF row 43 → index 42
 
+        return A_eq
+
+    def _build_inequality_constraints(
+        self, A_ineq: jnp.ndarray
+    ) -> tuple[jnp.ndarray, jnp.ndarray]:
+        """Build inequality constraint matrix A_ineq and RHS vector b_ineq.
+
+        Args:
+            A_ineq: Initialized inequality constraint matrix
+
+        Returns:
+            tuple of (A_ineq, b_ineq) for inequality constraints
+        """
         # === INEQUALITY CONSTRAINTS (A_ineq) ===
         # Build complete A_ineq matrix for rows 44-74 (SIF) → indices 0-30
 
@@ -778,7 +811,7 @@ class QPNBLEND(AbstractConstrainedQuadraticProblem):
         b_ineq = b_ineq.at[27].set(10.0)  # SIF row 71 → ineq index 27
         b_ineq = b_ineq.at[28].set(10.0)  # SIF row 72 → ineq index 28
 
-        return A_eq, A_ineq, b_ineq
+        return A_ineq, b_ineq
 
     @property
     def expected_result(self):

@@ -561,8 +561,24 @@ from ._nonlinear_equations import (
 # VANDERM2 as VANDERM2,  # TODO: Human review - mixed constraint types
 from ._quadratic_problems import (
     bounded_quadratic_problems as bounded_quadratic_problems,
-    constrained_quadratic_problems as constrained_quadratic_problems,
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
+    CMPC1 as CMPC1,
+    CMPC2 as CMPC2,
+    CMPC3 as CMPC3,
+    CMPC4 as CMPC4,
+    CMPC5 as CMPC5,
+    CMPC6 as CMPC6,
+    # CMPC7 as CMPC7,  # TODO: Human review
+    CMPC8 as CMPC8,
+    # CMPC9 as CMPC9,  # TODO: Human review
+    CMPC10 as CMPC10,
+    # CMPC11 as CMPC11,  # TODO: Human review
+    CMPC12 as CMPC12,
+    # CMPC13 as CMPC13,  # TODO: Human review
+    # CMPC14 as CMPC14,  # TODO: Human review
+    CMPC15 as CMPC15,
+    # CMPC16 as CMPC16,  # TODO: Human review
+    constrained_quadratic_problems as constrained_quadratic_problems,
     CVXBQP1 as CVXBQP1,
     CVXQP1 as CVXQP1,
     CVXQP2 as CVXQP2,
@@ -859,6 +875,22 @@ problems_dict = {
     "TRO41X9": TRO41X9(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
+    "CMPC1": CMPC1(),
+    "CMPC2": CMPC2(),
+    "CMPC3": CMPC3(),
+    "CMPC4": CMPC4(),
+    "CMPC5": CMPC5(),
+    "CMPC6": CMPC6(),
+    # "CMPC7": CMPC7(),  # TODO: Human review
+    "CMPC8": CMPC8(),
+    # "CMPC9": CMPC9(),  # TODO: Human review
+    "CMPC10": CMPC10(),
+    # "CMPC11": CMPC11(),  # TODO: Human review
+    "CMPC12": CMPC12(),
+    # "CMPC13": CMPC13(),  # TODO: Human review
+    # "CMPC14": CMPC14(),  # TODO: Human review
+    "CMPC15": CMPC15(),
+    # "CMPC16": CMPC16(),  # TODO: Human review
     "BOOTH": BOOTH(),
     "BURKEHAN": BURKEHAN(),
     "BYRDSPHR": BYRDSPHR(),

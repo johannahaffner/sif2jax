@@ -326,6 +326,15 @@ from ._constrained_minimisation import (
     POLAK5 as POLAK5,
     POLAK6 as POLAK6,
     # POLYGON as POLYGON,  # TODO: Human review - fixed variable conventions
+    READING1 as READING1,
+    READING2 as READING2,
+    READING3 as READING3,
+    READING4 as READING4,
+    READING5 as READING5,
+    # READING6 as READING6,  # TODO: Human review needed
+    # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
+    # the starting point is the solution too
+    READING9 as READING9,
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
     SIPOW1 as SIPOW1,
@@ -1010,6 +1019,15 @@ problems_dict = {
     "POLAK5": POLAK5(),
     "POLAK6": POLAK6(),
     # "POLYGON": POLYGON(),  # TODO: Human review - fixed variable conventions
+    "READING1": READING1(),
+    "READING2": READING2(),
+    "READING3": READING3(),
+    "READING4": READING4(),
+    "READING5": READING5(),
+    # "READING6": READING6(),  # TODO: Human review needed
+    # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
+    # the starting point is the solution too
+    "READING9": READING9(),
     "SIMPLLPA": SIMPLLPA(),
     "SIMPLLPB": SIMPLLPB(),
     "SIPOW1": SIPOW1(),

@@ -292,6 +292,16 @@ from .polak5 import POLAK5 as POLAK5
 from .polak6 import POLAK6 as POLAK6
 
 # from .polygon import POLYGON as POLYGON  # TODO: Human review - sign conventions
+from .reading1 import READING1 as READING1
+from .reading2 import READING2 as READING2
+from .reading3 import READING3 as READING3
+from .reading4 import READING4 as READING4
+from .reading5 import READING5 as READING5
+
+# from .reading6 import READING6 as READING6  # TODO: Human review needed
+# Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
+# the starting point is the solution too
+from .reading9 import READING9 as READING9
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
@@ -530,6 +540,15 @@ constrained_minimisation_problems = (
     POLAK5(),
     POLAK6(),
     # POLYGON(),  # TODO: Human review - constraint sign convention differences
+    READING1(),
+    READING2(),
+    READING3(),
+    READING4(),
+    READING5(),
+    # READING6(),  # TODO: Human review needed
+    # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
+    # the starting point is the solution too
+    READING9(),
     SIMPLLPA(),
     SIMPLLPB(),
     SIPOW1(),

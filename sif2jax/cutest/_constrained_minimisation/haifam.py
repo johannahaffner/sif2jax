@@ -84,40 +84,64 @@ class HAIFAM(AbstractConstrainedMinimisation):
             with open(data_path) as f:
                 data = json.load(f)
 
-            # Compute all element values E(i) = 0.5 * X(idx1) * X(idx2)
-            element_x_indices = data["element_x_indices"]
-            element_y_indices = data["element_y_indices"]
+            # Vectorized computation of element values E(i) = 0.5 * X(idx1) * X(idx2)
+            element_x_indices = jnp.array(data["element_x_indices"])
+            element_y_indices = jnp.array(data["element_y_indices"])
 
-            # Vectorized computation of all elements
-            element_values = []
-            for i in range(len(element_x_indices)):
-                x_idx = element_x_indices[i]
-                y_idx = element_y_indices[i]
-                element_val = 0.5 * x[x_idx] * x[y_idx]
-                element_values.append(element_val)
+            # Fully vectorized element computation
+            element_values = 0.5 * x[element_x_indices] * x[element_y_indices]
 
-            element_values = jnp.array(element_values)
-
-            # Compute constraints: C(j) = sum(coeff * E(i)) - 100*z - x(92)
+            # Vectorized constraint computation using advanced indexing
             constraint_element_lists = data["constraint_element_lists"]
             constraint_coeff_lists = data["constraint_coeff_lists"]
 
-            constraints = []
+            # Convert to flat arrays for vectorized operations
+            max_elements_per_constraint = max(
+                len(elem_list) for elem_list in constraint_element_lists
+            )
+
+            # Pad element indices and coefficients to uniform length
+            padded_element_indices = jnp.full(
+                (150, max_elements_per_constraint), -1, dtype=jnp.int32
+            )
+            padded_coefficients = jnp.zeros(
+                (150, max_elements_per_constraint), dtype=y.dtype
+            )
+
             for j in range(150):
-                element_indices = constraint_element_lists[j]
-                coefficients = constraint_coeff_lists[j]
+                elem_list = constraint_element_lists[j]
+                coeff_list = constraint_coeff_lists[j]
+                n_elements = len(elem_list)
 
-                # Sum weighted elements for this constraint
-                constraint_sum = 0.0
-                for elem_idx, coeff in zip(element_indices, coefficients):
-                    # Element indices in SIF are 1-based, our array is 0-based
-                    constraint_sum += coeff * element_values[elem_idx - 1]
+                # Convert to 0-based indexing (SIF uses 1-based) and ensure dtype
+                elem_array = jnp.array(elem_list, dtype=jnp.int32) - 1
+                coeff_array = jnp.array(coeff_list, dtype=y.dtype)
 
-                # Apply the constraint formula: C(j) - 100*z - x(92) <= 0
-                constraint_value = constraint_sum - 100.0 * z - x92
-                constraints.append(constraint_value)
+                padded_element_indices = padded_element_indices.at[j, :n_elements].set(
+                    elem_array
+                )
+                padded_coefficients = padded_coefficients.at[j, :n_elements].set(
+                    coeff_array
+                )
 
-            return None, jnp.array(constraints)
+            # Create mask for valid indices
+            valid_mask = padded_element_indices >= 0
+
+            # Use advanced indexing to gather element values
+            # Set invalid indices to 0 to avoid out-of-bounds
+            safe_indices = jnp.where(valid_mask, padded_element_indices, 0)
+            gathered_elements = element_values[safe_indices]
+
+            # Apply mask and compute weighted sums
+            masked_products = jnp.where(
+                valid_mask, gathered_elements * padded_coefficients, 0.0
+            )
+            constraint_sums = jnp.sum(jnp.asarray(masked_products), axis=1)
+
+            # Apply the constraint formula: C(j) - 100*z - x(92) <= 0
+            constraints = constraint_sums - 100.0 * z - x92
+
+            return None, constraints
 
         except (FileNotFoundError, json.JSONDecodeError):
             # If data file not available, raise error

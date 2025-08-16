@@ -59,6 +59,16 @@ Here are the sources relevant to problem implementations:
 - **Test After EVERY Change**: Even minor edits
 - **Batch Testing**: Full test suite will result in timeout in devcontainer, test problems individually or in small batches instead. 
 - **Test Timeouts**: If a problem is poorly vectorised, its tests may time out. In this case, vectorise the problem before trying again.
+- **Debug Order**: When fixing test failures, follow this strict priority order (matches test order in tests/test_problem.py):
+  1. **Fix imports** - Ensure the problem can be imported
+  2. **Fix class name** - Must match SIF problem name
+  3. **Fix dimensions** - Verify n_var, n_con match SIF specifications
+  4. **Fix starting point** - Check START POINT section in SIF file, must be exact
+  5. **Fix objective function** - Only after starting point is correct
+  6. **Fix constraint functions** - If applicable
+  7. **Fix derivatives** - Gradients, Hessians, Jacobians (last priority)
+  
+  **Important**: Never attempt to fix functions before their inputs are correct. An incorrect starting point will make debugging the objective function impossible. Work through issues in order of increasing complexity: constants → functions → derivatives.
 - **10 Attempts Rule**: After 10 failed attempts, flag for human review:
   ```python
   # TODO: Human review needed

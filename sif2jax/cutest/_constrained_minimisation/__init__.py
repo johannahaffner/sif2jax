@@ -72,6 +72,7 @@ from .expfita import EXPFITA as EXPFITA
 from .expfitb import EXPFITB as EXPFITB
 from .expfitc import EXPFITC as EXPFITC
 from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
+from .hadamard import HADAMARD as HADAMARD
 
 # TODO: Human review needed - parameter/dimension mismatch with pycutest
 # JAX implementation uses correct SIF parameters (N=10 → 21 variables)
@@ -83,6 +84,13 @@ from .hager2 import HAGER2 as HAGER2
 # TODO: HAGER3 needs human review - marked for future import
 # from .hager3 import HAGER3 as HAGER3
 from .hager4 import HAGER4 as HAGER4
+
+# TODO: Human review needed - complex SIF structure
+from .haifal import HAIFAL as HAIFAL
+from .haifam import (
+    HAIFAM as HAIFAM,
+)
+from .haifas import HAIFAS as HAIFAS
 from .himmelbc import HIMMELBC as HIMMELBC
 from .himmelbd import HIMMELBD as HIMMELBD
 from .himmelbe import HIMMELBE as HIMMELBE
@@ -396,10 +404,14 @@ constrained_minimisation_problems = (
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences
     # EXPFITC(),  # TODO: Human review - fundamental formulation differences
     GIGOMEZ2(),
+    HADAMARD(),
     HAGER1(),
     HAGER2(),
     # HAGER3(),  # TODO: Human review needed - marked for future import
     HAGER4(),
+    HAIFAS(),
+    HAIFAM(),  # TODO: Human review needed - complex SIF structure
+    HAIFAL(),
     HS6(),
     HS7(),
     HS8(),

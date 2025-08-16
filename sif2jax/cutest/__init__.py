@@ -24,6 +24,7 @@ from ._bounded_minimisation import (
     EXPLIN as EXPLIN,
     EXPLIN2 as EXPLIN2,
     EXPQUAD as EXPQUAD,
+    HADAMALS as HADAMALS,
     HART6 as HART6,
     HATFLDA as HATFLDA,
     HATFLDB as HATFLDB,
@@ -138,10 +139,14 @@ from ._constrained_minimisation import (
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
     # EXPFITC as EXPFITC,  # TODO: Human review - fundamental formulation differences
     GIGOMEZ2 as GIGOMEZ2,
+    HADAMARD as HADAMARD,
     HAGER1 as HAGER1,
     HAGER2 as HAGER2,
     # HAGER3 as HAGER3,  # TODO: HAGER3 needs human review - marked for future import
     HAGER4 as HAGER4,
+    HAIFAL as HAIFAL,
+    HAIFAM as HAIFAM,  # TODO: Human review needed - complex SIF structure
+    HAIFAS as HAIFAS,
     HIMMELBC as HIMMELBC,
     HIMMELBD as HIMMELBD,
     HIMMELBE as HIMMELBE,
@@ -1308,11 +1313,16 @@ problems_dict = {
     "HAGER2": HAGER2(),
     # "HAGER3": HAGER3(),  # TODO: HAGER3 needs human review - marked for future import
     "HAGER4": HAGER4(),
+    "HAIFAS": HAIFAS(),
+    "HAIFAM": HAIFAM(),  # TODO: Human review needed - complex SIF structure
+    "HAIFAL": HAIFAL(),
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
     # "GULF": GULF(),  # TODO: Human review - issues reported by user
     "HAHN1LS": HAHN1LS(),
     "HAIRY": HAIRY(),
+    "HADAMALS": HADAMALS(),
+    "HADAMARD": HADAMARD(),
     "HART6": HART6(),
     "HATFLDA": HATFLDA(),
     "HATFLDB": HATFLDB(),

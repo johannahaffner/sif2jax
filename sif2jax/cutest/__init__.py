@@ -426,6 +426,12 @@ from ._nonlinear_equations import (
     DENSCHNFNE as DENSCHNFNE,
     DEVGLA1NE as DEVGLA1NE,
     DEVGLA2NE as DEVGLA2NE,
+    DMN15102 as DMN15102,
+    DMN15103 as DMN15103,
+    # DMN15332 as DMN15332,  # TODO: Human review needed - Jacobian precision issues
+    # DMN15333 as DMN15333,  # TODO: Human review needed - Jacobian precision issues
+    # DMN37142 as DMN37142,  # TODO: Human review needed - Jacobian precision issues
+    # DMN37143 as DMN37143,  # TODO: Human review needed - Jacobian precision issues
     # BROYDN3D as BROYDN3D,  # TODO: Human review needed - constraint values mismatch
     # BROYDNBD as BROYDNBD,  # TODO: Human review needed - systematic differences
     # BRYBNDNE as BRYBNDNE,  # TODO: Human review needed - constraint values mismatch
@@ -700,6 +706,10 @@ from ._unconstrained_minimisation import (
     DENSCHNF as DENSCHNF,
     DEVGLA1 as DEVGLA1,
     DEVGLA2 as DEVGLA2,
+    # DMN15332LS as DMN15332LS,  # TODO: Human review - gradient precision
+    # DMN15333LS as DMN15333LS,  # TODO: Human review - gradient precision
+    # DMN37142LS as DMN37142LS,  # TODO: Human review - gradient precision
+    # DMN37143LS as DMN37143LS,  # TODO: Human review - gradient precision
     # DIAMON3DLS as DIAMON3DLS,  # TODO: Human review needed - see file
     DIXMAANA1 as DIXMAANA1,
     DIXMAANB as DIXMAANB,
@@ -719,6 +729,8 @@ from ._unconstrained_minimisation import (
     DIXMAANP as DIXMAANP,
     DIXON3DQ as DIXON3DQ,
     DJTL as DJTL,
+    DMN15102LS as DMN15102LS,
+    DMN15103LS as DMN15103LS,
     DQDRTIC as DQDRTIC,
     DQRTIC as DQRTIC,
     DRCAV1LQ as DRCAV1LQ,
@@ -1254,6 +1266,12 @@ problems_dict = {
     "DEVGLA1": DEVGLA1(),
     # "DIAMON3DLS": DIAMON3DLS(),  # TODO: Human review needed - see file
     "DEVGLA2": DEVGLA2(),
+    "DMN15102LS": DMN15102LS(),
+    "DMN15103LS": DMN15103LS(),
+    # "DMN15332LS": DMN15332LS(),  # TODO: Human review - gradient precision
+    # "DMN15333LS": DMN15333LS(),  # TODO: Human review - gradient precision
+    # "DMN37142LS": DMN37142LS(),  # TODO: Human review - gradient precision
+    # "DMN37143LS": DMN37143LS(),  # TODO: Human review - gradient precision
     "DIXMAANA1": DIXMAANA1(),
     "DIXMAANB": DIXMAANB(),
     "DIXMAANC": DIXMAANC(),
@@ -1577,6 +1595,12 @@ problems_dict = {
     "DECONVNE": DECONVNE(),
     "DEVGLA1NE": DEVGLA1NE(),
     "DEVGLA2NE": DEVGLA2NE(),
+    "DMN15102": DMN15102(),
+    "DMN15103": DMN15103(),
+    # "DMN15332": DMN15332(),  # TODO: Human review needed - Jacobian precision issues
+    # "DMN15333": DMN15333(),  # TODO: Human review needed - Jacobian precision issues
+    # "DMN37142": DMN37142(),  # TODO: Human review needed - Jacobian precision issues
+    # "DMN37143": DMN37143(),  # TODO: Human review needed - Jacobian precision issues
     "EGGCRATENE": EGGCRATENE(),
     # "EIGENA": EIGENA(),  # TODO: Human review needed
     # "EIGENAU": EIGENAU(),  # TODO: Human review needed

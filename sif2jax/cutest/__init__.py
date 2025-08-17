@@ -113,6 +113,12 @@ from ._constrained_minimisation import (
     CB3 as CB3,
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
+    CLEUVEN2 as CLEUVEN2,
+    CLEUVEN3 as CLEUVEN3,
+    CLEUVEN4 as CLEUVEN4,
+    CLEUVEN5 as CLEUVEN5,
+    CLEUVEN6 as CLEUVEN6,
+    CLEUVEN7 as CLEUVEN7,
     # CLNLBEAM as CLNLBEAM,  # TODO: Dimension mismatch in constraints
     # CONCON as CONCON,  # TODO: Removed - automatic derivative mismatches
     constrained_minimisation_problems as constrained_minimisation_problems,
@@ -397,9 +403,11 @@ from ._nonlinear_equations import (
     # BROWNALE as BROWNALE,  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE as BROWNBSNE,
     BROWNDENE as BROWNDENE,
-    # CERI651A as CERI651A,  # TODO: Human review - numerical overflow at ones vector
-    # CERI651B as CERI651B,  # TODO: Human review - numerical overflow at ones vector
-    # CERI651C as CERI651C,  # TODO: Human review - numerical overflow at ones vector
+    # CERI651A as CERI651A,  # TODO: Human review needed - constraint precision
+    # CERI651B as CERI651B,  # TODO: Human review needed - constraint precision
+    # CERI651C as CERI651C,  # TODO: Human review needed - constraint precision
+    # CERI651D as CERI651D,  # TODO: Human review needed - constraint precision
+    # CERI651E as CERI651E,  # TODO: Human review needed - constraint precision
     # CHAINWOONE as CHAINWOONE,  # TODO: Human review - constraint values mismatch
     CHANDHEQ as CHANDHEQ,
     # CHANNEL as CHANNEL,  # TODO: Human review needed
@@ -904,6 +912,12 @@ problems_dict = {
     "CB3": CB3(),
     "CHACONN1": CHACONN1(),
     "CHACONN2": CHACONN2(),
+    "CLEUVEN2": CLEUVEN2(),
+    "CLEUVEN3": CLEUVEN3(),
+    "CLEUVEN4": CLEUVEN4(),
+    "CLEUVEN5": CLEUVEN5(),
+    "CLEUVEN6": CLEUVEN6(),
+    "CLEUVEN7": CLEUVEN7(),
     # "CLNLBEAM": CLNLBEAM(),  # TODO: Dimension mismatch in constraints
     "HS1": HS1(),
     "HS2": HS2(),
@@ -1543,9 +1557,11 @@ problems_dict = {
     "HYPCIR": HYPCIR(),
     "MSQRTA": MSQRTA(),
     "MSQRTB": MSQRTB(),
-    # "CERI651A": CERI651A(),  # TODO: Human review - numerical overflow at ones vector
-    # "CERI651B": CERI651B(),  # TODO: Human review - numerical overflow at ones vector
-    # "CERI651C": CERI651C(),  # TODO: Human review - numerical overflow at ones vector
+    # "CERI651A": CERI651A(),  # TODO: Human review needed - constraint precision
+    # "CERI651B": CERI651B(),  # TODO: Human review needed - constraint precision
+    # "CERI651C": CERI651C(),  # TODO: Human review needed - constraint precision
+    # "CERI651D": CERI651D(),  # TODO: Human review needed - constraint precision
+    # "CERI651E": CERI651E(),  # TODO: Human review needed - constraint precision
     # "CHAINWOONE": CHAINWOONE(),  # TODO: Human review - constraint values mismatch
     # "CHANNEL": CHANNEL(),  # TODO: Human review needed
     "CHEBYQADNE": CHEBYQADNE(),

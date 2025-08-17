@@ -44,6 +44,13 @@ from .chaconn2 import CHACONN2 as CHACONN2
 # from .cresc4 import CRESC4 as CRESC4  # TODO: Human review - complex crescent area
 # TODO: CLNLBEAM needs fixing - dimension mismatch in constraints
 # from .clnlbeam import CLNLBEAM as CLNLBEAM
+from .cleuven2 import CLEUVEN2 as CLEUVEN2
+from .cleuven3 import CLEUVEN3 as CLEUVEN3
+from .cleuven4 import CLEUVEN4 as CLEUVEN4
+from .cleuven5 import CLEUVEN5 as CLEUVEN5
+from .cleuven6 import CLEUVEN6 as CLEUVEN6
+from .cleuven7 import CLEUVEN7 as CLEUVEN7
+
 # TODO: CONCON - removed from API due to automatic derivative mismatches with pycutest
 # from .concon import CONCON as CONCON
 from .coshfun import COSHFUN as COSHFUN
@@ -394,6 +401,12 @@ constrained_minimisation_problems = (
     # CHARDIS1(),  # TODO: Human review needed
     # CHARDIS12(),  # TODO: Human review needed
     # CLNLBEAM(),  # TODO: Dimension mismatch in constraints
+    CLEUVEN2(),
+    CLEUVEN3(),
+    CLEUVEN4(),
+    CLEUVEN5(),
+    CLEUVEN6(),
+    CLEUVEN7(),
     # CONCON(),  # TODO: Removed - automatic derivative mismatches
     COSHFUN(),
     # CRESC4(),  # TODO: Human review - complex crescent area formula

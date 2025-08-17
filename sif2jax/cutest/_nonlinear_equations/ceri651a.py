@@ -20,9 +20,26 @@ class CERI651A(AbstractNonlinearEquations):
     """ISIS Data fitting problem CERI651A given as an inconsistent set of
     nonlinear equations.
 
-    TODO: Human review needed - numerical overflow when evaluating at ones vector
-    The back-to-back exponential fitting function overflows when all parameters
-    are set to 1.0. The SIF file uses specific initial values that avoid this.
+    TODO: Human review needed
+    Attempts made:
+    1. Implemented back-to-back exponential formula with erfc_scaled helper
+    2. Fixed data transcription errors (used SIF values exactly as written)
+    3. Corrected erfc argument formula from (A*S^2+(x-X0))/(S*sqrt(2)) to
+       (A*S+(x-X0)/S)/sqrt(2)
+    4. All structural tests pass (dimensions, starting values)
+
+    Current status:
+    - Starting values match SIF exactly ✓
+    - Constraint dimensions correct ✓
+    - Constraint values fail: max difference ~0.0006 at starting point
+
+    Suspected issues:
+    - Numerical precision differences in exp/erfc computations vs Fortran
+    - Complex back-to-back exponential formula accumulates small errors
+
+    Resources needed:
+    - Expert review of numerical stability in exp/erfc combinations
+    - Possible alternative formulations or higher precision arithmetic
 
     Fit: y = c + l * x + I*A*B/2(A+B) *
                [ exp( A*[A*S^2+2(x-X0)]/2) * erfc( A*S^2+(x-X0)/S*sqrt(2) ) +
@@ -197,21 +214,21 @@ class CERI651A(AbstractNonlinearEquations):
                 4.69041576,
                 6.48074070,
                 8.12403840,
-                10.53565375,
-                11.61895004,
-                13.30413470,
-                13.78404875,
-                15.13274595,
-                16.58312395,
-                16.18641406,
-                16.55294536,
-                17.29161647,
-                16.82260384,
-                14.69693846,
-                14.66287830,
-                13.41640786,
-                12.44989960,
-                11.35781669,
+                0.53565375,
+                1.61895004,
+                3.30413470,
+                3.78404875,
+                5.13274595,
+                6.58312395,
+                6.18641406,
+                6.55294536,
+                7.29161647,
+                6.82260384,
+                4.69693846,
+                4.66287830,
+                3.41640786,
+                2.44989960,
+                1.35781669,
                 9.05538514,
                 9.84885780,
                 8.54400375,
@@ -261,14 +278,14 @@ class CERI651A(AbstractNonlinearEquations):
         # Terms for A exponential
         # Use scaled erfc to avoid overflow
         a_exp_arg = 0.5 * a * (a * s * s + 2 * xmy)
-        a_erfc_arg = (a * s * s + xmy) / (s * sqrt2)
+        a_erfc_arg = (a * s + xmy / s) / sqrt2
         # exp(a_exp_arg) * erfc(a_erfc_arg) =
         #   exp(a_exp_arg - a_erfc_arg^2) * exp(a_erfc_arg^2) * erfc(a_erfc_arg)
         qa = jnp.exp(a_exp_arg - a_erfc_arg * a_erfc_arg) * erfc_scaled(a_erfc_arg)
 
         # Terms for B exponential
         b_exp_arg = 0.5 * b * (b * s * s + 2 * xmy)
-        b_erfc_arg = (b * s * s + xmy) / (s * sqrt2)
+        b_erfc_arg = (b * s + xmy / s) / sqrt2
         qb = jnp.exp(b_exp_arg - b_erfc_arg * b_erfc_arg) * erfc_scaled(b_erfc_arg)
 
         # Model values

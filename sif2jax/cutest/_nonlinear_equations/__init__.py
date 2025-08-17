@@ -25,8 +25,17 @@ from .bratu2dt import BRATU2DT as BRATU2DT
 from .brownbsne import BROWNBSNE as BROWNBSNE
 from .browndene import BROWNDENE as BROWNDENE
 
-# TODO: Human review needed - numerical overflow when evaluating at ones vector
+# TODO: Human review needed - constraint values don't match pycutest
+# from .broydn3d import BROYDN3D as BROYDN3D
+# TODO: Human review needed - systematic differences in constraint values
+# from .broydnbd import BROYDNBD as BROYDNBD
+# TODO: Human review needed - constraint values don't match pycutest
+# from .brybndne import BRYBNDNE as BRYBNDNE
+# from .ceri651a import CERI651A as CERI651A
+# from .ceri651b import CERI651B as CERI651B
 # from .ceri651c import CERI651C as CERI651C
+# from .ceri651d import CERI651D as CERI651D
+# from .ceri651e import CERI651E as CERI651E
 # TODO: Human review needed - constraint values don't match pycutest
 # from .chainwoone import CHAINWOONE as CHAINWOONE
 from .chandheq import CHANDHEQ as CHANDHEQ
@@ -74,17 +83,6 @@ from .eggcratene import EGGCRATENE as EGGCRATENE
 # from .eigenau import EIGENAU as EIGENAU
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
-
-# TODO: Human review needed - constraint values don't match pycutest
-# from .broydn3d import BROYDN3D as BROYDN3D
-# TODO: Human review needed - systematic differences in constraint values
-# from .broydnbd import BROYDNBD as BROYDNBD
-# TODO: Human review needed - constraint values don't match pycutest
-# from .brybndne import BRYBNDNE as BRYBNDNE
-# TODO: Human review needed - numerical overflow when evaluating at ones vector
-# from .ceri651a import CERI651A as CERI651A
-# TODO: Human review needed - numerical overflow when evaluating at ones vector
-# from .ceri651b import CERI651B as CERI651B
 from .errinrosne import ERRINROSNE as ERRINROSNE
 from .errinrsmne import ERRINRSMNE as ERRINRSMNE
 from .exp2ne import EXP2NE as EXP2NE
@@ -279,6 +277,8 @@ nonlinear_equations_problems = (
     # BROWNALE(),  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE(),
     BROWNDENE(),
+    # CERI651D(),  # TODO: Human review needed - constraint precision
+    # CERI651E(),  # TODO: Human review needed - constraint precision
     # BROYDN3D(),  # TODO: Human review needed - constraint values mismatch
     # BROYDNBD(),  # TODO: Human review needed - systematic differences
     # BRYBNDNE(),  # TODO: Human review needed - constraint values mismatch
@@ -288,9 +288,9 @@ nonlinear_equations_problems = (
     HYPCIR(),
     MSQRTA(),
     MSQRTB(),
-    # CERI651A(),  # TODO: Human review needed - numerical overflow at ones vector
-    # CERI651B(),  # TODO: Human review needed - numerical overflow at ones vector
-    # CERI651C(),  # TODO: Human review needed - numerical overflow at ones vector
+    # CERI651A(),  # TODO: Human review needed - constraint precision
+    # CERI651B(),  # TODO: Human review needed - constraint precision
+    # CERI651C(),  # TODO: Human review needed - constraint precision
     # CHAINWOONE(),  # TODO: Human review needed - constraint values mismatch
     # CHANNEL(),  # TODO: Human review needed
     CHEBYQADNE(),

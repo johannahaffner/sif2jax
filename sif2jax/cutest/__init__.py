@@ -39,6 +39,7 @@ from ._bounded_minimisation import (
     HS38 as HS38,
     HS45 as HS45,
     HS110 as HS110,
+    KOEBHELB as KOEBHELB,
     LEVYMONT as LEVYMONT,
     LEVYMONT5 as LEVYMONT5,
     LEVYMONT6 as LEVYMONT6,
@@ -250,6 +251,8 @@ from ._constrained_minimisation import (
     # HS118 as HS118,  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119 as HS119,
     HYDROELL as HYDROELL,
+    KISSING as KISSING,
+    # KISSING2 as KISSING2,  # TODO: Human review needed
     LOOTSMA as LOOTSMA,
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,
@@ -469,8 +472,11 @@ from ._nonlinear_equations import (
     INTEQNE as INTEQNE,
     JENSMPNE as JENSMPNE,
     JUDGENE as JUDGENE,
+    KIRBY2 as KIRBY2,
     KOEBHELBNE as KOEBHELBNE,
     KOWOSBNE as KOWOSBNE,
+    KSS as KSS,
+    KTMODEL as KTMODEL,
     LEVYMONE as LEVYMONE,
     LEVYMONE5 as LEVYMONE5,
     LEVYMONE6 as LEVYMONE6,
@@ -1014,6 +1020,9 @@ problems_dict = {
     "HS117": HS117(),
     # "HS118": HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     "HS119": HS119(),
+    "HYDROELL": HYDROELL(),
+    "KISSING": KISSING(),
+    # "KISSING2": KISSING2(),  # TODO: Human review needed
     "HIMMELBC": HIMMELBC(),
     "HIMMELBD": HIMMELBD(),
     "HIMMELBE": HIMMELBE(),
@@ -1350,13 +1359,13 @@ problems_dict = {
     # "HIMMELP5": HIMMELP5(),  # TODO: Human review needed - OBNL element issues
     # "HIMMELP6": HIMMELP6(),  # TODO: Human review needed - OBNL element issues
     "HUMPS": HUMPS(),
-    "HYDROELL": HYDROELL(),
     "INDEF": INDEF(),
     "INDEFM": INDEFM(),
     "INTEQNELS": INTEQNELS(),
     "JENSMP": JENSMP(),
     "JUDGE": JUDGE(),
     "KIRBY2LS": KIRBY2LS(),
+    "KOEBHELB": KOEBHELB(),
     "KOWOSB": KOWOSB(),
     # "KSSLS": KSSLS(),  # TODO: Human review - significant obj/grad discrepancies
     "LANCZOS1LS": LANCZOS1LS(),
@@ -1611,7 +1620,10 @@ problems_dict = {
     "INTEQNE": INTEQNE(),
     "JENSMPNE": JENSMPNE(),
     "JUDGENE": JUDGENE(),
+    "KIRBY2": KIRBY2(),
     "KOEBHELBNE": KOEBHELBNE(),
+    "KSS": KSS(),
+    "KTMODEL": KTMODEL(),
     "KOWOSBNE": KOWOSBNE(),
     "LEVYMONE": LEVYMONE(),
     "LEVYMONE5": LEVYMONE5(),

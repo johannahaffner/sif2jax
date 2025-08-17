@@ -208,6 +208,11 @@ from .hs117 import HS117 as HS117
 # from .hs118 import HS118 as HS118
 from .hs119 import HS119 as HS119
 from .hydroell import HYDROELL as HYDROELL
+from .kissing import KISSING as KISSING
+
+# from .kissing2 import KISSING2 as KISSING2  # TODO: Human review needed
+from .kiwcresc import KIWCRESC as KIWCRESC
+from .ksip import KSIP as KSIP
 from .lootsma import LOOTSMA as LOOTSMA
 from .lukvle1 import LUKVLE1 as LUKVLE1
 
@@ -504,6 +509,12 @@ constrained_minimisation_problems = (
     HS117(),
     # HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119(),
+    HYDROELL(),
+    KIWCRESC(),
+    KISSING(),
+    # KISSING2(),  # TODO: Human review needed
+    KSIP(),
+    LOOTSMA(),
     HIMMELBC(),
     HIMMELBD(),
     HIMMELBE(),

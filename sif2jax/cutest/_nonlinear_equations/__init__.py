@@ -117,8 +117,11 @@ from .hypcir import HYPCIR as HYPCIR
 from .inteqne import INTEQNE as INTEQNE
 from .jensmpne import JENSMPNE as JENSMPNE
 from .judgene import JUDGENE as JUDGENE
+from .kirby2 import KIRBY2 as KIRBY2
 from .koebhelbne import KOEBHELBNE as KOEBHELBNE
 from .kowosbne import KOWOSBNE as KOWOSBNE
+from .kss import KSS as KSS
+from .ktmodel import KTMODEL as KTMODEL
 from .levymone import LEVYMONE as LEVYMONE
 from .levymone5 import LEVYMONE5 as LEVYMONE5
 from .levymone6 import LEVYMONE6 as LEVYMONE6
@@ -333,7 +336,10 @@ nonlinear_equations_problems = (
     INTEQNE(),
     JENSMPNE(),
     JUDGENE(),
+    KIRBY2(),
     KOEBHELBNE(),
+    KSS(),
+    KTMODEL(),
     KOWOSBNE(),
     LEVYMONE(),
     LEVYMONE5(),

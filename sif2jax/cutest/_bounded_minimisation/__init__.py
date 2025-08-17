@@ -38,6 +38,7 @@ from .hs45 import HS45 as HS45
 from .hs110 import HS110 as HS110
 
 # from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
+from .koebhelb import KOEBHELB as KOEBHELB
 from .levymont import LEVYMONT as LEVYMONT
 from .levymont5 import LEVYMONT5 as LEVYMONT5
 from .levymont6 import LEVYMONT6 as LEVYMONT6
@@ -131,6 +132,7 @@ bounded_minimisation_problems = (
     HS38(),
     HS45(),
     HS110(),
+    KOEBHELB(),
     LEVYMONT(),
     LEVYMONT5(),
     LEVYMONT6(),

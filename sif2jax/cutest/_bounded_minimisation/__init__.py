@@ -4,6 +4,9 @@ from .biggs5 import BIGGS5 as BIGGS5
 from .box2 import BOX2 as BOX2
 from .branin import BRANIN as BRANIN
 from .camel6 import CAMEL6 as CAMEL6
+from .chardis0 import CHARDIS0 as CHARDIS0
+
+# from .chardis02 import CHARDIS02 as CHARDIS02  # TODO: Human review needed
 from .cyclooctls import CYCLOOCTLS as CYCLOOCTLS
 from .degdiag import DEGDIAG as DEGDIAG
 from .degtrid import DEGTRID as DEGTRID
@@ -99,6 +102,8 @@ bounded_minimisation_problems = (
     BOX2(),
     BRANIN(),
     CAMEL6(),
+    CHARDIS0(),
+    # CHARDIS02(),  # TODO: Human review needed
     CYCLOOCTLS(),
     DEGDIAG(),
     DEGTRID(),

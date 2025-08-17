@@ -39,6 +39,8 @@ from .cb3 import CB3 as CB3
 from .chaconn1 import CHACONN1 as CHACONN1
 from .chaconn2 import CHACONN2 as CHACONN2
 
+# from .chardis1 import CHARDIS1 as CHARDIS1  # TODO: Human review needed
+# from .chardis12 import CHARDIS12 as CHARDIS12  # TODO: Human review needed
 # from .cresc4 import CRESC4 as CRESC4  # TODO: Human review - complex crescent area
 # TODO: CLNLBEAM needs fixing - dimension mismatch in constraints
 # from .clnlbeam import CLNLBEAM as CLNLBEAM
@@ -385,6 +387,8 @@ constrained_minimisation_problems = (
     CB3(),
     CHACONN1(),
     CHACONN2(),
+    # CHARDIS1(),  # TODO: Human review needed
+    # CHARDIS12(),  # TODO: Human review needed
     # CLNLBEAM(),  # TODO: Dimension mismatch in constraints
     # CONCON(),  # TODO: Removed - automatic derivative mismatches
     COSHFUN(),

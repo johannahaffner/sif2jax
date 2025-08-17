@@ -6,6 +6,8 @@ from ._bounded_minimisation import (
     BOX2 as BOX2,
     BRANIN as BRANIN,
     CAMEL6 as CAMEL6,
+    CHARDIS0 as CHARDIS0,
+    # CHARDIS02 as CHARDIS02,  # TODO: Human review needed
     CYCLOOCTLS as CYCLOOCTLS,
     DEGDIAG as DEGDIAG,
     DEGTRID as DEGTRID,
@@ -114,6 +116,8 @@ from ._constrained_minimisation import (
     CB3 as CB3,
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
+    # CHARDIS1 as CHARDIS1,  # TODO: Human review needed
+    # CHARDIS12 as CHARDIS12,  # TODO: Human review needed
     # CLNLBEAM as CLNLBEAM,  # TODO: Dimension mismatch in constraints
     # CONCON as CONCON,  # TODO: Removed - automatic derivative mismatches
     constrained_minimisation_problems as constrained_minimisation_problems,
@@ -922,6 +926,8 @@ problems_dict = {
     "CB3": CB3(),
     "CHACONN1": CHACONN1(),
     "CHACONN2": CHACONN2(),
+    # "CHARDIS1": CHARDIS1(),  # TODO: Human review needed
+    # "CHARDIS12": CHARDIS12(),  # TODO: Human review needed
     # "CLNLBEAM": CLNLBEAM(),  # TODO: Dimension mismatch in constraints
     "HS1": HS1(),
     "HS2": HS2(),
@@ -1201,6 +1207,8 @@ problems_dict = {
     # "BRATU1D": BRATU1D(),  # TODO: Human review needed - see file
     # "BRKMCC": BRKMCC(),  # TODO: Human review - significant discrepancies
     "CAMEL6": CAMEL6(),
+    "CHARDIS0": CHARDIS0(),
+    # "CHARDIS02": CHARDIS02(),  # TODO: Human review needed
     # "BROWNAL": BROWNAL(),  # TODO: Human review - small Hessian discrepancies
     "BROWNBS": BROWNBS(),
     "BROWNDEN": BROWNDEN(),

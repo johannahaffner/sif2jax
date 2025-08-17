@@ -74,6 +74,11 @@ from .denschnf import DENSCHNF as DENSCHNF
 from .devgla1 import DEVGLA1 as DEVGLA1
 from .devgla2 import DEVGLA2 as DEVGLA2
 
+# TODO: Human review needed - Likely gradient/Hessian precision issues
+# from .dmn15332ls import DMN15332LS as DMN15332LS
+# from .dmn15333ls import DMN15333LS as DMN15333LS
+# from .dmn37142ls import DMN37142LS as DMN37142LS
+# from .dmn37143ls import DMN37143LS as DMN37143LS
 # from .diamon3dls import DIAMON3DLS as DIAMON3DLS  # TODO: Human review needed
 from .dixmaana1 import DIXMAANA1 as DIXMAANA1
 from .dixmaanb import DIXMAANB as DIXMAANB
@@ -93,6 +98,8 @@ from .dixmaano import DIXMAANO as DIXMAANO
 from .dixmaanp import DIXMAANP as DIXMAANP
 from .dixon3dq import DIXON3DQ as DIXON3DQ
 from .djtl import DJTL as DJTL
+from .dmn15102ls import DMN15102LS as DMN15102LS
+from .dmn15103ls import DMN15103LS as DMN15103LS
 from .dqdrtic import DQDRTIC as DQDRTIC
 from .dqrtic import DQRTIC as DQRTIC
 from .drcav1lq import DRCAV1LQ as DRCAV1LQ
@@ -362,6 +369,12 @@ unconstrained_minimisation_problems = (
     DEVGLA1(),
     # DIAMON3DLS(),  # TODO: Human review needed - see file
     DEVGLA2(),
+    DMN15102LS(),
+    DMN15103LS(),
+    # DMN15332LS(),  # TODO: Human review needed - Gradient/Hessian precision issues
+    # DMN15333LS(),  # TODO: Human review needed - Gradient/Hessian precision issues
+    # DMN37142LS(),  # TODO: Human review needed - Gradient/Hessian precision issues
+    # DMN37143LS(),  # TODO: Human review needed - Gradient/Hessian precision issues
     DIXMAANA1(),
     DIXMAANB(),
     DIXMAANC(),

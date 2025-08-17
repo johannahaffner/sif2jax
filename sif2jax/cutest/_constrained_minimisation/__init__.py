@@ -294,6 +294,8 @@ from .polak6 import POLAK6 as POLAK6
 # from .polygon import POLYGON as POLYGON  # TODO: Human review - sign conventions
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
+
+# from .sinrosnb import SINROSNB as SINROSNB  # TODO: Human review - scaling issues
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
@@ -532,6 +534,7 @@ constrained_minimisation_problems = (
     # POLYGON(),  # TODO: Human review - constraint sign convention differences
     SIMPLLPA(),
     SIMPLLPB(),
+    # SINROSNB(),  # TODO: Human review - objective scaling issues
     SIPOW1(),
     SIPOW2(),
     # TAX13322(),  # TODO: Human review - complex objective structure

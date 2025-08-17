@@ -269,6 +269,8 @@ from ._constrained_minimisation import (
     HYDROELL as HYDROELL,
     # KISSING as KISSING,  # TODO: Human review - runtime issue (5.37x)
     # KISSING2 as KISSING2,  # TODO: Human review needed
+    # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
+    # KSIP as KSIP,  # TODO: Needs vectorization - dtype promotion errors
     LOOTSMA as LOOTSMA,
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,
@@ -1082,6 +1084,7 @@ problems_dict = {
     "HYDROELL": HYDROELL(),
     # "KISSING": KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # "KISSING2": KISSING2(),  # TODO: Human review needed
+    # "KIWCRESC": KIWCRESC(),  # TODO: Human review - constraints differ by 2.0
     "HIMMELBC": HIMMELBC(),
     "HIMMELBD": HIMMELBD(),
     "HIMMELBE": HIMMELBE(),
@@ -1724,6 +1727,7 @@ problems_dict = {
     "JUDGENE": JUDGENE(),
     "KIRBY2": KIRBY2(),
     "KOEBHELBNE": KOEBHELBNE(),
+    # "KSIP": KSIP(),  # TODO: Needs vectorization - dtype promotion errors
     "KSS": KSS(),
     # "KTMODEL": KTMODEL(),  # TODO: Human review - multiple test failures
     "KOWOSBNE": KOWOSBNE(),

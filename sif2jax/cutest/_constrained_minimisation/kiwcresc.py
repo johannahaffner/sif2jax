@@ -40,7 +40,7 @@ class KIWCRESC(AbstractConstrainedMinimisation):
         f2 = -(x1**2) - x2**2 + 3.0 * x2 - u - 2.0
 
         # No equality constraints
-        equality_constraints = jnp.array([])
+        equality_constraints = None
 
         # Inequality constraints (should be <= 0)
         inequality_constraints = jnp.array([f1, f2])

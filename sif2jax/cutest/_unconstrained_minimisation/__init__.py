@@ -123,8 +123,7 @@ from .expfit import EXPFIT as EXPFIT
 
 # TODO: EXTROSNB needs human review - objective/gradient discrepancies
 # from .extrosnb import EXTROSNB as EXTROSNB
-# TODO: FBRAIN3LS needs human review - complex data dependencies
-# from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
+from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
 from .fletbv3m import FLETBV3M as FLETBV3M
 from .fletcbv2 import FLETCBV2 as FLETCBV2
 from .fletcbv3 import FLETCBV3 as FLETCBV3
@@ -401,7 +400,7 @@ unconstrained_minimisation_problems = (
     EXP2(),
     EXPFIT(),
     # EXTROSNB(),  # TODO: Human review - objective/gradient discrepancies
-    # FBRAIN3LS(),  # TODO: Human review - complex data dependencies
+    FBRAIN3LS(),
     # FLETCH family problems
     # FLETCHBV(),  # TODO: Human review - objective/gradient discrepancies
     FLETBV3M(),

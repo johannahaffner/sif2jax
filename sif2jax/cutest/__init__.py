@@ -24,6 +24,8 @@ from ._bounded_minimisation import (
     EXPLIN as EXPLIN,
     EXPLIN2 as EXPLIN2,
     EXPQUAD as EXPQUAD,
+    FBRAIN2LS as FBRAIN2LS,
+    FBRAINLS as FBRAINLS,
     HADAMALS as HADAMALS,
     HART6 as HART6,
     HATFLDA as HATFLDA,
@@ -138,6 +140,10 @@ from ._constrained_minimisation import (
     # EXPFITA as EXPFITA,  # TODO: Human review - fundamental formulation differences
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
     # EXPFITC as EXPFITC,  # TODO: Human review - fundamental formulation differences
+    FCCU as FCCU,
+    FEEDLOC as FEEDLOC,
+    FLETCHER as FLETCHER,
+    FLT as FLT,
     GIGOMEZ2 as GIGOMEZ2,
     HADAMARD as HADAMARD,
     HAGER1 as HAGER1,
@@ -439,6 +445,11 @@ from ._nonlinear_equations import (
     EXP2NE as EXP2NE,
     EXPFITNE as EXPFITNE,
     EXTROSNBNE as EXTROSNBNE,
+    FBRAIN as FBRAIN,
+    FBRAIN2 as FBRAIN2,
+    FBRAIN2NE as FBRAIN2NE,
+    FBRAIN3 as FBRAIN3,
+    FBRAINNE as FBRAINNE,
     # FLOSP2HH as FLOSP2HH,  # TODO: Human review needed - NQR constraint handling
     # FLOSP2HL as FLOSP2HL,  # TODO: Human review needed - NQR constraint handling
     # FLOSP2HM as FLOSP2HM,  # TODO: Human review needed - NQR constraint handling
@@ -734,7 +745,7 @@ from ._unconstrained_minimisation import (
     EXP2 as EXP2,
     EXPFIT as EXPFIT,
     # EXTROSNB as EXTROSNB,  # TODO: Human review - objective/gradient discrepancies
-    # FBRAIN3LS as FBRAIN3LS,  # TODO: Human review - complex data dependencies
+    FBRAIN3LS as FBRAIN3LS,
     FLETBV3M as FLETBV3M,
     FLETCBV2 as FLETCBV2,
     FLETCBV3 as FLETCBV3,
@@ -1292,7 +1303,9 @@ problems_dict = {
     "EXP2B": EXP2B(),
     "EXPFIT": EXPFIT(),
     # "EXTROSNB": EXTROSNB(),  # TODO: Human review - objective/gradient discrepancies
-    # "FBRAIN3LS": FBRAIN3LS(),  # TODO: Human review - complex data dependencies
+    "FBRAIN2LS": FBRAIN2LS(),
+    "FBRAIN3LS": FBRAIN3LS(),
+    "FBRAINLS": FBRAINLS(),
     # "FLETCHBV": FLETCHBV(),  # TODO: Human review - objective/gradient discrepancies
     "FLETBV3M": FLETBV3M(),
     "FLETCBV2": FLETCBV2(),
@@ -1308,6 +1321,10 @@ problems_dict = {
     "GAUSSIAN": GAUSSIAN(),
     # "GBRAINLS": GBRAINLS(),  # TODO: Human review - complex data dependencies
     "GENHUMPS": GENHUMPS(),
+    "FCCU": FCCU(),
+    "FEEDLOC": FEEDLOC(),
+    "FLETCHER": FLETCHER(),
+    "FLT": FLT(),
     "GIGOMEZ2": GIGOMEZ2(),
     "HAGER1": HAGER1(),
     "HAGER2": HAGER2(),
@@ -1582,6 +1599,11 @@ problems_dict = {
     # "EXPFITC": EXPFITC(),  # TODO: Human review - fundamental formulation differences
     "EXPFITNE": EXPFITNE(),
     "EXTROSNBNE": EXTROSNBNE(),
+    "FBRAIN": FBRAIN(),
+    "FBRAIN2": FBRAIN2(),
+    "FBRAIN2NE": FBRAIN2NE(),
+    "FBRAIN3": FBRAIN3(),
+    "FBRAINNE": FBRAINNE(),
     # "FLOSP2HH": FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
     # "FLOSP2HL": FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
     # "FLOSP2HM": FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling

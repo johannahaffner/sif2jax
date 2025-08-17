@@ -5,7 +5,7 @@ requires = ["hatchling"]
 [project]
 authors = [
   {email = "johanna.haffner@bsse.ethz.ch", name = "Johanna Haffner"},
-  {email = "john_viljoen@berkeley.edu", name = "John Viljoen"},
+  {email = "john_viljoen@berkeley.edu", name = "John Viljoen"}
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -20,14 +20,14 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Mathematics"
 ]
 dependencies = [
-  "jax>=0.4.38", 
-  "jaxtyping>=0.2.20", 
-  "typing_extensions>=4.5.0", 
-  "wadler_lindig>=0.1.0", 
-  "pytest", 
+  "jax>=0.4.38",
+  "jaxtyping>=0.2.20",
+  "typing_extensions>=4.5.0",
+  "wadler_lindig>=0.1.0",
+  "pytest",
   "pytest-benchmark",
-  "equinox", 
-  "beartype",
+  "equinox",
+  "beartype"
 ]
 description = "Functionally pure definitions of optimisation problems extracted from Standard Input Format (SIF)."
 keywords = ["jax"]
@@ -36,7 +36,7 @@ name = "sif2jax"
 readme = "README.md"
 requires-python = ">=3.10"
 urls = {repository = "https://github.com/johannahaffner/sif2jax"}
-version = "0.0.5"
+version = "0.0.6"
 
 [project.optional-dependencies]
 docs = [

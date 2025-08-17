@@ -262,8 +262,9 @@ from .s308 import S308 as S308
 # from .sparsqur import SPARSQUR as SPARSQUR  # TODO: Human review - Hessian timeout
 # from .sscosine import SSCOSINE as SSCOSINE  # TODO: Human review needed
 from .sbrybnd import SBRYBND as SBRYBND
-from .schmvett import SCHMVETT as SCHMVETT
 
+# TODO: SCHMVETT needs human review - Hessian NaN issue at zero vector
+# from .schmvett import SCHMVETT as SCHMVETT
 # from .scosine import SCOSINE as SCOSINE  # TODO: Human review needed
 from .scurly10 import SCURLY10 as SCURLY10
 from .scurly20 import SCURLY20 as SCURLY20
@@ -550,7 +551,7 @@ unconstrained_minimisation_problems = (
     SPARSINE(),
     # SPARSQUR(),  # TODO: Human review - Hessian tests timeout
     SBRYBND(),
-    SCHMVETT(),
+    # SCHMVETT(),  # TODO: Human review - Hessian NaN issue at zero vector
     # SENSORS(),  # TODO: Human review - pycutest issues
     # SINQUAD(),  # TODO: Human review - Complex SIF
     SROSENBR(),

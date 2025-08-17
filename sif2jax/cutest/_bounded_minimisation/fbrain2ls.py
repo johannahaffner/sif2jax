@@ -1,23 +1,18 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 from ..data import load_fbrain_data
 
 
-# Load FBRAIN data (FBRAIN3LS uses same data as FBRAIN)
+# Load FBRAIN data (FBRAIN2LS uses same data as FBRAIN)
 A_coeffs, A_lambdas, B_coeffs, B_lambdas, R_values = load_fbrain_data("fbrain")
 
 
-class FBRAIN3LS(AbstractUnconstrainedMinimisation):
-    """FBRAIN3LS - Nonlinear Least-Squares problem for brain tissue modeling.
+class FBRAIN2LS(AbstractBoundedMinimisation):
+    """FBRAIN2LS - Brain tissue shear stress model with 4 parameters as least squares.
 
-    This problem involves fitting a model of the shear stress in human brain tissue
-    to experimental data, formulated as a nonlinear least-squares problem.
-
-    The model function is:
-    f(λ) = C0_1 * λ^(2*α_1-1) + C0_2 * λ^(2*α_2-1) + C0_3 * λ^(2*α_3-1)
-
-    where λ represents the shear deformation ratio.
+    Match a model of the shear stress in the human brain to data,
+    formulated as a nonlinear least-squares problem with 4 parameters.
 
     Source: an example in
     L.A. Mihai, S. Budday, G.A. Holzapfel, E. Kuhl and A. Goriely.
@@ -25,26 +20,36 @@ class FBRAIN3LS(AbstractUnconstrainedMinimisation):
     Journal of Mechanics and Physics of Solids,
     DOI: 10.1016/j.jmps.2017.05.015 (2017).
 
-    As conveyed by Angela Mihai (U. Cardiff)
+    as conveyed by Angela Mihai (U. Cardiff)
 
     SIF input: Nick Gould, June 2017.
 
-    Classification: SUR2-AN-6-0
+    Classification: SUR2-AN-4-0
+    N = 11 (number of data sets)
+    M = 200 (number of discretizations)
     """
 
     y0_iD: int = 0
-    provided_y0s: frozenset = frozenset({0})
+    provided_y0s: frozenset = frozenset({0, 1})
+
+    @property
+    def y0(self):
+        if self.y0_iD == 0:
+            return jnp.array([-4.0, -0.1, 4.0, 0.1])
+        else:  # y0_iD == 1
+            return jnp.array([1.0, 1.0, 1.0, 1.0])
+
+    @property
+    def args(self):
+        return None
 
     def objective(self, y, args):
         del args
-
-        # Extract the 6 parameters
-        alpha1, c01, alpha2, c02, alpha3, c03 = y
+        alpha1, c01, alpha2, c02 = y
 
         # Compute betas
         beta1 = 2.0 * alpha1 - 1.0
         beta2 = 2.0 * alpha2 - 1.0
-        beta3 = 2.0 * alpha3 - 1.0
 
         # Flatten arrays in column-major order to match SIF constraint ordering
         # SIF iterates: DO J (1 to N), DO I (0 to M) -> (I,J) pairs
@@ -55,45 +60,36 @@ class FBRAIN3LS(AbstractUnconstrainedMinimisation):
         b_lambdas_flat = B_lambdas.T.ravel().astype(y.dtype)
         r_values_flat = R_values.T.ravel().astype(y.dtype)
 
-        # Compute all 6 element values as per SIF structure:
+        # Compute all 4 element values as per SIF structure:
         # A(I,J) = C01 * AC(I,J) * AL(I,J)^(2*ALPHA1-1)
         # B(I,J) = C01 * BC(I,J) * BL(I,J)^(2*ALPHA1-1)
         # C(I,J) = C02 * AC(I,J) * AL(I,J)^(2*ALPHA2-1)
         # D(I,J) = C02 * BC(I,J) * BL(I,J)^(2*ALPHA2-1)
-        # E(I,J) = C03 * AC(I,J) * AL(I,J)^(2*ALPHA3-1)
-        # F(I,J) = C03 * BC(I,J) * BL(I,J)^(2*ALPHA3-1)
         a_values = c01 * a_coeffs_flat * (a_lambdas_flat**beta1)
         b_values = c01 * b_coeffs_flat * (b_lambdas_flat**beta1)
         c_values = c02 * a_coeffs_flat * (a_lambdas_flat**beta2)
         d_values = c02 * b_coeffs_flat * (b_lambdas_flat**beta2)
-        e_values = c03 * a_coeffs_flat * (a_lambdas_flat**beta3)
-        f_values = c03 * b_coeffs_flat * (b_lambdas_flat**beta3)
 
-        # Sum all 6 element functions for each (i,j)
-        model_values = a_values + b_values + c_values + d_values + e_values + f_values
+        # Sum all 4 element functions for each (i,j)
+        model_values = a_values + b_values + c_values + d_values
 
-        # Compute residuals
+        # Compute squared residuals
         residuals = model_values - r_values_flat
 
-        # Return the sum of squared residuals (least squares objective)
+        # Return sum of squares (least squares formulation)
         return jnp.sum(residuals**2)
 
     @property
-    def y0(self):
-        # Starting point from the SIF file
-        return jnp.array([-4.0, -0.1, 4.0, 0.1, -2.0, -0.1])
-
-    @property
-    def args(self):
-        return None
+    def bounds(self):
+        # SIF bounds: LO 'DEFAULT' -5.0, UP 'DEFAULT' 5.0 (applied to all 4 variables)
+        lower = jnp.array([-5.0, -5.0, -5.0, -5.0])
+        upper = jnp.array([5.0, 5.0, 5.0, 5.0])
+        return lower, upper
 
     @property
     def expected_result(self):
-        # The exact solution is not specified in the SIF file
         return None
 
     @property
     def expected_objective_value(self):
-        # The minimum objective value is not precisely specified in the SIF file
-        # But the lower bound is given as 0.0
         return jnp.array(0.0)

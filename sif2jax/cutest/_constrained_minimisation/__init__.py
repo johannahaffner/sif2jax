@@ -73,6 +73,10 @@ from .elattar import ELATTAR as ELATTAR
 from .expfita import EXPFITA as EXPFITA
 from .expfitb import EXPFITB as EXPFITB
 from .expfitc import EXPFITC as EXPFITC
+from .fccu import FCCU as FCCU
+from .feedloc import FEEDLOC as FEEDLOC
+from .fletcher import FLETCHER as FLETCHER
+from .flt import FLT as FLT
 from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .hadamard import HADAMARD as HADAMARD
 
@@ -412,6 +416,10 @@ constrained_minimisation_problems = (
     # EXPFITA(),  # TODO: Human review - fundamental formulation differences
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences
     # EXPFITC(),  # TODO: Human review - fundamental formulation differences
+    FCCU(),
+    FEEDLOC(),
+    FLETCHER(),
+    FLT(),
     GIGOMEZ2(),
     HADAMARD(),
     HAGER1(),

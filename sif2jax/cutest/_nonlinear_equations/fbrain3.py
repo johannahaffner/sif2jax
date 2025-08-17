@@ -1,23 +1,18 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 from ..data import load_fbrain_data
 
 
-# Load FBRAIN data (FBRAIN3LS uses same data as FBRAIN)
+# Load FBRAIN data (FBRAIN3 uses same data as FBRAIN)
 A_coeffs, A_lambdas, B_coeffs, B_lambdas, R_values = load_fbrain_data("fbrain")
 
 
-class FBRAIN3LS(AbstractUnconstrainedMinimisation):
-    """FBRAIN3LS - Nonlinear Least-Squares problem for brain tissue modeling.
+class FBRAIN3(AbstractNonlinearEquations):
+    """FBRAIN3 - Brain tissue shear stress model with 6 parameters as NE.
 
-    This problem involves fitting a model of the shear stress in human brain tissue
-    to experimental data, formulated as a nonlinear least-squares problem.
-
-    The model function is:
-    f(λ) = C0_1 * λ^(2*α_1-1) + C0_2 * λ^(2*α_2-1) + C0_3 * λ^(2*α_3-1)
-
-    where λ represents the shear deformation ratio.
+    Match a model of the shear stress in the human brain to data,
+    formulated as a set of nonlinear equations with 6 parameters.
 
     Source: an example in
     L.A. Mihai, S. Budday, G.A. Holzapfel, E. Kuhl and A. Goriely.
@@ -25,20 +20,28 @@ class FBRAIN3LS(AbstractUnconstrainedMinimisation):
     Journal of Mechanics and Physics of Solids,
     DOI: 10.1016/j.jmps.2017.05.015 (2017).
 
-    As conveyed by Angela Mihai (U. Cardiff)
+    as conveyed by Angela Mihai (U. Cardiff)
 
     SIF input: Nick Gould, June 2017.
 
-    Classification: SUR2-AN-6-0
+    Classification: NOR2-AN-6-2211
+    N = 11 (number of data sets)
+    M = 200 (number of discretizations)
+    Total constraints: 2211
     """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    def objective(self, y, args):
-        del args
+    @property
+    def y0(self):
+        return jnp.array([-4.0, -0.1, 4.0, 0.1, -2.0, -0.1])
 
-        # Extract the 6 parameters
+    @property
+    def args(self):
+        return None
+
+    def constraint(self, y):
         alpha1, c01, alpha2, c02, alpha3, c03 = y
 
         # Compute betas
@@ -72,28 +75,21 @@ class FBRAIN3LS(AbstractUnconstrainedMinimisation):
         # Sum all 6 element functions for each (i,j)
         model_values = a_values + b_values + c_values + d_values + e_values + f_values
 
-        # Compute residuals
-        residuals = model_values - r_values_flat
+        # Compute residuals (constraints)
+        constraints = model_values - r_values_flat
 
-        # Return the sum of squared residuals (least squares objective)
-        return jnp.sum(residuals**2)
-
-    @property
-    def y0(self):
-        # Starting point from the SIF file
-        return jnp.array([-4.0, -0.1, 4.0, 0.1, -2.0, -0.1])
+        return constraints, None
 
     @property
-    def args(self):
+    def bounds(self):
         return None
 
     @property
     def expected_result(self):
-        # The exact solution is not specified in the SIF file
         return None
 
     @property
     def expected_objective_value(self):
-        # The minimum objective value is not precisely specified in the SIF file
-        # But the lower bound is given as 0.0
+        # For nonlinear equations, objective is sum of squares of residuals
+        # At solution, this should be 0
         return jnp.array(0.0)

@@ -90,6 +90,11 @@ from .errinrsmne import ERRINRSMNE as ERRINRSMNE
 from .exp2ne import EXP2NE as EXP2NE
 from .expfitne import EXPFITNE as EXPFITNE
 from .extrosnbne import EXTROSNBNE as EXTROSNBNE
+from .fbrain import FBRAIN as FBRAIN
+from .fbrain2 import FBRAIN2 as FBRAIN2
+from .fbrain2ne import FBRAIN2NE as FBRAIN2NE
+from .fbrain3 import FBRAIN3 as FBRAIN3
+from .fbrainne import FBRAINNE as FBRAINNE
 
 # from .flosp2hh import FLOSP2HH as FLOSP2HH  # TODO: Human review - NQR constraints
 # from .flosp2hl import FLOSP2HL as FLOSP2HL  # TODO: Human review - NQR constraints
@@ -321,6 +326,11 @@ nonlinear_equations_problems = (
     EXP2NE(),
     EXPFITNE(),
     EXTROSNBNE(),
+    FBRAIN(),
+    FBRAIN2(),
+    FBRAIN2NE(),
+    FBRAIN3(),
+    FBRAINNE(),
     # FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
     # FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
     # FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling

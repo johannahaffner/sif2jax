@@ -361,6 +361,7 @@ from ._constrained_minimisation import (
     READING9 as READING9,
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
+    # SINROSNB as SINROSNB,  # TODO: Human review - objective scaling issues
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
     # TAX13322 as TAX13322,  # TODO: Human review - complex objective
@@ -875,8 +876,23 @@ from ._unconstrained_minimisation import (
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
     S308 as S308,
+    # SCOSINE as SCOSINE,  # TODO: Human review needed
+    SBRYBND as SBRYBND,
+    SCHMVETT as SCHMVETT,
+    # SENSORS as SENSORS,  # TODO: Human review - pycutest compatibility issues
+    # SINQUAD as SINQUAD,  # TODO: Human review - Complex SIF group structure
+    SCURLY10 as SCURLY10,
+    SCURLY20 as SCURLY20,
+    SCURLY30 as SCURLY30,
+    # SINEVAL as SINEVAL,  # TODO: Human review - Complex SCALE parameter
+    # SINEALI as SINEALI,  # TODO: Human review - Should be in bounded module
     SISSER as SISSER,
+    SNAIL as SNAIL,
+    SPARSINE as SPARSINE,
+    # SPARSQUR as SPARSQUR,  # TODO: Human review - Hessian tests timeout
+    # SSCOSINE as SSCOSINE,  # TODO: Human review needed
     SPIN2LS as SPIN2LS,
+    SROSENBR as SROSENBR,
     # SPINLS as SPINLS,  # TODO: Human review - gradient/Hessian issues
     # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
@@ -1119,6 +1135,7 @@ problems_dict = {
     "READING9": READING9(),
     "SIMPLLPA": SIMPLLPA(),
     "SIMPLLPB": SIMPLLPB(),
+    # "SINROSNB": SINROSNB(),  # TODO: Human review - objective scaling issues
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
     # "TAX13322": TAX13322(),  # TODO: Human review - complex objective
@@ -1269,6 +1286,13 @@ problems_dict = {
     "CURLY10": CURLY10(),
     "CURLY20": CURLY20(),
     "CURLY30": CURLY30(),
+    "SBRYBND": SBRYBND(),
+    "SCHMVETT": SCHMVETT(),
+    # "SENSORS": SENSORS(),  # TODO: Human review - pycutest compatibility issues
+    # "SINQUAD": SINQUAD(),  # TODO: Human review - Complex SIF group structure
+    "SCURLY10": SCURLY10(),
+    "SCURLY20": SCURLY20(),
+    "SCURLY30": SCURLY30(),
     "CVXBQP1": CVXBQP1(),
     "CVXQP1": CVXQP1(),
     "CVXQP2": CVXQP2(),
@@ -1505,7 +1529,15 @@ problems_dict = {
     "DIAGPQT": DIAGPQT(),
     "ROSZMAN1LS": ROSZMAN1LS(),
     "S308": S308(),
+    # "SCOSINE": SCOSINE(),  # TODO: Human review needed
+    # "SINEVAL": SINEVAL(),  # TODO: Human review - Complex SCALE parameter
+    # "SINEALI": SINEALI(),  # TODO: Human review - Should be in bounded module
     "SISSER": SISSER(),
+    "SNAIL": SNAIL(),
+    "SPARSINE": SPARSINE(),
+    # "SPARSQUR": SPARSQUR(),  # TODO: Human review - Hessian tests timeout
+    "SROSENBR": SROSENBR(),
+    # "SSCOSINE": SSCOSINE(),  # TODO: Human review needed
     # "SPINLS": SPINLS(),  # TODO: Human review - gradient/Hessian issues
     "SPIN2LS": SPIN2LS(),
     # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication

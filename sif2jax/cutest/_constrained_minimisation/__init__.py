@@ -330,6 +330,8 @@ from .reading5 import READING5 as READING5
 from .reading9 import READING9 as READING9
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
+
+# from .sinrosnb import SINROSNB as SINROSNB  # TODO: Human review - scaling issues
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
@@ -599,6 +601,7 @@ constrained_minimisation_problems = (
     READING9(),
     SIMPLLPA(),
     SIMPLLPB(),
+    # SINROSNB(),  # TODO: Human review - objective scaling issues
     SIPOW1(),
     SIPOW2(),
     # TAX13322(),  # TODO: Human review - complex objective structure

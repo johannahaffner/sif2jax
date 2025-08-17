@@ -258,8 +258,27 @@ from .quartc import QUARTC as QUARTC
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .s308 import S308 as S308
+
+# from .sparsqur import SPARSQUR as SPARSQUR  # TODO: Human review - Hessian timeout
+# from .sscosine import SSCOSINE as SSCOSINE  # TODO: Human review needed
+from .sbrybnd import SBRYBND as SBRYBND
+from .schmvett import SCHMVETT as SCHMVETT
+
+# from .scosine import SCOSINE as SCOSINE  # TODO: Human review needed
+from .scurly10 import SCURLY10 as SCURLY10
+from .scurly20 import SCURLY20 as SCURLY20
+from .scurly30 import SCURLY30 as SCURLY30
+
+# from .sineval import SINEVAL as SINEVAL  # TODO: Human review - Complex SCALE
+# from .sineali import SINEALI as SINEALI  # TODO: Human review - Should be in bounded
 from .sisser import SISSER as SISSER
+from .snail import SNAIL as SNAIL
+from .sparsine import SPARSINE as SPARSINE
+
+# from .sensors import SENSORS as SENSORS  # TODO: Human review - pycutest issues
+# from .sinquad import SINQUAD as SINQUAD  # TODO: Human review - Complex SIF
 from .spin2ls import SPIN2LS as SPIN2LS
+from .srosenbr import SROSENBR as SROSENBR
 
 # TODO: Human review needed - gradient/Hessian issues with auxiliary variables
 # from .spinls import SPINLS as SPINLS
@@ -356,6 +375,9 @@ unconstrained_minimisation_problems = (
     CURLY10(),
     CURLY20(),
     CURLY30(),
+    SCURLY10(),
+    SCURLY20(),
+    SCURLY30(),
     CYCLIC3LS(),
     CYCLOOCFLS(),
     DANIWOODLS(),
@@ -517,7 +539,22 @@ unconstrained_minimisation_problems = (
     ROSENBR(),
     ROSZMAN1LS(),
     S308(),
+    # SCOSINE(),  # TODO: Human review needed
+    SCURLY10(),
+    SCURLY20(),
+    SCURLY30(),
+    # SINEVAL(),  # TODO: Human review - Complex SCALE parameter interpretation
+    # SINEALI(),  # TODO: Human review - Should be in bounded_minimisation module
     SISSER(),
+    SNAIL(),
+    SPARSINE(),
+    # SPARSQUR(),  # TODO: Human review - Hessian tests timeout
+    SBRYBND(),
+    SCHMVETT(),
+    # SENSORS(),  # TODO: Human review - pycutest issues
+    # SINQUAD(),  # TODO: Human review - Complex SIF
+    SROSENBR(),
+    # SSCOSINE(),  # TODO: Human review needed
     # SPINLS(),  # TODO: Human review - gradient/Hessian issues
     SPIN2LS(),
     # SPMSRTLS(),  # TODO: Human review - complex matrix multiplication

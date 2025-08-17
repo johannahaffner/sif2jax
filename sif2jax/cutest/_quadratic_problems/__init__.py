@@ -1,6 +1,27 @@
 from .biggsc4 import BIGGSC4 as BIGGSC4
 
 # from .chenhark import CHENHARK as CHENHARK  # TODO: Human review needed - see file
+from .cmpc1 import CMPC1 as CMPC1
+from .cmpc2 import CMPC2 as CMPC2
+from .cmpc3 import CMPC3 as CMPC3
+from .cmpc4 import CMPC4 as CMPC4
+from .cmpc5 import CMPC5 as CMPC5
+from .cmpc6 import CMPC6 as CMPC6
+
+# from .cmpc7 import CMPC7 as CMPC7  # TODO: Human review - runtime 8.78x vs 5x
+from .cmpc8 import CMPC8 as CMPC8
+
+# from .cmpc9 import CMPC9 as CMPC9  # TODO: Human review - runtime 5.81x vs 5x
+from .cmpc10 import CMPC10 as CMPC10
+
+# from .cmpc11 import CMPC11 as CMPC11  # TODO: Human review - runtime 5.28x vs 5x
+from .cmpc12 import CMPC12 as CMPC12
+
+# from .cmpc13 import CMPC13 as CMPC13  # TODO: Human review - runtime 6.02x vs 5x
+# from .cmpc14 import CMPC14 as CMPC14  # TODO: Human review - runtime 5.51x vs 5x
+from .cmpc15 import CMPC15 as CMPC15
+
+# from .cmpc16 import CMPC16 as CMPC16  # TODO: Human review - runtime 8.41x vs 5x
 from .cvxbqp1 import CVXBQP1 as CVXBQP1
 from .cvxqp1 import CVXQP1 as CVXQP1
 from .cvxqp2 import CVXQP2 as CVXQP2
@@ -66,6 +87,22 @@ bounded_quadratic_problems = (
 # Constrained quadratic problems (equality and/or inequality constraints)
 constrained_quadratic_problems = (
     BIGGSC4(),
+    CMPC1(),
+    CMPC2(),
+    CMPC3(),
+    CMPC4(),
+    CMPC5(),
+    CMPC6(),
+    # CMPC7(),  # TODO: Human review - runtime 8.78x vs 5x threshold
+    CMPC8(),
+    # CMPC9(),  # TODO: Human review - runtime 5.81x vs 5x threshold
+    CMPC10(),
+    # CMPC11(),  # TODO: Human review - runtime 5.28x vs 5x threshold
+    CMPC12(),
+    # CMPC13(),  # TODO: Human review - runtime 6.02x vs 5x threshold
+    # CMPC14(),  # TODO: Human review - runtime 5.51x vs 5x threshold
+    CMPC15(),
+    # CMPC16(),  # TODO: Human review - runtime 8.41x vs 5x threshold
     CVXQP1(),
     CVXQP2(),
     CVXQP3(),

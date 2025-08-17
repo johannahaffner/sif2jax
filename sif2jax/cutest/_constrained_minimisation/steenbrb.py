@@ -206,20 +206,18 @@ class STEENBRB(AbstractConstrainedMinimisation):
 
         # Compute outflow and inflow for each (trip, node) pair
         # For outgoing arcs (from_node == node): -d_flow + r_flow
-        outflow_d = jnp.sum(
-            jnp.where(from_node_mask, -d_flows_expanded, 0), axis=1
-        )  # Shape: (n_trips, 9)
-        outflow_r = jnp.sum(
-            jnp.where(from_node_mask, r_flows_expanded, 0), axis=1
-        )  # Shape: (n_trips, 9)
+        outflow_d_array = jnp.asarray(jnp.where(from_node_mask, -d_flows_expanded, 0))
+        outflow_d = jnp.sum(outflow_d_array, axis=1)  # Shape: (n_trips, 9)
+
+        outflow_r_array = jnp.asarray(jnp.where(from_node_mask, r_flows_expanded, 0))
+        outflow_r = jnp.sum(outflow_r_array, axis=1)  # Shape: (n_trips, 9)
 
         # For incoming arcs (to_node == node): +d_flow - r_flow
-        inflow_d = jnp.sum(
-            jnp.where(to_node_mask, d_flows_expanded, 0), axis=1
-        )  # Shape: (n_trips, 9)
-        inflow_r = jnp.sum(
-            jnp.where(to_node_mask, -r_flows_expanded, 0), axis=1
-        )  # Shape: (n_trips, 9)
+        inflow_d_array = jnp.asarray(jnp.where(to_node_mask, d_flows_expanded, 0))
+        inflow_d = jnp.sum(inflow_d_array, axis=1)  # Shape: (n_trips, 9)
+
+        inflow_r_array = jnp.asarray(jnp.where(to_node_mask, -r_flows_expanded, 0))
+        inflow_r = jnp.sum(inflow_r_array, axis=1)  # Shape: (n_trips, 9)
 
         # Net flow = outflow - inflow for each (trip, node)
         net_flows = outflow_d + outflow_r + inflow_d + inflow_r  # Shape: (n_trips, 9)

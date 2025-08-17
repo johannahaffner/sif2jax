@@ -22,6 +22,7 @@ from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
 from .expquad import EXPQUAD as EXPQUAD
+from .hadamals import HADAMALS as HADAMALS
 from .hart6 import HART6 as HART6
 from .hatflda import HATFLDA as HATFLDA
 from .hatfldb import HATFLDB as HATFLDB
@@ -115,6 +116,7 @@ bounded_minimisation_problems = (
     EXPLIN(),
     EXPLIN2(),
     EXPQUAD(),
+    HADAMALS(),
     HART6(),
     HATFLDA(),
     HATFLDB(),

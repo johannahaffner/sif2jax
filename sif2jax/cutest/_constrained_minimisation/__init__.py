@@ -72,6 +72,7 @@ from .expfita import EXPFITA as EXPFITA
 from .expfitb import EXPFITB as EXPFITB
 from .expfitc import EXPFITC as EXPFITC
 from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
+from .hadamard import HADAMARD as HADAMARD
 
 # TODO: Human review needed - parameter/dimension mismatch with pycutest
 # JAX implementation uses correct SIF parameters (N=10 → 21 variables)
@@ -83,6 +84,13 @@ from .hager2 import HAGER2 as HAGER2
 # TODO: HAGER3 needs human review - marked for future import
 # from .hager3 import HAGER3 as HAGER3
 from .hager4 import HAGER4 as HAGER4
+
+# TODO: Human review needed - complex SIF structure
+from .haifal import HAIFAL as HAIFAL
+from .haifam import (
+    HAIFAM as HAIFAM,
+)
+from .haifas import HAIFAS as HAIFAS
 from .himmelbc import HIMMELBC as HIMMELBC
 from .himmelbd import HIMMELBD as HIMMELBD
 from .himmelbe import HIMMELBE as HIMMELBE
@@ -292,6 +300,16 @@ from .polak5 import POLAK5 as POLAK5
 from .polak6 import POLAK6 as POLAK6
 
 # from .polygon import POLYGON as POLYGON  # TODO: Human review - sign conventions
+from .reading1 import READING1 as READING1
+from .reading2 import READING2 as READING2
+from .reading3 import READING3 as READING3
+from .reading4 import READING4 as READING4
+from .reading5 import READING5 as READING5
+
+# from .reading6 import READING6 as READING6  # TODO: Human review needed
+# Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
+# the starting point is the solution too
+from .reading9 import READING9 as READING9
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
@@ -386,10 +404,14 @@ constrained_minimisation_problems = (
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences
     # EXPFITC(),  # TODO: Human review - fundamental formulation differences
     GIGOMEZ2(),
+    HADAMARD(),
     HAGER1(),
     HAGER2(),
     # HAGER3(),  # TODO: Human review needed - marked for future import
     HAGER4(),
+    HAIFAS(),
+    HAIFAM(),  # TODO: Human review needed - complex SIF structure
+    HAIFAL(),
     HS6(),
     HS7(),
     HS8(),
@@ -530,6 +552,15 @@ constrained_minimisation_problems = (
     POLAK5(),
     POLAK6(),
     # POLYGON(),  # TODO: Human review - constraint sign convention differences
+    READING1(),
+    READING2(),
+    READING3(),
+    READING4(),
+    READING5(),
+    # READING6(),  # TODO: Human review needed
+    # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
+    # the starting point is the solution too
+    READING9(),
     SIMPLLPA(),
     SIMPLLPB(),
     SIPOW1(),

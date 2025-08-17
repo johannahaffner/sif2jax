@@ -24,6 +24,7 @@ from ._bounded_minimisation import (
     EXPLIN as EXPLIN,
     EXPLIN2 as EXPLIN2,
     EXPQUAD as EXPQUAD,
+    HADAMALS as HADAMALS,
     HART6 as HART6,
     HATFLDA as HATFLDA,
     HATFLDB as HATFLDB,
@@ -138,10 +139,14 @@ from ._constrained_minimisation import (
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
     # EXPFITC as EXPFITC,  # TODO: Human review - fundamental formulation differences
     GIGOMEZ2 as GIGOMEZ2,
+    HADAMARD as HADAMARD,
     HAGER1 as HAGER1,
     HAGER2 as HAGER2,
     # HAGER3 as HAGER3,  # TODO: HAGER3 needs human review - marked for future import
     HAGER4 as HAGER4,
+    HAIFAL as HAIFAL,
+    HAIFAM as HAIFAM,  # TODO: Human review needed - complex SIF structure
+    HAIFAS as HAIFAS,
     HIMMELBC as HIMMELBC,
     HIMMELBD as HIMMELBD,
     HIMMELBE as HIMMELBE,
@@ -326,6 +331,15 @@ from ._constrained_minimisation import (
     POLAK5 as POLAK5,
     POLAK6 as POLAK6,
     # POLYGON as POLYGON,  # TODO: Human review - fixed variable conventions
+    READING1 as READING1,
+    READING2 as READING2,
+    READING3 as READING3,
+    READING4 as READING4,
+    READING5 as READING5,
+    # READING6 as READING6,  # TODO: Human review needed
+    # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
+    # the starting point is the solution too
+    READING9 as READING9,
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
     SIPOW1 as SIPOW1,
@@ -552,8 +566,24 @@ from ._nonlinear_equations import (
 # VANDERM2 as VANDERM2,  # TODO: Human review - mixed constraint types
 from ._quadratic_problems import (
     bounded_quadratic_problems as bounded_quadratic_problems,
-    constrained_quadratic_problems as constrained_quadratic_problems,
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
+    CMPC1 as CMPC1,
+    CMPC2 as CMPC2,
+    CMPC3 as CMPC3,
+    CMPC4 as CMPC4,
+    CMPC5 as CMPC5,
+    CMPC6 as CMPC6,
+    # CMPC7 as CMPC7,  # TODO: Human review
+    CMPC8 as CMPC8,
+    # CMPC9 as CMPC9,  # TODO: Human review
+    CMPC10 as CMPC10,
+    # CMPC11 as CMPC11,  # TODO: Human review
+    CMPC12 as CMPC12,
+    # CMPC13 as CMPC13,  # TODO: Human review
+    # CMPC14 as CMPC14,  # TODO: Human review
+    CMPC15 as CMPC15,
+    # CMPC16 as CMPC16,  # TODO: Human review
+    constrained_quadratic_problems as constrained_quadratic_problems,
     CVXBQP1 as CVXBQP1,
     CVXQP1 as CVXQP1,
     CVXQP2 as CVXQP2,
@@ -850,6 +880,22 @@ problems_dict = {
     "TRO41X9": TRO41X9(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
+    "CMPC1": CMPC1(),
+    "CMPC2": CMPC2(),
+    "CMPC3": CMPC3(),
+    "CMPC4": CMPC4(),
+    "CMPC5": CMPC5(),
+    "CMPC6": CMPC6(),
+    # "CMPC7": CMPC7(),  # TODO: Human review
+    "CMPC8": CMPC8(),
+    # "CMPC9": CMPC9(),  # TODO: Human review
+    "CMPC10": CMPC10(),
+    # "CMPC11": CMPC11(),  # TODO: Human review
+    "CMPC12": CMPC12(),
+    # "CMPC13": CMPC13(),  # TODO: Human review
+    # "CMPC14": CMPC14(),  # TODO: Human review
+    "CMPC15": CMPC15(),
+    # "CMPC16": CMPC16(),  # TODO: Human review
     "BOOTH": BOOTH(),
     "BURKEHAN": BURKEHAN(),
     "BYRDSPHR": BYRDSPHR(),
@@ -1010,6 +1056,15 @@ problems_dict = {
     "POLAK5": POLAK5(),
     "POLAK6": POLAK6(),
     # "POLYGON": POLYGON(),  # TODO: Human review - fixed variable conventions
+    "READING1": READING1(),
+    "READING2": READING2(),
+    "READING3": READING3(),
+    "READING4": READING4(),
+    "READING5": READING5(),
+    # "READING6": READING6(),  # TODO: Human review needed
+    # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
+    # the starting point is the solution too
+    "READING9": READING9(),
     "SIMPLLPA": SIMPLLPA(),
     "SIMPLLPB": SIMPLLPB(),
     "SIPOW1": SIPOW1(),
@@ -1258,11 +1313,16 @@ problems_dict = {
     "HAGER2": HAGER2(),
     # "HAGER3": HAGER3(),  # TODO: HAGER3 needs human review - marked for future import
     "HAGER4": HAGER4(),
+    "HAIFAS": HAIFAS(),
+    "HAIFAM": HAIFAM(),  # TODO: Human review needed - complex SIF structure
+    "HAIFAL": HAIFAL(),
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
     # "GULF": GULF(),  # TODO: Human review - issues reported by user
     "HAHN1LS": HAHN1LS(),
     "HAIRY": HAIRY(),
+    "HADAMALS": HADAMALS(),
+    "HADAMARD": HADAMARD(),
     "HART6": HART6(),
     "HATFLDA": HATFLDA(),
     "HATFLDB": HATFLDB(),

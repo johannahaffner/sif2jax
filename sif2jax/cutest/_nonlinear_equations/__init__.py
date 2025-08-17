@@ -25,8 +25,17 @@ from .bratu2dt import BRATU2DT as BRATU2DT
 from .brownbsne import BROWNBSNE as BROWNBSNE
 from .browndene import BROWNDENE as BROWNDENE
 
-# TODO: Human review needed - numerical overflow when evaluating at ones vector
+# TODO: Human review needed - constraint values don't match pycutest
+# from .broydn3d import BROYDN3D as BROYDN3D
+# TODO: Human review needed - systematic differences in constraint values
+# from .broydnbd import BROYDNBD as BROYDNBD
+# TODO: Human review needed - constraint values don't match pycutest
+# from .brybndne import BRYBNDNE as BRYBNDNE
+# from .ceri651a import CERI651A as CERI651A
+# from .ceri651b import CERI651B as CERI651B
 # from .ceri651c import CERI651C as CERI651C
+# from .ceri651d import CERI651D as CERI651D
+# from .ceri651e import CERI651E as CERI651E
 # TODO: Human review needed - constraint values don't match pycutest
 # from .chainwoone import CHAINWOONE as CHAINWOONE
 from .chandheq import CHANDHEQ as CHANDHEQ
@@ -55,6 +64,14 @@ from .denschnene import DENSCHNENE as DENSCHNENE
 from .denschnfne import DENSCHNFNE as DENSCHNFNE
 from .devgla1ne import DEVGLA1NE as DEVGLA1NE
 from .devgla2ne import DEVGLA2NE as DEVGLA2NE
+from .dmn15102 import DMN15102 as DMN15102
+from .dmn15103 import DMN15103 as DMN15103
+
+# TODO: Human review needed - Jacobian precision issues (0.001-0.003 differences)
+# from .dmn15332 import DMN15332 as DMN15332
+# from .dmn15333 import DMN15333 as DMN15333
+# from .dmn37142 import DMN37142 as DMN37142
+# from .dmn37143 import DMN37143 as DMN37143
 from .drcavty1 import DRCAVTY1 as DRCAVTY1
 from .drcavty2 import DRCAVTY2 as DRCAVTY2
 from .drcavty3 import DRCAVTY3 as DRCAVTY3
@@ -66,22 +83,16 @@ from .eggcratene import EGGCRATENE as EGGCRATENE
 # from .eigenau import EIGENAU as EIGENAU
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
-
-# TODO: Human review needed - constraint values don't match pycutest
-# from .broydn3d import BROYDN3D as BROYDN3D
-# TODO: Human review needed - systematic differences in constraint values
-# from .broydnbd import BROYDNBD as BROYDNBD
-# TODO: Human review needed - constraint values don't match pycutest
-# from .brybndne import BRYBNDNE as BRYBNDNE
-# TODO: Human review needed - numerical overflow when evaluating at ones vector
-# from .ceri651a import CERI651A as CERI651A
-# TODO: Human review needed - numerical overflow when evaluating at ones vector
-# from .ceri651b import CERI651B as CERI651B
 from .errinrosne import ERRINROSNE as ERRINROSNE
 from .errinrsmne import ERRINRSMNE as ERRINRSMNE
 from .exp2ne import EXP2NE as EXP2NE
 from .expfitne import EXPFITNE as EXPFITNE
 from .extrosnbne import EXTROSNBNE as EXTROSNBNE
+from .fbrain import FBRAIN as FBRAIN
+from .fbrain2 import FBRAIN2 as FBRAIN2
+from .fbrain2ne import FBRAIN2NE as FBRAIN2NE
+from .fbrain3 import FBRAIN3 as FBRAIN3
+from .fbrainne import FBRAINNE as FBRAINNE
 
 # from .flosp2hh import FLOSP2HH as FLOSP2HH  # TODO: Human review - NQR constraints
 # from .flosp2hl import FLOSP2HL as FLOSP2HL  # TODO: Human review - NQR constraints
@@ -117,8 +128,13 @@ from .hypcir import HYPCIR as HYPCIR
 from .inteqne import INTEQNE as INTEQNE
 from .jensmpne import JENSMPNE as JENSMPNE
 from .judgene import JUDGENE as JUDGENE
+from .kirby2 import KIRBY2 as KIRBY2
 from .koebhelbne import KOEBHELBNE as KOEBHELBNE
 from .kowosbne import KOWOSBNE as KOWOSBNE
+from .kss import KSS as KSS
+
+# TODO: KTMODEL needs human review - multiple test failures
+# from .ktmodel import KTMODEL as KTMODEL
 from .levymone import LEVYMONE as LEVYMONE
 from .levymone5 import LEVYMONE5 as LEVYMONE5
 from .levymone6 import LEVYMONE6 as LEVYMONE6
@@ -263,6 +279,8 @@ nonlinear_equations_problems = (
     # BROWNALE(),  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE(),
     BROWNDENE(),
+    # CERI651D(),  # TODO: Human review needed - constraint precision
+    # CERI651E(),  # TODO: Human review needed - constraint precision
     # BROYDN3D(),  # TODO: Human review needed - constraint values mismatch
     # BROYDNBD(),  # TODO: Human review needed - systematic differences
     # BRYBNDNE(),  # TODO: Human review needed - constraint values mismatch
@@ -272,9 +290,9 @@ nonlinear_equations_problems = (
     HYPCIR(),
     MSQRTA(),
     MSQRTB(),
-    # CERI651A(),  # TODO: Human review needed - numerical overflow at ones vector
-    # CERI651B(),  # TODO: Human review needed - numerical overflow at ones vector
-    # CERI651C(),  # TODO: Human review needed - numerical overflow at ones vector
+    # CERI651A(),  # TODO: Human review needed - constraint precision
+    # CERI651B(),  # TODO: Human review needed - constraint precision
+    # CERI651C(),  # TODO: Human review needed - constraint precision
     # CHAINWOONE(),  # TODO: Human review needed - constraint values mismatch
     # CHANNEL(),  # TODO: Human review needed
     CHEBYQADNE(),
@@ -294,6 +312,12 @@ nonlinear_equations_problems = (
     DECONVNE(),
     DEVGLA1NE(),
     DEVGLA2NE(),
+    DMN15102(),
+    DMN15103(),
+    # DMN15332(),  # TODO: Human review needed - Jacobian precision issues
+    # DMN15333(),  # TODO: Human review needed - Jacobian precision issues
+    # DMN37142(),  # TODO: Human review needed - Jacobian precision issues
+    # DMN37143(),  # TODO: Human review needed - Jacobian precision issues
     EGGCRATENE(),
     # EIGENA(),  # TODO: Human review needed - systematic constraint value discrepancies
     # EIGENAU(),  # TODO: Human review needed - same constraint issues as EIGENA
@@ -304,6 +328,11 @@ nonlinear_equations_problems = (
     EXP2NE(),
     EXPFITNE(),
     EXTROSNBNE(),
+    FBRAIN(),
+    FBRAIN2(),
+    FBRAIN2NE(),
+    FBRAIN3(),
+    FBRAINNE(),
     # FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
     # FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
     # FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling
@@ -333,7 +362,10 @@ nonlinear_equations_problems = (
     INTEQNE(),
     JENSMPNE(),
     JUDGENE(),
+    KIRBY2(),
     KOEBHELBNE(),
+    KSS(),
+    # KTMODEL(),  # TODO: KTMODEL needs human review - multiple test failures
     KOWOSBNE(),
     LEVYMONE(),
     LEVYMONE5(),

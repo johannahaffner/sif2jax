@@ -6,6 +6,8 @@ from ._bounded_minimisation import (
     BOX2 as BOX2,
     BRANIN as BRANIN,
     CAMEL6 as CAMEL6,
+    CHARDIS0 as CHARDIS0,
+    # CHARDIS02 as CHARDIS02,  # TODO: Human review needed
     CYCLOOCTLS as CYCLOOCTLS,
     DEGDIAG as DEGDIAG,
     DEGTRID as DEGTRID,
@@ -24,6 +26,8 @@ from ._bounded_minimisation import (
     EXPLIN as EXPLIN,
     EXPLIN2 as EXPLIN2,
     EXPQUAD as EXPQUAD,
+    FBRAIN2LS as FBRAIN2LS,
+    FBRAINLS as FBRAINLS,
     HADAMALS as HADAMALS,
     HART6 as HART6,
     HATFLDA as HATFLDA,
@@ -39,6 +43,7 @@ from ._bounded_minimisation import (
     HS38 as HS38,
     HS45 as HS45,
     HS110 as HS110,
+    KOEBHELB as KOEBHELB,
     LEVYMONT as LEVYMONT,
     LEVYMONT5 as LEVYMONT5,
     LEVYMONT6 as LEVYMONT6,
@@ -113,6 +118,14 @@ from ._constrained_minimisation import (
     CB3 as CB3,
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
+    # CHARDIS1 as CHARDIS1,  # TODO: Human review needed
+    # CHARDIS12 as CHARDIS12,  # TODO: Human review needed
+    CLEUVEN2 as CLEUVEN2,
+    CLEUVEN3 as CLEUVEN3,
+    CLEUVEN4 as CLEUVEN4,
+    CLEUVEN5 as CLEUVEN5,
+    CLEUVEN6 as CLEUVEN6,
+    CLEUVEN7 as CLEUVEN7,
     # CLNLBEAM as CLNLBEAM,  # TODO: Dimension mismatch in constraints
     # CONCON as CONCON,  # TODO: Removed - automatic derivative mismatches
     constrained_minimisation_problems as constrained_minimisation_problems,
@@ -138,6 +151,10 @@ from ._constrained_minimisation import (
     # EXPFITA as EXPFITA,  # TODO: Human review - fundamental formulation differences
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
     # EXPFITC as EXPFITC,  # TODO: Human review - fundamental formulation differences
+    # FCCU as FCCU,  # TODO: Human review - objective value discrepancies
+    # FEEDLOC as FEEDLOC,  # TODO: Human review - constraint dimension mismatch
+    FLETCHER as FLETCHER,
+    FLT as FLT,
     GIGOMEZ2 as GIGOMEZ2,
     HADAMARD as HADAMARD,
     HAGER1 as HAGER1,
@@ -250,6 +267,10 @@ from ._constrained_minimisation import (
     # HS118 as HS118,  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119 as HS119,
     HYDROELL as HYDROELL,
+    # KISSING as KISSING,  # TODO: Human review - runtime issue (5.37x)
+    # KISSING2 as KISSING2,  # TODO: Human review needed
+    # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
+    # KSIP as KSIP,  # TODO: Needs vectorization - dtype promotion errors
     LOOTSMA as LOOTSMA,
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,
@@ -342,6 +363,7 @@ from ._constrained_minimisation import (
     READING9 as READING9,
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
+    # SINROSNB as SINROSNB,  # TODO: Human review - objective scaling issues
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
     # TAX13322 as TAX13322,  # TODO: Human review - complex objective
@@ -397,9 +419,11 @@ from ._nonlinear_equations import (
     # BROWNALE as BROWNALE,  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE as BROWNBSNE,
     BROWNDENE as BROWNDENE,
-    # CERI651A as CERI651A,  # TODO: Human review - numerical overflow at ones vector
-    # CERI651B as CERI651B,  # TODO: Human review - numerical overflow at ones vector
-    # CERI651C as CERI651C,  # TODO: Human review - numerical overflow at ones vector
+    # CERI651A as CERI651A,  # TODO: Human review needed - constraint precision
+    # CERI651B as CERI651B,  # TODO: Human review needed - constraint precision
+    # CERI651C as CERI651C,  # TODO: Human review needed - constraint precision
+    # CERI651D as CERI651D,  # TODO: Human review needed - constraint precision
+    # CERI651E as CERI651E,  # TODO: Human review needed - constraint precision
     # CHAINWOONE as CHAINWOONE,  # TODO: Human review - constraint values mismatch
     CHANDHEQ as CHANDHEQ,
     # CHANNEL as CHANNEL,  # TODO: Human review needed
@@ -423,6 +447,12 @@ from ._nonlinear_equations import (
     DENSCHNFNE as DENSCHNFNE,
     DEVGLA1NE as DEVGLA1NE,
     DEVGLA2NE as DEVGLA2NE,
+    DMN15102 as DMN15102,
+    DMN15103 as DMN15103,
+    # DMN15332 as DMN15332,  # TODO: Human review needed - Jacobian precision issues
+    # DMN15333 as DMN15333,  # TODO: Human review needed - Jacobian precision issues
+    # DMN37142 as DMN37142,  # TODO: Human review needed - Jacobian precision issues
+    # DMN37143 as DMN37143,  # TODO: Human review needed - Jacobian precision issues
     # BROYDN3D as BROYDN3D,  # TODO: Human review needed - constraint values mismatch
     # BROYDNBD as BROYDNBD,  # TODO: Human review needed - systematic differences
     # BRYBNDNE as BRYBNDNE,  # TODO: Human review needed - constraint values mismatch
@@ -439,6 +469,11 @@ from ._nonlinear_equations import (
     EXP2NE as EXP2NE,
     EXPFITNE as EXPFITNE,
     EXTROSNBNE as EXTROSNBNE,
+    FBRAIN as FBRAIN,
+    FBRAIN2 as FBRAIN2,
+    FBRAIN2NE as FBRAIN2NE,
+    FBRAIN3 as FBRAIN3,
+    FBRAINNE as FBRAINNE,
     # FLOSP2HH as FLOSP2HH,  # TODO: Human review needed - NQR constraint handling
     # FLOSP2HL as FLOSP2HL,  # TODO: Human review needed - NQR constraint handling
     # FLOSP2HM as FLOSP2HM,  # TODO: Human review needed - NQR constraint handling
@@ -469,8 +504,11 @@ from ._nonlinear_equations import (
     INTEQNE as INTEQNE,
     JENSMPNE as JENSMPNE,
     JUDGENE as JUDGENE,
+    KIRBY2 as KIRBY2,
     KOEBHELBNE as KOEBHELBNE,
     KOWOSBNE as KOWOSBNE,
+    KSS as KSS,
+    # KTMODEL as KTMODEL,  # TODO: Human review - multiple test failures
     LEVYMONE as LEVYMONE,
     LEVYMONE5 as LEVYMONE5,
     LEVYMONE6 as LEVYMONE6,
@@ -694,6 +732,10 @@ from ._unconstrained_minimisation import (
     DENSCHNF as DENSCHNF,
     DEVGLA1 as DEVGLA1,
     DEVGLA2 as DEVGLA2,
+    # DMN15332LS as DMN15332LS,  # TODO: Human review - gradient precision
+    # DMN15333LS as DMN15333LS,  # TODO: Human review - gradient precision
+    # DMN37142LS as DMN37142LS,  # TODO: Human review - gradient precision
+    # DMN37143LS as DMN37143LS,  # TODO: Human review - gradient precision
     # DIAMON3DLS as DIAMON3DLS,  # TODO: Human review needed - see file
     DIXMAANA1 as DIXMAANA1,
     DIXMAANB as DIXMAANB,
@@ -713,6 +755,8 @@ from ._unconstrained_minimisation import (
     DIXMAANP as DIXMAANP,
     DIXON3DQ as DIXON3DQ,
     DJTL as DJTL,
+    DMN15102LS as DMN15102LS,
+    DMN15103LS as DMN15103LS,
     DQDRTIC as DQDRTIC,
     DQRTIC as DQRTIC,
     DRCAV1LQ as DRCAV1LQ,
@@ -734,7 +778,7 @@ from ._unconstrained_minimisation import (
     EXP2 as EXP2,
     EXPFIT as EXPFIT,
     # EXTROSNB as EXTROSNB,  # TODO: Human review - objective/gradient discrepancies
-    # FBRAIN3LS as FBRAIN3LS,  # TODO: Human review - complex data dependencies
+    FBRAIN3LS as FBRAIN3LS,
     FLETBV3M as FLETBV3M,
     FLETCBV2 as FLETCBV2,
     FLETCBV3 as FLETCBV3,
@@ -834,8 +878,23 @@ from ._unconstrained_minimisation import (
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
     S308 as S308,
+    # SCOSINE as SCOSINE,  # TODO: Human review needed
+    SBRYBND as SBRYBND,
+    # SCHMVETT as SCHMVETT,  # TODO: Human review - Hessian NaN issue
+    # SENSORS as SENSORS,  # TODO: Human review - pycutest compatibility issues
+    # SINQUAD as SINQUAD,  # TODO: Human review - Complex SIF group structure
+    SCURLY10 as SCURLY10,
+    SCURLY20 as SCURLY20,
+    SCURLY30 as SCURLY30,
+    # SINEVAL as SINEVAL,  # TODO: Human review - Complex SCALE parameter
+    # SINEALI as SINEALI,  # TODO: Human review - Should be in bounded module
     SISSER as SISSER,
+    SNAIL as SNAIL,
+    SPARSINE as SPARSINE,
+    # SPARSQUR as SPARSQUR,  # TODO: Human review - Hessian tests timeout
+    # SSCOSINE as SSCOSINE,  # TODO: Human review needed
     SPIN2LS as SPIN2LS,
+    SROSENBR as SROSENBR,
     # SPINLS as SPINLS,  # TODO: Human review - gradient/Hessian issues
     # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
@@ -904,6 +963,14 @@ problems_dict = {
     "CB3": CB3(),
     "CHACONN1": CHACONN1(),
     "CHACONN2": CHACONN2(),
+    # "CHARDIS1": CHARDIS1(),  # TODO: Human review needed
+    # "CHARDIS12": CHARDIS12(),  # TODO: Human review needed
+    "CLEUVEN2": CLEUVEN2(),
+    "CLEUVEN3": CLEUVEN3(),
+    "CLEUVEN4": CLEUVEN4(),
+    "CLEUVEN5": CLEUVEN5(),
+    "CLEUVEN6": CLEUVEN6(),
+    "CLEUVEN7": CLEUVEN7(),
     # "CLNLBEAM": CLNLBEAM(),  # TODO: Dimension mismatch in constraints
     "HS1": HS1(),
     "HS2": HS2(),
@@ -1014,6 +1081,10 @@ problems_dict = {
     "HS117": HS117(),
     # "HS118": HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     "HS119": HS119(),
+    "HYDROELL": HYDROELL(),
+    # "KISSING": KISSING(),  # TODO: Human review - runtime issue (5.37x)
+    # "KISSING2": KISSING2(),  # TODO: Human review needed
+    # "KIWCRESC": KIWCRESC(),  # TODO: Human review - constraints differ by 2.0
     "HIMMELBC": HIMMELBC(),
     "HIMMELBD": HIMMELBD(),
     "HIMMELBE": HIMMELBE(),
@@ -1067,6 +1138,7 @@ problems_dict = {
     "READING9": READING9(),
     "SIMPLLPA": SIMPLLPA(),
     "SIMPLLPB": SIMPLLPB(),
+    # "SINROSNB": SINROSNB(),  # TODO: Human review - objective scaling issues
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
     # "TAX13322": TAX13322(),  # TODO: Human review - complex objective
@@ -1180,6 +1252,8 @@ problems_dict = {
     # "BRATU1D": BRATU1D(),  # TODO: Human review needed - see file
     # "BRKMCC": BRKMCC(),  # TODO: Human review - significant discrepancies
     "CAMEL6": CAMEL6(),
+    "CHARDIS0": CHARDIS0(),
+    # "CHARDIS02": CHARDIS02(),  # TODO: Human review needed
     # "BROWNAL": BROWNAL(),  # TODO: Human review - small Hessian discrepancies
     "BROWNBS": BROWNBS(),
     "BROWNDEN": BROWNDEN(),
@@ -1215,6 +1289,13 @@ problems_dict = {
     "CURLY10": CURLY10(),
     "CURLY20": CURLY20(),
     "CURLY30": CURLY30(),
+    "SBRYBND": SBRYBND(),
+    # "SCHMVETT": SCHMVETT(),  # TODO: Human review - Hessian NaN issue
+    # "SENSORS": SENSORS(),  # TODO: Human review - pycutest compatibility issues
+    # "SINQUAD": SINQUAD(),  # TODO: Human review - Complex SIF group structure
+    "SCURLY10": SCURLY10(),
+    "SCURLY20": SCURLY20(),
+    "SCURLY30": SCURLY30(),
     "CVXBQP1": CVXBQP1(),
     "CVXQP1": CVXQP1(),
     "CVXQP2": CVXQP2(),
@@ -1245,6 +1326,12 @@ problems_dict = {
     "DEVGLA1": DEVGLA1(),
     # "DIAMON3DLS": DIAMON3DLS(),  # TODO: Human review needed - see file
     "DEVGLA2": DEVGLA2(),
+    "DMN15102LS": DMN15102LS(),
+    "DMN15103LS": DMN15103LS(),
+    # "DMN15332LS": DMN15332LS(),  # TODO: Human review - gradient precision
+    # "DMN15333LS": DMN15333LS(),  # TODO: Human review - gradient precision
+    # "DMN37142LS": DMN37142LS(),  # TODO: Human review - gradient precision
+    # "DMN37143LS": DMN37143LS(),  # TODO: Human review - gradient precision
     "DIXMAANA1": DIXMAANA1(),
     "DIXMAANB": DIXMAANB(),
     "DIXMAANC": DIXMAANC(),
@@ -1292,7 +1379,9 @@ problems_dict = {
     "EXP2B": EXP2B(),
     "EXPFIT": EXPFIT(),
     # "EXTROSNB": EXTROSNB(),  # TODO: Human review - objective/gradient discrepancies
-    # "FBRAIN3LS": FBRAIN3LS(),  # TODO: Human review - complex data dependencies
+    "FBRAIN2LS": FBRAIN2LS(),
+    "FBRAIN3LS": FBRAIN3LS(),
+    "FBRAINLS": FBRAINLS(),
     # "FLETCHBV": FLETCHBV(),  # TODO: Human review - objective/gradient discrepancies
     "FLETBV3M": FLETBV3M(),
     "FLETCBV2": FLETCBV2(),
@@ -1308,6 +1397,10 @@ problems_dict = {
     "GAUSSIAN": GAUSSIAN(),
     # "GBRAINLS": GBRAINLS(),  # TODO: Human review - complex data dependencies
     "GENHUMPS": GENHUMPS(),
+    # "FCCU": FCCU(),  # TODO: Human review - objective value discrepancies
+    # "FEEDLOC": FEEDLOC(),  # TODO: Human review - constraint mismatch
+    "FLETCHER": FLETCHER(),
+    "FLT": FLT(),
     "GIGOMEZ2": GIGOMEZ2(),
     "HAGER1": HAGER1(),
     "HAGER2": HAGER2(),
@@ -1350,13 +1443,13 @@ problems_dict = {
     # "HIMMELP5": HIMMELP5(),  # TODO: Human review needed - OBNL element issues
     # "HIMMELP6": HIMMELP6(),  # TODO: Human review needed - OBNL element issues
     "HUMPS": HUMPS(),
-    "HYDROELL": HYDROELL(),
     "INDEF": INDEF(),
     "INDEFM": INDEFM(),
     "INTEQNELS": INTEQNELS(),
     "JENSMP": JENSMP(),
     "JUDGE": JUDGE(),
     "KIRBY2LS": KIRBY2LS(),
+    "KOEBHELB": KOEBHELB(),
     "KOWOSB": KOWOSB(),
     # "KSSLS": KSSLS(),  # TODO: Human review - significant obj/grad discrepancies
     "LANCZOS1LS": LANCZOS1LS(),
@@ -1439,7 +1532,15 @@ problems_dict = {
     "DIAGPQT": DIAGPQT(),
     "ROSZMAN1LS": ROSZMAN1LS(),
     "S308": S308(),
+    # "SCOSINE": SCOSINE(),  # TODO: Human review needed
+    # "SINEVAL": SINEVAL(),  # TODO: Human review - Complex SCALE parameter
+    # "SINEALI": SINEALI(),  # TODO: Human review - Should be in bounded module
     "SISSER": SISSER(),
+    "SNAIL": SNAIL(),
+    "SPARSINE": SPARSINE(),
+    # "SPARSQUR": SPARSQUR(),  # TODO: Human review - Hessian tests timeout
+    "SROSENBR": SROSENBR(),
+    # "SSCOSINE": SSCOSINE(),  # TODO: Human review needed
     # "SPINLS": SPINLS(),  # TODO: Human review - gradient/Hessian issues
     "SPIN2LS": SPIN2LS(),
     # "SPMSRTLS": SPMSRTLS(),  # TODO: Human review - complex matrix multiplication
@@ -1543,9 +1644,11 @@ problems_dict = {
     "HYPCIR": HYPCIR(),
     "MSQRTA": MSQRTA(),
     "MSQRTB": MSQRTB(),
-    # "CERI651A": CERI651A(),  # TODO: Human review - numerical overflow at ones vector
-    # "CERI651B": CERI651B(),  # TODO: Human review - numerical overflow at ones vector
-    # "CERI651C": CERI651C(),  # TODO: Human review - numerical overflow at ones vector
+    # "CERI651A": CERI651A(),  # TODO: Human review needed - constraint precision
+    # "CERI651B": CERI651B(),  # TODO: Human review needed - constraint precision
+    # "CERI651C": CERI651C(),  # TODO: Human review needed - constraint precision
+    # "CERI651D": CERI651D(),  # TODO: Human review needed - constraint precision
+    # "CERI651E": CERI651E(),  # TODO: Human review needed - constraint precision
     # "CHAINWOONE": CHAINWOONE(),  # TODO: Human review - constraint values mismatch
     # "CHANNEL": CHANNEL(),  # TODO: Human review needed
     "CHEBYQADNE": CHEBYQADNE(),
@@ -1568,6 +1671,12 @@ problems_dict = {
     "DECONVNE": DECONVNE(),
     "DEVGLA1NE": DEVGLA1NE(),
     "DEVGLA2NE": DEVGLA2NE(),
+    "DMN15102": DMN15102(),
+    "DMN15103": DMN15103(),
+    # "DMN15332": DMN15332(),  # TODO: Human review needed - Jacobian precision issues
+    # "DMN15333": DMN15333(),  # TODO: Human review needed - Jacobian precision issues
+    # "DMN37142": DMN37142(),  # TODO: Human review needed - Jacobian precision issues
+    # "DMN37143": DMN37143(),  # TODO: Human review needed - Jacobian precision issues
     "EGGCRATENE": EGGCRATENE(),
     # "EIGENA": EIGENA(),  # TODO: Human review needed
     # "EIGENAU": EIGENAU(),  # TODO: Human review needed
@@ -1582,6 +1691,11 @@ problems_dict = {
     # "EXPFITC": EXPFITC(),  # TODO: Human review - fundamental formulation differences
     "EXPFITNE": EXPFITNE(),
     "EXTROSNBNE": EXTROSNBNE(),
+    "FBRAIN": FBRAIN(),
+    "FBRAIN2": FBRAIN2(),
+    "FBRAIN2NE": FBRAIN2NE(),
+    "FBRAIN3": FBRAIN3(),
+    "FBRAINNE": FBRAINNE(),
     # "FLOSP2HH": FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
     # "FLOSP2HL": FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
     # "FLOSP2HM": FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling
@@ -1611,7 +1725,11 @@ problems_dict = {
     "INTEQNE": INTEQNE(),
     "JENSMPNE": JENSMPNE(),
     "JUDGENE": JUDGENE(),
+    "KIRBY2": KIRBY2(),
     "KOEBHELBNE": KOEBHELBNE(),
+    # "KSIP": KSIP(),  # TODO: Needs vectorization - dtype promotion errors
+    "KSS": KSS(),
+    # "KTMODEL": KTMODEL(),  # TODO: Human review - multiple test failures
     "KOWOSBNE": KOWOSBNE(),
     "LEVYMONE": LEVYMONE(),
     "LEVYMONE5": LEVYMONE5(),

@@ -74,6 +74,11 @@ from .denschnf import DENSCHNF as DENSCHNF
 from .devgla1 import DEVGLA1 as DEVGLA1
 from .devgla2 import DEVGLA2 as DEVGLA2
 
+# TODO: Human review needed - Likely gradient/Hessian precision issues
+# from .dmn15332ls import DMN15332LS as DMN15332LS
+# from .dmn15333ls import DMN15333LS as DMN15333LS
+# from .dmn37142ls import DMN37142LS as DMN37142LS
+# from .dmn37143ls import DMN37143LS as DMN37143LS
 # from .diamon3dls import DIAMON3DLS as DIAMON3DLS  # TODO: Human review needed
 from .dixmaana1 import DIXMAANA1 as DIXMAANA1
 from .dixmaanb import DIXMAANB as DIXMAANB
@@ -93,6 +98,8 @@ from .dixmaano import DIXMAANO as DIXMAANO
 from .dixmaanp import DIXMAANP as DIXMAANP
 from .dixon3dq import DIXON3DQ as DIXON3DQ
 from .djtl import DJTL as DJTL
+from .dmn15102ls import DMN15102LS as DMN15102LS
+from .dmn15103ls import DMN15103LS as DMN15103LS
 from .dqdrtic import DQDRTIC as DQDRTIC
 from .dqrtic import DQRTIC as DQRTIC
 from .drcav1lq import DRCAV1LQ as DRCAV1LQ
@@ -123,8 +130,7 @@ from .expfit import EXPFIT as EXPFIT
 
 # TODO: EXTROSNB needs human review - objective/gradient discrepancies
 # from .extrosnb import EXTROSNB as EXTROSNB
-# TODO: FBRAIN3LS needs human review - complex data dependencies
-# from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
+from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
 from .fletbv3m import FLETBV3M as FLETBV3M
 from .fletcbv2 import FLETCBV2 as FLETCBV2
 from .fletcbv3 import FLETCBV3 as FLETCBV3
@@ -252,8 +258,28 @@ from .quartc import QUARTC as QUARTC
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .s308 import S308 as S308
+
+# from .sparsqur import SPARSQUR as SPARSQUR  # TODO: Human review - Hessian timeout
+# from .sscosine import SSCOSINE as SSCOSINE  # TODO: Human review needed
+from .sbrybnd import SBRYBND as SBRYBND
+
+# TODO: SCHMVETT needs human review - Hessian NaN issue at zero vector
+# from .schmvett import SCHMVETT as SCHMVETT
+# from .scosine import SCOSINE as SCOSINE  # TODO: Human review needed
+from .scurly10 import SCURLY10 as SCURLY10
+from .scurly20 import SCURLY20 as SCURLY20
+from .scurly30 import SCURLY30 as SCURLY30
+
+# from .sineval import SINEVAL as SINEVAL  # TODO: Human review - Complex SCALE
+# from .sineali import SINEALI as SINEALI  # TODO: Human review - Should be in bounded
 from .sisser import SISSER as SISSER
+from .snail import SNAIL as SNAIL
+from .sparsine import SPARSINE as SPARSINE
+
+# from .sensors import SENSORS as SENSORS  # TODO: Human review - pycutest issues
+# from .sinquad import SINQUAD as SINQUAD  # TODO: Human review - Complex SIF
 from .spin2ls import SPIN2LS as SPIN2LS
+from .srosenbr import SROSENBR as SROSENBR
 
 # TODO: Human review needed - gradient/Hessian issues with auxiliary variables
 # from .spinls import SPINLS as SPINLS
@@ -350,6 +376,9 @@ unconstrained_minimisation_problems = (
     CURLY10(),
     CURLY20(),
     CURLY30(),
+    SCURLY10(),
+    SCURLY20(),
+    SCURLY30(),
     CYCLIC3LS(),
     CYCLOOCFLS(),
     DANIWOODLS(),
@@ -362,6 +391,12 @@ unconstrained_minimisation_problems = (
     DEVGLA1(),
     # DIAMON3DLS(),  # TODO: Human review needed - see file
     DEVGLA2(),
+    DMN15102LS(),
+    DMN15103LS(),
+    # DMN15332LS(),  # TODO: Human review needed - Gradient/Hessian precision issues
+    # DMN15333LS(),  # TODO: Human review needed - Gradient/Hessian precision issues
+    # DMN37142LS(),  # TODO: Human review needed - Gradient/Hessian precision issues
+    # DMN37143LS(),  # TODO: Human review needed - Gradient/Hessian precision issues
     DIXMAANA1(),
     DIXMAANB(),
     DIXMAANC(),
@@ -401,7 +436,7 @@ unconstrained_minimisation_problems = (
     EXP2(),
     EXPFIT(),
     # EXTROSNB(),  # TODO: Human review - objective/gradient discrepancies
-    # FBRAIN3LS(),  # TODO: Human review - complex data dependencies
+    FBRAIN3LS(),
     # FLETCH family problems
     # FLETCHBV(),  # TODO: Human review - objective/gradient discrepancies
     FLETBV3M(),
@@ -505,7 +540,22 @@ unconstrained_minimisation_problems = (
     ROSENBR(),
     ROSZMAN1LS(),
     S308(),
+    # SCOSINE(),  # TODO: Human review needed
+    SCURLY10(),
+    SCURLY20(),
+    SCURLY30(),
+    # SINEVAL(),  # TODO: Human review - Complex SCALE parameter interpretation
+    # SINEALI(),  # TODO: Human review - Should be in bounded_minimisation module
     SISSER(),
+    SNAIL(),
+    SPARSINE(),
+    # SPARSQUR(),  # TODO: Human review - Hessian tests timeout
+    SBRYBND(),
+    # SCHMVETT(),  # TODO: Human review - Hessian NaN issue at zero vector
+    # SENSORS(),  # TODO: Human review - pycutest issues
+    # SINQUAD(),  # TODO: Human review - Complex SIF
+    SROSENBR(),
+    # SSCOSINE(),  # TODO: Human review needed
     # SPINLS(),  # TODO: Human review - gradient/Hessian issues
     SPIN2LS(),
     # SPMSRTLS(),  # TODO: Human review - complex matrix multiplication

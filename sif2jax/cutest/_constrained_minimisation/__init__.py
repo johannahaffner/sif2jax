@@ -39,9 +39,18 @@ from .cb3 import CB3 as CB3
 from .chaconn1 import CHACONN1 as CHACONN1
 from .chaconn2 import CHACONN2 as CHACONN2
 
+# from .chardis1 import CHARDIS1 as CHARDIS1  # TODO: Human review needed
+# from .chardis12 import CHARDIS12 as CHARDIS12  # TODO: Human review needed
 # from .cresc4 import CRESC4 as CRESC4  # TODO: Human review - complex crescent area
 # TODO: CLNLBEAM needs fixing - dimension mismatch in constraints
 # from .clnlbeam import CLNLBEAM as CLNLBEAM
+from .cleuven2 import CLEUVEN2 as CLEUVEN2
+from .cleuven3 import CLEUVEN3 as CLEUVEN3
+from .cleuven4 import CLEUVEN4 as CLEUVEN4
+from .cleuven5 import CLEUVEN5 as CLEUVEN5
+from .cleuven6 import CLEUVEN6 as CLEUVEN6
+from .cleuven7 import CLEUVEN7 as CLEUVEN7
+
 # TODO: CONCON - removed from API due to automatic derivative mismatches with pycutest
 # from .concon import CONCON as CONCON
 from .coshfun import COSHFUN as COSHFUN
@@ -71,6 +80,13 @@ from .elattar import ELATTAR as ELATTAR
 from .expfita import EXPFITA as EXPFITA
 from .expfitb import EXPFITB as EXPFITB
 from .expfitc import EXPFITC as EXPFITC
+
+# TODO: FCCU needs human review - objective value discrepancies
+# from .fccu import FCCU as FCCU
+# TODO: FEEDLOC needs human review - constraint dimension mismatch
+# from .feedloc import FEEDLOC as FEEDLOC
+from .fletcher import FLETCHER as FLETCHER
+from .flt import FLT as FLT
 from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
 from .hadamard import HADAMARD as HADAMARD
 
@@ -208,6 +224,14 @@ from .hs117 import HS117 as HS117
 # from .hs118 import HS118 as HS118
 from .hs119 import HS119 as HS119
 from .hydroell import HYDROELL as HYDROELL
+
+# TODO: KISSING needs human review - runtime issue (5.37x, slightly over 5x threshold)
+# from .kissing import KISSING as KISSING
+# from .kissing2 import KISSING2 as KISSING2  # TODO: Human review needed
+# TODO: Human review needed - KIWCRESC constraint values differ by 2.0 from pycutest
+# from .kiwcresc import KIWCRESC as KIWCRESC
+# TODO: Human review needed - KSIP needs vectorization, dtype promotion errors with JAX
+# from .ksip import KSIP as KSIP
 from .lootsma import LOOTSMA as LOOTSMA
 from .lukvle1 import LUKVLE1 as LUKVLE1
 
@@ -312,6 +336,8 @@ from .reading5 import READING5 as READING5
 from .reading9 import READING9 as READING9
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
+
+# from .sinrosnb import SINROSNB as SINROSNB  # TODO: Human review - scaling issues
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
@@ -380,7 +406,15 @@ constrained_minimisation_problems = (
     CB3(),
     CHACONN1(),
     CHACONN2(),
+    # CHARDIS1(),  # TODO: Human review needed
+    # CHARDIS12(),  # TODO: Human review needed
     # CLNLBEAM(),  # TODO: Dimension mismatch in constraints
+    CLEUVEN2(),
+    CLEUVEN3(),
+    CLEUVEN4(),
+    CLEUVEN5(),
+    CLEUVEN6(),
+    CLEUVEN7(),
     # CONCON(),  # TODO: Removed - automatic derivative mismatches
     COSHFUN(),
     # CRESC4(),  # TODO: Human review - complex crescent area formula
@@ -403,6 +437,10 @@ constrained_minimisation_problems = (
     # EXPFITA(),  # TODO: Human review - fundamental formulation differences
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences
     # EXPFITC(),  # TODO: Human review - fundamental formulation differences
+    # FCCU(),  # TODO: FCCU needs human review - objective value discrepancies
+    # FEEDLOC(),  # TODO: FEEDLOC needs human review - constraint dimension mismatch
+    FLETCHER(),
+    FLT(),
     GIGOMEZ2(),
     HADAMARD(),
     HAGER1(),
@@ -504,6 +542,12 @@ constrained_minimisation_problems = (
     HS117(),
     # HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119(),
+    HYDROELL(),
+    # KIWCRESC(),  # TODO: Human review - constraint values differ by 2.0 from pycutest
+    # KISSING(),  # TODO: Human review - runtime issue (5.37x)
+    # KISSING2(),  # TODO: Human review needed
+    # KSIP(),  # TODO: Human review needed - needs vectorization, dtype promotion errors
+    LOOTSMA(),
     HIMMELBC(),
     HIMMELBD(),
     HIMMELBE(),
@@ -563,6 +607,7 @@ constrained_minimisation_problems = (
     READING9(),
     SIMPLLPA(),
     SIMPLLPB(),
+    # SINROSNB(),  # TODO: Human review - objective scaling issues
     SIPOW1(),
     SIPOW2(),
     # TAX13322(),  # TODO: Human review - complex objective structure

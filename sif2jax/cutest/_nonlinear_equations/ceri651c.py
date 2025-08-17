@@ -20,6 +20,13 @@ class CERI651C(AbstractNonlinearEquations):
     """ISIS Data fitting problem CERI651C given as an inconsistent set of
     nonlinear equations.
 
+    TODO: Human review needed
+    Current status:
+    - Starting values match SIF exactly ✓
+    - Constraint dimensions correct ✓
+    - Constraint values fail: numerical precision differences vs Fortran
+    - Same issues as other CERI problems with exp/erfc computations
+
     Fit: y = c + l * x + I*A*B/2(A+B) *
                [ exp( A*[A*S^2+2(x-X0)]/2) * erfc( A*S^2+(x-X0)/S*sqrt(2) ) +
                  exp( B*[B*S^2+2(x-X0)]/2) * erfc( B*S^2+(x-X0)/S*sqrt(2) ) ]

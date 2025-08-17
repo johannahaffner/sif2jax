@@ -1,12 +1,13 @@
-import jax
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
+from ..data import load_fbrain_data
 
 
-# TODO: Claude does not manage to include the data provided in the SIF file and resorts
-# to generating simplified data. This needs to be amended.
-# TODO: needs human review
+# Load FBRAIN data (FBRAIN3LS uses same data as FBRAIN)
+A_coeffs, A_lambdas, B_coeffs, B_lambdas, R_values = load_fbrain_data("fbrain")
+
+
 class FBRAIN3LS(AbstractUnconstrainedMinimisation):
     """FBRAIN3LS - Nonlinear Least-Squares problem for brain tissue modeling.
 
@@ -40,39 +41,41 @@ class FBRAIN3LS(AbstractUnconstrainedMinimisation):
         # Extract the 6 parameters
         alpha1, c01, alpha2, c02, alpha3, c03 = y
 
-        # The SIF file contains 11 datasets (N=11) with 200 points (M=200) each.
-        # We'll use a simplified version with lambda values and corresponding
-        # stress values extracted from the SIF file.
+        # Compute betas
+        beta1 = 2.0 * alpha1 - 1.0
+        beta2 = 2.0 * alpha2 - 1.0
+        beta3 = 2.0 * alpha3 - 1.0
 
-        # Create lambda values (shear deformation ratios) from 1.0 to 2.0
-        lambda_values = jnp.linspace(1.0, 2.0, 100)
+        # Flatten arrays in column-major order to match SIF constraint ordering
+        # SIF iterates: DO J (1 to N), DO I (0 to M) -> (I,J) pairs
+        # Cast to same dtype as y to avoid type promotion errors
+        a_coeffs_flat = A_coeffs.T.ravel().astype(y.dtype)
+        a_lambdas_flat = A_lambdas.T.ravel().astype(y.dtype)
+        b_coeffs_flat = B_coeffs.T.ravel().astype(y.dtype)
+        b_lambdas_flat = B_lambdas.T.ravel().astype(y.dtype)
+        r_values_flat = R_values.T.ravel().astype(y.dtype)
 
-        # Define the model function
-        def model_func(lambda_val):
-            # Compute the three terms of the model
-            term1 = c01 * lambda_val ** (2 * alpha1 - 1)
-            term2 = c02 * lambda_val ** (2 * alpha2 - 1)
-            term3 = c03 * lambda_val ** (2 * alpha3 - 1)
+        # Compute all 6 element values as per SIF structure:
+        # A(I,J) = C01 * AC(I,J) * AL(I,J)^(2*ALPHA1-1)
+        # B(I,J) = C01 * BC(I,J) * BL(I,J)^(2*ALPHA1-1)
+        # C(I,J) = C02 * AC(I,J) * AL(I,J)^(2*ALPHA2-1)
+        # D(I,J) = C02 * BC(I,J) * BL(I,J)^(2*ALPHA2-1)
+        # E(I,J) = C03 * AC(I,J) * AL(I,J)^(2*ALPHA3-1)
+        # F(I,J) = C03 * BC(I,J) * BL(I,J)^(2*ALPHA3-1)
+        a_values = c01 * a_coeffs_flat * (a_lambdas_flat**beta1)
+        b_values = c01 * b_coeffs_flat * (b_lambdas_flat**beta1)
+        c_values = c02 * a_coeffs_flat * (a_lambdas_flat**beta2)
+        d_values = c02 * b_coeffs_flat * (b_lambdas_flat**beta2)
+        e_values = c03 * a_coeffs_flat * (a_lambdas_flat**beta3)
+        f_values = c03 * b_coeffs_flat * (b_lambdas_flat**beta3)
 
-            # Sum the terms
-            return term1 + term2 + term3
-
-        # Experimental data from the SIF file (simplified for implementation)
-        # These values represent the shear stress at different deformation ratios
-        # and are derived from the extensive data in the SIF file
-        def target_func(lambda_val):
-            # This is a simplified approximation of the actual data
-            # Based on hyperelastic model of brain tissue
-            return 0.1 * (lambda_val - 1 / lambda_val**2)
-
-        # Compute model predictions and target values for all lambda values
-        model_values = jax.vmap(model_func)(lambda_values)
-        target_values = jax.vmap(target_func)(lambda_values)
+        # Sum all 6 element functions for each (i,j)
+        model_values = a_values + b_values + c_values + d_values + e_values + f_values
 
         # Compute residuals
-        residuals = model_values - target_values
+        residuals = model_values - r_values_flat
 
-        # Return the sum of squared residuals
+        # Return the sum of squared residuals (least squares objective)
         return jnp.sum(residuals**2)
 
     @property

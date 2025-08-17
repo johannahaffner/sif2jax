@@ -4,6 +4,9 @@ from .biggs5 import BIGGS5 as BIGGS5
 from .box2 import BOX2 as BOX2
 from .branin import BRANIN as BRANIN
 from .camel6 import CAMEL6 as CAMEL6
+from .chardis0 import CHARDIS0 as CHARDIS0
+
+# from .chardis02 import CHARDIS02 as CHARDIS02  # TODO: Human review needed
 from .cyclooctls import CYCLOOCTLS as CYCLOOCTLS
 from .degdiag import DEGDIAG as DEGDIAG
 from .degtrid import DEGTRID as DEGTRID
@@ -22,6 +25,8 @@ from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
 from .expquad import EXPQUAD as EXPQUAD
+from .fbrain2ls import FBRAIN2LS as FBRAIN2LS
+from .fbrainls import FBRAINLS as FBRAINLS
 from .hadamals import HADAMALS as HADAMALS
 from .hart6 import HART6 as HART6
 from .hatflda import HATFLDA as HATFLDA
@@ -38,6 +43,7 @@ from .hs45 import HS45 as HS45
 from .hs110 import HS110 as HS110
 
 # from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
+from .koebhelb import KOEBHELB as KOEBHELB
 from .levymont import LEVYMONT as LEVYMONT
 from .levymont5 import LEVYMONT5 as LEVYMONT5
 from .levymont6 import LEVYMONT6 as LEVYMONT6
@@ -98,6 +104,8 @@ bounded_minimisation_problems = (
     BOX2(),
     BRANIN(),
     CAMEL6(),
+    CHARDIS0(),
+    # CHARDIS02(),  # TODO: Human review needed
     CYCLOOCTLS(),
     DEGDIAG(),
     DEGTRID(),
@@ -116,6 +124,8 @@ bounded_minimisation_problems = (
     EXPLIN(),
     EXPLIN2(),
     EXPQUAD(),
+    FBRAIN2LS(),
+    FBRAINLS(),
     HADAMALS(),
     HART6(),
     HATFLDA(),
@@ -131,6 +141,7 @@ bounded_minimisation_problems = (
     HS38(),
     HS45(),
     HS110(),
+    KOEBHELB(),
     LEVYMONT(),
     LEVYMONT5(),
     LEVYMONT6(),

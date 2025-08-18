@@ -238,7 +238,6 @@ from ._constrained_minimisation import (
     HS73 as HS73,
     # HS74 as HS74,  # TODO: Human review - constraint Jacobian discrepancies
     # HS75 as HS75,  # TODO: Human review - same issues as HS74
-    HS76 as HS76,
     HS77 as HS77,
     HS78 as HS78,
     HS79 as HS79,
@@ -640,6 +639,8 @@ from ._quadratic_problems import (
     GOULDQP3 as GOULDQP3,
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
+    HS76 as HS76,
+    NASH as NASH,
     NCVXBQP1 as NCVXBQP1,
     NCVXBQP2 as NCVXBQP2,
     NCVXBQP3 as NCVXBQP3,
@@ -849,6 +850,8 @@ from ._unconstrained_minimisation import (
     MGH17SLS as MGH17SLS,
     # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
+    NCB20 as NCB20,
+    # NCB20B as NCB20B,  # TODO: Human review needed
     # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
     NONCVXU2 as NONCVXU2,
     NONCVXUN as NONCVXUN,
@@ -1469,6 +1472,9 @@ problems_dict = {
     "MARATOSB": MARATOSB(),
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
+    "NASH": NASH(),
+    "NCB20": NCB20(),
+    # "NCB20B": NCB20B(),  # TODO: Human review needed
     "NCVXBQP1": NCVXBQP1(),
     "NCVXBQP2": NCVXBQP2(),
     "NCVXBQP3": NCVXBQP3(),

@@ -3,7 +3,6 @@ import jax.numpy as jnp
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: human review required
 class DENSCHNE(AbstractUnconstrainedMinimisation):
     """Dennis-Schnabel problem E.
 

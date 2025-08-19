@@ -79,16 +79,19 @@ class DEGENQP(AbstractConstrainedQuadraticProblem):
         # For each triple (i,j,k) with i < j < k:
         # Range constraint 0 <= x_i + x_j + x_k <= 2
         # CUTEst treats these as single inequality constraints: x_i + x_j + x_k >= 0
-        ineq_constraints = jnp.zeros(self.m_ineq)
-        ineq_idx = 0
 
-        for i in range(n):
-            for j in range(i + 1, n):
-                for k in range(j + 1, n):
-                    sum_ijk = y[i] + y[j] + y[k]
-                    # Only the lower bound: sum >= 0
-                    ineq_constraints = ineq_constraints.at[ineq_idx].set(sum_ijk)
-                    ineq_idx += 1
+        # Generate all combinations (i,j,k) with i < j < k vectorized
+        indices = jnp.arange(n)
+        i_vals, j_vals, k_vals = jnp.meshgrid(indices, indices, indices, indexing="ij")
+
+        # Filter for i < j < k condition
+        valid_mask = (i_vals < j_vals) & (j_vals < k_vals)
+        i_idx = i_vals[valid_mask]
+        j_idx = j_vals[valid_mask]
+        k_idx = k_vals[valid_mask]
+
+        # Vectorized computation of x_i + x_j + x_k for all valid triples
+        ineq_constraints = y[i_idx] + y[j_idx] + y[k_idx]
 
         return eq_constraints, ineq_constraints
 

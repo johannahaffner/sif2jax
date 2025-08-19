@@ -75,9 +75,30 @@ Here are the sources relevant to problem implementations:
   # Suspected issues: [your analysis]
   # Resources needed: [what would help]
   ```
-  If a problem is flagged for human review, its imports should be commented out. 
-  Verify that it cannot be run anymore by trying to run the tests for it, these should then fail during collection with a clear error message. 
-  When commenting out a problem that is marked for human review, also try running `python -c import sif2jax` to confirm that the removal still permits importing the library as a whole and does not result in errata.
+  If a problem is flagged for human review, comment out ALL its imports following this MANDATORY checklist:
+  
+  **Step 1: Comment out the problem in ALL relevant locations:**
+  - In the module's `__init__.py` import statement (e.g., `sif2jax/cutest/_bounded_minimisation/__init__.py`)
+  - In the module's problems tuple in the same file
+  - In the main `sif2jax/cutest/__init__.py` import statement  
+  - In the `cutest_problems` dictionary in `sif2jax/cutest/__init__.py`
+  
+  **Step 2: Run THREE verification checks (ALL must pass):**
+  1. **Verify sif2jax imports successfully:**
+     ```bash
+     python -c "import sif2jax; print('✓ Import successful')"
+     ```
+  2. **Verify tests fail during collection with clear error:**
+     ```bash
+     sudo bash run_tests.sh tests/test_problem.py --test-case "PROBLEMNAME"
+     # Should output: "RuntimeError: Test case 'PROBLEMNAME' not found in sif2jax.cutest problems"
+     ```
+  3. **Verify problem is NOT in the problems tuple:**
+     ```python
+     python -c "import sif2jax; probs = [p.__class__.__name__ for p in sif2jax.problems]; assert 'PROBLEMNAME' not in probs; print('✓ Problem successfully excluded')"
+     ```
+  
+  **CRITICAL**: Skipping any verification step can cause expensive CI failures. All three checks MUST pass before committing.
 - **Checking results of CI runs**: Numbers of problems correspond to positions (indices) in `sif2jax.problems`. 
 
 ### 5. Commit Process

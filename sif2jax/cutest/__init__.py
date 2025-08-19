@@ -635,6 +635,7 @@ from ._quadratic_problems import (
     DUALC5 as DUALC5,
     DUALC8 as DUALC8,
     # EIGENA2 as EIGENA2,  # TODO: Human review needed
+    # GMNCASE1 as GMNCASE1,  # TODO: Human review needed - constraint ordering
     GOULDQP1 as GOULDQP1,
     GOULDQP2 as GOULDQP2,
     GOULDQP3 as GOULDQP3,
@@ -1597,6 +1598,7 @@ problems_dict = {
     "DUALC5": DUALC5(),
     "DUALC8": DUALC8(),
     # "EIGENA2": EIGENA2(),  # TODO: Human review needed
+    # "GMNCASE1": GMNCASE1(),  # TODO: Human review needed - constraint ordering
     "GOULDQP1": GOULDQP1(),
     "GOULDQP2": GOULDQP2(),
     "GOULDQP3": GOULDQP3(),

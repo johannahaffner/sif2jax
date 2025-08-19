@@ -144,6 +144,8 @@ from ._constrained_minimisation import (
     DECONVC as DECONVC,
     DEGENLPA as DEGENLPA,
     DEGENLPB as DEGENLPB,
+    DEMBO7 as DEMBO7,
+    DEMYMALO as DEMYMALO,
     DIPIGRI as DIPIGRI,
     # DEGTRIDL as DEGTRIDL,  # TODO: Human review - causes segfault
     DTOC1L as DTOC1L,
@@ -1362,6 +1364,8 @@ problems_dict = {
     "DECONVC": DECONVC(),
     "DEGENLPA": DEGENLPA(),
     "DEGENLPB": DEGENLPB(),
+    "DEMBO7": DEMBO7(),
+    "DEMYMALO": DEMYMALO(),
     "DIPIGRI": DIPIGRI(),
     "DTOC1L": DTOC1L(),
     "DTOC1NA": DTOC1NA(),

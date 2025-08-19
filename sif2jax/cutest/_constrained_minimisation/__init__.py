@@ -61,6 +61,8 @@ from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
 from .degenlpa import DEGENLPA as DEGENLPA
 from .degenlpb import DEGENLPB as DEGENLPB
+from .dembo7 import DEMBO7 as DEMBO7
+from .demymalo import DEMYMALO as DEMYMALO
 from .dipigri import DIPIGRI as DIPIGRI
 
 # TODO: DEGTRIDL needs human review - causes segfault despite correct implementation
@@ -453,6 +455,8 @@ constrained_minimisation_problems = (
     DECONVC(),
     DEGENLPA(),
     DEGENLPB(),
+    DEMBO7(),
+    DEMYMALO(),
     DIPIGRI(),
     DTOC1L(),
     DTOC1NA(),

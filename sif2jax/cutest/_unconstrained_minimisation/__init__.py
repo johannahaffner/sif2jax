@@ -1,3 +1,4 @@
+from .aircrftb import AIRCRFTB as AIRCRFTB
 from .akiva import AKIVA as AKIVA
 from .allinitu import ALLINITU as ALLINITU
 from .arglina import ARGLINA as ARGLINA
@@ -329,6 +330,7 @@ from .zangwil2 import ZANGWIL2 as ZANGWIL2
 
 
 unconstrained_minimisation_problems = (
+    AIRCRFTB(),
     AKIVA(),
     ALLINITU(),
     ARGLINA(),

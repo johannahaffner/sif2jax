@@ -673,6 +673,7 @@ from ._quadratic_problems import (
 # VANDERM3 as VANDERM3,  # TODO: Human review needed - originally had issues
 # VANDERM4 as VANDERM4,  # TODO: Human review needed - originally had issues
 from ._unconstrained_minimisation import (
+    AIRCRFTB as AIRCRFTB,
     AKIVA as AKIVA,
     ALLINITU as ALLINITU,
     ARGLINA as ARGLINA,
@@ -1222,6 +1223,7 @@ problems_dict = {
     "LUKVLI16": LUKVLI16(),
     "LUKVLI17": LUKVLI17(),
     "LUKVLI18": LUKVLI18(),
+    "AIRCRFTB": AIRCRFTB(),
     "AKIVA": AKIVA(),
     "ALLINITU": ALLINITU(),
     "ARGLINA": ARGLINA(),

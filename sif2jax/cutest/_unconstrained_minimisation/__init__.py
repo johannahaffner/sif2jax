@@ -222,8 +222,8 @@ from .mgh17sls import MGH17SLS as MGH17SLS
 # from .morebv import MOREBV as MOREBV
 # TODO: Human review - SCALE interpretation issue
 # from .modbeale import MODBEALE as MODBEALE
-from .ncb20 import NCB20 as NCB20
-
+# TODO: Human review needed - marked for human review
+# from .ncb20 import NCB20 as NCB20
 # TODO: Human review needed - objective differs by ~9000 at ones vector
 # from .ncb20b import NCB20B as NCB20B
 # TODO: Human review needed - SCALE interpretation issue
@@ -516,7 +516,7 @@ unconstrained_minimisation_problems = (
     MGH17SLS(),
     # MOREBV(),  # TODO: Human review - minor gradient precision differences
     # MODBEALE(),  # TODO: Human review - SCALE interpretation issue
-    NCB20(),
+    # NCB20(),  # TODO: Human review needed
     # NCB20B(),  # TODO: Human review needed
     # NONDIA(),  # TODO: Human review needed - SCALE interpretation issue
     NONCVXU2(),

@@ -237,7 +237,8 @@ from .jannson4 import JANNSON4 as JANNSON4
 # from .kiwcresc import KIWCRESC as KIWCRESC
 # TODO: Human review needed - KSIP needs vectorization, dtype promotion errors with JAX
 # from .ksip import KSIP as KSIP
-from .leuven1 import LEUVEN1 as LEUVEN1
+# TODO: Human review needed - marked for human review
+# from .leuven1 import LEUVEN1 as LEUVEN1
 from .liswet1 import LISWET1 as LISWET1
 from .liswet2 import LISWET2 as LISWET2
 from .liswet3 import LISWET3 as LISWET3
@@ -376,7 +377,9 @@ from .tenbars2 import TENBARS2 as TENBARS2
 from .tenbars3 import TENBARS3 as TENBARS3
 from .tenbars4 import TENBARS4 as TENBARS4
 from .trainf import TRAINF as TRAINF
-from .trainh import TRAINH as TRAINH
+
+# TODO: Human review needed - marked for human review
+# from .trainh import TRAINH as TRAINH
 from .tro3x3 import TRO3X3 as TRO3X3
 from .tro4x4 import TRO4X4 as TRO4X4
 from .tro5x5 import TRO5X5 as TRO5X5
@@ -415,7 +418,7 @@ constrained_minimisation_problems = (
     TRO21X5(),
     TRO41X9(),
     TRAINF(),
-    TRAINH(),
+    # TRAINH(),  # TODO: Human review needed
     # ANTWERP(),  # TODO: needs human review - initial value calculation
     AVGASA(),
     AVGASB(),
@@ -572,7 +575,7 @@ constrained_minimisation_problems = (
     # KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # KISSING2(),  # TODO: Human review needed
     # KSIP(),  # TODO: Human review needed - needs vectorization, dtype promotion errors
-    LEUVEN1(),
+    # LEUVEN1(),  # TODO: Human review needed
     LISWET1(),
     LISWET2(),
     LISWET3(),

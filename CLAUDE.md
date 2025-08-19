@@ -43,6 +43,7 @@ Here are the sources relevant to problem implementations:
     a subclass of `AbstractConstrainedMinimisation` with no changes to the interface.
   - `AbstractNonlinearEquations`: provides default constant objective that may be 
     overridden; feasibility problem with constraints
+- **Vectorization First**: For problems with n > 200 dimensions, ALWAYS write vectorized implementations from the start. Tests will timeout on non-vectorized code for large problems. Use JAX operations (vmap, scan, etc.) instead of Python loops.
 - **Types**: Never hard-code dtypes. Use e.g. y.dtype if one needs to be specified
 - **Style**: Match existing code patterns, imports, conventions
 - **Fields**: Declare all dataclass fields (Equinox.Module inheritance)
@@ -57,8 +58,6 @@ Here are the sources relevant to problem implementations:
 ### 4. Testing Requirements
 - **Container Required**: Tests need pycutest/Fortran libs. These are available through the bash script. **ALWAYS USE THIS SCRIPT!**. Use it with `sudo bash run_tests.sh --test-case "PROBLEM1,PROBLEM2"`, look up other handy commands in the "Quick Reference" section above.
 - **Test After EVERY Change**: Even minor edits
-- **Batch Testing**: Full test suite will result in timeout in devcontainer, test problems individually or in small batches instead. 
-- **Test Timeouts**: If a problem is poorly vectorised, its tests may time out. In this case, vectorise the problem before trying again.
 - **Debug Order**: When fixing test failures, follow this strict priority order (matches test order in tests/test_problem.py):
   1. **Fix imports** - Ensure the problem can be imported
   2. **Fix class name** - Must match SIF problem name
@@ -99,6 +98,11 @@ Run `git diff main` and summarize the diff, not just latest commits.
 
 ## Performance Target
 JAX implementation must be within 5x of Fortran runtime. For larger problems JAX is expected to be faster.
-You can use for-loops to write an initial implementation that passes the tests, but please convert to a vectorised implementation once you have achieved this step.
-Production-ready problems should always be vectorised.
+**Critical**: For problems with n > 200, start with vectorized implementations. Non-vectorized code will timeout during testing.
+Production-ready problems must always be vectorised.
 If a sequential operation is needed, use a jax-native option such as a scan.
+Common vectorization patterns:
+- Replace Python for-loops with jnp operations (sum, dot, vmap)
+- Use array slicing and broadcasting instead of element-wise operations
+- Batch similar computations together
+- For problems with repeated structure, identify the pattern and vectorize it

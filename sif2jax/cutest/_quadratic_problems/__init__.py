@@ -43,6 +43,7 @@ from .gouldqp3 import GOULDQP3 as GOULDQP3
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
 from .hs76 import HS76 as HS76
+from .nash import NASH as NASH
 from .ncvxbqp1 import NCVXBQP1 as NCVXBQP1
 from .ncvxbqp2 import NCVXBQP2 as NCVXBQP2
 from .ncvxbqp3 import NCVXBQP3 as NCVXBQP3
@@ -121,6 +122,7 @@ constrained_quadratic_problems = (
     HATFLDH(),
     HS44NEW(),
     HS76(),
+    NASH(),
     NCVXQP1(),
     NCVXQP2(),
     NCVXQP3(),

@@ -53,6 +53,8 @@ from ._bounded_minimisation import (
     LEVYMONT9 as LEVYMONT9,
     LEVYMONT10 as LEVYMONT10,
     LOGROS as LOGROS,
+    # NOBNDTOR as NOBNDTOR,  # TODO: Human review needed - complex bounds logic
+    # NONSCOMP as NONSCOMP,  # TODO: Human review needed - GROUP TYPE L2
     PALMER1 as PALMER1,
     PALMER1A as PALMER1A,
     # PALMER1B as PALMER1B,  # TODO: Fix Hessian issues
@@ -243,7 +245,6 @@ from ._constrained_minimisation import (
     HS73 as HS73,
     # HS74 as HS74,  # TODO: Human review - constraint Jacobian discrepancies
     # HS75 as HS75,  # TODO: Human review - same issues as HS74
-    HS76 as HS76,
     HS77 as HS77,
     HS78 as HS78,
     HS79 as HS79,
@@ -661,6 +662,8 @@ from ._quadratic_problems import (
     GOULDQP3 as GOULDQP3,
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
+    HS76 as HS76,
+    NASH as NASH,
     NCVXBQP1 as NCVXBQP1,
     NCVXBQP2 as NCVXBQP2,
     NCVXBQP3 as NCVXBQP3,
@@ -870,7 +873,9 @@ from ._unconstrained_minimisation import (
     MGH17SLS as MGH17SLS,
     # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
-    # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
+    NCB20 as NCB20,
+    # NCB20B as NCB20B,  # TODO: Human review needed
+    # NONDIA as NONDIA,  # TODO: Human review needed - SCALE interpretation issue
     NONCVXU2 as NONCVXU2,
     NONCVXUN as NONCVXUN,
     NONDQUAR as NONDQUAR,
@@ -1097,6 +1102,7 @@ problems_dict = {
     "LEVYMONT9": LEVYMONT9(),
     "LEVYMONT10": LEVYMONT10(),
     "LOGROS": LOGROS(),
+    # "NOBNDTOR": NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     "HS111": HS111(),
     "HS112": HS112(),
     "HS113": HS113(),
@@ -1507,7 +1513,12 @@ problems_dict = {
     "MARATOSB": MARATOSB(),
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
+    "NASH": NASH(),
+    "NCB20": NCB20(),
+    # "NCB20B": NCB20B(),  # TODO: Human review needed
+    # "NONDIA": NONDIA(),  # TODO: Human review needed - SCALE interpretation issue
     "NCVXBQP1": NCVXBQP1(),
+    # "NONSCOMP": NONSCOMP(),  # TODO: Human review needed - GROUP TYPE L2
     "NCVXBQP2": NCVXBQP2(),
     "NCVXBQP3": NCVXBQP3(),
     "NCVXQP1": NCVXQP1(),
@@ -1519,7 +1530,6 @@ problems_dict = {
     "NCVXQP7": NCVXQP7(),
     "NCVXQP8": NCVXQP8(),
     "NCVXQP9": NCVXQP9(),
-    # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),
     "NONDQUAR": NONDQUAR(),

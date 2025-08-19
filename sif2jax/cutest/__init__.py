@@ -501,6 +501,7 @@ from ._nonlinear_equations import (
     HS25NE as HS25NE,
     # HYDCAR6 as HYDCAR6,  # TODO: Human review needed
     HYPCIR as HYPCIR,
+    INTEGREQ as INTEGREQ,
     INTEQNE as INTEQNE,
     JENSMPNE as JENSMPNE,
     JUDGENE as JUDGENE,
@@ -1722,6 +1723,7 @@ problems_dict = {
     "HS2NE": HS2NE(),
     "HS25NE": HS25NE(),
     # "HYDCAR6": HYDCAR6(),  # TODO: Human review needed
+    "INTEGREQ": INTEGREQ(),
     "INTEQNE": INTEQNE(),
     "JENSMPNE": JENSMPNE(),
     "JUDGENE": JUDGENE(),

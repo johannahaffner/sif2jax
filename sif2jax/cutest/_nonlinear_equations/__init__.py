@@ -125,6 +125,7 @@ from .hs25ne import HS25NE as HS25NE
 # TODO: Human review needed - complex scaling interactions
 # from .hydcar6 import HYDCAR6 as HYDCAR6
 from .hypcir import HYPCIR as HYPCIR
+from .integreq import INTEGREQ as INTEGREQ
 from .inteqne import INTEQNE as INTEQNE
 from .jensmpne import JENSMPNE as JENSMPNE
 from .judgene import JUDGENE as JUDGENE
@@ -359,6 +360,7 @@ nonlinear_equations_problems = (
     HS2NE(),
     HS25NE(),
     # HYDCAR6(),  # TODO: Human review needed - complex scaling interactions
+    INTEGREQ(),
     INTEQNE(),
     JENSMPNE(),
     JUDGENE(),

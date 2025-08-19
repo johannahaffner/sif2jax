@@ -61,6 +61,8 @@ from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
 from .degenlpa import DEGENLPA as DEGENLPA
 from .degenlpb import DEGENLPB as DEGENLPB
+from .degenqp import DEGENQP as DEGENQP
+from .degenqpc import DEGENQPC as DEGENQPC
 from .dembo7 import DEMBO7 as DEMBO7
 from .demymalo import DEMYMALO as DEMYMALO
 from .dipigri import DIPIGRI as DIPIGRI
@@ -455,6 +457,8 @@ constrained_minimisation_problems = (
     DECONVC(),
     DEGENLPA(),
     DEGENLPB(),
+    DEGENQP(),
+    DEGENQPC(),
     DEMBO7(),
     DEMYMALO(),
     DIPIGRI(),

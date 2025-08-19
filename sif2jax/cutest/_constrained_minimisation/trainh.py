@@ -11,7 +11,7 @@ from the beginning of a track to its end in a given time. The train is slowed
 down by drag (assumed to be quadratic in the velocity). The track follows the
 slope of a hill with the geometry given by:
 
-g(x) = -1/2(a_1 + a_ns) + 1/pi * SUM_{i=1}^{ns-1} (s_{i+1} - s_i) *
+g(x) = -1/2(a_1 + a_ns) + 1/pi * SUM_{i=1}^{ns-1} (s_{i+1} - s_i) * 
        arctan((x - z_i)/eps)
 
 where z_i are breakpoints between track sections, s_i are slopes on sections,

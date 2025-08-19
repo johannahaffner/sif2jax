@@ -384,6 +384,7 @@ from ._constrained_minimisation import (
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     READING9 as READING9,
+    # RDW2D51F as RDW2D51F,  # TODO: Human review needed
     ROSEPETAL as ROSEPETAL,
     ROSEPETAL2 as ROSEPETAL2,
     SIMPLLPA as SIMPLLPA,
@@ -1194,6 +1195,7 @@ problems_dict = {
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     "READING9": READING9(),
+    # "RDW2D51F": RDW2D51F(),  # TODO: Human review needed
     "ROSEPETAL": ROSEPETAL(),
     "ROSEPETAL2": ROSEPETAL2(),
     "SIMPLLPA": SIMPLLPA(),

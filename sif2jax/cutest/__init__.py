@@ -273,6 +273,8 @@ from ._constrained_minimisation import (
     # HS118 as HS118,  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119 as HS119,
     HYDROELL as HYDROELL,
+    # JANNSON3 as JANNSON3,  # TODO: Human review - Jacobian tests hang
+    JANNSON4 as JANNSON4,
     # KISSING as KISSING,  # TODO: Human review - runtime issue (5.37x)
     # KISSING2 as KISSING2,  # TODO: Human review needed
     # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
@@ -1112,6 +1114,8 @@ problems_dict = {
     # "HS118": HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     "HS119": HS119(),
     "HYDROELL": HYDROELL(),
+    # "JANNSON3": JANNSON3(),  # TODO: Human review - Jacobian tests hang
+    "JANNSON4": JANNSON4(),
     # "KISSING": KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # "KISSING2": KISSING2(),  # TODO: Human review needed
     # "KIWCRESC": KIWCRESC(),  # TODO: Human review - constraints differ by 2.0

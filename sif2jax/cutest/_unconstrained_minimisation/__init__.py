@@ -260,6 +260,8 @@ from .price4 import PRICE4 as PRICE4
 # TODO: Human review - objective off by factor of 4.15
 # from .powellsg import POWELLSG as POWELLSG
 from .quartc import QUARTC as QUARTC
+from .rat42ls import RAT42LS as RAT42LS
+from .rat43ls import RAT43LS as RAT43LS
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .s308 import S308 as S308
@@ -543,6 +545,8 @@ unconstrained_minimisation_problems = (
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     PRICE3(),
     PRICE4(),
+    RAT42LS(),
+    RAT43LS(),
     QUARTC(),
     ROSENBR(),
     ROSZMAN1LS(),

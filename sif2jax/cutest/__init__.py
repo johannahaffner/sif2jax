@@ -607,6 +607,8 @@ from ._nonlinear_equations import (
     POWELLSE as POWELLSE,
     POWELLSQ as POWELLSQ,
     POWERSUMNE as POWERSUMNE,
+    RAT42 as RAT42,
+    RAT43 as RAT43,
     # RES as RES,  # TODO: Human review needed - mixed constraint types
     SANTA as SANTA,
     SINVALNE as SINVALNE,
@@ -908,6 +910,8 @@ from ._unconstrained_minimisation import (
     PRICE3 as PRICE3,
     PRICE4 as PRICE4,
     QUARTC as QUARTC,
+    RAT42LS as RAT42LS,
+    RAT43LS as RAT43LS,
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
     S308 as S308,
@@ -1578,6 +1582,8 @@ problems_dict = {
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "PRICE3": PRICE3(),
     "PRICE4": PRICE4(),
+    "RAT42LS": RAT42LS(),
+    "RAT43LS": RAT43LS(),
     "QUARTC": QUARTC(),
     "ROSENBR": ROSENBR(),
     "DIAGIQB": DIAGIQB(),
@@ -1884,6 +1890,8 @@ problems_dict = {
     "PFIT3LS": PFIT3LS(),
     "PFIT4LS": PFIT4LS(),
     "POWERSUMNE": POWERSUMNE(),
+    "RAT42": RAT42(),
+    "RAT43": RAT43(),
     # "RES": RES(),  # TODO: Human review needed - mixed constraint types
     "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),

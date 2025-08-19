@@ -1,51 +1,66 @@
+"""DENSCHNC problem from CUTEst collection.
+
+Classification: SUR2-AN-2-0
+
+Source: an example problem (p. 98) in
+J.E. Dennis and R.B. Schnabel,
+"Numerical Methods for Unconstrained Optimization and Nonlinear Equations",
+Prentice-Hall, Englewood Cliffs, 1983.
+
+SIF input: Ph. Toint, Nov 1990.
+"""
+
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: human review required
 class DENSCHNC(AbstractUnconstrainedMinimisation):
-    """Dennis-Schnabel problem C.
+    """DENSCHNC problem from CUTEst collection.
 
-    This is a 2-dimensional unconstrained optimization problem with
-    squares of variables and an exponential term.
-
-    Source: Problem from "Numerical Methods for Unconstrained Optimization
-    and Nonlinear Equations" by J.E. Dennis and R.B. Schnabel, 1983.
-
-    Classification: SUR2-AN-2-0
+    Unconstrained minimization with 2 variables.
+    Sum of squares problem.
     """
 
+    n: int = 2
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    n: int = 2  # Number of variables
-
-    def objective(self, y, args):
-        del args
-        x1, x2 = y
-
-        # From AMPL model: (-2+x[1]^2+x[2]^2)^2 + (-2+exp(x[1]-1)+x[2]^3)^2
-        term1 = (-2.0 + x1**2 + x2**2) ** 2
-        term2 = (-2.0 + jnp.exp(x1 - 1.0) + x2**3) ** 2
-
-        return term1 + term2
-
     @property
     def y0(self):
-        # Initial values from AMPL model: x[1]=2, x[2]=3
+        """Initial guess."""
         return jnp.array([2.0, 3.0])
+
+    def objective(self, y, args):
+        """Compute the objective function.
+
+        The objective is a sum of squares:
+        (x1^2 + x2^2 - 2)^2 + (exp(x1 - 1) + x2^3 - 2)^2
+        """
+        del args
+        x1, x2 = y[0], y[1]
+
+        # A group: (x1^2 + x2^2 - 2)^2
+        term_a = (x1**2 + x2**2 - 2.0) ** 2
+
+        # B group: (exp(x1 - 1) + x2^3 - 2)^2
+        term_b = (jnp.exp(x1 - 1.0) + x2**3 - 2.0) ** 2
+
+        return term_a + term_b
 
     @property
     def args(self):
+        """No additional arguments."""
         return None
 
     @property
     def expected_result(self):
-        # Solution depends on solving the system of equations
-        return None
+        """Optimal point - approximate solution."""
+        # For this problem, the exact solution requires solving a system of equations
+        # The minimum is at a point where both squared terms are 0
+        return None  # Exact solution not provided in SIF file
 
     @property
     def expected_objective_value(self):
-        # The minimum value is 0 when both terms equal 0
+        """Optimal objective value."""
         return jnp.array(0.0)

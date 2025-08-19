@@ -1,0 +1,111 @@
+"""DEGENQP problem from CUTEst collection.
+
+Classification: QLR2-AN-V-V
+
+A simple degenerate convex quadratic program with a large number of constraints.
+
+Source: Nick Gould, February 2000
+Correction by S. Gratton & Ph. Toint, May 2024
+
+SIF input: Nick Gould, February 2000
+"""
+
+import jax.numpy as jnp
+
+from ..._problem import AbstractConstrainedQuadraticProblem
+
+
+class DEGENQP(AbstractConstrainedQuadraticProblem):
+    """DEGENQP problem from CUTEst collection.
+
+    Quadratic programming problem with O(N^3) constraints.
+    Fixed size: N=10 (default from SIF)
+    """
+
+    n: int = 10  # Number of variables
+    m_eq: int = 5  # Number of equality constraints (n // 2)
+    m_ineq: int = 120  # Number of inequality constraints (C(n,3))
+    y0_iD: int = 0
+    provided_y0s: frozenset = frozenset({0})
+
+    @property
+    def y0(self):
+        """Initial guess - all variables set to 2.0."""
+        return jnp.full(self.n, 2.0)
+
+    @property
+    def bounds(self):
+        """Variable bounds: 0 <= x_i <= 1."""
+        lower = jnp.zeros(self.n)
+        upper = jnp.ones(self.n)
+        return lower, upper
+
+    def objective(self, y, args):
+        """Quadratic objective function.
+
+        f(x) = sum_i (i/n) * x_i^2 / 2 + x_i
+        """
+        del args
+        n = self.n
+        indices = jnp.arange(1, n + 1)
+        coeffs = indices / n
+
+        # Quadratic term: (i/n) * x_i^2 / 2
+        quad_term = 0.5 * jnp.sum(coeffs * y**2)
+
+        # Linear term: sum(x_i)
+        linear_term = jnp.sum(y)
+
+        return quad_term + linear_term
+
+    def constraint(self, y):
+        """Returns the constraints on the variable y.
+
+        Equality constraints: x_i - x_{i+1} = 0 for odd i
+        Inequality constraints: 0 <= x_i + x_j + x_k <= 2 for i < j < k
+        """
+        n = self.n
+
+        # Equality constraints
+        eq_constraints = jnp.zeros(self.m_eq)
+        eq_idx = 0
+        for i in range(
+            0, n - 1, 2
+        ):  # i = 0, 2, 4, ... (corresponding to x_1, x_3, x_5, ...)
+            eq_constraints = eq_constraints.at[eq_idx].set(y[i] - y[i + 1])
+            eq_idx += 1
+
+        # Inequality constraints (range constraints)
+        # For each triple (i,j,k) with i < j < k:
+        # Range constraint 0 <= x_i + x_j + x_k <= 2
+        # CUTEst treats these as single inequality constraints: x_i + x_j + x_k >= 0
+
+        # Generate all combinations (i,j,k) with i < j < k vectorized
+        indices = jnp.arange(n)
+        i_vals, j_vals, k_vals = jnp.meshgrid(indices, indices, indices, indexing="ij")
+
+        # Filter for i < j < k condition
+        valid_mask = (i_vals < j_vals) & (j_vals < k_vals)
+        i_idx = i_vals[valid_mask]
+        j_idx = j_vals[valid_mask]
+        k_idx = k_vals[valid_mask]
+
+        # Vectorized computation of x_i + x_j + x_k for all valid triples
+        ineq_constraints = y[i_idx] + y[j_idx] + y[k_idx]
+
+        return eq_constraints, ineq_constraints
+
+    @property
+    def args(self):
+        """No additional arguments."""
+        return None
+
+    @property
+    def expected_result(self):
+        """Optimal solution not provided in SIF file."""
+        return None
+
+    @property
+    def expected_objective_value(self):
+        """Optimal objective value not provided in SIF file."""
+        return None

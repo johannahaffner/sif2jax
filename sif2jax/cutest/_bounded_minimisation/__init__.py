@@ -12,6 +12,8 @@ from .cyclooctls import CYCLOOCTLS as CYCLOOCTLS
 from .degdiag import DEGDIAG as DEGDIAG
 from .degtrid import DEGTRID as DEGTRID
 from .degtrid2 import DEGTRID2 as DEGTRID2
+from .devgla1b import DEVGLA1B as DEVGLA1B
+from .devgla2b import DEVGLA2B as DEVGLA2B
 from .dgospec import DGOSPEC as DGOSPEC
 from .diagiqb import DIAGIQB as DIAGIQB
 from .diagiqe import DIAGIQE as DIAGIQE
@@ -141,6 +143,8 @@ bounded_minimisation_problems = (
     CYCLOOCTLS(),
     DEGDIAG(),
     DEGTRID(),
+    DEVGLA1B(),
+    DEVGLA2B(),
     DIAGIQB(),
     DIAGIQE(),
     DIAGIQT(),

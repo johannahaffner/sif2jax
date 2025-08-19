@@ -59,6 +59,9 @@ from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
 from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
+from .degenlpa import DEGENLPA as DEGENLPA
+from .degenlpb import DEGENLPB as DEGENLPB
+from .dipigri import DIPIGRI as DIPIGRI
 
 # TODO: DEGTRIDL needs human review - causes segfault despite correct implementation
 # from .degtridl import DEGTRIDL as DEGTRIDL
@@ -448,6 +451,9 @@ constrained_minimisation_problems = (
     CSFI2(),
     DALLASS(),
     DECONVC(),
+    DEGENLPA(),
+    DEGENLPB(),
+    DIPIGRI(),
     DTOC1L(),
     DTOC1NA(),
     DTOC1NB(),

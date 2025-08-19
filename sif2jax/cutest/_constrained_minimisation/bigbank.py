@@ -220,26 +220,36 @@ class BIGBANK(AbstractConstrainedMinimisation):
         """Initial point from START POINT section."""
         x0 = jnp.ones(self.n_var) * 0.1  # Default value
 
-        # Set specific non-default values
-        x0 = x0.at[0].set(0.0)  # X1
-        x0 = x0.at[2].set(0.0)  # X3
-        x0 = x0.at[4].set(0.0)  # X5
-        x0 = x0.at[6].set(0.0)  # X7
-        x0 = x0.at[13].set(0.0)  # X14
-        x0 = x0.at[26].set(0.0)  # X27
-        x0 = x0.at[36].set(0.0)  # X37
-        x0 = x0.at[37].set(4.8)  # X38
-        x0 = x0.at[38].set(0.7)  # X39
-        x0 = x0.at[52].set(0.0)  # X53
-        x0 = x0.at[55].set(0.0)  # X56
-        x0 = x0.at[56].set(2.8)  # X57
-        x0 = x0.at[57].set(0.2)  # X58
-        x0 = x0.at[58].set(4.4)  # X59
-        x0 = x0.at[61].set(0.2)  # X62
-        x0 = x0.at[63].set(0.2)  # X64
-        x0 = x0.at[64].set(0.0)  # X65
+        # Set specific non-default values using vectorized updates
+        # Define indices and values for efficient batch update
+        indices = jnp.array(
+            [0, 2, 4, 6, 13, 26, 36, 37, 38, 52, 55, 56, 57, 58, 61, 63, 64]
+        )
+        values = jnp.array(
+            [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.8,
+                0.7,
+                0.0,
+                0.0,
+                2.8,
+                0.2,
+                4.4,
+                0.2,
+                0.2,
+                0.0,
+            ]
+        )
 
-        # Continue with more initial values as in SIF file
+        # Apply all updates at once
+        x0 = x0.at[indices].set(values)
+
         return x0
 
     @property
@@ -281,10 +291,13 @@ class BIGBANK(AbstractConstrainedMinimisation):
             170,
         ]
 
-        for idx in fixed_vars:
-            if idx < self.n_var:
-                lower = lower.at[idx].set(0.0)
-                upper = upper.at[idx].set(0.0)
+        # Vectorized bounds update for fixed variables
+        fixed_vars_array = jnp.array(fixed_vars)
+        valid_mask = fixed_vars_array < self.n_var
+        valid_fixed_vars = fixed_vars_array[valid_mask]
+
+        lower = lower.at[valid_fixed_vars].set(0.0)
+        upper = upper.at[valid_fixed_vars].set(0.0)
 
         return lower, upper
 
@@ -294,18 +307,24 @@ class BIGBANK(AbstractConstrainedMinimisation):
         # For each node i: sum of incoming flows - sum of outgoing flows = 0
 
         arcs = self._setup_arcs()
-        equality_constraints = []
 
-        for node in range(self.n_con):
-            constraint = 0.0
-            for arc_idx, (from_node, to_node) in enumerate(arcs):
-                if to_node == node:
-                    constraint += y[arc_idx]  # Incoming flow
-                if from_node == node:
-                    constraint -= y[arc_idx]  # Outgoing flow
-            equality_constraints.append(constraint)
+        # Vectorized constraint computation using sparse matrix approach
+        # Build incidence matrix: A[node, arc] = +1 if arc goes into node, -1 if out
+        from_nodes = arcs[:, 0]
+        to_nodes = arcs[:, 1]
 
-        return jnp.array(equality_constraints), None
+        # Create constraint matrix using vectorized operations
+        constraints = jnp.zeros(self.n_con)
+
+        # For each arc, add +1 to destination node and -1 to source node
+        arc_indices = jnp.arange(len(arcs))
+
+        # Sum incoming flows (to_nodes)
+        constraints = constraints.at[to_nodes].add(y[arc_indices])
+        # Subtract outgoing flows (from_nodes)
+        constraints = constraints.at[from_nodes].add(-y[arc_indices])
+
+        return constraints, None
 
     @property
     def expected_result(self):

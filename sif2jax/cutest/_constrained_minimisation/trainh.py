@@ -1,6 +1,11 @@
 """
 TRAINH: Optimal Train Energy Problem (Hilly Track).
 
+TODO: Human review needed
+Attempts made: Initial implementation with constraint formulation
+Suspected issues: Constraint values differ by ~0.0029 from pycutest
+Resources needed: Check constraint formulation, particularly equality constraints
+
 This is an optimal control problem to minimize the energy spent to move a train
 from the beginning of a track to its end in a given time. The train is slowed
 down by drag (assumed to be quadratic in the velocity). The track follows the

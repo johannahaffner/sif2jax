@@ -7,6 +7,11 @@ from ..._problem import AbstractUnconstrainedMinimisation
 class NCB20(AbstractUnconstrainedMinimisation):
     """A banded problem with semi-bandwidth 20.
 
+    TODO: Human review needed
+    Attempts made: Initial implementation
+    Suspected issues: Test failures detected but specific issue not captured
+    Resources needed: Debug objective function or starting point
+
     This problem exhibits frequent negative curvature in the exact Hessian.
 
     Source:

@@ -4,15 +4,11 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class NONDIA(AbstractUnconstrainedMinimisation):
-    """
-    NONDIA problem.
-
-    The Shanno nondiagonal extension of Rosenbrock function.
+    """The Shanno nondiagonal extension of Rosenbrock function.
 
     Source:
     D. Shanno,
-    " On Variable Metric Methods for Sparse Hessians II: the New
-    Method",
+    "On Variable Metric Methods for Sparse Hessians II: the New Method",
     MIS Tech report 27, University of Arizona (Tucson, UK), 1978.
 
     See also Buckley #37 (p. 76) and Toint #15.
@@ -21,46 +17,48 @@ class NONDIA(AbstractUnconstrainedMinimisation):
 
     classification SUR2-AN-V-0
 
-    TODO: Human review needed
-    Attempts made: Multiple interpretations of SCALE factor in SIF
-    Suspected issues: Incorrect understanding of how SCALE interacts with group
-                      coefficients
-    The objective/gradient values are off by a factor of ~10,000
+    TODO: Human review needed - SCALE interpretation issue
+    The objective/gradient values are off by a factor of ~10,000.
+    Suspected issue: Incorrect understanding of how SCALE interacts
+    with GROUP TYPE L2 and element contributions.
     """
 
+    n: int = 5000  # Default problem size
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
-    n: int = 5000
 
     def objective(self, y, args):
+        """Shanno nondiagonal extension objective - vectorized.
+
+        The objective has a special structure:
+        - Group SQ(1): (x[0] - 1)^2
+        - Groups SQ(i) for i=2..n with SCALE and GROUP TYPE L2
+
+        Testing: SCALE might apply only to linear coefficients.
+        """
         del args
-        n = self.n
 
-        # First squared term
-        # Group SQ(1) has X(1) with coefficient 1.0 and constant -1.0
-        # L2 squares: (x[0] - 1)^2
-        sq1 = (y[0] - 1.0) ** 2
+        # First term: (x[0] - 1)^2
+        obj = (y[0] - 1.0) ** 2
 
-        # Remaining squared terms for i=2 to n
-        # Groups SQ(i) for i>=2 all have x[0] with coefficient 1.0,
-        # plus element -x[i-1]^2, scaled by 0.01
-        if n > 1:
-            # Elements are -x[i-1]^2 for i=2 to n (0-based: indices 0 to n-2)
-            elements = -(y[0 : n - 1] ** 2)
-            # Group values before squaring: x[0] + element
-            group_values = y[0] + elements
-            # L2 squares, then scale by 0.01
-            sq_terms = 0.01 * group_values**2
-            sq_sum = jnp.sum(sq_terms)
-        else:
-            sq_sum = 0.0
+        # Remaining terms for i=2..n
+        # If SCALE applies only to linear coefficients (not elements):
+        # Linear part: 0.01 * x[0]
+        # Element: -x[i-1]^2
+        # Group value: 0.01 * x[0] - x[i-1]^2
+        # After L2: (0.01 * x[0] - x[i-1]^2)^2
+        if self.n > 1:
+            x_prev = y[: self.n - 1]  # x[0] to x[n-2]
+            # Scale only on linear coefficient
+            terms = (0.01 * y[0] - x_prev**2) ** 2
+            obj += jnp.sum(terms)
 
-        return sq1 + sq_sum
+        return obj
 
     @property
     def y0(self):
-        # Starting point: all variables at -1.0
-        return -jnp.ones(self.n)
+        """Initial guess - all -1.0."""
+        return jnp.full(self.n, -1.0)
 
     @property
     def args(self):
@@ -68,15 +66,10 @@ class NONDIA(AbstractUnconstrainedMinimisation):
 
     @property
     def expected_result(self):
-        # Solution not provided in detail in SIF file
-        # But noted that least square problems are bounded below by zero
-        # and solution value is 0.0
-        return None
+        """Solution: all ones."""
+        return jnp.ones(self.n)
 
     @property
     def expected_objective_value(self):
-        # Solution value
+        """Expected objective value at solution is 0.0."""
         return jnp.array(0.0)
-
-    def num_variables(self):
-        return self.n

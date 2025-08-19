@@ -1,6 +1,6 @@
 """DMN15333 - Diamond Light Source powder diffraction data fitting (3-parameter).
 
-A nonlinear equations problem fitting X-ray diffraction data using 
+A nonlinear equations problem fitting X-ray diffraction data using
 3-parameter Lorentzian peaks (weight, width, position).
 
 Source: Data from Aaron Parsons, I14: Hard X-ray Nanoprobe,

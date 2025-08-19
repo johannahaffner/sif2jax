@@ -37,12 +37,15 @@ from .dualc8 import DUALC8 as DUALC8
 
 # TODO: Human review needed - same constraint issues as EIGENA
 # from .eigena2 import EIGENA2 as EIGENA2
+# TODO: Human review needed - constraint ordering vs pycutest (15/27 tests passing)
+# from .gmncase1 import GMNCASE1 as GMNCASE1
 from .gouldqp1 import GOULDQP1 as GOULDQP1
 from .gouldqp2 import GOULDQP2 as GOULDQP2
 from .gouldqp3 import GOULDQP3 as GOULDQP3
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
 from .hs76 import HS76 as HS76
+from .nash import NASH as NASH
 from .ncvxbqp1 import NCVXBQP1 as NCVXBQP1
 from .ncvxbqp2 import NCVXBQP2 as NCVXBQP2
 from .ncvxbqp3 import NCVXBQP3 as NCVXBQP3
@@ -115,12 +118,14 @@ constrained_quadratic_problems = (
     DUALC5(),
     DUALC8(),
     # EIGENA2(),  # TODO: Human review needed - same constraint issues as EIGENA
+    # GMNCASE1(),  # TODO: Human review needed - constraint ordering vs pycutest
     GOULDQP1(),
     GOULDQP2(),
     GOULDQP3(),
     HATFLDH(),
     HS44NEW(),
     HS76(),
+    NASH(),
     NCVXQP1(),
     NCVXQP2(),
     NCVXQP3(),

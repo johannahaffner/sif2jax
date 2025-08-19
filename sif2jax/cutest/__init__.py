@@ -1,4 +1,5 @@
 from ._bounded_minimisation import (
+    AIRCRFTB as AIRCRFTB,
     BDEXP as BDEXP,
     BIGGS3 as BIGGS3,
     BIGGS5 as BIGGS5,
@@ -52,6 +53,8 @@ from ._bounded_minimisation import (
     LEVYMONT9 as LEVYMONT9,
     LEVYMONT10 as LEVYMONT10,
     LOGROS as LOGROS,
+    # NOBNDTOR as NOBNDTOR,  # TODO: Human review needed - complex bounds logic
+    # NONSCOMP as NONSCOMP,  # TODO: Human review needed - GROUP TYPE L2
     PALMER1 as PALMER1,
     PALMER1A as PALMER1A,
     # PALMER1B as PALMER1B,  # TODO: Fix Hessian issues
@@ -86,11 +89,15 @@ from ._bounded_minimisation import (
 )
 
 # TRIGON2B as TRIGON2B,  # TODO: Human review - tiny Hessian discrepancies
+# WALL10 as WALL10,  # TODO: Human review - small gradient discrepancies (~2.2e-4)
+# WALL20 as WALL20,  # TODO: Human review - small gradient discrepancies (~2.1e-4)
+# WALL50 as WALL50,  # TODO: Human review - small gradient discrepancies (~2e-4)
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
     # ALLINITC as ALLINITC,  # TODO: Human review - dimension mismatch with pycutest
+    ALJAZZAF as ALJAZZAF,
     ALSOTAME as ALSOTAME,
     # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
     # AUG2D as AUG2D,  # TODO: needs human review - edge variable structure
@@ -238,7 +245,6 @@ from ._constrained_minimisation import (
     HS73 as HS73,
     # HS74 as HS74,  # TODO: Human review - constraint Jacobian discrepancies
     # HS75 as HS75,  # TODO: Human review - same issues as HS74
-    HS76 as HS76,
     HS77 as HS77,
     HS78 as HS78,
     HS79 as HS79,
@@ -267,10 +273,25 @@ from ._constrained_minimisation import (
     # HS118 as HS118,  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119 as HS119,
     HYDROELL as HYDROELL,
+    # JANNSON3 as JANNSON3,  # TODO: Human review - Jacobian tests hang
+    JANNSON4 as JANNSON4,
     # KISSING as KISSING,  # TODO: Human review - runtime issue (5.37x)
     # KISSING2 as KISSING2,  # TODO: Human review needed
     # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
     # KSIP as KSIP,  # TODO: Needs vectorization - dtype promotion errors
+    # LEUVEN1 as LEUVEN1,  # TODO: Human review needed
+    LISWET1 as LISWET1,
+    LISWET2 as LISWET2,
+    LISWET3 as LISWET3,
+    LISWET4 as LISWET4,
+    LISWET5 as LISWET5,
+    LISWET6 as LISWET6,
+    LISWET7 as LISWET7,
+    LISWET8 as LISWET8,
+    LISWET9 as LISWET9,
+    LISWET10 as LISWET10,
+    LISWET11 as LISWET11,
+    LISWET12 as LISWET12,
     LOOTSMA as LOOTSMA,
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,
@@ -371,6 +392,8 @@ from ._constrained_minimisation import (
     TENBARS2 as TENBARS2,
     TENBARS3 as TENBARS3,
     TENBARS4 as TENBARS4,
+    TRAINF as TRAINF,
+    # TRAINH as TRAINH,  # TODO: Human review - constraints differ by ~0.0029
     TRO3X3 as TRO3X3,
     TRO4X4 as TRO4X4,
     TRO5X5 as TRO5X5,
@@ -406,6 +429,8 @@ from ._nonlinear_equations import (
     ARTIF as ARTIF,
     # TODO: Human review needed - constraint dimension mismatch
     # ARWHDNE as ARWHDNE,
+    # TODO: Human review needed - pycutest has bugs for large rotation cameras
+    # BA_L1 as BA_L1,
     BARDNE as BARDNE,
     BDVALUES as BDVALUES,
     # BDQRTICNE as BDQRTICNE,  # TODO: Human review needed
@@ -501,6 +526,7 @@ from ._nonlinear_equations import (
     HS25NE as HS25NE,
     # HYDCAR6 as HYDCAR6,  # TODO: Human review needed
     HYPCIR as HYPCIR,
+    INTEGREQ as INTEGREQ,
     INTEQNE as INTEQNE,
     JENSMPNE as JENSMPNE,
     JUDGENE as JUDGENE,
@@ -635,11 +661,14 @@ from ._quadratic_problems import (
     DUALC5 as DUALC5,
     DUALC8 as DUALC8,
     # EIGENA2 as EIGENA2,  # TODO: Human review needed
+    # GMNCASE1 as GMNCASE1,  # TODO: Human review needed - constraint ordering
     GOULDQP1 as GOULDQP1,
     GOULDQP2 as GOULDQP2,
     GOULDQP3 as GOULDQP3,
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
+    HS76 as HS76,
+    NASH as NASH,
     NCVXBQP1 as NCVXBQP1,
     NCVXBQP2 as NCVXBQP2,
     NCVXBQP3 as NCVXBQP3,
@@ -849,7 +878,9 @@ from ._unconstrained_minimisation import (
     MGH17SLS as MGH17SLS,
     # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
-    # NONDIA as NONDIA,  # TODO: Human review - SCALE factor issue
+    # NCB20 as NCB20,  # TODO: Human review needed - test failures
+    # NCB20B as NCB20B,  # TODO: Human review needed
+    # NONDIA as NONDIA,  # TODO: Human review needed - SCALE interpretation issue
     NONCVXU2 as NONCVXU2,
     NONCVXUN as NONCVXUN,
     NONDQUAR as NONDQUAR,
@@ -929,6 +960,7 @@ problems_dict = {
     # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
     # "ALLINITC": ALLINITC(),  # Human review needed - dimension mismatch
+    "ALJAZZAF": ALJAZZAF(),
     "ALSOTAME": ALSOTAME(),
     "TRO3X3": TRO3X3(),
     "TRO4X4": TRO4X4(),
@@ -937,6 +969,8 @@ problems_dict = {
     "TRO11X3": TRO11X3(),
     "TRO21X5": TRO21X5(),
     "TRO41X9": TRO41X9(),
+    "TRAINF": TRAINF(),
+    # "TRAINH": TRAINH(),  # TODO: Human review - constraints differ by ~0.0029
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
     "CMPC1": CMPC1(),
@@ -1073,6 +1107,7 @@ problems_dict = {
     "LEVYMONT9": LEVYMONT9(),
     "LEVYMONT10": LEVYMONT10(),
     "LOGROS": LOGROS(),
+    # "NOBNDTOR": NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     "HS111": HS111(),
     "HS112": HS112(),
     "HS113": HS113(),
@@ -1082,12 +1117,27 @@ problems_dict = {
     # "HS118": HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     "HS119": HS119(),
     "HYDROELL": HYDROELL(),
+    # "JANNSON3": JANNSON3(),  # TODO: Human review - Jacobian tests hang
+    "JANNSON4": JANNSON4(),
     # "KISSING": KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # "KISSING2": KISSING2(),  # TODO: Human review needed
     # "KIWCRESC": KIWCRESC(),  # TODO: Human review - constraints differ by 2.0
     "HIMMELBC": HIMMELBC(),
     "HIMMELBD": HIMMELBD(),
     "HIMMELBE": HIMMELBE(),
+    # "LEUVEN1": LEUVEN1(),  # TODO: Human review needed
+    "LISWET1": LISWET1(),
+    "LISWET2": LISWET2(),
+    "LISWET3": LISWET3(),
+    "LISWET4": LISWET4(),
+    "LISWET5": LISWET5(),
+    "LISWET6": LISWET6(),
+    "LISWET7": LISWET7(),
+    "LISWET8": LISWET8(),
+    "LISWET9": LISWET9(),
+    "LISWET10": LISWET10(),
+    "LISWET11": LISWET11(),
+    "LISWET12": LISWET12(),
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
     "MSS1": MSS1(),
@@ -1220,6 +1270,7 @@ problems_dict = {
     "LUKVLI16": LUKVLI16(),
     "LUKVLI17": LUKVLI17(),
     "LUKVLI18": LUKVLI18(),
+    "AIRCRFTB": AIRCRFTB(),
     "AKIVA": AKIVA(),
     "ALLINITU": ALLINITU(),
     "ARGLINA": ARGLINA(),
@@ -1469,7 +1520,12 @@ problems_dict = {
     "MARATOSB": MARATOSB(),
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
+    "NASH": NASH(),
+    # "NCB20": NCB20(),  # TODO: Human review needed - test failures
+    # "NCB20B": NCB20B(),  # TODO: Human review needed
+    # "NONDIA": NONDIA(),  # TODO: Human review needed - SCALE interpretation issue
     "NCVXBQP1": NCVXBQP1(),
+    # "NONSCOMP": NONSCOMP(),  # TODO: Human review needed - GROUP TYPE L2
     "NCVXBQP2": NCVXBQP2(),
     "NCVXBQP3": NCVXBQP3(),
     "NCVXQP1": NCVXQP1(),
@@ -1481,7 +1537,6 @@ problems_dict = {
     "NCVXQP7": NCVXQP7(),
     "NCVXQP8": NCVXQP8(),
     "NCVXQP9": NCVXQP9(),
-    # "NONDIA": NONDIA(),  # TODO: Human review - SCALE factor issue
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),
     "NONDQUAR": NONDQUAR(),
@@ -1568,6 +1623,9 @@ problems_dict = {
     "TRIGON1NE": TRIGON1NE(),
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TRIGON2B": TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
+    # "WALL10": WALL10(),  # TODO: Human review - small gradient discrepancies (~2.2e-4)
+    # "WALL20": WALL20(),  # TODO: Human review - small gradient discrepancies (~2.1e-4)
+    # "WALL50": WALL50(),  # TODO: Human review - small gradient discrepancies (~2e-4)
     # "TRIGON2NE": TRIGON2NE(),  # TODO: Human review - Jacobian tolerance 1.26e-05
     "VANDANIUMS": VANDANIUMS(),
     "VARDIMNE": VARDIMNE(),
@@ -1597,6 +1655,7 @@ problems_dict = {
     "DUALC5": DUALC5(),
     "DUALC8": DUALC8(),
     # "EIGENA2": EIGENA2(),  # TODO: Human review needed
+    # "GMNCASE1": GMNCASE1(),  # TODO: Human review needed - constraint ordering
     "GOULDQP1": GOULDQP1(),
     "GOULDQP2": GOULDQP2(),
     "GOULDQP3": GOULDQP3(),
@@ -1626,6 +1685,8 @@ problems_dict = {
     "ARTIF": ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch
     # "ARWHDNE": ARWHDNE(),
+    # TODO: Human review needed - pycutest has bugs for large rotation cameras
+    # "BA-L1": BA_L1(),
     "BARDNE": BARDNE(),
     "BDVALUES": BDVALUES(),
     # "BDQRTICNE": BDQRTICNE(),  # TODO: Human review needed
@@ -1722,6 +1783,7 @@ problems_dict = {
     "HS2NE": HS2NE(),
     "HS25NE": HS25NE(),
     # "HYDCAR6": HYDCAR6(),  # TODO: Human review needed
+    "INTEGREQ": INTEGREQ(),
     "INTEQNE": INTEQNE(),
     "JENSMPNE": JENSMPNE(),
     "JUDGENE": JUDGENE(),

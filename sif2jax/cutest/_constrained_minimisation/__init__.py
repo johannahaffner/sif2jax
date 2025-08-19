@@ -7,6 +7,7 @@
 # from .allinita import ALLINITA as ALLINITA
 # TODO: ALLINITC needs human review - dimension mismatch with pycutest (fixed variables)
 # from .allinitc import ALLINITC as ALLINITC
+from .aljazzaf import ALJAZZAF as ALJAZZAF
 from .alsotame import ALSOTAME as ALSOTAME
 
 # TODO: ANTWERP needs human review - initial value calculation issues
@@ -225,6 +226,10 @@ from .hs117 import HS117 as HS117
 from .hs119 import HS119 as HS119
 from .hydroell import HYDROELL as HYDROELL
 
+# TODO: JANNSON3 needs human review - Jacobian tests hang due to computational cost
+# from .jannson3 import JANNSON3 as JANNSON3
+from .jannson4 import JANNSON4 as JANNSON4
+
 # TODO: KISSING needs human review - runtime issue (5.37x, slightly over 5x threshold)
 # from .kissing import KISSING as KISSING
 # from .kissing2 import KISSING2 as KISSING2  # TODO: Human review needed
@@ -232,6 +237,20 @@ from .hydroell import HYDROELL as HYDROELL
 # from .kiwcresc import KIWCRESC as KIWCRESC
 # TODO: Human review needed - KSIP needs vectorization, dtype promotion errors with JAX
 # from .ksip import KSIP as KSIP
+# TODO: Human review needed - marked for human review
+# from .leuven1 import LEUVEN1 as LEUVEN1
+from .liswet1 import LISWET1 as LISWET1
+from .liswet2 import LISWET2 as LISWET2
+from .liswet3 import LISWET3 as LISWET3
+from .liswet4 import LISWET4 as LISWET4
+from .liswet5 import LISWET5 as LISWET5
+from .liswet6 import LISWET6 as LISWET6
+from .liswet7 import LISWET7 as LISWET7
+from .liswet8 import LISWET8 as LISWET8
+from .liswet9 import LISWET9 as LISWET9
+from .liswet10 import LISWET10 as LISWET10
+from .liswet11 import LISWET11 as LISWET11
+from .liswet12 import LISWET12 as LISWET12
 from .lootsma import LOOTSMA as LOOTSMA
 from .lukvle1 import LUKVLE1 as LUKVLE1
 
@@ -357,6 +376,10 @@ from .tenbars1 import TENBARS1 as TENBARS1
 from .tenbars2 import TENBARS2 as TENBARS2
 from .tenbars3 import TENBARS3 as TENBARS3
 from .tenbars4 import TENBARS4 as TENBARS4
+from .trainf import TRAINF as TRAINF
+
+# TODO: Human review needed - marked for human review
+# from .trainh import TRAINH as TRAINH
 from .tro3x3 import TRO3X3 as TRO3X3
 from .tro4x4 import TRO4X4 as TRO4X4
 from .tro5x5 import TRO5X5 as TRO5X5
@@ -385,6 +408,7 @@ constrained_minimisation_problems = (
     # AIRPORT(),  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA(),  # TODO: needs human review - L2 group type interpretation
     # ALLINITC(),  # Human review needed - dimension mismatch
+    ALJAZZAF(),
     ALSOTAME(),
     TRO3X3(),
     TRO4X4(),
@@ -393,6 +417,8 @@ constrained_minimisation_problems = (
     TRO11X3(),
     TRO21X5(),
     TRO41X9(),
+    TRAINF(),
+    # TRAINH(),  # TODO: Human review needed
     # ANTWERP(),  # TODO: needs human review - initial value calculation
     AVGASA(),
     AVGASB(),
@@ -543,10 +569,25 @@ constrained_minimisation_problems = (
     # HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119(),
     HYDROELL(),
+    # JANNSON3(),  # TODO: Human review - Jacobian tests hang due to computational cost
+    JANNSON4(),
     # KIWCRESC(),  # TODO: Human review - constraint values differ by 2.0 from pycutest
     # KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # KISSING2(),  # TODO: Human review needed
     # KSIP(),  # TODO: Human review needed - needs vectorization, dtype promotion errors
+    # LEUVEN1(),  # TODO: Human review needed
+    LISWET1(),
+    LISWET2(),
+    LISWET3(),
+    LISWET4(),
+    LISWET5(),
+    LISWET6(),
+    LISWET7(),
+    LISWET8(),
+    LISWET9(),
+    LISWET10(),
+    LISWET11(),
+    LISWET12(),
     LOOTSMA(),
     HIMMELBC(),
     HIMMELBD(),

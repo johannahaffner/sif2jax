@@ -1,58 +1,66 @@
+"""DENSCHNA problem from CUTEst collection.
+
+Classification: OUR2-AN-2-0
+
+Source: an example problem (p. 206) in
+J.E. Dennis and R.B. Schnabel,
+"Numerical Methods for Unconstrained Optimization and Nonlinear Equations",
+Prentice-Hall, Englewood Cliffs, 1983.
+
+SIF input: Ph. Toint, Nov 1990.
+"""
+
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: human review required
 class DENSCHNA(AbstractUnconstrainedMinimisation):
-    """Dennis-Schnabel problem A.
+    """DENSCHNA problem from CUTEst collection.
 
-    This is a 2-dimensional unconstrained optimization problem with
-    nonlinear terms including exponentials.
-
-    Source: Problem from "Numerical Methods for Unconstrained Optimization
-    and Nonlinear Equations" by J.E. Dennis and R.B. Schnabel, 1983.
-
-    Classification: OUR2-AN-2-0
+    Unconstrained minimization with 2 variables.
     """
 
+    n: int = 2
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    n: int = 2  # Number of variables
-
-    def objective(self, y, args):
-        del args
-        x1, x2 = y
-
-        # From AMPL model: x[1]^4 + (x[1]+x[2])^2 + (-1.0+exp(x[2]))^2
-        # Compute powers and exponential once
-        x1_sq = x1 * x1
-        x1_4 = x1_sq * x1_sq
-        exp_x2 = jnp.exp(x2)
-        x1_plus_x2 = x1 + x2
-
-        term1 = x1_4
-        term2 = x1_plus_x2 * x1_plus_x2
-        term3 = (-1.0 + exp_x2) ** 2
-
-        return term1 + term2 + term3
-
     @property
     def y0(self):
-        # Initial values based on problem specification
-        return jnp.array([1.0, 1.0])
+        """Initial guess."""
+        return jnp.ones(2)
+
+    def objective(self, y, args):
+        """Compute the objective function.
+
+        The objective is:
+        (x1)^4 + (x1 + x2)^2 + (exp(x2) - 1)^2
+        """
+        del args
+        x1, x2 = y[0], y[1]
+
+        # A group: x1^4
+        term_a = x1**4
+
+        # B group: (x1 + x2)^2
+        term_b = (x1 + x2) ** 2
+
+        # C group: (exp(x2) - 1)^2
+        term_c = (jnp.exp(x2) - 1.0) ** 2
+
+        return term_a + term_b + term_c
 
     @property
     def args(self):
+        """No additional arguments."""
         return None
 
     @property
     def expected_result(self):
-        # The minimum is at x = [0.0, 0.0]
+        """Optimal point."""
         return jnp.array([0.0, 0.0])
 
     @property
     def expected_objective_value(self):
-        # At x = [0.0, 0.0]: 0^4 + (0+0)^2 + (-1+exp(0))^2 = 0 + 0 + 0 = 0
+        """Optimal objective value."""
         return jnp.array(0.0)

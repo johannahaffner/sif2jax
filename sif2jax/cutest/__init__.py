@@ -371,6 +371,8 @@ from ._constrained_minimisation import (
     TENBARS2 as TENBARS2,
     TENBARS3 as TENBARS3,
     TENBARS4 as TENBARS4,
+    TRAINF as TRAINF,
+    TRAINH as TRAINH,
     TRO3X3 as TRO3X3,
     TRO4X4 as TRO4X4,
     TRO5X5 as TRO5X5,
@@ -937,6 +939,8 @@ problems_dict = {
     "TRO11X3": TRO11X3(),
     "TRO21X5": TRO21X5(),
     "TRO41X9": TRO41X9(),
+    "TRAINF": TRAINF(),
+    "TRAINH": TRAINH(),
     # "ANTWERP": ANTWERP(),  # TODO: needs human review
     "BIGGSC4": BIGGSC4(),
     "CMPC1": CMPC1(),

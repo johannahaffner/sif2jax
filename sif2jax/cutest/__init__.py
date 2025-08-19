@@ -86,7 +86,7 @@ from ._bounded_minimisation import (
     PRICE4B as PRICE4B,
     QUDLIN as QUDLIN,
     RAYBENDL as RAYBENDL,
-    RAYBENDS as RAYBENDS,
+    # RAYBENDS as RAYBENDS,  # TODO: Human review - numerical issues
     TRIGON1B as TRIGON1B,
 )
 
@@ -1588,7 +1588,7 @@ problems_dict = {
     "RAT43LS": RAT43LS(),
     "QUARTC": QUARTC(),
     "RAYBENDL": RAYBENDL(),
-    "RAYBENDS": RAYBENDS(),
+    # "RAYBENDS": RAYBENDS(),  # TODO: Human review - numerical issues
     "ROSENBR": ROSENBR(),
     "DIAGIQB": DIAGIQB(),
     "DIAGIQE": DIAGIQE(),

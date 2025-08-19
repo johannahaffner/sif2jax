@@ -86,6 +86,9 @@ from ._bounded_minimisation import (
 )
 
 # TRIGON2B as TRIGON2B,  # TODO: Human review - tiny Hessian discrepancies
+# WALL10 as WALL10,  # TODO: Human review - small gradient discrepancies (~2.2e-4)
+# WALL20 as WALL20,  # TODO: Human review - small gradient discrepancies (~2.1e-4)
+# WALL50 as WALL50,  # TODO: Human review - small gradient discrepancies (~2e-4)
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
@@ -1568,6 +1571,9 @@ problems_dict = {
     "TRIGON1NE": TRIGON1NE(),
     # "TRIGON2": TRIGON2(),  # TODO: Human review - Hessian test fails
     # "TRIGON2B": TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
+    # "WALL10": WALL10(),  # TODO: Human review - small gradient discrepancies (~2.2e-4)
+    # "WALL20": WALL20(),  # TODO: Human review - small gradient discrepancies (~2.1e-4)
+    # "WALL50": WALL50(),  # TODO: Human review - small gradient discrepancies (~2e-4)
     # "TRIGON2NE": TRIGON2NE(),  # TODO: Human review - Jacobian tolerance 1.26e-05
     "VANDANIUMS": VANDANIUMS(),
     "VARDIMNE": VARDIMNE(),

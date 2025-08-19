@@ -1,6 +1,6 @@
 """DMN37142LS - Diamond Light Source powder diffraction data fitting (least squares).
 
-A least squares problem fitting X-ray diffraction data using 
+A least squares problem fitting X-ray diffraction data using
 2-parameter Lorentzian peaks.
 
 Source: Data from Aaron Parsons, I14: Hard X-ray Nanoprobe,

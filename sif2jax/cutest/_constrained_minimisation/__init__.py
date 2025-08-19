@@ -7,6 +7,7 @@
 # from .allinita import ALLINITA as ALLINITA
 # TODO: ALLINITC needs human review - dimension mismatch with pycutest (fixed variables)
 # from .allinitc import ALLINITC as ALLINITC
+from .aljazzaf import ALJAZZAF as ALJAZZAF
 from .alsotame import ALSOTAME as ALSOTAME
 
 # TODO: ANTWERP needs human review - initial value calculation issues
@@ -387,6 +388,7 @@ constrained_minimisation_problems = (
     # AIRPORT(),  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA(),  # TODO: needs human review - L2 group type interpretation
     # ALLINITC(),  # Human review needed - dimension mismatch
+    ALJAZZAF(),
     ALSOTAME(),
     TRO3X3(),
     TRO4X4(),

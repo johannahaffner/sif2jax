@@ -1,4 +1,5 @@
 from ._bounded_minimisation import (
+    AIRCRFTB as AIRCRFTB,
     BDEXP as BDEXP,
     BIGGS3 as BIGGS3,
     BIGGS5 as BIGGS5,
@@ -94,6 +95,7 @@ from ._constrained_minimisation import (
     # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
     # ALLINITC as ALLINITC,  # TODO: Human review - dimension mismatch with pycutest
+    ALJAZZAF as ALJAZZAF,
     ALSOTAME as ALSOTAME,
     # ANTWERP as ANTWERP,  # TODO: needs human review - initial value calculation
     # AUG2D as AUG2D,  # TODO: needs human review - edge variable structure
@@ -935,6 +937,7 @@ problems_dict = {
     # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
     # "ALLINITC": ALLINITC(),  # Human review needed - dimension mismatch
+    "ALJAZZAF": ALJAZZAF(),
     "ALSOTAME": ALSOTAME(),
     "TRO3X3": TRO3X3(),
     "TRO4X4": TRO4X4(),
@@ -1228,6 +1231,7 @@ problems_dict = {
     "LUKVLI16": LUKVLI16(),
     "LUKVLI17": LUKVLI17(),
     "LUKVLI18": LUKVLI18(),
+    "AIRCRFTB": AIRCRFTB(),
     "AKIVA": AKIVA(),
     "ALLINITU": ALLINITU(),
     "ARGLINA": ARGLINA(),

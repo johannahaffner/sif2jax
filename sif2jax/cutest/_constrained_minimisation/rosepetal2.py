@@ -90,7 +90,7 @@ class ROSEPETAL2(AbstractConstrainedMinimisation):
     def bounds(self):
         """Bounds on variables."""
         # All variables are free
-        return None, None
+        return None
 
     @property
     def expected_result(self):

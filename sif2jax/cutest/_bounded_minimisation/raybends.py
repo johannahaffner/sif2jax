@@ -22,10 +22,10 @@ import jax
 import jax.numpy as jnp
 from equinox import Module
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class RAYBENDS(AbstractUnconstrainedMinimisation, Module):
+class RAYBENDS(AbstractBoundedMinimisation, Module):
     """RAYBENDS - Ray bending with beta-spline curve."""
 
     _nknots: int = 1024  # Number of knots (NK in SIF)
@@ -58,8 +58,25 @@ class RAYBENDS(AbstractUnconstrainedMinimisation, Module):
     @property
     def bounds(self):
         """Bounds on variables."""
-        # All variables are free (unconstrained)
-        return None
+        nknots = self._nknots
+
+        # Initialize with unbounded arrays
+        lower = jnp.full(2 * (nknots + 1), -jnp.inf)
+        upper = jnp.full(2 * (nknots + 1), jnp.inf)
+
+        # Fix source position (x[0], z[0])
+        lower = lower.at[0].set(0.0)  # xsrc
+        lower = lower.at[1].set(0.0)  # zsrc
+        upper = upper.at[0].set(0.0)  # xsrc
+        upper = upper.at[1].set(0.0)  # zsrc
+
+        # Fix receiver position (x[NK], z[NK])
+        lower = lower.at[2 * nknots].set(100.0)  # xrcv
+        lower = lower.at[2 * nknots + 1].set(100.0)  # zrcv
+        upper = upper.at[2 * nknots].set(100.0)  # xrcv
+        upper = upper.at[2 * nknots + 1].set(100.0)  # zrcv
+
+        return lower, upper
 
     @property
     def args(self):

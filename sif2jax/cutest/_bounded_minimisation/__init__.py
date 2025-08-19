@@ -96,6 +96,8 @@ from .pfit3ls import PFIT3LS as PFIT3LS
 from .pfit4ls import PFIT4LS as PFIT4LS
 from .price4b import PRICE4B as PRICE4B
 from .qudlin import QUDLIN as QUDLIN
+from .raybendl import RAYBENDL as RAYBENDL
+from .raybends import RAYBENDS as RAYBENDS
 from .trigon1b import TRIGON1B as TRIGON1B
 
 
@@ -214,6 +216,8 @@ bounded_minimisation_problems = (
     PFIT4LS(),
     PRICE4B(),
     QUDLIN(),
+    RAYBENDL(),
+    RAYBENDS(),
     TRIGON1B(),
     # TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
     # WALL10(),  # TODO: Human review - small gradient discrepancies (~2.2e-4)

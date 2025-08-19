@@ -85,6 +85,8 @@ from ._bounded_minimisation import (
     PFIT4LS as PFIT4LS,
     PRICE4B as PRICE4B,
     QUDLIN as QUDLIN,
+    RAYBENDL as RAYBENDL,
+    RAYBENDS as RAYBENDS,
     TRIGON1B as TRIGON1B,
 )
 
@@ -912,8 +914,6 @@ from ._unconstrained_minimisation import (
     QUARTC as QUARTC,
     RAT42LS as RAT42LS,
     RAT43LS as RAT43LS,
-    RAYBENDL as RAYBENDL,
-    RAYBENDS as RAYBENDS,
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
     S308 as S308,

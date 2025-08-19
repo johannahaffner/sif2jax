@@ -1,3 +1,4 @@
+from .aircrftb import AIRCRFTB as AIRCRFTB
 from .bdexp import BDEXP as BDEXP
 from .biggs3 import BIGGS3 as BIGGS3
 from .biggs5 import BIGGS5 as BIGGS5
@@ -98,6 +99,7 @@ from .trigon1b import TRIGON1B as TRIGON1B
 
 
 bounded_minimisation_problems = (
+    AIRCRFTB(),
     BDEXP(),
     BIGGS3(),
     BIGGS5(),

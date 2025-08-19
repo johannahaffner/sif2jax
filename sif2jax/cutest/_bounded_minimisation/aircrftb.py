@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractBoundedMinimisation
 
 
-class AIRCRFTB(AbstractUnconstrainedMinimisation):
+class AIRCRFTB(AbstractBoundedMinimisation):
     """The aircraft stability problem by Rheinboldt (variant B).
 
     The aircraft stability problem by Rheinboldt, as a function
@@ -125,6 +125,26 @@ class AIRCRFTB(AbstractUnconstrainedMinimisation):
     def args(self):
         """No additional arguments."""
         return None
+
+    @property
+    def bounds(self):
+        """Bounds on variables.
+
+        Variables 0-4 are free (rollrate, pitchrat, yawrate, attckang, sslipang).
+        Variables 5-7 are fixed at their control values.
+        """
+        lower = jnp.full(8, -jnp.inf)
+        upper = jnp.full(8, jnp.inf)
+
+        # Fix control variables to their exact values
+        lower = lower.at[5].set(self.ELVVAL)  # ELEVATOR
+        upper = upper.at[5].set(self.ELVVAL)
+        lower = lower.at[6].set(self.AILVAL)  # AILERON
+        upper = upper.at[6].set(self.AILVAL)
+        lower = lower.at[7].set(self.RUDVAL)  # RUDDERDF
+        upper = upper.at[7].set(self.RUDVAL)
+
+        return (lower, upper)
 
     @property
     def expected_result(self):

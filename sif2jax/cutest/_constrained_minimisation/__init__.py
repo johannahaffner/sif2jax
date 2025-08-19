@@ -67,6 +67,7 @@ from .dembo7 import DEMBO7 as DEMBO7
 from .demymalo import DEMYMALO as DEMYMALO
 from .dipigri import DIPIGRI as DIPIGRI
 
+# from .dittert import DITTERT as DITTERT  # TODO: Human review needed
 # TODO: DEGTRIDL needs human review - causes segfault despite correct implementation
 # from .degtridl import DEGTRIDL as DEGTRIDL
 from .dtoc1l import DTOC1L as DTOC1L
@@ -462,6 +463,7 @@ constrained_minimisation_problems = (
     DEMBO7(),
     DEMYMALO(),
     DIPIGRI(),
+    # DITTERT(),  # TODO: Human review needed
     DTOC1L(),
     DTOC1NA(),
     DTOC1NB(),

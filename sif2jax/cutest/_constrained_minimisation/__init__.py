@@ -233,6 +233,19 @@ from .hydroell import HYDROELL as HYDROELL
 # from .kiwcresc import KIWCRESC as KIWCRESC
 # TODO: Human review needed - KSIP needs vectorization, dtype promotion errors with JAX
 # from .ksip import KSIP as KSIP
+from .leuven1 import LEUVEN1 as LEUVEN1
+from .liswet1 import LISWET1 as LISWET1
+from .liswet2 import LISWET2 as LISWET2
+from .liswet3 import LISWET3 as LISWET3
+from .liswet4 import LISWET4 as LISWET4
+from .liswet5 import LISWET5 as LISWET5
+from .liswet6 import LISWET6 as LISWET6
+from .liswet7 import LISWET7 as LISWET7
+from .liswet8 import LISWET8 as LISWET8
+from .liswet9 import LISWET9 as LISWET9
+from .liswet10 import LISWET10 as LISWET10
+from .liswet11 import LISWET11 as LISWET11
+from .liswet12 import LISWET12 as LISWET12
 from .lootsma import LOOTSMA as LOOTSMA
 from .lukvle1 import LUKVLE1 as LUKVLE1
 
@@ -553,6 +566,19 @@ constrained_minimisation_problems = (
     # KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # KISSING2(),  # TODO: Human review needed
     # KSIP(),  # TODO: Human review needed - needs vectorization, dtype promotion errors
+    LEUVEN1(),
+    LISWET1(),
+    LISWET2(),
+    LISWET3(),
+    LISWET4(),
+    LISWET5(),
+    LISWET6(),
+    LISWET7(),
+    LISWET8(),
+    LISWET9(),
+    LISWET10(),
+    LISWET11(),
+    LISWET12(),
     LOOTSMA(),
     HIMMELBC(),
     HIMMELBD(),

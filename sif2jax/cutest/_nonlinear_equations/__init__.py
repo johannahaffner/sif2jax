@@ -8,6 +8,8 @@ from .artif import ARTIF as ARTIF
 
 # TODO: Human review needed - constraint dimension mismatch
 # from .arwhdne import ARWHDNE as ARWHDNE
+# TODO: Human review needed - pycutest has bugs for large rotation cameras
+# from .ba_l1 import BA_L1 as BA_L1
 from .bardne import BARDNE as BARDNE
 from .bdvalues import BDVALUES as BDVALUES
 
@@ -266,6 +268,8 @@ nonlinear_equations_problems = (
     ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch
     # ARWHDNE(),
+    # TODO: Human review needed - pycutest has bugs for large rotation cameras
+    # BA_L1(),
     BARDNE(),
     BDVALUES(),
     # BDQRTICNE(),  # TODO: Human review needed

@@ -406,6 +406,8 @@ from ._nonlinear_equations import (
     ARTIF as ARTIF,
     # TODO: Human review needed - constraint dimension mismatch
     # ARWHDNE as ARWHDNE,
+    # TODO: Human review needed - pycutest has bugs for large rotation cameras
+    # BA_L1 as BA_L1,
     BARDNE as BARDNE,
     BDVALUES as BDVALUES,
     # BDQRTICNE as BDQRTICNE,  # TODO: Human review needed
@@ -1626,6 +1628,8 @@ problems_dict = {
     "ARTIF": ARTIF(),
     # TODO: Human review needed - constraint dimension mismatch
     # "ARWHDNE": ARWHDNE(),
+    # TODO: Human review needed - pycutest has bugs for large rotation cameras
+    # "BA-L1": BA_L1(),
     "BARDNE": BARDNE(),
     "BDVALUES": BDVALUES(),
     # "BDQRTICNE": BDQRTICNE(),  # TODO: Human review needed

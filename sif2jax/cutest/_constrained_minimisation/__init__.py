@@ -353,6 +353,8 @@ from .reading5 import READING5 as READING5
 # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
 # the starting point is the solution too
 from .reading9 import READING9 as READING9
+from .rosepetal import ROSEPETAL as ROSEPETAL
+from .rosepetal2 import ROSEPETAL2 as ROSEPETAL2
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 
@@ -646,6 +648,8 @@ constrained_minimisation_problems = (
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     READING9(),
+    ROSEPETAL(),
+    ROSEPETAL2(),
     SIMPLLPA(),
     SIMPLLPB(),
     # SINROSNB(),  # TODO: Human review - objective scaling issues

@@ -382,6 +382,8 @@ from ._constrained_minimisation import (
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     READING9 as READING9,
+    ROSEPETAL as ROSEPETAL,
+    ROSEPETAL2 as ROSEPETAL2,
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
     # SINROSNB as SINROSNB,  # TODO: Human review - objective scaling issues
@@ -1186,6 +1188,8 @@ problems_dict = {
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     "READING9": READING9(),
+    "ROSEPETAL": ROSEPETAL(),
+    "ROSEPETAL2": ROSEPETAL2(),
     "SIMPLLPA": SIMPLLPA(),
     "SIMPLLPB": SIMPLLPB(),
     # "SINROSNB": SINROSNB(),  # TODO: Human review - objective scaling issues

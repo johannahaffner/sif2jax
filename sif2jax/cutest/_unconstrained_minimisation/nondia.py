@@ -32,19 +32,25 @@ class NONDIA(AbstractUnconstrainedMinimisation):
 
         The objective has a special structure:
         - Group SQ(1): (x[0] - 1)^2
-        - Groups SQ(i) for i=2..n: 0.01 * (x[0] - x[i-1]^2)^2
+        - Groups SQ(i) for i=2..n with SCALE and GROUP TYPE L2
+
+        Testing: SCALE might apply only to linear coefficients.
         """
         del args
 
         # First term: (x[0] - 1)^2
         obj = (y[0] - 1.0) ** 2
 
-        # Remaining terms: 0.01 * (x[0] - x[i-1]^2)^2 for i=2..n
-        # Extract x[i-1] for i=2..n (i.e., x[0] to x[n-2])
+        # Remaining terms for i=2..n
+        # If SCALE applies only to linear coefficients (not elements):
+        # Linear part: 0.01 * x[0]
+        # Element: -x[i-1]^2
+        # Group value: 0.01 * x[0] - x[i-1]^2
+        # After L2: (0.01 * x[0] - x[i-1]^2)^2
         if self.n > 1:
             x_prev = y[: self.n - 1]  # x[0] to x[n-2]
-            # Each term is 0.01 * (x[0] - x[i-1]^2)^2
-            terms = 0.01 * (y[0] - x_prev**2) ** 2
+            # Scale only on linear coefficient
+            terms = (0.01 * y[0] - x_prev**2) ** 2
             obj += jnp.sum(terms)
 
         return obj

@@ -232,6 +232,7 @@ from .hydroell import HYDROELL as HYDROELL
 # from .kiwcresc import KIWCRESC as KIWCRESC
 # TODO: Human review needed - KSIP needs vectorization, dtype promotion errors with JAX
 # from .ksip import KSIP as KSIP
+from .leuven1 import LEUVEN1 as LEUVEN1
 from .liswet1 import LISWET1 as LISWET1
 from .liswet2 import LISWET2 as LISWET2
 from .liswet3 import LISWET3 as LISWET3
@@ -559,6 +560,7 @@ constrained_minimisation_problems = (
     # KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # KISSING2(),  # TODO: Human review needed
     # KSIP(),  # TODO: Human review needed - needs vectorization, dtype promotion errors
+    LEUVEN1(),
     LISWET1(),
     LISWET2(),
     LISWET3(),

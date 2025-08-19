@@ -271,6 +271,7 @@ from ._constrained_minimisation import (
     # KISSING2 as KISSING2,  # TODO: Human review needed
     # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
     # KSIP as KSIP,  # TODO: Needs vectorization - dtype promotion errors
+    # LEUVEN1 as LEUVEN1,  # TODO: Human review needed
     LISWET1 as LISWET1,
     LISWET2 as LISWET2,
     LISWET3 as LISWET3,
@@ -1100,6 +1101,7 @@ problems_dict = {
     "HIMMELBC": HIMMELBC(),
     "HIMMELBD": HIMMELBD(),
     "HIMMELBE": HIMMELBE(),
+    # "LEUVEN1": LEUVEN1(),  # TODO: Human review needed
     "LISWET1": LISWET1(),
     "LISWET2": LISWET2(),
     "LISWET3": LISWET3(),

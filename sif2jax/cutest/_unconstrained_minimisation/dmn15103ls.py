@@ -1,6 +1,6 @@
 """DMN15103LS - Diamond Light Source powder diffraction data fitting (3-parameter LS).
 
-A least squares problem fitting X-ray diffraction data using 
+A least squares problem fitting X-ray diffraction data using
 3-parameter Lorentzian peaks (weight, width, position).
 
 Source: Data from Aaron Parsons, I14: Hard X-ray Nanoprobe,

@@ -1,6 +1,6 @@
 """DMN15102 - Diamond Light Source powder diffraction data fitting.
 
-A nonlinear equations problem fitting X-ray diffraction data using 
+A nonlinear equations problem fitting X-ray diffraction data using
 2-parameter Lorentzian peaks.
 
 Source: Data from Aaron Parsons, I14: Hard X-ray Nanoprobe,

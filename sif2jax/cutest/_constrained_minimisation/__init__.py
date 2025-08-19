@@ -225,6 +225,10 @@ from .hs117 import HS117 as HS117
 from .hs119 import HS119 as HS119
 from .hydroell import HYDROELL as HYDROELL
 
+# TODO: JANNSON3 needs human review - Jacobian tests hang due to computational cost
+# from .jannson3 import JANNSON3 as JANNSON3
+from .jannson4 import JANNSON4 as JANNSON4
+
 # TODO: KISSING needs human review - runtime issue (5.37x, slightly over 5x threshold)
 # from .kissing import KISSING as KISSING
 # from .kissing2 import KISSING2 as KISSING2  # TODO: Human review needed
@@ -543,6 +547,8 @@ constrained_minimisation_problems = (
     # HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119(),
     HYDROELL(),
+    # JANNSON3(),  # TODO: Human review - Jacobian tests hang due to computational cost
+    JANNSON4(),
     # KIWCRESC(),  # TODO: Human review - constraint values differ by 2.0 from pycutest
     # KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # KISSING2(),  # TODO: Human review needed

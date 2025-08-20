@@ -18,6 +18,8 @@ from .avgasa import AVGASA as AVGASA
 from .avgasb import AVGASB as AVGASB
 
 # from .avion2 import AVION2 as AVION2  # TODO: Human review - gradient discrepancies
+# from .bdry2 import BDRY2 as BDRY2  # TODO: Human review - objective values don't match
+# from .bigbank import BIGBANK as BIGBANK  # TODO: Human review - objective mismatch
 from .biggsc4 import BIGGSC4 as BIGGSC4
 from .bt1 import BT1 as BT1
 from .bt2 import BT2 as BT2
@@ -59,7 +61,15 @@ from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
 from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
+from .degenlpa import DEGENLPA as DEGENLPA
+from .degenlpb import DEGENLPB as DEGENLPB
+from .degenqp import DEGENQP as DEGENQP
+from .degenqpc import DEGENQPC as DEGENQPC
+from .dembo7 import DEMBO7 as DEMBO7
+from .demymalo import DEMYMALO as DEMYMALO
+from .dipigri import DIPIGRI as DIPIGRI
 
+# from .dittert import DITTERT as DITTERT  # TODO: Human review needed
 # TODO: DEGTRIDL needs human review - causes segfault despite correct implementation
 # from .degtridl import DEGTRIDL as DEGTRIDL
 from .dtoc1l import DTOC1L as DTOC1L
@@ -353,6 +363,10 @@ from .reading5 import READING5 as READING5
 # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
 # the starting point is the solution too
 from .reading9 import READING9 as READING9
+
+# from .rdw2d51f import RDW2D51F as RDW2D51F  # TODO: Human review needed
+from .rosepetal import ROSEPETAL as ROSEPETAL
+from .rosepetal2 import ROSEPETAL2 as ROSEPETAL2
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 
@@ -424,6 +438,8 @@ constrained_minimisation_problems = (
     AVGASB(),
     # DEGTRIDL(),  # TODO: Human review - causes segfault despite correct implementation
     # AVION2(),  # TODO: Human review - gradient discrepancies
+    # BDRY2(),  # TODO: Human review - objective values don't match pycutest
+    # BIGBANK(),  # TODO: Human review - objective values don't match pycutest
     BIGGSC4(),
     BURKEHAN(),
     BYRDSPHR(),
@@ -448,6 +464,14 @@ constrained_minimisation_problems = (
     CSFI2(),
     DALLASS(),
     DECONVC(),
+    DEGENLPA(),
+    DEGENLPB(),
+    DEGENQP(),
+    DEGENQPC(),
+    DEMBO7(),
+    DEMYMALO(),
+    DIPIGRI(),
+    # DITTERT(),  # TODO: Human review needed
     DTOC1L(),
     DTOC1NA(),
     DTOC1NB(),
@@ -646,6 +670,9 @@ constrained_minimisation_problems = (
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     READING9(),
+    # RDW2D51F(),  # TODO: Human review needed
+    ROSEPETAL(),
+    ROSEPETAL2(),
     SIMPLLPA(),
     SIMPLLPB(),
     # SINROSNB(),  # TODO: Human review - objective scaling issues

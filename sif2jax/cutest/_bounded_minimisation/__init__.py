@@ -12,6 +12,8 @@ from .cyclooctls import CYCLOOCTLS as CYCLOOCTLS
 from .degdiag import DEGDIAG as DEGDIAG
 from .degtrid import DEGTRID as DEGTRID
 from .degtrid2 import DEGTRID2 as DEGTRID2
+from .devgla1b import DEVGLA1B as DEVGLA1B
+from .devgla2b import DEVGLA2B as DEVGLA2B
 from .dgospec import DGOSPEC as DGOSPEC
 from .diagiqb import DIAGIQB as DIAGIQB
 from .diagiqe import DIAGIQE as DIAGIQE
@@ -96,6 +98,9 @@ from .pfit3ls import PFIT3LS as PFIT3LS
 from .pfit4ls import PFIT4LS as PFIT4LS
 from .price4b import PRICE4B as PRICE4B
 from .qudlin import QUDLIN as QUDLIN
+from .raybendl import RAYBENDL as RAYBENDL
+
+# from .raybends import RAYBENDS as RAYBENDS  # TODO: Human review - numerical issues
 from .trigon1b import TRIGON1B as TRIGON1B
 
 
@@ -141,6 +146,8 @@ bounded_minimisation_problems = (
     CYCLOOCTLS(),
     DEGDIAG(),
     DEGTRID(),
+    DEVGLA1B(),
+    DEVGLA2B(),
     DIAGIQB(),
     DIAGIQE(),
     DIAGIQT(),
@@ -214,6 +221,8 @@ bounded_minimisation_problems = (
     PFIT4LS(),
     PRICE4B(),
     QUDLIN(),
+    RAYBENDL(),
+    # RAYBENDS(),  # TODO: Human review - numerical issues
     TRIGON1B(),
     # TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
     # WALL10(),  # TODO: Human review - small gradient discrepancies (~2.2e-4)

@@ -4,6 +4,7 @@ import jax.numpy as jnp
 import numpy as np
 import pytest
 import sif2jax
+from jax.experimental.sparse import BCOO
 
 
 def try_except_evaluate(
@@ -318,6 +319,11 @@ def _sif2jax_hprod(problem, y):
     hprod = jax.jit(hprod_).lower(y).compile()
     return hprod(y)
 
+def _sif2jax_sparse_hprod(problem, y, hess_coo):
+    obj = lambda x: problem.objective(x, problem.args)
+    sphess_fun = sparse_hessian(obj, hess_coo, [1,y.size,y.size]) # [fun out size, inp size, inp size] always for vector input vector output functions
+    hprod = sphess_fun(y) @ jnp.ones_like(y)
+    return hprod
 
 def check_hprod_allclose(problem, pycutest_problem, point, *, atol=1e-6):
     """Compute and compare pycutest and sif2jax Hessian-vector products for equality.
@@ -348,6 +354,206 @@ def check_hprod_allclose(problem, pycutest_problem, point, *, atol=1e-6):
     # We use a vector of ones and evaluate the Hessian at the given point
     pycutest_hprod = pycutest_problem.hprod(np.ones_like(point), np.asarray(point))
     sif2jax_hprod = _sif2jax_hprod(problem, point)
+
+    # Check for NaN or inf values
+    pycutest_nonfinite = ~jnp.isfinite(pycutest_hprod)
+    sif2jax_nonfinite = ~jnp.isfinite(sif2jax_hprod)
+
+    if jnp.any(pycutest_nonfinite) and jnp.any(sif2jax_nonfinite):
+        # Both have NaN/inf - check if they're in the same places
+        nonfinite_diff = jnp.sum(
+            pycutest_nonfinite.astype(int) - sif2jax_nonfinite.astype(int)
+        )
+        if nonfinite_diff == 0:
+            # NaN/inf in same places - test passes
+            return
+        else:
+            # NaN/inf in different places - test fails
+            pycutest_first_idx = jnp.argmax(pycutest_nonfinite)
+            sif2jax_first_idx = jnp.argmax(sif2jax_nonfinite)
+            msg = (
+                f"Hessian-vector products contain NaN or inf values for different "
+                f"elements in problem {problem.name}. "
+                f"First non-finite index in pycutest: {pycutest_first_idx}, "
+                f"first non-finite index in sif2jax: {sif2jax_first_idx}."
+            )
+            pytest.fail(msg)
+    elif jnp.any(pycutest_nonfinite):
+        # Only pycutest has NaN/inf
+        first_idx = jnp.argmax(pycutest_nonfinite)
+        msg = (
+            f"Only pycutest Hessian-vector product contains NaN or inf values "
+            f"for problem {problem.name}. First non-finite index: {first_idx}."
+        )
+        pytest.fail(msg)
+    elif jnp.any(sif2jax_nonfinite):
+        # Only sif2jax has NaN/inf
+        first_idx = jnp.argmax(sif2jax_nonfinite)
+        msg = (
+            f"Only sif2jax Hessian-vector product contains NaN or inf values "
+            f"for problem {problem.name}. First non-finite index: {first_idx}."
+        )
+        pytest.fail(msg)
+    else:
+        # Neither has NaN/inf - proceed with normal comparison
+        difference = pycutest_hprod - sif2jax_hprod
+        abs_difference = jnp.abs(difference)
+        msg = (
+            f"Mismatch in Hessian-vector product for {problem.name}. "
+            f"The max. absolute difference is at element {jnp.argmax(abs_difference)} "
+            f"with a value of {jnp.max(abs_difference)}."
+        )
+        assert np.allclose(pycutest_hprod, sif2jax_hprod, atol=atol), msg
+
+def sparse_jacobian(f, jac_coo, out_shape):
+
+    if len(jac_coo) == 0:
+        # indicates that there isn't a function or no known Jacobian pattern
+        return lambda x: BCOO([jnp.array([]), jnp.zeros([0, len(out_shape)], dtype=jnp.int32)], shape=out_shape)
+
+    # Ensure jac_coo is a JAX array of int
+    jac_coo = jnp.array(jac_coo, dtype=jnp.int32)
+    ncols = jac_coo.shape[1]
+    # adjust jac_coo to allow for jittability in partial when slicing y on return statement
+    # nrows = jac_coo.shape[0]
+    # jac_coo = jnp.hstack([jnp.zeros([nrows,1], dtype=jnp.int32), jac_coo]) if ncols == 1 else jac_coo
+    
+    # sometimes function is scalar output, giving a leading 1 in the out_shape - we remove it
+    if out_shape[0] == 1:
+        out_shape = out_shape[1:]
+
+    # CASE 1: vector-valued function: R^n -> R^m
+    #         Each row in jac_coo is [out_idx, x_idx]
+    if ncols > 1:  
+        def partial_out_j(x, out_idx, x_idx):
+            """
+            Computes d(f_out_idx)(x)/dx_x_idx = partial derivative of the out_idx-th
+            component of f w.r.t. the x_idx-th component of x.
+            """
+            # grad_f_out is the gradient of f(...)[out_idx], i.e. R^n -> scalar
+            grad_f_out = jax.grad(lambda z: f(z)[out_idx])(x)
+            return grad_f_out[x_idx]
+
+        def jac_fn(x):
+            """
+            Evaluate all requested Jacobian entries at x,
+            and store them in a BCOO with coords=jac_coo, data=the partials.
+            """
+            def single_entry(coord):
+                out_idx, x_idx = coord
+                return partial_out_j(x, out_idx, x_idx)
+
+            # Vectorize over rows of jac_coo to get all partial derivatives
+            out = jax.vmap(single_entry)(jac_coo)
+            # In the style of your sparse_hessian, we'll store shape=jac_coo.shape
+            return BCOO((out, jac_coo), shape=out_shape)
+
+    # CASE 2: scalar-valued function: R^n -> R
+    #         Each row in jac_coo is [x_idx]
+    elif ncols == 1:
+        def partial_j(x, x_idx):
+            """
+            Computes d f(x)/dx_x_idx for a scalar function f.
+            """
+            grad_f = jax.grad(f)(x)  # shape (n,)
+            return grad_f[x_idx]
+
+        def jac_fn(x):
+            def single_entry(coord):
+                x_idx = coord[0]
+                return partial_j(x, x_idx)
+
+            out = jax.vmap(single_entry)(jac_coo)
+            return BCOO((out, jac_coo), shape=out_shape)
+
+    else:
+        # Not a recognized pattern
+        raise ValueError(
+            f"jac_coo should have either 1 column (scalar f) or 2 columns (vector f). "
+            f"Got shape={out_shape}."
+        )
+
+    return jac_fn
+
+def sparse_hessian(f, hes_coo, out_shape):
+
+    if len(hes_coo) == 0:
+        # indicates that there isn't a function / or no known Hessian pattern
+        return lambda x: BCOO([jnp.array([]), jnp.zeros([0, len(out_shape)], dtype=jnp.int32)], shape=out_shape)
+
+    # Ensure hes_coo is a JAX array of int
+    hes_coo = jnp.array(hes_coo, dtype=jnp.int32)
+    ncols = hes_coo.shape[1]
+
+    # sometimes function is scalar output, giving a leading 1 in the out_shape - we remove it
+    if out_shape[0] == 1:
+        out_shape = out_shape[1:]
+
+    if ncols > 2:
+
+        def partial_out_ij(x, out_idx, i, j):
+            """
+            Compute d^2 f_{out_idx}(x) / (dx_i dx_j).
+            That is: first derivative w.r.t. x_i, then derivative of that result w.r.t. x_j.
+            """
+
+            # 1) Define a function g_i(u) = df_{out_idx}(u)/dx_i
+            #    i.e., pick out the i-th component from jax.grad(f_{out_idx})(u).
+            #    f_{out_idx}(u) means f(u)[out_idx].
+            def g_i(u):
+                return jax.grad(lambda z: f(z)[out_idx])(u)[i]
+
+            # 2) Now take derivative of g_i w.r.t. x_j
+            #    i.e. second partial derivative.
+            return jax.grad(g_i)(x)[j]
+
+        def hess_fn(x):
+            """
+            Evaluate all requested Hessian entries at x and return them as a 1D array.
+            """
+            def single_entry(coord):
+                out_idx, i, j = coord
+                return partial_out_ij(x, out_idx, i, j)
+
+            # Vectorize over rows of hes_coo
+            out = jax.vmap(single_entry)(hes_coo)
+            return BCOO([out, hes_coo], shape=out_shape)
+        
+    elif ncols == 2:
+
+        def partial_ij(x, i, j):
+            """
+            Compute d^2 f(x) / (dx_i dx_j).
+            That is: first derivative w.r.t. x_i, then derivative of that result w.r.t. x_j.
+            """
+            # 1) g_i(u) = derivative of f(u) w.r.t. x_i
+            #    jax.grad(f)(u) is a vector, pick out component i
+            def g_i(u):
+                return jax.grad(f)(u)[i]
+
+            # 2) derivative of g_i(u) w.r.t. x_j
+            return jax.grad(g_i)(x)[j]
+
+        def hess_fn(x):
+            """
+            Evaluate all requested Hessian entries at x and return them as a 1D array.
+            """
+            def single_entry(coord):
+                i, j = coord
+                return partial_ij(x, i, j)
+
+            # Vectorize over rows of hes_coo
+            out = jax.vmap(single_entry)(hes_coo)
+            return BCOO([out, hes_coo], shape=out_shape)
+
+    return hess_fn
+
+def check_sparse_hprod_allclose(problem, pycutest_problem, point, *, atol=1e-6):
+
+    pycutest_hprod = pycutest_problem.hprod(np.ones_like(point), np.asarray(point))
+    sphess = pycutest_problem.isphess(np.asarray(point))
+    hess_coo = jnp.vstack(sphess.coords).T
+    sif2jax_hprod = _sif2jax_sparse_hprod(problem, point, hess_coo)
 
     # Check for NaN or inf values
     pycutest_nonfinite = ~jnp.isfinite(pycutest_hprod)

@@ -43,6 +43,7 @@ Here are the sources relevant to problem implementations:
     a subclass of `AbstractConstrainedMinimisation` with no changes to the interface.
   - `AbstractNonlinearEquations`: provides default constant objective that may be 
     overridden; feasibility problem with constraints
+    For guidance on problem classification, see: https://ralna.github.io/SIFDecode/html/classification/
 - **Vectorization First**: For problems with n > 200 dimensions, ALWAYS write vectorized implementations from the start. Tests will timeout on non-vectorized code for large problems. Use JAX operations (vmap, scan, etc.) instead of Python loops.
 - **Types**: Never hard-code dtypes. Use e.g. y.dtype if one needs to be specified
 - **Style**: Match existing code patterns, imports, conventions

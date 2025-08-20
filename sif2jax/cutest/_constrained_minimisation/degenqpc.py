@@ -15,6 +15,26 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedQuadraticProblem
 
 
+def _generate_triple_indices(n):
+    """Precompute indices for all (i,j,k) triples where i < j < k."""
+    i_list = []
+    j_list = []
+    k_list = []
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            for k in range(j + 1, n):
+                i_list.append(i)
+                j_list.append(j)
+                k_list.append(k)
+
+    return jnp.array(i_list), jnp.array(j_list), jnp.array(k_list)
+
+
+# Precompute indices for n=50 (the fixed problem size)
+_TRIPLE_INDICES_50 = _generate_triple_indices(50)
+
+
 class DEGENQPC(AbstractConstrainedQuadraticProblem):
     """DEGENQPC problem from CUTEst collection.
 
@@ -81,18 +101,11 @@ class DEGENQPC(AbstractConstrainedQuadraticProblem):
         # Range constraint 0 <= x_i + x_j + x_k <= 2
         # CUTEst treats these as single inequality constraints: x_i + x_j + x_k >= 0
 
-        # Generate all combinations (i,j,k) with i < j < k vectorized
-        indices = jnp.arange(n)
-        i_vals, j_vals, k_vals = jnp.meshgrid(indices, indices, indices, indexing="ij")
+        # Use precomputed indices for efficiency
+        i_indices, j_indices, k_indices = _TRIPLE_INDICES_50
 
-        # Filter for i < j < k condition
-        valid_mask = (i_vals < j_vals) & (j_vals < k_vals)
-        i_idx = i_vals[valid_mask]
-        j_idx = j_vals[valid_mask]
-        k_idx = k_vals[valid_mask]
-
-        # Vectorized computation of x_i + x_j + x_k for all valid triples
-        ineq_constraints = y[i_idx] + y[j_idx] + y[k_idx]
+        # Compute constraints vectorized
+        ineq_constraints = y[i_indices] + y[j_indices] + y[k_indices]
 
         return eq_constraints, ineq_constraints
 

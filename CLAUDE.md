@@ -7,7 +7,6 @@ Convert CUTEST problems to JAX implementations that match Fortran precision and 
 
 ```bash
 sudo bash run_tests.sh tests/test_problem.py --test-case "PROBLEM1,PROBLEM2"   # Test specific problems
-sudo bash run_tests.sh tests/test_problem.py -k test_objective                 # Test specific aspect
 sudo bash run_tests.sh --test-case "PROBLEM1" --local-tests  # Additionally test compilation
 ruff format . && ruff check .                       # Format and lint
 ```

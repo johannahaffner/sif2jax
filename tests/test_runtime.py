@@ -95,11 +95,20 @@ class TestRuntime:
         return pycutest.import_problem(problem.name, drop_fixed_variables=False)
 
     @pytest.fixture(autouse=True)
-    def clear_jax_cache(self):
+    def clear_jax_cache(self, problem):
         """Clear JAX cache before each test to ensure fair comparison."""
         jax.clear_caches()
+        try:
+            pycutest.clear_cache(problem.name)
+        except (KeyError, FileNotFoundError):
+            pass
+
         yield
         jax.clear_caches()
+        try:
+            pycutest.clear_cache(problem.name)
+        except (KeyError, FileNotFoundError):
+            pass
 
     @pytest.fixture
     def threshold(self, request):

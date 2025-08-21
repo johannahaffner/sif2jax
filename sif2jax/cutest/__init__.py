@@ -648,6 +648,21 @@ from ._nonlinear_equations import (
 # VANDERM1 as VANDERM1,  # TODO: Human review - mixed constraint types
 # VANDERM2 as VANDERM2,  # TODO: Human review - mixed constraint types
 from ._quadratic_problems import (
+    A0ENDNDL as A0ENDNDL,
+    A0ENINDL as A0ENINDL,
+    A0ENSNDL as A0ENSNDL,
+    A0ESDNDL as A0ESDNDL,
+    A0ESINDL as A0ESINDL,
+    A0ESSNDL as A0ESSNDL,
+    A0NNDNDL as A0NNDNDL,
+    A0NNDNIL as A0NNDNIL,
+    A0NNDNSL as A0NNDNSL,
+    A0NNSNSL as A0NNSNSL,
+    A0NSDSDL as A0NSDSDL,
+    A0NSDSDS as A0NSDSDS,
+    A0NSDSIL as A0NSDSIL,
+    A0NSDSSL as A0NSDSSL,
+    A0NSSSSL as A0NSSSSL,
     bounded_quadratic_problems as bounded_quadratic_problems,
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
     CMPC1 as CMPC1,
@@ -977,6 +992,21 @@ from ._unconstrained_minimisation import (
 
 
 problems_dict = {
+    "A0ENDNDL": A0ENDNDL(),
+    "A0ENINDL": A0ENINDL(),
+    "A0ENSNDL": A0ENSNDL(),
+    "A0ESDNDL": A0ESDNDL(),
+    "A0ESINDL": A0ESINDL(),
+    "A0ESSNDL": A0ESSNDL(),
+    "A0NNDNDL": A0NNDNDL(),
+    "A0NNDNIL": A0NNDNIL(),
+    "A0NNDNSL": A0NNDNSL(),
+    "A0NNSNSL": A0NNSNSL(),
+    "A0NSDSDL": A0NSDSDL(),
+    "A0NSDSDS": A0NSDSDS(),
+    "A0NSDSIL": A0NSDSIL(),
+    "A0NSDSSL": A0NSDSSL(),
+    "A0NSSSSL": A0NSSSSL(),
     # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
     # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review

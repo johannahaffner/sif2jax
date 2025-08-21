@@ -1,6 +1,5 @@
 import inspect
 
-import equinox as eqx
 import jax
 import jax.flatten_util as jfu
 import jax.numpy as jnp
@@ -19,15 +18,15 @@ from .helpers import (
 )
 
 
-@pytest.fixture(scope="class")
-def clear_caches():
-    # Setup
-    yield
-    eqx.clear_caches()
-    # Teardown
+# @pytest.fixture(scope="class")
+# def clear_caches():
+#    # Setup
+#    yield
+#    eqx.clear_caches()
+#    # Teardown
 
 
-@pytest.mark.usefixtures("clear_caches")
+# @pytest.mark.usefixtures("clear_caches")
 class TestProblem:
     """Test class for CUTEst problems. This class tests sif2jax implementations of
     CUTEst problems against the pycutest interface to the Fortran problems, using the
@@ -45,6 +44,22 @@ class TestProblem:
     def pycutest_problem(self, problem):
         """Load pycutest problem once per problem per class."""
         return pycutest.import_problem(problem.name, drop_fixed_variables=False)
+
+    @pytest.fixture(autouse=True)
+    def clear_caches(self, problem):
+        jax.clear_caches()
+        try:
+            pycutest.clear_cache(problem.name)
+        except (KeyError, FileNotFoundError):
+            pass
+
+        yield
+
+        jax.clear_caches()
+        try:
+            pycutest.clear_cache(problem.name)
+        except (KeyError, FileNotFoundError):
+            pass
 
     def test_correct_name(self, pycutest_problem):
         assert pycutest_problem is not None

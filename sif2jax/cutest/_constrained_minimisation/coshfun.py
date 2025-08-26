@@ -24,7 +24,7 @@ class COSHFUN(AbstractConstrainedMinimisation):
     provided_y0s: frozenset = frozenset({0})
 
     # Number of functions
-    m: int = 2000  # Default from SIF, can be 3, 8, 14, 20, 200, 2000
+    m: int = 2000 # 3  # Default from SIF, can be 3, 8, 14, 20, 200, 2000
 
     @property
     def n(self) -> int:
@@ -113,9 +113,9 @@ class COSHFUN(AbstractConstrainedMinimisation):
         # Compute linear terms for all middle indices, using 0 for invalid ones
         linear_terms = jnp.where(
             valid_mask,
-            x[jnp.minimum(idx_base - 5, n - 1)]
-            - 2.0 * x[jnp.minimum(idx_base, n - 1)]
-            - x[jnp.minimum(idx_base + 3, n - 1)],
+            x[jnp.minimum(idx_base - 6, n - 1)]
+            - 2.0 * x[jnp.minimum(idx_base - 1, n - 1)]
+            - x[jnp.minimum(idx_base + 2, n - 1)],
             0.0,
         )
 

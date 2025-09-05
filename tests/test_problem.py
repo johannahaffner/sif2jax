@@ -1,6 +1,5 @@
 import inspect
 
-import equinox as eqx
 import jax
 import jax.flatten_util as jfu
 import jax.numpy as jnp
@@ -19,15 +18,15 @@ from .helpers import (
 )
 
 
-@pytest.fixture(scope="class")
-def clear_caches():
-    # Setup
-    yield
-    eqx.clear_caches()
-    # Teardown
+# @pytest.fixture(scope="class")
+# def clear_caches():
+#    # Setup
+#    yield
+#    eqx.clear_caches()
+#    # Teardown
 
 
-@pytest.mark.usefixtures("clear_caches")
+# @pytest.mark.usefixtures("clear_caches")
 class TestProblem:
     """Test class for CUTEst problems. This class tests sif2jax implementations of
     CUTEst problems against the pycutest interface to the Fortran problems, using the
@@ -45,6 +44,22 @@ class TestProblem:
     def pycutest_problem(self, problem):
         """Load pycutest problem once per problem per class."""
         return pycutest.import_problem(problem.name, drop_fixed_variables=False)
+
+    @pytest.fixture(autouse=True)
+    def clear_caches(self, problem):
+        jax.clear_caches()
+        try:
+            pycutest.clear_cache(problem.name)
+        except (KeyError, FileNotFoundError):
+            pass
+
+        yield
+
+        jax.clear_caches()
+        try:
+            pycutest.clear_cache(problem.name)
+        except (KeyError, FileNotFoundError):
+            pass
 
     def test_correct_name(self, pycutest_problem):
         assert pycutest_problem is not None
@@ -272,13 +287,36 @@ class TestProblem:
 
             assert pycutest_problem.bl is not None
             pc_lower = jnp.asarray(pycutest_problem.bl)
-            pc_lower = jnp.where(pc_lower == -1e20, -jnp.inf, pc_lower)
-            assert np.allclose(pc_lower, lower), "Lower bounds do not match."
+            assert lower.size == pc_lower.size
+
+            pc_lower = jnp.where(pc_lower <= -1e20, -jnp.inf, pc_lower)
+            difference = lower - pc_lower
+            # Ignoring NaN values is fine here, since these come from nonfinite bounds,
+            # and we have a separate test for nonfinite bounds.
+            position = jnp.nanargmax(jnp.abs(difference))
+            msg = (
+                "Lower bounds to not match. The difference (sif2jax-pycutest values) "
+                f"is largest at {position}, where it is {difference[position]}. "
+                f"The sif2jax value is {lower[position]}, while the pycutest value "
+                f"is {pc_lower[position]}."
+            )
+            assert np.allclose(pc_lower, lower), msg
 
             assert pycutest_problem.bu is not None
             pc_upper = jnp.asarray(pycutest_problem.bu)
-            pc_upper = jnp.where(pc_upper == 1e20, jnp.inf, pc_upper)
-            assert np.allclose(pc_upper, upper), "Upper bounds do not match."
+            assert upper.size == pc_upper.size
+
+            pc_upper = jnp.where(pc_upper >= 1e20, jnp.inf, pc_upper)
+            difference = upper - pc_upper
+            # Ignoring NaN values here: see comment above.
+            position = jnp.nanargmax(jnp.abs(difference))
+            msg = (
+                "Upper bounds do not match. The difference (sif2jax-pycutest values) "
+                f"is largest at {position}, where it is {difference[position]}. "
+                f"The sif2jax value is {upper[position]}, while the pycutest value "
+                f"is {pc_upper[position]}."
+            )
+            assert np.allclose(pc_upper, upper), msg
         else:
             assert problem.bounds is None, "sif2jax problem should not have bounds."
             pytest.skip("Problem has no bounds defined.")

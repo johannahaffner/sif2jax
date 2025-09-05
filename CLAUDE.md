@@ -7,7 +7,6 @@ Convert CUTEST problems to JAX implementations that match Fortran precision and 
 
 ```bash
 sudo bash run_tests.sh tests/test_problem.py --test-case "PROBLEM1,PROBLEM2"   # Test specific problems
-sudo bash run_tests.sh tests/test_problem.py -k test_objective                 # Test specific aspect
 sudo bash run_tests.sh --test-case "PROBLEM1" --local-tests  # Additionally test compilation
 ruff format . && ruff check .                       # Format and lint
 ```
@@ -43,6 +42,7 @@ Here are the sources relevant to problem implementations:
     a subclass of `AbstractConstrainedMinimisation` with no changes to the interface.
   - `AbstractNonlinearEquations`: provides default constant objective that may be 
     overridden; feasibility problem with constraints
+    For guidance on problem classification, see: https://ralna.github.io/SIFDecode/html/classification/
 - **Vectorization First**: For problems with n > 200 dimensions, ALWAYS write vectorized implementations from the start. Tests will timeout on non-vectorized code for large problems. Use JAX operations (vmap, scan, etc.) instead of Python loops.
 - **Types**: Never hard-code dtypes. Use e.g. y.dtype if one needs to be specified
 - **Style**: Match existing code patterns, imports, conventions

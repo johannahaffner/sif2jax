@@ -1,3 +1,18 @@
+from .a0endndl import A0ENDNDL as A0ENDNDL
+from .a0enindl import A0ENINDL as A0ENINDL
+from .a0ensndl import A0ENSNDL as A0ENSNDL
+from .a0esdndl import A0ESDNDL as A0ESDNDL
+from .a0esindl import A0ESINDL as A0ESINDL
+from .a0essndl import A0ESSNDL as A0ESSNDL
+from .a0nndndl import A0NNDNDL as A0NNDNDL
+from .a0nndnil import A0NNDNIL as A0NNDNIL
+from .a0nndnsl import A0NNDNSL as A0NNDNSL
+from .a0nnsnsl import A0NNSNSL as A0NNSNSL
+from .a0nsdsdl import A0NSDSDL as A0NSDSDL
+from .a0nsdsds import A0NSDSDS as A0NSDSDS
+from .a0nsdsil import A0NSDSIL as A0NSDSIL
+from .a0nsdssl import A0NSDSSL as A0NSDSSL
+from .a0nssssl import A0NSSSSL as A0NSSSSL
 from .biggsc4 import BIGGSC4 as BIGGSC4
 
 # from .chenhark import CHENHARK as CHENHARK  # TODO: Human review needed - see file
@@ -89,6 +104,21 @@ bounded_quadratic_problems = (
 
 # Constrained quadratic problems (equality and/or inequality constraints)
 constrained_quadratic_problems = (
+    A0ENDNDL(),
+    A0ENINDL(),
+    A0ENSNDL(),
+    A0ESDNDL(),
+    A0ESINDL(),
+    A0ESSNDL(),
+    A0NNDNDL(),
+    A0NNDNIL(),
+    A0NNDNSL(),
+    A0NNSNSL(),
+    A0NSDSDL(),
+    A0NSDSDS(),
+    A0NSDSIL(),
+    A0NSDSSL(),
+    A0NSSSSL(),
     BIGGSC4(),
     CMPC1(),
     CMPC2(),

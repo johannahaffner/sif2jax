@@ -169,6 +169,7 @@ from ._constrained_minimisation import (
     DTOC6 as DTOC6,
     # EIGENACO as EIGENACO,  # TODO: Human review needed
     ELATTAR as ELATTAR,
+    ELEC as ELEC,
     # EXPFITA as EXPFITA,  # TODO: Human review - fundamental formulation differences
     # EXPFITB as EXPFITB,  # TODO: Human review - fundamental formulation differences
     # EXPFITC as EXPFITC,  # TODO: Human review - fundamental formulation differences
@@ -506,6 +507,7 @@ from ._nonlinear_equations import (
     # EIGENAU as EIGENAU,  # TODO: Human review needed
     ELATVIDUNE as ELATVIDUNE,
     ENGVAL2NE as ENGVAL2NE,
+    ENSO as ENSO,
     ERRINROSNE as ERRINROSNE,
     ERRINRSMNE as ERRINRSMNE,
     EXP2NE as EXP2NE,
@@ -1813,7 +1815,9 @@ problems_dict = {
     # "EIGENAU": EIGENAU(),  # TODO: Human review needed
     "ELATTAR": ELATTAR(),
     "ELATVIDUNE": ELATVIDUNE(),
+    "ELEC": ELEC(),
     "ENGVAL2NE": ENGVAL2NE(),
+    "ENSO": ENSO(),
     "ERRINRSMNE": ERRINRSMNE(),
     "ERRINROSNE": ERRINROSNE(),
     "EXP2NE": EXP2NE(),

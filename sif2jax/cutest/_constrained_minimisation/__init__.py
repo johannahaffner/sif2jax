@@ -88,6 +88,7 @@ from .dtoc4 import DTOC4 as DTOC4
 from .dtoc5 import DTOC5 as DTOC5
 from .dtoc6 import DTOC6 as DTOC6
 from .elattar import ELATTAR as ELATTAR
+from .elec import ELEC as ELEC
 from .expfita import EXPFITA as EXPFITA
 from .expfitb import EXPFITB as EXPFITB
 from .expfitc import EXPFITC as EXPFITC
@@ -484,6 +485,7 @@ constrained_minimisation_problems = (
     DTOC6(),
     # EIGENACO(),  # TODO: Human review needed - same constraint issues as EIGENA
     ELATTAR(),
+    ELEC(),
     # EXPFITA(),  # TODO: Human review - fundamental formulation differences
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences
     # EXPFITC(),  # TODO: Human review - fundamental formulation differences

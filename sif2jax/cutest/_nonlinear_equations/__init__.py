@@ -85,6 +85,7 @@ from .eggcratene import EGGCRATENE as EGGCRATENE
 # from .eigenau import EIGENAU as EIGENAU
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
+from .enso import ENSO as ENSO
 from .errinrosne import ERRINROSNE as ERRINROSNE
 from .errinrsmne import ERRINRSMNE as ERRINRSMNE
 from .exp2ne import EXP2NE as EXP2NE
@@ -330,6 +331,7 @@ nonlinear_equations_problems = (
     # EIGENAU(),  # TODO: Human review needed - same constraint issues as EIGENA
     ELATVIDUNE(),
     ENGVAL2NE(),
+    ENSO(),
     ERRINRSMNE(),
     ERRINROSNE(),
     EXP2NE(),

@@ -59,6 +59,7 @@ from .cleuven7 import CLEUVEN7 as CLEUVEN7
 from .coshfun import COSHFUN as COSHFUN
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
+from .dale import DALE as DALE  # TODO: Human review needed - see dale.py for details
 from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
 from .degenlpa import DEGENLPA as DEGENLPA
@@ -69,9 +70,14 @@ from .dembo7 import DEMBO7 as DEMBO7
 from .demymalo import DEMYMALO as DEMYMALO
 from .dipigri import DIPIGRI as DIPIGRI
 
+# from .disc2 import DISC2 as DISC2  # TODO: Human review needed - see disc2.py for details
+# from .dixchlng import DIXCHLNG as DIXCHLNG  # TODO: Human review needed - see dixchlng.py for details
+# from .dnieper import DNIEPER as DNIEPER  # TODO: Human review needed - see dnieper.py for details
 # from .dittert import DITTERT as DITTERT  # TODO: Human review needed
 # TODO: DEGTRIDL needs human review - causes segfault despite correct implementation
 # from .degtridl import DEGTRIDL as DEGTRIDL
+# from .drugdis import DRUGDIS as DRUGDIS  # TODO: Human review needed - see drugdis.py for details
+# from .drugdise import DRUGDISE as DRUGDISE  # TODO: Human review needed - see drugdise.py for details
 from .dtoc1l import DTOC1L as DTOC1L
 from .dtoc1na import DTOC1NA as DTOC1NA
 from .dtoc1nb import DTOC1NB as DTOC1NB
@@ -462,6 +468,7 @@ constrained_minimisation_problems = (
     # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
     CSFI2(),
+    DALE(),  # TODO: Human review needed - see dale.py for details
     DALLASS(),
     DECONVC(),
     DEGENLPA(),
@@ -471,7 +478,12 @@ constrained_minimisation_problems = (
     DEMBO7(),
     DEMYMALO(),
     DIPIGRI(),
+    # DISC2(),  # TODO: Human review needed - see disc2.py for details
+    # DIXCHLNG(),  # TODO: Human review needed - see dixchlng.py for details
+    # DNIEPER(),  # TODO: Human review needed - see dnieper.py for details
     # DITTERT(),  # TODO: Human review needed
+    # DRUGDIS(),  # TODO: Human review needed - see drugdis.py for details
+    # DRUGDISE(),  # TODO: Human review needed - see drugdise.py for details
     DTOC1L(),
     DTOC1NA(),
     DTOC1NB(),

@@ -146,6 +146,7 @@ from ._constrained_minimisation import (
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
     CSFI1 as CSFI1,
     CSFI2 as CSFI2,
+    DALE as DALE,  # TODO: Human review needed - see dale.py for details
     DALLASS as DALLASS,
     DECONVC as DECONVC,
     DEGENLPA as DEGENLPA,
@@ -155,8 +156,13 @@ from ._constrained_minimisation import (
     DEMBO7 as DEMBO7,
     DEMYMALO as DEMYMALO,
     DIPIGRI as DIPIGRI,
+    # DISC2 as DISC2,  # TODO: Human review needed - see disc2.py for details
+    # DIXCHLNG as DIXCHLNG,  # TODO: Human review needed - see dixchlng.py for details
+    # DNIEPER as DNIEPER,  # TODO: Human review needed - see dnieper.py for details
     # DITTERT as DITTERT,  # TODO: Human review needed
     # DEGTRIDL as DEGTRIDL,  # TODO: Human review - causes segfault
+    # DRUGDIS as DRUGDIS,  # TODO: Human review needed - see drugdis.py for details
+    # DRUGDISE as DRUGDISE,  # TODO: Human review needed - see drugdise.py for details
     DTOC1L as DTOC1L,
     DTOC1NA as DTOC1NA,
     DTOC1NB as DTOC1NB,
@@ -1408,6 +1414,7 @@ problems_dict = {
     "CVXQP2": CVXQP2(),
     "CVXQP3": CVXQP3(),
     "CYCLOOCFLS": CYCLOOCFLS(),
+    "DALE": DALE(),  # TODO: Human review needed - see dale.py for details
     "DALLASS": DALLASS(),
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
@@ -1422,7 +1429,12 @@ problems_dict = {
     "DEMBO7": DEMBO7(),
     "DEMYMALO": DEMYMALO(),
     "DIPIGRI": DIPIGRI(),
+    # "DISC2": DISC2(),  # TODO: Human review needed - see disc2.py for details
+    # "DIXCHLNG": DIXCHLNG(),  # TODO: Human review needed - see dixchlng.py for details
+    # "DNIEPER": DNIEPER(),  # TODO: Human review needed - see dnieper.py for details
     # "DITTERT": DITTERT(),  # TODO: Human review needed
+    # "DRUGDIS": DRUGDIS(),  # TODO: Human review needed - see drugdis.py for details
+    # "DRUGDISE": DRUGDISE(),  # TODO: Human review needed - see drugdise.py for details
     "DTOC1L": DTOC1L(),
     "DTOC1NA": DTOC1NA(),
     "DTOC1NB": DTOC1NB(),

@@ -201,7 +201,13 @@ from ._constrained_minimisation import (
     # FEEDLOC as FEEDLOC,  # TODO: Human review - constraint dimension mismatch
     FLETCHER as FLETCHER,
     FLT as FLT,
+    # GASOIL as GASOIL,  # TODO: Human review needed - complex optimal control problem
+    GIGOMEZ1 as GIGOMEZ1,
     GIGOMEZ2 as GIGOMEZ2,
+    GIGOMEZ3 as GIGOMEZ3,
+    GOFFIN as GOFFIN,
+    GPP as GPP,
+    # GILBERT as GILBERT,  # TODO: Human review needed - SIF scaling issues
     HADAMARD as HADAMARD,
     HAGER1 as HAGER1,
     HAGER2 as HAGER2,
@@ -567,6 +573,7 @@ from ._nonlinear_equations import (
     GENROSEBNE as GENROSEBNE,
     GENROSENE as GENROSENE,
     GOTTFR as GOTTFR,
+    GROWTH as GROWTH,
     GULFNE as GULFNE,
     HATFLDANE as HATFLDANE,
     HATFLDBNE as HATFLDBNE,
@@ -1619,7 +1626,13 @@ problems_dict = {
     # "FEEDLOC": FEEDLOC(),  # TODO: Human review - constraint mismatch
     "FLETCHER": FLETCHER(),
     "FLT": FLT(),
+    # "GASOIL": GASOIL(),  # TODO: Human review needed - complex optimal control problem
+    "GIGOMEZ1": GIGOMEZ1(),
     "GIGOMEZ2": GIGOMEZ2(),
+    "GIGOMEZ3": GIGOMEZ3(),
+    "GOFFIN": GOFFIN(),
+    "GPP": GPP(),
+    # "GILBERT": GILBERT(),  # TODO: Human review needed - SIF scaling issues
     "HAGER1": HAGER1(),
     "HAGER2": HAGER2(),
     # "HAGER3": HAGER3(),  # TODO: HAGER3 needs human review - marked for future import
@@ -1977,6 +1990,7 @@ problems_dict = {
     "GENROSEBNE": GENROSEBNE(),
     "GENROSENE": GENROSENE(),
     "GOTTFR": GOTTFR(),
+    "GROWTH": GROWTH(),
     "GULFNE": GULFNE(),
     "HATFLDANE": HATFLDANE(),
     "HATFLDBNE": HATFLDBNE(),

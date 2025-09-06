@@ -110,6 +110,7 @@ from .freurone import FREURONE as FREURONE
 from .genrosebne import GENROSEBNE as GENROSEBNE
 from .genrosene import GENROSENE as GENROSENE
 from .gottfr import GOTTFR as GOTTFR
+from .growth import GROWTH as GROWTH
 from .gulfne import GULFNE as GULFNE
 from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
@@ -365,6 +366,7 @@ nonlinear_equations_problems = (
     GENROSEBNE(),
     GENROSENE(),
     GOTTFR(),
+    GROWTH(),
     GULFNE(),
     HATFLDANE(),
     HATFLDBNE(),

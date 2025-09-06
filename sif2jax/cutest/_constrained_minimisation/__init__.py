@@ -135,7 +135,15 @@ from .expfitc import EXPFITC as EXPFITC
 # from .feedloc import FEEDLOC as FEEDLOC
 from .fletcher import FLETCHER as FLETCHER
 from .flt import FLT as FLT
+
+# from .gasoil import GASOIL as GASOIL  # TODO: Human review needed - complex OCP
+from .gigomez1 import GIGOMEZ1 as GIGOMEZ1
 from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
+from .gigomez3 import GIGOMEZ3 as GIGOMEZ3
+
+# from .gilbert import GILBERT as GILBERT  # TODO: Human review needed - scaling
+from .goffin import GOFFIN as GOFFIN
+from .gpp import GPP as GPP
 from .hadamard import HADAMARD as HADAMARD
 
 # TODO: Human review needed - parameter/dimension mismatch with pycutest
@@ -557,7 +565,13 @@ constrained_minimisation_problems = (
     # FEEDLOC(),  # TODO: FEEDLOC needs human review - constraint dimension mismatch
     FLETCHER(),
     FLT(),
+    # GASOIL(),  # TODO: Human review needed - complex optimal control problem
+    GIGOMEZ1(),
     GIGOMEZ2(),
+    GIGOMEZ3(),
+    # GILBERT(),  # TODO: Human review needed - SIF scaling issues
+    GOFFIN(),
+    GPP(),
     HADAMARD(),
     HAGER1(),
     HAGER2(),

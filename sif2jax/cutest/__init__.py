@@ -88,7 +88,9 @@ from ._bounded_minimisation import (
     PRICE4B as PRICE4B,
     QUDLIN as QUDLIN,
     RAYBENDL as RAYBENDL,
+    S368 as S368,
     # RAYBENDS as RAYBENDS,  # TODO: Human review - numerical issues
+    # S277_280 as S277_280,  # TODO: Human review - Complex constraint/bound
     TRIGON1B as TRIGON1B,
 )
 
@@ -399,11 +401,15 @@ from ._constrained_minimisation import (
     # RDW2D51F as RDW2D51F,  # TODO: Human review needed
     ROSEPETAL as ROSEPETAL,
     ROSEPETAL2 as ROSEPETAL2,
+    S316_322 as S316_322,
+    S365 as S365,
+    S365MOD as S365MOD,
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
     # SINROSNB as SINROSNB,  # TODO: Human review - objective scaling issues
     SIPOW1 as SIPOW1,
     SIPOW2 as SIPOW2,
+    # S277_280 as S277_280,  # Moved to unconstrained
     # TAX13322 as TAX13322,  # TODO: Human review - complex objective
     TENBARS1 as TENBARS1,
     TENBARS2 as TENBARS2,
@@ -624,6 +630,7 @@ from ._nonlinear_equations import (
     POWERSUMNE as POWERSUMNE,
     RAT42 as RAT42,
     RAT43 as RAT43,
+    S308NE as S308NE,
     # RES as RES,  # TODO: Human review needed - mixed constraint types
     SANTA as SANTA,
     SINVALNE as SINVALNE,
@@ -722,6 +729,7 @@ from ._quadratic_problems import (
     # QPNBOEI2 as QPNBOEI2,  # TODO: Human review - Boeing routing constraints
     # QPNSTAIR as QPNSTAIR,  # TODO: Human review - complex constraint dimensions
     quadratic_problems as quadratic_problems,
+    # S268 as S268,  # TODO: Human review needed - Complex SIF syntax
     TABLE1 as TABLE1,
     TABLE3 as TABLE3,
     TABLE6 as TABLE6,
@@ -944,6 +952,7 @@ from ._unconstrained_minimisation import (
     RAT43LS as RAT43LS,
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
+    # S277_280 as S277_280,  # Moved to bounded
     S308 as S308,
     # SCOSINE as SCOSINE,  # TODO: Human review needed
     SBRYBND as SBRYBND,
@@ -1247,6 +1256,10 @@ problems_dict = {
     # "SINROSNB": SINROSNB(),  # TODO: Human review - objective scaling issues
     "SIPOW1": SIPOW1(),
     "SIPOW2": SIPOW2(),
+    "S316-322": S316_322(),
+    "S365": S365(),
+    "S365MOD": S365MOD(),
+    # "S277-280": S277_280(),  # Now imported from unconstrained
     # "TAX13322": TAX13322(),  # TODO: Human review - complex objective
     "TENBARS1": TENBARS1(),
     "TENBARS2": TENBARS2(),
@@ -1644,7 +1657,9 @@ problems_dict = {
     "RAT43LS": RAT43LS(),
     "QUARTC": QUARTC(),
     "RAYBENDL": RAYBENDL(),
+    "S368": S368(),
     # "RAYBENDS": RAYBENDS(),  # TODO: Human review - numerical issues
+    # "S277-280": S277_280(),  # TODO: Human review - Complex constraint/bound
     "ROSENBR": ROSENBR(),
     "DIAGIQB": DIAGIQB(),
     "DIAGIQE": DIAGIQE(),
@@ -1656,6 +1671,8 @@ problems_dict = {
     "DIAGPQE": DIAGPQE(),
     "DIAGPQT": DIAGPQT(),
     "ROSZMAN1LS": ROSZMAN1LS(),
+    # "S268": S268(),  # TODO: Human review needed - Complex SIF syntax
+    # "S277-280": S277_280(),  # Now imported from bounded
     "S308": S308(),
     # "SCOSINE": SCOSINE(),  # TODO: Human review needed
     # "SINEVAL": SINEVAL(),  # TODO: Human review - Complex SCALE parameter
@@ -1955,6 +1972,7 @@ problems_dict = {
     # "RES": RES(),  # TODO: Human review needed - mixed constraint types
     "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),
+    "S308NE": S308NE(),
     "SPIN": SPIN(),
     # "SPIN2": SPIN2(),  # TODO: Human review - constraint test failures
     # "SSBRYBNDNE": SSBRYBNDNE(),  # TODO: Human review - complex element structure

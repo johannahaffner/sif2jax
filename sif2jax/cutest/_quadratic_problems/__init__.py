@@ -80,6 +80,7 @@ from .qpnband import QPNBAND as QPNBAND
 # from .qpnboei1 import QPNBOEI1 as QPNBOEI1  # TODO: Human review - Boeing constraints
 # from .qpnboei2 import QPNBOEI2 as QPNBOEI2  # TODO: Human review - Boeing constraints
 # from .qpnstair import QPNSTAIR as QPNSTAIR  # TODO: Human review - constraint dims
+# from .s268 import S268 as S268  # TODO: Human review needed - Complex SIF syntax
 from .table1 import TABLE1 as TABLE1
 from .table3 import TABLE3 as TABLE3
 from .table6 import TABLE6 as TABLE6
@@ -171,6 +172,7 @@ constrained_quadratic_problems = (
     # QPNBOEI1(),  # TODO: Human review - Boeing routing constraints
     # QPNBOEI2(),  # TODO: Human review - Boeing routing constraints
     # QPNSTAIR(),  # TODO: Human review - complex constraint dimensions
+    # S268(),  # TODO: Human review needed - Complex SIF syntax
     TABLE1(),
     TABLE3(),
     TABLE6(),

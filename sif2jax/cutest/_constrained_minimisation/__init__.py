@@ -367,6 +367,9 @@ from .reading9 import READING9 as READING9
 # from .rdw2d51f import RDW2D51F as RDW2D51F  # TODO: Human review needed
 from .rosepetal import ROSEPETAL as ROSEPETAL
 from .rosepetal2 import ROSEPETAL2 as ROSEPETAL2
+from .s316_322 import S316_322 as S316_322
+from .s365 import S365 as S365
+from .s365mod import S365MOD as S365MOD
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 
@@ -374,6 +377,7 @@ from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
+# from .s277_280 import S277_280 as S277_280  # Moved to unconstrained
 # TODO: Human review needed - constraint test failures (vectorized but sign issues)
 # from .spin2op import SPIN2OP as SPIN2OP
 # TODO: Human review needed - constraint issues with auxiliary variables
@@ -678,6 +682,10 @@ constrained_minimisation_problems = (
     # SINROSNB(),  # TODO: Human review - objective scaling issues
     SIPOW1(),
     SIPOW2(),
+    S316_322(),
+    S365(),
+    S365MOD(),
+    # S277_280(),  # Moved to unconstrained
     # TAX13322(),  # TODO: Human review - complex objective structure
     TENBARS1(),
     TENBARS2(),

@@ -264,6 +264,8 @@ from .rat42ls import RAT42LS as RAT42LS
 from .rat43ls import RAT43LS as RAT43LS
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
+
+# from .s277_280 import S277_280 as S277_280  # Moved to bounded
 from .s308 import S308 as S308
 
 # from .sparsqur import SPARSQUR as SPARSQUR  # TODO: Human review - Hessian timeout
@@ -550,6 +552,7 @@ unconstrained_minimisation_problems = (
     QUARTC(),
     ROSENBR(),
     ROSZMAN1LS(),
+    # S277_280(),  # Moved to bounded
     S308(),
     # SCOSINE(),  # TODO: Human review needed
     SCURLY10(),

@@ -55,6 +55,7 @@ from ._bounded_minimisation import (
     LEVYMONT9 as LEVYMONT9,
     LEVYMONT10 as LEVYMONT10,
     LOGROS as LOGROS,
+    # MINSURFO as MINSURFO,  # TODO: Human review needed - dimension mismatch
     # NOBNDTOR as NOBNDTOR,  # TODO: Human review needed - complex bounds logic
     # NONSCOMP as NONSCOMP,  # TODO: Human review needed - GROUP TYPE L2
     PALMER1 as PALMER1,
@@ -350,6 +351,8 @@ from ._constrained_minimisation import (
     MAKELA3 as MAKELA3,
     MAKELA4 as MAKELA4,
     MARATOS as MARATOS,
+    MINMAXBD as MINMAXBD,
+    MINMAXRB as MINMAXRB,
     MSS1 as MSS1,
     MSS2 as MSS2,
     MSS3 as MSS3,
@@ -702,6 +705,8 @@ from ._quadratic_problems import (
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
     HS76 as HS76,
+    # MOSARQP1 as MOSARQP1,  # TODO: Human review needed - objective/constraint issues
+    # MOSARQP2 as MOSARQP2,  # TODO: Human review needed - objective/constraint issues
     NASH as NASH,
     NCVXBQP1 as NCVXBQP1,
     NCVXBQP2 as NCVXBQP2,
@@ -1160,6 +1165,7 @@ problems_dict = {
     "LEVYMONT9": LEVYMONT9(),
     "LEVYMONT10": LEVYMONT10(),
     "LOGROS": LOGROS(),
+    # "MINSURFO": MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # "NOBNDTOR": NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     "HS111": HS111(),
     "HS112": HS112(),
@@ -1193,6 +1199,8 @@ problems_dict = {
     "LISWET12": LISWET12(),
     "LOOTSMA": LOOTSMA(),
     "MARATOS": MARATOS(),
+    "MINMAXBD": MINMAXBD(),
+    "MINMAXRB": MINMAXRB(),
     "MSS1": MSS1(),
     "MSS2": MSS2(),
     "MSS3": MSS3(),
@@ -1586,6 +1594,8 @@ problems_dict = {
     "MARATOSB": MARATOSB(),
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
+    # "MOSARQP1": MOSARQP1(),  # TODO: Human review needed - objective/constraint issues
+    # "MOSARQP2": MOSARQP2(),  # TODO: Human review needed - objective/constraint issues
     "NASH": NASH(),
     # "NCB20": NCB20(),  # TODO: Human review needed - test failures
     # "NCB20B": NCB20B(),  # TODO: Human review needed

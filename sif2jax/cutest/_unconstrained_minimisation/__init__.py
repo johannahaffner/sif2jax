@@ -210,6 +210,8 @@ from .luksan21ls import LUKSAN21LS as LUKSAN21LS
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
 from .maratosb import MARATOSB as MARATOSB
+
+# from .methanl8ls import METHANL8LS as METHANL8LS  # TODO: Human review needed
 from .mexhat import MEXHAT as MEXHAT
 from .mgh09ls import MGH09LS as MGH09LS
 from .mgh10ls import MGH10LS as MGH10LS
@@ -514,6 +516,7 @@ unconstrained_minimisation_problems = (
     # LUKSAN22LS(),  # TODO: Human review needed - gradient issues
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     MARATOSB(),
+    # METHANL8LS(),  # TODO: Human review needed
     MEXHAT(),
     MGH09LS(),
     MGH10LS(),

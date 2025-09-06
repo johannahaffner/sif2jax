@@ -371,6 +371,7 @@ from ._constrained_minimisation import (
     MAKELA2 as MAKELA2,
     MAKELA3 as MAKELA3,
     MAKELA4 as MAKELA4,
+    # METHANOL as METHANOL,  # TODO: Human review needed
     MARATOS as MARATOS,
     MINMAXBD as MINMAXBD,
     MINMAXRB as MINMAXRB,
@@ -953,6 +954,7 @@ from ._unconstrained_minimisation import (
     # LUKSAN22LS as LUKSAN22LS,  # TODO: Human review needed - gradient issues
     # MANCINO as MANCINO,  # TODO: Human review - significant discrepancies in all
     MARATOSB as MARATOSB,
+    # METHANL8LS as METHANL8LS,  # TODO: Human review needed
     MEXHAT as MEXHAT,
     MGH09LS as MGH09LS,
     MGH10LS as MGH10LS,
@@ -1329,6 +1331,7 @@ problems_dict = {
     "MAKELA2": MAKELA2(),
     "MAKELA3": MAKELA3(),
     "MAKELA4": MAKELA4(),
+    # "METHANOL": METHANOL(),  # TODO: Human review needed
     # "HS70": HS70(),  # TODO: Human review - test failures
     # "HS84": HS84(),  # TODO: Human review - objective value discrepancy
     # TODO: TWIR problems need human review - complex trilinear constraint formulation
@@ -1663,6 +1666,7 @@ problems_dict = {
     "MGH17LS": MGH17LS(),
     "MGH17SLS": MGH17SLS(),
     "MARATOSB": MARATOSB(),
+    # "METHANL8LS": METHANL8LS(),  # TODO: Human review needed
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
     # "MOSARQP1": MOSARQP1(),  # TODO: Human review needed - objective/constraint issues

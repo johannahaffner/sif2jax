@@ -104,6 +104,7 @@ from .raybendl import RAYBENDL as RAYBENDL
 # from .s277_280 import S277_280 as S277_280
 from .s368 import S368 as S368
 
+# from .santals import SANTALS as SANTALS  # TODO: Human review - Small gradients
 # from .raybends import RAYBENDS as RAYBENDS  # TODO: Human review - numerical issues
 from .trigon1b import TRIGON1B as TRIGON1B
 
@@ -227,6 +228,7 @@ bounded_minimisation_problems = (
     QUDLIN(),
     RAYBENDL(),
     S368(),
+    # SANTALS(),  # TODO: Human review - Small gradient discrepancies
     # RAYBENDS(),  # TODO: Human review - numerical issues
     # S277_280(),  # TODO: Human review needed - Complex constraint/bound structure
     TRIGON1B(),

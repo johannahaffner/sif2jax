@@ -89,6 +89,7 @@ from ._bounded_minimisation import (
     QUDLIN as QUDLIN,
     RAYBENDL as RAYBENDL,
     S368 as S368,
+    # SANTALS as SANTALS,  # TODO: Human review - Small gradient discrepancies
     # RAYBENDS as RAYBENDS,  # TODO: Human review - numerical issues
     # S277_280 as S277_280,  # TODO: Human review - Complex constraint/bound
     TRIGON1B as TRIGON1B,
@@ -1658,6 +1659,7 @@ problems_dict = {
     "QUARTC": QUARTC(),
     "RAYBENDL": RAYBENDL(),
     "S368": S368(),
+    # "SANTALS": SANTALS(),  # TODO: Human review - Small gradient discrepancies
     # "RAYBENDS": RAYBENDS(),  # TODO: Human review - numerical issues
     # "S277-280": S277_280(),  # TODO: Human review - Complex constraint/bound
     "ROSENBR": ROSENBR(),

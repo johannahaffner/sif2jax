@@ -618,6 +618,9 @@ from ._nonlinear_equations import (
     MGH10S as MGH10S,
     MGH17 as MGH17,
     MGH17S as MGH17S,
+    MISRA1A as MISRA1A,
+    MISRA1B as MISRA1B,
+    MISRA1C as MISRA1C,
     MISRA1D as MISRA1D,
     # MODBEALENE as MODBEALENE,  # TODO: Human review - constraint ordering issues
     # MOREBVNE as MOREBVNE,  # TODO: Human review - SIF file bug on line 64
@@ -959,6 +962,10 @@ from ._unconstrained_minimisation import (
     MGH10SLS as MGH10SLS,
     MGH17LS as MGH17LS,
     MGH17SLS as MGH17SLS,
+    MISRA1ALS as MISRA1ALS,
+    MISRA1BLS as MISRA1BLS,
+    MISRA1CLS as MISRA1CLS,
+    MISRA1DLS as MISRA1DLS,
     # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
     # NCB20 as NCB20,  # TODO: Human review needed - test failures
@@ -1662,6 +1669,10 @@ problems_dict = {
     "MGH10SLS": MGH10SLS(),
     "MGH17LS": MGH17LS(),
     "MGH17SLS": MGH17SLS(),
+    "MISRA1ALS": MISRA1ALS(),
+    "MISRA1BLS": MISRA1BLS(),
+    "MISRA1CLS": MISRA1CLS(),
+    "MISRA1DLS": MISRA1DLS(),
     "MARATOSB": MARATOSB(),
     "MEXHAT": MEXHAT(),
     # "MOREBV": MOREBV(),  # TODO: Human review - minor gradient precision differences
@@ -1995,6 +2006,9 @@ problems_dict = {
     "MGH10S": MGH10S(),
     "MGH17": MGH17(),
     "MGH17S": MGH17S(),
+    "MISRA1A": MISRA1A(),
+    "MISRA1B": MISRA1B(),
+    "MISRA1C": MISRA1C(),
     "MISRA1D": MISRA1D(),
     # "MODBEALENE": MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # "MOREBVNE": MOREBVNE(),  # TODO: Human review - SIF file bug on line 64

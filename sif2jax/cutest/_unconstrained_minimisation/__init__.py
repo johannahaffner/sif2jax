@@ -216,6 +216,10 @@ from .mgh10ls import MGH10LS as MGH10LS
 from .mgh10sls import MGH10SLS as MGH10SLS
 from .mgh17ls import MGH17LS as MGH17LS
 from .mgh17sls import MGH17SLS as MGH17SLS
+from .misra1als import MISRA1ALS as MISRA1ALS
+from .misra1bls import MISRA1BLS as MISRA1BLS
+from .misra1cls import MISRA1CLS as MISRA1CLS
+from .misra1dls import MISRA1DLS as MISRA1DLS
 
 # TODO: Human review needed - Minor gradient precision differences
 # from .morebv import MOREBV as MOREBV
@@ -520,6 +524,10 @@ unconstrained_minimisation_problems = (
     MGH10SLS(),
     MGH17LS(),
     MGH17SLS(),
+    MISRA1ALS(),
+    MISRA1BLS(),
+    MISRA1CLS(),
+    MISRA1DLS(),
     # MOREBV(),  # TODO: Human review - minor gradient precision differences
     # MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     # NCB20(),  # TODO: Human review needed

@@ -1,11 +1,10 @@
 from jaxtyping import Array, Float
 
-from ._misra_base import MISRABase
+from ._misra_ls_base import MISRALSBase
 
 
-class MISRA1D(MISRABase):
-    """NIST Data fitting problem MISRA1D given as an inconsistent set of
-    nonlinear equations.
+class MISRA1DLS(MISRALSBase):
+    """NIST Data fitting problem MISRA1D formulated as least squares minimization.
 
     Fit: y = b1*b2*x*((1+b2*x)**(-1))
     """

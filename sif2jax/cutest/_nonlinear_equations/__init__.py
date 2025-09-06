@@ -172,6 +172,9 @@ from .mgh10 import MGH10 as MGH10
 from .mgh10s import MGH10S as MGH10S
 from .mgh17 import MGH17 as MGH17
 from .mgh17s import MGH17S as MGH17S
+from .misra1a import MISRA1A as MISRA1A
+from .misra1b import MISRA1B as MISRA1B
+from .misra1c import MISRA1C as MISRA1C
 from .misra1d import MISRA1D as MISRA1D
 
 # TODO: Human review - constraint ordering issues
@@ -416,6 +419,9 @@ nonlinear_equations_problems = (
     MGH10S(),
     MGH17(),
     MGH17S(),
+    MISRA1A(),
+    MISRA1B(),
+    MISRA1C(),
     MISRA1D(),
     # MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # MOREBVNE(),  # TODO: Human review - SIF file bug on line 64

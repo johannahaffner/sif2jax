@@ -135,11 +135,12 @@ from .fletbv3m import FLETBV3M as FLETBV3M
 from .fletcbv2 import FLETCBV2 as FLETCBV2
 from .fletcbv3 import FLETCBV3 as FLETCBV3
 from .fletchcr import FLETCHCR as FLETCHCR
+from .fminsrf2 import FMINSRF2 as FMINSRF2
 
 # TODO: Human review - objective/gradient discrepancies
 # from .fletchbv import FLETCHBV as FLETCHBV
-# TODO: FMINSURF and FMINSRF2 have bugs - starting value/gradient discrepancies
-# from .fminsurf import FMINSRF2 as FMINSRF2, FMINSURF as FMINSURF
+from .fminsurf import FMINSURF as FMINSURF
+
 # TODO: FREURONE needs human review - miscategorized (should be constrained)
 # from .freuroth import FREURONE as FREURONE
 from .freuroth import FREUROTH as FREUROTH
@@ -451,8 +452,8 @@ unconstrained_minimisation_problems = (
     FLETCHCR(),
     # Not varying the scale term in the FLETCBV3 problem
     FLETCBV3(),
-    #    FMINSURF(),  # TODO: has a bug
-    #    FMINSRF2(),  # TODO: has a bug
+    FMINSURF(),
+    FMINSRF2(),
     FREUROTH(),
     # FREURONE(),  # TODO: Human review - miscategorized (should be constrained)
     # GAUSS1LS(),  # TODO: Human review - issues reported by user

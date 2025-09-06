@@ -96,12 +96,13 @@ from .fbrain2ne import FBRAIN2NE as FBRAIN2NE
 from .fbrain3 import FBRAIN3 as FBRAIN3
 from .fbrainne import FBRAINNE as FBRAINNE
 
-# from .flosp2hh import FLOSP2HH as FLOSP2HH  # TODO: Human review - NQR constraints
-# from .flosp2hl import FLOSP2HL as FLOSP2HL  # TODO: Human review - NQR constraints
-# from .flosp2hm import FLOSP2HM as FLOSP2HM  # TODO: Human review - NQR constraints
-# from .flosp2th import FLOSP2TH as FLOSP2TH  # TODO: Human review - NQR constraints
-# from .flosp2tl import FLOSP2TL as FLOSP2TL  # TODO: Human review - NQR constraints
-# from .flosp2tm import FLOSP2TM as FLOSP2TM  # TODO: Human review - NQR constraints
+# TODO: Human review needed - CONSTANTS section interpretation issue
+# from .flosp2hh import FLOSP2HH as FLOSP2HH
+# from .flosp2hl import FLOSP2HL as FLOSP2HL
+# from .flosp2hm import FLOSP2HM as FLOSP2HM
+# from .flosp2th import FLOSP2TH as FLOSP2TH
+# from .flosp2tl import FLOSP2TL as FLOSP2TL
+# from .flosp2tm import FLOSP2TM as FLOSP2TM
 from .freurone import FREURONE as FREURONE
 from .genrosebne import GENROSEBNE as GENROSEBNE
 from .genrosene import GENROSENE as GENROSENE
@@ -340,12 +341,12 @@ nonlinear_equations_problems = (
     FBRAIN2NE(),
     FBRAIN3(),
     FBRAINNE(),
-    # FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2TH(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2TL(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2TM(),  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2HH(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2HL(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2HM(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2TH(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2TL(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2TM(),  # TODO: Human review needed - CONSTANTS section interpretation
     FREURONE(),
     GENROSEBNE(),
     GENROSENE(),

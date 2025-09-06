@@ -31,25 +31,28 @@ class FLOSP2HL(AbstractNonlinearEquations):
 
     classification NQR2-MY-V-V
 
-    TODO: Human review needed - constraint values issue
+    TODO: Human review needed - CONSTANTS section interpretation issue
 
     Implementation work completed:
-    1. ✅ Fixed variable ordering to match SIF interleaved format
-    2. ✅ Fixed bounds implementation to work with interleaved variables
-    3. ✅ All tests pass except constraint value tests (636 tests pass)
-    4. ✅ Bounds test now passes correctly
-    5. ✅ Objective, starting point, and dimension tests all pass
+    1. ✅ Vectorized all interior equations (S, V, E) for performance
+    2. ✅ Vectorized all boundary conditions (temperature and vorticity)
+    3. ✅ Fixed variable ordering to match SIF interleaved format
+    4. ✅ Fixed bounds implementation to work with interleaved variables
+    5. ✅ All basic tests pass (dimensions, starting point, bounds, objective)
+    6. ✅ Performance: Vectorized implementation completes in ~30s vs >2min timeout
 
-    Issue remaining:
-    - Constraint values at initial point fail (max difference 1.0 at element 2525)
-    - Temperature boundary constraints evaluate to 0.0 in our implementation
-    - pycutest expects 0.0, our implementation returns 0.0, but test still fails
-    - All 6 FLOSP2 problems exhibit identical failure pattern
+    Issue remaining - CONSTANTS section interpretation:
+    - Constraint values fail at element 2525 (max difference 1.0)
+    - The SIF CONSTANTS section defines: A3=-1, B3=-1, F3=0, G3=0
+    - These appear in temperature boundary constraints T(K,M)=A3, T(K,-M)=B3, etc.
+    - Tried: subtract (-1.0 diff), add (+2.0 diff), no constants (1.0 diff)
+    - All approaches show systematic 1.0 differences at temperature boundary constraints
+    - Issue is consistent across all 6 FLOSP2 variants
 
-    Suspected cause:
-    - Possible constraint ordering discrepancy between implementations
-    - May be related to how pycutest handles NQR classification
-    - The CONSTANTS section in SIF file may be handled differently by pycutest
+    Suspected root cause:
+    - Fundamental difference in CONSTANTS interpretation vs pycutest
+    - May need to examine pycutest source code or compare with working SIF problems
+    - Could be related to NQR classification or constraint equation normalization
     """
 
     m: int = 15  # Half the number of discretization intervals
@@ -138,121 +141,124 @@ class FLOSP2HL(AbstractNonlinearEquations):
         axx = self.axx
         ax = self.ax
 
-        residuals = []
+        # Vectorized interior equations for all interior points
+        # Interior points are [1:-1, 1:-1]
+        interior_om = om[1:-1, 1:-1]
+        interior_ph = ph[1:-1, 1:-1]
+        interior_ps = ps[1:-1, 1:-1]
 
-        # Interior equations
-        for j in range(1, self.grid_size - 1):
-            for i in range(1, self.grid_size - 1):
-                # Stream function equation (S) - linear
-                s_eq = (
-                    om[j, i] * (-2 / h2 - 2 * axx / h2)
-                    + om[j, i + 1] * (1 / h2)
-                    + om[j, i - 1] * (1 / h2)
-                    + om[j + 1, i] * (axx / h2)
-                    + om[j - 1, i] * (axx / h2)
-                    + ph[j, i + 1] * (-self.pi1 / (2 * h))
-                    + ph[j, i - 1] * (self.pi1 / (2 * h))
-                    + ph[j + 1, i] * (-self.pi2 / (2 * h))
-                    + ph[j - 1, i] * (self.pi2 / (2 * h))
-                )
-                residuals.append(s_eq)
+        # Stream function equation (S) - vectorized
+        s_eq = (
+            interior_om * (-2 / h2 - 2 * axx / h2)
+            + om[1:-1, 2:] * (1 / h2)  # om[j, i+1]
+            + om[1:-1, :-2] * (1 / h2)  # om[j, i-1]
+            + om[2:, 1:-1] * (axx / h2)  # om[j+1, i]
+            + om[:-2, 1:-1] * (axx / h2)  # om[j-1, i]
+            + ph[1:-1, 2:] * (-self.pi1 / (2 * h))  # ph[j, i+1]
+            + ph[1:-1, :-2] * (self.pi1 / (2 * h))  # ph[j, i-1]
+            + ph[2:, 1:-1] * (-self.pi2 / (2 * h))  # ph[j+1, i]
+            + ph[:-2, 1:-1] * (self.pi2 / (2 * h))  # ph[j-1, i]
+        )
 
-                # Vorticity equation (V) - linear
-                v_eq = (
-                    ps[j, i] * (-2 / h2 - 2 * axx / h2)
-                    + ps[j, i + 1] * (1 / h2)
-                    + ps[j, i - 1] * (1 / h2)
-                    + ps[j + 1, i] * (axx / h2)
-                    + ps[j - 1, i] * (axx / h2)
-                    + om[j, i] * (axx / 4)
-                )
-                residuals.append(v_eq)
+        # Vorticity equation (V) - vectorized
+        v_eq = (
+            interior_ps * (-2 / h2 - 2 * axx / h2)
+            + ps[1:-1, 2:] * (1 / h2)  # ps[j, i+1]
+            + ps[1:-1, :-2] * (1 / h2)  # ps[j, i-1]
+            + ps[2:, 1:-1] * (axx / h2)  # ps[j+1, i]
+            + ps[:-2, 1:-1] * (axx / h2)  # ps[j-1, i]
+            + interior_om * (axx / 4)
+        )
 
-                # Thermal energy equation (E) - quadratic
-                # Linear part
-                e_eq = (
-                    ph[j, i] * (-2 / h2 - 2 * axx / h2)
-                    + ph[j, i + 1] * (1 / h2)
-                    + ph[j, i - 1] * (1 / h2)
-                    + ph[j + 1, i] * (axx / h2)
-                    + ph[j - 1, i] * (axx / h2)
-                )
+        # Thermal energy equation (E) - vectorized
+        # Linear part
+        e_eq = (
+            interior_ph * (-2 / h2 - 2 * axx / h2)
+            + ph[1:-1, 2:] * (1 / h2)  # ph[j, i+1]
+            + ph[1:-1, :-2] * (1 / h2)  # ph[j, i-1]
+            + ph[2:, 1:-1] * (axx / h2)  # ph[j+1, i]
+            + ph[:-2, 1:-1] * (axx / h2)  # ph[j-1, i]
+        )
 
-                # Quadratic terms
-                psidif_i = ps[j + 1, i] - ps[j - 1, i]
-                phidif_i = ph[j, i + 1] - ph[j, i - 1]
-                e_eq += -ax / (4 * h2) * psidif_i * phidif_i
+        # Quadratic terms - vectorized
+        psidif_i = ps[2:, 1:-1] - ps[:-2, 1:-1]  # ps[j+1, i] - ps[j-1, i]
+        phidif_i = ph[1:-1, 2:] - ph[1:-1, :-2]  # ph[j, i+1] - ph[j, i-1]
+        e_eq += -ax / (4 * h2) * psidif_i * phidif_i
 
-                psidif_j = ps[j, i + 1] - ps[j, i - 1]
-                phidif_j = ph[j + 1, i] - ph[j - 1, i]
-                e_eq += ax / (4 * h2) * psidif_j * phidif_j
+        psidif_j = ps[1:-1, 2:] - ps[1:-1, :-2]  # ps[j, i+1] - ps[j, i-1]
+        phidif_j = ph[2:, 1:-1] - ph[:-2, 1:-1]  # ph[j+1, i] - ph[j-1, i]
+        e_eq += ax / (4 * h2) * psidif_j * phidif_j
 
-                residuals.append(e_eq)
+        # Flatten interior equations
+        s_interior = s_eq.flatten()
+        v_interior = v_eq.flatten()
+        e_interior = e_eq.flatten()
 
-        # Boundary conditions on temperature - avoid corner overlaps
+        # Temperature boundary conditions - vectorized
+        # Based on SIF CONSTANTS section investigation:
+        # The issue appears to be constraint ordering or interpretation
+        # Keeping original computation for now to debug indexing
+
+        # Top boundary (all k) - group values without CONSTANTS
+        j = self.grid_size - 1
+        t_top = ph[j, :] * (2 * self.a1 / h + self.a2) + ph[j - 1, :] * (
+            -2 * self.a1 / h
+        )
+
+        # Bottom boundary (all k) - group values without CONSTANTS
+        j = 0
+        t_bot = ph[j + 1, :] * (2 * self.b1 / h) + ph[j, :] * (
+            -2 * self.b1 / h + self.b2
+        )
+
+        # Right boundary (excluding corners) - group values without CONSTANTS
+        i = self.grid_size - 1
+        t_right = ph[1:-1, i] * (2 * self.f1 / (ax * h) + self.f2) + ph[1:-1, i - 1] * (
+            -2 * self.f1 / (ax * h)
+        )
+
+        # Left boundary (excluding corners) - group values without CONSTANTS
+        i = 0
+        t_left = ph[1:-1, i + 1] * (2 * self.g1 / (ax * h)) + ph[1:-1, i] * (
+            -2 * self.g1 / (ax * h) + self.g2
+        )
+
+        # Vorticity boundary conditions - vectorized
         # Top and bottom boundaries
-        for k in range(self.grid_size):
-            # Top boundary (j = M): T(K,M)
-            j = self.grid_size - 1
-            t_top = ph[j, k] * (2 * self.a1 / h + self.a2) + ph[j - 1, k] * (
-                -2 * self.a1 / h
-            )
-            residuals.append(t_top)
+        j_top = self.grid_size - 1
+        v_top = ps[j_top, :] * (-2 / h) + ps[j_top - 1, :] * (2 / h)
 
-            # Bottom boundary (j = -M): T(K,-M)
-            j = 0
-            t_bot = ph[j + 1, k] * (2 * self.b1 / h) + ph[j, k] * (
-                -2 * self.b1 / h + self.b2
-            )
-            residuals.append(t_bot)
+        j_bot = 0
+        v_bot = ps[j_bot + 1, :] * (2 / h) + ps[j_bot, :] * (-2 / h)
 
-        # Left and right boundaries (excluding corners to avoid double counting)
-        for k in range(
-            1, self.grid_size - 1
-        ):  # Exclude corners at k=0 and k=grid_size-1
-            # Right boundary (i = M): T(M,K)
-            i = self.grid_size - 1
-            t_right = ph[k, i] * (2 * self.f1 / (ax * h) + self.f2) + ph[k, i - 1] * (
-                -2 * self.f1 / (ax * h)
-            )
-            residuals.append(t_right)
+        # Right and left boundaries (excluding corners)
+        i_right = self.grid_size - 1
+        v_right = ps[1:-1, i_right] * (-2 / (ax * h)) + ps[1:-1, i_right - 1] * (
+            2 / (ax * h)
+        )
 
-            # Left boundary (i = -M): T(-M,K)
-            i = 0
-            t_left = ph[k, i + 1] * (2 * self.g1 / (ax * h)) + ph[k, i] * (
-                -2 * self.g1 / (ax * h) + self.g2
-            )
-            residuals.append(t_left)
+        i_left = 0
+        v_left = ps[1:-1, i_left + 1] * (2 / (ax * h)) + ps[1:-1, i_left] * (
+            -2 / (ax * h)
+        )
 
-        # Boundary conditions on vorticity - avoid double counting corners
-        # Top and bottom boundaries
-        for k in range(self.grid_size):
-            # Top boundary: V(K,M)
-            j = self.grid_size - 1
-            v_top = ps[j, k] * (-2 / h) + ps[j - 1, k] * (2 / h)
-            residuals.append(v_top)
-
-            # Bottom boundary: V(K,-M)
-            j = 0
-            v_bot = ps[j + 1, k] * (2 / h) + ps[j, k] * (-2 / h)
-            residuals.append(v_bot)
-
-        # Left and right boundaries (excluding all corners to avoid double counting)
-        # Since we covered all K values in top/bottom, skip corner K values entirely
-        for k in range(
-            1, self.grid_size - 1
-        ):  # Exclude corners at k=0 and k=grid_size-1
-            # Right boundary: V(M,K)
-            i = self.grid_size - 1
-            v_right = ps[k, i] * (-2 / (ax * h)) + ps[k, i - 1] * (2 / (ax * h))
-            residuals.append(v_right)
-
-            # Left boundary: V(-M,K)
-            i = 0
-            v_left = ps[k, i + 1] * (2 / (ax * h)) + ps[k, i] * (-2 / (ax * h))
-            residuals.append(v_left)
-
-        return jnp.array(residuals)
+        # Concatenate all residuals in the correct order
+        # PS boundary conditions handled by variable bounds, not constraints
+        return jnp.concatenate(
+            [
+                s_interior,
+                v_interior,
+                e_interior,  # Interior equations
+                t_top,
+                t_bot,
+                t_right,
+                t_left,  # Temperature boundaries
+                v_top,
+                v_bot,
+                v_right,
+                v_left,  # Vorticity boundaries
+            ]
+        )
 
     @property
     def y0(self) -> Array:
@@ -275,58 +281,38 @@ class FLOSP2HL(AbstractNonlinearEquations):
 
     @property
     def bounds(self) -> tuple[Array, Array] | None:
-        """Returns bounds on variables.
-
-        The SIF file sets bounds on PS variables at boundaries:
-        For each K from -M to M:
-        - PS(K,-M): bottom boundary
-        - PS(-M,K): left boundary
-        - PS(K,M): top boundary
-        - PS(M,K): right boundary
-
-        Variables are in interleaved order: OM(I,J), PH(I,J), PS(I,J) for each (J,I)
-        """
+        """Returns bounds on variables - vectorized computation for performance."""
         bounds_lower = jnp.full(self.n_vars, -jnp.inf, dtype=jnp.float64)
         bounds_upper = jnp.full(self.n_vars, jnp.inf, dtype=jnp.float64)
 
         M = self.m
+        grid_size = self.grid_size
 
-        # Set bounds according to SIF file's DO loop
-        for k in range(-M, M + 1):  # K from -M to M
-            # Convert to 0-based indices
-            k_idx = k + M  # k=-15 -> 0, k=15 -> 30
+        # Vectorized bounds computation for all boundary PS variables
+        k_indices = jnp.arange(2 * M + 1)  # 0 to 30 (corresponds to K=-M to M)
 
-            # PS(K,-M): bottom boundary - in SIF notation PS(k, -M)
-            # Grid position: row 0, column k_idx, PS component (index 2)
-            j_idx = 0  # J=-M corresponds to row 0
-            i_idx = k_idx  # I=K
-            var_idx = (j_idx * self.grid_size + i_idx) * 3 + 2  # +2 for PS component
-            bounds_lower = bounds_lower.at[var_idx].set(1.0)
-            bounds_upper = bounds_upper.at[var_idx].set(1.0)
+        # PS(K,-M): bottom boundary (row 0, all columns)
+        var_indices_bottom = k_indices * 3 + 2
+        bounds_lower = bounds_lower.at[var_indices_bottom].set(1.0)
+        bounds_upper = bounds_upper.at[var_indices_bottom].set(1.0)
 
-            # PS(-M,K): left boundary - in SIF notation PS(-M, k)
-            # Grid position: row k_idx, column 0, PS component
-            j_idx = k_idx  # J=K
-            i_idx = 0  # I=-M corresponds to column 0
-            var_idx = (j_idx * self.grid_size + i_idx) * 3 + 2
-            bounds_lower = bounds_lower.at[var_idx].set(1.0)
-            bounds_upper = bounds_upper.at[var_idx].set(1.0)
+        # PS(K,M): top boundary (row 30, all columns)
+        row_offset_top = (grid_size - 1) * grid_size * 3
+        var_indices_top = row_offset_top + k_indices * 3 + 2
+        bounds_lower = bounds_lower.at[var_indices_top].set(1.0)
+        bounds_upper = bounds_upper.at[var_indices_top].set(1.0)
 
-            # PS(K,M): top boundary - in SIF notation PS(k, M)
-            # Grid position: row 30, column k_idx, PS component
-            j_idx = self.grid_size - 1  # J=M corresponds to row 30
-            i_idx = k_idx  # I=K
-            var_idx = (j_idx * self.grid_size + i_idx) * 3 + 2
-            bounds_lower = bounds_lower.at[var_idx].set(1.0)
-            bounds_upper = bounds_upper.at[var_idx].set(1.0)
+        # PS(-M,K): left boundary (column 0, all rows)
+        row_offsets_left = k_indices * grid_size * 3
+        var_indices_left = row_offsets_left + 2
+        bounds_lower = bounds_lower.at[var_indices_left].set(1.0)
+        bounds_upper = bounds_upper.at[var_indices_left].set(1.0)
 
-            # PS(M,K): right boundary - in SIF notation PS(M, k)
-            # Grid position: row k_idx, column 30, PS component
-            j_idx = k_idx  # J=K
-            i_idx = self.grid_size - 1  # I=M corresponds to column 30
-            var_idx = (j_idx * self.grid_size + i_idx) * 3 + 2
-            bounds_lower = bounds_lower.at[var_idx].set(1.0)
-            bounds_upper = bounds_upper.at[var_idx].set(1.0)
+        # PS(M,K): right boundary (column 30, all rows)
+        col_offset_right = (grid_size - 1) * 3
+        var_indices_right = row_offsets_left + col_offset_right + 2
+        bounds_lower = bounds_lower.at[var_indices_right].set(1.0)
+        bounds_upper = bounds_upper.at[var_indices_right].set(1.0)
 
         return bounds_lower, bounds_upper
 

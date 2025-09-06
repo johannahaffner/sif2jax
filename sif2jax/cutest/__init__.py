@@ -138,7 +138,11 @@ from ._constrained_minimisation import (
     BT13 as BT13,
     BURKEHAN as BURKEHAN,
     BYRDSPHR as BYRDSPHR,
+    # CAMSHAPE as CAMSHAPE,  # TODO: Human review needed
     CANTILVR as CANTILVR,
+    CATENA as CATENA,
+    CATMIX as CATMIX,
+    # CATENARY as CATENARY,  # TODO: Human review needed
     CB2 as CB2,
     CB3 as CB3,
     CHACONN1 as CHACONN1,
@@ -1096,7 +1100,11 @@ problems_dict = {
     "BOOTH": BOOTH(),
     "BURKEHAN": BURKEHAN(),
     "BYRDSPHR": BYRDSPHR(),
+    # "CAMSHAPE": CAMSHAPE(),  # TODO: Human review needed
     "CANTILVR": CANTILVR(),
+    "CATENA": CATENA(),
+    "CATMIX": CATMIX(),
+    # "CATENARY": CATENARY(),  # TODO: Human review needed
     "CB2": CB2(),
     "CB3": CB3(),
     "CHACONN1": CHACONN1(),

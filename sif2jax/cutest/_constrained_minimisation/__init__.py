@@ -478,6 +478,12 @@ from .zecevic3 import ZECEVIC3 as ZECEVIC3
 from .zecevic4 import ZECEVIC4 as ZECEVIC4
 
 
+# TODO: ZAMB2 needs human review - requires 30 years of data
+# (3966 vars, 1440 constraints). Mathematical framework implemented but
+# needs full historical dataset and large-scale optimization
+# from .zamb2 import ZAMB2 as ZAMB2
+
+
 constrained_minimisation_problems = (
     # ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT(),  # TODO: Human review - constraint values don't match pycutest
@@ -799,6 +805,8 @@ constrained_minimisation_problems = (
     ZECEVIC2(),
     ZECEVIC3(),
     ZECEVIC4(),
+    # ZAMB2(),  # TODO: Human review - requires 30 years of data
+    # (3966 vars, 1440 constraints)
     # TRUSPYR1(),  # TODO: Human review - complex constraint scaling issues
     # TRUSPYR2(),  # TODO: Human review - test requested to be removed
     BT1(),

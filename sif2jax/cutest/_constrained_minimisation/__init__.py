@@ -370,6 +370,8 @@ from .rosepetal2 import ROSEPETAL2 as ROSEPETAL2
 from .s316_322 import S316_322 as S316_322
 from .s365 import S365 as S365
 from .s365mod import S365MOD as S365MOD
+
+# from .saro import SARO as SARO  # TODO: Human review - physics model approximation
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 
@@ -685,6 +687,7 @@ constrained_minimisation_problems = (
     S316_322(),
     S365(),
     S365MOD(),
+    # SARO(),  # TODO: Human review - physics model approximation
     # S277_280(),  # Moved to unconstrained
     # TAX13322(),  # TODO: Human review - complex objective structure
     TENBARS1(),

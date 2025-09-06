@@ -56,6 +56,7 @@ from .levymont9 import LEVYMONT9 as LEVYMONT9
 from .levymont10 import LEVYMONT10 as LEVYMONT10
 from .logros import LOGROS as LOGROS
 
+# from .minsurfo import MINSURFO as MINSURFO  # TODO: Human review - dimensions
 # TODO: Human review needed - complex bounds logic
 # from .nobndtor import NOBNDTOR as NOBNDTOR
 # TODO: Human review needed - GROUP TYPE L2 not properly handled
@@ -189,6 +190,7 @@ bounded_minimisation_problems = (
     LEVYMONT9(),
     LEVYMONT10(),
     LOGROS(),
+    # MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     # NONSCOMP(),  # TODO: Human review needed
     PALMER1(),

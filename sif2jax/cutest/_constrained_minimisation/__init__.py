@@ -319,6 +319,8 @@ from .makela2 import MAKELA2 as MAKELA2
 from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
 from .maratos import MARATOS as MARATOS
+from .minmaxbd import MINMAXBD as MINMAXBD
+from .minmaxrb import MINMAXRB as MINMAXRB
 from .mss1 import MSS1 as MSS1
 from .mss2 import MSS2 as MSS2
 from .mss3 import MSS3 as MSS3
@@ -636,6 +638,8 @@ constrained_minimisation_problems = (
     HYDROELL(),
     LOOTSMA(),
     MARATOS(),
+    MINMAXBD(),
+    MINMAXRB(),
     MSS1(),
     MSS2(),
     MSS3(),

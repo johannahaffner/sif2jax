@@ -63,6 +63,7 @@ from .hs76 import HS76 as HS76
 
 # from .mosarqp1 import MOSARQP1 as MOSARQP1  # TODO: Human review - objective issues
 # from .mosarqp2 import MOSARQP2 as MOSARQP2  # TODO: Human review - objective issues
+from .junkturn import JUNKTURN as JUNKTURN
 from .nash import NASH as NASH
 from .ncvxbqp1 import NCVXBQP1 as NCVXBQP1
 from .ncvxbqp2 import NCVXBQP2 as NCVXBQP2
@@ -158,6 +159,7 @@ constrained_quadratic_problems = (
     GOULDQP3(),
     HATFLDH(),
     HS44NEW(),
+    JUNKTURN(),
     HS76(),
     # MOSARQP1(),  # TODO: Human review needed - objective/constraint issues
     # MOSARQP2(),  # TODO: Human review needed - objective/constraint issues

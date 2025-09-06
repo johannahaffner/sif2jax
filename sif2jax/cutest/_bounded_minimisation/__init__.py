@@ -53,6 +53,10 @@ from .hs45 import HS45 as HS45
 from .hs110 import HS110 as HS110
 
 # from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
+# from .jnlbrng1 import JNLBRNG1 as JNLBRNG1  # TODO: Human review needed
+# from .jnlbrng2 import JNLBRNG2 as JNLBRNG2  # TODO: Human review
+# from .jannson3 import JANNSON3 as JANNSON3  # TODO: Human review
+from .judgeb import JUDGEB as JUDGEB
 from .koebhelb import KOEBHELB as KOEBHELB
 from .levymont import LEVYMONT as LEVYMONT
 from .levymont5 import LEVYMONT5 as LEVYMONT5
@@ -198,6 +202,10 @@ bounded_minimisation_problems = (
     HS38(),
     HS45(),
     HS110(),
+    # JNLBRNG1(),  # TODO: Human review needed
+    # JNLBRNG2(),  # TODO: Human review needed - performance issues
+    # JANNSON3(),  # TODO: Human review needed - large-scale problem
+    JUDGEB(),
     KOEBHELB(),
     LEVYMONT(),
     LEVYMONT5(),

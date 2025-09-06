@@ -49,6 +49,10 @@ from ._bounded_minimisation import (
     HS38 as HS38,
     HS45 as HS45,
     HS110 as HS110,
+    # JNLBRNG1 as JNLBRNG1,  # TODO: Human review needed
+    # JNLBRNG2 as JNLBRNG2,  # TODO: Human review needed - performance issues
+    # JANNSON3 as JANNSON3,  # TODO: Human review needed - large-scale problem
+    JUDGEB as JUDGEB,
     KOEBHELB as KOEBHELB,
     LEVYMONT as LEVYMONT,
     LEVYMONT5 as LEVYMONT5,
@@ -744,6 +748,7 @@ from ._quadratic_problems import (
     HS76 as HS76,
     # MOSARQP1 as MOSARQP1,  # TODO: Human review needed - objective/constraint issues
     # MOSARQP2 as MOSARQP2,  # TODO: Human review needed - objective/constraint issues
+    JUNKTURN as JUNKTURN,
     NASH as NASH,
     NCVXBQP1 as NCVXBQP1,
     NCVXBQP2 as NCVXBQP2,
@@ -926,6 +931,7 @@ from ._unconstrained_minimisation import (
     INDEFM as INDEFM,
     INTEQNELS as INTEQNELS,
     JENSMP as JENSMP,
+    # JIMACK as JIMACK,  # TODO: Human review needed
     JUDGE as JUDGE,
     KIRBY2LS as KIRBY2LS,
     KOWOSB as KOWOSB,
@@ -1631,7 +1637,13 @@ problems_dict = {
     "INDEFM": INDEFM(),
     "INTEQNELS": INTEQNELS(),
     "JENSMP": JENSMP(),
+    # "JNLBRNG1": JNLBRNG1(),  # TODO: Human review needed
+    # "JNLBRNG2": JNLBRNG2(),  # TODO: Human review needed - performance issues
+    # "JANNSON3": JANNSON3(),  # TODO: Human review needed - large-scale problem
+    # "JIMACK": JIMACK(),  # TODO: Human review needed
     "JUDGE": JUDGE(),
+    "JUDGEB": JUDGEB(),
+    "JUNKTURN": JUNKTURN(),
     "KIRBY2LS": KIRBY2LS(),
     "KOEBHELB": KOEBHELB(),
     "KOWOSB": KOWOSB(),

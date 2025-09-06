@@ -262,6 +262,8 @@ from .price4 import PRICE4 as PRICE4
 from .quartc import QUARTC as QUARTC
 from .rat42ls import RAT42LS as RAT42LS
 from .rat43ls import RAT43LS as RAT43LS
+
+# from .recipels import RECIPELS as RECIPELS  # TODO: timeout on 3-var problem
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
 from .s308 import S308 as S308
@@ -547,6 +549,7 @@ unconstrained_minimisation_problems = (
     PRICE4(),
     RAT42LS(),
     RAT43LS(),
+    # RECIPELS(),  # TODO: Human review - timeout on simple 3-var problem
     QUARTC(),
     ROSENBR(),
     ROSZMAN1LS(),

@@ -63,6 +63,7 @@ from ._bounded_minimisation import (
     LEVYMONT10 as LEVYMONT10,
     # LINVERSE as LINVERSE,  # TODO: Human review needed
     LOGROS as LOGROS,
+    # MAXLIKA as MAXLIKA,  # TODO: Human review needed
     # MINSURFO as MINSURFO,  # TODO: Human review needed - dimension mismatch
     # NOBNDTOR as NOBNDTOR,  # TODO: Human review needed - complex bounds logic
     # NONSCOMP as NONSCOMP,  # TODO: Human review needed - GROUP TYPE L2
@@ -377,12 +378,17 @@ from ._constrained_minimisation import (
     LUKVLI16 as LUKVLI16,
     LUKVLI17 as LUKVLI17,
     LUKVLI18 as LUKVLI18,
+    MADSEN as MADSEN,
+    # MADSSCHJ as MADSSCHJ,  # TODO: Human review needed - complex constraint structure
     MAKELA1 as MAKELA1,
     MAKELA2 as MAKELA2,
     MAKELA3 as MAKELA3,
     MAKELA4 as MAKELA4,
     # METHANOL as METHANOL,  # TODO: Human review needed
+    # MANNE as MANNE,  # TODO: Human review needed - complex econometric model
+    # MARINE as MARINE,  # TODO: Human review needed - complex differential equations
     MARATOS as MARATOS,
+    MATRIX2 as MATRIX2,
     MINMAXBD as MINMAXBD,
     MINMAXRB as MINMAXRB,
     MSS1 as MSS1,
@@ -1250,6 +1256,7 @@ problems_dict = {
     "LEVYMONT10": LEVYMONT10(),
     # "LINVERSE": LINVERSE(),  # TODO: Human review needed
     "LOGROS": LOGROS(),
+    # "MAXLIKA": MAXLIKA(),  # TODO: Human review needed
     # "MINSURFO": MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # "NOBNDTOR": NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     "HS111": HS111(),
@@ -1363,11 +1370,16 @@ problems_dict = {
     # "VANDERM2": VANDERM2(),  # TODO: Human review - mixed constraint types
     # "VANDERM3": VANDERM3(),  # TODO: Human review - constraints mismatch
     # "VANDERM4": VANDERM4(),  # TODO: Human review - constraints mismatch
+    "MADSEN": MADSEN(),
+    # "MADSSCHJ": MADSSCHJ(),  # TODO: Human review needed - complex constraints
     "MAKELA1": MAKELA1(),
     "MAKELA2": MAKELA2(),
     "MAKELA3": MAKELA3(),
     "MAKELA4": MAKELA4(),
     # "METHANOL": METHANOL(),  # TODO: Human review needed
+    # "MANNE": MANNE(),  # TODO: Human review needed - complex econometric model
+    # "MARINE": MARINE(),  # TODO: Human review needed - complex differential equations
+    "MATRIX2": MATRIX2(),
     # "HS70": HS70(),  # TODO: Human review - test failures
     # "HS84": HS84(),  # TODO: Human review - objective value discrepancy
     # TODO: TWIR problems need human review - complex trilinear constraint formulation

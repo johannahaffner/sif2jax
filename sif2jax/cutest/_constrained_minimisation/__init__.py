@@ -353,13 +353,20 @@ from .lukvli15 import LUKVLI15 as LUKVLI15
 from .lukvli16 import LUKVLI16 as LUKVLI16
 from .lukvli17 import LUKVLI17 as LUKVLI17
 from .lukvli18 import LUKVLI18 as LUKVLI18
+from .madsen import MADSEN as MADSEN
+
+# from .madsschj import MADSSCHJ as MADSSCHJ  # TODO: Human review needed
 from .makela1 import MAKELA1 as MAKELA1
 from .makela2 import MAKELA2 as MAKELA2
 from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
+
+# from .manne import MANNE as MANNE  # TODO: Human review needed
+# from .marine import MARINE as MARINE  # TODO: Human review needed
 from .maratos import MARATOS as MARATOS
 
 # from .methanol import METHANOL as METHANOL  # TODO: Human review needed
+from .matrix2 import MATRIX2 as MATRIX2
 from .minmaxbd import MINMAXBD as MINMAXBD
 from .minmaxrb import MINMAXRB as MINMAXRB
 from .mss1 import MSS1 as MSS1
@@ -791,11 +798,16 @@ constrained_minimisation_problems = (
     # VANDERM2(),  # Moved to nonlinear equations (NOR2 classification)
     # VANDERM3(),  # TODO: Human review - constraint values don't match
     # VANDERM4(),  # TODO: Human review - constraint values don't match
+    MADSEN(),
+    # MADSSCHJ(),  # TODO: Human review needed - complex constraint structure
     MAKELA1(),
     MAKELA2(),
     MAKELA3(),
     MAKELA4(),
     # METHANOL(),  # TODO: Human review needed
+    # MANNE(),  # TODO: Human review needed - complex econometric model
+    # MARINE(),  # TODO: Human review needed - complex differential equations
+    MATRIX2(),
     # HS70(),  # TODO: Human review - test failures
     # HS84(),  # TODO: Human review - objective value discrepancy
     # TODO: TWIR problems need human review - complex trilinear constraint formulation

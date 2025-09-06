@@ -111,12 +111,12 @@ from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
 from .hatfldcne import HATFLDCNE as HATFLDCNE
 from .hatflddne import HATFLDDNE as HATFLDDNE
-
-# TODO: Human review needed - sign convention issues with pycutest
-# from .hatfldene import HATFLDENE as HATFLDENE
+from .hatfldene import HATFLDENE as HATFLDENE
 from .hatfldf import HATFLDF as HATFLDF
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
 from .hatfldg import HATFLDG as HATFLDG
+from .heart6 import HEART6 as HEART6
+from .heart8 import HEART8 as HEART8
 from .helixne import HELIXNE as HELIXNE
 from .himmelba import HIMMELBA as HIMMELBA
 from .himmelbfne import HIMMELBFNE as HIMMELBFNE
@@ -355,10 +355,12 @@ nonlinear_equations_problems = (
     HATFLDBNE(),
     HATFLDCNE(),
     HATFLDDNE(),
-    # HATFLDENE(),  # TODO: Human review needed - sign convention issues
+    HATFLDENE(),
     HATFLDF(),
     HATFLDFLNE(),
     HATFLDG(),
+    HEART6(),
+    HEART8(),
     HELIXNE(),
     HIMMELBA(),
     HIMMELBFNE(),

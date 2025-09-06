@@ -54,21 +54,25 @@ class ELEC(AbstractConstrainedMinimisation):
         # Compute all pairwise differences
         diffs = points_i - points_j  # Shape: (NP, NP, 3)
 
-        # Compute all pairwise distances with small epsilon for numerical stability
+        # Compute all pairwise distances
         distances_squared = jnp.sum(diffs**2, axis=2)  # Shape: (NP, NP)
-        # Add small epsilon to prevent gradient explosion at small distances
-        epsilon = 1e-10
-        distances = jnp.sqrt(distances_squared + epsilon)  # Shape: (NP, NP)
 
-        # Create mask for upper triangle (i < j)
+        # Create mask for upper triangle (i < j) to select only unique pairs
         i_indices = jnp.arange(self.NP)[:, jnp.newaxis]
         j_indices = jnp.arange(self.NP)[jnp.newaxis, :]
         upper_triangle_mask = i_indices < j_indices
 
+        # Add small value to diagonal to prevent division by zero in gradient
+        # This doesn't affect the result since we mask out the diagonal anyway
+        distances_squared_safe = jnp.where(
+            upper_triangle_mask,
+            distances_squared,
+            1.0,  # Set to 1.0 for non-upper-triangle elements
+        )
+        distances = jnp.sqrt(distances_squared_safe)
+
         # Compute potential energy only for i < j pairs
-        # Use where to avoid division by zero on diagonal
-        safe_distances = jnp.where(upper_triangle_mask, distances, 1.0)
-        potentials = jnp.where(upper_triangle_mask, 1.0 / safe_distances, 0.0)
+        potentials = jnp.where(upper_triangle_mask, 1.0 / distances, 0.0)
 
         return jnp.sum(potentials)
 
@@ -106,12 +110,6 @@ class ELEC(AbstractConstrainedMinimisation):
             x = cos_theta * sin_phi
             y = sin_theta * sin_phi
             z = cos_phi
-
-            # Normalize to ensure exactly on unit sphere
-            norm = jnp.sqrt(x**2 + y**2 + z**2)
-            x = x / norm
-            y = y / norm
-            z = z / norm
 
             points.extend([x, y, z])
 

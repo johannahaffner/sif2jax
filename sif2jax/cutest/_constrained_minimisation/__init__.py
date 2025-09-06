@@ -36,7 +36,13 @@ from .bt12 import BT12 as BT12
 from .bt13 import BT13 as BT13
 from .burkehan import BURKEHAN as BURKEHAN
 from .byrdsphr import BYRDSPHR as BYRDSPHR
+
+# from .camshape import CAMSHAPE as CAMSHAPE  # TODO: Human review needed
 from .cantilvr import CANTILVR as CANTILVR
+from .catena import CATENA as CATENA
+from .catmix import CATMIX as CATMIX
+
+# from .catenary import CATENARY as CATENARY  # TODO: Human review needed
 from .cb2 import CB2 as CB2
 from .cb3 import CB3 as CB3
 from .chaconn1 import CHACONN1 as CHACONN1
@@ -488,7 +494,11 @@ constrained_minimisation_problems = (
     BIGGSC4(),
     BURKEHAN(),
     BYRDSPHR(),
+    # CAMSHAPE(),  # TODO: Human review needed
     CANTILVR(),
+    CATENA(),
+    CATMIX(),
+    # CATENARY(),  # TODO: Human review needed
     CB2(),
     CB3(),
     CHACONN1(),

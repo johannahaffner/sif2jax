@@ -108,6 +108,11 @@ from .price4b import PRICE4B as PRICE4B
 from .qudlin import QUDLIN as QUDLIN
 from .raybendl import RAYBENDL as RAYBENDL
 
+# TODO: Human review needed - Complex constraint/bound structure
+# from .s277_280 import S277_280 as S277_280
+from .s368 import S368 as S368
+
+# from .santals import SANTALS as SANTALS  # TODO: Human review - gradient discrepancies
 # from .raybends import RAYBENDS as RAYBENDS  # TODO: Human review - numerical issues
 from .trigon1b import TRIGON1B as TRIGON1B
 
@@ -234,7 +239,10 @@ bounded_minimisation_problems = (
     PRICE4B(),
     QUDLIN(),
     RAYBENDL(),
+    S368(),
+    # SANTALS(),  # TODO: Human review - Small gradient discrepancies
     # RAYBENDS(),  # TODO: Human review - numerical issues
+    # S277_280(),  # TODO: Human review needed - Complex constraint/bound structure
     TRIGON1B(),
     # TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
     # WALL10(),  # TODO: Human review - small gradient discrepancies (~2.2e-4)

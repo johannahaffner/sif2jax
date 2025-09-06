@@ -226,6 +226,7 @@ from .powellsq import POWELLSQ as POWELLSQ
 from .powersumne import POWERSUMNE as POWERSUMNE
 from .rat42 import RAT42 as RAT42
 from .rat43 import RAT43 as RAT43
+from .s308ne import S308NE as S308NE
 
 # TODO: Human review needed - mixed constraint types (equality/inequality)
 # from .res import RES as RES
@@ -449,6 +450,7 @@ nonlinear_equations_problems = (
     # RES(),  # TODO: Human review needed - mixed constraint types
     SANTA(),
     SINVALNE(),
+    S308NE(),
     SPIN(),
     # SPIN2(),  # TODO: Human review - constraint test failures
     # SSBRYBNDNE(),  # TODO: Human review needed - complex element structure

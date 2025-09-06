@@ -350,6 +350,8 @@ from .makela2 import MAKELA2 as MAKELA2
 from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
 from .maratos import MARATOS as MARATOS
+
+# from .methanol import METHANOL as METHANOL  # TODO: Human review needed
 from .minmaxbd import MINMAXBD as MINMAXBD
 from .minmaxrb import MINMAXRB as MINMAXRB
 from .mss1 import MSS1 as MSS1
@@ -773,6 +775,7 @@ constrained_minimisation_problems = (
     MAKELA2(),
     MAKELA3(),
     MAKELA4(),
+    # METHANOL(),  # TODO: Human review needed
     # HS70(),  # TODO: Human review - test failures
     # HS84(),  # TODO: Human review - objective value discrepancy
     # TODO: TWIR problems need human review - complex trilinear constraint formulation

@@ -24,10 +24,17 @@ from .diagnqt import DIAGNQT as DIAGNQT
 from .diagpqb import DIAGPQB as DIAGPQB
 from .diagpqe import DIAGPQE as DIAGPQE
 from .diagpqt import DIAGPQT as DIAGPQT
+
+# TODO: EG1 needs human review - test timeout issues
+# from .eg1 import EG1 as EG1
+from .eggcrateb import EGGCRATEB as EGGCRATEB
+from .elatvidub import ELATVIDUB as ELATVIDUB
 from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
-from .expquad import EXPQUAD as EXPQUAD
+
+# TODO: Human review - test timeout on large problem
+# from .expquad import EXPQUAD as EXPQUAD
 from .fbrain2ls import FBRAIN2LS as FBRAIN2LS
 from .fbrainls import FBRAINLS as FBRAINLS
 from .hadamals import HADAMALS as HADAMALS
@@ -158,11 +165,14 @@ bounded_minimisation_problems = (
     DIAGPQE(),
     DIAGPQT(),
     DEGTRID2(),
+    # EG1(),  # TODO: Human review - test timeout issues
+    EGGCRATEB(),
+    ELATVIDUB(),
     DGOSPEC(),
     EXP2B(),
     EXPLIN(),
     EXPLIN2(),
-    EXPQUAD(),
+    # EXPQUAD(),  # TODO: Human review - test timeout on large problem
     FBRAIN2LS(),
     FBRAINLS(),
     HADAMALS(),

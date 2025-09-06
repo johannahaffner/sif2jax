@@ -90,21 +90,25 @@ class ERRINROSNE(AbstractNonlinearEquations):
         """Compute the residuals of the error in Rosenbrock nonlinear equations"""
         n = self.n
         alpha = self.alpha
-        # There are 2*(n-1) residuals: SQ(2) to SQ(n) and B(2) to B(n)
-        residuals = jnp.zeros(2 * (n - 1), dtype=y.dtype)
 
+        # Vectorized computation for all residuals
         # For i = 2 to n:
         # SQ(i): x(i-1) + 16*alpha(i)^2 * (-x(i)^2) = 0
         # B(i): x(i) - 1 = 0
-        for i in range(2, n + 1):
-            idx = 2 * (i - 2)  # Index for SQ(i) and B(i)
 
-            # SQ(i): x(i-1) + 16*alpha(i)^2 * (-x(i)^2)
-            ai = 16.0 * alpha[i - 1] ** 2
-            residuals = residuals.at[idx].set(y[i - 2] + ai * (-(y[i - 1] ** 2)))
+        # Compute SQ residuals (indices 0, 2, 4, ...)
+        ai_squared = 16.0 * alpha[1:n] ** 2  # alpha(2) to alpha(n)
+        sq_residuals = y[:-1] - ai_squared * (
+            y[1:] ** 2
+        )  # x(1) to x(n-1) and x(2) to x(n)
 
-            # B(i): x(i) - 1
-            residuals = residuals.at[idx + 1].set(y[i - 1] - 1.0)
+        # Compute B residuals (indices 1, 3, 5, ...)
+        b_residuals = y[1:] - 1.0  # x(2) to x(n)
+
+        # Interleave SQ and B residuals
+        residuals = jnp.zeros(2 * (n - 1), dtype=y.dtype)
+        residuals = residuals.at[::2].set(sq_residuals)  # Even indices
+        residuals = residuals.at[1::2].set(b_residuals)  # Odd indices
 
         return residuals
 

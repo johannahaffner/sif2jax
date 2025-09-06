@@ -43,18 +43,19 @@ class EXP2NE(AbstractNonlinearEquations):
         where y_i = e^{-i/10} - 5e^{-i}
         """
         x1, x2 = y[0], y[1]
-        residuals = jnp.zeros(self.m, dtype=jnp.float64)
 
-        for i in range(self.m):
-            # Compute the target value
-            e1 = jnp.exp(-i / 10.0)
-            e2 = jnp.exp(-float(i))
-            y_i = e1 - 5.0 * e2
+        # Vectorized computation for all residuals
+        i_vals = jnp.arange(self.m, dtype=y.dtype)  # [0, 1, 2, ..., m-1]
 
-            # Compute the residual
-            exp1 = jnp.exp(-i / 10.0 * x1)
-            exp2 = jnp.exp(-i / 10.0 * x2)
-            residuals = residuals.at[i].set(exp1 - 5.0 * exp2 - y_i)
+        # Compute target values vectorized
+        e1 = jnp.exp(-i_vals / 10.0)
+        e2 = jnp.exp(-i_vals)
+        y_targets = e1 - 5.0 * e2
+
+        # Compute residuals vectorized
+        exp1 = jnp.exp(-i_vals / 10.0 * x1)
+        exp2 = jnp.exp(-i_vals / 10.0 * x2)
+        residuals = exp1 - 5.0 * exp2 - y_targets
 
         return residuals
 

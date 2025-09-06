@@ -470,6 +470,9 @@ from ._constrained_minimisation import (
     ZECEVIC3 as ZECEVIC3,
     ZECEVIC4 as ZECEVIC4,
 )
+
+# ZAMB2 as ZAMB2,  # TODO: Human review - requires 30 years of data
+# (3966 vars, 1440 constraints)
 from ._nonlinear_equations import (
     AIRCRFTA as AIRCRFTA,
     ARGAUSS as ARGAUSS,
@@ -1345,6 +1348,8 @@ problems_dict = {
     "ZECEVIC2": ZECEVIC2(),
     "ZECEVIC3": ZECEVIC3(),
     "ZECEVIC4": ZECEVIC4(),
+    # "ZAMB2": ZAMB2(),  # TODO: Human review - requires 30 years of data
+    # (3966 vars, 1440 constraints)
     # "TRUSPYR1": TRUSPYR1(),  # TODO: Human review - complex constraint scaling issues
     # "TRUSPYR2": TRUSPYR2(),  # TODO: Human review - test requested to be removed
     "BT1": BT1(),

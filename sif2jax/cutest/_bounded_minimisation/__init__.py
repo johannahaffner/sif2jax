@@ -47,8 +47,8 @@ from .hs110 import HS110 as HS110
 
 # from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
 # from .jnlbrng1 import JNLBRNG1 as JNLBRNG1  # TODO: Human review needed
-# from .jnlbrng2 import JNLBRNG2 as JNLBRNG2  # TODO: Human review needed - performance issues
-# from .jannson3 import JANNSON3 as JANNSON3  # TODO: Human review needed - large-scale problem
+# from .jnlbrng2 import JNLBRNG2 as JNLBRNG2  # TODO: Human review
+# from .jannson3 import JANNSON3 as JANNSON3  # TODO: Human review
 from .judgeb import JUDGEB as JUDGEB
 from .koebhelb import KOEBHELB as KOEBHELB
 from .levymont import LEVYMONT as LEVYMONT

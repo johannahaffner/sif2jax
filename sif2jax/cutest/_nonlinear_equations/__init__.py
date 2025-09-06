@@ -142,6 +142,9 @@ from .kss import KSS as KSS
 
 # TODO: KTMODEL needs human review - multiple test failures
 # from .ktmodel import KTMODEL as KTMODEL
+from .lanczos1 import LANCZOS1 as LANCZOS1
+from .lanczos2 import LANCZOS2 as LANCZOS2
+from .lanczos3 import LANCZOS3 as LANCZOS3
 from .levymone import LEVYMONE as LEVYMONE
 from .levymone5 import LEVYMONE5 as LEVYMONE5
 from .levymone6 import LEVYMONE6 as LEVYMONE6
@@ -151,7 +154,7 @@ from .levymone9 import LEVYMONE9 as LEVYMONE9
 from .levymone10 import LEVYMONE10 as LEVYMONE10
 from .liarwhdne import LIARWHDNE as LIARWHDNE
 
-# TODO: Human review needed - incomplete implementation
+# TODO: Human review needed - Python loop timeout and scaling issues
 # from .linversene import LINVERSENE as LINVERSENE
 from .luksan11 import LUKSAN11 as LUKSAN11
 from .luksan12 import LUKSAN12 as LUKSAN12
@@ -382,6 +385,9 @@ nonlinear_equations_problems = (
     KSS(),
     # KTMODEL(),  # TODO: KTMODEL needs human review - multiple test failures
     KOWOSBNE(),
+    LANCZOS1(),
+    LANCZOS2(),
+    LANCZOS3(),
     LEVYMONE(),
     LEVYMONE5(),
     LEVYMONE6(),
@@ -389,7 +395,7 @@ nonlinear_equations_problems = (
     LEVYMONE8(),
     LEVYMONE10(),
     LIARWHDNE(),
-    # LINVERSENE(),  # TODO: Human review needed - incomplete implementation
+    # LINVERSENE(),  # TODO: Human review - Python loop timeout and scaling issues
     LUKSAN11(),
     LUKSAN12(),
     LUKSAN13(),

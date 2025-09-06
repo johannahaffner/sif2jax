@@ -57,6 +57,7 @@ from ._bounded_minimisation import (
     LEVYMONT8 as LEVYMONT8,
     LEVYMONT9 as LEVYMONT9,
     LEVYMONT10 as LEVYMONT10,
+    # LINVERSE as LINVERSE,  # TODO: Human review needed
     LOGROS as LOGROS,
     # MINSURFO as MINSURFO,  # TODO: Human review needed - dimension mismatch
     # NOBNDTOR as NOBNDTOR,  # TODO: Human review needed - complex bounds logic
@@ -309,7 +310,7 @@ from ._constrained_minimisation import (
     # KISSING2 as KISSING2,  # TODO: Human review needed
     # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
     # KSIP as KSIP,  # TODO: Needs vectorization - dtype promotion errors
-    # LEUVEN1 as LEUVEN1,  # TODO: Human review needed
+    # NOTE: LEUVEN1 removed - superseded by CLEUVEN series (incorrect/nonconvex)
     LISWET1 as LISWET1,
     LISWET2 as LISWET2,
     LISWET3 as LISWET3,
@@ -324,10 +325,10 @@ from ._constrained_minimisation import (
     LISWET12 as LISWET12,
     LOOTSMA as LOOTSMA,
     LUKVLE1 as LUKVLE1,
-    # LUKVLE2 as LUKVLE2,
+    LUKVLE2 as LUKVLE2,
     LUKVLE3 as LUKVLE3,
     # LUKVLE4 as LUKVLE4,  # Use LUKVLE4C instead
-    # LUKVLE4C as LUKVLE4C,
+    # LUKVLE4C as LUKVLE4C,  # TODO: Human review - 3% numerical discrepancy
     LUKVLE5 as LUKVLE5,
     LUKVLE6 as LUKVLE6,
     LUKVLE7 as LUKVLE7,
@@ -343,7 +344,7 @@ from ._constrained_minimisation import (
     LUKVLE17 as LUKVLE17,
     LUKVLE18 as LUKVLE18,
     LUKVLI1 as LUKVLI1,
-    # LUKVLI2 as LUKVLI2,
+    LUKVLI2 as LUKVLI2,
     LUKVLI3 as LUKVLI3,
     # LUKVLI4 as LUKVLI4,  # Use LUKVLI4C instead
     # LUKVLI4C as LUKVLI4C,
@@ -577,6 +578,9 @@ from ._nonlinear_equations import (
     KOWOSBNE as KOWOSBNE,
     KSS as KSS,
     # KTMODEL as KTMODEL,  # TODO: Human review - multiple test failures
+    LANCZOS1 as LANCZOS1,
+    LANCZOS2 as LANCZOS2,
+    LANCZOS3 as LANCZOS3,
     LEVYMONE as LEVYMONE,
     LEVYMONE5 as LEVYMONE5,
     LEVYMONE6 as LEVYMONE6,
@@ -585,7 +589,7 @@ from ._nonlinear_equations import (
     LEVYMONE9 as LEVYMONE9,
     LEVYMONE10 as LEVYMONE10,
     LIARWHDNE as LIARWHDNE,
-    # LINVERSENE as LINVERSENE,  # TODO: Human review - incomplete implementation
+    # LINVERSENE as LINVERSENE,  # TODO: Human review - timeout and scaling issues
     LUKSAN11 as LUKSAN11,
     LUKSAN12 as LUKSAN12,
     LUKSAN13 as LUKSAN13,
@@ -1189,6 +1193,7 @@ problems_dict = {
     "LEVYMONT8": LEVYMONT8(),
     "LEVYMONT9": LEVYMONT9(),
     "LEVYMONT10": LEVYMONT10(),
+    # "LINVERSE": LINVERSE(),  # TODO: Human review needed
     "LOGROS": LOGROS(),
     # "MINSURFO": MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # "NOBNDTOR": NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
@@ -1209,7 +1214,7 @@ problems_dict = {
     "HIMMELBC": HIMMELBC(),
     "HIMMELBD": HIMMELBD(),
     "HIMMELBE": HIMMELBE(),
-    # "LEUVEN1": LEUVEN1(),  # TODO: Human review needed
+    # NOTE: LEUVEN1 removed - superseded by CLEUVEN series
     "LISWET1": LISWET1(),
     "LISWET2": LISWET2(),
     "LISWET3": LISWET3(),
@@ -1327,10 +1332,10 @@ problems_dict = {
     "BT12": BT12(),
     "BT13": BT13(),
     "LUKVLE1": LUKVLE1(),
-    # "LUKVLE2": LUKVLE2(),
+    "LUKVLE2": LUKVLE2(),
     "LUKVLE3": LUKVLE3(),
     # "LUKVLE4": LUKVLE4(),  # Use LUKVLE4C instead
-    # "LUKVLE4C": LUKVLE4C(),
+    # "LUKVLE4C": LUKVLE4C(),  # TODO: Human review - 3% numerical discrepancy
     "LUKVLE5": LUKVLE5(),
     "LUKVLE6": LUKVLE6(),
     "LUKVLE7": LUKVLE7(),
@@ -1346,7 +1351,7 @@ problems_dict = {
     "LUKVLE17": LUKVLE17(),
     "LUKVLE18": LUKVLE18(),
     "LUKVLI1": LUKVLI1(),
-    # "LUKVLI2": LUKVLI2(),
+    "LUKVLI2": LUKVLI2(),
     "LUKVLI3": LUKVLI3(),
     # "LUKVLI4": LUKVLI4(),  # Use LUKVLI4C instead
     # "LUKVLI4C": LUKVLI4C(),
@@ -1922,6 +1927,9 @@ problems_dict = {
     "KSS": KSS(),
     # "KTMODEL": KTMODEL(),  # TODO: Human review - multiple test failures
     "KOWOSBNE": KOWOSBNE(),
+    "LANCZOS1": LANCZOS1(),
+    "LANCZOS2": LANCZOS2(),
+    "LANCZOS3": LANCZOS3(),
     "LEVYMONE": LEVYMONE(),
     "LEVYMONE5": LEVYMONE5(),
     "LEVYMONE6": LEVYMONE6(),
@@ -1929,7 +1937,7 @@ problems_dict = {
     "LEVYMONE8": LEVYMONE8(),
     "LEVYMONE10": LEVYMONE10(),
     "LIARWHDNE": LIARWHDNE(),
-    # "LINVERSENE": LINVERSENE(),  # TODO: Human review - incomplete implementation
+    # "LINVERSENE": LINVERSENE(),  # TODO: Human review - timeout and scaling issues
     "LUKSAN11": LUKSAN11(),
     "LUKSAN12": LUKSAN12(),
     "LUKSAN13": LUKSAN13(),

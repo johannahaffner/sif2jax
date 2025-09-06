@@ -61,6 +61,8 @@ from .levymont7 import LEVYMONT7 as LEVYMONT7
 from .levymont8 import LEVYMONT8 as LEVYMONT8
 from .levymont9 import LEVYMONT9 as LEVYMONT9
 from .levymont10 import LEVYMONT10 as LEVYMONT10
+
+# from .linverse import LINVERSE as LINVERSE  # TODO: Human review needed
 from .logros import LOGROS as LOGROS
 
 # from .minsurfo import MINSURFO as MINSURFO  # TODO: Human review - dimensions
@@ -204,6 +206,7 @@ bounded_minimisation_problems = (
     LEVYMONT8(),
     LEVYMONT9(),
     LEVYMONT10(),
+    # LINVERSE(),  # TODO: Human review needed
     LOGROS(),
     # MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # NOBNDTOR(),  # TODO: Human review needed - complex bounds logic

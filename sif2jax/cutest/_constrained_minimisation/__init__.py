@@ -148,6 +148,9 @@ from .haifam import (
     HAIFAM as HAIFAM,
 )
 from .haifas import HAIFAS as HAIFAS
+
+# TODO: Human review needed - constraint matrix doesn't match PyCUTEst expectations
+# from .hie1372d import HIE1372D as HIE1372D
 from .himmelbc import HIMMELBC as HIMMELBC
 from .himmelbd import HIMMELBD as HIMMELBD
 from .himmelbe import HIMMELBE as HIMMELBE
@@ -544,6 +547,7 @@ constrained_minimisation_problems = (
     HAIFAS(),
     HAIFAM(),  # TODO: Human review needed - complex SIF structure
     HAIFAL(),
+    # HIE1372D(),  # TODO: Human review - Jacobian mismatch
     HS6(),
     HS7(),
     HS8(),

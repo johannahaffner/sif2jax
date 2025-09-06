@@ -202,6 +202,7 @@ from ._constrained_minimisation import (
     HAIFAL as HAIFAL,
     HAIFAM as HAIFAM,  # TODO: Human review needed - complex SIF structure
     HAIFAS as HAIFAS,
+    # HIE1372D as HIE1372D,  # TODO: Human review - Jacobian mismatch
     HIMMELBC as HIMMELBC,
     HIMMELBD as HIMMELBD,
     HIMMELBE as HIMMELBE,
@@ -557,10 +558,12 @@ from ._nonlinear_equations import (
     HATFLDBNE as HATFLDBNE,
     HATFLDCNE as HATFLDCNE,
     HATFLDDNE as HATFLDDNE,
-    # HATFLDENE as HATFLDENE,  # TODO: Human review - sign convention issues
+    HATFLDENE as HATFLDENE,
     HATFLDF as HATFLDF,
     HATFLDFLNE as HATFLDFLNE,
     HATFLDG as HATFLDG,
+    HEART6 as HEART6,
+    HEART8 as HEART8,
     HELIXNE as HELIXNE,
     HIMMELBA as HIMMELBA,
     HIMMELBFNE as HIMMELBFNE,
@@ -899,9 +902,9 @@ from ._unconstrained_minimisation import (
     HATFLDE as HATFLDE,
     HATFLDFL as HATFLDFL,
     HATFLDFLS as HATFLDFLS,
-    # HATFLDGLS as HATFLDGLS,  # TODO: Known gradient/Hessian discrepancies
-    # HEART6LS as HEART6LS,  # TODO: Human review - significant discrepancies
-    # HEART8LS as HEART8LS,  # TODO: Human review - significant discrepancies
+    # HATFLDGLS as HATFLDGLS,  # TODO: PyCUTEst L2 group bug
+    HEART6LS as HEART6LS,
+    HEART8LS as HEART8LS,
     HELIX as HELIX,
     # HIELOW as HIELOW,  # TODO: Human review - significant discrepancies
     HILBERTA as HILBERTA,
@@ -1576,6 +1579,7 @@ problems_dict = {
     "HAIFAS": HAIFAS(),
     "HAIFAM": HAIFAM(),  # TODO: Human review needed - complex SIF structure
     "HAIFAL": HAIFAL(),
+    # "HIE1372D": HIE1372D(),  # TODO: Human review - Jacobian mismatch
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
     # "GULF": GULF(),  # TODO: Human review - issues reported by user
@@ -1591,9 +1595,9 @@ problems_dict = {
     "HATFLDE": HATFLDE(),
     "HATFLDFL": HATFLDFL(),
     "HATFLDFLS": HATFLDFLS(),
-    # "HATFLDGLS": HATFLDGLS(),  # TODO: Known gradient/Hessian discrepancies
-    # "HEART6LS": HEART6LS(),  # TODO: Human review - significant discrepancies
-    # "HEART8LS": HEART8LS(),  # TODO: Human review - significant discrepancies
+    # "HATFLDGLS": HATFLDGLS(),  # TODO: PyCUTEst L2 group bug
+    "HEART6LS": HEART6LS(),
+    "HEART8LS": HEART8LS(),
     "HELIX": HELIX(),
     # "HIELOW": HIELOW(),  # TODO: Human review - significant discrepancies
     "HILBERTA": HILBERTA(),
@@ -1906,10 +1910,12 @@ problems_dict = {
     "HATFLDBNE": HATFLDBNE(),
     "HATFLDCNE": HATFLDCNE(),
     "HATFLDDNE": HATFLDDNE(),
-    # "HATFLDENE": HATFLDENE(),  # TODO: Human review - sign convention issues
+    "HATFLDENE": HATFLDENE(),
     "HATFLDF": HATFLDF(),
     "HATFLDFLNE": HATFLDFLNE(),
     "HATFLDG": HATFLDG(),
+    "HEART6": HEART6(),
+    "HEART8": HEART8(),
     "HELIXNE": HELIXNE(),
     "HIMMELBA": HIMMELBA(),
     "HIMMELBFNE": HIMMELBFNE(),

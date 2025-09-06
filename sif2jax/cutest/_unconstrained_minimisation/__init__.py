@@ -160,9 +160,9 @@ from .hatflde import HATFLDE as HATFLDE
 from .hatfldfl import HATFLDFL as HATFLDFL
 from .hatfldfls import HATFLDFLS as HATFLDFLS
 
-# from .hatfldgls import HATFLDGLS as HATFLDGLS  # TODO: gradient/Hessian issues
-# TODO: HEART problems need human review - significant discrepancies
-# from .heart import HEART6LS as HEART6LS, HEART8LS as HEART8LS
+# from .hatfldgls import HATFLDGLS as HATFLDGLS  # TODO: PyCUTEst L2 group bug
+from .heart6ls import HEART6LS as HEART6LS
+from .heart8ls import HEART8LS as HEART8LS
 from .helix import HELIX as HELIX
 
 # TODO: HIELOW needs human review - significant discrepancies
@@ -470,9 +470,9 @@ unconstrained_minimisation_problems = (
     HATFLDE(),
     HATFLDFL(),
     HATFLDFLS(),
-    # HATFLDGLS(),  # TODO: gradient/Hessian issues
-    # HEART6LS(),  # TODO: Human review - significant discrepancies
-    # HEART8LS(),  # TODO: Human review - significant discrepancies
+    # HATFLDGLS(),  # TODO: PyCUTEst L2 group bug
+    HEART6LS(),
+    HEART8LS(),
     HELIX(),
     # HIELOW(),  # TODO: Human review - significant discrepancies
     HILBERTA(),

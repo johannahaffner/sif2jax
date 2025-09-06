@@ -6,18 +6,26 @@ Convert CUTEST problems to JAX implementations that match Fortran precision and 
 ## Quick Reference
 
 ```bash
-sudo bash run_tests.sh tests/test_problem.py --test-case "PROBLEM1,PROBLEM2"   # Test specific problems
-sudo bash run_tests.sh --test-case "PROBLEM1" --local-tests  # Additionally test compilation
-ruff format . && ruff check .                       # Format and lint
+# Test specific problems (only runs tests/test_problem.py)
+sudo bash run_tests.sh tests/test_problem.py --test-case "PROBLEM1,PROBLEM2"
+
+# Run FULL test suite for a problem (all test modules including compilation tests)
+sudo bash run_tests.sh --test-case "PROBLEM1" --local-tests
+
+# Format and lint
+ruff format . && ruff check .
 ```
+
+**Important:** Specifying `tests/test_problem.py` limits testing to ONLY that module. To run the complete test suite, omit the file path and use just `sudo bash run_tests.sh --test-case "PROBLEM1"`.
 
 (The test script may have to be run with `sudo bash` in the container.)
 
 ## Workflow: Implement → Test → Fix → Commit → Repeat
 
 ### 1. Overall goal
-Problems only count as implemented if they pass the tests against pycutest in the main test suite, accessible through the bash script. 
-This means that `sudo bash run_tests.sh --test-case "PROBLEM1" --local-tests` should pass.
+Problems only count as implemented if they pass ALL tests in the full test suite. 
+- Quick validation: `sudo bash run_tests.sh tests/test_problem.py --test-case "PROBLEM1"` 
+- Full validation: `sudo bash run_tests.sh --test-case "PROBLEM1" --local-tests`
 The tests are designed to be very informative, and can guide you toward a working implementation.
 
 ### 2. Implementation Priority

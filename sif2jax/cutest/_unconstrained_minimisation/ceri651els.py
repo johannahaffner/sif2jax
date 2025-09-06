@@ -8,23 +8,10 @@ from ..._problem import AbstractUnconstrainedMinimisation
 def erfc_scaled(z):
     """Scaled complementary error function: exp(z^2) * erfc(z)
 
-    Simplified and more numerically stable implementation.
+    Direct implementation without thresholds to maintain smoothness.
     """
-    # For large |z|, the result is either negligible (z > 0) or overflows (z < 0)
-    # We handle these cases explicitly to avoid numerical issues
-
-    # For z > 3, use asymptotic expansion: erfcx(z) ≈ 1/(sqrt(pi)*z)
-    sqrt_pi = jnp.sqrt(jnp.pi)
-
-    return jnp.where(
-        z > 3.0,
-        1.0 / (sqrt_pi * z),  # Simple asymptotic for large positive z
-        jnp.where(
-            z < -3.0,
-            jnp.inf,  # This will be handled by the outer threshold check
-            jnp.exp(z * z) * erfc(z),  # Normal computation for moderate z
-        ),
-    )
+    # Direct computation - let JAX handle overflow/underflow naturally
+    return jnp.exp(z * z) * erfc(z)
 
 
 # TODO: Human review needed - numerical stability issues
@@ -302,20 +289,14 @@ class CERI651ELS(AbstractUnconstrainedMinimisation):
             erfc_arg_a = (a * s_safe + diff / s_safe) / jnp.sqrt(2.0)
             erfc_arg_b = (b * s_safe + diff / s_safe) / jnp.sqrt(2.0)
 
-            # Compute the terms using the scaled erfc with numerical protection
-            # For very large erfc arguments, the terms become negligible
-            # Use a very conservative threshold to avoid numerical issues entirely
-            threshold = 5.0
-
-            def compute_term(exp_arg, erfc_arg):
-                return jnp.where(
-                    jnp.abs(erfc_arg) > threshold,
-                    0.0,  # Term becomes negligible for large arguments
-                    jnp.exp(exp_arg - erfc_arg * erfc_arg) * erfc_scaled(erfc_arg),
-                )
-
-            term1 = compute_term(exp_arg_a, erfc_arg_a)
-            term2 = compute_term(exp_arg_b, erfc_arg_b)
+            # Compute the terms using the scaled erfc function
+            # exp(exp_arg) * erfc(erfc_arg) = exp(exp_arg - erfc_arg^2) * erfcx
+            term1 = jnp.exp(exp_arg_a - erfc_arg_a * erfc_arg_a) * erfc_scaled(
+                erfc_arg_a
+            )
+            term2 = jnp.exp(exp_arg_b - erfc_arg_b * erfc_arg_b) * erfc_scaled(
+                erfc_arg_b
+            )
 
             # Full back-to-back exponential
             b2b = prefactor * (term1 + term2)

@@ -762,11 +762,11 @@ from ._unconstrained_minimisation import (
     BROYDN7D as BROYDN7D,
     # BROYDNBDLS as BROYDNBDLS,  # TODO: Gradient test fails - needs human review
     # BRYBND as BRYBND,  # TODO: Gradient test fails - needs human review
-    # CERI651ALS as CERI651ALS,  # TODO: Human review - gradient/Hessian precision
-    # CERI651BLS as CERI651BLS,  # TODO: Human review - gradient/Hessian precision
-    # CERI651CLS as CERI651CLS,  # TODO: Human review - gradient/Hessian precision
-    # CERI651DLS as CERI651DLS,  # TODO: Human review - gradient/Hessian precision
-    # CERI651ELS as CERI651ELS,  # TODO: Human review - gradient/Hessian precision
+    # CERI651ALS as CERI651ALS,  # TODO: Numerical overflow
+    # CERI651BLS as CERI651BLS,  # TODO: Numerical overflow
+    # CERI651CLS as CERI651CLS,  # TODO: Numerical overflow
+    # CERI651DLS as CERI651DLS,  # TODO: Numerical overflow
+    # CERI651ELS as CERI651ELS,  # TODO: Numerical overflow
     CHAINWOO as CHAINWOO,
     CHNROSNB as CHNROSNB,
     CHNRSNBM as CHNRSNBM,
@@ -1368,11 +1368,11 @@ problems_dict = {
     "BROYDN7D": BROYDN7D(),
     # "BROYDNBDLS": BROYDNBDLS(),  # TODO: Gradient test fails - needs human review
     # "BRYBND": BRYBND(),  # TODO: Gradient test fails - needs human review
-    # "CERI651ALS": CERI651ALS(),  # TODO: Human review - gradient/Hessian precision
-    # "CERI651BLS": CERI651BLS(),  # TODO: Human review - gradient/Hessian precision
-    # "CERI651CLS": CERI651CLS(),  # TODO: Human review - gradient/Hessian precision
-    # "CERI651DLS": CERI651DLS(),  # TODO: Human review - gradient/Hessian precision
-    # "CERI651ELS": CERI651ELS(),  # TODO: Human review - gradient/Hessian precision
+    # "CERI651ALS": CERI651ALS(),  # TODO: Numerical overflow
+    # "CERI651BLS": CERI651BLS(),  # TODO: Numerical overflow
+    # "CERI651CLS": CERI651CLS(),  # TODO: Numerical overflow
+    # "CERI651DLS": CERI651DLS(),  # TODO: Numerical overflow
+    # "CERI651ELS": CERI651ELS(),  # TODO: Numerical overflow
     "CHAINWOO": CHAINWOO(),
     "CHANDHEQ": CHANDHEQ(),
     "CHNROSNB": CHNROSNB(),

@@ -8,22 +8,10 @@ from ..._problem import AbstractUnconstrainedMinimisation
 def erfc_scaled(z):
     """Scaled complementary error function: exp(z^2) * erfc(z)
 
-    Uses more accurate asymptotic expansion for large z.
+    Direct implementation without thresholds to maintain smoothness.
     """
-    # For large positive z, use more terms in asymptotic expansion
-    # erfcx(z) ≈ 1/(sqrt(pi)*z) * (1 - 0.5/z^2 + 0.75/z^4 - ...)
-    sqrt_pi = jnp.sqrt(jnp.pi)
-
-    # Use more terms for better accuracy
-    def asymptotic(z):
-        z2 = z * z
-        return 1.0 / (sqrt_pi * z) * (1.0 - 0.5 / z2 + 0.75 / (z2 * z2))
-
-    return jnp.where(
-        z > 5.0,
-        asymptotic(z),
-        jnp.exp(z * z) * erfc(z),
-    )
+    # Direct computation - let JAX handle overflow/underflow naturally
+    return jnp.exp(z * z) * erfc(z)
 
 
 class CERI651CLS(AbstractUnconstrainedMinimisation):

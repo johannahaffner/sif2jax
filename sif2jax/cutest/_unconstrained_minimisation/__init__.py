@@ -34,11 +34,11 @@ from .broydn7d import BROYDN7D as BROYDN7D
 # from .broydnbdls import BROYDNBDLS as BROYDNBDLS
 # from .brybnd import BRYBND as BRYBND
 # TODO: Human review needed - gradient/Hessian precision issues
-# from .ceri651als import CERI651ALS as CERI651ALS
-# from .ceri651bls import CERI651BLS as CERI651BLS
-# from .ceri651cls import CERI651CLS as CERI651CLS
-# from .ceri651dls import CERI651DLS as CERI651DLS
-# from .ceri651els import CERI651ELS as CERI651ELS
+# from .ceri651als import CERI651ALS as CERI651ALS  # TODO: Numerical overflow
+# from .ceri651bls import CERI651BLS as CERI651BLS  # TODO: Numerical overflow
+# from .ceri651cls import CERI651CLS as CERI651CLS  # TODO: Numerical overflow
+# from .ceri651dls import CERI651DLS as CERI651DLS  # TODO: Numerical overflow
+# from .ceri651els import CERI651ELS as CERI651ELS  # TODO: Numerical overflow
 from .chainwoo import CHAINWOO as CHAINWOO
 from .chnrosnb import CHNROSNB as CHNROSNB
 from .chnrsnbm import CHNRSNBM as CHNRSNBM
@@ -361,11 +361,11 @@ unconstrained_minimisation_problems = (
     BROYDN7D(),
     # BROYDNBDLS(),  # TODO: Gradient test fails - needs human review
     # BRYBND(),  # TODO: Gradient test fails - needs human review
-    # CERI651ALS(),  # TODO: Human review needed - gradient/Hessian precision issues
-    # CERI651BLS(),  # TODO: Human review needed - gradient/Hessian precision issues
-    # CERI651CLS(),  # TODO: Human review needed - gradient/Hessian precision issues
-    # CERI651DLS(),  # TODO: Human review needed - gradient/Hessian precision issues
-    # CERI651ELS(),  # TODO: Human review needed - gradient/Hessian precision issues
+    # CERI651ALS(),  # TODO: Numerical overflow
+    # CERI651BLS(),  # TODO: Numerical overflow
+    # CERI651CLS(),  # TODO: Numerical overflow
+    # CERI651DLS(),  # TODO: Numerical overflow
+    # CERI651ELS(),  # TODO: Numerical overflow
     CHAINWOO(),
     CHNROSNB(),
     CHNRSNBM(),

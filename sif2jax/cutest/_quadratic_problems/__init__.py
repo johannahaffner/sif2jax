@@ -91,8 +91,18 @@ from .table6 import TABLE6 as TABLE6
 from .table7 import TABLE7 as TABLE7
 from .table8 import TABLE8 as TABLE8
 from .tame import TAME as TAME
-
-# from .torsiond import TORSIOND as TORSIOND  # TODO: Human review needed - see file
+from .torsion1 import TORSION1 as TORSION1
+from .torsion2 import TORSION2 as TORSION2
+from .torsion3 import TORSION3 as TORSION3
+from .torsion4 import TORSION4 as TORSION4
+from .torsion5 import TORSION5 as TORSION5
+from .torsion6 import TORSION6 as TORSION6
+from .torsiona import TORSIONA as TORSIONA
+from .torsionb import TORSIONB as TORSIONB
+from .torsionc import TORSIONC as TORSIONC
+from .torsiond import TORSIOND as TORSIOND
+from .torsione import TORSIONE as TORSIONE
+from .torsionf import TORSIONF as TORSIONF
 from .yao import YAO as YAO
 
 
@@ -103,7 +113,18 @@ bounded_quadratic_problems = (
     NCVXBQP1(),
     NCVXBQP2(),
     NCVXBQP3(),
-    # TORSIOND(),  # TODO: Human review needed - objective mismatch with pycutest
+    TORSION1(),
+    TORSION2(),
+    TORSION3(),
+    TORSION4(),
+    TORSION5(),
+    TORSION6(),
+    TORSIONA(),
+    TORSIONB(),
+    TORSIONC(),
+    TORSIOND(),
+    TORSIONE(),
+    TORSIONF(),
 )
 
 

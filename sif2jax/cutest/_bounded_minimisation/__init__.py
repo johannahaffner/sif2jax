@@ -69,6 +69,7 @@ from .levymont10 import LEVYMONT10 as LEVYMONT10
 # from .linverse import LINVERSE as LINVERSE  # TODO: Human review needed
 from .logros import LOGROS as LOGROS
 
+# from .maxlika import MAXLIKA as MAXLIKA  # TODO: Human review needed
 # from .minsurfo import MINSURFO as MINSURFO  # TODO: Human review - dimensions
 # TODO: Human review needed - complex bounds logic
 # from .nobndtor import NOBNDTOR as NOBNDTOR
@@ -216,6 +217,7 @@ bounded_minimisation_problems = (
     LEVYMONT10(),
     # LINVERSE(),  # TODO: Human review needed
     LOGROS(),
+    # MAXLIKA(),  # TODO: Human review needed
     # MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     # NONSCOMP(),  # TODO: Human review needed

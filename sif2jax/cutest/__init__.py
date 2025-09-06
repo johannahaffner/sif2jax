@@ -185,6 +185,7 @@ from ._constrained_minimisation import (
     HAIFAL as HAIFAL,
     HAIFAM as HAIFAM,  # TODO: Human review needed - complex SIF structure
     HAIFAS as HAIFAS,
+    # HIE1372D as HIE1372D,  # TODO: Human review - Jacobian mismatch
     HIMMELBC as HIMMELBC,
     HIMMELBD as HIMMELBD,
     HIMMELBE as HIMMELBE,
@@ -1528,6 +1529,7 @@ problems_dict = {
     "HAIFAS": HAIFAS(),
     "HAIFAM": HAIFAM(),  # TODO: Human review needed - complex SIF structure
     "HAIFAL": HAIFAL(),
+    # "HIE1372D": HIE1372D(),  # TODO: Human review - Jacobian mismatch
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
     # "GULF": GULF(),  # TODO: Human review - issues reported by user

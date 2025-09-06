@@ -405,7 +405,7 @@ from ._constrained_minimisation import (
     S316_322 as S316_322,
     S365 as S365,
     S365MOD as S365MOD,
-    # SARO as SARO,  # TODO: Human review - physics model approximation
+    # SARO as SARO,  # TODO: Requires DAE solver support in JAX
     SIMPLLPA as SIMPLLPA,
     SIMPLLPB as SIMPLLPB,
     # SINROSNB as SINROSNB,  # TODO: Human review - objective scaling issues
@@ -1261,7 +1261,7 @@ problems_dict = {
     "S316-322": S316_322(),
     "S365": S365(),
     "S365MOD": S365MOD(),
-    # "SARO": SARO(),  # TODO: Human review - physics model approximation
+    # "SARO": SARO(),  # TODO: Requires DAE solver support in JAX
     # "S277-280": S277_280(),  # Now imported from unconstrained
     # "TAX13322": TAX13322(),  # TODO: Human review - complex objective
     "TENBARS1": TENBARS1(),

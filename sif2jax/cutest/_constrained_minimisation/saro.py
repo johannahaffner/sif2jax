@@ -64,14 +64,17 @@ def _saro_path_constraints(rk, ridx, x1, x2, x3, x4, x5, x6, x7, x8, x9, u1, u2)
 class SARO(AbstractConstrainedMinimisation):
     """SARO problem.
 
-    TODO: Human review needed - Physics model approximation
+    TODO: Human review needed - Requires DAE solver capabilities
     Attempts made: [Complete structure implementation, variable ordering fixed,
                    placeholder physics functions, correct bounds and constraints]
-    Suspected issues: [Simplified physics model differs from DYMOLA-generated
-                      Fortran functions SAROFN/SAROGN. Constraint values don't
-                      match pycutest due to approximate system dynamics]
-    Resources needed: [Access to original DYMOLA model or detailed physics
-                      equations for accurate solar heating system implementation]
+    Fundamental blocker: [This problem requires solving differential-algebraic
+                         equations (DAEs) from a DYMOLA-generated physical model.
+                         The Fortran functions SAROFN/SAROGN encode complex thermal
+                         dynamics that cannot be accurately replicated without
+                         proper DAE solver support in JAX]
+    Future work: [Revisit when JAX has mature DAE solver capabilities similar
+                 to SUNDIALS or DASPK. The problem structure is ready but the
+                 physics requires proper DAE integration]
 
     A discrete-time optimal control problem describing a central solar heating
     plant with seasonal water tank store in Säro, Sweden. The plant supplies

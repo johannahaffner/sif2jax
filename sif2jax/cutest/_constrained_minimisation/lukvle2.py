@@ -101,16 +101,22 @@ class LUKVLE2(AbstractConstrainedMinimisation):
         x_k = y[k_indices]
         main_terms = 2 * x_k + 5 * x_k**3 - 1
 
-        # For the sum part, we need to handle variable window sizes
-        # This is trickier to vectorize perfectly, but we can use a sliding window
-        # For now, keep a hybrid approach for the sum part
-        sum_terms = jnp.zeros(num_constraints)
+        # Ultra-efficient vectorized computation using convolution-style approach
+        # For constraint at k, sum x_i + x_i^2 for i: max(0, k-5) to min(n-1, k+1)
+        y_expanded = y + y**2  # Pre-compute x_i + x_i^2 for all elements
 
-        for idx, k in enumerate(k_indices):
-            start_idx = max(0, k - 5)
-            end_idx = min(n - 1, k + 1)
-            window = y[start_idx : end_idx + 1]
-            sum_terms = sum_terms.at[idx].set(jnp.sum(window + window**2))
+        # Use cumulative sums to compute window sums efficiently
+        # This avoids creating large mask matrices
+        cumsum = jnp.cumsum(jnp.concatenate([jnp.array([0.0]), y_expanded]))
+
+        # For each constraint k (0-based), compute sum over [max(0,k-5), min(n-1,k+1)]
+        start_indices = jnp.maximum(0, k_indices - 5)  # Clamp to valid range
+        end_indices = (
+            jnp.minimum(n - 1, k_indices + 1) + 1
+        )  # +1 because cumsum is exclusive on right
+
+        # Window sums using cumulative sum difference: cumsum[end] - cumsum[start]
+        sum_terms = cumsum[end_indices] - cumsum[start_indices]
 
         constraints = main_terms + sum_terms
         return constraints, None

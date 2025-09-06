@@ -247,8 +247,7 @@ from .jannson4 import JANNSON4 as JANNSON4
 # from .kiwcresc import KIWCRESC as KIWCRESC
 # TODO: Human review needed - KSIP needs vectorization, dtype promotion errors with JAX
 # from .ksip import KSIP as KSIP
-# TODO: Human review needed - marked for human review
-# from .leuven1 import LEUVEN1 as LEUVEN1
+# NOTE: LEUVEN1 removed - superseded by CLEUVEN series (incorrect/nonconvex)
 from .liswet1 import LISWET1 as LISWET1
 from .liswet2 import LISWET2 as LISWET2
 from .liswet3 import LISWET3 as LISWET3
@@ -263,12 +262,11 @@ from .liswet11 import LISWET11 as LISWET11
 from .liswet12 import LISWET12 as LISWET12
 from .lootsma import LOOTSMA as LOOTSMA
 from .lukvle1 import LUKVLE1 as LUKVLE1
-
-# from .lukvle2 import LUKVLE2 as LUKVLE2
+from .lukvle2 import LUKVLE2 as LUKVLE2
 from .lukvle3 import LUKVLE3 as LUKVLE3
 
 # from .lukvle4 import LUKVLE4 as LUKVLE4  # Use LUKVLE4C instead
-# from .lukvle4c import LUKVLE4C as LUKVLE4C
+# from .lukvle4c import LUKVLE4C as LUKVLE4C  # TODO: Human review - 3% discrepancy
 from .lukvle5 import LUKVLE5 as LUKVLE5
 from .lukvle6 import LUKVLE6 as LUKVLE6
 from .lukvle7 import LUKVLE7 as LUKVLE7
@@ -286,8 +284,7 @@ from .lukvle16 import LUKVLE16 as LUKVLE16
 from .lukvle17 import LUKVLE17 as LUKVLE17
 from .lukvle18 import LUKVLE18 as LUKVLE18
 from .lukvli1 import LUKVLI1 as LUKVLI1
-
-# from .lukvli2 import LUKVLI2 as LUKVLI2
+from .lukvli2 import LUKVLI2 as LUKVLI2
 from .lukvli3 import LUKVLI3 as LUKVLI3
 
 # from .lukvli4 import LUKVLI4 as LUKVLI4  # Use LUKVLI4C instead
@@ -599,7 +596,7 @@ constrained_minimisation_problems = (
     # KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # KISSING2(),  # TODO: Human review needed
     # KSIP(),  # TODO: Human review needed - needs vectorization, dtype promotion errors
-    # LEUVEN1(),  # TODO: Human review needed
+    # NOTE: LEUVEN1 removed - superseded by CLEUVEN series
     LISWET1(),
     LISWET2(),
     LISWET3(),
@@ -721,10 +718,10 @@ constrained_minimisation_problems = (
     BT12(),
     BT13(),
     LUKVLE1(),
-    # LUKVLE2(),
+    LUKVLE2(),
     LUKVLE3(),
     # LUKVLE4(),  # Has factor ~2380 error due to SIF bug, use LUKVLE4C instead
-    # LUKVLE4C(),  # Has 3% discrepancy with pycutest
+    # LUKVLE4C(),  # TODO: Human review - 3% numerical discrepancy
     LUKVLE5(),
     LUKVLE6(),
     LUKVLE7(),
@@ -740,7 +737,7 @@ constrained_minimisation_problems = (
     LUKVLE17(),
     LUKVLE18(),
     LUKVLI1(),
-    # LUKVLI2(),
+    LUKVLI2(),
     LUKVLI3(),
     # LUKVLI4(),  # Has factor ~2380 error due to SIF bug, use LUKVLI4C instead
     # LUKVLI4C(),  # Has 3% discrepancy with pycutest

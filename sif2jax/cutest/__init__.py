@@ -516,12 +516,12 @@ from ._nonlinear_equations import (
     FBRAIN2NE as FBRAIN2NE,
     FBRAIN3 as FBRAIN3,
     FBRAINNE as FBRAINNE,
-    # FLOSP2HH as FLOSP2HH,  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2HL as FLOSP2HL,  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2HM as FLOSP2HM,  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2TH as FLOSP2TH,  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2TL as FLOSP2TL,  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2TM as FLOSP2TM,  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2HH as FLOSP2HH,  # TODO: Human review needed - CONSTANTS section
+    # FLOSP2HL as FLOSP2HL,  # TODO: Human review needed - CONSTANTS section
+    # FLOSP2HM as FLOSP2HM,  # TODO: Human review needed - CONSTANTS section
+    # FLOSP2TH as FLOSP2TH,  # TODO: Human review needed - CONSTANTS section
+    # FLOSP2TL as FLOSP2TL,  # TODO: Human review needed - CONSTANTS section
+    # FLOSP2TM as FLOSP2TM,  # TODO: Human review needed - CONSTANTS section
     FREURONE as FREURONE,
     GENROSEBNE as GENROSEBNE,
     GENROSENE as GENROSENE,
@@ -847,8 +847,8 @@ from ._unconstrained_minimisation import (
     FLETCBV3 as FLETCBV3,
     # FLETCHBV as FLETCHBV,  # TODO: Human review - objective/gradient discrepancies
     FLETCHCR as FLETCHCR,
-    # FMINSRF2 as FMINSRF2,  # TODO: Human review - starting value/gradient issues
-    # FMINSURF as FMINSURF,  # TODO: Human review - starting value/gradient issues
+    FMINSRF2 as FMINSRF2,
+    FMINSURF as FMINSURF,
     # FREURONE as FREURONE,  # TODO: Human review - miscategorized (constrained)
     FREUROTH as FREUROTH,
     # GAUSS1LS as GAUSS1LS,  # TODO: Human review - issues reported by user
@@ -1504,8 +1504,8 @@ problems_dict = {
     "FLETCBV2": FLETCBV2(),
     "FLETCHCR": FLETCHCR(),
     "FLETCBV3": FLETCBV3(),
-    # "FMINSRF2": FMINSRF2(),  # TODO: Human review - starting value/gradient issues
-    # "FMINSURF": FMINSURF(),  # TODO: Human review - starting value/gradient issues
+    "FMINSRF2": FMINSRF2(),
+    "FMINSURF": FMINSURF(),
     # "FREURONE": FREURONE(),  # TODO: Human review - miscategorized (constrained)
     "FREUROTH": FREUROTH(),
     # "GAUSS1LS": GAUSS1LS(),  # TODO: Human review - issues reported by user
@@ -1827,12 +1827,12 @@ problems_dict = {
     "FBRAIN2NE": FBRAIN2NE(),
     "FBRAIN3": FBRAIN3(),
     "FBRAINNE": FBRAINNE(),
-    # "FLOSP2HH": FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
-    # "FLOSP2HL": FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
-    # "FLOSP2HM": FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling
-    # "FLOSP2TH": FLOSP2TH(),  # TODO: Human review needed - NQR constraint handling
-    # "FLOSP2TL": FLOSP2TL(),  # TODO: Human review needed - NQR constraint handling
-    # "FLOSP2TM": FLOSP2TM(),  # TODO: Human review needed - NQR constraint handling
+    # "FLOSP2HH": FLOSP2HH(),  # TODO: Human review needed - CONSTANTS section
+    # "FLOSP2HL": FLOSP2HL(),  # TODO: Human review needed - CONSTANTS section
+    # "FLOSP2HM": FLOSP2HM(),  # TODO: Human review needed - CONSTANTS section
+    # "FLOSP2TH": FLOSP2TH(),  # TODO: Human review needed - CONSTANTS section
+    # "FLOSP2TL": FLOSP2TL(),  # TODO: Human review needed - CONSTANTS section
+    # "FLOSP2TM": FLOSP2TM(),  # TODO: Human review needed - CONSTANTS section
     "FREURONE": FREURONE(),
     "GENROSEBNE": GENROSEBNE(),
     "GENROSENE": GENROSENE(),

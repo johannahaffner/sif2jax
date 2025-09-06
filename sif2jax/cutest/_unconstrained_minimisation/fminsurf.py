@@ -58,7 +58,9 @@ class FMINSURF(AbstractUnconstrainedMinimisation):
         p = self.p
 
         # Reshape the variables into a 2D grid
-        x = y.reshape((p, p))
+        # Since CUTEst uses Fortran ordering (column-major) and we flattened
+        # with x.T.flatten(), we need to reshape and transpose back
+        x = y.reshape((p, p)).T
 
         # From AMPL file - the objective is:
         # sum {i in 1..p-1, j in 1..p-1}
@@ -77,7 +79,9 @@ class FMINSURF(AbstractUnconstrainedMinimisation):
         area_elements = jnp.sqrt(0.5 * scale * (a_vals**2 + b_vals**2) + 1.0) / scale
         area_sum = jnp.sum(area_elements)
 
-        # Second part: (sum of all x values)^2 / p^4
+        # Second part: average height penalty
+        # In CUTEst, SCALE goes in the denominator
+        # The AVH group sums all X(I,J) and divides by P^4
         total_sum = jnp.sum(x)
         penalty = (total_sum**2) / (p**4)
 
@@ -107,25 +111,27 @@ class FMINSURF(AbstractUnconstrainedMinimisation):
         # -> x[i-1,0] := (i-1)*ston+h01
 
         # Bottom edge (i=1 in AMPL = i=0 in 0-based): x[0,j] := (j-1)*wtoe+h00
-        j_vals = jnp.arange(p)
-        x = x.at[0, :].set((j_vals) * wtoe + h00)
+        j_vals = jnp.arange(p, dtype=x.dtype)
+        x = x.at[0, :].set(j_vals * wtoe + h00)
 
         # Top edge (i=p in AMPL = i=p-1 in 0-based): x[p-1,j] := (j-1)*wtoe+h10
-        x = x.at[p - 1, :].set((j_vals) * wtoe + h10)
+        x = x.at[p - 1, :].set(j_vals * wtoe + h10)
 
-        # Left edge (j=1 in AMPL = j=0 in 0-based):
-        # x[i,0] := (i-1)*ston+h01 for i=2..p-1
-        i_vals = jnp.arange(1, p - 1)
-        x = x.at[i_vals, 0].set((i_vals) * ston + h01)
+        # Left edge (j=1 in SIF = j=0 in 0-based):
+        # X(I,1) = TR = TV + H00 where TV = (I-1)*STON for i=2..p-1
+        i_vals = jnp.arange(1, p - 1)  # Keep as int for indexing
+        i_vals_float = i_vals.astype(x.dtype)  # Convert to float for calculation
+        x = x.at[i_vals, 0].set(i_vals_float * ston + h00)  # TR
 
-        # Right edge (j=p in AMPL = j=p-1 in 0-based):
-        # x[i,p-1] := (i-1)*ston+h00 for i=2..p-1
-        x = x.at[i_vals, p - 1].set((i_vals) * ston + h00)
+        # Right edge (j=p in SIF = j=p-1 in 0-based):
+        # X(I,P) = TL = TV + H01 where TV = (I-1)*STON for i=2..p-1
+        x = x.at[i_vals, p - 1].set(i_vals_float * ston + h01)  # TL
 
         # Interior points: 0.0 (already initialized)
 
-        # Flatten the 2D grid to 1D vector
-        return x.flatten()
+        # Flatten the 2D grid to 1D vector using Fortran (column-major) ordering
+        # to match CUTEst convention
+        return x.T.flatten()
 
     @property
     def args(self):

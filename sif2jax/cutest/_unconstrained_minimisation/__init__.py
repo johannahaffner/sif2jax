@@ -105,9 +105,7 @@ from .dqrtic import DQRTIC as DQRTIC
 from .drcav1lq import DRCAV1LQ as DRCAV1LQ
 from .drcav2lq import DRCAV2LQ as DRCAV2LQ
 from .drcav3lq import DRCAV3LQ as DRCAV3LQ
-
-# TODO: ECKERLE4LS needs human review - significant discrepancies
-# from .eckerle4ls import ECKERLE4LS as ECKERLE4LS
+from .eckerle4ls import ECKERLE4LS as ECKERLE4LS
 from .edensch import EDENSCH as EDENSCH
 from .eg1 import EG1 as EG1
 from .eg2 import EG2 as EG2
@@ -428,7 +426,7 @@ unconstrained_minimisation_problems = (
     DJTL(),
     DQDRTIC(),
     DQRTIC(),
-    # ECKERLE4LS(),  # TODO: Human review - significant discrepancies
+    ECKERLE4LS(),
     EDENSCH(),
     EG2(),
     EGGCRATE(),

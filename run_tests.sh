@@ -2,8 +2,8 @@
 
 # Configuration
 CONTAINER_IMAGE="johannahaffner/pycutest:latest"
-MOUNT_PATH="/workspace"  # Path inside container where your code will be mounted  
-LOCAL_PATH="/Users/jhaffner/Desktop/projects/benchmarks/f"
+MOUNT_PATH="/workspace"  # Path inside container where your code will be mounted
+LOCAL_PATH="/Users/jhaffner/Desktop/projects/benchmarks/e"
 
 # Run tests in container
 docker run --rm \

@@ -1,44 +1,48 @@
-import jax
 import jax.numpy as jnp
+from jax import Array
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._misc import inexact_asarray
+from ..._problem import AbstractNonlinearEquations
 
 
-class ECKERLE4LS(AbstractUnconstrainedMinimisation):
-    """ECKERLE4LS - Nonlinear Least-Squares problem (NIST dataset).
+class ECKERLE4(AbstractNonlinearEquations):
+    """NIST Data fitting problem ECKERLE4 as nonlinear equations.
 
-    This problem involves a nonlinear least squares fit to a Gaussian peak function,
-    arising from a circular interference transmittance study.
+    Fit: y = (b1/b2) * exp[-0.5*((x-b3)/b2)**2] + e
 
-    Source: Problem 7 from
-    NIST nonlinear least squares test set
+    Source: Problem from the NIST nonlinear regression test set
     http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml
 
-    SIF input: Ph. Toint, April 1997.
+    Reference: Eckerle, K., NIST (197?).
+    Circular Interference Transmittance Study.
 
-    Classification: SUR2-MN-3-0
+    SIF input: Nick Gould and Tyrone Rees, Oct 2015
+
+    Classification: NOR2-MN-3-35
     """
 
     y0_iD: int = 0
-    provided_y0s: frozenset = frozenset({0})
+    provided_y0s: frozenset = frozenset({0, 1})
 
-    # Allow selecting which starting point to use (0-based indexing)
-    start_point: int = 0  # 0 or 1
-    _allowed_start_points = frozenset({0, 1})
+    # Problem parameters
+    M: int = 35  # Number of data points
+    N: int = 3  # Number of variables
 
-    def __check_init__(self):
-        if self.start_point not in self._allowed_start_points:
-            allowed = self._allowed_start_points
-            msg = f"start_point must be in {allowed}, got {self.start_point}"
-            raise ValueError(msg)
+    @property
+    def n(self):
+        """Number of variables."""
+        return self.N
 
-    def objective(self, y, args):
-        del args
+    @property
+    def m(self):
+        """Number of equations."""
+        return self.M
 
-        # Extract parameters
+    def constraint(self, y: Array):
+        """Compute the residuals for the data fitting problem."""
         b1, b2, b3 = y
 
-        # NIST dataset: x and y values
+        # Data points (x values)
         x_data = jnp.array(
             [
                 400.0,
@@ -79,6 +83,7 @@ class ECKERLE4LS(AbstractUnconstrainedMinimisation):
             ]
         )
 
+        # Data points (y values)
         y_data = jnp.array(
             [
                 0.0001575,
@@ -119,40 +124,44 @@ class ECKERLE4LS(AbstractUnconstrainedMinimisation):
             ]
         )
 
-        # Model function: b1/b2 * exp[-0.5*((x-b3)/b2)^2]
-        def model_func(x):
-            exponent = -0.5 * ((x - b3) / b2) ** 2
-            return (b1 / b2) * jnp.exp(exponent)
+        # Model: y = (b1/b2) * exp[-0.5*((x-b3)/b2)**2]
+        diff = x_data - b3
+        exponent = -0.5 * (diff / b2) ** 2
+        model_values = (b1 / b2) * jnp.exp(exponent)
 
-        # Calculate model predictions for all x values at once
-        predictions = jax.vmap(model_func)(x_data)
+        # Residuals: model - data
+        residuals = model_values - y_data
 
-        # Compute residuals
-        residuals = predictions - y_data
-
-        # Return the sum of squared residuals
-        return jnp.sum(residuals**2)
+        return residuals, None
 
     @property
     def y0(self):
-        # Two starting points from the SIF file
-        if self.start_point == 0:
-            # Starting point 1: b1 = 1.0, b2 = 10.0, b3 = 500.0
-            return jnp.array([1.0, 10.0, 500.0])
-        else:  # self.start_point == 1
-            # Starting point 2: b1 = 1.5, b2 = 5.0, b3 = 450.0
-            return jnp.array([1.5, 5.0, 450.0])
+        """Initial guess."""
+        if self.y0_iD == 0:
+            # START1
+            return inexact_asarray(jnp.array([1.0, 10.0, 500.0]))
+        else:
+            # START2
+            return inexact_asarray(jnp.array([1.5, 5.0, 450.0]))
 
     @property
     def args(self):
+        """No additional arguments."""
+        return None
+
+    @property
+    def bounds(self):
+        """No explicit bounds."""
         return None
 
     @property
     def expected_result(self):
-        # Should use certified values from NIST
+        """Expected optimal solution."""
+        # Not provided in SIF file
         return None
 
     @property
     def expected_objective_value(self):
-        # Should use certified minimum value from NIST
-        return None
+        """Expected optimal objective value."""
+        # Least squares problems are bounded below by zero
+        return jnp.array(0.0)

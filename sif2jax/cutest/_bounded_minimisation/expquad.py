@@ -21,31 +21,34 @@ class EXPQUAD(AbstractBoundedMinimisation):
     m: int = eqx.field(default=100, init=False)
 
     def objective(self, y, args):
-        """Compute the objective function (vectorized)."""
+        """Compute the objective function (vectorized and optimized)."""
         n = self.n
         m = self.m
 
         # Linear terms in objective: -10*i*x[i] for i=1 to n
-        i_vals = jnp.arange(1, n + 1, dtype=jnp.float64)
-        linear_obj = jnp.sum(-10.0 * i_vals * y)
+        # Pre-compute coefficients and use dot product
+        linear_coeffs = -10.0 * jnp.arange(1, n + 1, dtype=y.dtype)
+        linear_obj = jnp.dot(linear_coeffs, y)
 
-        # Element contributions
-        # First m elements: EXP type with parameters
-        # From AMPL: exp(0.1*i*m*x[i]*x[i+1]) but SIF has i/m as parameter
-        # So it's exp(0.1*i/m*x[i]*x[i+1])
-        i_vals_exp = jnp.arange(1, m + 1, dtype=jnp.float64)
-        p_vals = i_vals_exp / m
-        x_vals = y[:m]
-        y_vals = y[1 : m + 1]
-        exp_terms = jnp.exp(0.1 * p_vals * x_vals * y_vals)
+        # Exponential elements: exp(0.1 * (i/m) * x[i] * x[i+1]) for i=1 to m
+        # Vectorize all operations to avoid loops
+        p_vals = jnp.arange(1, m + 1, dtype=y.dtype) / m
+        products = y[:m] * y[1 : m + 1]  # x[i] * x[i+1]
+        exp_terms = jnp.sum(jnp.exp(0.1 * p_vals * products))
 
-        # Elements m+1 to n-1: QUAD type
-        # These use x[i] and x[n-1] (last variable)
-        x_last = y[n - 1]
-        x_quad = y[m : n - 1]
-        quad_terms = 4.0 * x_quad * x_quad + 2.0 * x_last * x_last + x_quad * x_last
+        # Quadratic elements for variables m+1 to n-1
+        # These use x[i] and x[n] (last variable)
+        if m < n - 1:  # Only if there are quad terms
+            x_last = y[n - 1]
+            x_quad = y[m : n - 1]  # Variables from m+1 to n-1
+            quad_obj = jnp.sum(4.0 * x_quad * x_quad + x_quad * x_last)
+            quad_obj += (
+                (n - 1 - m) * 2.0 * x_last * x_last
+            )  # x_last appears in each quad term
+        else:
+            quad_obj = 0.0
 
-        return linear_obj + jnp.sum(exp_terms) + jnp.sum(quad_terms)
+        return linear_obj + exp_terms + quad_obj
 
     @property
     def y0(self):

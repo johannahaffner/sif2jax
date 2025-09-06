@@ -68,15 +68,16 @@ from .devgla1ne import DEVGLA1NE as DEVGLA1NE
 from .devgla2ne import DEVGLA2NE as DEVGLA2NE
 from .dmn15102 import DMN15102 as DMN15102
 from .dmn15103 import DMN15103 as DMN15103
+from .drcavty1 import DRCAVTY1 as DRCAVTY1
+from .drcavty2 import DRCAVTY2 as DRCAVTY2
+from .drcavty3 import DRCAVTY3 as DRCAVTY3
 
 # TODO: Human review needed - Jacobian precision issues (0.001-0.003 differences)
 # from .dmn15332 import DMN15332 as DMN15332
 # from .dmn15333 import DMN15333 as DMN15333
 # from .dmn37142 import DMN37142 as DMN37142
 # from .dmn37143 import DMN37143 as DMN37143
-from .drcavty1 import DRCAVTY1 as DRCAVTY1
-from .drcavty2 import DRCAVTY2 as DRCAVTY2
-from .drcavty3 import DRCAVTY3 as DRCAVTY3
+from .eckerle4 import ECKERLE4 as ECKERLE4
 from .eggcratene import EGGCRATENE as EGGCRATENE
 
 # TODO: Human review needed - systematic constraint value discrepancies
@@ -85,6 +86,7 @@ from .eggcratene import EGGCRATENE as EGGCRATENE
 # from .eigenau import EIGENAU as EIGENAU
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
+from .enso import ENSO as ENSO
 from .errinrosne import ERRINROSNE as ERRINROSNE
 from .errinrsmne import ERRINRSMNE as ERRINRSMNE
 from .exp2ne import EXP2NE as EXP2NE
@@ -322,6 +324,7 @@ nonlinear_equations_problems = (
     DEVGLA2NE(),
     DMN15102(),
     DMN15103(),
+    ECKERLE4(),
     # DMN15332(),  # TODO: Human review needed - Jacobian precision issues
     # DMN15333(),  # TODO: Human review needed - Jacobian precision issues
     # DMN37142(),  # TODO: Human review needed - Jacobian precision issues
@@ -331,6 +334,7 @@ nonlinear_equations_problems = (
     # EIGENAU(),  # TODO: Human review needed - same constraint issues as EIGENA
     ELATVIDUNE(),
     ENGVAL2NE(),
+    ENSO(),
     ERRINRSMNE(),
     ERRINROSNE(),
     EXP2NE(),

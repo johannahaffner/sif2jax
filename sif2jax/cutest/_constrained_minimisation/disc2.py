@@ -8,7 +8,8 @@ from ..._problem import AbstractConstrainedMinimisation
 
 # TODO: Human review needed - multiple implementation issues
 # Issues:
-# 1. Starting values mismatch: pycutest expects [0.5, 5, 5, ...], sif2jax provides [11, 1, 2, ...]
+# 1. Starting values mismatch: pycutest expects [0.5, 5, 5, ...],
+#    sif2jax provides [11, 1, 2, ...]
 # 2. Constraint formulation incorrect: significant discrepancies in constraint values
 # 3. Bounds issues: bound checking failures
 # 4. Jacobian structure wrong: max difference ~24.0 in equality Jacobians
@@ -47,7 +48,7 @@ class DISC2(AbstractConstrainedMinimisation):
         epsilon = y[0]  # EPSILON variable
         return epsilon
 
-    def constraint(self, y: Array) -> tuple[Array, None]:
+    def constraint(self, y: Array) -> tuple[Array, Array]:
         """Constraint functions with circle and line elements."""
         # Extract variables
         epsilon = y[0]  # EPSILON
@@ -128,7 +129,8 @@ class DISC2(AbstractConstrainedMinimisation):
             5:
         ]  # B(6) to B(11) and collinearity are equalities
 
-        # Actually, looking at the groups: B(1-5) are XE (equality), B(6-11) are XL (<=),
+        # Actually, looking at the groups: B(1-5) are XE (equality),
+        # B(6-11) are XL (<=),
         # collinearity are XE (equality)
         equalities = jnp.concatenate(
             [all_constraints[:5], all_constraints[11:]]

@@ -16,7 +16,8 @@
 #     with zero trace
 #   - Potentially prohibitive computational complexity for large N
 
-"""MINC44 problem - Minimize the permanent of a doubly stochastic matrix whose trace is zero.
+"""MINC44 problem - Minimize the permanent of a doubly stochastic matrix
+whose trace is zero.
 
 Source: conjecture 44 in
 H. Minc,

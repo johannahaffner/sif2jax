@@ -59,7 +59,8 @@ from .cleuven7 import CLEUVEN7 as CLEUVEN7
 from .coshfun import COSHFUN as COSHFUN
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
-from .dale import DALE as DALE  # TODO: Human review needed - see dale.py for details
+
+# from .dale import DALE as DALE  # TODO: Human review needed - see dale.py for details
 from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
 from .degenlpa import DEGENLPA as DEGENLPA
@@ -397,6 +398,12 @@ from .reading5 import READING5 as READING5
 from .reading9 import READING9 as READING9
 
 # from .rdw2d51f import RDW2D51F as RDW2D51F  # TODO: Human review needed
+from .rocket import ROCKET as ROCKET
+
+# from .rdw2d51u import RDW2D51U as RDW2D51U  # TODO: Human review needed - times out
+# from .rdw2d52b import RDW2D52B as RDW2D52B  # TODO: Human review needed
+# from .rdw2d52f import RDW2D52F as RDW2D52F  # TODO: Human review needed
+# from .rdw2d52u import RDW2D52U as RDW2D52U  # TODO: Human review needed
 from .rosepetal import ROSEPETAL as ROSEPETAL
 from .rosepetal2 import ROSEPETAL2 as ROSEPETAL2
 from .s316_322 import S316_322 as S316_322
@@ -500,7 +507,7 @@ constrained_minimisation_problems = (
     # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
     CSFI2(),
-    DALE(),  # TODO: Human review needed - see dale.py for details
+    # DALE(),  # TODO: Human review needed - see dale.py for details
     DALLASS(),
     DECONVC(),
     DEGENLPA(),
@@ -720,7 +727,12 @@ constrained_minimisation_problems = (
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     READING9(),
+    ROCKET(),
     # RDW2D51F(),  # TODO: Human review needed
+    # RDW2D51U(),  # TODO: Human review needed - times out
+    # RDW2D52B(),  # TODO: Human review needed
+    # RDW2D52F(),  # TODO: Human review needed
+    # RDW2D52U(),  # TODO: Human review needed
     ROSEPETAL(),
     ROSEPETAL2(),
     SIMPLLPA(),

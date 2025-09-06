@@ -229,6 +229,8 @@ from .powellsq import POWELLSQ as POWELLSQ
 from .powersumne import POWERSUMNE as POWERSUMNE
 from .rat42 import RAT42 as RAT42
 from .rat43 import RAT43 as RAT43
+from .recipe import RECIPE as RECIPE
+from .repeat import REPEAT as REPEAT
 from .s308ne import S308NE as S308NE
 
 # TODO: Human review needed - mixed constraint types (equality/inequality)
@@ -455,6 +457,8 @@ nonlinear_equations_problems = (
     POWERSUMNE(),
     RAT42(),
     RAT43(),
+    RECIPE(),
+    REPEAT(),
     # RES(),  # TODO: Human review needed - mixed constraint types
     SANTA(),
     SINVALNE(),

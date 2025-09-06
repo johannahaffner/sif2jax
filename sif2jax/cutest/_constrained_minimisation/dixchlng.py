@@ -42,7 +42,7 @@ class DIXCHLNG(AbstractConstrainedMinimisation):
         scale_10_1 = 1.0 / 10.1
         scale_19_8 = 1.0 / 19.8
 
-        obj = 0.0
+        obj = jnp.array(0.0)
 
         # Process 7 groups (i = 1 to 7, using 0-based indexing)
         for i in range(7):

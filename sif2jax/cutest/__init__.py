@@ -154,7 +154,7 @@ from ._constrained_minimisation import (
     # CRESC4 as CRESC4,  # TODO: Human review - complex crescent area formula
     CSFI1 as CSFI1,
     CSFI2 as CSFI2,
-    DALE as DALE,  # TODO: Human review needed - see dale.py for details
+    # DALE as DALE,  # TODO: Human review needed - see dale.py for details
     DALLASS as DALLASS,
     DECONVC as DECONVC,
     DEGENLPA as DEGENLPA,
@@ -416,7 +416,12 @@ from ._constrained_minimisation import (
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     READING9 as READING9,
+    ROCKET as ROCKET,
     # RDW2D51F as RDW2D51F,  # TODO: Human review needed
+    # RDW2D51U as RDW2D51U,  # TODO: Human review needed - times out
+    # RDW2D52B as RDW2D52B,  # TODO: Human review needed
+    # RDW2D52F as RDW2D52F,  # TODO: Human review needed
+    # RDW2D52U as RDW2D52U,  # TODO: Human review needed
     ROSEPETAL as ROSEPETAL,
     ROSEPETAL2 as ROSEPETAL2,
     S316_322 as S316_322,
@@ -656,6 +661,8 @@ from ._nonlinear_equations import (
     POWERSUMNE as POWERSUMNE,
     RAT42 as RAT42,
     RAT43 as RAT43,
+    RECIPE as RECIPE,
+    REPEAT as REPEAT,
     S308NE as S308NE,
     # RES as RES,  # TODO: Human review needed - mixed constraint types
     SANTA as SANTA,
@@ -978,6 +985,7 @@ from ._unconstrained_minimisation import (
     QUARTC as QUARTC,
     RAT42LS as RAT42LS,
     RAT43LS as RAT43LS,
+    # RECIPELS as RECIPELS,  # TODO: Human review - timeout on simple 3-var problem
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
     # S277_280 as S277_280,  # Moved to bounded
@@ -1280,7 +1288,12 @@ problems_dict = {
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     "READING9": READING9(),
+    "ROCKET": ROCKET(),
     # "RDW2D51F": RDW2D51F(),  # TODO: Human review needed
+    # "RDW2D51U": RDW2D51U(),  # TODO: Human review needed - times out
+    # "RDW2D52B": RDW2D52B(),  # TODO: Human review needed
+    # "RDW2D52F": RDW2D52F(),  # TODO: Human review needed
+    # "RDW2D52U": RDW2D52U(),  # TODO: Human review needed
     "ROSEPETAL": ROSEPETAL(),
     "ROSEPETAL2": ROSEPETAL2(),
     "SIMPLLPA": SIMPLLPA(),
@@ -1454,7 +1467,7 @@ problems_dict = {
     "CVXQP2": CVXQP2(),
     "CVXQP3": CVXQP3(),
     "CYCLOOCFLS": CYCLOOCFLS(),
-    "DALE": DALE(),  # TODO: Human review needed - see dale.py for details
+    # "DALE": DALE(),  # TODO: Human review needed - see dale.py for details
     "DALLASS": DALLASS(),
     "DANIWOOD": DANIWOOD(),
     "DANIWOODLS": DANIWOODLS(),
@@ -1698,6 +1711,7 @@ problems_dict = {
     "PRICE4": PRICE4(),
     "RAT42LS": RAT42LS(),
     "RAT43LS": RAT43LS(),
+    # "RECIPELS": RECIPELS(),  # TODO: Human review - timeout on simple 3-var problem
     "QUARTC": QUARTC(),
     "RAYBENDL": RAYBENDL(),
     "S368": S368(),
@@ -2025,6 +2039,8 @@ problems_dict = {
     "POWERSUMNE": POWERSUMNE(),
     "RAT42": RAT42(),
     "RAT43": RAT43(),
+    "RECIPE": RECIPE(),
+    "REPEAT": REPEAT(),
     # "RES": RES(),  # TODO: Human review needed - mixed constraint types
     "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),

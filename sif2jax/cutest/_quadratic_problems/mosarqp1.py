@@ -141,25 +141,25 @@ class MOSARQP1(AbstractConstrainedQuadraticProblem):
         """Problem conditioning parameter."""
         return COND
 
-    def objective(self, x, args):
+    def objective(self, y, args):
         """Compute the quadratic objective function."""
         del args
 
-        # Linear term: c^T * x
-        linear_term = jnp.dot(C, x)
+        # Linear term: c^T * y
+        linear_term = jnp.dot(C, y)
 
-        # Diagonal quadratic term: 0.5 * x^T * D * x
-        diag_term = 0.5 * jnp.sum(D * x * x)
+        # Diagonal quadratic term: 0.5 * y^T * D * y
+        diag_term = 0.5 * jnp.sum(D * y * y)
 
         # Y-based quadratic terms (sparse - only 10 nonzeros)
-        x_at_k = x[K_POSITIONS]
+        y_at_k = y[K_POSITIONS]
 
         # Use precomputed sparse quadratic form
-        quad_term = jnp.dot(x_at_k, jnp.dot(H_SPARSE, x_at_k))
+        quad_term = jnp.dot(y_at_k, jnp.dot(H_SPARSE, y_at_k))
 
         return linear_term + diag_term + quad_term
 
-    def constraint(self, x):
+    def constraint(self, y):
         """Compute the linear constraints (discretized 5-point Laplacian)."""
         n = N
         m = M
@@ -174,30 +174,30 @@ class MOSARQP1(AbstractConstrainedQuadraticProblem):
         cols = constraint_indices % rtn
 
         # Center term (always present)
-        constraints = 4.0 * x[constraint_indices]
+        constraints = 4.0 * y[constraint_indices]
 
         # Left neighbors: subtract x[i-1] if col > 0 and i > 0
         left_valid = (cols > 0) & (constraint_indices > 0)
         constraints = constraints - jnp.where(
-            left_valid, x[constraint_indices - 1], 0.0
+            left_valid, y[constraint_indices - 1], 0.0
         )
 
         # Right neighbors: subtract x[i+1] if col < rtn-1 and i < n-1
         right_valid = (cols < rtn - 1) & (constraint_indices < n - 1)
         constraints = constraints - jnp.where(
-            right_valid, x[constraint_indices + 1], 0.0
+            right_valid, y[constraint_indices + 1], 0.0
         )
 
         # Top neighbors: subtract x[i-rtn] if row > 0
         top_valid = rows > 0
         constraints = constraints - jnp.where(
-            top_valid, x[constraint_indices - rtn], 0.0
+            top_valid, y[constraint_indices - rtn], 0.0
         )
 
         # Bottom neighbors: subtract x[i+rtn] if row < rtn-1 and i+rtn < n
         bottom_valid = (rows < rtn - 1) & (constraint_indices + rtn < n)
         constraints = constraints - jnp.where(
-            bottom_valid, x[constraint_indices + rtn], 0.0
+            bottom_valid, y[constraint_indices + rtn], 0.0
         )
 
         # RHS values depend on boundary conditions

@@ -109,7 +109,8 @@ class DRUGDISE(AbstractConstrainedMinimisation):
         return y[0] / self.tf_obj_scale  # TF / 100
 
     def constraint(self, y: Array) -> tuple[Array, None]:
-        """Constraint functions: state equations and intermediate variable definitions (vectorized).
+        """Constraint functions: state equations and intermediate variable
+        definitions (vectorized).
 
         PyCUTEst applies internal scaling but the API uses actual values.
         """
@@ -129,7 +130,8 @@ class DRUGDISE(AbstractConstrainedMinimisation):
         dd = d * d
 
         # State equations using trapezoidal rule
-        # EW(i): W(i+1) - W(i) - (TF/NI) * [C(i) * A(i) * (WSS - W(i)) - Z * C(i) * W(i) * (U(i) - 2*P(i))]
+        # EW(i): W(i+1) - W(i) - (TF/NI) * [C(i) * A(i) * (WSS - W(i))
+        #        - Z * C(i) * W(i) * (U(i) - 2*P(i))]
         ew_terms = c * a * (self.wss - w[:-1]) - self.z * c * w[:-1] * (
             u - 2.0 * p[:-1]
         )
@@ -137,7 +139,8 @@ class DRUGDISE(AbstractConstrainedMinimisation):
         # Apply EW inverse scaling: SIF has 'SCALE' 0.02, so divide by it
         ew = ew / self.ew_scale
 
-        # EP(i): P(i+1) - P(i) - (TF/NI) * [C(i) * B(i) * (U(i) - 2*P(i)) - Z * C(i) * P(i) * (WSS - W(i))]
+        # EP(i): P(i+1) - P(i) - (TF/NI) * [C(i) * B(i) * (U(i) - 2*P(i))
+        #        - Z * C(i) * P(i) * (WSS - W(i))]
         ep_terms = c * b * (u - 2.0 * p[:-1]) - self.z * c * p[:-1] * (
             self.wss - w[:-1]
         )
@@ -226,7 +229,7 @@ class DRUGDISE(AbstractConstrainedMinimisation):
     def expected_objective_value(self) -> Array:
         """Expected objective value from SIF file comments."""
         # Solution not provided in SIF file
-        return None
+        return jnp.array([])
 
     @property
     def bounds(self) -> tuple[Array, Array]:

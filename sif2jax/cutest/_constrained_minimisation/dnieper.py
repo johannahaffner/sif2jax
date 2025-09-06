@@ -48,10 +48,10 @@ class DNIEPER(AbstractConstrainedMinimisation):
 
         # Extract variables: X(1)..X(56), X0F, X24F, X12F, X36F, AC
         x = y[:56]  # X(1) to X(56)
-        x0f = y[56]  # X0F
-        x24f = y[57]  # X24F
-        x12f = y[58]  # X12F
-        x36f = y[59]  # X36F
+        # x0f = y[56]  # X0F - unused
+        # x24f = y[57]  # X24F - unused
+        # x12f = y[58]  # X12F - unused
+        # x36f = y[59]  # X36F - unused
         ac = y[60]  # AC
 
         obj = -112.464  # Constant term from CONSTANTS section

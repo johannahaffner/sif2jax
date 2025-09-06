@@ -175,7 +175,7 @@ class DRUGDIS(AbstractConstrainedMinimisation):
         """Expected objective value from SIF file comments."""
         # From SIF file: SOLTN(10) = 3.82432, but we use NI=2000
         # The actual optimal value is not provided for NI=2000
-        return None  # Not known for NI=2000
+        return jnp.array([])  # Not known for NI=2000
 
     @property
     def bounds(self) -> tuple[Array, Array]:

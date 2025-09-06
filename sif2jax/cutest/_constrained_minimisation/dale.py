@@ -20,6 +20,17 @@ from jax import Array
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# Module-level private variables for DALE problem
+_n_variables = 16514
+_n_constraints = 405
+
+# Initialize with dummy data (TODO: replace with actual MPS parsing)
+_constraint_matrix = jnp.zeros((_n_constraints, _n_variables))
+_quadratic_coeffs = jnp.ones(_n_variables) * 0.05
+_lower_bounds = jnp.full(_n_variables, -1000.0)
+_upper_bounds = jnp.full(_n_variables, 1000.0)
+
+
 class DALE(AbstractConstrainedMinimisation):
     """DALE - Tabular data protection with minimum distance perturbation.
 
@@ -47,43 +58,7 @@ class DALE(AbstractConstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    # Declare fields for parsed data
-    _constraint_matrix: Array
-    _quadratic_coeffs: Array
-    _lower_bounds: Array
-    _upper_bounds: Array
-
-    def __init__(self):
-        """Initialize DALE problem by parsing the MPS file."""
-        # Initialize with dummy data first
-        n_variables = 16514
-        n_constraints = 405
-
-        constraint_matrix = jnp.zeros((n_constraints, n_variables))
-        quadratic_coeffs = jnp.ones(n_variables) * 0.05
-        lower_bounds = jnp.full(n_variables, -1000.0)
-        upper_bounds = jnp.full(n_variables, 1000.0)
-
-        # Try to parse the actual MPS file
-        parsed_data = self._parse_mps_file()
-        if parsed_data is not None:
-            (
-                constraint_matrix,
-                quadratic_coeffs,
-                lower_bounds,
-                upper_bounds,
-            ) = parsed_data
-
-        # Now call super().__init__ with the parsed data
-        super().__init__()
-
-        # Set the fields using object.__setattr__ to bypass frozen check
-        object.__setattr__(self, "_constraint_matrix", constraint_matrix)
-        object.__setattr__(self, "_quadratic_coeffs", quadratic_coeffs)
-        object.__setattr__(self, "_lower_bounds", lower_bounds)
-        object.__setattr__(self, "_upper_bounds", upper_bounds)
-
-    def _parse_mps_file(self):
+    def _parse_mps_file(self) -> tuple[Array, Array, Array, Array] | None:
         """Parse the DALE.SIF MPS format file.
 
         Returns:
@@ -136,16 +111,16 @@ class DALE(AbstractConstrainedMinimisation):
                     cols.append(var_idx)
                     data.append(coeff)
 
-                # Handle second constraint on same line
-                if len(parts) >= 5:
-                    constraint_name2 = parts[3]
-                    coeff2 = float(parts[4])
+                    # Handle second constraint on same line
+                    if len(parts) >= 5:
+                        constraint_name2 = parts[3]
+                        coeff2 = float(parts[4])
 
-                    if constraint_name2 in constraint_to_idx:
-                        constraint_idx2 = constraint_to_idx[constraint_name2]
-                        rows.append(constraint_idx2)
-                        cols.append(var_idx)
-                        data.append(coeff2)
+                        if constraint_name2 in constraint_to_idx:
+                            constraint_idx2 = constraint_to_idx[constraint_name2]
+                            rows.append(constraint_idx2)
+                            cols.append(var_idx)
+                            data.append(coeff2)
 
         # Convert to dense matrix (JAX doesn't have good sparse support)
         A = jnp.zeros((n_constraints, n_variables))
@@ -213,34 +188,34 @@ class DALE(AbstractConstrainedMinimisation):
     @property
     def n_var(self) -> int:
         """Number of variables."""
-        return 16514
+        return _n_variables
 
     @property
     def n_con(self) -> int:
         """Number of constraints."""
-        return 405
+        return _n_constraints
 
     def objective(self, y: Array, args) -> Array:
         """Quadratic objective function: sum_i (q_i * x_i^2)."""
         del args
-        return jnp.sum(self._quadratic_coeffs * y * y)
+        return jnp.sum(_quadratic_coeffs * y * y)
 
     def constraint(self, y: Array) -> tuple[Array, None]:
         """Linear equality constraints: A * x = 0 (RHS is all zeros)."""
-        residuals = jnp.dot(self._constraint_matrix, y)
+        residuals = jnp.dot(_constraint_matrix, y)
         return residuals, None
 
     @property
     def y0(self) -> Array:
         """Starting point - use midpoint of bounds."""
         # Use midpoint between bounds where finite, otherwise 0
-        lower_finite = jnp.isfinite(self._lower_bounds)
-        upper_finite = jnp.isfinite(self._upper_bounds)
+        lower_finite = jnp.isfinite(_lower_bounds)
+        upper_finite = jnp.isfinite(_upper_bounds)
         both_finite = lower_finite & upper_finite
 
         y0 = jnp.zeros(self.n_var)
         # Where both bounds are finite, use midpoint
-        midpoints = (self._lower_bounds + self._upper_bounds) / 2
+        midpoints = (_lower_bounds + _upper_bounds) / 2
         y0 = jnp.where(both_finite, midpoints, y0)
 
         return y0
@@ -253,23 +228,23 @@ class DALE(AbstractConstrainedMinimisation):
     @property
     def expected_result(self) -> Array:
         """Expected solution not provided."""
-        return None
+        return jnp.array([])
 
     @property
     def expected_objective_value(self) -> Array:
         """Expected objective value not provided."""
-        return None
+        return jnp.array([])
 
     @property
     def bounds(self) -> tuple[Array, Array]:
         """Variable bounds from BOUNDS section."""
-        return self._lower_bounds, self._upper_bounds
+        return _lower_bounds, _upper_bounds
 
     def num_constraints(self) -> tuple[int, int, int]:
         """Returns the number of constraints and bounds."""
         # Count finite bounds
-        num_finite_lower = jnp.sum(jnp.isfinite(self._lower_bounds))
-        num_finite_upper = jnp.sum(jnp.isfinite(self._upper_bounds))
+        num_finite_lower = jnp.sum(jnp.isfinite(_lower_bounds))
+        num_finite_upper = jnp.sum(jnp.isfinite(_upper_bounds))
         num_finite_bounds = int(num_finite_lower + num_finite_upper)
 
         # All 405 constraints are equalities

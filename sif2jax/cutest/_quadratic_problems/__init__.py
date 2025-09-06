@@ -59,6 +59,7 @@ from .gouldqp2 import GOULDQP2 as GOULDQP2
 from .gouldqp3 import GOULDQP3 as GOULDQP3
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
+from .junkturn import JUNKTURN as JUNKTURN
 from .hs76 import HS76 as HS76
 from .nash import NASH as NASH
 from .ncvxbqp1 import NCVXBQP1 as NCVXBQP1
@@ -154,6 +155,7 @@ constrained_quadratic_problems = (
     GOULDQP3(),
     HATFLDH(),
     HS44NEW(),
+    JUNKTURN(),
     HS76(),
     NASH(),
     NCVXQP1(),

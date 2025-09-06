@@ -397,6 +397,10 @@ from ._constrained_minimisation import (
     # the starting point is the solution too
     READING9 as READING9,
     # RDW2D51F as RDW2D51F,  # TODO: Human review needed
+    # RDW2D51U as RDW2D51U,  # TODO: Human review needed - times out
+    # RDW2D52B as RDW2D52B,  # TODO: Human review needed
+    # RDW2D52F as RDW2D52F,  # TODO: Human review needed
+    # RDW2D52U as RDW2D52U,  # TODO: Human review needed
     ROSEPETAL as ROSEPETAL,
     ROSEPETAL2 as ROSEPETAL2,
     SIMPLLPA as SIMPLLPA,
@@ -624,6 +628,7 @@ from ._nonlinear_equations import (
     POWERSUMNE as POWERSUMNE,
     RAT42 as RAT42,
     RAT43 as RAT43,
+    RECIPE as RECIPE,
     # RES as RES,  # TODO: Human review needed - mixed constraint types
     SANTA as SANTA,
     SINVALNE as SINVALNE,
@@ -942,6 +947,7 @@ from ._unconstrained_minimisation import (
     QUARTC as QUARTC,
     RAT42LS as RAT42LS,
     RAT43LS as RAT43LS,
+    # RECIPELS as RECIPELS,  # TODO: Human review - timeout on simple 3-var problem
     ROSENBR as ROSENBR,
     ROSZMAN1LS as ROSZMAN1LS,
     S308 as S308,
@@ -1240,6 +1246,10 @@ problems_dict = {
     # the starting point is the solution too
     "READING9": READING9(),
     # "RDW2D51F": RDW2D51F(),  # TODO: Human review needed
+    # "RDW2D51U": RDW2D51U(),  # TODO: Human review needed - times out
+    # "RDW2D52B": RDW2D52B(),  # TODO: Human review needed
+    # "RDW2D52F": RDW2D52F(),  # TODO: Human review needed
+    # "RDW2D52U": RDW2D52U(),  # TODO: Human review needed
     "ROSEPETAL": ROSEPETAL(),
     "ROSEPETAL2": ROSEPETAL2(),
     "SIMPLLPA": SIMPLLPA(),
@@ -1642,6 +1652,7 @@ problems_dict = {
     "PRICE4": PRICE4(),
     "RAT42LS": RAT42LS(),
     "RAT43LS": RAT43LS(),
+    # "RECIPELS": RECIPELS(),  # TODO: Human review - timeout on simple 3-var problem
     "QUARTC": QUARTC(),
     "RAYBENDL": RAYBENDL(),
     # "RAYBENDS": RAYBENDS(),  # TODO: Human review - numerical issues
@@ -1952,6 +1963,7 @@ problems_dict = {
     "POWERSUMNE": POWERSUMNE(),
     "RAT42": RAT42(),
     "RAT43": RAT43(),
+    "RECIPE": RECIPE(),
     # "RES": RES(),  # TODO: Human review needed - mixed constraint types
     "SANTA": SANTA(),
     "SINVALNE": SINVALNE(),

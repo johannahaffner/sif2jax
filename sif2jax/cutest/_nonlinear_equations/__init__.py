@@ -33,11 +33,12 @@ from .browndene import BROWNDENE as BROWNDENE
 # from .broydnbd import BROYDNBD as BROYDNBD
 # TODO: Human review needed - constraint values don't match pycutest
 # from .brybndne import BRYBNDNE as BRYBNDNE
-# from .ceri651a import CERI651A as CERI651A
-# from .ceri651b import CERI651B as CERI651B
-# from .ceri651c import CERI651C as CERI651C
-# from .ceri651d import CERI651D as CERI651D
-# from .ceri651e import CERI651E as CERI651E
+# from .ceri651a import CERI651A as CERI651A  # TODO: Jacobian precision - 0.000865
+# from .ceri651b import CERI651B as CERI651B  # TODO: Jacobian precision - 0.000100
+from .ceri651c import CERI651C as CERI651C
+
+# from .ceri651d import CERI651D as CERI651D  # TODO: Jacobian precision - 0.000053
+# from .ceri651e import CERI651E as CERI651E  # TODO: Jacobian precision - 0.000053
 # TODO: Human review needed - constraint values don't match pycutest
 # from .chainwoone import CHAINWOONE as CHAINWOONE
 from .chandheq import CHANDHEQ as CHANDHEQ
@@ -289,8 +290,8 @@ nonlinear_equations_problems = (
     # BROWNALE(),  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE(),
     BROWNDENE(),
-    # CERI651D(),  # TODO: Human review needed - constraint precision
-    # CERI651E(),  # TODO: Human review needed - constraint precision
+    # CERI651D(),  # TODO: Jacobian precision - max diff 0.000053
+    # CERI651E(),  # TODO: Jacobian precision - max diff 0.000053
     # BROYDN3D(),  # TODO: Human review needed - constraint values mismatch
     # BROYDNBD(),  # TODO: Human review needed - systematic differences
     # BRYBNDNE(),  # TODO: Human review needed - constraint values mismatch
@@ -300,9 +301,9 @@ nonlinear_equations_problems = (
     HYPCIR(),
     MSQRTA(),
     MSQRTB(),
-    # CERI651A(),  # TODO: Human review needed - constraint precision
-    # CERI651B(),  # TODO: Human review needed - constraint precision
-    # CERI651C(),  # TODO: Human review needed - constraint precision
+    # CERI651A(),  # TODO: Jacobian precision - max diff 0.000865
+    # CERI651B(),  # TODO: Jacobian precision - max diff 0.000100
+    CERI651C(),
     # CHAINWOONE(),  # TODO: Human review needed - constraint values mismatch
     # CHANNEL(),  # TODO: Human review needed
     CHEBYQADNE(),

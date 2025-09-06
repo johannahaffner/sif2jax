@@ -476,11 +476,11 @@ from ._nonlinear_equations import (
     # BROWNALE as BROWNALE,  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE as BROWNBSNE,
     BROWNDENE as BROWNDENE,
-    # CERI651A as CERI651A,  # TODO: Human review needed - constraint precision
-    # CERI651B as CERI651B,  # TODO: Human review needed - constraint precision
-    # CERI651C as CERI651C,  # TODO: Human review needed - constraint precision
-    # CERI651D as CERI651D,  # TODO: Human review needed - constraint precision
-    # CERI651E as CERI651E,  # TODO: Human review needed - constraint precision
+    # CERI651A as CERI651A,  # TODO: Jacobian precision - max diff 0.000865
+    # CERI651B as CERI651B,  # TODO: Jacobian precision - max diff 0.000100
+    CERI651C as CERI651C,
+    # CERI651D as CERI651D,  # TODO: Jacobian precision - max diff 0.000053
+    # CERI651E as CERI651E,  # TODO: Jacobian precision - max diff 0.000053
     # CHAINWOONE as CHAINWOONE,  # TODO: Human review - constraint values mismatch
     CHANDHEQ as CHANDHEQ,
     # CHANNEL as CHANNEL,  # TODO: Human review needed
@@ -781,11 +781,11 @@ from ._unconstrained_minimisation import (
     BROYDN7D as BROYDN7D,
     # BROYDNBDLS as BROYDNBDLS,  # TODO: Gradient test fails - needs human review
     # BRYBND as BRYBND,  # TODO: Gradient test fails - needs human review
-    # CERI651ALS as CERI651ALS,  # TODO: Human review - numerical instability
-    # CERI651BLS as CERI651BLS,  # TODO: Human review - numerical instability
-    # CERI651CLS as CERI651CLS,  # TODO: Human review - numerical instability
-    # CERI651DLS as CERI651DLS,  # TODO: Human review - numerical instability
-    # CERI651ELS as CERI651ELS,  # TODO: Human review - numerical instability
+    # CERI651ALS as CERI651ALS,  # TODO: Numerical overflow
+    # CERI651BLS as CERI651BLS,  # TODO: Numerical overflow
+    # CERI651CLS as CERI651CLS,  # TODO: Numerical overflow
+    # CERI651DLS as CERI651DLS,  # TODO: Numerical overflow
+    # CERI651ELS as CERI651ELS,  # TODO: Numerical overflow
     CHAINWOO as CHAINWOO,
     CHNROSNB as CHNROSNB,
     CHNRSNBM as CHNRSNBM,
@@ -1390,11 +1390,11 @@ problems_dict = {
     "BROYDN7D": BROYDN7D(),
     # "BROYDNBDLS": BROYDNBDLS(),  # TODO: Gradient test fails - needs human review
     # "BRYBND": BRYBND(),  # TODO: Gradient test fails - needs human review
-    # "CERI651ALS": CERI651ALS(),  # TODO: Human review - numerical instability
-    # "CERI651BLS": CERI651BLS(),  # TODO: Human review - numerical instability
-    # "CERI651CLS": CERI651CLS(),  # TODO: Human review - numerical instability
-    # "CERI651DLS": CERI651DLS(),  # TODO: Human review - numerical instability
-    # "CERI651ELS": CERI651ELS(),  # TODO: Human review - numerical instability
+    # "CERI651ALS": CERI651ALS(),  # TODO: Numerical overflow
+    # "CERI651BLS": CERI651BLS(),  # TODO: Numerical overflow
+    # "CERI651CLS": CERI651CLS(),  # TODO: Numerical overflow
+    # "CERI651DLS": CERI651DLS(),  # TODO: Numerical overflow
+    # "CERI651ELS": CERI651ELS(),  # TODO: Numerical overflow
     "CHAINWOO": CHAINWOO(),
     "CHANDHEQ": CHANDHEQ(),
     "CHNROSNB": CHNROSNB(),
@@ -1806,11 +1806,11 @@ problems_dict = {
     "HYPCIR": HYPCIR(),
     "MSQRTA": MSQRTA(),
     "MSQRTB": MSQRTB(),
-    # "CERI651A": CERI651A(),  # TODO: Human review needed - constraint precision
-    # "CERI651B": CERI651B(),  # TODO: Human review needed - constraint precision
-    # "CERI651C": CERI651C(),  # TODO: Human review needed - constraint precision
-    # "CERI651D": CERI651D(),  # TODO: Human review needed - constraint precision
-    # "CERI651E": CERI651E(),  # TODO: Human review needed - constraint precision
+    # "CERI651A": CERI651A(),  # TODO: Jacobian precision - max diff 0.000865
+    # "CERI651B": CERI651B(),  # TODO: Jacobian precision - max diff 0.000100
+    "CERI651C": CERI651C(),
+    # "CERI651D": CERI651D(),  # TODO: Jacobian precision - max diff 0.000053
+    # "CERI651E": CERI651E(),  # TODO: Jacobian precision - max diff 0.000053
     # "CHAINWOONE": CHAINWOONE(),  # TODO: Human review - constraint values mismatch
     # "CHANNEL": CHANNEL(),  # TODO: Human review needed
     "CHEBYQADNE": CHEBYQADNE(),

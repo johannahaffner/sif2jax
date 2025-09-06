@@ -1,12 +1,20 @@
 import jax
 import jax.numpy as jnp
-import jax.scipy.special as jss
+from jax.scipy.special import erfc
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: This implementation requires human review and verification against
-# another CUTEst interface
+def erfc_scaled(z):
+    """Scaled complementary error function: exp(z^2) * erfc(z)
+
+    Direct implementation without thresholds to maintain smoothness.
+    """
+    # Direct computation - let JAX handle overflow/underflow naturally
+    return jnp.exp(z * z) * erfc(z)
+
+
+# TODO: Human review needed - numerical stability issues
 class CERI651DLS(AbstractUnconstrainedMinimisation):
     """ISIS Data fitting problem CERI651D given as an inconsistent set of
     nonlinear equations.
@@ -256,25 +264,6 @@ class CERI651DLS(AbstractUnconstrainedMinimisation):
             ]
         )
 
-        # Define helper function for the erfc_scaled function
-        def erfc_scaled(z):
-            # erfc_scaled(z) = exp(z^2) * erfc(z)
-            # For numerical stability, use scipy's erfcx which is exp(x^2)*erfc(x)
-            # JAX doesn't have erfcx, so we need to be careful with large z
-            # For |z| > 5, erfc(z) is very small and exp(z^2) is very large
-            # Use asymptotic expansion for large |z|
-            abs_z = jnp.abs(z)
-
-            # For small |z|, use the direct formula
-            small_z_result = jnp.exp(z * z) * (1.0 - jss.erf(z))
-
-            # For large |z|, use asymptotic approximation
-            # erfcx(z) ≈ 1/(sqrt(pi)*z) for large |z|
-            large_z_result = 1.0 / (jnp.sqrt(jnp.pi) * abs_z)
-
-            # Use where to select based on magnitude
-            return jnp.where(abs_z < 5.0, small_z_result, large_z_result)
-
         # Weights for weighted least squares (1/error)
         weights = 1.0 / e_data
 
@@ -306,12 +295,17 @@ class CERI651DLS(AbstractUnconstrainedMinimisation):
             exp_arg_b = jnp.clip(exp_arg_b, -700, 700)
 
             # Arguments for the erfc functions
-            erfc_arg_a = (a * s_safe * s_safe + diff) / (s_safe * jnp.sqrt(2.0))
-            erfc_arg_b = (b * s_safe * s_safe + diff) / (s_safe * jnp.sqrt(2.0))
+            erfc_arg_a = (a * s_safe + diff / s_safe) / jnp.sqrt(2.0)
+            erfc_arg_b = (b * s_safe + diff / s_safe) / jnp.sqrt(2.0)
 
-            # Compute the terms
-            term1 = jnp.exp(exp_arg_a) * (1.0 - jss.erf(erfc_arg_a))
-            term2 = jnp.exp(exp_arg_b) * (1.0 - jss.erf(erfc_arg_b))
+            # Compute the terms using the scaled erfc function
+            # Note: exp(exp_arg) * erfc(erfc_arg) = exp(exp_arg - erfc_arg^2) * erfcx
+            term1 = jnp.exp(exp_arg_a - erfc_arg_a * erfc_arg_a) * erfc_scaled(
+                erfc_arg_a
+            )
+            term2 = jnp.exp(exp_arg_b - erfc_arg_b * erfc_arg_b) * erfc_scaled(
+                erfc_arg_b
+            )
 
             # Full back-to-back exponential
             b2b = prefactor * (term1 + term2)

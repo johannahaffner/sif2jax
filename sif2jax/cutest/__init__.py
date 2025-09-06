@@ -119,10 +119,13 @@ from ._constrained_minimisation import (
     # AUG2D as AUG2D,  # TODO: needs human review - edge variable structure
     AVGASA as AVGASA,
     AVGASB as AVGASB,
+    BIGGSC4 as BIGGSC4,
     # AVION2 as AVION2,  # TODO: Human review - gradient discrepancies
     # BDRY2 as BDRY2,  # TODO: Human review - objective values don't match
     # BIGBANK as BIGBANK,  # TODO: Human review - objective values don't match
-    BIGGSC4 as BIGGSC4,
+    # BLOWEYA as BLOWEYA,  # TODO: Human review needed
+    # BLOWEYB as BLOWEYB,  # TODO: Human review needed
+    # BLOWEYC as BLOWEYC,  # TODO: Human review needed
     BT1 as BT1,
     BT2 as BT2,
     BT3 as BT3,
@@ -1064,6 +1067,9 @@ problems_dict = {
     # "ALLINITC": ALLINITC(),  # Human review needed - dimension mismatch
     "ALJAZZAF": ALJAZZAF(),
     "ALSOTAME": ALSOTAME(),
+    # "BLOWEYA": BLOWEYA(),  # TODO: Human review needed
+    # "BLOWEYB": BLOWEYB(),  # TODO: Human review needed
+    # "BLOWEYC": BLOWEYC(),  # TODO: Human review needed
     "TRO3X3": TRO3X3(),
     "TRO4X4": TRO4X4(),
     "TRO5X5": TRO5X5(),

@@ -16,11 +16,14 @@ from .alsotame import ALSOTAME as ALSOTAME
 # from .aug2d import AUG2D as AUG2D
 from .avgasa import AVGASA as AVGASA
 from .avgasb import AVGASB as AVGASB
+from .biggsc4 import BIGGSC4 as BIGGSC4
 
 # from .avion2 import AVION2 as AVION2  # TODO: Human review - gradient discrepancies
 # from .bdry2 import BDRY2 as BDRY2  # TODO: Human review - objective values don't match
 # from .bigbank import BIGBANK as BIGBANK  # TODO: Human review - objective mismatch
-from .biggsc4 import BIGGSC4 as BIGGSC4
+# from .bloweya import BLOWEYA as BLOWEYA  # TODO: Human review needed
+# from .bloweyb import BLOWEYB as BLOWEYB  # TODO: Human review needed
+# from .bloweyc import BLOWEYC as BLOWEYC  # TODO: Human review needed
 from .bt1 import BT1 as BT1
 from .bt2 import BT2 as BT2
 from .bt3 import BT3 as BT3
@@ -485,6 +488,9 @@ constrained_minimisation_problems = (
     # AVION2(),  # TODO: Human review - gradient discrepancies
     # BDRY2(),  # TODO: Human review - objective values don't match pycutest
     # BIGBANK(),  # TODO: Human review - objective values don't match pycutest
+    # BLOWEYA(),  # TODO: Human review needed
+    # BLOWEYB(),  # TODO: Human review needed
+    # BLOWEYC(),  # TODO: Human review needed
     BIGGSC4(),
     BURKEHAN(),
     BYRDSPHR(),

@@ -14,7 +14,7 @@
 Find the surface with minimal area, given boundary conditions,
 and above an obstacle.
 
-This is problem 17 in the COPS (Version 2) collection of 
+This is problem 17 in the COPS (Version 2) collection of
 E. Dolan and J. More'
 see "Benchmarking Optimization Software with COPS"
 Argonne National Labs Technical Report ANL/MCS-246 (2000)

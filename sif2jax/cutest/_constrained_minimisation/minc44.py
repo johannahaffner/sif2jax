@@ -2,15 +2,18 @@
 # Attempts made:
 #   1. Analysis of SIF file structure
 # Suspected issues:
-#   - Extremely complex combinatorial problem (permanent of doubly stochastic matrix with zero trace)
+#   - Extremely complex combinatorial problem (permanent of doubly
+#     stochastic matrix with zero trace)
 #   - Same complexity as MINPERM: involves 2^N sub-permanents (2^10 = 1024 for N=10)
 #   - Complex looping and indexing in SIF file
 #   - Requires understanding of permanent computation algorithms
 #   - Additional trace=0 constraint compared to MINPERM
-#   - Classification LQR2-AN-V-V suggests constraints on doubly stochastic property
+#   - Classification LQR2-AN-V-V suggests constraints on doubly
+#     stochastic property
 # Resources needed:
 #   - Matrix permanent computation expertise
-#   - Analysis of constraint structure for doubly stochastic matrices with zero trace
+#   - Analysis of constraint structure for doubly stochastic matrices
+#     with zero trace
 #   - Potentially prohibitive computational complexity for large N
 
 """MINC44 problem - Minimize the permanent of a doubly stochastic matrix whose trace is zero.
@@ -50,7 +53,7 @@ class MINC44(AbstractConstrainedMinimisation):
     def constraint(self, y):
         """Placeholder constraint function."""
         # This is a placeholder - actual implementation needs analysis
-        return jnp.array([])
+        return None, jnp.array([])
 
     @property
     def args(self):

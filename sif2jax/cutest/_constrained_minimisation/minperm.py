@@ -44,7 +44,7 @@ class MINPERM(AbstractConstrainedMinimisation):
     def constraint(self, y):
         """Placeholder constraint function."""
         # This is a placeholder - actual implementation needs analysis
-        return jnp.array([])
+        return None, jnp.array([])
 
     @property
     def args(self):

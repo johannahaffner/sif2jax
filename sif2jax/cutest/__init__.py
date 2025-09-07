@@ -431,6 +431,13 @@ from ._constrained_minimisation import (
     POLAK5 as POLAK5,
     POLAK6 as POLAK6,
     # POLYGON as POLYGON,  # TODO: Human review - fixed variable conventions
+    PORTFL1 as PORTFL1,
+    PORTFL2 as PORTFL2,
+    PORTFL3 as PORTFL3,
+    PORTFL4 as PORTFL4,
+    PORTFL6 as PORTFL6,
+    PORTSNQP as PORTSNQP,
+    # PORTSQP as PORTSQP,  # TODO: Human review - test timeouts with n=100000 default
     READING1 as READING1,
     READING2 as READING2,
     READING3 as READING3,
@@ -1336,6 +1343,13 @@ problems_dict = {
     "POLAK5": POLAK5(),
     "POLAK6": POLAK6(),
     # "POLYGON": POLYGON(),  # TODO: Human review - fixed variable conventions
+    "PORTFL1": PORTFL1(),
+    "PORTFL2": PORTFL2(),
+    "PORTFL3": PORTFL3(),
+    "PORTFL4": PORTFL4(),
+    "PORTFL6": PORTFL6(),
+    "PORTSNQP": PORTSNQP(),
+    # "PORTSQP": PORTSQP(),  # TODO: Human review - test timeouts with n=100000 default
     "READING1": READING1(),
     "READING2": READING2(),
     "READING3": READING3(),

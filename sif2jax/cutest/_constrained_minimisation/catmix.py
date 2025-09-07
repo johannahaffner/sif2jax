@@ -1,3 +1,9 @@
+# TODO: Human review needed
+# Test failures in constraints, bounds, and runtime performance
+# Attempts made: 1
+# Suspected issues: Constraint formulation or bound specification issues
+# Resources needed: Review COPS problem 14 formulation and boundary conditions
+
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation

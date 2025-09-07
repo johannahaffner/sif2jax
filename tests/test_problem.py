@@ -48,18 +48,18 @@ class TestProblem:
     @pytest.fixture(autouse=True)
     def clear_caches(self, problem):
         jax.clear_caches()
-        try:
-            pycutest.clear_cache(problem.name)
-        except (KeyError, FileNotFoundError):
-            pass
+        # try:
+        #     pycutest.clear_cache(problem.name)
+        # except (KeyError, FileNotFoundError):
+        #     pass
 
         yield
 
         jax.clear_caches()
-        try:
-            pycutest.clear_cache(problem.name)
-        except (KeyError, FileNotFoundError):
-            pass
+        # try:
+        #     pycutest.clear_cache(problem.name)
+        # except (KeyError, FileNotFoundError):
+        #     pass
 
     def test_correct_name(self, pycutest_problem):
         assert pycutest_problem is not None

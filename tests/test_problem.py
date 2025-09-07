@@ -18,7 +18,7 @@ from .helpers import (
 )
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="class", autouse=True)
 def clear_caches():
     # Setup
     yield
@@ -26,7 +26,6 @@ def clear_caches():
     # Teardown
 
 
-@pytest.mark.usefixtures("clear_caches")
 class TestProblem:
     """Test class for CUTEst problems. This class tests sif2jax implementations of
     CUTEst problems against the pycutest interface to the Fortran problems, using the

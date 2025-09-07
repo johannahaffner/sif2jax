@@ -231,6 +231,7 @@ from .powellbs import POWELLBS as POWELLBS
 from .powellse import POWELLSE as POWELLSE
 from .powellsq import POWELLSQ as POWELLSQ
 from .powersumne import POWERSUMNE as POWERSUMNE
+from .qingne import QINGNE as QINGNE
 from .rat42 import RAT42 as RAT42
 from .rat43 import RAT43 as RAT43
 from .recipe import RECIPE as RECIPE
@@ -463,6 +464,7 @@ nonlinear_equations_problems = (
     PFIT3(),
     PFIT4(),
     POWERSUMNE(),
+    QINGNE(),
     RAT42(),
     RAT43(),
     RECIPE(),

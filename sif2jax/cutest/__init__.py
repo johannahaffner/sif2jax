@@ -96,6 +96,7 @@ from ._bounded_minimisation import (
     PFIT3LS as PFIT3LS,
     PFIT4LS as PFIT4LS,
     PRICE4B as PRICE4B,
+    QINGB as QINGB,
     QUDLIN as QUDLIN,
     RAYBENDL as RAYBENDL,
     S368 as S368,
@@ -690,6 +691,7 @@ from ._nonlinear_equations import (
     POWELLSE as POWELLSE,
     POWELLSQ as POWELLSQ,
     POWERSUMNE as POWERSUMNE,
+    QINGNE as QINGNE,
     RAT42 as RAT42,
     RAT43 as RAT43,
     RECIPE as RECIPE,
@@ -1031,6 +1033,7 @@ from ._unconstrained_minimisation import (
     # POWELLSG as POWELLSG,  # TODO: Human review - objective off by factor of 4.15
     PRICE3 as PRICE3,
     PRICE4 as PRICE4,
+    QING as QING,
     QUARTC as QUARTC,
     RAT42LS as RAT42LS,
     RAT43LS as RAT43LS,
@@ -1791,10 +1794,11 @@ problems_dict = {
     # "POWELLSG": POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     "PRICE3": PRICE3(),
     "PRICE4": PRICE4(),
+    "QING": QING(),
+    "QUARTC": QUARTC(),
     "RAT42LS": RAT42LS(),
     "RAT43LS": RAT43LS(),
     # "RECIPELS": RECIPELS(),  # TODO: Human review - timeout on simple 3-var problem
-    "QUARTC": QUARTC(),
     "RAYBENDL": RAYBENDL(),
     "S368": S368(),
     # "SANTALS": SANTALS(),  # TODO: Human review - Small gradient discrepancies
@@ -1832,6 +1836,7 @@ problems_dict = {
     "POWELLSE": POWELLSE(),
     "POWELLSQ": POWELLSQ(),
     "PRICE4B": PRICE4B(),
+    "QINGB": QINGB(),
     # "WATSON": WATSON(),  # TODO: Human review - Hessian computation issues
     "WAYSEA1": WAYSEA1(),
     "WAYSEA2": WAYSEA2(),
@@ -2135,6 +2140,7 @@ problems_dict = {
     "PFIT3LS": PFIT3LS(),
     "PFIT4LS": PFIT4LS(),
     "POWERSUMNE": POWERSUMNE(),
+    "QINGNE": QINGNE(),
     "RAT42": RAT42(),
     "RAT43": RAT43(),
     "RECIPE": RECIPE(),

@@ -112,6 +112,7 @@ from .pfit2ls import PFIT2LS as PFIT2LS
 from .pfit3ls import PFIT3LS as PFIT3LS
 from .pfit4ls import PFIT4LS as PFIT4LS
 from .price4b import PRICE4B as PRICE4B
+from .qingb import QINGB as QINGB
 from .qudlin import QUDLIN as QUDLIN
 from .raybendl import RAYBENDL as RAYBENDL
 
@@ -250,6 +251,7 @@ bounded_minimisation_problems = (
     PFIT3LS(),
     PFIT4LS(),
     PRICE4B(),
+    QINGB(),
     QUDLIN(),
     RAYBENDL(),
     S368(),

@@ -264,6 +264,7 @@ from .price4 import PRICE4 as PRICE4
 
 # TODO: Human review - objective off by factor of 4.15
 # from .powellsg import POWELLSG as POWELLSG
+from .qing import QING as QING
 from .quartc import QUARTC as QUARTC
 from .rat42ls import RAT42LS as RAT42LS
 from .rat43ls import RAT43LS as RAT43LS
@@ -560,10 +561,11 @@ unconstrained_minimisation_problems = (
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     PRICE3(),
     PRICE4(),
+    QING(),
+    QUARTC(),
     RAT42LS(),
     RAT43LS(),
     # RECIPELS(),  # TODO: Human review - timeout on simple 3-var problem
-    QUARTC(),
     ROSENBR(),
     ROSZMAN1LS(),
     # S277_280(),  # Moved to bounded

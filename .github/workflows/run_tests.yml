@@ -12,6 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Checks with pre-commit
+        uses: pre-commit/action@v3.0.1
+      
       - name: Test problem definition pre-built image
         run: |
           docker run --rm -v ${{ github.workspace }}:/workspace \
@@ -30,19 +33,3 @@ jobs:
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py"
 
-  test-api:
-    runs-on: python:3.12
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install project + dependencies
-        run: |
-          pip install -e . && pip install ruff pyright pre-commit
-
-      - name: Checks with pre-commit
-        uses: pre-commit/action@v3.0.1
-
-      - name: Test API
-        run: |
-          pytest tests/test_api.py

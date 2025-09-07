@@ -7,47 +7,22 @@ import numpy as np
 from ..._problem import AbstractConstrainedQuadraticProblem
 
 
-# Cache the parsed data at module level
-_cached_data = None
+# Load data at module level
+_current_dir = os.path.dirname(__file__)
+_data_dir = os.path.join(_current_dir, "data")
 
-
-def _get_cached_data():
-    """Get cached parsed data, loading from numpy files if needed."""
-    global _cached_data
-    if _cached_data is None:
-        # Get the directory containing this file
-        current_dir = os.path.dirname(__file__)
-        data_dir = os.path.join(current_dir, "data")
-
-        # Load data directly as JAX arrays
-        A_rows = jnp.asarray(
-            np.load(os.path.join(data_dir, "table1_A_rows.npy")), dtype=jnp.int32
-        )
-        A_cols = jnp.asarray(
-            np.load(os.path.join(data_dir, "table1_A_cols.npy")), dtype=jnp.int32
-        )
-        A_vals = jnp.asarray(np.load(os.path.join(data_dir, "table1_A_vals.npy")))
-        lower_bounds = jnp.asarray(
-            np.load(os.path.join(data_dir, "table1_lower_bounds.npy"))
-        )
-        upper_bounds = jnp.asarray(
-            np.load(os.path.join(data_dir, "table1_upper_bounds.npy"))
-        )
-        Q_diag_vals = jnp.asarray(
-            np.load(os.path.join(data_dir, "table1_Q_diag_vals.npy"))
-        )
-        m_val = int(np.load(os.path.join(data_dir, "table1_m.npy")))
-
-        _cached_data = (
-            A_rows,
-            A_cols,
-            A_vals,
-            lower_bounds,
-            upper_bounds,
-            Q_diag_vals,
-            m_val,
-        )
-    return _cached_data
+# Load data directly as JAX arrays
+_A_ROWS = jnp.asarray(
+    np.load(os.path.join(_data_dir, "table1_A_rows.npy")), dtype=jnp.int32
+)
+_A_COLS = jnp.asarray(
+    np.load(os.path.join(_data_dir, "table1_A_cols.npy")), dtype=jnp.int32
+)
+_A_VALS = jnp.asarray(np.load(os.path.join(_data_dir, "table1_A_vals.npy")))
+_LOWER_BOUNDS = jnp.asarray(np.load(os.path.join(_data_dir, "table1_lower_bounds.npy")))
+_UPPER_BOUNDS = jnp.asarray(np.load(os.path.join(_data_dir, "table1_upper_bounds.npy")))
+_Q_DIAG_VALS = jnp.asarray(np.load(os.path.join(_data_dir, "table1_Q_diag_vals.npy")))
+_M_VAL = int(np.load(os.path.join(_data_dir, "table1_m.npy")))
 
 
 class TABLE1(AbstractConstrainedQuadraticProblem):
@@ -90,19 +65,8 @@ class TABLE1(AbstractConstrainedQuadraticProblem):
     def objective(self, y, args):
         """Quadratic objective function: 0.5 * y^T Q y where Q is diagonal."""
         del args
-        # Get the cached problem data
-        (
-            A_rows,
-            A_cols,
-            A_vals,
-            lower_bounds,
-            upper_bounds,
-            Q_diag_vals,
-            m_val,
-        ) = _get_cached_data()
-
         # Cast to match y's dtype if needed
-        Q_diag_vals = Q_diag_vals.astype(y.dtype)
+        Q_diag_vals = _Q_DIAG_VALS.astype(y.dtype)
         # The QMATRIX values need to be halved for the standard form 0.5 * y^T Q y
         # since the SIF file specifies the full coefficient
         return 0.5 * jnp.sum(Q_diag_vals * y * y)
@@ -110,40 +74,20 @@ class TABLE1(AbstractConstrainedQuadraticProblem):
     @property
     def bounds(self):
         """Variable bounds."""
-        (
-            A_rows,
-            A_cols,
-            A_vals,
-            lower_bounds,
-            upper_bounds,
-            Q_diag_vals,
-            m_val,
-        ) = _get_cached_data()
-        return lower_bounds, upper_bounds
+        return _LOWER_BOUNDS, _UPPER_BOUNDS
 
     def constraint(self, y):
         """Linear equality constraints: Ay = 0."""
-        # Get the cached problem data
-        (
-            A_rows,
-            A_cols,
-            A_vals,
-            lower_bounds,
-            upper_bounds,
-            Q_diag_vals,
-            m_val,
-        ) = _get_cached_data()
-
         # Cast A_vals to match y's dtype if needed
-        A_vals = A_vals.astype(y.dtype)
+        A_vals = _A_VALS.astype(y.dtype)
 
         # Vectorized sparse matrix-vector multiplication
-        selected_y = y[A_cols]
+        selected_y = y[_A_COLS]
         products = A_vals * selected_y
 
         # Use segment_sum for efficient aggregation
         eq_constraints = jax.ops.segment_sum(
-            products, A_rows, num_segments=m_val, indices_are_sorted=False
+            products, _A_ROWS, num_segments=_M_VAL, indices_are_sorted=False
         )
         return eq_constraints, None
 

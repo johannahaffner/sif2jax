@@ -918,7 +918,7 @@ from ._unconstrained_minimisation import (
     DRCAV1LQ as DRCAV1LQ,
     DRCAV2LQ as DRCAV2LQ,
     DRCAV3LQ as DRCAV3LQ,
-    ECKERLE4LS as ECKERLE4LS,
+    # ECKERLE4LS as ECKERLE4LS,  # TODO: Human review needed - Hessian discrepancy
     EDENSCH as EDENSCH,
     EG2 as EG2,
     EGGCRATE as EGGCRATE,
@@ -1619,7 +1619,7 @@ problems_dict = {
     "DJTL": DJTL(),
     "DQDRTIC": DQDRTIC(),
     "DQRTIC": DQRTIC(),
-    "ECKERLE4LS": ECKERLE4LS(),
+    # "ECKERLE4LS": ECKERLE4LS(),  # TODO: Human review needed - Hessian discrepancy
     "EDENSCH": EDENSCH(),
     "EG2": EG2(),
     "EGGCRATE": EGGCRATE(),

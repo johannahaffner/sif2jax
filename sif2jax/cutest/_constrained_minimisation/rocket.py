@@ -1,3 +1,11 @@
+# TODO: Human review needed - performance issues
+# Runtime test failed: JAX constraint is 19.60x slower than pycutest (threshold: 5.0)
+# The problem uses non-vectorized loops for NH=400 time points (401 total points)
+# Needs vectorization using JAX operations (vmap, scan) to meet performance requirements
+# Attempts made: 1
+# Suspected issues: Non-vectorized loops in _unpack_variables and constraint methods
+# Resources needed: Vectorization expertise for time-series discretization
+
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation

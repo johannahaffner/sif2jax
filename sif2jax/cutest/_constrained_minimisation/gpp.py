@@ -1,3 +1,9 @@
+# TODO: Human review needed
+# Test failures in objective, gradient, and hessian functions
+# Attempts made: 1
+# Suspected issues: Possible formulation differences or numerical precision issues
+# Resources needed: Review SIF file formulation and compare with implementation
+
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation

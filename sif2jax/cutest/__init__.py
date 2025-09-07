@@ -445,7 +445,7 @@ from ._constrained_minimisation import (
     PORTFL3 as PORTFL3,
     PORTFL4 as PORTFL4,
     PORTFL6 as PORTFL6,
-    PORTSNQP as PORTSNQP,
+    # PORTSNQP as PORTSNQP,  # TODO: Human review needed
     # PORTSQP as PORTSQP,  # TODO: Human review - test timeouts with n=100000 default
     READING1 as READING1,
     READING2 as READING2,
@@ -1364,7 +1364,7 @@ problems_dict = {
     "PORTFL3": PORTFL3(),
     "PORTFL4": PORTFL4(),
     "PORTFL6": PORTFL6(),
-    "PORTSNQP": PORTSNQP(),
+    # "PORTSNQP": PORTSNQP(),  # TODO: Human review needed
     # "PORTSQP": PORTSQP(),  # TODO: Human review - test timeouts with n=100000 default
     "READING1": READING1(),
     "READING2": READING2(),

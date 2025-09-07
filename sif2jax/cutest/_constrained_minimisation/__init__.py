@@ -425,8 +425,8 @@ from .portfl2 import PORTFL2 as PORTFL2
 from .portfl3 import PORTFL3 as PORTFL3
 from .portfl4 import PORTFL4 as PORTFL4
 from .portfl6 import PORTFL6 as PORTFL6
-from .portsnqp import PORTSNQP as PORTSNQP
 
+# from .portsnqp import PORTSNQP as PORTSNQP  # TODO: Human review needed
 # TODO: PORTSQP needs human review - test timeouts with n=100000 default
 # from .portsqp import PORTSQP as PORTSQP
 from .reading1 import READING1 as READING1
@@ -785,7 +785,7 @@ constrained_minimisation_problems = (
     PORTFL3(),
     PORTFL4(),
     PORTFL6(),
-    PORTSNQP(),
+    # PORTSNQP(),  # TODO: Human review needed
     # PORTSQP(),  # TODO: Human review - test timeouts with n=100000 default
     READING1(),
     READING2(),

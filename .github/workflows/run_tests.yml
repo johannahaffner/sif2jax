@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  test-problem-definition:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -14,4 +14,14 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
-            bash -c "cd /workspace && pip install -e . && pytest"
+            bash -c "cd /workspace && pip install -e . && pytest tests/test_problem.py"
+
+  test-problem-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test with pre-built image
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/workspace \
+            johannahaffner/pycutest:latest \
+            bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py"

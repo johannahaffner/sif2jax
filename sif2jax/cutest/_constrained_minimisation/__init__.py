@@ -316,6 +316,8 @@ from .liswet10 import LISWET10 as LISWET10
 from .liswet11 import LISWET11 as LISWET11
 from .liswet12 import LISWET12 as LISWET12
 from .lootsma import LOOTSMA as LOOTSMA
+from .lsnnodoc import LSNNODOC as LSNNODOC
+from .lsqfit import LSQFIT as LSQFIT
 from .lukvle1 import LUKVLE1 as LUKVLE1
 
 # TODO: LUKVLE2 needs human review - shape mismatch in constraints & objective
@@ -740,6 +742,8 @@ constrained_minimisation_problems = (
     # HIMMELP6(),  # TODO: Human review needed - OBNL element issues
     HYDROELL(),
     LOOTSMA(),
+    LSNNODOC(),
+    LSQFIT(),
     MARATOS(),
     MINMAXBD(),
     MINMAXRB(),

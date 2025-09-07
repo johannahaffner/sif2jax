@@ -352,6 +352,8 @@ from ._constrained_minimisation import (
     LISWET11 as LISWET11,
     LISWET12 as LISWET12,
     LOOTSMA as LOOTSMA,
+    LSNNODOC as LSNNODOC,
+    LSQFIT as LSQFIT,
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,  # TODO: Human review - shape mismatch & objective
     LUKVLE3 as LUKVLE3,
@@ -642,6 +644,8 @@ from ._nonlinear_equations import (
     LEVYMONE10 as LEVYMONE10,
     LIARWHDNE as LIARWHDNE,
     # LINVERSENE as LINVERSENE,  # TODO: Human review - timeout and scaling issues
+    LSC1 as LSC1,
+    LSC2 as LSC2,
     LUKSAN11 as LUKSAN11,
     LUKSAN12 as LUKSAN12,
     LUKSAN13 as LUKSAN13,
@@ -1319,6 +1323,8 @@ problems_dict = {
     "LISWET11": LISWET11(),
     "LISWET12": LISWET12(),
     "LOOTSMA": LOOTSMA(),
+    "LSNNODOC": LSNNODOC(),
+    "LSQFIT": LSQFIT(),
     "MARATOS": MARATOS(),
     "MINMAXBD": MINMAXBD(),
     "MINMAXRB": MINMAXRB(),
@@ -2088,6 +2094,8 @@ problems_dict = {
     "LEVYMONE10": LEVYMONE10(),
     "LIARWHDNE": LIARWHDNE(),
     # "LINVERSENE": LINVERSENE(),  # TODO: Human review - timeout and scaling issues
+    "LSC1": LSC1(),
+    "LSC2": LSC2(),
     "LUKSAN11": LUKSAN11(),
     "LUKSAN12": LUKSAN12(),
     "LUKSAN13": LUKSAN13(),

@@ -157,6 +157,8 @@ from .liarwhdne import LIARWHDNE as LIARWHDNE
 
 # TODO: Human review needed - Python loop timeout and scaling issues
 # from .linversene import LINVERSENE as LINVERSENE
+from .lsc1 import LSC1 as LSC1
+from .lsc2 import LSC2 as LSC2
 from .luksan11 import LUKSAN11 as LUKSAN11
 from .luksan12 import LUKSAN12 as LUKSAN12
 from .luksan13 import LUKSAN13 as LUKSAN13
@@ -406,6 +408,8 @@ nonlinear_equations_problems = (
     LEVYMONE10(),
     LIARWHDNE(),
     # LINVERSENE(),  # TODO: Human review - Python loop timeout and scaling issues
+    LSC1(),
+    LSC2(),
     LUKSAN11(),
     LUKSAN12(),
     LUKSAN13(),

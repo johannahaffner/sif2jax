@@ -420,6 +420,15 @@ from .polak5 import POLAK5 as POLAK5
 from .polak6 import POLAK6 as POLAK6
 
 # from .polygon import POLYGON as POLYGON  # TODO: Human review - sign conventions
+from .portfl1 import PORTFL1 as PORTFL1
+from .portfl2 import PORTFL2 as PORTFL2
+from .portfl3 import PORTFL3 as PORTFL3
+from .portfl4 import PORTFL4 as PORTFL4
+from .portfl6 import PORTFL6 as PORTFL6
+from .portsnqp import PORTSNQP as PORTSNQP
+
+# TODO: PORTSQP needs human review - test timeouts with n=100000 default
+# from .portsqp import PORTSQP as PORTSQP
 from .reading1 import READING1 as READING1
 from .reading2 import READING2 as READING2
 from .reading3 import READING3 as READING3
@@ -771,6 +780,13 @@ constrained_minimisation_problems = (
     POLAK5(),
     POLAK6(),
     # POLYGON(),  # TODO: Human review - constraint sign convention differences
+    PORTFL1(),
+    PORTFL2(),
+    PORTFL3(),
+    PORTFL4(),
+    PORTFL6(),
+    PORTSNQP(),
+    # PORTSQP(),  # TODO: Human review - test timeouts with n=100000 default
     READING1(),
     READING2(),
     READING3(),

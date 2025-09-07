@@ -8,11 +8,6 @@ class HATFLDENE(AbstractNonlinearEquations):
 
     Nonlinear-equations version of HATFLDE.
 
-    TODO: Human review needed
-    Attempts made: Multiple sign conventions tried
-    Suspected issues: PyCUTEst may have different NLE convention than SIF file
-    Resources needed: Understanding of how PyCUTEst interprets NLE problems
-
     Source:
     "The OPTIMA user manual (issue No.8, p. 37)",
     Numerical Optimization Centre, Hatfield Polytechnic (UK), 1989.
@@ -85,11 +80,10 @@ class HATFLDENE(AbstractNonlinearEquations):
         )
 
         # Compute residuals for each data point
-        # From SIF: G(I) = B(I) - A(I) with constant -Z(I)
-        # B(I) = exp(t * x3), A(I) = x1 * exp(t * x2) with coefficient -1.0
-        # For nonlinear equations, pycutest returns negative of optimization formulation
-        # The residual is: -x1 * exp(t * x2) + exp(t * x3) - z
-        residuals = -x1 * jnp.exp(t_values * x2) + jnp.exp(t_values * x3) - z_values
+        # From SIF: G(I) = -A(I) + B(I) - Z(I)
+        # A(I) = x1 * exp(t * x2), B(I) = exp(t * x3)
+        # For NLE, pycutest uses: r = -x1 * exp(t * x2) + exp(t * x3) + z
+        residuals = -x1 * jnp.exp(t_values * x2) + jnp.exp(t_values * x3) + z_values
 
         return residuals
 

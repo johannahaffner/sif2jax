@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from ..._problem import AbstractBoundedMinimisation
+from ..._problem import AbstractBoundedQuadraticProblem
 
 
-class TORSIOND(AbstractBoundedMinimisation):
+class TORSIOND(AbstractBoundedQuadraticProblem):
     """The quadratic elastic torsion problem.
 
     The problem comes from the obstacle problem on a square.
@@ -56,7 +56,7 @@ class TORSIOND(AbstractBoundedMinimisation):
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
-    q: int = 36  # Default value (pycutest uses 36, not 37 from SIF)
+    q: int = 37  # Default value from SIF file (Q = 37, n = 5476)
     c: float = 10.0  # Force constant
 
     @property
@@ -77,7 +77,7 @@ class TORSIOND(AbstractBoundedMinimisation):
 
     @property
     def y0(self):
-        """Initial guess - all zeros."""
+        """Initial guess - all zeros (starting point Z = origin)."""
         return jnp.zeros(self.n)
 
     @property
@@ -95,8 +95,12 @@ class TORSIOND(AbstractBoundedMinimisation):
     def objective(self, y, args):
         """Quadratic objective function.
 
-        The objective is the sum of squared differences between neighboring
-        grid points, scaled by the force constant.
+        From SIF file: each interior point (i,j) has 4 elements:
+        A(I,J): 0.25 * (X(I+1,J) - X(I,J))^2
+        B(I,J): 0.25 * (X(I,J+1) - X(I,J))^2
+        C(I,J): 0.25 * (X(I-1,J) - X(I,J))^2
+        D(I,J): 0.25 * (X(I,J-1) - X(I,J))^2
+        Plus linear term: -c0 * X(I,J)
         """
         del args
         p = self.p
@@ -106,24 +110,30 @@ class TORSIOND(AbstractBoundedMinimisation):
         # Reshape to grid using column-major (Fortran) order
         x = y.reshape((p, p), order="F")
 
-        # Terms from GL groups (left differences)
-        # Vectorized: compute all left differences at once
-        diff_i_left = x[1:, 1:] - x[:-1, 1:]  # Shape: (p-1, p-1)
-        diff_j_left = x[1:, 1:] - x[1:, :-1]  # Shape: (p-1, p-1)
-        gl_terms = 0.25 * (diff_i_left**2 + diff_j_left**2)
+        # For interior points [1:-1, 1:-1], compute 4 neighbor differences
+        interior = x[1:-1, 1:-1]  # Shape: (p-2, p-2)
 
-        # Terms from GR groups (right differences)
-        # Vectorized: compute all right differences at once
-        diff_i_right = x[1:, :-1] - x[:-1, :-1]  # Shape: (p-1, p-1)
-        diff_j_right = x[:-1, 1:] - x[:-1, :-1]  # Shape: (p-1, p-1)
-        gr_terms = 0.25 * (diff_i_right**2 + diff_j_right**2)
+        # A terms: difference with point below (I+1,J)
+        diff_down = x[2:, 1:-1] - interior  # x[i+1,j] - x[i,j]
+        a_terms = 0.25 * diff_down**2
 
-        # Linear terms from G groups
-        # Vectorized: apply to interior points
-        linear_terms = -c0 * x[1:-1, 1:-1]  # Shape: (p-2, p-2)
+        # B terms: difference with point to the right (I,J+1)
+        diff_right = x[1:-1, 2:] - interior  # x[i,j+1] - x[i,j]
+        b_terms = 0.25 * diff_right**2
+
+        # C terms: difference with point above (I-1,J)
+        diff_up = x[:-2, 1:-1] - interior  # x[i-1,j] - x[i,j]
+        c_terms = 0.25 * diff_up**2
+
+        # D terms: difference with point to the left (I,J-1)
+        diff_left = x[1:-1, :-2] - interior  # x[i,j-1] - x[i,j]
+        d_terms = 0.25 * diff_left**2
+
+        # Linear terms from G groups (coefficient -c0)
+        linear_terms = -c0 * interior
 
         # Sum all contributions
-        obj = jnp.sum(gl_terms) + jnp.sum(gr_terms) + jnp.sum(linear_terms)
+        obj = jnp.sum(a_terms + b_terms + c_terms + d_terms + linear_terms)
 
         return jnp.array(obj)
 
@@ -138,7 +148,11 @@ class TORSIOND(AbstractBoundedMinimisation):
         h = self.h
 
         # Create 2D coordinate grids
-        i_grid, j_grid = jnp.meshgrid(jnp.arange(p), jnp.arange(p), indexing="ij")
+        i_grid, j_grid = jnp.meshgrid(
+            jnp.arange(p, dtype=jnp.float64),
+            jnp.arange(p, dtype=jnp.float64),
+            indexing="ij",
+        )
 
         # Compute distance to each edge
         dist_to_bottom = i_grid  # Distance to i=0

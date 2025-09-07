@@ -1,16 +1,10 @@
-import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
-# TODO: Human review needed
-# Attempts made: [fixed boundary condition setup from SIF file analysis]
-# Suspected issues: [starting point indexing/flattening still doesn't match
-# PyCUTEst exactly]
-# Additional resources needed: [detailed comparison of boundary setup with
-# reference implementation]
+# Implementation follows CUTEst convention where SCALE appears in the denominator
 class FMINSRF2(AbstractUnconstrainedMinimisation):
     """The FMINSRF2 function.
 
@@ -59,45 +53,34 @@ class FMINSRF2(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
         p = self.p
-        p_1 = p - 1
 
         # Reshape the variables into a 2D grid
-        x = y.reshape((p, p))
+        # Since CUTEst uses Fortran ordering (column-major) and we flattened
+        # with x.T.flatten(), we need to reshape and transpose back
+        x = y.reshape((p, p)).T
 
         # Calculate the objective function components
 
-        # First part: sum of sqrt(1 + 0.5 * (p-1)^2 * (a_ij + b_ij)) / (p-1)^2
-        # for each little square in the grid
+        # First part: sum of area elements (fully vectorized like FMINSURF)
+        scale = (p - 1) ** 2
 
-        # Vectorized computation of a_ij and b_ij for all little squares
-        def compute_area_element(i, j):
-            # a_ij = x_ij - x_{i+1,j+1}
-            a_ij = x[i, j] - x[i + 1, j + 1]
-            # b_ij = x_{i+1,j} - x_{i,j+1}
-            b_ij = x[i + 1, j] - x[i, j + 1]
+        # Vectorized computation of all a_ij and b_ij
+        a_vals = x[:-1, :-1] - x[1:, 1:]  # x[i,j] - x[i+1,j+1]
+        b_vals = x[1:, :-1] - x[:-1, 1:]  # x[i+1,j] - x[i,j+1]
 
-            # Compute square root term
-            param = 0.5 * (p_1**2)
-            area = jnp.sqrt(1.0 + param * (a_ij**2 + b_ij**2)) / (p_1**2)
-            return area
-
-        # Use vmap to compute all area elements
-        i_indices, j_indices = jnp.meshgrid(
-            jnp.arange(p_1), jnp.arange(p_1), indexing="ij"
-        )
-        i_indices = i_indices.flatten()
-        j_indices = j_indices.flatten()
-
-        compute_area_vectorized = jax.vmap(compute_area_element)
-        area_elements = compute_area_vectorized(i_indices, j_indices)
+        # Compute all area elements at once
+        area_elements = jnp.sqrt(0.5 * scale * (a_vals**2 + b_vals**2) + 1.0) / scale
         area_sum = jnp.sum(area_elements)
 
         # Second part: penalize value at center point
-        mid = p // 2  # Integer division to find the middle point
-        center_val = x[mid, mid]
+        # In SIF, MID = P/2 = 37 for p=75 (1-based indexing)
+        # In 0-based indexing, this becomes 36
+        mid_idx = (p // 2) - 1  # Convert from 1-based to 0-based
+        center_val = x[mid_idx, mid_idx]
 
-        # Scale by p^2 as in the SIF file
-        center_penalty = (center_val**2) * (p**2)
+        # In CUTEst, SCALE goes in the denominator, not numerator
+        # So the penalty is divided by p^2, not multiplied
+        center_penalty = (center_val**2) / (p**2)
 
         return area_sum + center_penalty
 
@@ -123,28 +106,32 @@ class FMINSRF2(AbstractUnconstrainedMinimisation):
             # Converting to 0-based: X[I-1,J-1]
 
             # Lower and upper edges (SIF lines 122-130)
-            j_vals = jnp.arange(p)  # J=1..P becomes j=0..p-1
+            j_vals = jnp.arange(p, dtype=vals.dtype)  # J=1..P becomes j=0..p-1
             # X(1,J) = TL = (J-1)*WTOE + H00
-            vals = vals.at[0, :].set((j_vals) * wtoe + h00)
+            vals = vals.at[0, :].set(j_vals * wtoe + h00)
             # X(P,J) = TU = (J-1)*WTOE + H10
             h10 = h00 + self.slopei
-            vals = vals.at[p - 1, :].set((j_vals) * wtoe + h10)
+            vals = vals.at[p - 1, :].set(j_vals * wtoe + h10)
 
             # Left and right edges (SIF lines 134-142)
-            i_vals = jnp.arange(1, p - 1)  # I=2..P-1 becomes i=1..p-2
+            i_vals = jnp.arange(
+                1, p - 1
+            )  # I=2..P-1 becomes i=1..p-2, keep as int for indexing
+            i_vals_float = i_vals.astype(vals.dtype)  # Convert to float for calculation
             # X(I,1) = TR = (I-1)*STON + H00
-            vals = vals.at[i_vals, 0].set((i_vals) * ston + h00)
+            vals = vals.at[i_vals, 0].set(i_vals_float * ston + h00)
             # X(I,P) = TL = (I-1)*STON + H01
             h01 = h00 + self.slopej
-            vals = vals.at[i_vals, p - 1].set((i_vals) * ston + h01)
+            vals = vals.at[i_vals, p - 1].set(i_vals_float * ston + h01)
 
             return inexact_asarray(vals)
 
         # Create and set boundary values
         x = create_boundary_vals()
 
-        # Flatten the 2D grid to 1D vector
-        return inexact_asarray(x.flatten())
+        # Flatten the 2D grid to 1D vector using Fortran (column-major) ordering
+        # to match CUTEst convention
+        return inexact_asarray(x.T.flatten())
 
     @property
     def args(self):

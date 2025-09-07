@@ -118,121 +118,125 @@ class FLOSP2TH(AbstractNonlinearEquations):
         axx = self.axx
         ax = self.ax
 
-        residuals = []
+        # Vectorized interior equations for all interior points
+        # Interior points are [1:-1, 1:-1]
+        interior_om = om[1:-1, 1:-1]
+        interior_ph = ph[1:-1, 1:-1]
+        interior_ps = ps[1:-1, 1:-1]
 
-        # Interior equations
-        for j in range(1, self.grid_size - 1):
-            for i in range(1, self.grid_size - 1):
-                # Stream function equation (S) - linear
-                s_eq = (
-                    om[j, i] * (-2 / h2 - 2 * axx / h2)
-                    + om[j, i + 1] * (1 / h2)
-                    + om[j, i - 1] * (1 / h2)
-                    + om[j + 1, i] * (axx / h2)
-                    + om[j - 1, i] * (axx / h2)
-                    + ph[j, i + 1] * (-self.pi1 / (2 * h))
-                    + ph[j, i - 1] * (self.pi1 / (2 * h))
-                    + ph[j + 1, i] * (-self.pi2 / (2 * h))
-                    + ph[j - 1, i] * (self.pi2 / (2 * h))
-                )
-                residuals.append(s_eq)
+        # Stream function equation (S) - vectorized
+        s_eq = (
+            interior_om * (-2 / h2 - 2 * axx / h2)
+            + om[1:-1, 2:] * (1 / h2)  # om[j, i+1]
+            + om[1:-1, :-2] * (1 / h2)  # om[j, i-1]
+            + om[2:, 1:-1] * (axx / h2)  # om[j+1, i]
+            + om[:-2, 1:-1] * (axx / h2)  # om[j-1, i]
+            + ph[1:-1, 2:] * (-self.pi1 / (2 * h))  # ph[j, i+1]
+            + ph[1:-1, :-2] * (self.pi1 / (2 * h))  # ph[j, i-1]
+            + ph[2:, 1:-1] * (-self.pi2 / (2 * h))  # ph[j+1, i]
+            + ph[:-2, 1:-1] * (self.pi2 / (2 * h))  # ph[j-1, i]
+        )
 
-                # Vorticity equation (V) - linear
-                v_eq = (
-                    ps[j, i] * (-2 / h2 - 2 * axx / h2)
-                    + ps[j, i + 1] * (1 / h2)
-                    + ps[j, i - 1] * (1 / h2)
-                    + ps[j + 1, i] * (axx / h2)
-                    + ps[j - 1, i] * (axx / h2)
-                    + om[j, i] * (axx / 4)
-                )
-                residuals.append(v_eq)
+        # Vorticity equation (V) - vectorized
+        v_eq = (
+            interior_ps * (-2 / h2 - 2 * axx / h2)
+            + ps[1:-1, 2:] * (1 / h2)  # ps[j, i+1]
+            + ps[1:-1, :-2] * (1 / h2)  # ps[j, i-1]
+            + ps[2:, 1:-1] * (axx / h2)  # ps[j+1, i]
+            + ps[:-2, 1:-1] * (axx / h2)  # ps[j-1, i]
+            + interior_om * (axx / 4)
+        )
 
-                # Thermal energy equation (E) - quadratic
-                # Linear part
-                e_eq = (
-                    ph[j, i] * (-2 / h2 - 2 * axx / h2)
-                    + ph[j, i + 1] * (1 / h2)
-                    + ph[j, i - 1] * (1 / h2)
-                    + ph[j + 1, i] * (axx / h2)
-                    + ph[j - 1, i] * (axx / h2)
-                )
+        # Thermal energy equation (E) - vectorized
+        # Linear part
+        e_eq = (
+            interior_ph * (-2 / h2 - 2 * axx / h2)
+            + ph[1:-1, 2:] * (1 / h2)  # ph[j, i+1]
+            + ph[1:-1, :-2] * (1 / h2)  # ph[j, i-1]
+            + ph[2:, 1:-1] * (axx / h2)  # ph[j+1, i]
+            + ph[:-2, 1:-1] * (axx / h2)  # ph[j-1, i]
+        )
 
-                # Quadratic terms
-                psidif_i = ps[j + 1, i] - ps[j - 1, i]
-                phidif_i = ph[j, i + 1] - ph[j, i - 1]
-                e_eq += -ax / (4 * h2) * psidif_i * phidif_i
+        # Quadratic terms - vectorized
+        psidif_i = ps[2:, 1:-1] - ps[:-2, 1:-1]  # ps[j+1, i] - ps[j-1, i]
+        phidif_i = ph[1:-1, 2:] - ph[1:-1, :-2]  # ph[j, i+1] - ph[j, i-1]
+        e_eq += -ax / (4 * h2) * psidif_i * phidif_i
 
-                psidif_j = ps[j, i + 1] - ps[j, i - 1]
-                phidif_j = ph[j + 1, i] - ph[j - 1, i]
-                e_eq += ax / (4 * h2) * psidif_j * phidif_j
+        psidif_j = ps[1:-1, 2:] - ps[1:-1, :-2]  # ps[j, i+1] - ps[j, i-1]
+        phidif_j = ph[2:, 1:-1] - ph[:-2, 1:-1]  # ph[j+1, i] - ph[j-1, i]
+        e_eq += ax / (4 * h2) * psidif_j * phidif_j
 
-                residuals.append(e_eq)
+        # Flatten interior equations
+        s_interior = s_eq.flatten()
+        v_interior = v_eq.flatten()
+        e_interior = e_eq.flatten()
 
-        # Boundary conditions on temperature - avoid corner overlaps
+        # Temperature boundary conditions - vectorized
+        # TODO: Human review needed for CONSTANTS section handling
+        # The SIF file has CONSTANTS section with A3=-1, B3=-1, F3=0, G3=0
+        # but pycutest may handle these differently than expected
+        # Current implementation matches original loop-based version
+
+        # Top boundary (all k)
+        j = self.grid_size - 1
+        t_top = ph[j, :] * (2 * self.a1 / h + self.a2) + ph[j - 1, :] * (
+            -2 * self.a1 / h
+        )
+
+        # Bottom boundary (all k)
+        j = 0
+        t_bot = ph[j + 1, :] * (2 * self.b1 / h) + ph[j, :] * (
+            -2 * self.b1 / h + self.b2
+        )
+
+        # Right boundary (excluding corners)
+        i = self.grid_size - 1
+        t_right = ph[1:-1, i] * (2 * self.f1 / (ax * h) + self.f2) + ph[1:-1, i - 1] * (
+            -2 * self.f1 / (ax * h)
+        )
+
+        # Left boundary (excluding corners)
+        i = 0
+        t_left = ph[1:-1, i + 1] * (2 * self.g1 / (ax * h)) + ph[1:-1, i] * (
+            -2 * self.g1 / (ax * h) + self.g2
+        )
+
+        # Vorticity boundary conditions - vectorized
         # Top and bottom boundaries
-        for k in range(self.grid_size):
-            # Top boundary (j = M): T(K,M)
-            j = self.grid_size - 1
-            t_top = ph[j, k] * (2 * self.a1 / h + self.a2) + ph[j - 1, k] * (
-                -2 * self.a1 / h
-            )
-            residuals.append(t_top)
+        j_top = self.grid_size - 1
+        v_top = ps[j_top, :] * (-2 / h) + ps[j_top - 1, :] * (2 / h)
 
-            # Bottom boundary (j = -M): T(K,-M)
-            j = 0
-            t_bot = ph[j + 1, k] * (2 * self.b1 / h) + ph[j, k] * (
-                -2 * self.b1 / h + self.b2
-            )
-            residuals.append(t_bot)
+        j_bot = 0
+        v_bot = ps[j_bot + 1, :] * (2 / h) + ps[j_bot, :] * (-2 / h)
 
-        # Left and right boundaries (excluding corners to avoid double counting)
-        for k in range(
-            1, self.grid_size - 1
-        ):  # Exclude corners at k=0 and k=grid_size-1
-            # Right boundary (i = M): T(M,K)
-            i = self.grid_size - 1
-            t_right = ph[k, i] * (2 * self.f1 / (ax * h) + self.f2) + ph[k, i - 1] * (
-                -2 * self.f1 / (ax * h)
-            )
-            residuals.append(t_right)
+        # Right and left boundaries (excluding corners)
+        i_right = self.grid_size - 1
+        v_right = ps[1:-1, i_right] * (-2 / (ax * h)) + ps[1:-1, i_right - 1] * (
+            2 / (ax * h)
+        )
 
-            # Left boundary (i = -M): T(-M,K)
-            i = 0
-            t_left = ph[k, i + 1] * (2 * self.g1 / (ax * h)) + ph[k, i] * (
-                -2 * self.g1 / (ax * h) + self.g2
-            )
-            residuals.append(t_left)
+        i_left = 0
+        v_left = ps[1:-1, i_left + 1] * (2 / (ax * h)) + ps[1:-1, i_left] * (
+            -2 / (ax * h)
+        )
 
-        # Boundary conditions on vorticity - avoid double counting corners
-        # Top and bottom boundaries
-        for k in range(self.grid_size):
-            # Top boundary: V(K,M)
-            j = self.grid_size - 1
-            v_top = ps[j, k] * (-2 / h) + ps[j - 1, k] * (2 / h)
-            residuals.append(v_top)
-
-            # Bottom boundary: V(K,-M)
-            j = 0
-            v_bot = ps[j + 1, k] * (2 / h) + ps[j, k] * (-2 / h)
-            residuals.append(v_bot)
-
-        # Left and right boundaries (excluding all corners to avoid double counting)
-        # Since we covered all K values in top/bottom, skip corner K values entirely
-        for k in range(
-            1, self.grid_size - 1
-        ):  # Exclude corners at k=0 and k=grid_size-1
-            # Right boundary: V(M,K)
-            i = self.grid_size - 1
-            v_right = ps[k, i] * (-2 / (ax * h)) + ps[k, i - 1] * (2 / (ax * h))
-            residuals.append(v_right)
-
-            # Left boundary: V(-M,K)
-            i = 0
-            v_left = ps[k, i + 1] * (2 / (ax * h)) + ps[k, i] * (-2 / (ax * h))
-            residuals.append(v_left)
-
-        return jnp.array(residuals)
+        # Concatenate all residuals in the correct order
+        # PS boundary conditions handled by variable bounds, not constraints
+        return jnp.concatenate(
+            [
+                s_interior,
+                v_interior,
+                e_interior,  # Interior equations
+                t_top,
+                t_bot,
+                t_right,
+                t_left,  # Temperature boundaries
+                v_top,
+                v_bot,
+                v_right,
+                v_left,  # Vorticity boundaries
+            ]
+        )
 
     @property
     def y0(self) -> Array:

@@ -39,7 +39,7 @@ class _AbstractLISWET(AbstractConstrainedMinimisation):
     @abstractmethod
     def _g_function(self, t):
         """The specific g(t) function for each LISWET variant."""
-        ...
+        return jnp.array([])
 
     def _compute_c(self):
         """Compute c_i values for the objective."""

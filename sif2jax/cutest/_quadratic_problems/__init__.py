@@ -60,6 +60,10 @@ from .gouldqp3 import GOULDQP3 as GOULDQP3
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
 from .hs76 import HS76 as HS76
+
+# from .mosarqp1 import MOSARQP1 as MOSARQP1  # TODO: Human review - objective issues
+# from .mosarqp2 import MOSARQP2 as MOSARQP2  # TODO: Human review - objective issues
+from .junkturn import JUNKTURN as JUNKTURN
 from .nash import NASH as NASH
 from .ncvxbqp1 import NCVXBQP1 as NCVXBQP1
 from .ncvxbqp2 import NCVXBQP2 as NCVXBQP2
@@ -80,14 +84,25 @@ from .qpnband import QPNBAND as QPNBAND
 # from .qpnboei1 import QPNBOEI1 as QPNBOEI1  # TODO: Human review - Boeing constraints
 # from .qpnboei2 import QPNBOEI2 as QPNBOEI2  # TODO: Human review - Boeing constraints
 # from .qpnstair import QPNSTAIR as QPNSTAIR  # TODO: Human review - constraint dims
+# from .s268 import S268 as S268  # TODO: Human review needed - Complex SIF syntax
 from .table1 import TABLE1 as TABLE1
 from .table3 import TABLE3 as TABLE3
 from .table6 import TABLE6 as TABLE6
 from .table7 import TABLE7 as TABLE7
 from .table8 import TABLE8 as TABLE8
 from .tame import TAME as TAME
-
-# from .torsiond import TORSIOND as TORSIOND  # TODO: Human review needed - see file
+from .torsion1 import TORSION1 as TORSION1
+from .torsion2 import TORSION2 as TORSION2
+from .torsion3 import TORSION3 as TORSION3
+from .torsion4 import TORSION4 as TORSION4
+from .torsion5 import TORSION5 as TORSION5
+from .torsion6 import TORSION6 as TORSION6
+from .torsiona import TORSIONA as TORSIONA
+from .torsionb import TORSIONB as TORSIONB
+from .torsionc import TORSIONC as TORSIONC
+from .torsiond import TORSIOND as TORSIOND
+from .torsione import TORSIONE as TORSIONE
+from .torsionf import TORSIONF as TORSIONF
 from .yao import YAO as YAO
 
 
@@ -98,7 +113,18 @@ bounded_quadratic_problems = (
     NCVXBQP1(),
     NCVXBQP2(),
     NCVXBQP3(),
-    # TORSIOND(),  # TODO: Human review needed - objective mismatch with pycutest
+    TORSION1(),
+    TORSION2(),
+    TORSION3(),
+    TORSION4(),
+    TORSION5(),
+    TORSION6(),
+    TORSIONA(),
+    TORSIONB(),
+    TORSIONC(),
+    TORSIOND(),
+    TORSIONE(),
+    TORSIONF(),
 )
 
 
@@ -154,7 +180,10 @@ constrained_quadratic_problems = (
     GOULDQP3(),
     HATFLDH(),
     HS44NEW(),
+    JUNKTURN(),
     HS76(),
+    # MOSARQP1(),  # TODO: Human review needed - objective/constraint issues
+    # MOSARQP2(),  # TODO: Human review needed - objective/constraint issues
     NASH(),
     NCVXQP1(),
     NCVXQP2(),
@@ -171,6 +200,7 @@ constrained_quadratic_problems = (
     # QPNBOEI1(),  # TODO: Human review - Boeing routing constraints
     # QPNBOEI2(),  # TODO: Human review - Boeing routing constraints
     # QPNSTAIR(),  # TODO: Human review - complex constraint dimensions
+    # S268(),  # TODO: Human review needed - Complex SIF syntax
     TABLE1(),
     TABLE3(),
     TABLE6(),

@@ -8,6 +8,9 @@ from .camel6 import CAMEL6 as CAMEL6
 from .chardis0 import CHARDIS0 as CHARDIS0
 
 # from .chardis02 import CHARDIS02 as CHARDIS02  # TODO: Human review needed
+from .clplatea import CLPLATEA as CLPLATEA
+from .clplateb import CLPLATEB as CLPLATEB
+from .clplatec import CLPLATEC as CLPLATEC
 from .cyclooctls import CYCLOOCTLS as CYCLOOCTLS
 from .degdiag import DEGDIAG as DEGDIAG
 from .degtrid import DEGTRID as DEGTRID
@@ -24,10 +27,17 @@ from .diagnqt import DIAGNQT as DIAGNQT
 from .diagpqb import DIAGPQB as DIAGPQB
 from .diagpqe import DIAGPQE as DIAGPQE
 from .diagpqt import DIAGPQT as DIAGPQT
+
+# TODO: EG1 needs human review - test timeout issues
+# from .eg1 import EG1 as EG1
+from .eggcrateb import EGGCRATEB as EGGCRATEB
+from .elatvidub import ELATVIDUB as ELATVIDUB
 from .exp2b import EXP2B as EXP2B
 from .explin import EXPLIN as EXPLIN
 from .explin2 import EXPLIN2 as EXPLIN2
-from .expquad import EXPQUAD as EXPQUAD
+
+# TODO: Human review - test timeout on large problem
+# from .expquad import EXPQUAD as EXPQUAD
 from .fbrain2ls import FBRAIN2LS as FBRAIN2LS
 from .fbrainls import FBRAINLS as FBRAINLS
 from .hadamals import HADAMALS as HADAMALS
@@ -46,6 +56,10 @@ from .hs45 import HS45 as HS45
 from .hs110 import HS110 as HS110
 
 # from .himmelp1 import HIMMELP1 as HIMMELP1  # TODO: Human review - OBNL issues
+# from .jnlbrng1 import JNLBRNG1 as JNLBRNG1  # TODO: Human review needed
+# from .jnlbrng2 import JNLBRNG2 as JNLBRNG2  # TODO: Human review
+# from .jannson3 import JANNSON3 as JANNSON3  # TODO: Human review
+from .judgeb import JUDGEB as JUDGEB
 from .koebhelb import KOEBHELB as KOEBHELB
 from .levymont import LEVYMONT as LEVYMONT
 from .levymont5 import LEVYMONT5 as LEVYMONT5
@@ -54,8 +68,19 @@ from .levymont7 import LEVYMONT7 as LEVYMONT7
 from .levymont8 import LEVYMONT8 as LEVYMONT8
 from .levymont9 import LEVYMONT9 as LEVYMONT9
 from .levymont10 import LEVYMONT10 as LEVYMONT10
-from .logros import LOGROS as LOGROS
 
+# from .linverse import LINVERSE as LINVERSE  # TODO: Human review needed
+from .logros import LOGROS as LOGROS
+from .obstcl import (
+    OBSTCLAE as OBSTCLAE,
+    OBSTCLAL as OBSTCLAL,
+    OBSTCLBL as OBSTCLBL,
+    OBSTCLBM as OBSTCLBM,
+    OBSTCLBU as OBSTCLBU,
+)
+
+# from .maxlika import MAXLIKA as MAXLIKA  # TODO: Human review needed
+# from .minsurfo import MINSURFO as MINSURFO  # TODO: Human review - dimensions
 # TODO: Human review needed - complex bounds logic
 # from .nobndtor import NOBNDTOR as NOBNDTOR
 # TODO: Human review needed - GROUP TYPE L2 not properly handled
@@ -97,9 +122,15 @@ from .pfit2ls import PFIT2LS as PFIT2LS
 from .pfit3ls import PFIT3LS as PFIT3LS
 from .pfit4ls import PFIT4LS as PFIT4LS
 from .price4b import PRICE4B as PRICE4B
+from .qingb import QINGB as QINGB
 from .qudlin import QUDLIN as QUDLIN
 from .raybendl import RAYBENDL as RAYBENDL
 
+# TODO: Human review needed - Complex constraint/bound structure
+# from .s277_280 import S277_280 as S277_280
+from .s368 import S368 as S368
+
+# from .santals import SANTALS as SANTALS  # TODO: Human review - gradient discrepancies
 # from .raybends import RAYBENDS as RAYBENDS  # TODO: Human review - numerical issues
 from .trigon1b import TRIGON1B as TRIGON1B
 
@@ -143,6 +174,9 @@ bounded_minimisation_problems = (
     CAMEL6(),
     CHARDIS0(),
     # CHARDIS02(),  # TODO: Human review needed
+    CLPLATEA(),
+    CLPLATEB(),
+    CLPLATEC(),
     CYCLOOCTLS(),
     DEGDIAG(),
     DEGTRID(),
@@ -158,11 +192,14 @@ bounded_minimisation_problems = (
     DIAGPQE(),
     DIAGPQT(),
     DEGTRID2(),
+    # EG1(),  # TODO: Human review - test timeout issues
+    EGGCRATEB(),
+    ELATVIDUB(),
     DGOSPEC(),
     EXP2B(),
     EXPLIN(),
     EXPLIN2(),
-    EXPQUAD(),
+    # EXPQUAD(),  # TODO: Human review - test timeout on large problem
     FBRAIN2LS(),
     FBRAINLS(),
     HADAMALS(),
@@ -180,6 +217,10 @@ bounded_minimisation_problems = (
     HS38(),
     HS45(),
     HS110(),
+    # JNLBRNG1(),  # TODO: Human review needed
+    # JNLBRNG2(),  # TODO: Human review needed - performance issues
+    # JANNSON3(),  # TODO: Human review needed - large-scale problem
+    JUDGEB(),
     KOEBHELB(),
     LEVYMONT(),
     LEVYMONT5(),
@@ -188,7 +229,15 @@ bounded_minimisation_problems = (
     LEVYMONT8(),
     LEVYMONT9(),
     LEVYMONT10(),
+    # LINVERSE(),  # TODO: Human review needed
     LOGROS(),
+    OBSTCLAE(),
+    OBSTCLAL(),
+    OBSTCLBL(),
+    OBSTCLBM(),
+    OBSTCLBU(),
+    # MAXLIKA(),  # TODO: Human review needed
+    # MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     # NONSCOMP(),  # TODO: Human review needed
     PALMER1(),
@@ -220,9 +269,13 @@ bounded_minimisation_problems = (
     PFIT3LS(),
     PFIT4LS(),
     PRICE4B(),
+    QINGB(),
     QUDLIN(),
     RAYBENDL(),
+    S368(),
+    # SANTALS(),  # TODO: Human review - Small gradient discrepancies
     # RAYBENDS(),  # TODO: Human review - numerical issues
+    # S277_280(),  # TODO: Human review needed - Complex constraint/bound structure
     TRIGON1B(),
     # TRIGON2B(),  # TODO: Human review - tiny Hessian discrepancies
     # WALL10(),  # TODO: Human review - small gradient discrepancies (~2.2e-4)

@@ -16,11 +16,14 @@ from .alsotame import ALSOTAME as ALSOTAME
 # from .aug2d import AUG2D as AUG2D
 from .avgasa import AVGASA as AVGASA
 from .avgasb import AVGASB as AVGASB
+from .biggsc4 import BIGGSC4 as BIGGSC4
 
 # from .avion2 import AVION2 as AVION2  # TODO: Human review - gradient discrepancies
 # from .bdry2 import BDRY2 as BDRY2  # TODO: Human review - objective values don't match
 # from .bigbank import BIGBANK as BIGBANK  # TODO: Human review - objective mismatch
-from .biggsc4 import BIGGSC4 as BIGGSC4
+# from .bloweya import BLOWEYA as BLOWEYA  # TODO: Human review needed
+# from .bloweyb import BLOWEYB as BLOWEYB  # TODO: Human review needed
+# from .bloweyc import BLOWEYC as BLOWEYC  # TODO: Human review needed
 from .bt1 import BT1 as BT1
 from .bt2 import BT2 as BT2
 from .bt3 import BT3 as BT3
@@ -36,7 +39,15 @@ from .bt12 import BT12 as BT12
 from .bt13 import BT13 as BT13
 from .burkehan import BURKEHAN as BURKEHAN
 from .byrdsphr import BYRDSPHR as BYRDSPHR
+
+# from .camshape import CAMSHAPE as CAMSHAPE  # TODO: Human review needed
 from .cantilvr import CANTILVR as CANTILVR
+
+# TODO: CATENA needs human review - incorrect starting values, gradient & bounds
+# from .catena import CATENA as CATENA
+# TODO: CATMIX needs human review - test failures
+# from .catmix import CATMIX as CATMIX
+# from .catenary import CATENARY as CATENARY  # TODO: Human review needed
 from .cb2 import CB2 as CB2
 from .cb3 import CB3 as CB3
 from .chaconn1 import CHACONN1 as CHACONN1
@@ -59,6 +70,8 @@ from .cleuven7 import CLEUVEN7 as CLEUVEN7
 from .coshfun import COSHFUN as COSHFUN
 from .csfi1 import CSFI1 as CSFI1
 from .csfi2 import CSFI2 as CSFI2
+
+# from .dale import DALE as DALE  # TODO: Human review needed - see dale.py for details
 from .dallass import DALLASS as DALLASS
 from .deconvc import DECONVC as DECONVC
 from .degenlpa import DEGENLPA as DEGENLPA
@@ -69,9 +82,19 @@ from .dembo7 import DEMBO7 as DEMBO7
 from .demymalo import DEMYMALO as DEMYMALO
 from .dipigri import DIPIGRI as DIPIGRI
 
+# TODO: Human review needed - see disc2.py for details
+# from .disc2 import DISC2 as DISC2
+# TODO: Human review needed - see dixchlng.py for details
+# from .dixchlng import DIXCHLNG as DIXCHLNG
+# TODO: Human review needed - see dnieper.py for details
+# from .dnieper import DNIEPER as DNIEPER
 # from .dittert import DITTERT as DITTERT  # TODO: Human review needed
 # TODO: DEGTRIDL needs human review - causes segfault despite correct implementation
 # from .degtridl import DEGTRIDL as DEGTRIDL
+# TODO: Human review needed - see drugdis.py for details
+# from .drugdis import DRUGDIS as DRUGDIS
+# TODO: Human review needed - see drugdise.py for details
+# from .drugdise import DRUGDISE as DRUGDISE
 from .dtoc1l import DTOC1L as DTOC1L
 from .dtoc1na import DTOC1NA as DTOC1NA
 from .dtoc1nb import DTOC1NB as DTOC1NB
@@ -87,7 +110,26 @@ from .dtoc4 import DTOC4 as DTOC4
 # from .eigenaco import EIGENACO as EIGENACO
 from .dtoc5 import DTOC5 as DTOC5
 from .dtoc6 import DTOC6 as DTOC6
+
+# TODO: EG3 needs human review - large-scale problem (N=10000) timeouts
+# from .eg3 import EG3 as EG3
+# TODO: ELEC needs human review - numerical precision issue
+# Gradient differences of ~1e-4 absolute (1e-6 to 1e-9 relative) between
+# CUTEst's analytical derivatives and JAX's automatic differentiation.
+# Issue persists with:
+# - Exact analytical gradient implementation matching SIF element definitions
+# - Double precision computation
+# - Both vectorized and loop-based implementations
+# Mathematical implementation is correct; differences stem from subtle
+# numerical differences between CUTEst's Fortran-based analytical
+# derivatives and JAX's AD.
+# from .elec import ELEC as ELEC
 from .elattar import ELATTAR as ELATTAR
+
+# TODO: EXTRASIM needs human review - pycutest timeout issue
+# (2-var linear program). Implementation is correct but pycutest
+# appears to have issues loading this problem
+# from .extrasim import EXTRASIM as EXTRASIM
 from .expfita import EXPFITA as EXPFITA
 from .expfitb import EXPFITB as EXPFITB
 from .expfitc import EXPFITC as EXPFITC
@@ -98,7 +140,17 @@ from .expfitc import EXPFITC as EXPFITC
 # from .feedloc import FEEDLOC as FEEDLOC
 from .fletcher import FLETCHER as FLETCHER
 from .flt import FLT as FLT
+
+# from .gasoil import GASOIL as GASOIL  # TODO: Human review needed - complex OCP
+from .gigomez1 import GIGOMEZ1 as GIGOMEZ1
 from .gigomez2 import GIGOMEZ2 as GIGOMEZ2
+from .gigomez3 import GIGOMEZ3 as GIGOMEZ3
+
+# from .gilbert import GILBERT as GILBERT  # TODO: Human review needed - scaling
+from .goffin import GOFFIN as GOFFIN
+
+# TODO: GPP needs human review - test failures
+# from .gpp import GPP as GPP
 from .hadamard import HADAMARD as HADAMARD
 
 # TODO: Human review needed - parameter/dimension mismatch with pycutest
@@ -118,6 +170,9 @@ from .haifam import (
     HAIFAM as HAIFAM,
 )
 from .haifas import HAIFAS as HAIFAS
+
+# TODO: Human review needed - constraint matrix doesn't match PyCUTEst expectations
+# from .hie1372d import HIE1372D as HIE1372D
 from .himmelbc import HIMMELBC as HIMMELBC
 from .himmelbd import HIMMELBD as HIMMELBD
 from .himmelbe import HIMMELBE as HIMMELBE
@@ -247,8 +302,7 @@ from .jannson4 import JANNSON4 as JANNSON4
 # from .kiwcresc import KIWCRESC as KIWCRESC
 # TODO: Human review needed - KSIP needs vectorization, dtype promotion errors with JAX
 # from .ksip import KSIP as KSIP
-# TODO: Human review needed - marked for human review
-# from .leuven1 import LEUVEN1 as LEUVEN1
+# NOTE: LEUVEN1 removed - superseded by CLEUVEN series (incorrect/nonconvex)
 from .liswet1 import LISWET1 as LISWET1
 from .liswet2 import LISWET2 as LISWET2
 from .liswet3 import LISWET3 as LISWET3
@@ -264,11 +318,12 @@ from .liswet12 import LISWET12 as LISWET12
 from .lootsma import LOOTSMA as LOOTSMA
 from .lukvle1 import LUKVLE1 as LUKVLE1
 
+# TODO: LUKVLE2 needs human review - shape mismatch in constraints & objective
 # from .lukvle2 import LUKVLE2 as LUKVLE2
 from .lukvle3 import LUKVLE3 as LUKVLE3
 
 # from .lukvle4 import LUKVLE4 as LUKVLE4  # Use LUKVLE4C instead
-# from .lukvle4c import LUKVLE4C as LUKVLE4C
+# from .lukvle4c import LUKVLE4C as LUKVLE4C  # TODO: Human review - 3% discrepancy
 from .lukvle5 import LUKVLE5 as LUKVLE5
 from .lukvle6 import LUKVLE6 as LUKVLE6
 from .lukvle7 import LUKVLE7 as LUKVLE7
@@ -287,6 +342,7 @@ from .lukvle17 import LUKVLE17 as LUKVLE17
 from .lukvle18 import LUKVLE18 as LUKVLE18
 from .lukvli1 import LUKVLI1 as LUKVLI1
 
+# TODO: LUKVLI2 needs human review - shape mismatch in constraints & objective
 # from .lukvli2 import LUKVLI2 as LUKVLI2
 from .lukvli3 import LUKVLI3 as LUKVLI3
 
@@ -308,11 +364,22 @@ from .lukvli15 import LUKVLI15 as LUKVLI15
 from .lukvli16 import LUKVLI16 as LUKVLI16
 from .lukvli17 import LUKVLI17 as LUKVLI17
 from .lukvli18 import LUKVLI18 as LUKVLI18
+from .madsen import MADSEN as MADSEN
+
+# from .madsschj import MADSSCHJ as MADSSCHJ  # TODO: Human review needed
 from .makela1 import MAKELA1 as MAKELA1
 from .makela2 import MAKELA2 as MAKELA2
 from .makela3 import MAKELA3 as MAKELA3
 from .makela4 import MAKELA4 as MAKELA4
+
+# from .manne import MANNE as MANNE  # TODO: Human review needed
+# from .marine import MARINE as MARINE  # TODO: Human review needed
 from .maratos import MARATOS as MARATOS
+
+# from .methanol import METHANOL as METHANOL  # TODO: Human review needed
+from .matrix2 import MATRIX2 as MATRIX2
+from .minmaxbd import MINMAXBD as MINMAXBD
+from .minmaxrb import MINMAXRB as MINMAXRB
 from .mss1 import MSS1 as MSS1
 from .mss2 import MSS2 as MSS2
 from .mss3 import MSS3 as MSS3
@@ -353,6 +420,15 @@ from .polak5 import POLAK5 as POLAK5
 from .polak6 import POLAK6 as POLAK6
 
 # from .polygon import POLYGON as POLYGON  # TODO: Human review - sign conventions
+from .portfl1 import PORTFL1 as PORTFL1
+from .portfl2 import PORTFL2 as PORTFL2
+from .portfl3 import PORTFL3 as PORTFL3
+from .portfl4 import PORTFL4 as PORTFL4
+from .portfl6 import PORTFL6 as PORTFL6
+
+# from .portsnqp import PORTSNQP as PORTSNQP  # TODO: Human review needed
+# TODO: PORTSQP needs human review - test timeouts with n=100000 default
+# from .portsqp import PORTSQP as PORTSQP
 from .reading1 import READING1 as READING1
 from .reading2 import READING2 as READING2
 from .reading3 import READING3 as READING3
@@ -365,8 +441,19 @@ from .reading5 import READING5 as READING5
 from .reading9 import READING9 as READING9
 
 # from .rdw2d51f import RDW2D51F as RDW2D51F  # TODO: Human review needed
+# TODO: ROCKET needs human review - performance issues (19.60x slower than threshold)
+# from .rocket import ROCKET as ROCKET
+# from .rdw2d51u import RDW2D51U as RDW2D51U  # TODO: Human review needed - times out
+# from .rdw2d52b import RDW2D52B as RDW2D52B  # TODO: Human review needed
+# from .rdw2d52f import RDW2D52F as RDW2D52F  # TODO: Human review needed
+# from .rdw2d52u import RDW2D52U as RDW2D52U  # TODO: Human review needed
 from .rosepetal import ROSEPETAL as ROSEPETAL
 from .rosepetal2 import ROSEPETAL2 as ROSEPETAL2
+from .s316_322 import S316_322 as S316_322
+from .s365 import S365 as S365
+from .s365mod import S365MOD as S365MOD
+
+# from .saro import SARO as SARO  # TODO: Requires DAE solver support in JAX
 from .simpllpa import SIMPLLPA as SIMPLLPA
 from .simpllpb import SIMPLLPB as SIMPLLPB
 
@@ -374,6 +461,7 @@ from .simpllpb import SIMPLLPB as SIMPLLPB
 from .sipow1 import SIPOW1 as SIPOW1
 from .sipow2 import SIPOW2 as SIPOW2
 
+# from .s277_280 import S277_280 as S277_280  # Moved to unconstrained
 # TODO: Human review needed - constraint test failures (vectorized but sign issues)
 # from .spin2op import SPIN2OP as SPIN2OP
 # TODO: Human review needed - constraint issues with auxiliary variables
@@ -417,6 +505,12 @@ from .zecevic3 import ZECEVIC3 as ZECEVIC3
 from .zecevic4 import ZECEVIC4 as ZECEVIC4
 
 
+# TODO: ZAMB2 needs human review - requires 30 years of data
+# (3966 vars, 1440 constraints). Mathematical framework implemented but
+# needs full historical dataset and large-scale optimization
+# from .zamb2 import ZAMB2 as ZAMB2
+
+
 constrained_minimisation_problems = (
     # ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
     # AIRPORT(),  # TODO: Human review - constraint values don't match pycutest
@@ -440,10 +534,17 @@ constrained_minimisation_problems = (
     # AVION2(),  # TODO: Human review - gradient discrepancies
     # BDRY2(),  # TODO: Human review - objective values don't match pycutest
     # BIGBANK(),  # TODO: Human review - objective values don't match pycutest
+    # BLOWEYA(),  # TODO: Human review needed
+    # BLOWEYB(),  # TODO: Human review needed
+    # BLOWEYC(),  # TODO: Human review needed
     BIGGSC4(),
     BURKEHAN(),
     BYRDSPHR(),
+    # CAMSHAPE(),  # TODO: Human review needed
     CANTILVR(),
+    # CATENA(),  # TODO: Human review - starting values, gradient & bounds
+    # CATMIX(),  # TODO: Human review - test failures
+    # CATENARY(),  # TODO: Human review needed
     CB2(),
     CB3(),
     CHACONN1(),
@@ -462,6 +563,7 @@ constrained_minimisation_problems = (
     # CRESC4(),  # TODO: Human review - complex crescent area formula
     CSFI1(),
     CSFI2(),
+    # DALE(),  # TODO: Human review needed - see dale.py for details
     DALLASS(),
     DECONVC(),
     DEGENLPA(),
@@ -471,7 +573,12 @@ constrained_minimisation_problems = (
     DEMBO7(),
     DEMYMALO(),
     DIPIGRI(),
+    # DISC2(),  # TODO: Human review needed - see disc2.py for details
+    # DIXCHLNG(),  # TODO: Human review needed - see dixchlng.py for details
+    # DNIEPER(),  # TODO: Human review needed - see dnieper.py for details
     # DITTERT(),  # TODO: Human review needed
+    # DRUGDIS(),  # TODO: Human review needed - see drugdis.py for details
+    # DRUGDISE(),  # TODO: Human review needed - see drugdise.py for details
     DTOC1L(),
     DTOC1NA(),
     DTOC1NB(),
@@ -482,8 +589,11 @@ constrained_minimisation_problems = (
     DTOC4(),
     DTOC5(),
     DTOC6(),
+    # EG3(),  # TODO: Human review - large-scale problem causing test timeouts
     # EIGENACO(),  # TODO: Human review needed - same constraint issues as EIGENA
     ELATTAR(),
+    # EXTRASIM(),  # TODO: Human review - pycutest timeout issue
+    # ELEC(),  # TODO: Human review - numerical precision issue (see import comment)
     # EXPFITA(),  # TODO: Human review - fundamental formulation differences
     # EXPFITB(),  # TODO: Human review - fundamental formulation differences
     # EXPFITC(),  # TODO: Human review - fundamental formulation differences
@@ -491,7 +601,13 @@ constrained_minimisation_problems = (
     # FEEDLOC(),  # TODO: FEEDLOC needs human review - constraint dimension mismatch
     FLETCHER(),
     FLT(),
+    # GASOIL(),  # TODO: Human review needed - complex optimal control problem
+    GIGOMEZ1(),
     GIGOMEZ2(),
+    GIGOMEZ3(),
+    # GILBERT(),  # TODO: Human review needed - SIF scaling issues
+    GOFFIN(),
+    # GPP(),  # TODO: Human review - test failures
     HADAMARD(),
     HAGER1(),
     HAGER2(),
@@ -500,6 +616,7 @@ constrained_minimisation_problems = (
     HAIFAS(),
     HAIFAM(),  # TODO: Human review needed - complex SIF structure
     HAIFAL(),
+    # HIE1372D(),  # TODO: Human review - Jacobian mismatch
     HS6(),
     HS7(),
     HS8(),
@@ -599,7 +716,7 @@ constrained_minimisation_problems = (
     # KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # KISSING2(),  # TODO: Human review needed
     # KSIP(),  # TODO: Human review needed - needs vectorization, dtype promotion errors
-    # LEUVEN1(),  # TODO: Human review needed
+    # NOTE: LEUVEN1 removed - superseded by CLEUVEN series
     LISWET1(),
     LISWET2(),
     LISWET3(),
@@ -624,6 +741,8 @@ constrained_minimisation_problems = (
     HYDROELL(),
     LOOTSMA(),
     MARATOS(),
+    MINMAXBD(),
+    MINMAXRB(),
     MSS1(),
     MSS2(),
     MSS3(),
@@ -661,6 +780,13 @@ constrained_minimisation_problems = (
     POLAK5(),
     POLAK6(),
     # POLYGON(),  # TODO: Human review - constraint sign convention differences
+    PORTFL1(),
+    PORTFL2(),
+    PORTFL3(),
+    PORTFL4(),
+    PORTFL6(),
+    # PORTSNQP(),  # TODO: Human review needed
+    # PORTSQP(),  # TODO: Human review - test timeouts with n=100000 default
     READING1(),
     READING2(),
     READING3(),
@@ -670,7 +796,12 @@ constrained_minimisation_problems = (
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     READING9(),
+    # ROCKET(),  # TODO: Human review - performance issues (19.60x slower)
     # RDW2D51F(),  # TODO: Human review needed
+    # RDW2D51U(),  # TODO: Human review needed - times out
+    # RDW2D52B(),  # TODO: Human review needed
+    # RDW2D52F(),  # TODO: Human review needed
+    # RDW2D52U(),  # TODO: Human review needed
     ROSEPETAL(),
     ROSEPETAL2(),
     SIMPLLPA(),
@@ -678,6 +809,11 @@ constrained_minimisation_problems = (
     # SINROSNB(),  # TODO: Human review - objective scaling issues
     SIPOW1(),
     SIPOW2(),
+    S316_322(),
+    S365(),
+    S365MOD(),
+    # SARO(),  # TODO: Requires DAE solver support in JAX
+    # S277_280(),  # Moved to unconstrained
     # TAX13322(),  # TODO: Human review - complex objective structure
     TENBARS1(),
     TENBARS2(),
@@ -692,10 +828,16 @@ constrained_minimisation_problems = (
     # VANDERM2(),  # Moved to nonlinear equations (NOR2 classification)
     # VANDERM3(),  # TODO: Human review - constraint values don't match
     # VANDERM4(),  # TODO: Human review - constraint values don't match
+    MADSEN(),
+    # MADSSCHJ(),  # TODO: Human review needed - complex constraint structure
     MAKELA1(),
     MAKELA2(),
     MAKELA3(),
     MAKELA4(),
+    # METHANOL(),  # TODO: Human review needed
+    # MANNE(),  # TODO: Human review needed - complex econometric model
+    # MARINE(),  # TODO: Human review needed - complex differential equations
+    MATRIX2(),
     # HS70(),  # TODO: Human review - test failures
     # HS84(),  # TODO: Human review - objective value discrepancy
     # TODO: TWIR problems need human review - complex trilinear constraint formulation
@@ -705,6 +847,8 @@ constrained_minimisation_problems = (
     ZECEVIC2(),
     ZECEVIC3(),
     ZECEVIC4(),
+    # ZAMB2(),  # TODO: Human review - requires 30 years of data
+    # (3966 vars, 1440 constraints)
     # TRUSPYR1(),  # TODO: Human review - complex constraint scaling issues
     # TRUSPYR2(),  # TODO: Human review - test requested to be removed
     BT1(),
@@ -721,10 +865,10 @@ constrained_minimisation_problems = (
     BT12(),
     BT13(),
     LUKVLE1(),
-    # LUKVLE2(),
+    # LUKVLE2(),  # TODO: Human review - shape mismatch and objective issues
     LUKVLE3(),
     # LUKVLE4(),  # Has factor ~2380 error due to SIF bug, use LUKVLE4C instead
-    # LUKVLE4C(),  # Has 3% discrepancy with pycutest
+    # LUKVLE4C(),  # TODO: Human review - 3% numerical discrepancy
     LUKVLE5(),
     LUKVLE6(),
     LUKVLE7(),
@@ -740,7 +884,7 @@ constrained_minimisation_problems = (
     LUKVLE17(),
     LUKVLE18(),
     LUKVLI1(),
-    # LUKVLI2(),
+    # LUKVLI2(),  # TODO: Human review - shape mismatch and objective issues
     LUKVLI3(),
     # LUKVLI4(),  # Has factor ~2380 error due to SIF bug, use LUKVLI4C instead
     # LUKVLI4C(),  # Has 3% discrepancy with pycutest

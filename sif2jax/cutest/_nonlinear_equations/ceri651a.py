@@ -6,12 +6,22 @@ from ..._problem import AbstractNonlinearEquations
 
 
 def erfc_scaled(z):
-    """Scaled complementary error function: exp(z^2) * erfc(z)"""
-    # For large positive z, use asymptotic expansion to avoid overflow
-    # For negative z, use the relationship: erfc_scaled(z) = exp(z^2) * erfc(z)
+    """Scaled complementary error function: exp(z^2) * erfc(z)
+
+    Uses more accurate asymptotic expansion for large z.
+    """
+    # For large positive z, use more terms in asymptotic expansion
+    # erfcx(z) ≈ 1/(sqrt(pi)*z) * (1 - 0.5/z^2 + 0.75/z^4 - ...)
+    sqrt_pi = jnp.sqrt(jnp.pi)
+
+    # Use more terms for better accuracy
+    def asymptotic(z):
+        z2 = z * z
+        return 1.0 / (sqrt_pi * z) * (1.0 - 0.5 / z2 + 0.75 / (z2 * z2))
+
     return jnp.where(
         z > 5.0,
-        1.0 / (jnp.sqrt(jnp.pi) * z),  # Leading term of asymptotic expansion
+        asymptotic(z),
         jnp.exp(z * z) * erfc(z),
     )
 

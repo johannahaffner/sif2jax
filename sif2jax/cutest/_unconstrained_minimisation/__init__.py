@@ -33,14 +33,12 @@ from .broydn7d import BROYDN7D as BROYDN7D
 # TODO: BROYDNBDLS and BRYBND require human review - gradient tests fail
 # from .broydnbdls import BROYDNBDLS as BROYDNBDLS
 # from .brybnd import BRYBND as BRYBND
-# TODO: CERI problems need human review - numerical instability in erfc/exp
-# from .ceri import (
-#     CERI651ALS as CERI651ALS,
-#     CERI651BLS as CERI651BLS,
-#     CERI651CLS as CERI651CLS,
-#     CERI651DLS as CERI651DLS,
-#     CERI651ELS as CERI651ELS,
-# )
+# TODO: Human review needed - gradient/Hessian precision issues
+# from .ceri651als import CERI651ALS as CERI651ALS  # TODO: Numerical overflow
+# from .ceri651bls import CERI651BLS as CERI651BLS  # TODO: Numerical overflow
+# from .ceri651cls import CERI651CLS as CERI651CLS  # TODO: Numerical overflow
+# from .ceri651dls import CERI651DLS as CERI651DLS  # TODO: Numerical overflow
+# from .ceri651els import CERI651ELS as CERI651ELS  # TODO: Numerical overflow
 from .chainwoo import CHAINWOO as CHAINWOO
 from .chnrosnb import CHNROSNB as CHNROSNB
 from .chnrsnbm import CHNRSNBM as CHNRSNBM
@@ -106,8 +104,7 @@ from .drcav1lq import DRCAV1LQ as DRCAV1LQ
 from .drcav2lq import DRCAV2LQ as DRCAV2LQ
 from .drcav3lq import DRCAV3LQ as DRCAV3LQ
 
-# TODO: ECKERLE4LS needs human review - significant discrepancies
-# from .eckerle4ls import ECKERLE4LS as ECKERLE4LS
+# from .eckerle4ls import ECKERLE4LS as ECKERLE4LS  # TODO: Human review
 from .edensch import EDENSCH as EDENSCH
 from .eg1 import EG1 as EG1
 from .eg2 import EG2 as EG2
@@ -135,11 +132,12 @@ from .fletbv3m import FLETBV3M as FLETBV3M
 from .fletcbv2 import FLETCBV2 as FLETCBV2
 from .fletcbv3 import FLETCBV3 as FLETCBV3
 from .fletchcr import FLETCHCR as FLETCHCR
+from .fminsrf2 import FMINSRF2 as FMINSRF2
 
 # TODO: Human review - objective/gradient discrepancies
 # from .fletchbv import FLETCHBV as FLETCHBV
-# TODO: FMINSURF and FMINSRF2 have bugs - starting value/gradient discrepancies
-# from .fminsurf import FMINSRF2 as FMINSRF2, FMINSURF as FMINSURF
+from .fminsurf import FMINSURF as FMINSURF
+
 # TODO: FREURONE needs human review - miscategorized (should be constrained)
 # from .freuroth import FREURONE as FREURONE
 from .freuroth import FREUROTH as FREUROTH
@@ -163,9 +161,9 @@ from .hatflde import HATFLDE as HATFLDE
 from .hatfldfl import HATFLDFL as HATFLDFL
 from .hatfldfls import HATFLDFLS as HATFLDFLS
 
-# from .hatfldgls import HATFLDGLS as HATFLDGLS  # TODO: gradient/Hessian issues
-# TODO: HEART problems need human review - significant discrepancies
-# from .heart import HEART6LS as HEART6LS, HEART8LS as HEART8LS
+# from .hatfldgls import HATFLDGLS as HATFLDGLS  # TODO: PyCUTEst L2 group bug
+from .heart6ls import HEART6LS as HEART6LS
+from .heart8ls import HEART8LS as HEART8LS
 from .helix import HELIX as HELIX
 
 # TODO: HIELOW needs human review - significant discrepancies
@@ -186,6 +184,8 @@ from .indef import INDEF as INDEF
 from .indefm import INDEFM as INDEFM
 from .inteqnels import INTEQNELS as INTEQNELS
 from .jensmp import JENSMP as JENSMP
+
+# from .jimack import JIMACK as JIMACK  # TODO: Human review needed
 from .judge import JUDGE as JUDGE
 from .kirby import KIRBY2LS as KIRBY2LS
 from .kowosb import KOWOSB as KOWOSB
@@ -211,12 +211,18 @@ from .luksan21ls import LUKSAN21LS as LUKSAN21LS
 # TODO: MANCINO needs human review - significant discrepancies in all values
 # from .mancino import MANCINO as MANCINO
 from .maratosb import MARATOSB as MARATOSB
+
+# from .methanl8ls import METHANL8LS as METHANL8LS  # TODO: Human review needed
 from .mexhat import MEXHAT as MEXHAT
 from .mgh09ls import MGH09LS as MGH09LS
 from .mgh10ls import MGH10LS as MGH10LS
 from .mgh10sls import MGH10SLS as MGH10SLS
 from .mgh17ls import MGH17LS as MGH17LS
 from .mgh17sls import MGH17SLS as MGH17SLS
+from .misra1als import MISRA1ALS as MISRA1ALS
+from .misra1bls import MISRA1BLS as MISRA1BLS
+from .misra1cls import MISRA1CLS as MISRA1CLS
+from .misra1dls import MISRA1DLS as MISRA1DLS
 
 # TODO: Human review needed - Minor gradient precision differences
 # from .morebv import MOREBV as MOREBV
@@ -259,11 +265,16 @@ from .price4 import PRICE4 as PRICE4
 
 # TODO: Human review - objective off by factor of 4.15
 # from .powellsg import POWELLSG as POWELLSG
+from .qing import QING as QING
 from .quartc import QUARTC as QUARTC
 from .rat42ls import RAT42LS as RAT42LS
 from .rat43ls import RAT43LS as RAT43LS
+
+# from .recipels import RECIPELS as RECIPELS  # TODO: timeout on 3-var problem
 from .rosenbr import ROSENBR as ROSENBR
 from .roszman1ls import ROSZMAN1LS as ROSZMAN1LS
+
+# from .s277_280 import S277_280 as S277_280  # Moved to bounded
 from .s308 import S308 as S308
 
 # from .sparsqur import SPARSQUR as SPARSQUR  # TODO: Human review - Hessian timeout
@@ -363,11 +374,11 @@ unconstrained_minimisation_problems = (
     BROYDN7D(),
     # BROYDNBDLS(),  # TODO: Gradient test fails - needs human review
     # BRYBND(),  # TODO: Gradient test fails - needs human review
-    # CERI651ALS(),  # TODO: Human review - numerical instability in erfc/exp
-    # CERI651BLS(),  # TODO: Human review - numerical instability in erfc/exp
-    # CERI651CLS(),  # TODO: Human review - numerical instability in erfc/exp
-    # CERI651DLS(),  # TODO: Human review - numerical instability in erfc/exp
-    # CERI651ELS(),  # TODO: Human review - numerical instability in erfc/exp
+    # CERI651ALS(),  # TODO: Numerical overflow
+    # CERI651BLS(),  # TODO: Numerical overflow
+    # CERI651CLS(),  # TODO: Numerical overflow
+    # CERI651DLS(),  # TODO: Numerical overflow
+    # CERI651ELS(),  # TODO: Numerical overflow
     CHAINWOO(),
     CHNROSNB(),
     CHNRSNBM(),
@@ -427,7 +438,7 @@ unconstrained_minimisation_problems = (
     DJTL(),
     DQDRTIC(),
     DQRTIC(),
-    # ECKERLE4LS(),  # TODO: Human review - significant discrepancies
+    # ECKERLE4LS(),  # TODO: Human review needed - Hessian discrepancy
     EDENSCH(),
     EG2(),
     EGGCRATE(),
@@ -451,8 +462,8 @@ unconstrained_minimisation_problems = (
     FLETCHCR(),
     # Not varying the scale term in the FLETCBV3 problem
     FLETCBV3(),
-    #    FMINSURF(),  # TODO: has a bug
-    #    FMINSRF2(),  # TODO: has a bug
+    FMINSURF(),
+    FMINSRF2(),
     FREUROTH(),
     # FREURONE(),  # TODO: Human review - miscategorized (should be constrained)
     # GAUSS1LS(),  # TODO: Human review - issues reported by user
@@ -471,9 +482,9 @@ unconstrained_minimisation_problems = (
     HATFLDE(),
     HATFLDFL(),
     HATFLDFLS(),
-    # HATFLDGLS(),  # TODO: gradient/Hessian issues
-    # HEART6LS(),  # TODO: Human review - significant discrepancies
-    # HEART8LS(),  # TODO: Human review - significant discrepancies
+    # HATFLDGLS(),  # TODO: PyCUTEst L2 group bug
+    HEART6LS(),
+    HEART8LS(),
     HELIX(),
     # HIELOW(),  # TODO: Human review - significant discrepancies
     HILBERTA(),
@@ -488,6 +499,7 @@ unconstrained_minimisation_problems = (
     INDEFM(),
     INTEQNELS(),
     JENSMP(),
+    # JIMACK(),  # TODO: Human review needed
     JUDGE(),
     KIRBY2LS(),
     KOWOSB(),
@@ -510,12 +522,17 @@ unconstrained_minimisation_problems = (
     # LUKSAN22LS(),  # TODO: Human review needed - gradient issues
     # MANCINO(),  # TODO: Human review - significant discrepancies in all values
     MARATOSB(),
+    # METHANL8LS(),  # TODO: Human review needed
     MEXHAT(),
     MGH09LS(),
     MGH10LS(),
     MGH10SLS(),
     MGH17LS(),
     MGH17SLS(),
+    MISRA1ALS(),
+    MISRA1BLS(),
+    MISRA1CLS(),
+    MISRA1DLS(),
     # MOREBV(),  # TODO: Human review - minor gradient precision differences
     # MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     # NCB20(),  # TODO: Human review needed
@@ -545,11 +562,14 @@ unconstrained_minimisation_problems = (
     # POWELLSG(),  # TODO: Human review - objective off by factor of 4.15
     PRICE3(),
     PRICE4(),
+    QING(),
+    QUARTC(),
     RAT42LS(),
     RAT43LS(),
-    QUARTC(),
+    # RECIPELS(),  # TODO: Human review - timeout on simple 3-var problem
     ROSENBR(),
     ROSZMAN1LS(),
+    # S277_280(),  # Moved to bounded
     S308(),
     # SCOSINE(),  # TODO: Human review needed
     SCURLY10(),

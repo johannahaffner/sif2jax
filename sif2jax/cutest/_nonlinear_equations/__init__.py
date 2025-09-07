@@ -33,11 +33,12 @@ from .browndene import BROWNDENE as BROWNDENE
 # from .broydnbd import BROYDNBD as BROYDNBD
 # TODO: Human review needed - constraint values don't match pycutest
 # from .brybndne import BRYBNDNE as BRYBNDNE
-# from .ceri651a import CERI651A as CERI651A
-# from .ceri651b import CERI651B as CERI651B
-# from .ceri651c import CERI651C as CERI651C
-# from .ceri651d import CERI651D as CERI651D
-# from .ceri651e import CERI651E as CERI651E
+# from .ceri651a import CERI651A as CERI651A  # TODO: Jacobian precision - 0.000865
+# from .ceri651b import CERI651B as CERI651B  # TODO: Jacobian precision - 0.000100
+from .ceri651c import CERI651C as CERI651C
+
+# from .ceri651d import CERI651D as CERI651D  # TODO: Jacobian precision - 0.000053
+# from .ceri651e import CERI651E as CERI651E  # TODO: Jacobian precision - 0.000053
 # TODO: Human review needed - constraint values don't match pycutest
 # from .chainwoone import CHAINWOONE as CHAINWOONE
 from .chandheq import CHANDHEQ as CHANDHEQ
@@ -68,15 +69,16 @@ from .devgla1ne import DEVGLA1NE as DEVGLA1NE
 from .devgla2ne import DEVGLA2NE as DEVGLA2NE
 from .dmn15102 import DMN15102 as DMN15102
 from .dmn15103 import DMN15103 as DMN15103
+from .drcavty1 import DRCAVTY1 as DRCAVTY1
+from .drcavty2 import DRCAVTY2 as DRCAVTY2
+from .drcavty3 import DRCAVTY3 as DRCAVTY3
 
 # TODO: Human review needed - Jacobian precision issues (0.001-0.003 differences)
 # from .dmn15332 import DMN15332 as DMN15332
 # from .dmn15333 import DMN15333 as DMN15333
 # from .dmn37142 import DMN37142 as DMN37142
 # from .dmn37143 import DMN37143 as DMN37143
-from .drcavty1 import DRCAVTY1 as DRCAVTY1
-from .drcavty2 import DRCAVTY2 as DRCAVTY2
-from .drcavty3 import DRCAVTY3 as DRCAVTY3
+from .eckerle4 import ECKERLE4 as ECKERLE4
 from .eggcratene import EGGCRATENE as EGGCRATENE
 
 # TODO: Human review needed - systematic constraint value discrepancies
@@ -85,6 +87,7 @@ from .eggcratene import EGGCRATENE as EGGCRATENE
 # from .eigenau import EIGENAU as EIGENAU
 from .elatvidune import ELATVIDUNE as ELATVIDUNE
 from .engval2ne import ENGVAL2NE as ENGVAL2NE
+from .enso import ENSO as ENSO
 from .errinrosne import ERRINROSNE as ERRINROSNE
 from .errinrsmne import ERRINRSMNE as ERRINRSMNE
 from .exp2ne import EXP2NE as EXP2NE
@@ -96,27 +99,29 @@ from .fbrain2ne import FBRAIN2NE as FBRAIN2NE
 from .fbrain3 import FBRAIN3 as FBRAIN3
 from .fbrainne import FBRAINNE as FBRAINNE
 
-# from .flosp2hh import FLOSP2HH as FLOSP2HH  # TODO: Human review - NQR constraints
-# from .flosp2hl import FLOSP2HL as FLOSP2HL  # TODO: Human review - NQR constraints
-# from .flosp2hm import FLOSP2HM as FLOSP2HM  # TODO: Human review - NQR constraints
-# from .flosp2th import FLOSP2TH as FLOSP2TH  # TODO: Human review - NQR constraints
-# from .flosp2tl import FLOSP2TL as FLOSP2TL  # TODO: Human review - NQR constraints
-# from .flosp2tm import FLOSP2TM as FLOSP2TM  # TODO: Human review - NQR constraints
+# TODO: Human review needed - CONSTANTS section interpretation issue
+# from .flosp2hh import FLOSP2HH as FLOSP2HH
+# from .flosp2hl import FLOSP2HL as FLOSP2HL
+# from .flosp2hm import FLOSP2HM as FLOSP2HM
+# from .flosp2th import FLOSP2TH as FLOSP2TH
+# from .flosp2tl import FLOSP2TL as FLOSP2TL
+# from .flosp2tm import FLOSP2TM as FLOSP2TM
 from .freurone import FREURONE as FREURONE
 from .genrosebne import GENROSEBNE as GENROSEBNE
 from .genrosene import GENROSENE as GENROSENE
 from .gottfr import GOTTFR as GOTTFR
+from .growth import GROWTH as GROWTH
 from .gulfne import GULFNE as GULFNE
 from .hatfldane import HATFLDANE as HATFLDANE
 from .hatfldbne import HATFLDBNE as HATFLDBNE
 from .hatfldcne import HATFLDCNE as HATFLDCNE
 from .hatflddne import HATFLDDNE as HATFLDDNE
-
-# TODO: Human review needed - sign convention issues with pycutest
-# from .hatfldene import HATFLDENE as HATFLDENE
+from .hatfldene import HATFLDENE as HATFLDENE
 from .hatfldf import HATFLDF as HATFLDF
 from .hatfldflne import HATFLDFLNE as HATFLDFLNE
 from .hatfldg import HATFLDG as HATFLDG
+from .heart6 import HEART6 as HEART6
+from .heart8 import HEART8 as HEART8
 from .helixne import HELIXNE as HELIXNE
 from .himmelba import HIMMELBA as HIMMELBA
 from .himmelbfne import HIMMELBFNE as HIMMELBFNE
@@ -138,6 +143,9 @@ from .kss import KSS as KSS
 
 # TODO: KTMODEL needs human review - multiple test failures
 # from .ktmodel import KTMODEL as KTMODEL
+from .lanczos1 import LANCZOS1 as LANCZOS1
+from .lanczos2 import LANCZOS2 as LANCZOS2
+from .lanczos3 import LANCZOS3 as LANCZOS3
 from .levymone import LEVYMONE as LEVYMONE
 from .levymone5 import LEVYMONE5 as LEVYMONE5
 from .levymone6 import LEVYMONE6 as LEVYMONE6
@@ -147,7 +155,7 @@ from .levymone9 import LEVYMONE9 as LEVYMONE9
 from .levymone10 import LEVYMONE10 as LEVYMONE10
 from .liarwhdne import LIARWHDNE as LIARWHDNE
 
-# TODO: Human review needed - incomplete implementation
+# TODO: Human review needed - Python loop timeout and scaling issues
 # from .linversene import LINVERSENE as LINVERSENE
 from .luksan11 import LUKSAN11 as LUKSAN11
 from .luksan12 import LUKSAN12 as LUKSAN12
@@ -165,6 +173,9 @@ from .mgh10 import MGH10 as MGH10
 from .mgh10s import MGH10S as MGH10S
 from .mgh17 import MGH17 as MGH17
 from .mgh17s import MGH17S as MGH17S
+from .misra1a import MISRA1A as MISRA1A
+from .misra1b import MISRA1B as MISRA1B
+from .misra1c import MISRA1C as MISRA1C
 from .misra1d import MISRA1D as MISRA1D
 
 # TODO: Human review - constraint ordering issues
@@ -220,8 +231,12 @@ from .powellbs import POWELLBS as POWELLBS
 from .powellse import POWELLSE as POWELLSE
 from .powellsq import POWELLSQ as POWELLSQ
 from .powersumne import POWERSUMNE as POWERSUMNE
+from .qingne import QINGNE as QINGNE
 from .rat42 import RAT42 as RAT42
 from .rat43 import RAT43 as RAT43
+from .recipe import RECIPE as RECIPE
+from .repeat import REPEAT as REPEAT
+from .s308ne import S308NE as S308NE
 
 # TODO: Human review needed - mixed constraint types (equality/inequality)
 # from .res import RES as RES
@@ -286,8 +301,8 @@ nonlinear_equations_problems = (
     # BROWNALE(),  # TODO: Human review needed - Jacobian precision issues
     BROWNBSNE(),
     BROWNDENE(),
-    # CERI651D(),  # TODO: Human review needed - constraint precision
-    # CERI651E(),  # TODO: Human review needed - constraint precision
+    # CERI651D(),  # TODO: Jacobian precision - max diff 0.000053
+    # CERI651E(),  # TODO: Jacobian precision - max diff 0.000053
     # BROYDN3D(),  # TODO: Human review needed - constraint values mismatch
     # BROYDNBD(),  # TODO: Human review needed - systematic differences
     # BRYBNDNE(),  # TODO: Human review needed - constraint values mismatch
@@ -297,9 +312,9 @@ nonlinear_equations_problems = (
     HYPCIR(),
     MSQRTA(),
     MSQRTB(),
-    # CERI651A(),  # TODO: Human review needed - constraint precision
-    # CERI651B(),  # TODO: Human review needed - constraint precision
-    # CERI651C(),  # TODO: Human review needed - constraint precision
+    # CERI651A(),  # TODO: Jacobian precision - max diff 0.000865
+    # CERI651B(),  # TODO: Jacobian precision - max diff 0.000100
+    CERI651C(),
     # CHAINWOONE(),  # TODO: Human review needed - constraint values mismatch
     # CHANNEL(),  # TODO: Human review needed
     CHEBYQADNE(),
@@ -321,6 +336,7 @@ nonlinear_equations_problems = (
     DEVGLA2NE(),
     DMN15102(),
     DMN15103(),
+    ECKERLE4(),
     # DMN15332(),  # TODO: Human review needed - Jacobian precision issues
     # DMN15333(),  # TODO: Human review needed - Jacobian precision issues
     # DMN37142(),  # TODO: Human review needed - Jacobian precision issues
@@ -330,6 +346,7 @@ nonlinear_equations_problems = (
     # EIGENAU(),  # TODO: Human review needed - same constraint issues as EIGENA
     ELATVIDUNE(),
     ENGVAL2NE(),
+    ENSO(),
     ERRINRSMNE(),
     ERRINROSNE(),
     EXP2NE(),
@@ -340,25 +357,28 @@ nonlinear_equations_problems = (
     FBRAIN2NE(),
     FBRAIN3(),
     FBRAINNE(),
-    # FLOSP2HH(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2HL(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2HM(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2TH(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2TL(),  # TODO: Human review needed - NQR constraint handling
-    # FLOSP2TM(),  # TODO: Human review needed - NQR constraint handling
+    # FLOSP2HH(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2HL(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2HM(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2TH(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2TL(),  # TODO: Human review needed - CONSTANTS section interpretation
+    # FLOSP2TM(),  # TODO: Human review needed - CONSTANTS section interpretation
     FREURONE(),
     GENROSEBNE(),
     GENROSENE(),
     GOTTFR(),
+    GROWTH(),
     GULFNE(),
     HATFLDANE(),
     HATFLDBNE(),
     HATFLDCNE(),
     HATFLDDNE(),
-    # HATFLDENE(),  # TODO: Human review needed - sign convention issues
+    HATFLDENE(),
     HATFLDF(),
     HATFLDFLNE(),
     HATFLDG(),
+    HEART6(),
+    HEART8(),
     HELIXNE(),
     HIMMELBA(),
     HIMMELBFNE(),
@@ -375,6 +395,9 @@ nonlinear_equations_problems = (
     KSS(),
     # KTMODEL(),  # TODO: KTMODEL needs human review - multiple test failures
     KOWOSBNE(),
+    LANCZOS1(),
+    LANCZOS2(),
+    LANCZOS3(),
     LEVYMONE(),
     LEVYMONE5(),
     LEVYMONE6(),
@@ -382,7 +405,7 @@ nonlinear_equations_problems = (
     LEVYMONE8(),
     LEVYMONE10(),
     LIARWHDNE(),
-    # LINVERSENE(),  # TODO: Human review needed - incomplete implementation
+    # LINVERSENE(),  # TODO: Human review - Python loop timeout and scaling issues
     LUKSAN11(),
     LUKSAN12(),
     LUKSAN13(),
@@ -399,6 +422,9 @@ nonlinear_equations_problems = (
     MGH10S(),
     MGH17(),
     MGH17S(),
+    MISRA1A(),
+    MISRA1B(),
+    MISRA1C(),
     MISRA1D(),
     # MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # MOREBVNE(),  # TODO: Human review - SIF file bug on line 64
@@ -438,11 +464,15 @@ nonlinear_equations_problems = (
     PFIT3(),
     PFIT4(),
     POWERSUMNE(),
+    QINGNE(),
     RAT42(),
     RAT43(),
+    RECIPE(),
+    REPEAT(),
     # RES(),  # TODO: Human review needed - mixed constraint types
     SANTA(),
     SINVALNE(),
+    S308NE(),
     SPIN(),
     # SPIN2(),  # TODO: Human review - constraint test failures
     # SSBRYBNDNE(),  # TODO: Human review needed - complex element structure

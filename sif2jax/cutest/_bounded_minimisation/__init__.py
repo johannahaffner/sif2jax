@@ -68,6 +68,13 @@ from .levymont10 import LEVYMONT10 as LEVYMONT10
 
 # from .linverse import LINVERSE as LINVERSE  # TODO: Human review needed
 from .logros import LOGROS as LOGROS
+from .obstcl import (
+    OBSTCLAE as OBSTCLAE,
+    OBSTCLAL as OBSTCLAL,
+    OBSTCLBL as OBSTCLBL,
+    OBSTCLBM as OBSTCLBM,
+    OBSTCLBU as OBSTCLBU,
+)
 
 # from .maxlika import MAXLIKA as MAXLIKA  # TODO: Human review needed
 # from .minsurfo import MINSURFO as MINSURFO  # TODO: Human review - dimensions
@@ -218,6 +225,11 @@ bounded_minimisation_problems = (
     LEVYMONT10(),
     # LINVERSE(),  # TODO: Human review needed
     LOGROS(),
+    OBSTCLAE(),
+    OBSTCLAL(),
+    OBSTCLBL(),
+    OBSTCLBM(),
+    OBSTCLBU(),
     # MAXLIKA(),  # TODO: Human review needed
     # MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # NOBNDTOR(),  # TODO: Human review needed - complex bounds logic

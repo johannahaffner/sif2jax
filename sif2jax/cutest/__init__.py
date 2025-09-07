@@ -64,6 +64,11 @@ from ._bounded_minimisation import (
     # LINVERSE as LINVERSE,  # TODO: Human review needed
     LOGROS as LOGROS,
     # MAXLIKA as MAXLIKA,  # TODO: Human review needed
+    OBSTCLAE as OBSTCLAE,
+    OBSTCLAL as OBSTCLAL,
+    OBSTCLBL as OBSTCLBL,
+    OBSTCLBM as OBSTCLBM,
+    OBSTCLBU as OBSTCLBU,
     # MINSURFO as MINSURFO,  # TODO: Human review needed - dimension mismatch
     # NOBNDTOR as NOBNDTOR,  # TODO: Human review needed - complex bounds logic
     # NONSCOMP as NONSCOMP,  # TODO: Human review needed - GROUP TYPE L2
@@ -1266,6 +1271,11 @@ problems_dict = {
     # "LINVERSE": LINVERSE(),  # TODO: Human review needed
     "LOGROS": LOGROS(),
     # "MAXLIKA": MAXLIKA(),  # TODO: Human review needed
+    "OBSTCLAE": OBSTCLAE(),
+    "OBSTCLAL": OBSTCLAL(),
+    "OBSTCLBL": OBSTCLBL(),
+    "OBSTCLBM": OBSTCLBM(),
+    "OBSTCLBU": OBSTCLBU(),
     # "MINSURFO": MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # "NOBNDTOR": NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     "HS111": HS111(),

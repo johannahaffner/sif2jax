@@ -3,6 +3,7 @@
 import timeit
 from collections.abc import Callable
 
+import equinox as eqx
 import jax
 import jax.numpy as jnp
 import jax.tree_util as jtu
@@ -86,6 +87,27 @@ def benchmark_jax(
     return min(times) / number
 
 
+@pytest.fixture(autouse=True, scope="class")
+def clear_caches(problem):
+    jax.clear_caches()
+    eqx.clear_caches()
+
+    try:
+        pycutest.clear_cache(problem.name)
+    except (KeyError, FileNotFoundError):
+        pass
+
+    yield
+
+    jax.clear_caches()
+    eqx.clear_caches()
+
+    try:
+        pycutest.clear_cache(problem.name)
+    except (KeyError, FileNotFoundError):
+        pass
+
+
 class TestRuntime:
     """Runtime benchmarks comparing JAX to pycutest."""
 
@@ -94,21 +116,21 @@ class TestRuntime:
         """Load pycutest problem once per problem per class."""
         return pycutest.import_problem(problem.name, drop_fixed_variables=False)
 
-    @pytest.fixture(autouse=True)
-    def clear_jax_cache(self, problem):
-        """Clear JAX cache before each test to ensure fair comparison."""
-        jax.clear_caches()
-        try:
-            pycutest.clear_cache(problem.name)
-        except (KeyError, FileNotFoundError):
-            pass
+    # @pytest.fixture(autouse=True)
+    # def clear_jax_cache(self, problem):
+    #     """Clear JAX cache before each test to ensure fair comparison."""
+    #     jax.clear_caches()
+    #     try:
+    #         pycutest.clear_cache(problem.name)
+    #     except (KeyError, FileNotFoundError):
+    #         pass
 
-        yield
-        jax.clear_caches()
-        try:
-            pycutest.clear_cache(problem.name)
-        except (KeyError, FileNotFoundError):
-            pass
+    #     yield
+    #     jax.clear_caches()
+    #     try:
+    #         pycutest.clear_cache(problem.name)
+    #     except (KeyError, FileNotFoundError):
+    #         pass
 
     @pytest.fixture
     def threshold(self, request):

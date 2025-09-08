@@ -1024,6 +1024,8 @@ from ._unconstrained_minimisation import (
     MISRA1BLS as MISRA1BLS,
     MISRA1CLS as MISRA1CLS,
     MISRA1DLS as MISRA1DLS,
+    MSQRTALS as MSQRTALS,
+    MSQRTBLS as MSQRTBLS,
     # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
     # NCB20 as NCB20,  # TODO: Human review needed - test failures
@@ -1772,6 +1774,8 @@ problems_dict = {
     "MISRA1BLS": MISRA1BLS(),
     "MISRA1CLS": MISRA1CLS(),
     "MISRA1DLS": MISRA1DLS(),
+    "MSQRTALS": MSQRTALS(),
+    "MSQRTBLS": MSQRTBLS(),
     "MARATOSB": MARATOSB(),
     # "METHANL8LS": METHANL8LS(),  # TODO: Human review needed
     "MEXHAT": MEXHAT(),

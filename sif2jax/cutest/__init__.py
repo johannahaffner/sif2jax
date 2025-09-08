@@ -757,6 +757,10 @@ from ._quadratic_problems import (
     A0NSDSSL as A0NSDSSL,
     A0NSSSSL as A0NSSSSL,
     bounded_quadratic_problems as bounded_quadratic_problems,
+    BQP1VAR as BQP1VAR,
+    BQPGABIM as BQPGABIM,
+    BQPGASIM as BQPGASIM,
+    # BQPGAUSS as BQPGAUSS,  # TODO: Human review needed - see file
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
     CMPC1 as CMPC1,
     CMPC2 as CMPC2,
@@ -1570,6 +1574,10 @@ problems_dict = {
     "SCURLY10": SCURLY10(),
     "SCURLY20": SCURLY20(),
     "SCURLY30": SCURLY30(),
+    "BQP1VAR": BQP1VAR(),
+    "BQPGABIM": BQPGABIM(),
+    "BQPGASIM": BQPGASIM(),
+    # "BQPGAUSS": BQPGAUSS(),  # TODO: Human review needed - see file
     "CVXBQP1": CVXBQP1(),
     "CVXQP1": CVXQP1(),
     "CVXQP2": CVXQP2(),

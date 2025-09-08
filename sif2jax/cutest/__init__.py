@@ -120,6 +120,7 @@ from ._bounded_minimisation import (
 # WALL50 as WALL50,  # TODO: Human review - small gradient discrepancies (~2e-4)
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
+    # AGG as AGG,  # TODO: needs human review - MPS format LP problem
     # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
     # ALLINITC as ALLINITC,  # TODO: Human review - dimension mismatch with pycutest
@@ -129,6 +130,7 @@ from ._constrained_minimisation import (
     # AUG2D as AUG2D,  # TODO: needs human review - edge variable structure
     AVGASA as AVGASA,
     AVGASB as AVGASB,
+    BATCH as BATCH,
     BIGGSC4 as BIGGSC4,
     # AVION2 as AVION2,  # TODO: Human review - gradient discrepancies
     # BDRY2 as BDRY2,  # TODO: Human review - objective values don't match
@@ -1140,6 +1142,7 @@ problems_dict = {
     "A0NSDSSL": A0NSDSSL(),
     "A0NSSSSL": A0NSSSSL(),
     # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
+    # "AGG": AGG(),  # TODO: needs human review - MPS format LP problem
     # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
     # "ALLINITC": ALLINITC(),  # Human review needed - dimension mismatch
@@ -1515,6 +1518,7 @@ problems_dict = {
     # "AUG2D": AUG2D(),  # TODO: needs human review - edge variable structure
     "AVGASA": AVGASA(),
     "AVGASB": AVGASB(),
+    "BATCH": BATCH(),
     # "DEGTRIDL": DEGTRIDL(),  # TODO: Human review - causes segfault
     # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files

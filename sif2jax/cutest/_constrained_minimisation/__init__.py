@@ -89,6 +89,7 @@ from .dipigri import DIPIGRI as DIPIGRI
 # from .disc2 import DISC2 as DISC2
 # TODO: Human review needed - see dixchlng.py for details
 # from .dixchlng import DIXCHLNG as DIXCHLNG
+# from .dixchlnv import DIXCHLNV as DIXCHLNV  # TODO: Human review needed
 # TODO: Human review needed - see dnieper.py for details
 # from .dnieper import DNIEPER as DNIEPER
 # from .dittert import DITTERT as DITTERT  # TODO: Human review needed
@@ -588,6 +589,7 @@ constrained_minimisation_problems = (
     DIPIGRI(),
     # DISC2(),  # TODO: Human review needed - see disc2.py for details
     # DIXCHLNG(),  # TODO: Human review needed - see dixchlng.py for details
+    # DIXCHLNV(),  # TODO: Human review needed - see dixchlnv.py for details
     # DNIEPER(),  # TODO: Human review needed - see dnieper.py for details
     # DITTERT(),  # TODO: Human review needed
     # DRUGDIS(),  # TODO: Human review needed - see drugdis.py for details

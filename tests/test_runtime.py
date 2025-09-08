@@ -3,7 +3,6 @@
 import timeit
 from collections.abc import Callable
 
-import equinox as eqx
 import jax
 import jax.numpy as jnp
 import jax.tree_util as jtu
@@ -89,7 +88,6 @@ def benchmark_jax(
 
 @pytest.fixture(autouse=True, scope="class")
 def clear_caches(problem):
-    eqx.clear_caches()
     jax.clear_caches()
 
     try:
@@ -99,7 +97,6 @@ def clear_caches(problem):
 
     yield
 
-    eqx.clear_caches()
     jax.clear_caches()
 
     try:
@@ -113,24 +110,8 @@ class TestRuntime:
 
     @pytest.fixture(scope="class")
     def pycutest_problem(self, problem):
-        """Load pycutest problem once per problem per class."""
+        print(f"running problem {problem.name}")
         return pycutest.import_problem(problem.name, drop_fixed_variables=False)
-
-    # @pytest.fixture(autouse=True)
-    # def clear_jax_cache(self, problem):
-    #     """Clear JAX cache before each test to ensure fair comparison."""
-    #     jax.clear_caches()
-    #     try:
-    #         pycutest.clear_cache(problem.name)
-    #     except (KeyError, FileNotFoundError):
-    #         pass
-
-    #     yield
-    #     jax.clear_caches()
-    #     try:
-    #         pycutest.clear_cache(problem.name)
-    #     except (KeyError, FileNotFoundError):
-    #         pass
 
     @pytest.fixture
     def threshold(self, request):
@@ -156,11 +137,11 @@ class TestRuntime:
         # Calculate ratio
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
-        # Print results (visible with -s flag)
-        print(f"\nObjective runtime for {problem.name}:")
-        print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
-        print(f"  JAX:      {jax_time * 1000:.3f} ms")
-        print(f"  Ratio:    {ratio:.2f}x")
+        # # Print results (visible with -s flag)
+        # print(f"\nObjective runtime for {problem.name}:")
+        # print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
+        # print(f"  JAX:      {jax_time * 1000:.3f} ms")
+        # print(f"  Ratio:    {ratio:.2f}x")
 
         # Assert within threshold only if runtime is above minimum
         # This avoids failures due to noise in microsecond-level measurements
@@ -188,11 +169,11 @@ class TestRuntime:
         # Calculate ratio
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
-        # Print results (visible with -s flag)
-        print(f"\nGradient runtime for {problem.name}:")
-        print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
-        print(f"  JAX:      {jax_time * 1000:.3f} ms")
-        print(f"  Ratio:    {ratio:.2f}x")
+        # # Print results (visible with -s flag)
+        # print(f"\nGradient runtime for {problem.name}:")
+        # print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
+        # print(f"  JAX:      {jax_time * 1000:.3f} ms")
+        # print(f"  Ratio:    {ratio:.2f}x")
 
         # Assert within threshold only if runtime is above minimum
         # This avoids failures due to noise in microsecond-level measurements
@@ -223,11 +204,11 @@ class TestRuntime:
         # Calculate ratio
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
-        # Print results (visible with -s flag)
-        print(f"\nConstraint runtime for {problem.name}:")
-        print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
-        print(f"  JAX:      {jax_time * 1000:.3f} ms")
-        print(f"  Ratio:    {ratio:.2f}x")
+        # # Print results (visible with -s flag)
+        # print(f"\nConstraint runtime for {problem.name}:")
+        # print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
+        # print(f"  JAX:      {jax_time * 1000:.3f} ms")
+        # print(f"  Ratio:    {ratio:.2f}x")
 
         # Assert within threshold only if runtime is above minimum
         # This avoids failures due to noise in microsecond-level measurements
@@ -279,11 +260,11 @@ class TestRuntime:
         # Calculate ratio
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
-        # Print results (visible with -s flag)
-        print(f"\nConstraint Jacobian runtime for {problem.name}:")
-        print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
-        print(f"  JAX:      {jax_time * 1000:.3f} ms")
-        print(f"  Ratio:    {ratio:.2f}x")
+        # # Print results (visible with -s flag)
+        # print(f"\nConstraint Jacobian runtime for {problem.name}:")
+        # print(f"  pycutest: {pycutest_time * 1000:.3f} ms")
+        # print(f"  JAX:      {jax_time * 1000:.3f} ms")
+        # print(f"  Ratio:    {ratio:.2f}x")
 
         # Assert within threshold only if runtime is above minimum
         # This avoids failures due to noise in microsecond-level measurements

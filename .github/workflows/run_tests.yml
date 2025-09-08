@@ -31,5 +31,5 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
-            bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py"
+            bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py -s"
 

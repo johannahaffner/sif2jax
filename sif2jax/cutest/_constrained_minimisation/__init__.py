@@ -294,6 +294,8 @@ from .hydroell import HYDROELL as HYDROELL
 # TODO: JANNSON3 needs human review - Jacobian tests hang due to computational cost
 # from .jannson3 import JANNSON3 as JANNSON3
 from .jannson4 import JANNSON4 as JANNSON4
+from .lippert1 import LIPPERT1 as LIPPERT1
+from .lippert2 import LIPPERT2 as LIPPERT2
 
 # TODO: KISSING needs human review - runtime issue (5.37x, slightly over 5x threshold)
 # from .kissing import KISSING as KISSING
@@ -731,6 +733,8 @@ constrained_minimisation_problems = (
     LISWET10(),
     LISWET11(),
     LISWET12(),
+    LIPPERT1(),
+    LIPPERT2(),
     LOOTSMA(),
     HIMMELBC(),
     HIMMELBD(),

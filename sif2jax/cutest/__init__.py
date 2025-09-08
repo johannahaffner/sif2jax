@@ -334,6 +334,8 @@ from ._constrained_minimisation import (
     HYDROELL as HYDROELL,
     # JANNSON3 as JANNSON3,  # TODO: Human review - Jacobian tests hang
     JANNSON4 as JANNSON4,
+    LIPPERT1 as LIPPERT1,
+    LIPPERT2 as LIPPERT2,
     # KISSING as KISSING,  # TODO: Human review - runtime issue (5.37x)
     # KISSING2 as KISSING2,  # TODO: Human review needed
     # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
@@ -1324,6 +1326,8 @@ problems_dict = {
     "LISWET10": LISWET10(),
     "LISWET11": LISWET11(),
     "LISWET12": LISWET12(),
+    "LIPPERT1": LIPPERT1(),
+    "LIPPERT2": LIPPERT2(),
     "LOOTSMA": LOOTSMA(),
     "LSNNODOC": LSNNODOC(),
     "LSQFIT": LSQFIT(),

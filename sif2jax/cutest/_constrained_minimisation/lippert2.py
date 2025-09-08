@@ -123,13 +123,15 @@ class LIPPERT2(AbstractConstrainedMinimisation):
         v_prev = v[:, :-1]  # v_i,j-1 for i=1:nx, j=1:ny, shape (nx, ny)
 
         # Compute capacity constraints (SIF XG form: r^2 - u^2 - v^2 >= 0, keep as ≥ 0)
+        # Must match SIF ordering: for each (i,j), A(i,j), B(i,j), C(i,j), D(i,j)
         r_squared = r**2
-        cap_a = (r_squared - u_curr**2 - v_curr**2).ravel()  # nx*ny constraints
-        cap_b = (r_squared - u_prev**2 - v_curr**2).ravel()  # nx*ny constraints
-        cap_c = (r_squared - u_curr**2 - v_prev**2).ravel()  # nx*ny constraints
-        cap_d = (r_squared - u_prev**2 - v_prev**2).ravel()  # nx*ny constraints
+        cap_a = r_squared - u_curr**2 - v_curr**2  # shape (nx, ny)
+        cap_b = r_squared - u_prev**2 - v_curr**2  # shape (nx, ny)
+        cap_c = r_squared - u_curr**2 - v_prev**2  # shape (nx, ny)
+        cap_d = r_squared - u_prev**2 - v_prev**2  # shape (nx, ny)
 
-        ineq_constraints = jnp.concatenate([cap_a, cap_b, cap_c, cap_d])
+        # Interleave A, B, C, D for each (i,j) to match SIF constraint order
+        ineq_constraints = jnp.stack([cap_a, cap_b, cap_c, cap_d], axis=-1).ravel()
 
         return eq_constraints, ineq_constraints
 

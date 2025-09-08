@@ -23,7 +23,7 @@ class HS21MOD(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(7)
+        return 7
 
     @property
     def y0(self):
@@ -40,7 +40,8 @@ class HS21MOD(AbstractConstrainedMinimisation):
         del args
         x1, x2, x3, x4, x5, x6, x7 = y[0], y[1], y[2], y[3], y[4], y[5], y[6]
 
-        # Objective: -100.0 + 0.01*x1^2 + x2^2 + 0.01*x3^2 + x4^2 + 0.01*x5^2 + 0.01*x6^2 + x7^2
+        # Objective: -100.0 + 0.01*x1^2 + x2^2 + 0.01*x3^2 + x4^2
+        #             + 0.01*x5^2 + 0.01*x6^2 + x7^2
         objective_value = (
             -100.0
             + 0.01 * x1 * x1

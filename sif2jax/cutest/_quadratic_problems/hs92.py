@@ -25,7 +25,7 @@ class HS92(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(6)
+        return 6
 
     @property
     def y0(self):

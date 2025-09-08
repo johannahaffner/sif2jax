@@ -25,7 +25,7 @@ class HS35I(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(3)
+        return 3
 
     @property
     def y0(self):
@@ -54,7 +54,8 @@ class HS35I(AbstractConstrainedMinimisation):
             + 2.0 * x1 * x3
         )
 
-        # Constant from CONSTANTS section: interpret -9.0 as +9.0 (based on HS35MOD experience)
+        # Constant from CONSTANTS section: interpret -9.0 as +9.0
+        # (based on HS35MOD experience)
         constant = 9.0
 
         return constant + linear + quadratic

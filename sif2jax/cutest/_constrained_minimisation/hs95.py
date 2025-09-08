@@ -23,7 +23,7 @@ class HS95(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(6)
+        return 6
 
     @property
     def y0(self):
@@ -57,7 +57,8 @@ class HS95(AbstractConstrainedMinimisation):
         x1, x2, x3, x4, x5, x6 = y[0], y[1], y[2], y[3], y[4], y[5]
 
         # C1: 17.1*x1 + 38.2*x2 + 204.2*x3 + 212.3*x4 + 623.4*x5 + 1495.5*x6
-        #     - 169.0*x1*x3 - 3580.0*x3*x5 - 3810.0*x4*x5 - 18500.0*x4*x6 - 24300.0*x5*x6 >= 4.97
+        #     - 169.0*x1*x3 - 3580.0*x3*x5 - 3810.0*x4*x5
+        #     - 18500.0*x4*x6 - 24300.0*x5*x6 >= 4.97
         c1 = (
             17.1 * x1
             + 38.2 * x2
@@ -92,7 +93,8 @@ class HS95(AbstractConstrainedMinimisation):
         # C3: -273.0*x2 - 70.0*x4 - 819.0*x5 + 26000.0*x4*x5 >= -29.08
         c3 = -273.0 * x2 - 70.0 * x4 - 819.0 * x5 + 26000.0 * x4 * x5 + 29.08
 
-        # C4: 159.9*x1 - 311.0*x2 + 587.0*x4 + 391.0*x5 + 2198.0*x6 - 14000.0*x1*x6 >= -78.02
+        # C4: 159.9*x1 - 311.0*x2 + 587.0*x4 + 391.0*x5 + 2198.0*x6
+        #     - 14000.0*x1*x6 >= -78.02
         c4 = (
             159.9 * x1
             - 311.0 * x2

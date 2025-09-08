@@ -29,7 +29,7 @@ class HS111LNP(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(10)
+        return 10
 
     @property
     def y0(self):

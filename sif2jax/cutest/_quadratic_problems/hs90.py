@@ -25,7 +25,7 @@ class HS90(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(4)
+        return 4
 
     @property
     def y0(self):
@@ -132,7 +132,8 @@ class HS90(AbstractConstrainedQuadraticProblem):
         r = r_off.at[jnp.diag_indices(30)].set(r_diag)
 
         # Calculate p functions (partial sums of squares)
-        # For N=4: p[0] = sum(x_i^2), p[1] = sum(x_i^2, i=2..4), p[2] = sum(x_i^2, i=3..4), p[3] = x4^2, p[4] = 0
+        # For N=4: p[0] = sum(x_i^2), p[1] = sum(x_i^2, i=2..4),
+        # p[2] = sum(x_i^2, i=3..4), p[3] = x4^2, p[4] = 0
         p = jnp.array(
             [
                 x1**2 + x2**2 + x3**2 + x4**2,
@@ -157,7 +158,8 @@ class HS90(AbstractConstrainedQuadraticProblem):
         u = u - 2.0 * jnp.exp(-muj2 * p[3])  # i=4, alpha=-2
 
         # Final constant term (alpha = 2 for i=5, p[4]=0 so exp(0)=1)
-        # From line 265 in Fortran: u = u + 0.5 * alpha where alpha = 2 after N=4 iterations
+        # From line 265 in Fortran: u = u + 0.5 * alpha
+        # where alpha = 2 after N=4 iterations
         u = u + 1.0
 
         # Compute rho

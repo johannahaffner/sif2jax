@@ -25,7 +25,7 @@ class HS91(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(5)
+        return 5
 
     @property
     def y0(self):

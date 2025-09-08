@@ -25,7 +25,7 @@ class HS76I(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(4)
+        return 4
 
     @property
     def y0(self):
@@ -70,9 +70,11 @@ class HS76I(AbstractConstrainedMinimisation):
         """Linear constraints."""
         x1, x2, x3, x4 = y[0], y[1], y[2], y[3]
 
-        # C1 (L): x1 + 2*x2 + x3 + x4 ≤ 5.0, so constraint is (x1 + 2*x2 + x3 + x4) - 5.0 ≤ 0
+        # C1 (L): x1 + 2*x2 + x3 + x4 ≤ 5.0
+        # Constraint is (x1 + 2*x2 + x3 + x4) - 5.0 ≤ 0
         # For sif2jax format (≥ 0), we need: 5.0 - (x1 + 2*x2 + x3 + x4) ≥ 0
-        # But the test expects the derivative to be [1, 2, 1, 1], which is the LHS coefficients
+        # But the test expects the derivative to be [1, 2, 1, 1],
+        # which is the LHS coefficients
         # So we should return the LHS minus constant: (x1 + 2*x2 + x3 + x4) - 5.0
         c1 = (x1 + 2.0 * x2 + x3 + x4) - 5.0
 

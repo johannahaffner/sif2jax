@@ -316,7 +316,7 @@ from ._constrained_minimisation import (
     HS81 as HS81,
     HS83 as HS83,
     # HS84 as HS84,  # TODO: Human review - objective value discrepancy
-    # HS85 as HS85,  # TODO: Human review needed - requires implementing complex IFUN85 Fortran function
+    # HS85 as HS85,  # TODO: Human review - requires complex IFUN85 Fortran function
     HS86 as HS86,
     HS87 as HS87,
     HS93 as HS93,
@@ -325,7 +325,7 @@ from ._constrained_minimisation import (
     HS97 as HS97,
     HS98 as HS98,
     # HS99 as HS99,  # TODO: Needs human review - complex recursive formulation
-    HS99EXP as HS99EXP,
+    # HS99EXP as HS99EXP,  # TODO: Human review - constraint value discrepancies
     HS100 as HS100,
     # HS100MOD as HS100MOD,  # TODO: Human review - 610.67 objective discrepancy
     # HS100LNP as HS100LNP,  # TODO: Human review - 610.67 objective discrepancy
@@ -1291,7 +1291,7 @@ problems_dict = {
     "HS80": HS80(),
     "HS81": HS81(),
     "HS83": HS83(),
-    # "HS85": HS85(),  # TODO: Human review needed - requires implementing complex IFUN85 Fortran function
+    # "HS85": HS85(),  # TODO: Human review - requires complex IFUN85 Fortran function
     "HS86": HS86(),
     "HS87": HS87(),
     "HS88": HS88(),
@@ -1305,7 +1305,7 @@ problems_dict = {
     "HS97": HS97(),
     "HS98": HS98(),
     # "HS99": HS99(),  # TODO: Needs human review - complex recursive formulation
-    "HS99EXP": HS99EXP(),
+    # "HS99EXP": HS99EXP(),  # TODO: Human review - constraint value discrepancies
     "HS100": HS100(),
     # "HS100MOD": HS100MOD(),  # TODO: Human review - 610.67 objective discrepancy
     # "HS100LNP": HS100LNP(),  # TODO: Human review - 610.67 objective discrepancy

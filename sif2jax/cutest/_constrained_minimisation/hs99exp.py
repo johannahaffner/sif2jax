@@ -59,19 +59,27 @@ class HS99EXP(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         """Variable bounds."""
-        lower = jnp.zeros(31, dtype=jnp.float64)
+        # FR (free) is default for all variables
+        lower = jnp.full(31, -jnp.inf, dtype=jnp.float64)
         upper = jnp.full(31, jnp.inf, dtype=jnp.float64)
 
         # Variables are interleaved: X(1), R(2), Q(2), S(2), X(2), R(3), Q(3), S(3), ...
         # ..., X(7), R(8), Q(8), S(8), R(1), Q(1), S(1)
+
+        # X(1:7) have bounds [0, 1.58]
         # X(1) at position 0, X(2:7) at positions 4, 8, 12, 16, 20, 24
-        upper = upper.at[0].set(1.58)  # X(1)
+        lower = lower.at[0].set(0.0)
+        upper = upper.at[0].set(1.58)
         for pos in [4, 8, 12, 16, 20, 24]:  # X(2:7)
+            lower = lower.at[pos].set(0.0)
             upper = upper.at[pos].set(1.58)
 
         # R(1), Q(1), S(1) are fixed at 0 (positions 28, 29, 30)
+        lower = lower.at[28].set(0.0)  # R(1)
         upper = upper.at[28].set(0.0)  # R(1)
+        lower = lower.at[29].set(0.0)  # Q(1)
         upper = upper.at[29].set(0.0)  # Q(1)
+        lower = lower.at[30].set(0.0)  # S(1)
         upper = upper.at[30].set(0.0)  # S(1)
 
         return lower, upper

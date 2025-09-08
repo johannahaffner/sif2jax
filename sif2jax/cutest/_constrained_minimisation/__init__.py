@@ -279,12 +279,13 @@ from .hs97 import HS97 as HS97
 from .hs98 import HS98 as HS98
 
 # from .hs99 import HS99 as HS99  # TODO: Needs human review - complex recursion
-from .hs99exp import HS99EXP as HS99EXP
+# TODO: Human review needed - HS99EXP has constraint value discrepancies
+# from .hs99exp import HS99EXP as HS99EXP
 from .hs100 import HS100 as HS100
 
-# TODO: Human review needed - HS100MOD has 610.67 objective discrepancy at starting point
+# TODO: Human review - HS100MOD has 610.67 objective discrepancy at start
 # from .hs100mod import HS100MOD as HS100MOD
-# TODO: Human review needed - HS100LNP has same 610.67 objective discrepancy as HS100MOD
+# TODO: Human review - HS100LNP has same 610.67 objective discrepancy
 # from .hs100lnp import HS100LNP as HS100LNP
 from .hs101 import HS101 as HS101
 from .hs102 import HS102 as HS102
@@ -714,7 +715,7 @@ constrained_minimisation_problems = (
     HS80(),
     HS81(),
     HS83(),
-    # HS85(),  # TODO: Human review needed - requires implementing complex IFUN85 Fortran function
+    # HS85(),  # TODO: Human review - requires complex IFUN85 Fortran function
     HS86(),
     HS87(),
     HS93(),
@@ -723,7 +724,7 @@ constrained_minimisation_problems = (
     HS97(),
     HS98(),
     # HS99(),  # TODO: Needs human review - complex recursive formulation
-    HS99EXP(),
+    # HS99EXP(),  # TODO: Human review - constraint value discrepancies
     HS100(),
     # HS100MOD(),  # TODO: Human review - 610.67 objective discrepancy
     # HS100LNP(),  # TODO: Human review - 610.67 objective discrepancy

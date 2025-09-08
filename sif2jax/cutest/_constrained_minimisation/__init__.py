@@ -206,6 +206,7 @@ from .hs18 import HS18 as HS18
 from .hs19 import HS19 as HS19
 from .hs20 import HS20 as HS20
 from .hs21 import HS21 as HS21
+from .hs21mod import HS21MOD as HS21MOD
 from .hs22 import HS22 as HS22
 from .hs23 import HS23 as HS23
 from .hs24 import HS24 as HS24
@@ -219,6 +220,8 @@ from .hs32 import HS32 as HS32
 from .hs33 import HS33 as HS33
 from .hs34 import HS34 as HS34
 from .hs35 import HS35 as HS35
+from .hs35i import HS35I as HS35I
+from .hs35mod import HS35MOD as HS35MOD
 from .hs36 import HS36 as HS36
 from .hs37 import HS37 as HS37
 from .hs39 import HS39 as HS39
@@ -264,6 +267,7 @@ from .hs73 import HS73 as HS73
 # TODO: HS75 needs human review - same issues as HS74
 # from .hs75 import HS75 as HS75
 from .hs76 import HS76 as HS76
+from .hs76i import HS76I as HS76I
 from .hs77 import HS77 as HS77
 from .hs78 import HS78 as HS78
 from .hs79 import HS79 as HS79
@@ -273,10 +277,24 @@ from .hs83 import HS83 as HS83
 
 # TODO: HS84 needs human review - objective value discrepancy (~2%)
 # from .hs84 import HS84 as HS84
+from .hs85 import HS85 as HS85
+from .hs86 import HS86 as HS86
+from .hs87 import HS87 as HS87
 from .hs93 import HS93 as HS93
+from .hs95 import HS95 as HS95
+from .hs96 import HS96 as HS96
+from .hs97 import HS97 as HS97
+from .hs98 import HS98 as HS98
 
 # from .hs99 import HS99 as HS99  # TODO: Needs human review - complex recursion
+# TODO: Human review needed - HS99EXP has constraint value discrepancies
+# from .hs99exp import HS99EXP as HS99EXP
 from .hs100 import HS100 as HS100
+
+# TODO: Human review - HS100MOD has 610.67 objective discrepancy at start
+# from .hs100mod import HS100MOD as HS100MOD
+# TODO: Human review - HS100LNP has same 610.67 objective discrepancy
+# from .hs100lnp import HS100LNP as HS100LNP
 from .hs101 import HS101 as HS101
 from .hs102 import HS102 as HS102
 from .hs103 import HS103 as HS103
@@ -288,6 +306,7 @@ from .hs108 import HS108 as HS108
 
 # from .hs109 import HS109 as HS109  # TODO: Human review - sign convention issues
 from .hs111 import HS111 as HS111
+from .hs111lnp import HS111LNP as HS111LNP
 from .hs112 import HS112 as HS112
 from .hs113 import HS113 as HS113
 from .hs114 import HS114 as HS114
@@ -297,6 +316,7 @@ from .hs117 import HS117 as HS117
 # TODO: HS118 needs human review - constraint Jacobian ordering mismatch
 # from .hs118 import HS118 as HS118
 from .hs119 import HS119 as HS119
+from .hs268 import HS268 as HS268
 from .hydroell import HYDROELL as HYDROELL
 
 # TODO: JANNSON3 needs human review - Jacobian tests hang due to computational cost
@@ -652,6 +672,7 @@ constrained_minimisation_problems = (
     HS19(),
     HS20(),
     HS21(),
+    HS21MOD(),
     HS22(),
     HS23(),
     HS24(),
@@ -665,6 +686,8 @@ constrained_minimisation_problems = (
     HS33(),
     HS34(),
     HS35(),
+    HS35MOD(),
+    HS35I(),
     HS36(),
     HS37(),
     HS39(),
@@ -702,15 +725,26 @@ constrained_minimisation_problems = (
     # HS74(),  # Human review needed - constraint Jacobian issues
     # HS75(),  # Human review needed - same issues as HS74
     HS76(),
+    HS76I(),
     HS77(),
     HS78(),
     HS79(),
     HS80(),
     HS81(),
     HS83(),
+    # HS85(),  # TODO: Human review - requires complex IFUN85 Fortran function
+    HS86(),
+    HS87(),
     HS93(),
+    HS95(),
+    HS96(),
+    HS97(),
+    HS98(),
     # HS99(),  # TODO: Needs human review - complex recursive formulation
+    # HS99EXP(),  # TODO: Human review - constraint value discrepancies
     HS100(),
+    # HS100MOD(),  # TODO: Human review - 610.67 objective discrepancy
+    # HS100LNP(),  # TODO: Human review - 610.67 objective discrepancy
     HS101(),
     HS102(),
     HS103(),
@@ -721,6 +755,7 @@ constrained_minimisation_problems = (
     HS108(),
     # HS109(),  # TODO: Human review needed - sign convention issues
     HS111(),
+    HS111LNP(),
     HS112(),
     HS113(),
     HS114(),
@@ -728,6 +763,7 @@ constrained_minimisation_problems = (
     HS117(),
     # HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119(),
+    HS268(),
     HYDROELL(),
     # JANNSON3(),  # TODO: Human review - Jacobian tests hang due to computational cost
     JANNSON4(),

@@ -32,7 +32,7 @@ class HS70(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 4
+        return jnp.array(4)
 
     @property
     def m(self):

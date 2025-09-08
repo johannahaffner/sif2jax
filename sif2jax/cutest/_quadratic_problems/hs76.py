@@ -23,7 +23,7 @@ class HS76(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return 4
+        return jnp.array(4)
 
     @property
     def y0(self):

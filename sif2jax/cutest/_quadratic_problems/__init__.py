@@ -14,7 +14,11 @@ from .a0nsdsil import A0NSDSIL as A0NSDSIL
 from .a0nsdssl import A0NSDSSL as A0NSDSSL
 from .a0nssssl import A0NSSSSL as A0NSSSSL
 from .biggsc4 import BIGGSC4 as BIGGSC4
+from .bqp1var import BQP1VAR as BQP1VAR
+from .bqpgabim import BQPGABIM as BQPGABIM
+from .bqpgasim import BQPGASIM as BQPGASIM
 
+# from .bqpgauss import BQPGAUSS as BQPGAUSS  # TODO: Human review needed - see file
 # from .chenhark import CHENHARK as CHENHARK  # TODO: Human review needed - see file
 from .cmpc1 import CMPC1 as CMPC1
 from .cmpc2 import CMPC2 as CMPC2
@@ -108,6 +112,10 @@ from .yao import YAO as YAO
 
 # Bounded quadratic problems (only bound constraints)
 bounded_quadratic_problems = (
+    BQP1VAR(),
+    BQPGABIM(),
+    BQPGASIM(),
+    # BQPGAUSS(),  # TODO: Human review needed - see file
     # CHENHARK(),  # TODO: Human review needed - see file
     CVXBQP1(),
     NCVXBQP1(),

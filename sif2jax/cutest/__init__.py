@@ -671,6 +671,7 @@ from ._nonlinear_equations import (
     MSQRTA as MSQRTA,
     MSQRTB as MSQRTB,
     # MUONSINE as MUONSINE,  # TODO: Human review - hardcoded data values
+    NELSON as NELSON,
     NONDIANE as NONDIANE,
     nonlinear_equations_problems as nonlinear_equations_problems,
     # NONMSQRTNE as NONMSQRTNE,  # TODO: Human review - element structure
@@ -1028,6 +1029,7 @@ from ._unconstrained_minimisation import (
     # NCB20 as NCB20,  # TODO: Human review needed - test failures
     # NCB20B as NCB20B,  # TODO: Human review needed
     # NONDIA as NONDIA,  # TODO: Human review needed - SCALE interpretation issue
+    NELSONLS as NELSONLS,
     NONCVXU2 as NONCVXU2,
     NONCVXUN as NONCVXUN,
     NONDQUAR as NONDQUAR,
@@ -1793,6 +1795,7 @@ problems_dict = {
     "NCVXQP7": NCVXQP7(),
     "NCVXQP8": NCVXQP8(),
     "NCVXQP9": NCVXQP9(),
+    "NELSONLS": NELSONLS(),
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),
     "NONDQUAR": NONDQUAR(),
@@ -2128,6 +2131,7 @@ problems_dict = {
     # "MODBEALENE": MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # "MOREBVNE": MOREBVNE(),  # TODO: Human review - SIF file bug on line 64
     # "MUONSINE": MUONSINE(),  # TODO: Human review - hardcoded data values
+    "NELSON": NELSON(),
     "NONDIANE": NONDIANE(),
     # "NONMSQRTNE": NONMSQRTNE(),  # TODO: Human review - element structure
     "NONSCOMPNE": NONSCOMPNE(),

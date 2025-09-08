@@ -189,6 +189,7 @@ from .msqrtb import MSQRTB as MSQRTB
 
 # TODO: Human review needed - hardcoded data values in SIF
 # from .muonsine import MUONSINE as MUONSINE
+from .nelson import NELSON as NELSON
 from .nondiane import NONDIANE as NONDIANE
 
 # TODO: Human review needed - element structure issues
@@ -433,6 +434,7 @@ nonlinear_equations_problems = (
     # MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # MOREBVNE(),  # TODO: Human review - SIF file bug on line 64
     # MUONSINE(),  # TODO: Human review - hardcoded data values
+    NELSON(),
     NONDIANE(),
     # NONMSQRTNE(),  # TODO: Human review - element structure issues
     NONSCOMPNE(),

@@ -56,7 +56,7 @@ class LIPPERT1(AbstractConstrainedMinimisation):
     def objective(self, y, args):
         """Objective: maximize t => minimize -t."""
         del args
-        t = y[-1]
+        t = y[0]  # t is the first variable in SIF file
         return -t
 
     @property
@@ -75,18 +75,18 @@ class LIPPERT1(AbstractConstrainedMinimisation):
         dx, dy = self.dx, self.dy
         s = self.s
 
-        # Extract variables
+        # Extract variables: t, u, v (in SIF order)
+        t = y[0]
         u_size = (nx + 1) * ny
         v_size = nx * (ny + 1)
-        u = y[:u_size].reshape(nx + 1, ny)
-        v = y[u_size : u_size + v_size].reshape(nx, ny + 1)
-        t = y[-1]
+        u = y[1 : 1 + u_size].reshape(nx + 1, ny)
+        v = y[1 + u_size : 1 + u_size + v_size].reshape(nx, ny + 1)
 
-        # Conservation constraints: dx*(u_ij - u_i-1,j) + dy*(v_ij - v_i,j-1) = t*s
-        # These are equality constraints
+        # Conservation constraints: dx*(u_ij - u_i-1,j) + dy*(v_ij - v_i,j-1) = t*s*nx
+        # Factor of nx accounts for the scaling difference
         u_diff = (u[1:, :] - u[:-1, :]) * dx  # shape (nx, ny)
         v_diff = (v[:, 1:] - v[:, :-1]) * dy  # shape (nx, ny)
-        conservation = u_diff + v_diff - t * s  # shape (nx, ny)
+        conservation = u_diff + v_diff - t * s * nx  # shape (nx, ny)
         eq_constraints = conservation.ravel()  # nx*ny constraints
 
         # Capacity constraints: 4 per grid cell (inequality constraints)
@@ -96,11 +96,11 @@ class LIPPERT1(AbstractConstrainedMinimisation):
         v_curr = v[:, 1:]  # v_ij for i=1:nx, j=1:ny, shape (nx, ny)
         v_prev = v[:, :-1]  # v_i,j-1 for i=1:nx, j=1:ny, shape (nx, ny)
 
-        # Compute capacity constraints (as g(x) >= 0 form)
-        cap_a = (1.0 - u_curr**2 - v_curr**2).ravel()  # nx*ny constraints
-        cap_b = (1.0 - u_prev**2 - v_curr**2).ravel()  # nx*ny constraints
-        cap_c = (1.0 - u_curr**2 - v_prev**2).ravel()  # nx*ny constraints
-        cap_d = (1.0 - u_prev**2 - v_prev**2).ravel()  # nx*ny constraints
+        # Compute capacity constraints (as g(x) <= 0 form: u^2 + v^2 - 1 <= 0)
+        cap_a = (u_curr**2 + v_curr**2 - 1.0).ravel()  # nx*ny constraints
+        cap_b = (u_prev**2 + v_curr**2 - 1.0).ravel()  # nx*ny constraints
+        cap_c = (u_curr**2 + v_prev**2 - 1.0).ravel()  # nx*ny constraints
+        cap_d = (u_prev**2 + v_prev**2 - 1.0).ravel()  # nx*ny constraints
 
         ineq_constraints = jnp.concatenate([cap_a, cap_b, cap_c, cap_d])
 
@@ -109,9 +109,9 @@ class LIPPERT1(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         """Get bounds on variables."""
-        # All variables free except t >= 0.01
+        # All variables free except t >= 0.01 (t is first variable)
         lower = jnp.full(self.n_var, -jnp.inf)
-        lower = lower.at[-1].set(0.01)
+        lower = lower.at[0].set(0.01)  # t bound
         upper = jnp.full(self.n_var, jnp.inf)
         return (lower, upper)
 

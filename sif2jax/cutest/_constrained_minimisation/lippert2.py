@@ -59,7 +59,7 @@ class LIPPERT2(AbstractConstrainedMinimisation):
     def objective(self, y, args):
         """Objective: minimize r."""
         del args
-        r = y[-1]
+        r = y[0]  # r is the first variable in SIF file
         return r
 
     @property
@@ -70,8 +70,8 @@ class LIPPERT2(AbstractConstrainedMinimisation):
 
         x0 = jnp.zeros(self.n_var)
 
-        # Set r (last variable) to 1.0
-        x0 = x0.at[-1].set(1.0)
+        # Set r (first variable) to 1.0
+        x0 = x0.at[0].set(1.0)
 
         # Initialize u values with linear gradient
         u_size = (nx + 1) * ny
@@ -79,7 +79,7 @@ class LIPPERT2(AbstractConstrainedMinimisation):
         for i in range(nx + 1):
             alpha = i * dx / 2.0
             u = u.at[i, :].set(alpha)
-        x0 = x0.at[:u_size].set(u.ravel())
+        x0 = x0.at[1 : 1 + u_size].set(u.ravel())
 
         # Initialize v values with linear gradient
         v_size = nx * (ny + 1)
@@ -87,7 +87,7 @@ class LIPPERT2(AbstractConstrainedMinimisation):
         for j in range(ny + 1):
             alpha = j * dx / 2.0  # Note: using dx as in SIF file
             v = v.at[:, j].set(alpha)
-        x0 = x0.at[u_size : u_size + v_size].set(v.ravel())
+        x0 = x0.at[1 + u_size : 1 + u_size + v_size].set(v.ravel())
 
         return x0
 
@@ -101,28 +101,28 @@ class LIPPERT2(AbstractConstrainedMinimisation):
         dx, dy = self.dx, self.dy
         s = self.s
 
-        # Extract variables
+        # Extract variables: r, u, v (in SIF order)
+        r = y[0]
         u_size = (nx + 1) * ny
         v_size = nx * (ny + 1)
-        u = y[:u_size].reshape(nx + 1, ny)
-        v = y[u_size : u_size + v_size].reshape(nx, ny + 1)
-        r = y[-1]
+        u = y[1 : 1 + u_size].reshape(nx + 1, ny)
+        v = y[1 + u_size : 1 + u_size + v_size].reshape(nx, ny + 1)
 
         # Conservation constraints: dx*(u_ij - u_i-1,j) + dy*(v_ij - v_i,j-1) = s
-        # These are equality constraints
+        # These are equality constraints with RHS = s (not scaled like LIPPERT1)
         u_diff = (u[1:, :] - u[:-1, :]) * dx  # shape (nx, ny)
         v_diff = (v[:, 1:] - v[:, :-1]) * dy  # shape (nx, ny)
         conservation = u_diff + v_diff - s  # shape (nx, ny)
         eq_constraints = conservation.ravel()  # nx*ny constraints
 
         # Capacity constraints: 4 per grid cell (inequality constraints)
-        # Need to convert to g(x) >= 0 form: r^2 - u^2 - v^2 >= 0
+        # SIF uses XG (≥ 0): r^2 - u^2 - v^2 ≥ 0, keep as ≥ 0 format
         u_curr = u[1:, :]  # u_ij for i=1:nx, j=1:ny, shape (nx, ny)
         u_prev = u[:-1, :]  # u_i-1,j for i=1:nx, j=1:ny, shape (nx, ny)
         v_curr = v[:, 1:]  # v_ij for i=1:nx, j=1:ny, shape (nx, ny)
         v_prev = v[:, :-1]  # v_i,j-1 for i=1:nx, j=1:ny, shape (nx, ny)
 
-        # Compute capacity constraints (as g(x) >= 0 form)
+        # Compute capacity constraints (SIF XG form: r^2 - u^2 - v^2 >= 0, keep as ≥ 0)
         r_squared = r**2
         cap_a = (r_squared - u_curr**2 - v_curr**2).ravel()  # nx*ny constraints
         cap_b = (r_squared - u_prev**2 - v_curr**2).ravel()  # nx*ny constraints
@@ -136,9 +136,9 @@ class LIPPERT2(AbstractConstrainedMinimisation):
     @property
     def bounds(self):
         """Get bounds on variables."""
-        # All variables free except r >= 0
+        # All variables free except r >= 0 (r is first variable)
         lower = jnp.full(self.n_var, -jnp.inf)
-        lower = lower.at[-1].set(0.0)
+        lower = lower.at[0].set(0.0)
         upper = jnp.full(self.n_var, jnp.inf)
         return (lower, upper)
 

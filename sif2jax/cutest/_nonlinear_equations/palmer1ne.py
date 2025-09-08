@@ -29,7 +29,7 @@ class PALMER1NE(AbstractNonlinearEquations):
 
     def num_residuals(self) -> int:
         """Number of residuals equals number of data points."""
-        return jnp.array(31)
+        return 31
 
     def starting_point(self) -> Array:
         """Return the starting point for the problem."""

@@ -53,7 +53,7 @@ class ELATVIDUB(AbstractBoundedMinimisation):
         return f1**2 + f2**2 + f3**2
 
     def num_variables(self):
-        return jnp.array(2)
+        return 2
 
     @property
     def expected_result(self):

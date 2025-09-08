@@ -27,12 +27,12 @@ class AVION2(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(49)
+        return 49
 
     @property
     def m(self):
         """Number of constraints."""
-        return jnp.array(15)
+        return 15
 
     def objective(self, y, args):
         """Compute the objective function."""

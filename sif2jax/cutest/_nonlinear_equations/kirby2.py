@@ -27,7 +27,7 @@ class KIRBY2(AbstractNonlinearEquations):
 
     def num_residuals(self) -> int:
         """Number of residuals."""
-        return jnp.array(151)
+        return 151
 
     def starting_point(self, y0_id: int = 0) -> Array:
         """Return the starting point for the problem."""

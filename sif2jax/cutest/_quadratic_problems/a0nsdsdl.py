@@ -71,7 +71,7 @@ class A0NSDSDL(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(60012)
+        return 60012
 
     @property
     def y0(self):

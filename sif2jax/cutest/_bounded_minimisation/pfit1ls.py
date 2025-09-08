@@ -31,7 +31,7 @@ class PFIT1LS(AbstractBoundedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(3)
+        return 3
 
     @property
     def y0(self):

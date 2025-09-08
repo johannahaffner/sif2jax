@@ -108,8 +108,8 @@ class HEART8(AbstractNonlinearEquations):
 
     @property
     def n_var(self):
-        return jnp.array(8)
+        return 8
 
     @property
     def n_con(self):
-        return jnp.array(8)
+        return 8

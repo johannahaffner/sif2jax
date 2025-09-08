@@ -28,12 +28,12 @@ class QPNBLEND(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(83)
+        return 83
 
     @property
     def m(self):
         """Number of constraints."""
-        return jnp.array(74)
+        return 74
 
     @property
     def y0(self):

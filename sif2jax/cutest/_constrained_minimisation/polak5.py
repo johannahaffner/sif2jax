@@ -48,7 +48,7 @@ class POLAK5(AbstractConstrainedMinimisation):
         return jnp.array(50.0)
 
     def num_variables(self):
-        return jnp.array(3)
+        return 3
 
     @property
     def bounds(self):

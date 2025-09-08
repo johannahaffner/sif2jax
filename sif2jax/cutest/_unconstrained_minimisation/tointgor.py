@@ -32,7 +32,7 @@ class TOINTGOR(AbstractUnconstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(50)
+        return 50
 
     def _get_problem_data(self):
         """Get the problem-specific data."""

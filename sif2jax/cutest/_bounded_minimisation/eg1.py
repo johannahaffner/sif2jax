@@ -25,7 +25,7 @@ class EG1(AbstractBoundedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(3)
+        return 3
 
     def objective(self, y: Array, args) -> Array:
         """Compute the objective function."""

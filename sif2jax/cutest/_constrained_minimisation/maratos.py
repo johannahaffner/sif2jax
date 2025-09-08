@@ -50,7 +50,7 @@ class MARATOS(AbstractConstrainedMinimisation):
         return None
 
     def num_variables(self):
-        return jnp.array(2)
+        return 2
 
     @property
     def bounds(self):

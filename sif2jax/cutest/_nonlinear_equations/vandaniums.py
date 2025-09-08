@@ -36,7 +36,7 @@ class VANDANIUMS(AbstractNonlinearEquations):
         twoh = h + h  # 2*h
 
         def case1():  # xx <= x0 - 2*h or xx >= x0 + 2*h
-            return jnp.array(0.0)
+            return 0.0
 
         def case2():  # xx <= x0 - h
             return (twoh + (xx - x0) ** 3) / 6.0

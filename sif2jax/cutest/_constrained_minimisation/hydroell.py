@@ -58,7 +58,7 @@ class HYDROELL(AbstractConstrainedMinimisation):
     @property
     def m_nonlinear(self):
         """Number of nonlinear constraints."""
-        return jnp.array(0)
+        return 0
 
     def _get_tariff_schedule(self):
         """Get the tariff schedule for the week."""

@@ -47,12 +47,12 @@ class A0EBase(AbstractConstrainedQuadraticProblem, ABC):
     @property
     def n(self):
         """Number of variables: 45,006 for all A0E problems."""
-        return jnp.array(45006)
+        return 45006
 
     @property
     def constraint_size(self):
         """Number of constraints: 15,002 for all A0E problems."""
-        return jnp.array(15002)
+        return 15002
 
     @property
     def y0(self):

@@ -28,7 +28,7 @@ class RECIPE(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(3)
+        return 3
 
     def constraint(self, y):
         """Compute the nonlinear equations."""

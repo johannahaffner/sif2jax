@@ -26,12 +26,12 @@ class DIXCHLNG(AbstractConstrainedMinimisation):
     @property
     def n_var(self) -> int:
         """Number of variables: 10."""
-        return jnp.array(10)
+        return 10
 
     @property
     def n_con(self) -> int:
         """Number of constraints: 5 (P(2), P(4), P(6), P(8), P(10))."""
-        return jnp.array(5)
+        return 5
 
     def objective(self, y: Array, args) -> Array:
         """Objective function with squared and product terms."""

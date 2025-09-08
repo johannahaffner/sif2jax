@@ -25,12 +25,12 @@ class DUALC2(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(7)
+        return 7
 
     @property
     def m(self):
         """Number of constraints."""
-        return jnp.array(229)
+        return 229
 
     # Linear objective coefficients
     c = jnp.array(

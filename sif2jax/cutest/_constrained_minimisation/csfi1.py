@@ -22,7 +22,7 @@ class CSFI1(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(5)
+        return 5
 
     def objective(self, y, args):
         """Compute the objective (-TPH to maximize TPH)."""

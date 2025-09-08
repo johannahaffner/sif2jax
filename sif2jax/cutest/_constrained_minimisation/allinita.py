@@ -32,12 +32,12 @@ class ALLINITA(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables (excluding fixed X4)."""
-        return jnp.array(3)
+        return 3
 
     @property
     def m(self):
         """Number of constraints."""
-        return jnp.array(4)
+        return 4
 
     def objective(self, y, args):
         del args

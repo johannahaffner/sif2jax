@@ -35,7 +35,7 @@ class CLNLBEAM(AbstractConstrainedMinimisation):
         # Variables: T(0) to T(NI), X(0) to X(NI), U(0) to U(NI)
         # But pycutest expects 5999, not 6000 = 3*(NI+1)
         # Perhaps pycutest excludes one of the fixed variables?
-        return jnp.array(5999)
+        return 5999
 
     @property
     def m(self):
@@ -47,7 +47,7 @@ class CLNLBEAM(AbstractConstrainedMinimisation):
     @property
     def m_linear(self):
         """Number of linear constraints."""
-        return jnp.array(0)
+        return 0
 
     @property
     def m_nonlinear(self):

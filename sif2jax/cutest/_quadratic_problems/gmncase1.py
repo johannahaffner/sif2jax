@@ -76,12 +76,12 @@ class GMNCASE1(AbstractConstrainedQuadraticProblem, Module):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(175)
+        return 175
 
     @property
     def m(self):
         """Number of constraints."""
-        return jnp.array(300)
+        return 300
 
     def objective(self, y, args):
         """Compute the objective function using vectorized operations."""

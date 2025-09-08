@@ -51,11 +51,11 @@ class PORTFL3(AbstractConstrainedMinimisation):
 
     @property
     def n_var(self):
-        return jnp.array(12)
+        return 12
 
     @property
     def n_con(self):
-        return jnp.array(1)
+        return 1
 
     @property
     def y0(self):

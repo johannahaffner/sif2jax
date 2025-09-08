@@ -43,7 +43,7 @@ class MEYER3NE(AbstractNonlinearEquations):
 
     def num_residuals(self) -> int:
         """Return the number of residuals."""
-        return jnp.array(16)
+        return 16
 
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of Meyer's problem."""

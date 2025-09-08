@@ -50,7 +50,7 @@ class LOOTSMA(AbstractConstrainedMinimisation):
         return None
 
     def num_variables(self):
-        return jnp.array(3)
+        return 3
 
     @property
     def bounds(self):

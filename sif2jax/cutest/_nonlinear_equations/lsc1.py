@@ -26,12 +26,12 @@ class LSC1(AbstractNonlinearEquations):
     @property
     def n_var(self):
         """Number of variables: X, Y, R."""
-        return jnp.array(3)
+        return 3
 
     @property
     def n_con(self):
         """Number of constraints: 6 equations."""
-        return jnp.array(6)
+        return 6
 
     def constraint(self, y):
         """Compute the nonlinear equations.

@@ -44,7 +44,7 @@ class PORTSQP(AbstractConstrainedQuadraticProblem):
 
     @property
     def n_con(self):
-        return jnp.array(1)
+        return 1
 
     @property
     def y0(self):

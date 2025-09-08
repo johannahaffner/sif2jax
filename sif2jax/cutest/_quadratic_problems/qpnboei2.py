@@ -22,12 +22,12 @@ class QPNBOEI2(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(143)
+        return 143
 
     @property
     def m(self):
         """Number of constraints."""
-        return jnp.array(166)
+        return 166
 
     @property
     def y0(self):

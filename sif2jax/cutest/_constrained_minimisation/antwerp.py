@@ -74,7 +74,7 @@ class ANTWERP(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Total number of variables."""
-        return jnp.array(27)
+        return 27
 
     @property
     def m(self):

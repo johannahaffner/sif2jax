@@ -25,12 +25,12 @@ class EXPFITB(AbstractConstrainedMinimisation):
     @property
     def n(self) -> int:
         """Number of variables: P0, P1, P2, Q1, Q2."""
-        return jnp.array(5)
+        return 5
 
     @property
     def m(self) -> int:
         """Number of constraints: 102 linear constraints (51 × 2)."""
-        return jnp.array(102)
+        return 102
 
     def starting_point(self) -> Array:
         """Return the starting point for the problem."""

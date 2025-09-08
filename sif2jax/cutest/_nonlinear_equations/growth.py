@@ -24,11 +24,11 @@ class GROWTH(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(3)
+        return 3
 
     def num_residuals(self):
         """Number of residual equations."""
-        return jnp.array(12)
+        return 12
 
     @property
     def y0(self):

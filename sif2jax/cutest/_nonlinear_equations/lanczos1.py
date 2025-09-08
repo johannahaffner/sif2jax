@@ -27,7 +27,7 @@ class LANCZOS1(AbstractNonlinearEquations):
 
     def num_residuals(self) -> int:
         """Number of residuals."""
-        return jnp.array(24)
+        return 24
 
     def starting_point(self, y0_id: int = 0) -> Array:
         """Return the starting point for the problem."""

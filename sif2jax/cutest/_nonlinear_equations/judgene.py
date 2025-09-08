@@ -26,7 +26,7 @@ class JUDGENE(AbstractNonlinearEquations):
 
     def num_residuals(self) -> int:
         """Number of residuals."""
-        return jnp.array(20)
+        return 20
 
     def starting_point(self) -> Array:
         """Return the starting point for the problem."""

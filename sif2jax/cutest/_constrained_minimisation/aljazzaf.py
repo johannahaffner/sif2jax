@@ -111,7 +111,7 @@ class ALJAZZAF(AbstractConstrainedMinimisation):
     @property
     def n_con(self):
         """Number of constraints (1 equality constraint)."""
-        return jnp.array(1)
+        return 1
 
     @property
     def expected_result(self):

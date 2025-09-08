@@ -32,7 +32,7 @@ class CRESC4(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(6)
+        return 6
 
     @property
     def m(self):

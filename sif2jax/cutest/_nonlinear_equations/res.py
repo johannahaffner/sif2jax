@@ -28,12 +28,12 @@ class RES(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(20)
+        return 20
 
     @property
     def m(self):
         """Number of residuals/equations."""
-        return jnp.array(14)
+        return 14
 
     @property
     def y0(self):

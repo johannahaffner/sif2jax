@@ -445,7 +445,7 @@ class NELSONLS(AbstractUnconstrainedMinimisation):
     @property
     def n_var(self) -> int:
         """Number of variables (3 parameters)."""
-        return jnp.array(3)
+        return 3
 
     @property
     def y0s(self):

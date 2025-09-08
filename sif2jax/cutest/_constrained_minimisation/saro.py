@@ -99,14 +99,14 @@ class SARO(AbstractConstrainedMinimisation):
         # States: 9 * 366 = 3294
         # Controls: 2 * 365 = 730
         # Slack: 2 * 365 = 730
-        return jnp.array(4754)
+        return 4754
 
     @property
     def m(self):
         """Number of constraints: 4015"""
         # System equations: 9 * 365 = 3285
         # Path constraints: 2 * 365 = 730
-        return jnp.array(4015)
+        return 4015
 
     def _unpack_variables(self, y):
         """Unpack the variable vector into states, controls, and slack variables.

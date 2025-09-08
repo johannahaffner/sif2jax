@@ -61,12 +61,12 @@ class LSNNODOC(AbstractConstrainedMinimisation):
     @property
     def n_var(self):
         """Number of variables."""
-        return jnp.array(5)
+        return 5
 
     @property
     def n_con(self):
         """Number of constraints."""
-        return jnp.array(4)
+        return 4
 
     @property
     def y0(self):

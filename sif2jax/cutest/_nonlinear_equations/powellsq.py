@@ -26,12 +26,12 @@ class POWELLSQ(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(2)
+        return 2
 
     def num_residuals(self):
         """Number of residuals."""
         # 2 residual equations
-        return jnp.array(2)
+        return 2
 
     def residual(self, y, args):
         """Compute the residuals."""

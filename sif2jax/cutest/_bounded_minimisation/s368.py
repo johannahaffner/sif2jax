@@ -30,7 +30,7 @@ class S368(AbstractBoundedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(8)
+        return 8
 
     def objective(self, y, args):
         """Compute the objective function.

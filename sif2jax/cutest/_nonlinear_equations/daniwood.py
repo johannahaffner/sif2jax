@@ -36,7 +36,7 @@ class DANIWOOD(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables."""
-        return jnp.array(2)
+        return 2
 
     def num_residuals(self):
         """Number of residuals."""

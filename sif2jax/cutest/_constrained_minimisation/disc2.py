@@ -35,12 +35,12 @@ class DISC2(AbstractConstrainedMinimisation):
     @property
     def n_var(self) -> int:
         """Number of variables: 1 EPSILON + 11 U(I) + 11 V(I) + 6 ALPHA(I) = 29."""
-        return jnp.array(29)
+        return 29
 
     @property
     def n_con(self) -> int:
         """Number of constraints: 11 B(I) + 12 collinearity constraints = 23."""
-        return jnp.array(23)
+        return 23
 
     def objective(self, y: Array, args) -> Array:
         """Objective function: minimize EPSILON."""

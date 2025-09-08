@@ -31,7 +31,7 @@ class AIRCRFTA(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables (including fixed controls)."""
-        return jnp.array(8)
+        return 8
 
     @property
     def y0(self):

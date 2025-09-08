@@ -56,7 +56,7 @@ class SIPOW1(AbstractConstrainedMinimisation):
         return jnp.array(-1.0)
 
     def num_variables(self):
-        return jnp.array(2)
+        return 2
 
     @property
     def bounds(self):

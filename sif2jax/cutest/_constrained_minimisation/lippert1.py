@@ -27,9 +27,9 @@ class LIPPERT1(AbstractConstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    # Problem parameters (using smaller default for testing)
-    nx: int = 10  # Number of nodes in x direction
-    ny: int = 10  # Number of nodes in y direction
+    # Problem parameters (matching SIF file defaults)
+    nx: int = 100  # Number of nodes in x direction
+    ny: int = 100  # Number of nodes in y direction
 
     @property
     def dx(self):
@@ -61,10 +61,9 @@ class LIPPERT1(AbstractConstrainedMinimisation):
 
     @property
     def y0(self):
-        """Get initial point - all zeros except t = 1.0."""
-        x0 = jnp.zeros(self.n_var)
-        # Set t (last variable) to 1.0 (default for all other variables)
-        return x0.at[-1].set(1.0)
+        """Get initial point - all zeros (no explicit START POINT in SIF)."""
+        # The SIF file has no active START POINT section, so all variables start at 0
+        return jnp.zeros(self.n_var)
 
     @property
     def args(self):

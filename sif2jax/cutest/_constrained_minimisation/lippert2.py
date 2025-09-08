@@ -30,9 +30,9 @@ class LIPPERT2(AbstractConstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    # Problem parameters (using smaller default for testing)
-    nx: int = 10  # Number of nodes in x direction
-    ny: int = 10  # Number of nodes in y direction
+    # Problem parameters (matching SIF file defaults)
+    nx: int = 100  # Number of nodes in x direction
+    ny: int = 100  # Number of nodes in y direction
 
     @property
     def dx(self):

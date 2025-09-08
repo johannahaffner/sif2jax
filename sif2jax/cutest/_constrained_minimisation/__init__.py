@@ -1,5 +1,7 @@
 # TODO: ACOPP14 needs human review - complex AC OPF formulation
 # from .acopp14 import ACOPP14 as ACOPP14
+# TODO: AGG needs human review - MPS format LP problem requires careful parsing
+# from .agg import AGG as AGG
 # TODO: AIRPORT needs human review - constraint values don't match pycutest
 # from .airport import AIRPORT as AIRPORT
 
@@ -16,6 +18,7 @@ from .alsotame import ALSOTAME as ALSOTAME
 # from .aug2d import AUG2D as AUG2D
 from .avgasa import AVGASA as AVGASA
 from .avgasb import AVGASB as AVGASB
+from .batch import BATCH as BATCH
 from .biggsc4 import BIGGSC4 as BIGGSC4
 
 # from .avion2 import AVION2 as AVION2  # TODO: Human review - gradient discrepancies
@@ -515,6 +518,7 @@ from .zecevic4 import ZECEVIC4 as ZECEVIC4
 
 constrained_minimisation_problems = (
     # ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
+    # AGG(),  # TODO: needs human review - MPS format LP problem
     # AIRPORT(),  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA(),  # TODO: needs human review - L2 group type interpretation
     # ALLINITC(),  # Human review needed - dimension mismatch
@@ -532,6 +536,7 @@ constrained_minimisation_problems = (
     # ANTWERP(),  # TODO: needs human review - initial value calculation
     AVGASA(),
     AVGASB(),
+    BATCH(),
     # DEGTRIDL(),  # TODO: Human review - causes segfault despite correct implementation
     # AVION2(),  # TODO: Human review - gradient discrepancies
     # BDRY2(),  # TODO: Human review - objective values don't match pycutest

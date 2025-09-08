@@ -187,6 +187,7 @@ from ._constrained_minimisation import (
     DIPIGRI as DIPIGRI,
     # DISC2 as DISC2,  # TODO: Human review needed - see disc2.py for details
     # DIXCHLNG as DIXCHLNG,  # TODO: Human review needed - see dixchlng.py for details
+    # DIXCHLNV as DIXCHLNV,  # TODO: Human review needed - see dixchlnv.py for details
     # DNIEPER as DNIEPER,  # TODO: Human review needed - see dnieper.py for details
     # DITTERT as DITTERT,  # TODO: Human review needed
     # DEGTRIDL as DEGTRIDL,  # TODO: Human review - causes segfault
@@ -1592,6 +1593,7 @@ problems_dict = {
     "DIPIGRI": DIPIGRI(),
     # "DISC2": DISC2(),  # TODO: Human review needed - see disc2.py for details
     # "DIXCHLNG": DIXCHLNG(),  # TODO: Human review needed - see dixchlng.py for details
+    # "DIXCHLNV": DIXCHLNV(),  # TODO: Human review needed - see dixchlnv.py for details
     # "DNIEPER": DNIEPER(),  # TODO: Human review needed - see dnieper.py for details
     # "DITTERT": DITTERT(),  # TODO: Human review needed
     # "DRUGDIS": DRUGDIS(),  # TODO: Human review needed - see drugdis.py for details

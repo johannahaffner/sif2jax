@@ -204,6 +204,10 @@ from ._constrained_minimisation import (
     DTOC6 as DTOC6,
     # EG3 as EG3,  # TODO: Human review - large-scale problem causing test timeouts
     # EIGENACO as EIGENACO,  # TODO: Human review needed
+    EIGENB2 as EIGENB2,
+    EIGENBCO as EIGENBCO,
+    EIGENC2 as EIGENC2,
+    EIGENCCO as EIGENCCO,
     ELATTAR as ELATTAR,
     # EXTRASIM as EXTRASIM,  # TODO: Human review - pycutest timeout issue
     # ELEC as ELEC,  # TODO: Human review - numerical precision issue
@@ -578,6 +582,8 @@ from ._nonlinear_equations import (
     DRCAVTY3 as DRCAVTY3,
     ECKERLE4 as ECKERLE4,
     EGGCRATENE as EGGCRATENE,
+    EIGENB as EIGENB,
+    EIGENC as EIGENC,
     # EIGENA as EIGENA,  # TODO: Human review needed
     # EIGENAU as EIGENAU,  # TODO: Human review needed
     ELATVIDUNE as ELATVIDUNE,
@@ -1606,6 +1612,10 @@ problems_dict = {
     "DTOC6": DTOC6(),
     # "EG3": EG3(),  # TODO: Human review - large-scale problem causing test timeouts
     # "EIGENACO": EIGENACO(),  # TODO: Human review needed
+    "EIGENB2": EIGENB2(),
+    "EIGENBCO": EIGENBCO(),
+    "EIGENC2": EIGENC2(),
+    "EIGENCCO": EIGENCCO(),
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),
@@ -1652,7 +1662,9 @@ problems_dict = {
     "EG2": EG2(),
     "EGGCRATE": EGGCRATE(),
     "EIGENALS": EIGENALS(),
+    "EIGENB": EIGENB(),
     "EIGENBLS": EIGENBLS(),
+    "EIGENC": EIGENC(),
     "EIGENCLS": EIGENCLS(),
     "ELATVIDU": ELATVIDU(),
     "ENGVAL1": ENGVAL1(),

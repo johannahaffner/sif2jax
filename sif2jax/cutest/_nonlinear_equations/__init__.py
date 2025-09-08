@@ -80,6 +80,8 @@ from .drcavty3 import DRCAVTY3 as DRCAVTY3
 # from .dmn37143 import DMN37143 as DMN37143
 from .eckerle4 import ECKERLE4 as ECKERLE4
 from .eggcratene import EGGCRATENE as EGGCRATENE
+from .eigenb import EIGENB as EIGENB
+from .eigenc import EIGENC as EIGENC
 
 # TODO: Human review needed - systematic constraint value discrepancies
 # from .eigena import EIGENA as EIGENA
@@ -345,6 +347,8 @@ nonlinear_equations_problems = (
     # DMN37142(),  # TODO: Human review needed - Jacobian precision issues
     # DMN37143(),  # TODO: Human review needed - Jacobian precision issues
     EGGCRATENE(),
+    EIGENB(),
+    EIGENC(),
     # EIGENA(),  # TODO: Human review needed - systematic constraint value discrepancies
     # EIGENAU(),  # TODO: Human review needed - same constraint issues as EIGENA
     ELATVIDUNE(),

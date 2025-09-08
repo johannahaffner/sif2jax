@@ -51,7 +51,7 @@ class HS100MOD(AbstractConstrainedMinimisation):
         # O4: GVAR = X4 - 11, then square (scale 1/3)
         o4 = (1.0 / 3.0) * ((x4 - 11.0) ** 2)
 
-        # O5 group: -10*X6 - 8*X7 (linear terms) + element contributions (no L2 group type)
+        # O5 group: -10*X6 - 8*X7 (linear) + element contributions (no L2 type)
         # Element contributions from GROUP USES:
         # X5P6 with coefficient 10.0: 10*X5^6
         # EL with coefficient 1.0: ELT(X6, X7) = 7*X6^2 + X7^4 - 4*X6*X7
@@ -86,7 +86,7 @@ class HS100MOD(AbstractConstrainedMinimisation):
         c3_group = -23.0 * x1 + 8.0 * x7 - x2**2 - 6.0 * x6**2
         c3 = c3_group - (-196.0)
 
-        # C4: group = 11*X7 + 587*X4 + 391*X5 + 2193*X6 + elements, constant = 0 (not specified)
+        # C4: group = 11*X7 + 587*X4 + 391*X5 + 2193*X6 + elements, constant = 0
         c4 = (
             11.0 * x7
             + 587.0 * x4

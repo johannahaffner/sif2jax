@@ -89,8 +89,8 @@ def benchmark_jax(
 
 @pytest.fixture(autouse=True, scope="class")
 def clear_caches(problem):
-    jax.clear_caches()
     eqx.clear_caches()
+    jax.clear_caches()
 
     try:
         pycutest.clear_cache(problem.name)
@@ -99,8 +99,8 @@ def clear_caches(problem):
 
     yield
 
-    jax.clear_caches()
     eqx.clear_caches()
+    jax.clear_caches()
 
     try:
         pycutest.clear_cache(problem.name)

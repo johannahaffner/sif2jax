@@ -85,7 +85,7 @@ class LIPPERT2(AbstractConstrainedMinimisation):
         v_size = nx * (ny + 1)
         v = jnp.zeros((nx, ny + 1))
         for j in range(ny + 1):
-            alpha = j * dx / 2.0  # Note: using dx as in SIF file
+            alpha = j * dx / 2.0  # Note: SIF uses DX/2 for both U and V
             v = v.at[:, j].set(alpha)
         x0 = x0.at[1 + u_size : 1 + u_size + v_size].set(v.ravel())
 

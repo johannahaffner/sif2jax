@@ -48,6 +48,7 @@ from .hatfldc import HATFLDC as HATFLDC
 from .hs1 import HS1 as HS1
 from .hs2 import HS2 as HS2
 from .hs3 import HS3 as HS3
+from .hs3mod import HS3MOD as HS3MOD
 from .hs4 import HS4 as HS4
 from .hs5 import HS5 as HS5
 from .hs25 import HS25 as HS25
@@ -211,6 +212,7 @@ bounded_minimisation_problems = (
     HS1(),
     HS2(),
     HS3(),
+    HS3MOD(),
     HS4(),
     HS5(),
     HS25(),

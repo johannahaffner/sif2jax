@@ -29,12 +29,12 @@ class PFIT4(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables."""
-        return 3
+        return jnp.array(3)
 
     @property
     def m(self):
         """Number of residuals/equations."""
-        return 3
+        return jnp.array(3)
 
     @property
     def y0(self):

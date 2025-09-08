@@ -117,8 +117,8 @@ class HEART6(AbstractNonlinearEquations):
 
     @property
     def n_var(self):
-        return 6
+        return jnp.array(6)
 
     @property
     def n_con(self):
-        return 6
+        return jnp.array(6)

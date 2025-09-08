@@ -22,7 +22,7 @@ class TAME(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return 2
+        return jnp.array(2)
 
     @property
     def y0(self):

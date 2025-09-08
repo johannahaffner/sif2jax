@@ -25,12 +25,12 @@ class S308NE(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables."""
-        return 2
+        return jnp.array(2)
 
     @property
     def m(self):
         """Number of equations."""
-        return 3
+        return jnp.array(3)
 
     def constraint(self, y):
         """Compute the system of nonlinear equations."""

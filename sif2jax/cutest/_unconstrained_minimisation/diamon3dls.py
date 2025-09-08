@@ -33,17 +33,17 @@ class DIAMON3DLS(AbstractUnconstrainedMinimisation):
     @property
     def n(self):
         """Number of variables (33 weights + 33 widths + 33 positions)."""
-        return 99
+        return jnp.array(99)
 
     @property
     def m(self):
         """Number of data points."""
-        return 4643
+        return jnp.array(4643)
 
     @property
     def nvec(self):
         """Number of Lorentzian peaks."""
-        return 33
+        return jnp.array(33)
 
     @property
     def y0(self):

@@ -46,6 +46,7 @@ from ._bounded_minimisation import (
     HS1 as HS1,
     HS2 as HS2,
     HS3 as HS3,
+    HS3MOD as HS3MOD,
     HS4 as HS4,
     HS5 as HS5,
     HS25 as HS25,
@@ -254,6 +255,7 @@ from ._constrained_minimisation import (
     HS19 as HS19,
     HS20 as HS20,
     HS21 as HS21,
+    HS21MOD as HS21MOD,
     HS22 as HS22,
     HS23 as HS23,
     HS24 as HS24,
@@ -267,6 +269,8 @@ from ._constrained_minimisation import (
     HS33 as HS33,
     HS34 as HS34,
     HS35 as HS35,
+    HS35I as HS35I,
+    HS35MOD as HS35MOD,
     HS36 as HS36,
     HS37 as HS37,
     HS39 as HS39,
@@ -304,6 +308,7 @@ from ._constrained_minimisation import (
     HS73 as HS73,
     # HS74 as HS74,  # TODO: Human review - constraint Jacobian discrepancies
     # HS75 as HS75,  # TODO: Human review - same issues as HS74
+    HS76I as HS76I,
     HS77 as HS77,
     HS78 as HS78,
     HS79 as HS79,
@@ -311,9 +316,19 @@ from ._constrained_minimisation import (
     HS81 as HS81,
     HS83 as HS83,
     # HS84 as HS84,  # TODO: Human review - objective value discrepancy
+    # HS85 as HS85,  # TODO: Human review needed - requires implementing complex IFUN85 Fortran function
+    HS86 as HS86,
+    HS87 as HS87,
     HS93 as HS93,
+    HS95 as HS95,
+    HS96 as HS96,
+    HS97 as HS97,
+    HS98 as HS98,
     # HS99 as HS99,  # TODO: Needs human review - complex recursive formulation
+    HS99EXP as HS99EXP,
     HS100 as HS100,
+    # HS100MOD as HS100MOD,  # TODO: Human review - 610.67 objective discrepancy
+    # HS100LNP as HS100LNP,  # TODO: Human review - 610.67 objective discrepancy
     HS101 as HS101,
     HS102 as HS102,
     HS103 as HS103,
@@ -324,6 +339,7 @@ from ._constrained_minimisation import (
     HS108 as HS108,
     # HS109 as HS109,  # TODO: Human review needed - sign convention issues
     HS111 as HS111,
+    HS111LNP as HS111LNP,
     HS112 as HS112,
     HS113 as HS113,
     HS114 as HS114,
@@ -331,6 +347,7 @@ from ._constrained_minimisation import (
     HS117 as HS117,
     # HS118 as HS118,  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119 as HS119,
+    HS268 as HS268,
     HYDROELL as HYDROELL,
     # JANNSON3 as JANNSON3,  # TODO: Human review - Jacobian tests hang
     JANNSON4 as JANNSON4,
@@ -795,6 +812,11 @@ from ._quadratic_problems import (
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
     HS76 as HS76,
+    HS88 as HS88,
+    HS89 as HS89,
+    HS90 as HS90,
+    HS91 as HS91,
+    HS92 as HS92,
     # MOSARQP1 as MOSARQP1,  # TODO: Human review needed - objective/constraint issues
     # MOSARQP2 as MOSARQP2,  # TODO: Human review needed - objective/constraint issues
     JUNKTURN as JUNKTURN,
@@ -1187,6 +1209,7 @@ problems_dict = {
     "HS1": HS1(),
     "HS2": HS2(),
     "HS3": HS3(),
+    "HS3MOD": HS3MOD(),
     "HS4": HS4(),
     "HS5": HS5(),
     "HS6": HS6(),
@@ -1205,6 +1228,7 @@ problems_dict = {
     "HS19": HS19(),
     "HS20": HS20(),
     "HS21": HS21(),
+    "HS21MOD": HS21MOD(),
     "HS22": HS22(),
     "HS23": HS23(),
     "HS24": HS24(),
@@ -1219,6 +1243,8 @@ problems_dict = {
     "HS33": HS33(),
     "HS34": HS34(),
     "HS35": HS35(),
+    "HS35MOD": HS35MOD(),
+    "HS35I": HS35I(),
     "HS36": HS36(),
     "HS37": HS37(),
     "HS38": HS38(),
@@ -1258,15 +1284,31 @@ problems_dict = {
     # "HS74": HS74(),  # TODO: Human review - constraint Jacobian issues
     # "HS75": HS75(),  # TODO: Human review - same issues as HS74
     "HS76": HS76(),
+    "HS76I": HS76I(),
     "HS77": HS77(),
     "HS78": HS78(),
     "HS79": HS79(),
     "HS80": HS80(),
     "HS81": HS81(),
     "HS83": HS83(),
+    # "HS85": HS85(),  # TODO: Human review needed - requires implementing complex IFUN85 Fortran function
+    "HS86": HS86(),
+    "HS87": HS87(),
+    "HS88": HS88(),
+    "HS89": HS89(),
+    "HS90": HS90(),
+    "HS91": HS91(),
+    "HS92": HS92(),
     "HS93": HS93(),
+    "HS95": HS95(),
+    "HS96": HS96(),
+    "HS97": HS97(),
+    "HS98": HS98(),
     # "HS99": HS99(),  # TODO: Needs human review - complex recursive formulation
+    "HS99EXP": HS99EXP(),
     "HS100": HS100(),
+    # "HS100MOD": HS100MOD(),  # TODO: Human review - 610.67 objective discrepancy
+    # "HS100LNP": HS100LNP(),  # TODO: Human review - 610.67 objective discrepancy
     "HS101": HS101(),
     "HS102": HS102(),
     "HS103": HS103(),
@@ -1295,6 +1337,7 @@ problems_dict = {
     # "MINSURFO": MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # "NOBNDTOR": NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     "HS111": HS111(),
+    "HS111LNP": HS111LNP(),
     "HS112": HS112(),
     "HS113": HS113(),
     "HS114": HS114(),
@@ -1302,6 +1345,7 @@ problems_dict = {
     "HS117": HS117(),
     # "HS118": HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     "HS119": HS119(),
+    "HS268": HS268(),
     "HYDROELL": HYDROELL(),
     # "JANNSON3": JANNSON3(),  # TODO: Human review - Jacobian tests hang
     "JANNSON4": JANNSON4(),

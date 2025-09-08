@@ -26,7 +26,7 @@ class DENSCHNFNE(AbstractNonlinearEquations):
         return jnp.array([2.0, 0.0], dtype=jnp.float64)
 
     def num_residuals(self) -> int:
-        return 2
+        return jnp.array(2)
 
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the Dennis-Schnabel problem F"""

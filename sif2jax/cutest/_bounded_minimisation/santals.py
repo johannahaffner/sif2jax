@@ -42,7 +42,7 @@ class SANTALS(AbstractBoundedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 21
+        return jnp.array(21)
 
     def objective(self, y, args):
         """Compute the objective function.

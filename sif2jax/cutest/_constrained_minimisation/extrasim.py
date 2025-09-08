@@ -24,12 +24,12 @@ class EXTRASIM(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 2
+        return jnp.array(2)
 
     @property
     def m(self):
         """Number of constraints."""
-        return 1
+        return jnp.array(1)
 
     def objective(self, y: Array, args) -> Array:
         """Compute the objective function."""

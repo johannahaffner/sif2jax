@@ -21,7 +21,7 @@ class ZECEVIC2(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 2
+        return jnp.array(2)
 
     def objective(self, y, args):
         """Compute the objective function."""

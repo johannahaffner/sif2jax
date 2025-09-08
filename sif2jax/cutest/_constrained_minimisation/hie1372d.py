@@ -116,14 +116,14 @@ class HIE1372D(AbstractConstrainedMinimisation):
         """Number of variables."""
         if self._problem_data:
             return self._problem_data["n_vars"]
-        return 637
+        return jnp.array(637)
 
     @property
     def m(self):
         """Number of constraints."""
         if self._problem_data:
             return self._problem_data["n_constraints"] - 1  # Subtract 1 for MXR row
-        return 525
+        return jnp.array(525)
 
     @property
     def y0(self):

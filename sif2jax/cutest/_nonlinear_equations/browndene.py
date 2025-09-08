@@ -31,7 +31,7 @@ class BROWNDENE(AbstractNonlinearEquations):
         return jnp.array([25.0, 5.0, -5.0, -1.0], dtype=jnp.float64)
 
     def num_residuals(self) -> int:
-        return 20
+        return jnp.array(20)
 
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the Brown and Dennis problem

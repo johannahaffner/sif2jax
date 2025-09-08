@@ -26,7 +26,7 @@ class TRUSPYR2(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables (8 cross-sectional areas + 3 displacements)."""
-        return 11
+        return jnp.array(11)
 
     def _get_problem_data(self):
         """Get the problem-specific data for the truss structure."""

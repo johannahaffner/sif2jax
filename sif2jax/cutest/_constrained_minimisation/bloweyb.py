@@ -41,7 +41,7 @@ class BLOWEYB(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of discretization intervals (N=2000 from SIF)."""
-        return 2000
+        return jnp.array(2000)
 
     def _compute_v_values(self):
         """Compute the piecewise linear function v(s) values."""

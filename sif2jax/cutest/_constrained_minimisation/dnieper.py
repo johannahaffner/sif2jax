@@ -35,12 +35,12 @@ class DNIEPER(AbstractConstrainedMinimisation):
     @property
     def n_var(self) -> int:
         """Number of variables: 56 X(I) + 4 fixed variables + 1 AC = 61."""
-        return 61
+        return jnp.array(61)
 
     @property
     def n_con(self) -> int:
         """Number of constraints."""
-        return 24
+        return jnp.array(24)
 
     def objective(self, y: Array, args) -> Array:
         """Objective function with quadratic, cubic and product terms."""

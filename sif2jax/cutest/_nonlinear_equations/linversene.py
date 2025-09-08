@@ -59,7 +59,7 @@ class LINVERSENE(AbstractNonlinearEquations):
     def _get_target_matrix_element(self, i: int, j: int):
         """Compute T(i,j) = sin(i)cos(j) for pentadiagonal matrix."""
         if abs(i - j) > 2:
-            return 0.0
+            return jnp.array(0.0)
         return jnp.sin(float(i)) * jnp.cos(float(j))
 
     def residual(self, y: Array, args) -> Array:

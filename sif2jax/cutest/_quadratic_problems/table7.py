@@ -46,12 +46,12 @@ class TABLE7(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return 624
+        return jnp.array(624)
 
     @property
     def m(self):
         """Number of constraints."""
-        return 230
+        return jnp.array(230)
 
     @property
     def y0(self):

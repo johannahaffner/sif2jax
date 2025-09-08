@@ -33,7 +33,7 @@ class RECIPELS(AbstractUnconstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 3
+        return jnp.array(3)
 
     def objective(self, y, args):
         """Compute the objective function."""

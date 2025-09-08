@@ -22,7 +22,7 @@ class WAYSEA1(AbstractUnconstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 2
+        return jnp.array(2)
 
     def objective(self, y, args):
         """Compute the sum of squares objective."""

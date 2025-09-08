@@ -27,7 +27,7 @@ class KOWOSBNE(AbstractNonlinearEquations):
 
     def num_residuals(self) -> int:
         """Number of residuals."""
-        return 11
+        return jnp.array(11)
 
     def starting_point(self) -> Array:
         """Return the starting point for the problem."""

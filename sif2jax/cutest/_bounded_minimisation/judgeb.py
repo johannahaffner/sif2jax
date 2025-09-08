@@ -24,7 +24,7 @@ class JUDGEB(AbstractBoundedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 2
+        return jnp.array(2)
 
     def objective(self, y, args):
         """Least squares objective function."""

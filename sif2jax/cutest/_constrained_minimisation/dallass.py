@@ -25,12 +25,12 @@ class DALLASS(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 46
+        return jnp.array(46)
 
     @property
     def m(self):
         """Number of constraints."""
-        return 31
+        return jnp.array(31)
 
     def objective(self, y, args):
         """Compute the objective function.

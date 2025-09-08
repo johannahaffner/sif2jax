@@ -27,7 +27,7 @@ class ARGAUSS(AbstractNonlinearEquations):
         return jnp.array([0.4, 1.0, 0.0], dtype=jnp.float64)
 
     def num_residuals(self) -> int:
-        return 15
+        return jnp.array(15)
 
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the gaussian problem"""

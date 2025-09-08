@@ -103,7 +103,7 @@ class MGH17SLS(AbstractUnconstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 5
+        return jnp.array(5)
 
     @property
     def y0(self):

@@ -57,7 +57,7 @@ class PENTAGON(AbstractConstrainedMinimisation):
         return jnp.array(1.36521631e-04)
 
     def num_variables(self):
-        return 6
+        return jnp.array(6)
 
     @property
     def bounds(self):

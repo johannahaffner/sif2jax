@@ -101,7 +101,7 @@ class READING5(AbstractConstrainedMinimisation):
         numerator = x[1:] - x[:-1]
         denominator = cos_2pi_ti - x[1:]
 
-        # Handle division by zero: when both num and denom are 0, return 0
+        # Handle division by zero: when both num and denom are 0, return jnp.array(0)
         # This occurs at t=1.0 when x=1.0 (cos(2π)=1)
         uc = jnp.where(jnp.abs(denominator) < 1e-10, 0.0, numerator / denominator)
 

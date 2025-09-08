@@ -26,12 +26,12 @@ class S365(AbstractConstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 7
+        return jnp.array(7)
 
     @property
     def m(self):
         """Number of constraints."""
-        return 5
+        return jnp.array(5)
 
     def objective(self, y, args):
         """Compute the objective function."""

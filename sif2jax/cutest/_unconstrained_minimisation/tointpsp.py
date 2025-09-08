@@ -27,7 +27,7 @@ class TOINTPSP(AbstractUnconstrainedMinimisation):
     @property
     def n(self):
         """Number of variables."""
-        return 50
+        return jnp.array(50)
 
     def _get_problem_data(self):
         """Get the problem-specific data."""

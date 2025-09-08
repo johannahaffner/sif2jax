@@ -32,12 +32,12 @@ class HYPCIR(AbstractNonlinearEquations):
     @property
     def m(self):
         """Number of equations."""
-        return 2
+        return jnp.array(2)
 
     @property
     def n(self):
         """Number of variables."""
-        return 2
+        return jnp.array(2)
 
     def residual(self, y, args):
         """Compute the residuals (vectorized).

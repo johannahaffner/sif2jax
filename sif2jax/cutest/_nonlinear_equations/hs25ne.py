@@ -25,7 +25,7 @@ class HS25NE(AbstractNonlinearEquations):
 
     def num_residuals(self) -> int:
         """Number of residuals."""
-        return 99
+        return jnp.array(99)
 
     def starting_point(self) -> Array:
         """Return the starting point for the problem."""

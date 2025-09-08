@@ -71,7 +71,7 @@ class PALMER6ENE(AbstractNonlinearEquations):
     @property
     def M_residuals(self):
         """Number of residual functions."""
-        return 13
+        return jnp.array(13)
 
     def residual(self, y, args):
         """Compute the residual functions."""

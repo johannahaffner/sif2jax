@@ -22,12 +22,12 @@ class QPNSTAIR(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return 467
+        return jnp.array(467)
 
     @property
     def m(self):
         """Number of constraints."""
-        return 356
+        return jnp.array(356)
 
     @property
     def y0(self):

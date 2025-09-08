@@ -34,7 +34,7 @@ class BROYDN3D(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables (default 5000)."""
-        return 5000
+        return jnp.array(5000)
 
     @property
     def y0(self):

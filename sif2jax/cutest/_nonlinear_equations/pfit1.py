@@ -22,11 +22,11 @@ class PFIT1(AbstractNonlinearEquations):
     @property
     def n(self):
         """Number of variables."""
-        return 3
+        return jnp.array(3)
 
     def num_residuals(self):
         """Number of residual equations."""
-        return 3
+        return jnp.array(3)
 
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals for the three equations."""

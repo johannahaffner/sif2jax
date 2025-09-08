@@ -69,7 +69,7 @@ class A0ENDNDL(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return 45006
+        return jnp.array(45006)
 
     @property
     def y0(self):

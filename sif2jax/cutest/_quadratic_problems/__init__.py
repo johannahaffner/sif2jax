@@ -60,6 +60,11 @@ from .gouldqp3 import GOULDQP3 as GOULDQP3
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
 from .hs76 import HS76 as HS76
+from .hs88 import HS88 as HS88
+from .hs89 import HS89 as HS89
+from .hs90 import HS90 as HS90
+from .hs91 import HS91 as HS91
+from .hs92 import HS92 as HS92
 
 # from .mosarqp1 import MOSARQP1 as MOSARQP1  # TODO: Human review - objective issues
 # from .mosarqp2 import MOSARQP2 as MOSARQP2  # TODO: Human review - objective issues
@@ -182,6 +187,11 @@ constrained_quadratic_problems = (
     HS44NEW(),
     JUNKTURN(),
     HS76(),
+    HS88(),
+    HS89(),
+    HS90(),
+    HS91(),
+    HS92(),
     # MOSARQP1(),  # TODO: Human review needed - objective/constraint issues
     # MOSARQP2(),  # TODO: Human review needed - objective/constraint issues
     NASH(),

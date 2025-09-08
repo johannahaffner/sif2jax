@@ -47,12 +47,12 @@ class LSQFIT(AbstractConstrainedMinimisation):
     @property
     def n_var(self):
         """Number of variables."""
-        return 2
+        return jnp.array(2)
 
     @property
     def n_con(self):
         """Number of constraints."""
-        return 1
+        return jnp.array(1)
 
     @property
     def y0s(self):

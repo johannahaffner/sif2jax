@@ -28,7 +28,7 @@ class BEALENE(AbstractNonlinearEquations):
         return jnp.ones(self.n, dtype=jnp.float64)
 
     def num_residuals(self) -> int:
-        return 3
+        return jnp.array(3)
 
     def residual(self, y: Array, args) -> Array:
         """Compute the residuals of the Beale problem"""

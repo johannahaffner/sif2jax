@@ -443,12 +443,12 @@ class NELSON(AbstractNonlinearEquations):
     @property
     def n_var(self) -> int:
         """Number of variables (3 parameters)."""
-        return 3
+        return jnp.array(3)
 
     @property
     def n_con(self) -> int:
         """Number of constraints (128 data points)."""
-        return 128
+        return jnp.array(128)
 
     @property
     def y0s(self):

@@ -105,11 +105,15 @@ from .dtoc2 import DTOC2 as DTOC2
 # TODO: DTOC3 needs human review - X(1498) and X(1499) treated as 0 by pycutest
 # from .dtoc3 import DTOC3 as DTOC3
 from .dtoc4 import DTOC4 as DTOC4
+from .dtoc5 import DTOC5 as DTOC5
+from .dtoc6 import DTOC6 as DTOC6
 
 # TODO: Human review needed - same constraint issues as EIGENA
 # from .eigenaco import EIGENACO as EIGENACO
-from .dtoc5 import DTOC5 as DTOC5
-from .dtoc6 import DTOC6 as DTOC6
+from .eigenb2 import EIGENB2 as EIGENB2
+from .eigenbco import EIGENBCO as EIGENBCO
+from .eigenc2 import EIGENC2 as EIGENC2
+from .eigencco import EIGENCCO as EIGENCCO
 
 # TODO: EG3 needs human review - large-scale problem (N=10000) timeouts
 # from .eg3 import EG3 as EG3
@@ -595,6 +599,10 @@ constrained_minimisation_problems = (
     DTOC6(),
     # EG3(),  # TODO: Human review - large-scale problem causing test timeouts
     # EIGENACO(),  # TODO: Human review needed - same constraint issues as EIGENA
+    EIGENB2(),
+    EIGENBCO(),
+    EIGENC2(),
+    EIGENCCO(),
     ELATTAR(),
     # EXTRASIM(),  # TODO: Human review - pycutest timeout issue
     # ELEC(),  # TODO: Human review - numerical precision issue (see import comment)

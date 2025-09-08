@@ -90,28 +90,38 @@ def benchmark_jax(
 def clear_caches(problem):
     jax.clear_caches()
 
-    try:
-        pycutest.clear_cache(problem.name)
-    except (KeyError, FileNotFoundError):
-        pass
+    # try:
+    #     pycutest.clear_cache(problem.name)
+    # except (KeyError, FileNotFoundError):
+    #     pass
 
     yield
 
     jax.clear_caches()
 
-    try:
-        pycutest.clear_cache(problem.name)
-    except (KeyError, FileNotFoundError):
-        pass
+    # try:
+    #     pycutest.clear_cache(problem.name)
+    # except (KeyError, FileNotFoundError):
+    #     pass
+
+
+@pytest.fixture(scope="class")
+def pycutest_problem(problem):
+    pycutest_problem_ = pycutest.import_problem(
+        problem.name, drop_fixed_variables=False
+    )
+    yield pycutest_problem_
+
+    pycutest.clear_cache(problem.name)
 
 
 class TestRuntime:
     """Runtime benchmarks comparing JAX to pycutest."""
 
-    @pytest.fixture(scope="class")
-    def pycutest_problem(self, problem):
-        print(f"running problem {problem.name}")
-        return pycutest.import_problem(problem.name, drop_fixed_variables=False)
+    # @pytest.fixture(scope="class")
+    # def pycutest_problem(self, problem):
+    #     print(f"running problem {problem.name}")
+    #     return pycutest.import_problem(problem.name, drop_fixed_variables=False)
 
     @pytest.fixture
     def threshold(self, request):

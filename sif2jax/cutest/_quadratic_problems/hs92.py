@@ -129,27 +129,35 @@ class HS92(AbstractConstrainedQuadraticProblem):
         # Calculate p functions (partial sums of squares)
         # For N=6: p[k] = sum(x_i^2, i=k..N) for k=1..N, p[N+1]=0
         n = 6
+        # Vectorized: reverse cumulative sum of squared elements
+        y_squared = y[:n] ** 2
         p = jnp.zeros(n + 1, dtype=y.dtype)
-        for k in range(n, 0, -1):
-            p = p.at[k - 1].set(p[k] + y[k - 1] ** 2)
+        # Reverse cumsum: sum from current index to end
+        p = p.at[:n].set(jnp.cumsum(y_squared[::-1])[::-1])
 
         # Calculate rho functions following Fortran logic
-        muj2 = mu**2
+        muj2 = mu**2  # Shape: (30,)
 
-        # Initial contribution from i=1
-        u = jnp.exp(-muj2 * p[0])
+        # Vectorized computation for all mu values at once
+        # Alternating sign pattern: [1, -2, 2, -2, 2, -2]
+        signs = jnp.array([1.0, -2.0, 2.0, -2.0, 2.0, -2.0])
 
-        # Alternating contributions
-        alpha = -2.0
-        for i in range(1, n):
-            u = u + alpha * jnp.exp(-muj2 * p[i])
-            alpha = -alpha
+        # Compute exp terms for all combinations of mu and p
+        # muj2[:, None] has shape (30, 1), p[None, :n] has shape (1, 6)
+        # Broadcasting will give shape (30, 6)
+        exp_terms = jnp.exp(-muj2[:, None] * p[None, :n])
 
-        # Final constant term (alpha after loop, p[n]=0 so exp(0)=1)
-        u = u + 0.5 * alpha
+        # Apply signs and sum across p dimension
+        # signs has shape (6,), exp_terms has shape (30, 6)
+        # Broadcasting will apply signs to each row
+        u = jnp.sum(signs[None, :] * exp_terms, axis=1)
 
-        # Compute rho
-        rho = -u / muj2
+        # Final constant term: alpha would be 2 after 5 iterations (starting from -2)
+        # So 0.5 * alpha = 1.0, and exp(0) = 1
+        u = u + 1.0
+
+        # Compute rho for each mu
+        rho = -u / muj2  # Shape: (30,)
 
         # Calculate the function value H(x)
         h_val = t

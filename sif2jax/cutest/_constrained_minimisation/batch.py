@@ -222,28 +222,27 @@ class BATCH(AbstractConstrainedMinimisation):
         # Equality constraints
 
         # 1. NPAR constraints: sum_k Y[k,j] * log(k+1) - N[j] = 0 for each stage j
-        for j in range(6):
-            npar_constraint = jnp.sum(Y_vars[:, j] * self.LOGI) - N_vars[j]
-            eq_constraints.append(npar_constraint)
+        # Vectorized: compute all 6 constraints at once
+        npar_constraints = jnp.sum(Y_vars * self.LOGI[:, None], axis=0) - N_vars
+        eq_constraints.extend(npar_constraints)
 
         # 2. SOS1 constraints: sum_k Y[k,j] - 1 = 0 for each stage j
-        for j in range(6):
-            sos1_constraint = jnp.sum(Y_vars[:, j]) - 1.0
-            eq_constraints.append(sos1_constraint)
+        # Vectorized: compute all 6 constraints at once
+        sos1_constraints = jnp.sum(Y_vars, axis=0) - 1.0
+        eq_constraints.extend(sos1_constraints)
 
         # Inequality constraints (all of form g >= 0)
 
         # 3. VOL constraints: V[j] - B[i] - S[i,j] >= 0 for each product i, stage j
-        for i in range(5):
-            for j in range(6):
-                vol_constraint = V_vars[j] - B_vars[i] - self.S[i, j]
-                ineq_constraints.append(vol_constraint)
+        # Vectorized: compute all 5*6=30 constraints at once
+        # V_vars[None, :] broadcasts V to shape (1, 6), B_vars[:, None] to (5, 1)
+        vol_constraints = V_vars[None, :] - B_vars[:, None] - self.S
+        ineq_constraints.extend(vol_constraints.flatten())
 
         # 4. CYCL constraints: N[j] + TL[i] - T[i,j] >= 0 for each product i, stage j
-        for i in range(5):
-            for j in range(6):
-                cycl_constraint = N_vars[j] + TL_vars[i] - self.T[i, j]
-                ineq_constraints.append(cycl_constraint)
+        # Vectorized: compute all 5*6=30 constraints at once
+        cycl_constraints = N_vars[None, :] + TL_vars[:, None] - self.T
+        ineq_constraints.extend(cycl_constraints.flatten())
 
         # 5. HORIZON constraint: sum_i Q[i] * exp(TL[i] - B[i]) - H >= 0
         # Pycutest expects positive value, so flip the sign from H - sum to sum - H

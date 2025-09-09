@@ -86,19 +86,24 @@ class EIGENB(AbstractNonlinearEquations):
         # Interleave eigen and orthogonality residuals following SIF structure
         # For each J (column), for each I <= J (row): E(I,J) then O(I,J)
         identity = jnp.eye(self._N)
-        all_residuals = []
 
-        for j in range(self._N):  # J from 1 to N (0-indexed)
-            for i in range(j + 1):  # I from 1 to J (0-indexed: 0 to j)
-                # E(I,J): eigen equation Q^T D Q - A = 0
-                e_residual = qtdq[i, j] - a[i, j]
-                all_residuals.append(e_residual)
+        # Get upper triangular indices in column-major order
+        i_indices, j_indices = jnp.triu_indices(self._N)
+        order = jnp.lexsort((i_indices, j_indices))
+        i_ordered = i_indices[order]
+        j_ordered = j_indices[order]
 
-                # O(I,J): orthogonality Q^T Q - I = 0
-                o_residual = qtq[i, j] - identity[i, j]
-                all_residuals.append(o_residual)
+        # Extract eigen and orthogonality residuals
+        e_residuals = (qtdq - a)[i_ordered, j_ordered]
+        o_residuals = (qtq - identity)[i_ordered, j_ordered]
 
-        return jnp.array(all_residuals)
+        # Interleave: for each position, place E then O
+        n_constraints = len(e_residuals)
+        all_residuals = jnp.zeros(2 * n_constraints)
+        all_residuals = all_residuals.at[::2].set(e_residuals)  # E at even indices
+        all_residuals = all_residuals.at[1::2].set(o_residuals)  # O at odd indices
+
+        return all_residuals
 
     @property
     def y0(self):

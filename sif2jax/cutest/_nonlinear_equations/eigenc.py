@@ -58,9 +58,7 @@ class EIGENC(AbstractNonlinearEquations):
         # Create diagonal: M, M-1, ..., 0, ..., M-1, M
         # From SIF: A(J,J) = M+1-J (for J from 1 to N in 1-based indexing)
         # Converting to 0-based: A[j,j] = M+1-(j+1) = M-j
-        diag = jnp.zeros(n)
-        for j in range(n):
-            diag = diag.at[j].set(float(m - j))
+        diag = m - jnp.arange(n, dtype=float)
 
         # Create off-diagonals: all 1.0
         off_diag = jnp.ones(n - 1)
@@ -104,19 +102,22 @@ class EIGENC(AbstractNonlinearEquations):
         # Interleave eigen and orthogonality residuals following SIF structure
         # For each J (column), for each I <= J (row): E(I,J) then O(I,J)
         identity = jnp.eye(self._N)
-        all_residuals = []
 
-        for j in range(self._N):  # J from 1 to N (0-indexed)
-            for i in range(j + 1):  # I from 1 to J (0-indexed: 0 to j)
-                # E(I,J): eigen equation Q^T D Q - A = 0
-                e_residual = qtdq[i, j] - a[i, j]
-                all_residuals.append(e_residual)
+        # Get upper triangular indices in column-major order
+        i_indices, j_indices = jnp.triu_indices(self._N)
+        order = jnp.lexsort((i_indices, j_indices))
+        i_ordered = i_indices[order]
+        j_ordered = j_indices[order]
 
-                # O(I,J): orthogonality Q^T Q - I = 0
-                o_residual = qtq[i, j] - identity[i, j]
-                all_residuals.append(o_residual)
+        # Extract eigen and orthogonality residuals
+        e_residuals = (qtdq - a)[i_ordered, j_ordered]
+        o_residuals = (qtq - identity)[i_ordered, j_ordered]
 
-        all_residuals = jnp.array(all_residuals)
+        # Interleave: for each position, place E then O
+        n_constraints = len(e_residuals)
+        all_residuals = jnp.zeros(2 * n_constraints)
+        all_residuals = all_residuals.at[::2].set(e_residuals)  # E at even indices
+        all_residuals = all_residuals.at[1::2].set(o_residuals)  # O at odd indices
 
         return all_residuals
 

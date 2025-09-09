@@ -275,9 +275,19 @@ class BQPGASIM(AbstractBoundedQuadraticProblem):
             (40, 47, -1.0000e02),
         ]
 
-        for i, j, val in off_diag:
-            H = H.at[i, j].set(val)
-            H = H.at[j, i].set(val)  # Symmetric matrix
+        # Vectorized approach: extract indices and values
+        if off_diag:
+            off_diag_array = jnp.array(off_diag)
+            i_indices = off_diag_array[:, 0].astype(int)
+            j_indices = off_diag_array[:, 1].astype(int)
+            values = off_diag_array[:, 2]
+
+            # Set both (i,j) and (j,i) for symmetric matrix
+            all_i = jnp.concatenate([i_indices, j_indices])
+            all_j = jnp.concatenate([j_indices, i_indices])
+            all_values = jnp.concatenate([values, values])
+
+            H = H.at[all_i, all_j].set(all_values)
 
         # Compute the quadratic objective: 0.5 * y^T H y + c^T y
         return 0.5 * jnp.dot(y, jnp.dot(H, y)) + jnp.dot(c, y)

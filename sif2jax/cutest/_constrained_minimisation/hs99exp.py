@@ -36,8 +36,8 @@ class HS99EXP(AbstractConstrainedMinimisation):
         # X(1) at position 0
         y0 = y0.at[0].set(0.5)
         # X(2:7) at positions 4, 8, 12, 16, 20, 24
-        for i, pos in enumerate([4, 8, 12, 16, 20, 24]):
-            y0 = y0.at[pos].set(0.5)
+        positions = jnp.array([4, 8, 12, 16, 20, 24])
+        y0 = y0.at[positions].set(0.5)
         # Note: R(1), Q(1), S(1) don't appear as variables
         return y0
 
@@ -70,9 +70,9 @@ class HS99EXP(AbstractConstrainedMinimisation):
         # X(1) at position 0, X(2:7) at positions 4, 8, 12, 16, 20, 24
         lower = lower.at[0].set(0.0)
         upper = upper.at[0].set(1.58)
-        for pos in [4, 8, 12, 16, 20, 24]:  # X(2:7)
-            lower = lower.at[pos].set(0.0)
-            upper = upper.at[pos].set(1.58)
+        positions = jnp.array([4, 8, 12, 16, 20, 24])  # X(2:7)
+        lower = lower.at[positions].set(0.0)
+        upper = upper.at[positions].set(1.58)
 
         # R(1), Q(1), S(1) are fixed at 0 (positions 28, 29, 30)
         lower = lower.at[28].set(0.0)  # R(1)
@@ -99,13 +99,14 @@ class HS99EXP(AbstractConstrainedMinimisation):
         x = x.at[0].set(y[0])
 
         # Pattern: after X(1), we have groups of [R(i), Q(i), S(i), X(i)] for i=2..7
-        for i in range(2, 8):
-            base = 1 + 4 * (i - 2)  # Start position for group i
-            r = r.at[i - 1].set(y[base])  # R(i)
-            q = q.at[i - 1].set(y[base + 1])  # Q(i)
-            s = s.at[i - 1].set(y[base + 2])  # S(i)
-            if i < 8:  # X(i) for i=2..7
-                x = x.at[i - 1].set(y[base + 3])
+        # Vectorized extraction
+        i_range = jnp.arange(2, 8)
+        base_positions = 1 + 4 * (i_range - 2)  # Start positions for groups
+
+        r = r.at[i_range - 1].set(y[base_positions])  # R(2:7)
+        q = q.at[i_range - 1].set(y[base_positions + 1])  # Q(2:7)
+        s = s.at[i_range - 1].set(y[base_positions + 2])  # S(2:7)
+        x = x.at[i_range - 1].set(y[base_positions + 3])  # X(2:7)
 
         # R(8), Q(8), S(8) at positions 25, 26, 27
         r = r.at[7].set(y[25])
@@ -135,39 +136,40 @@ class HS99EXP(AbstractConstrainedMinimisation):
         eq_constraints = []
 
         # R(i)DEF constraints: R(i) - R(i-1) - A(i)*DT(i)*cos(X(i-1)) = 0 for i=2..8
-        # For i in range(1,8) representing I=2..8, X(I-1) means x[i-1] in 0-indexed
-        for i in range(1, 8):
-            constraint = r[i] - r[i - 1] - a[i] * dt[i - 1] * cos_x[i - 1]
-            eq_constraints.append(constraint)
+        # Vectorized computation for i=1..7 (representing I=2..8 in SIF)
+        i_indices = jnp.arange(1, 8)
+        r_constraints = (
+            r[i_indices]
+            - r[i_indices - 1]
+            - a[i_indices] * dt[i_indices - 1] * cos_x[i_indices - 1]
+        )
+        eq_constraints.extend(r_constraints)
 
         # Q(i)DEF constraints: Q(i) - Q(i-1) - DT(i)*S(i-1) - A(i)*DT(i)^2/2*sin(X(i-1))
         # = RHS for i=2..8
         # RHS = B*DT(i)^2/2 for i=2..7, special values for i=8
-        for i in range(1, 8):
-            if i < 7:
-                rhs = B * dt[i - 1] ** 2 / 2.0
-            else:  # i == 7, which is i=8 in SIF (1-indexed)
-                rhs = 100000.0
-
-            constraint = (
-                q[i]
-                - q[i - 1]
-                - dt[i - 1] * s[i - 1]
-                - a[i] * dt[i - 1] ** 2 / 2.0 * sin_x[i - 1]
-                - rhs
-            )
-            eq_constraints.append(constraint)
+        # Vectorized computation
+        rhs_q = jnp.where(i_indices < 7, B * dt[i_indices - 1] ** 2 / 2.0, 100000.0)
+        q_constraints = (
+            q[i_indices]
+            - q[i_indices - 1]
+            - dt[i_indices - 1] * s[i_indices - 1]
+            - a[i_indices] * dt[i_indices - 1] ** 2 / 2.0 * sin_x[i_indices - 1]
+            - rhs_q
+        )
+        eq_constraints.extend(q_constraints)
 
         # S(i)DEF constraints: S(i) - S(i-1) - A(i)*DT(i)*sin(X(i-1)) = RHS for i=2..8
         # RHS = B*DT(i) for i=2..7, special value for i=8
-        for i in range(1, 8):
-            if i < 7:
-                rhs = B * dt[i - 1]
-            else:  # i == 7, which is i=8 in SIF (1-indexed)
-                rhs = 1000.0
-
-            constraint = s[i] - s[i - 1] - a[i] * dt[i - 1] * sin_x[i - 1] - rhs
-            eq_constraints.append(constraint)
+        # Vectorized computation
+        rhs_s = jnp.where(i_indices < 7, B * dt[i_indices - 1], 1000.0)
+        s_constraints = (
+            s[i_indices]
+            - s[i_indices - 1]
+            - a[i_indices] * dt[i_indices - 1] * sin_x[i_indices - 1]
+            - rhs_s
+        )
+        eq_constraints.extend(s_constraints)
 
         equalities = jnp.array(eq_constraints)
 

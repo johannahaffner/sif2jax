@@ -79,15 +79,14 @@ class EIGENBCO(AbstractConstrainedMinimisation):
         qtdq = q.T @ (d[:, None] * q)
 
         # Sum of squares for upper triangular part only (I <= J)
-        total_obj = 0.0
+        # Vectorized: use triu_indices to get upper triangular indices
+        i_indices, j_indices = jnp.triu_indices(self._N)
 
         # Eigen equation residuals: Q^T D Q - A
-        for i in range(self._N):
-            for j in range(i, self._N):
-                e_residual = qtdq[i, j] - a[i, j]
-                total_obj += e_residual**2
+        e_residuals = qtdq[i_indices, j_indices] - a[i_indices, j_indices]
+        total_obj = jnp.sum(e_residuals**2)
 
-        return jnp.array(total_obj)
+        return total_obj
 
     def constraint(self, y):
         """Compute the equality constraints.
@@ -102,12 +101,19 @@ class EIGENBCO(AbstractConstrainedMinimisation):
         identity = jnp.eye(self._N)
 
         # Extract upper triangular part (including diagonal) as constraints
-        constraints = []
-        for j in range(self._N):  # J from 1 to N (0-indexed)
-            for i in range(j + 1):  # I from 1 to J (0-indexed: 0 to j)
-                constraints.append(qtq[i, j] - identity[i, j])
+        # Vectorized approach using triu_indices to get upper triangular indices
+        i_indices, j_indices = jnp.triu_indices(self._N)
 
-        return jnp.array(constraints), None  # Only equality constraints
+        # The SIF ordering is column-major: for each j, all i <= j
+        # Sort by j first, then by i to match the nested loop order
+        order = jnp.lexsort((i_indices, j_indices))
+        i_ordered = i_indices[order]
+        j_ordered = j_indices[order]
+
+        # Extract constraints in the correct order
+        constraints = (qtq - identity)[i_ordered, j_ordered]
+
+        return constraints, None  # Only equality constraints
 
     @property
     def bounds(self):

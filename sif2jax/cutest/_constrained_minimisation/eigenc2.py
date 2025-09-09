@@ -58,9 +58,7 @@ class EIGENC2(AbstractConstrainedMinimisation):
         # Create diagonal: M, M-1, ..., 0, ..., M-1, M
         # From SIF: A(J,J) = M+1-J (for J from 1 to N in 1-based indexing)
         # Converting to 0-based: A[j,j] = M+1-(j+1) = M-j
-        diag = jnp.zeros(n)
-        for j in range(n):
-            diag = diag.at[j].set(float(m - j))
+        diag = m - jnp.arange(n, dtype=float)
 
         # Create off-diagonals: all 1.0
         off_diag = jnp.ones(n - 1)
@@ -115,12 +113,19 @@ class EIGENC2(AbstractConstrainedMinimisation):
         identity = jnp.eye(self._N)
 
         # Extract constraints following SIF order: for J, for I <= J: O(I,J)
-        constraints = []
-        for j in range(self._N):  # J from 1 to N (0-indexed)
-            for i in range(j + 1):  # I from 1 to J (0-indexed: 0 to j)
-                constraints.append(qtq[i, j] - identity[i, j])
+        # Vectorized approach using triu_indices to get upper triangular indices
+        i_indices, j_indices = jnp.triu_indices(self._N)
 
-        return jnp.array(constraints), None  # Only equality constraints
+        # The SIF ordering is column-major: for each j, all i <= j
+        # Sort by j first, then by i to match the nested loop order
+        order = jnp.lexsort((i_indices, j_indices))
+        i_ordered = i_indices[order]
+        j_ordered = j_indices[order]
+
+        # Extract constraints in the correct order
+        constraints = (qtq - identity)[i_ordered, j_ordered]
+
+        return constraints, None  # Only equality constraints
 
     @property
     def bounds(self):

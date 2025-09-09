@@ -13,11 +13,12 @@ class BQPGAUSS(AbstractBoundedQuadraticProblem):
 
     classification QBR2-AN-2003-0
 
-    TODO: Human review needed
+    TODO: Human review needed - This problem needs to be vectorized to remove for-loops
     Attempts made:
     - Extracted complete SIF data: 2003 linear coefficients, 999 diagonal elements,
       5287 off-diagonal elements
     - Created vectorized sparse matrix implementation
+    - For-loops in lines 198, 237, 343 need to be replaced with JAX scatter operations
     - Fixed bounds issues (variables 754+ should have bounds [-1.0, 1.0])
     Suspected issues:
     - Very large data size makes maintainable implementation challenging

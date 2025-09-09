@@ -75,18 +75,18 @@ class LIPPERT2(AbstractConstrainedMinimisation):
 
         # Initialize u values with linear gradient
         u_size = (nx + 1) * ny
-        u = jnp.zeros((nx + 1, ny))
-        for i in range(nx + 1):
-            alpha = i * dx / 2.0
-            u = u.at[i, :].set(alpha)
+        # Vectorized: create gradient using broadcasting
+        i_vals = jnp.arange(nx + 1, dtype=jnp.float64)[:, None]  # Shape (nx+1, 1)
+        alpha_u = i_vals * dx / 2.0
+        u = jnp.broadcast_to(alpha_u, (nx + 1, ny))
         x0 = x0.at[1 : 1 + u_size].set(u.ravel())
 
         # Initialize v values with linear gradient
         v_size = nx * (ny + 1)
-        v = jnp.zeros((nx, ny + 1))
-        for j in range(ny + 1):
-            alpha = j * dx / 2.0  # Note: SIF uses DX/2 for both U and V
-            v = v.at[:, j].set(alpha)
+        # Vectorized: create gradient using broadcasting
+        j_vals = jnp.arange(ny + 1, dtype=jnp.float64)[None, :]  # Shape (1, ny+1)
+        alpha_v = j_vals * dx / 2.0  # Note: SIF uses DX/2 for both U and V
+        v = jnp.broadcast_to(alpha_v, (nx, ny + 1))
         x0 = x0.at[1 + u_size : 1 + u_size + v_size].set(v.ravel())
 
         return x0

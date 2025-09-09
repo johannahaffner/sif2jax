@@ -1,5 +1,3 @@
-"""Runtime benchmarks comparing JAX implementations against pycutest."""
-
 import timeit
 from collections.abc import Callable
 
@@ -12,32 +10,14 @@ import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
 
 
-# Default runtime ratio threshold (JAX time / pycutest time)
-DEFAULT_THRESHOLD = 5.0
-
-# Minimum runtime threshold in seconds
-# Below this threshold, noise dominates and comparisons are unreliable
-MIN_RUNTIME_SECONDS = 1e-5  # 10 microseconds
-
-
-# pytest_generate_tests is now handled in conftest.py
+DEFAULT_THRESHOLD = 5.0  # Our implementation may at most be five times slower
+MIN_RUNTIME_SECONDS = 1e-5  # Noise dominates at the microsecond level
 
 
 def benchmark_pycutest(
     func: Callable, point, number: int = 100, repeat: int = 5
 ) -> float:
-    """Benchmark a pycutest function using timeit.
-
-    **Arguments**:
-
-    - `func`: Function to benchmark
-    - `point`: Arguments to pass to func. For pycutest, this is always only `x`.
-    - `number`: Number of executions per timing (default: 100)
-    - `repeat`: Number of timing repetitions (default: 5)
-
-    Returns:
-        Best average time per execution in seconds
-    """
+    """Benchmarking a pycutest function (`func`)."""
     _ = func(np.asarray(point))
     timer = timeit.Timer(lambda: func(np.asarray(point)))
     times = timer.repeat(repeat=repeat, number=number)
@@ -47,17 +27,7 @@ def benchmark_pycutest(
 def benchmark_jax(
     func: Callable, args: tuple, number: int = 100, repeat: int = 5
 ) -> float:
-    """Benchmark a JAX function using AOT compilation and timeit.
-
-    Args:
-        func: JAX function to benchmark (should already be jitted)
-        args: Arguments to pass to func as a tuple
-        number: Number of executions per timing (default: 100)
-        repeat: Number of timing repetitions (default: 5)
-
-    Returns:
-        Best average time per execution in seconds
-    """
+    """Benchmark a JAX function using AOT compilation and timeit."""
     compiled = func.lower(*args).compile()
     out = compiled(*args)
     jtu.tree_map(lambda x: x.block_until_ready(), out)
@@ -74,20 +44,6 @@ def benchmark_jax(
 @pytest.fixture(autouse=True)
 def clear_caches():
     jax.clear_caches()
-
-    # try:
-    #     pycutest.clear_cache(problem.name)
-    # except (KeyError, FileNotFoundError):
-    #     pass
-
-    # yield
-
-    # jax.clear_caches()
-
-    # try:
-    #     pycutest.clear_cache(problem.name)
-    # except (KeyError, FileNotFoundError):
-    #     pass
 
 
 @pytest.fixture(scope="class")
@@ -111,21 +67,11 @@ class TestRuntime:
     """Runtime benchmarks comparing JAX to pycutest."""
 
     def test_objective_runtime(self, problem, pycutest_problem, threshold):
-        """Compare objective function runtime."""
-        # Get starting point
-        x0 = problem.y0
-        args = problem.args
+        pycutest_time = benchmark_pycutest(pycutest_problem.obj, problem.y0)
 
-        # Compile JAX function
         jax_obj = jax.jit(problem.objective)
+        jax_time = benchmark_jax(jax_obj, (problem.y0, problem.args))
 
-        # Benchmark pycutest
-        pycutest_time = benchmark_pycutest(pycutest_problem.obj, x0)
-
-        # Benchmark JAX
-        jax_time = benchmark_jax(jax_obj, (x0, args))
-
-        # Calculate ratio
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
         # Print results (visible with -s flag)
@@ -134,8 +80,6 @@ class TestRuntime:
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
-        # Assert within threshold only if runtime is above minimum
-        # This avoids failures due to noise in microsecond-level measurements
         if pycutest_time > MIN_RUNTIME_SECONDS:
             assert ratio < threshold, (
                 f"JAX objective is {ratio:.2f}x slower than pycutest "
@@ -144,20 +88,11 @@ class TestRuntime:
 
     def test_gradient_runtime(self, problem, pycutest_problem, threshold):
         """Compare gradient computation runtime."""
-        # Get starting point
-        x0 = problem.y0
-        args = problem.args
+        pycutest_time = benchmark_pycutest(pycutest_problem.grad, problem.y0)
 
-        # Compile JAX gradient
         jax_grad = jax.jit(jax.grad(problem.objective))
+        jax_time = benchmark_jax(jax_grad, (problem.y0, problem.args))
 
-        # Benchmark pycutest
-        pycutest_time = benchmark_pycutest(pycutest_problem.grad, x0)
-
-        # Benchmark JAX
-        jax_time = benchmark_jax(jax_grad, (x0, args))
-
-        # Calculate ratio
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
         # Print results (visible with -s flag)
@@ -166,8 +101,6 @@ class TestRuntime:
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
-        # Assert within threshold only if runtime is above minimum
-        # This avoids failures due to noise in microsecond-level measurements
         if pycutest_time > MIN_RUNTIME_SECONDS:
             assert ratio < threshold, (
                 f"JAX gradient is {ratio:.2f}x slower than pycutest "
@@ -176,23 +109,14 @@ class TestRuntime:
 
     def test_constraint_runtime(self, problem, pycutest_problem, threshold):
         """Compare constraint function runtime."""
-        # Skip if problem is unconstrained
         if not isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
             pytest.skip("Problem has no constraints")
 
-        # Get starting point
-        x0 = problem.y0
+        pycutest_time = benchmark_pycutest(pycutest_problem.cons, problem.y0)
 
-        # Compile JAX constraint function
         jax_cons = jax.jit(problem.constraint)
+        jax_time = benchmark_jax(jax_cons, (problem.y0,))
 
-        # Benchmark pycutest
-        pycutest_time = benchmark_pycutest(pycutest_problem.cons, x0)
-
-        # Benchmark JAX
-        jax_time = benchmark_jax(jax_cons, (x0,))
-
-        # Calculate ratio
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
         # Print results (visible with -s flag)
@@ -201,8 +125,6 @@ class TestRuntime:
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
-        # Assert within threshold only if runtime is above minimum
-        # This avoids failures due to noise in microsecond-level measurements
         if pycutest_time > MIN_RUNTIME_SECONDS:
             assert ratio < threshold, (
                 f"JAX constraint is {ratio:.2f}x slower than pycutest "
@@ -211,12 +133,8 @@ class TestRuntime:
 
     def test_constraint_jacobian_runtime(self, problem, pycutest_problem, threshold):
         """Compare constraint Jacobian computation runtime."""
-        # Skip if problem is unconstrained
         if not isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
             pytest.skip("Problem has no constraints")
-
-        # Get starting point
-        x0 = problem.y0
 
         # Create JAX Jacobian function
         # For constrained problems, we want the Jacobian of all constraints
@@ -243,12 +161,9 @@ class TestRuntime:
             # Skip if no Jacobian method available
             pytest.skip("No Jacobian method available in pycutest")
 
-        pycutest_time = benchmark_pycutest(pycutest_jac_func, x0)
+        pycutest_time = benchmark_pycutest(pycutest_jac_func, problem.y0)
+        jax_time = benchmark_jax(jax_jac, (problem.y0,))
 
-        # Benchmark JAX
-        jax_time = benchmark_jax(jax_jac, (x0,))
-
-        # Calculate ratio
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
         # Print results (visible with -s flag)
@@ -257,8 +172,6 @@ class TestRuntime:
         print(f"  JAX:      {jax_time * 1000:.3f} ms")
         print(f"  Ratio:    {ratio:.2f}x")
 
-        # Assert within threshold only if runtime is above minimum
-        # This avoids failures due to noise in microsecond-level measurements
         if pycutest_time > MIN_RUNTIME_SECONDS:
             assert ratio < threshold, (
                 f"JAX constraint Jacobian is {ratio:.2f}x slower than pycutest "

@@ -38,16 +38,9 @@ def benchmark_pycutest(
     Returns:
         Best average time per execution in seconds
     """
-    # Warmup run
     _ = func(np.asarray(point))
-
-    # Create a timer
     timer = timeit.Timer(lambda: func(np.asarray(point)))
-
-    # Run the benchmark
     times = timer.repeat(repeat=repeat, number=number)
-
-    # Return the best average time
     return min(times) / number
 
 
@@ -65,29 +58,21 @@ def benchmark_jax(
     Returns:
         Best average time per execution in seconds
     """
-    # AOT compile the function
     compiled = func.lower(*args).compile()
-
-    # Warmup run with block_until_ready
     out = compiled(*args)
     jtu.tree_map(lambda x: x.block_until_ready(), out)
 
-    # Create a timer that calls block_until_ready
     def timed_call():
         out = compiled(*args)  # Map for constraint method: (equalities, inequalities)
         return jtu.tree_map(lambda x: x.block_until_ready(), out)
 
     timer = timeit.Timer(timed_call)
-
-    # Run the benchmark
     times = timer.repeat(repeat=repeat, number=number)
-
-    # Return the best average time
     return min(times) / number
 
 
-@pytest.fixture(autouse=True, scope="class")
-def clear_caches(problem):
+@pytest.fixture(autouse=True)
+def clear_caches():
     jax.clear_caches()
 
     # try:
@@ -95,9 +80,9 @@ def clear_caches(problem):
     # except (KeyError, FileNotFoundError):
     #     pass
 
-    yield
+    # yield
 
-    jax.clear_caches()
+    # jax.clear_caches()
 
     # try:
     #     pycutest.clear_cache(problem.name)
@@ -115,19 +100,15 @@ def pycutest_problem(problem):
     pycutest.clear_cache(problem.name)
 
 
+@pytest.fixture
+def threshold(request):
+    """Get runtime ratio threshold from command line or use default."""
+    threshold_value = request.config.getoption("--runtime-threshold", default=None)
+    return float(threshold_value) if threshold_value else DEFAULT_THRESHOLD
+
+
 class TestRuntime:
     """Runtime benchmarks comparing JAX to pycutest."""
-
-    # @pytest.fixture(scope="class")
-    # def pycutest_problem(self, problem):
-    #     print(f"running problem {problem.name}")
-    #     return pycutest.import_problem(problem.name, drop_fixed_variables=False)
-
-    @pytest.fixture
-    def threshold(self, request):
-        """Get runtime ratio threshold from command line or use default."""
-        threshold_value = request.config.getoption("--runtime-threshold", default=None)
-        return float(threshold_value) if threshold_value else DEFAULT_THRESHOLD
 
     def test_objective_runtime(self, problem, pycutest_problem, threshold):
         """Compare objective function runtime."""

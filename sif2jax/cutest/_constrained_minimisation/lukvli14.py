@@ -102,36 +102,56 @@ class LUKVLI14(AbstractConstrainedMinimisation):
         if n_c == 0:
             return None, jnp.array([])
 
-        # Based on S2MPJ implementation, constraints use direct indices:
-        # For odd k (k=1,3,5,...): c_k uses X(k)^2 + X(k+1) + X(k+2) + 4*X(k+3) - 7
-        # For even k (k=2,4,6,...): c_k uses X(k+1)^2 - 5*X(k+3) - 6
+        # From SIF file: K loops as 1, 3, 5, ... (increments by 2)
+        # For each K:
+        # - C(K) = E(K) + X(K+1) + X(K+2) + 4*X(K+3) - 7
+        #   where E(K) = X(K)^2
+        # - C(K+1) = E(K+1) - 5*X(K+4) - 6
+        #   where E(K+1) = X(K+2)^2
+        #
+        # So for K=1,3,5,7,... we create constraint pairs:
+        # K=1: C(1) = X(1)^2 + X(2) + X(3) + 4*X(4) - 7
+        #      C(2) = X(3)^2 - 5*X(5) - 6
+        # K=3: C(3) = X(3)^2 + X(4) + X(5) + 4*X(6) - 7
+        #      C(4) = X(5)^2 - 5*X(7) - 6
+        # K=5: C(5) = X(5)^2 + X(6) + X(7) + 4*X(8) - 7
+        #      C(6) = X(7)^2 - 5*X(9) - 6
+        # etc.
 
-        # Pad y to ensure we can access all required indices
-        max_k = n_c
-        max_idx = max_k + 4  # Maximum index needed is k+4 for largest k
-        if max_idx > n:
-            padding = max_idx - n
-            y = jnp.pad(y, (0, padding), mode="constant", constant_values=0)
+        # Extend y with zeros to safely access all indices
+        extended_length = n + 20
+        y_extended = jnp.zeros(extended_length)
+        y_extended = y_extended.at[:n].set(y)
 
-        # Generate all k values
-        k_values = jnp.arange(1, n_c + 1)  # 1-indexed k values
-        k_idx = k_values - 1  # Convert to 0-based for array indexing
+        constraints = []
 
-        # Compute constraints for all k, then select based on odd/even
-        # Odd constraints (k=1,3,5,...)
-        # From S2MPJ: C(K) = E(K) + X(K+1) + X(K+2) + 4*X(K+3) - 7
-        # where E(K) = X(K)^2
-        c_odd = y[k_idx] ** 2 + y[k_idx + 1] + y[k_idx + 2] + 4 * y[k_idx + 3] - 7
+        # Generate constraints in pairs
+        k = 0  # Start at 0 for 0-based indexing (corresponds to K=1 in SIF)
+        constraint_count = 0
 
-        # Even constraints (k=2,4,6,...)
-        # From S2MPJ: For K=1,3,5,... (odd), C(K+1) = E(K+1) - 5*X(K+4) - 6
-        # Note: Bug in S2MPJ Python - all E(K+1) elements use X(2)^2!
-        # For k=2, K=1 so X(K+4)=X(5); for k=4, K=3 so X(K+4)=X(7), etc.
-        # So for even k, we need X(2)^2 - 5*X(k+3) - 6
-        c_even = y[1] ** 2 - 5 * y[k_idx + 3] - 6  # Always X(2)^2 due to S2MPJ bug
+        while constraint_count < n_c:
+            # C(K): X(K)^2 + X(K+1) + X(K+2) + 4*X(K+3) - 7
+            # Note: K in SIF is 1-indexed, so K=1 means index 0 in our arrays
+            c_k = (
+                y_extended[k] ** 2
+                + y_extended[k + 1]
+                + y_extended[k + 2]
+                + 4 * y_extended[k + 3]
+                - 7
+            )
+            constraints.append(c_k)
+            constraint_count += 1
 
-        # Select based on odd/even using where
-        is_odd = (k_values % 2) == 1
-        constraints = jnp.where(is_odd, c_odd, c_even)
+            if constraint_count >= n_c:
+                break
 
-        return None, constraints
+            # C(K+1): X(K+1)^2 - 5*X(K+4) - 6
+            # Note: SIF file says E(K+1) uses X(K+2), but pycutest uses X(K+1)
+            # Both use X(K+4) for the linear term
+            c_k1 = y_extended[k + 1] ** 2 - 5 * y_extended[k + 4] - 6
+            constraints.append(c_k1)
+            constraint_count += 1
+
+            k += 2  # K increments by 2 in the SIF loop
+
+        return None, jnp.array(constraints)

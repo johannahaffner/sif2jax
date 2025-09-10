@@ -58,14 +58,15 @@ class ORTHREGF(AbstractConstrainedMinimisation):
         # Computed parameters
         incr = 2.0 * pi / self.npts
 
-        # Generate angles using meshgrid
+        # Generate angles - SIF uses nested loops: DO I, DO J (row-major)
+        # This means for each I, we iterate through all J values
         i_vals = jnp.arange(self.npts, dtype=jnp.float64)
         j_vals = jnp.arange(self.npts, dtype=jnp.float64)
         ii, jj = jnp.meshgrid(i_vals, j_vals, indexing="ij")
 
-        # Flatten using Fortran-style (column-major) ordering to match SIF
-        ii_flat = ii.ravel(order="F")
-        jj_flat = jj.ravel(order="F")
+        # Flatten using C-style (row-major) ordering to match SIF nested loops
+        ii_flat = ii.ravel(order="C")
+        jj_flat = jj.ravel(order="C")
 
         # Compute angles
         theta1 = ii_flat * incr

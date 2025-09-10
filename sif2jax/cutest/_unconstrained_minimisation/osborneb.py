@@ -2,9 +2,82 @@ from __future__ import annotations
 
 from typing import Any
 
+import jax
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
+
+
+# Data values from SIF file
+_Y_DATA = jnp.array(
+    [
+        1.366,
+        1.191,
+        1.112,
+        1.013,
+        0.991,
+        0.885,
+        0.831,
+        0.847,
+        0.786,
+        0.725,
+        0.746,
+        0.679,
+        0.608,
+        0.655,
+        0.616,
+        0.606,
+        0.602,
+        0.626,
+        0.651,
+        0.724,
+        0.649,
+        0.649,
+        0.694,
+        0.644,
+        0.624,
+        0.661,
+        0.612,
+        0.558,
+        0.533,
+        0.495,
+        0.500,
+        0.423,
+        0.395,
+        0.375,
+        0.372,
+        0.391,
+        0.396,
+        0.405,
+        0.428,
+        0.429,
+        0.523,
+        0.562,
+        0.607,
+        0.653,
+        0.672,
+        0.708,
+        0.633,
+        0.668,
+        0.645,
+        0.632,
+        0.591,
+        0.559,
+        0.597,
+        0.625,
+        0.739,
+        0.710,
+        0.729,
+        0.720,
+        0.636,
+        0.581,
+        0.428,
+        0.292,
+        0.162,
+        0.098,
+        0.054,
+    ]
+)
 
 
 class OSBORNEB(AbstractUnconstrainedMinimisation):
@@ -36,79 +109,8 @@ class OSBORNEB(AbstractUnconstrainedMinimisation):
     n: int = 11  # Number of variables
     m: int = 65  # Number of groups
 
-    # Data values
-    y_data = jnp.array(
-        [
-            1.366,
-            1.191,
-            1.112,
-            1.013,
-            0.991,
-            0.885,
-            0.831,
-            0.847,
-            0.786,
-            0.725,
-            0.746,
-            0.679,
-            0.608,
-            0.655,
-            0.616,
-            0.606,
-            0.602,
-            0.626,
-            0.651,
-            0.724,
-            0.649,
-            0.649,
-            0.694,
-            0.644,
-            0.624,
-            0.661,
-            0.612,
-            0.558,
-            0.533,
-            0.495,
-            0.500,
-            0.423,
-            0.395,
-            0.375,
-            0.372,
-            0.391,
-            0.396,
-            0.405,
-            0.428,
-            0.429,
-            0.523,
-            0.562,
-            0.607,
-            0.653,
-            0.672,
-            0.708,
-            0.633,
-            0.668,
-            0.645,
-            0.632,
-            0.591,
-            0.559,
-            0.597,
-            0.625,
-            0.739,
-            0.710,
-            0.729,
-            0.720,
-            0.636,
-            0.581,
-            0.428,
-            0.292,
-            0.162,
-            0.098,
-            0.054,
-        ]
-    )
-
     def objective(self, y: Any, args: Any) -> Any:
-        """Compute the objective function (vectorized)."""
+        """Compute the objective function (vectorized with vmap)."""
         x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11 = y
 
         # Vectorized computation for all i from 1 to m
@@ -121,20 +123,26 @@ class OSBORNEB(AbstractUnconstrainedMinimisation):
         # Element A: x1 * exp(-ti * x5) (PEXP type)
         element_a = x1 * jnp.exp(-ti * x5)
 
-        # Element B: x2 * exp(-(ti - x9)^2 * x6) (PEXP3 type)
-        diff_b = ti - x9
-        element_b = x2 * jnp.exp(-(diff_b * diff_b) * x6)
+        # Use vmap for the three PEXP3 elements (B, C, D)
+        # Stack the parameters for vectorized computation
+        v1_vals = jnp.array([x2, x3, x4])  # Coefficients
+        v2_vals = jnp.array([x9, x10, x11])  # Centers
+        v3_vals = jnp.array([x6, x7, x8])  # Scale factors
 
-        # Element C: x3 * exp(-(ti - x10)^2 * x7) (PEXP3 type)
-        diff_c = ti - x10
-        element_c = x3 * jnp.exp(-(diff_c * diff_c) * x7)
+        def pexp3_element(v1, v2, v3, t):
+            """Compute v1 * exp(-(t - v2)^2 * v3) for all t."""
+            diff = t - v2
+            return v1 * jnp.exp(-(diff * diff) * v3)
 
-        # Element D: x4 * exp(-(ti - x11)^2 * x8) (PEXP3 type)
-        diff_d = ti - x11
-        element_d = x4 * jnp.exp(-(diff_d * diff_d) * x8)
+        # vmap over the three sets of parameters
+        pexp3_vmap = jax.vmap(pexp3_element, in_axes=(0, 0, 0, None))
+        elements_bcd = pexp3_vmap(v1_vals, v2_vals, v3_vals, ti)
 
-        # Residuals: element_a + element_b + element_c + element_d - y_data[i]
-        residuals = element_a + element_b + element_c + element_d - self.y_data
+        # Sum the three PEXP3 elements
+        element_bcd_sum = jnp.sum(elements_bcd, axis=0)
+
+        # Residuals: element_a + sum(element_b,c,d) - y_data[i]
+        residuals = element_a + element_bcd_sum - _Y_DATA
 
         # Sum of squared residuals
         return jnp.sum(residuals * residuals)

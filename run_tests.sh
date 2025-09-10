@@ -3,7 +3,7 @@
 # Configuration
 CONTAINER_IMAGE="johannahaffner/pycutest:latest"
 MOUNT_PATH="/workspace"
-LOCAL_PATH="/Users/jhaffner/Desktop/projects/benchmarks/sif2jax"
+LOCAL_PATH="/Users/jhaffner/Desktop/projects/benchmarks/new-tests"
 
 # Run tests in container
 docker run --rm \

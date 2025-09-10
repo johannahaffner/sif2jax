@@ -21,7 +21,7 @@ jobs:
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_problem.py"
 
-  test-problem-runtime A-M:
+  test-problem-runtime_A-M:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

@@ -704,6 +704,8 @@ from ._nonlinear_equations import (
     nonlinear_equations_problems as nonlinear_equations_problems,
     # NONMSQRTNE as NONMSQRTNE,  # TODO: Human review - element structure
     NONSCOMPNE as NONSCOMPNE,
+    OSBORNE1 as OSBORNE1,
+    OSBORNE2 as OSBORNE2,
     OSCIGRNE as OSCIGRNE,
     OSCIPANE as OSCIPANE,
     PALMER1ANE as PALMER1ANE,
@@ -1074,7 +1076,7 @@ from ._unconstrained_minimisation import (
     NONDQUAR as NONDQUAR,
     NONMSQRT as NONMSQRT,
     OSBORNEA as OSBORNEA,
-    # OSBORNEB as OSBORNEB,  # TODO: Human review - objective discrepancy
+    OSBORNEB as OSBORNEB,
     PALMER1C as PALMER1C,
     PALMER1D as PALMER1D,
     PALMER2C as PALMER2C,
@@ -1879,7 +1881,7 @@ problems_dict = {
     "NONDQUAR": NONDQUAR(),
     "NONMSQRT": NONMSQRT(),
     "OSBORNEA": OSBORNEA(),
-    # "OSBORNEB": OSBORNEB(),  # TODO: Human review - objective discrepancy
+    "OSBORNEB": OSBORNEB(),
     "PALMER1C": PALMER1C(),
     "PALMER1D": PALMER1D(),
     "PALMER2C": PALMER2C(),
@@ -2213,6 +2215,8 @@ problems_dict = {
     "NONDIANE": NONDIANE(),
     # "NONMSQRTNE": NONMSQRTNE(),  # TODO: Human review - element structure
     "NONSCOMPNE": NONSCOMPNE(),
+    "OSBORNE1": OSBORNE1(),
+    "OSBORNE2": OSBORNE2(),
     "OSCIGRNE": OSCIGRNE(),
     "OSCIPANE": OSCIPANE(),
     "PALMER1ANE": PALMER1ANE(),

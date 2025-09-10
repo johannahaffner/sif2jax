@@ -242,9 +242,7 @@ from .noncvxun import NONCVXUN as NONCVXUN
 from .nondquar import NONDQUAR as NONDQUAR
 from .nonmsqrt import NONMSQRT as NONMSQRT
 from .osbornea import OSBORNEA as OSBORNEA
-
-# TODO: Human review - objective discrepancy
-# from .osborneb import OSBORNEB as OSBORNEB
+from .osborneb import OSBORNEB as OSBORNEB
 from .palmer1c import PALMER1C as PALMER1C
 from .palmer1d import PALMER1D as PALMER1D
 from .palmer2c import PALMER2C as PALMER2C
@@ -549,7 +547,7 @@ unconstrained_minimisation_problems = (
     NONDQUAR(),
     NONMSQRT(),
     OSBORNEA(),
-    # OSBORNEB(),  # TODO: Human review - objective discrepancy
+    OSBORNEB(),
     PALMER1C(),
     PALMER1D(),
     PALMER2C(),

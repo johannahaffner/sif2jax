@@ -4,7 +4,7 @@ from typing import Any
 
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
 # Data values from SIF file
@@ -46,49 +46,11 @@ _Y_DATA = jnp.array(
     ]
 )
 
-# Pre-computed time values: ti = -10.0 * i for i from 0 to 32
-_TI = jnp.array(
-    [
-        0.0,
-        -10.0,
-        -20.0,
-        -30.0,
-        -40.0,
-        -50.0,
-        -60.0,
-        -70.0,
-        -80.0,
-        -90.0,
-        -100.0,
-        -110.0,
-        -120.0,
-        -130.0,
-        -140.0,
-        -150.0,
-        -160.0,
-        -170.0,
-        -180.0,
-        -190.0,
-        -200.0,
-        -210.0,
-        -220.0,
-        -230.0,
-        -240.0,
-        -250.0,
-        -260.0,
-        -270.0,
-        -280.0,
-        -290.0,
-        -300.0,
-        -310.0,
-        -320.0,
-    ]
-)
 
+class OSBORNE1(AbstractNonlinearEquations):
+    """Osborne first problem in 5 variables (nonlinear equation version).
 
-class OSBORNEA(AbstractUnconstrainedMinimisation):
-    """Osborne first problem in 5 variables.
-
+    This is a nonlinear equation version of problem OSBORNEA.
     This function is a nonlinear least squares with 33 groups. Each
     group has 2 nonlinear elements and one linear element.
 
@@ -100,8 +62,9 @@ class OSBORNEA(AbstractUnconstrainedMinimisation):
     See also Buckley#32 (p. 77).
 
     SIF input: Ph. Toint, Dec 1989.
+    Modification as a set of nonlinear equations: Nick Gould, Oct 2015.
 
-    classification SUR2-MN-5-0
+    classification NOR2-MN-5-33
     """
 
     y0_iD: int = 0
@@ -110,21 +73,24 @@ class OSBORNEA(AbstractUnconstrainedMinimisation):
     n: int = 5  # Number of variables
     m: int = 33  # Number of groups
 
-    def objective(self, y: Any, args: Any) -> Any:
-        """Compute the objective function (vectorized)."""
+    def constraint(self, y: Any) -> tuple[Any, None]:
+        """Returns the residuals as equality constraints."""
         x1, x2, x3, x4, x5 = y
 
+        # Vectorized computation for all i from 0 to m-1
+        i_vals = jnp.arange(self.m, dtype=jnp.float64)
+        ti = -10.0 * i_vals
+
         # Element A: x2 * exp(x4 * ti) for all i
-        element_a = x2 * jnp.exp(x4 * _TI)
+        element_a = x2 * jnp.exp(x4 * ti)
 
         # Element B: x3 * exp(x5 * ti) for all i
-        element_b = x3 * jnp.exp(x5 * _TI)
+        element_b = x3 * jnp.exp(x5 * ti)
 
-        # Groups: (x1 + element_a + element_b - y_data[i])^2 for all i
+        # Residuals: x1 + element_a + element_b - y_data[i] for all i
         residuals = x1 + element_a + element_b - _Y_DATA
 
-        # Sum of squared residuals
-        return jnp.sum(residuals**2)
+        return residuals, None
 
     @property
     def y0(self):
@@ -141,5 +107,10 @@ class OSBORNEA(AbstractUnconstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        # From SIF file comment: 5.46489D-05
-        return jnp.array(5.46489e-05)
+        # For nonlinear equations, objective is typically 0
+        return jnp.array(0.0)
+
+    @property
+    def bounds(self) -> tuple[Any, Any] | None:
+        """No bounds for this problem."""
+        return None

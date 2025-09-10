@@ -197,6 +197,8 @@ from .nondiane import NONDIANE as NONDIANE
 # TODO: Human review needed - element structure issues
 # from .nonmsqrtne import NONMSQRTNE as NONMSQRTNE
 from .nonscompne import NONSCOMPNE as NONSCOMPNE
+from .osborne1 import OSBORNE1 as OSBORNE1
+from .osborne2 import OSBORNE2 as OSBORNE2
 from .oscigrne import OSCIGRNE as OSCIGRNE
 from .oscipane import OSCIPANE as OSCIPANE
 from .palmer1ane import PALMER1ANE as PALMER1ANE
@@ -442,6 +444,8 @@ nonlinear_equations_problems = (
     NONDIANE(),
     # NONMSQRTNE(),  # TODO: Human review - element structure issues
     NONSCOMPNE(),
+    OSBORNE1(),
+    OSBORNE2(),
     OSCIGRNE(),
     OSCIPANE(),
     PALMER1ANE(),

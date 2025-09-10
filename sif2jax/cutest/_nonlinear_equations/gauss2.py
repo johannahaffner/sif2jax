@@ -1,56 +1,79 @@
 import jax.numpy as jnp
 
-from ..._misc import inexact_asarray
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
-class GAUSS2LS(AbstractUnconstrainedMinimisation):
-    """The GAUSS2LS function.
+class GAUSS2(AbstractNonlinearEquations):
+    """NIST Data fitting problem GAUSS2.
 
-    NIST Data fitting problem GAUSS2.
+    NIST Data fitting problem GAUSS2 given as an inconsistent set of
+    nonlinear equations.
 
-    Fit: y = b1*exp(-b2*x) + b3*exp(-(x-b4)^2/b5^2) + b6*exp(-(x-b7)^2/b8^2) + e
+    Fit: y = b1*exp( -b2*x ) + b3*exp( -(x-b4)**2 / b5**2 )
+                             + b6*exp( -(x-b7)**2 / b8**2 ) + e
 
     Source: Problem from the NIST nonlinear regression test set
-    http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml
+        http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml
 
     Reference: Rust, B., NIST (1996).
 
     SIF input: Nick Gould and Tyrone Rees, Oct 2015
 
-    Classification SUR2-MN-8-0
+    Classification: NOR2-MN-8-250
     """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
     # Number of variables
-    n: int = 8
+    n_var: int = 8
 
-    def objective(self, y, args):
-        """Compute the objective function value.
+    # Number of constraints (equations)
+    n_con: int = 250
+
+    @property
+    def y0(self):
+        """Return the starting point from START1 in the SIF file."""
+        return jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
+
+    @property
+    def args(self):
+        """Return None as no additional args are needed."""
+        return None
+
+    @property
+    def bounds(self):
+        """Return unbounded constraints."""
+        return None
+
+    @property
+    def expected_result(self):
+        """Return None as the exact solution is not specified."""
+        return None
+
+    @property
+    def expected_objective_value(self):
+        """Return None as the minimum objective value is not specified."""
+        return None
+
+    def constraint(self, y, args=None):
+        """Compute the constraint residuals.
 
         Args:
             y: The parameters [b1, b2, b3, b4, b5, b6, b7, b8]
             args: None
 
         Returns:
-            The sum of squared residuals.
+            Tuple of (equality_constraints, inequality_constraints).
+            For nonlinear equations, all constraints are equalities.
         """
         del args
         b1, b2, b3, b4, b5, b6, b7, b8 = y
 
-        # Create the x data points (1 to 250)
+        # X values from 1 to 250
         x = jnp.arange(1.0, 251.0)
 
-        # Model function:
-        # b1*exp(-b2*x) + b3*exp(-(x-b4)^2/b5^2) + b6*exp(-(x-b7)^2/b8^2)
-        term1 = b1 * jnp.exp(-b2 * x)
-        term2 = b3 * jnp.exp(-((x - b4) ** 2) / (b5**2))
-        term3 = b6 * jnp.exp(-((x - b7) ** 2) / (b8**2))
-        model = term1 + term2 + term3
-
-        # Actual y values from the dataset (hard-coded from the SIF file)
+        # Y data values from the SIF file
         y_data = jnp.array(
             [
                 97.58776,
@@ -306,31 +329,19 @@ class GAUSS2LS(AbstractUnconstrainedMinimisation):
             ]
         )
 
-        # Compute residuals
-        residuals = model - y_data
+        # Compute the model using vectorized operations
+        # First exponential term: b1 * exp(-b2 * x)
+        term1 = b1 * jnp.exp(-b2 * x)
 
-        # Return sum of squared residuals
-        return jnp.sum(residuals**2)
+        # Second Gaussian term: b3 * exp(-(x-b4)^2 / b5^2)
+        term2 = b3 * jnp.exp(-((x - b4) ** 2) / (b5**2))
 
-    @property
-    def y0(self):
-        """Initial parameter guess."""
-        # From START POINT 1 in the SIF file
-        return inexact_asarray(
-            jnp.array([96.0, 0.009, 103.0, 106.0, 18.0, 72.0, 151.0, 18.0])
-        )
+        # Third Gaussian term: b6 * exp(-(x-b7)^2 / b8^2)
+        term3 = b6 * jnp.exp(-((x - b7) ** 2) / (b8**2))
 
-    @property
-    def args(self):
-        """No additional arguments."""
-        return None
+        # Full model
+        model = term1 + term2 + term3
 
-    @property
-    def expected_result(self):
-        """The expected result is not specified in the SIF file."""
-        return None
-
-    @property
-    def expected_objective_value(self):
-        """The expected objective value is not specified in the SIF file."""
-        return None
+        # Return residuals as equality constraints (model - data = 0)
+        # For nonlinear equations, return (equalities, None)
+        return model - y_data, None

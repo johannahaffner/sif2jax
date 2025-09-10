@@ -143,7 +143,9 @@ from .fminsurf import FMINSURF as FMINSURF
 from .freuroth import FREUROTH as FREUROTH
 
 # TODO: GAUSS family needs human review - issues reported by user
-# from .gauss import GAUSS1LS as GAUSS1LS, GAUSS2LS as GAUSS2LS, GAUSS3LS as GAUSS3LS
+from .gauss1ls import GAUSS1LS as GAUSS1LS
+from .gauss2ls import GAUSS2LS as GAUSS2LS
+from .gauss3ls import GAUSS3LS as GAUSS3LS
 from .gaussian import GAUSSIAN as GAUSSIAN
 
 # TODO: GBRAINLS needs human review - complex data dependencies
@@ -467,9 +469,9 @@ unconstrained_minimisation_problems = (
     FMINSRF2(),
     FREUROTH(),
     # FREURONE(),  # TODO: Human review - miscategorized (should be constrained)
-    # GAUSS1LS(),  # TODO: Human review - issues reported by user
-    # GAUSS2LS(),  # TODO: Human review - issues reported by user
-    # GAUSS3LS(),  # TODO: Human review - issues reported by user
+    GAUSS1LS(),
+    GAUSS2LS(),
+    GAUSS3LS(),
     GAUSSIAN(),
     # GBRAINLS(),  # TODO: Human review - complex data dependencies
     GENHUMPS(),

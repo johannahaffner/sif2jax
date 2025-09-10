@@ -39,10 +39,11 @@ class BRATU2DT(AbstractNonlinearEquations):
         """Map 2D indices to 1D indices for all points."""
         # All points (i,j) for i,j = 1 to P (1-indexed)
         # We map them to indices 0 to P^2 - 1
+        # SIF uses column-major ordering (j outer loop, i inner loop)
         idx_map = {}
         idx = 0
-        for j in range(1, self.P + 1):  # j from 1 to P
-            for i in range(1, self.P + 1):  # i from 1 to P
+        for j in range(1, self.P + 1):  # j from 1 to P (outer loop)
+            for i in range(1, self.P + 1):  # i from 1 to P (inner loop)
                 idx_map[(i, j)] = idx
                 idx += 1
         return idx_map
@@ -94,8 +95,11 @@ class BRATU2DT(AbstractNonlinearEquations):
         equations = []
 
         # Loop over interior points only (equations are only for interior points)
-        for j in range(2, self.P):  # j from 2 to P-1
-            for i in range(2, self.P):  # i from 2 to P-1
+        # Need to match SIF ordering: i loops inside j (column-major)
+        for i in range(2, self.P):  # i from 2 to P-1 (outer in constraint generation)
+            for j in range(
+                2, self.P
+            ):  # j from 2 to P-1 (inner in constraint generation)
                 # Get the variable for this point
                 u_ij = y[idx_map[(i, j)]]
 

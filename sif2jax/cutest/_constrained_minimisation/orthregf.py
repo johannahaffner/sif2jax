@@ -63,9 +63,9 @@ class ORTHREGF(AbstractConstrainedMinimisation):
         j_vals = jnp.arange(self.npts, dtype=jnp.float64)
         ii, jj = jnp.meshgrid(i_vals, j_vals, indexing="ij")
 
-        # Flatten to match the expected order
-        ii_flat = ii.ravel()
-        jj_flat = jj.ravel()
+        # Flatten using Fortran-style (column-major) ordering to match SIF
+        ii_flat = ii.ravel(order="F")
+        jj_flat = jj.ravel(order="F")
 
         # Compute angles
         theta1 = ii_flat * incr
@@ -107,13 +107,16 @@ class ORTHREGF(AbstractConstrainedMinimisation):
         y = y.at[3].set(1.0)  # P4
         y = y.at[4].set(0.5)  # P5
 
-        # Point projections initialized to data points (interleaved X,Y,Z)
+        # Point projections initialized to data points
         xd, yd, zd = self._generate_data_points()
 
-        # Variables are ordered as X(1,1), Y(1,1), Z(1,1), X(1,2), Y(1,2), Z(1,2), ...
-        y = y.at[5::3].set(xd)  # Set all X values at indices 5, 8, 11, ...
-        y = y.at[6::3].set(yd)  # Set all Y values at indices 6, 9, 12, ...
-        y = y.at[7::3].set(zd)  # Set all Z values at indices 7, 10, 13, ...
+        # Variables are ordered as X(I,J), Y(I,J), Z(I,J) in column-major order
+        # For each (I,J) pair in column-major order, we have X,Y,Z consecutively
+        for idx in range(self.npts * self.npts):
+            base_idx = 5 + 3 * idx
+            y = y.at[base_idx].set(xd[idx])  # X(I,J)
+            y = y.at[base_idx + 1].set(yd[idx])  # Y(I,J)
+            y = y.at[base_idx + 2].set(zd[idx])  # Z(I,J)
 
         return y
 
@@ -121,10 +124,11 @@ class ORTHREGF(AbstractConstrainedMinimisation):
         """Compute the objective function."""
         # Get data points
         xd, yd, zd = self._generate_data_points()
-        # Extract projected points (interleaved X,Y,Z)
-        x_proj = y[5::3]  # Gets indices 5, 8, 11, ... (all X values)
-        y_proj = y[6::3]  # Gets indices 6, 9, 12, ... (all Y values)
-        z_proj = y[7::3]  # Gets indices 7, 10, 13, ... (all Z values)
+
+        # Extract projected points - they are stored as X,Y,Z triplets
+        x_proj = y[5::3]  # X values at indices 5, 8, 11, ...
+        y_proj = y[6::3]  # Y values at indices 6, 9, 12, ...
+        z_proj = y[7::3]  # Z values at indices 7, 10, 13, ...
 
         # Sum of squared distances to data points
         obj = jnp.sum((x_proj - xd) ** 2 + (y_proj - yd) ** 2 + (z_proj - zd) ** 2)
@@ -136,10 +140,10 @@ class ORTHREGF(AbstractConstrainedMinimisation):
         # Extract torus parameters
         p1, p2, p3, p4, p5 = y[0], y[1], y[2], y[3], y[4]
 
-        # Extract projected points (interleaved X,Y,Z)
-        x_proj = y[5::3]  # Gets indices 5, 8, 11, ... (all X values)
-        y_proj = y[6::3]  # Gets indices 6, 9, 12, ... (all Y values)
-        z_proj = y[7::3]  # Gets indices 7, 10, 13, ... (all Z values)
+        # Extract projected points - they are stored as X,Y,Z triplets
+        x_proj = y[5::3]  # X values at indices 5, 8, 11, ...
+        y_proj = y[6::3]  # Y values at indices 6, 9, 12, ...
+        z_proj = y[7::3]  # Z values at indices 7, 10, 13, ...
 
         # Torus constraints from the SIF file:
         # A(I,J): ((X(I,J)-P1)^2 + (Y(I,J)-P2)^2)^0.5 * P4^-1 + (Z(I,J)-P3)^2

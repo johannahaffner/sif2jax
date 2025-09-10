@@ -100,34 +100,34 @@ class LUKVLI18(AbstractConstrainedMinimisation):
         if n_c == 0:
             return None, jnp.array([])
 
-        # Compute l values for all k
-        k_values = jnp.arange(1, n_c + 1)
-        l_values = 4 * ((k_values - 1) // 3)
+        # Compute constraints based on problem description
+        # c_k for k = 1 to n_c
+        # l = 4 * ((k-1) // 3) for each k
 
         # Extend y with zeros to safely access all indices
-        # Maximum index needed is max(l_values) + 5
-        extended_length = n + 20  # Add sufficient padding
+        extended_length = n + 20
         y_extended = jnp.zeros(extended_length)
         y_extended = y_extended.at[:n].set(y)
 
-        # Type 1 constraints: k ≡ 1 (mod 3)
-        # c_k = x_{l+1}^2 + 3x_{l+2}
-        c1 = y_extended[l_values] ** 2 + 3 * y_extended[l_values + 1]
+        constraints = []
 
-        # Type 2 constraints: k ≡ 2 (mod 3)
-        # c_k = x_{l+3}^2 + x_{l+4} - 2x_{l+5}
-        c2 = (
-            y_extended[l_values + 2] ** 2
-            + y_extended[l_values + 3]
-            - 2 * y_extended[l_values + 4]
-        )
+        for k in range(1, n_c + 1):
+            l = 4 * ((k - 1) // 3)  # 1-based formula
+            k_mod = k % 3
 
-        # Type 3 constraints: k ≡ 0 (mod 3)
-        # c_k = x_{l+2}^2 - x_{l+5}
-        c3 = y_extended[l_values + 1] ** 2 - y_extended[l_values + 4]
+            if k_mod == 1:
+                # Type 1: x_{l+1}^2 + 3*x_{l+2}
+                # Convert to 0-based: y[l]^2 + 3*y[l+1]
+                c = y_extended[l] ** 2 + 3 * y_extended[l + 1]
+            elif k_mod == 2:
+                # Type 2: x_{l+3}^2 + x_{l+4} - 2*x_{l+5}
+                # Convert to 0-based: y[l+2]^2 + y[l+3] - 2*y[l+4]
+                c = y_extended[l + 2] ** 2 + y_extended[l + 3] - 2 * y_extended[l + 4]
+            else:  # k_mod == 0
+                # Type 3: x_{l+2}^2 - x_{l+5}
+                # Convert to 0-based: y[l+1]^2 - y[l+4]
+                c = y_extended[l + 1] ** 2 - y_extended[l + 4]
 
-        # Select constraints based on k modulo 3
-        k_mod3 = k_values % 3
-        constraints = jnp.where(k_mod3 == 1, c1, jnp.where(k_mod3 == 2, c2, c3))
+            constraints.append(c)
 
-        return None, constraints
+        return None, jnp.array(constraints)

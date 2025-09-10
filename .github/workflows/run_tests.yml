@@ -35,6 +35,6 @@ jobs:
 
       - name: Test problem runtime for problems N-Z with pre-built image
         run: |
-          docker run -rm -v ${{ github.workspace }}:/workspace \
+          docker run --rm -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py --letters=N-Z"

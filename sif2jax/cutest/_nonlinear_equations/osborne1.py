@@ -7,46 +7,6 @@ import jax.numpy as jnp
 from ..._problem import AbstractNonlinearEquations
 
 
-# Data values from SIF file
-_Y_DATA = jnp.array(
-    [
-        0.844,
-        0.908,
-        0.932,
-        0.936,
-        0.925,
-        0.908,
-        0.881,
-        0.850,
-        0.818,
-        0.784,
-        0.751,
-        0.718,
-        0.685,
-        0.658,
-        0.628,
-        0.603,
-        0.580,
-        0.558,
-        0.538,
-        0.522,
-        0.506,
-        0.490,
-        0.478,
-        0.467,
-        0.457,
-        0.448,
-        0.438,
-        0.431,
-        0.424,
-        0.420,
-        0.414,
-        0.411,
-        0.406,
-    ]
-)
-
-
 class OSBORNE1(AbstractNonlinearEquations):
     """Osborne first problem in 5 variables (nonlinear equation version).
 
@@ -73,6 +33,45 @@ class OSBORNE1(AbstractNonlinearEquations):
     n: int = 5  # Number of variables
     m: int = 33  # Number of groups
 
+    # Data values
+    y_data = jnp.array(
+        [
+            0.844,
+            0.908,
+            0.932,
+            0.936,
+            0.925,
+            0.908,
+            0.881,
+            0.850,
+            0.818,
+            0.784,
+            0.751,
+            0.718,
+            0.685,
+            0.658,
+            0.628,
+            0.603,
+            0.580,
+            0.558,
+            0.538,
+            0.522,
+            0.506,
+            0.490,
+            0.478,
+            0.467,
+            0.457,
+            0.448,
+            0.438,
+            0.431,
+            0.424,
+            0.420,
+            0.414,
+            0.411,
+            0.406,
+        ]
+    )
+
     def constraint(self, y: Any) -> tuple[Any, None]:
         """Returns the residuals as equality constraints."""
         x1, x2, x3, x4, x5 = y
@@ -88,7 +87,7 @@ class OSBORNE1(AbstractNonlinearEquations):
         element_b = x3 * jnp.exp(x5 * ti)
 
         # Residuals: x1 + element_a + element_b - y_data[i] for all i
-        residuals = x1 + element_a + element_b - _Y_DATA
+        residuals = x1 + element_a + element_b - self.y_data
 
         return residuals, None
 

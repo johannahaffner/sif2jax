@@ -38,12 +38,9 @@ def benchmark_jax(
 
     timer = timeit.Timer(timed_call)
     times = timer.repeat(repeat=repeat, number=number)
-    return min(times) / number
 
-
-@pytest.fixture(autouse=True)
-def clear_caches():
     jax.clear_caches()
+    return min(times) / number
 
 
 @pytest.fixture(scope="class")
@@ -69,8 +66,8 @@ class TestRuntime:
     def test_objective_runtime(self, problem, pycutest_problem, threshold):
         pycutest_time = benchmark_pycutest(pycutest_problem.obj, problem.y0)
 
-        jax_obj = jax.jit(problem.objective)
-        jax_time = benchmark_jax(jax_obj, (problem.y0, problem.args))
+        jax_objective = jax.jit(problem.objective)
+        jax_time = benchmark_jax(jax_objective, (problem.y0, problem.args))
 
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
@@ -85,6 +82,8 @@ class TestRuntime:
                 f"JAX objective is {ratio:.2f}x slower than pycutest "
                 f"(threshold: {threshold})"
             )
+        del jax_objective
+        jax.clear_caches()
 
     def test_gradient_runtime(self, problem, pycutest_problem, threshold):
         """Compare gradient computation runtime."""
@@ -107,6 +106,9 @@ class TestRuntime:
                 f"(threshold: {threshold})"
             )
 
+        del jax_grad
+        jax.clear_caches()
+
     def test_constraint_runtime(self, problem, pycutest_problem, threshold):
         """Compare constraint function runtime."""
         if not isinstance(problem, sif2jax.AbstractConstrainedMinimisation):
@@ -114,8 +116,8 @@ class TestRuntime:
 
         pycutest_time = benchmark_pycutest(pycutest_problem.cons, problem.y0)
 
-        jax_cons = jax.jit(problem.constraint)
-        jax_time = benchmark_jax(jax_cons, (problem.y0,))
+        jax_constraint = jax.jit(problem.constraint)
+        jax_time = benchmark_jax(jax_constraint, (problem.y0,))
 
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
@@ -130,6 +132,9 @@ class TestRuntime:
                 f"JAX constraint is {ratio:.2f}x slower than pycutest "
                 f"(threshold: {threshold})"
             )
+
+        del jax_constraint
+        jax.clear_caches()
 
     def test_constraint_jacobian_runtime(self, problem, pycutest_problem, threshold):
         """Compare constraint Jacobian computation runtime."""
@@ -148,7 +153,7 @@ class TestRuntime:
                 all_cons.append(ineq_cons)
             return jnp.concatenate(all_cons) if all_cons else jnp.array([])
 
-        jax_jac = jax.jit(jax.jacfwd(constraint_wrapper))
+        jax_jacobian = jax.jit(jax.jacfwd(constraint_wrapper))
 
         # Benchmark pycutest - use dense Jacobian
         # For constrained problems, cjac returns (gradient, Jacobian)
@@ -162,7 +167,7 @@ class TestRuntime:
             pytest.skip("No Jacobian method available in pycutest")
 
         pycutest_time = benchmark_pycutest(pycutest_jac_func, problem.y0)
-        jax_time = benchmark_jax(jax_jac, (problem.y0,))
+        jax_time = benchmark_jax(jax_jacobian, (problem.y0,))
 
         ratio = jax_time / pycutest_time if pycutest_time > 0 else float("inf")
 
@@ -177,3 +182,6 @@ class TestRuntime:
                 f"JAX constraint Jacobian is {ratio:.2f}x slower than pycutest "
                 f"(threshold: {threshold})"
             )
+
+        del jax_jacobian
+        jax.clear_caches()

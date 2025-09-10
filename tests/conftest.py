@@ -126,6 +126,6 @@ def pytest_generate_tests(metafunc):
                         filtered_problems.append(problem)
                 test_cases = tuple(filtered_problems)
             else:
-                test_cases = tuple(all_problems)[::-1]
+                test_cases = tuple(all_problems)
 
         metafunc.parametrize("problem", test_cases, scope="class")

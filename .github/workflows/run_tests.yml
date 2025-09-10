@@ -21,7 +21,7 @@ jobs:
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_problem.py"
 
-  test-problem-runtime_A-M:
+  test-problem-runtime:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -33,3 +33,8 @@ jobs:
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py --letters=A-M"
 
+      - name: Test problem runtime for problems N-Z with pre-built image
+        run: |
+          docker run -rm -v ${{ github.workspace }}:/workspace \
+            johannahaffner/pycutest:latest \
+            bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py --letters=N-Z"

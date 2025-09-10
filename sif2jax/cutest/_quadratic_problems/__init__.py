@@ -14,7 +14,11 @@ from .a0nsdsil import A0NSDSIL as A0NSDSIL
 from .a0nsdssl import A0NSDSSL as A0NSDSSL
 from .a0nssssl import A0NSSSSL as A0NSSSSL
 from .biggsc4 import BIGGSC4 as BIGGSC4
+from .bqp1var import BQP1VAR as BQP1VAR
+from .bqpgabim import BQPGABIM as BQPGABIM
+from .bqpgasim import BQPGASIM as BQPGASIM
 
+# from .bqpgauss import BQPGAUSS as BQPGAUSS  # TODO: Human review needed - see file
 # from .chenhark import CHENHARK as CHENHARK  # TODO: Human review needed - see file
 from .cmpc1 import CMPC1 as CMPC1
 from .cmpc2 import CMPC2 as CMPC2
@@ -60,6 +64,11 @@ from .gouldqp3 import GOULDQP3 as GOULDQP3
 from .hatfldh import HATFLDH as HATFLDH
 from .hs44new import HS44NEW as HS44NEW
 from .hs76 import HS76 as HS76
+from .hs88 import HS88 as HS88
+from .hs89 import HS89 as HS89
+from .hs90 import HS90 as HS90
+from .hs91 import HS91 as HS91
+from .hs92 import HS92 as HS92
 
 # from .mosarqp1 import MOSARQP1 as MOSARQP1  # TODO: Human review - objective issues
 # from .mosarqp2 import MOSARQP2 as MOSARQP2  # TODO: Human review - objective issues
@@ -108,6 +117,10 @@ from .yao import YAO as YAO
 
 # Bounded quadratic problems (only bound constraints)
 bounded_quadratic_problems = (
+    BQP1VAR(),
+    BQPGABIM(),
+    BQPGASIM(),
+    # BQPGAUSS(),  # TODO: Human review needed - see file
     # CHENHARK(),  # TODO: Human review needed - see file
     CVXBQP1(),
     NCVXBQP1(),
@@ -182,6 +195,11 @@ constrained_quadratic_problems = (
     HS44NEW(),
     JUNKTURN(),
     HS76(),
+    HS88(),
+    HS89(),
+    HS90(),
+    HS91(),
+    HS92(),
     # MOSARQP1(),  # TODO: Human review needed - objective/constraint issues
     # MOSARQP2(),  # TODO: Human review needed - objective/constraint issues
     NASH(),

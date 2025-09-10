@@ -80,6 +80,8 @@ from .drcavty3 import DRCAVTY3 as DRCAVTY3
 # from .dmn37143 import DMN37143 as DMN37143
 from .eckerle4 import ECKERLE4 as ECKERLE4
 from .eggcratene import EGGCRATENE as EGGCRATENE
+from .eigenb import EIGENB as EIGENB
+from .eigenc import EIGENC as EIGENC
 
 # TODO: Human review needed - systematic constraint value discrepancies
 # from .eigena import EIGENA as EIGENA
@@ -157,6 +159,8 @@ from .liarwhdne import LIARWHDNE as LIARWHDNE
 
 # TODO: Human review needed - Python loop timeout and scaling issues
 # from .linversene import LINVERSENE as LINVERSENE
+from .lsc1 import LSC1 as LSC1
+from .lsc2 import LSC2 as LSC2
 from .luksan11 import LUKSAN11 as LUKSAN11
 from .luksan12 import LUKSAN12 as LUKSAN12
 from .luksan13 import LUKSAN13 as LUKSAN13
@@ -187,6 +191,7 @@ from .msqrtb import MSQRTB as MSQRTB
 
 # TODO: Human review needed - hardcoded data values in SIF
 # from .muonsine import MUONSINE as MUONSINE
+from .nelson import NELSON as NELSON
 from .nondiane import NONDIANE as NONDIANE
 
 # TODO: Human review needed - element structure issues
@@ -342,6 +347,8 @@ nonlinear_equations_problems = (
     # DMN37142(),  # TODO: Human review needed - Jacobian precision issues
     # DMN37143(),  # TODO: Human review needed - Jacobian precision issues
     EGGCRATENE(),
+    EIGENB(),
+    EIGENC(),
     # EIGENA(),  # TODO: Human review needed - systematic constraint value discrepancies
     # EIGENAU(),  # TODO: Human review needed - same constraint issues as EIGENA
     ELATVIDUNE(),
@@ -406,6 +413,8 @@ nonlinear_equations_problems = (
     LEVYMONE10(),
     LIARWHDNE(),
     # LINVERSENE(),  # TODO: Human review - Python loop timeout and scaling issues
+    LSC1(),
+    LSC2(),
     LUKSAN11(),
     LUKSAN12(),
     LUKSAN13(),
@@ -429,6 +438,7 @@ nonlinear_equations_problems = (
     # MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # MOREBVNE(),  # TODO: Human review - SIF file bug on line 64
     # MUONSINE(),  # TODO: Human review - hardcoded data values
+    NELSON(),
     NONDIANE(),
     # NONMSQRTNE(),  # TODO: Human review - element structure issues
     NONSCOMPNE(),

@@ -1,5 +1,7 @@
 # TODO: ACOPP14 needs human review - complex AC OPF formulation
 # from .acopp14 import ACOPP14 as ACOPP14
+# TODO: AGG needs human review - MPS format LP problem requires careful parsing
+# from .agg import AGG as AGG
 # TODO: AIRPORT needs human review - constraint values don't match pycutest
 # from .airport import AIRPORT as AIRPORT
 
@@ -16,6 +18,7 @@ from .alsotame import ALSOTAME as ALSOTAME
 # from .aug2d import AUG2D as AUG2D
 from .avgasa import AVGASA as AVGASA
 from .avgasb import AVGASB as AVGASB
+from .batch import BATCH as BATCH
 from .biggsc4 import BIGGSC4 as BIGGSC4
 
 # from .avion2 import AVION2 as AVION2  # TODO: Human review - gradient discrepancies
@@ -86,6 +89,7 @@ from .dipigri import DIPIGRI as DIPIGRI
 # from .disc2 import DISC2 as DISC2
 # TODO: Human review needed - see dixchlng.py for details
 # from .dixchlng import DIXCHLNG as DIXCHLNG
+# from .dixchlnv import DIXCHLNV as DIXCHLNV  # TODO: Human review needed
 # TODO: Human review needed - see dnieper.py for details
 # from .dnieper import DNIEPER as DNIEPER
 # from .dittert import DITTERT as DITTERT  # TODO: Human review needed
@@ -105,11 +109,15 @@ from .dtoc2 import DTOC2 as DTOC2
 # TODO: DTOC3 needs human review - X(1498) and X(1499) treated as 0 by pycutest
 # from .dtoc3 import DTOC3 as DTOC3
 from .dtoc4 import DTOC4 as DTOC4
+from .dtoc5 import DTOC5 as DTOC5
+from .dtoc6 import DTOC6 as DTOC6
 
 # TODO: Human review needed - same constraint issues as EIGENA
 # from .eigenaco import EIGENACO as EIGENACO
-from .dtoc5 import DTOC5 as DTOC5
-from .dtoc6 import DTOC6 as DTOC6
+from .eigenb2 import EIGENB2 as EIGENB2
+from .eigenbco import EIGENBCO as EIGENBCO
+from .eigenc2 import EIGENC2 as EIGENC2
+from .eigencco import EIGENCCO as EIGENCCO
 
 # TODO: EG3 needs human review - large-scale problem (N=10000) timeouts
 # from .eg3 import EG3 as EG3
@@ -198,6 +206,7 @@ from .hs18 import HS18 as HS18
 from .hs19 import HS19 as HS19
 from .hs20 import HS20 as HS20
 from .hs21 import HS21 as HS21
+from .hs21mod import HS21MOD as HS21MOD
 from .hs22 import HS22 as HS22
 from .hs23 import HS23 as HS23
 from .hs24 import HS24 as HS24
@@ -211,6 +220,8 @@ from .hs32 import HS32 as HS32
 from .hs33 import HS33 as HS33
 from .hs34 import HS34 as HS34
 from .hs35 import HS35 as HS35
+from .hs35i import HS35I as HS35I
+from .hs35mod import HS35MOD as HS35MOD
 from .hs36 import HS36 as HS36
 from .hs37 import HS37 as HS37
 from .hs39 import HS39 as HS39
@@ -256,6 +267,7 @@ from .hs73 import HS73 as HS73
 # TODO: HS75 needs human review - same issues as HS74
 # from .hs75 import HS75 as HS75
 from .hs76 import HS76 as HS76
+from .hs76i import HS76I as HS76I
 from .hs77 import HS77 as HS77
 from .hs78 import HS78 as HS78
 from .hs79 import HS79 as HS79
@@ -265,10 +277,24 @@ from .hs83 import HS83 as HS83
 
 # TODO: HS84 needs human review - objective value discrepancy (~2%)
 # from .hs84 import HS84 as HS84
+from .hs85 import HS85 as HS85
+from .hs86 import HS86 as HS86
+from .hs87 import HS87 as HS87
 from .hs93 import HS93 as HS93
+from .hs95 import HS95 as HS95
+from .hs96 import HS96 as HS96
+from .hs97 import HS97 as HS97
+from .hs98 import HS98 as HS98
 
 # from .hs99 import HS99 as HS99  # TODO: Needs human review - complex recursion
+# TODO: Human review needed - HS99EXP has constraint value discrepancies
+# from .hs99exp import HS99EXP as HS99EXP
 from .hs100 import HS100 as HS100
+
+# TODO: Human review - HS100MOD has 610.67 objective discrepancy at start
+# from .hs100mod import HS100MOD as HS100MOD
+# TODO: Human review - HS100LNP has same 610.67 objective discrepancy
+# from .hs100lnp import HS100LNP as HS100LNP
 from .hs101 import HS101 as HS101
 from .hs102 import HS102 as HS102
 from .hs103 import HS103 as HS103
@@ -280,6 +306,7 @@ from .hs108 import HS108 as HS108
 
 # from .hs109 import HS109 as HS109  # TODO: Human review - sign convention issues
 from .hs111 import HS111 as HS111
+from .hs111lnp import HS111LNP as HS111LNP
 from .hs112 import HS112 as HS112
 from .hs113 import HS113 as HS113
 from .hs114 import HS114 as HS114
@@ -289,11 +316,14 @@ from .hs117 import HS117 as HS117
 # TODO: HS118 needs human review - constraint Jacobian ordering mismatch
 # from .hs118 import HS118 as HS118
 from .hs119 import HS119 as HS119
+from .hs268 import HS268 as HS268
 from .hydroell import HYDROELL as HYDROELL
 
 # TODO: JANNSON3 needs human review - Jacobian tests hang due to computational cost
 # from .jannson3 import JANNSON3 as JANNSON3
 from .jannson4 import JANNSON4 as JANNSON4
+from .lippert1 import LIPPERT1 as LIPPERT1
+from .lippert2 import LIPPERT2 as LIPPERT2
 
 # TODO: KISSING needs human review - runtime issue (5.37x, slightly over 5x threshold)
 # from .kissing import KISSING as KISSING
@@ -316,6 +346,8 @@ from .liswet10 import LISWET10 as LISWET10
 from .liswet11 import LISWET11 as LISWET11
 from .liswet12 import LISWET12 as LISWET12
 from .lootsma import LOOTSMA as LOOTSMA
+from .lsnnodoc import LSNNODOC as LSNNODOC
+from .lsqfit import LSQFIT as LSQFIT
 from .lukvle1 import LUKVLE1 as LUKVLE1
 
 # TODO: LUKVLE2 needs human review - shape mismatch in constraints & objective
@@ -513,6 +545,7 @@ from .zecevic4 import ZECEVIC4 as ZECEVIC4
 
 constrained_minimisation_problems = (
     # ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
+    # AGG(),  # TODO: needs human review - MPS format LP problem
     # AIRPORT(),  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA(),  # TODO: needs human review - L2 group type interpretation
     # ALLINITC(),  # Human review needed - dimension mismatch
@@ -530,6 +563,7 @@ constrained_minimisation_problems = (
     # ANTWERP(),  # TODO: needs human review - initial value calculation
     AVGASA(),
     AVGASB(),
+    BATCH(),
     # DEGTRIDL(),  # TODO: Human review - causes segfault despite correct implementation
     # AVION2(),  # TODO: Human review - gradient discrepancies
     # BDRY2(),  # TODO: Human review - objective values don't match pycutest
@@ -575,6 +609,7 @@ constrained_minimisation_problems = (
     DIPIGRI(),
     # DISC2(),  # TODO: Human review needed - see disc2.py for details
     # DIXCHLNG(),  # TODO: Human review needed - see dixchlng.py for details
+    # DIXCHLNV(),  # TODO: Human review needed - see dixchlnv.py for details
     # DNIEPER(),  # TODO: Human review needed - see dnieper.py for details
     # DITTERT(),  # TODO: Human review needed
     # DRUGDIS(),  # TODO: Human review needed - see drugdis.py for details
@@ -591,6 +626,10 @@ constrained_minimisation_problems = (
     DTOC6(),
     # EG3(),  # TODO: Human review - large-scale problem causing test timeouts
     # EIGENACO(),  # TODO: Human review needed - same constraint issues as EIGENA
+    EIGENB2(),
+    EIGENBCO(),
+    EIGENC2(),
+    EIGENCCO(),
     ELATTAR(),
     # EXTRASIM(),  # TODO: Human review - pycutest timeout issue
     # ELEC(),  # TODO: Human review - numerical precision issue (see import comment)
@@ -633,6 +672,7 @@ constrained_minimisation_problems = (
     HS19(),
     HS20(),
     HS21(),
+    HS21MOD(),
     HS22(),
     HS23(),
     HS24(),
@@ -646,6 +686,8 @@ constrained_minimisation_problems = (
     HS33(),
     HS34(),
     HS35(),
+    HS35MOD(),
+    HS35I(),
     HS36(),
     HS37(),
     HS39(),
@@ -683,15 +725,26 @@ constrained_minimisation_problems = (
     # HS74(),  # Human review needed - constraint Jacobian issues
     # HS75(),  # Human review needed - same issues as HS74
     HS76(),
+    HS76I(),
     HS77(),
     HS78(),
     HS79(),
     HS80(),
     HS81(),
     HS83(),
+    # HS85(),  # TODO: Human review - requires complex IFUN85 Fortran function
+    HS86(),
+    HS87(),
     HS93(),
+    HS95(),
+    HS96(),
+    HS97(),
+    HS98(),
     # HS99(),  # TODO: Needs human review - complex recursive formulation
+    # HS99EXP(),  # TODO: Human review - constraint value discrepancies
     HS100(),
+    # HS100MOD(),  # TODO: Human review - 610.67 objective discrepancy
+    # HS100LNP(),  # TODO: Human review - 610.67 objective discrepancy
     HS101(),
     HS102(),
     HS103(),
@@ -702,6 +755,7 @@ constrained_minimisation_problems = (
     HS108(),
     # HS109(),  # TODO: Human review needed - sign convention issues
     HS111(),
+    HS111LNP(),
     HS112(),
     HS113(),
     HS114(),
@@ -709,6 +763,7 @@ constrained_minimisation_problems = (
     HS117(),
     # HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119(),
+    HS268(),
     HYDROELL(),
     # JANNSON3(),  # TODO: Human review - Jacobian tests hang due to computational cost
     JANNSON4(),
@@ -729,6 +784,8 @@ constrained_minimisation_problems = (
     LISWET10(),
     LISWET11(),
     LISWET12(),
+    LIPPERT1(),
+    LIPPERT2(),
     LOOTSMA(),
     HIMMELBC(),
     HIMMELBD(),
@@ -740,6 +797,8 @@ constrained_minimisation_problems = (
     # HIMMELP6(),  # TODO: Human review needed - OBNL element issues
     HYDROELL(),
     LOOTSMA(),
+    LSNNODOC(),
+    LSQFIT(),
     MARATOS(),
     MINMAXBD(),
     MINMAXRB(),

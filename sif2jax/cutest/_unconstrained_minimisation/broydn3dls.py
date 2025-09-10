@@ -32,27 +32,29 @@ class BROYDN3DLS(AbstractUnconstrainedMinimisation):
         k1 = self.kappa1
         k2 = self.kappa2
 
-        # Compute residuals without conditional logic
-        residuals = jnp.zeros(n)
-
+        # Compute all residuals using vectorized operations
         # First residual: (3-2*x1)*x1 - 2*x2 + k2
-        residuals = residuals.at[0].set((3.0 - k1 * y[0]) * y[0] - 2.0 * y[1] + k2)
+        first_residual = (3.0 - k1 * y[0]) * y[0] - 2.0 * y[1] + k2
 
         # Last residual: (3-2*xn)*xn - xn-1 + k2
-        residuals = residuals.at[n - 1].set(
-            (3.0 - k1 * y[n - 1]) * y[n - 1] - y[n - 2] + k2
-        )
+        last_residual = (3.0 - k1 * y[n - 1]) * y[n - 1] - y[n - 2] + k2
 
         # Middle residuals: (3-2*xi)*xi - xi-1 - 2*xi+1 + k2 for i=1 to n-2
         if n > 2:
-            middle_indices = jnp.arange(1, n - 1)
             middle_residuals = (
-                (3.0 - k1 * y[middle_indices]) * y[middle_indices]
-                - y[middle_indices - 1]
-                - 2.0 * y[middle_indices + 1]
-                + k2
+                (3.0 - k1 * y[1:-1]) * y[1:-1] - y[:-2] - 2.0 * y[2:] + k2
             )
-            residuals = residuals.at[middle_indices].set(middle_residuals)
+            # Concatenate all residuals
+            residuals = jnp.concatenate(
+                [
+                    jnp.array([first_residual]),
+                    middle_residuals,
+                    jnp.array([last_residual]),
+                ]
+            )
+        else:
+            # For n=2, only first and last residuals
+            residuals = jnp.array([first_residual, last_residual])
 
         # Return the sum of squared residuals
         return jnp.sum(residuals**2)

@@ -46,6 +46,7 @@ from ._bounded_minimisation import (
     HS1 as HS1,
     HS2 as HS2,
     HS3 as HS3,
+    HS3MOD as HS3MOD,
     HS4 as HS4,
     HS5 as HS5,
     HS25 as HS25,
@@ -120,6 +121,7 @@ from ._bounded_minimisation import (
 # WALL50 as WALL50,  # TODO: Human review - small gradient discrepancies (~2e-4)
 from ._constrained_minimisation import (
     # ACOPP14 as ACOPP14,  # TODO: needs human review - complex AC OPF formulation
+    # AGG as AGG,  # TODO: needs human review - MPS format LP problem
     # AIRPORT as AIRPORT,  # TODO: Human review - constraint values don't match pycutest
     # ALLINITA as ALLINITA,  # TODO: needs human review - L2 group type interpretation
     # ALLINITC as ALLINITC,  # TODO: Human review - dimension mismatch with pycutest
@@ -129,6 +131,7 @@ from ._constrained_minimisation import (
     # AUG2D as AUG2D,  # TODO: needs human review - edge variable structure
     AVGASA as AVGASA,
     AVGASB as AVGASB,
+    BATCH as BATCH,
     BIGGSC4 as BIGGSC4,
     # AVION2 as AVION2,  # TODO: Human review - gradient discrepancies
     # BDRY2 as BDRY2,  # TODO: Human review - objective values don't match
@@ -187,6 +190,7 @@ from ._constrained_minimisation import (
     DIPIGRI as DIPIGRI,
     # DISC2 as DISC2,  # TODO: Human review needed - see disc2.py for details
     # DIXCHLNG as DIXCHLNG,  # TODO: Human review needed - see dixchlng.py for details
+    # DIXCHLNV as DIXCHLNV,  # TODO: Human review needed - see dixchlnv.py for details
     # DNIEPER as DNIEPER,  # TODO: Human review needed - see dnieper.py for details
     # DITTERT as DITTERT,  # TODO: Human review needed
     # DEGTRIDL as DEGTRIDL,  # TODO: Human review - causes segfault
@@ -204,6 +208,10 @@ from ._constrained_minimisation import (
     DTOC6 as DTOC6,
     # EG3 as EG3,  # TODO: Human review - large-scale problem causing test timeouts
     # EIGENACO as EIGENACO,  # TODO: Human review needed
+    EIGENB2 as EIGENB2,
+    EIGENBCO as EIGENBCO,
+    EIGENC2 as EIGENC2,
+    EIGENCCO as EIGENCCO,
     ELATTAR as ELATTAR,
     # EXTRASIM as EXTRASIM,  # TODO: Human review - pycutest timeout issue
     # ELEC as ELEC,  # TODO: Human review - numerical precision issue
@@ -254,6 +262,7 @@ from ._constrained_minimisation import (
     HS19 as HS19,
     HS20 as HS20,
     HS21 as HS21,
+    HS21MOD as HS21MOD,
     HS22 as HS22,
     HS23 as HS23,
     HS24 as HS24,
@@ -267,6 +276,8 @@ from ._constrained_minimisation import (
     HS33 as HS33,
     HS34 as HS34,
     HS35 as HS35,
+    HS35I as HS35I,
+    HS35MOD as HS35MOD,
     HS36 as HS36,
     HS37 as HS37,
     HS39 as HS39,
@@ -304,6 +315,7 @@ from ._constrained_minimisation import (
     HS73 as HS73,
     # HS74 as HS74,  # TODO: Human review - constraint Jacobian discrepancies
     # HS75 as HS75,  # TODO: Human review - same issues as HS74
+    HS76I as HS76I,
     HS77 as HS77,
     HS78 as HS78,
     HS79 as HS79,
@@ -311,9 +323,19 @@ from ._constrained_minimisation import (
     HS81 as HS81,
     HS83 as HS83,
     # HS84 as HS84,  # TODO: Human review - objective value discrepancy
+    # HS85 as HS85,  # TODO: Human review - requires complex IFUN85 Fortran function
+    HS86 as HS86,
+    HS87 as HS87,
     HS93 as HS93,
+    HS95 as HS95,
+    HS96 as HS96,
+    HS97 as HS97,
+    HS98 as HS98,
     # HS99 as HS99,  # TODO: Needs human review - complex recursive formulation
+    # HS99EXP as HS99EXP,  # TODO: Human review - constraint value discrepancies
     HS100 as HS100,
+    # HS100MOD as HS100MOD,  # TODO: Human review - 610.67 objective discrepancy
+    # HS100LNP as HS100LNP,  # TODO: Human review - 610.67 objective discrepancy
     HS101 as HS101,
     HS102 as HS102,
     HS103 as HS103,
@@ -324,6 +346,7 @@ from ._constrained_minimisation import (
     HS108 as HS108,
     # HS109 as HS109,  # TODO: Human review needed - sign convention issues
     HS111 as HS111,
+    HS111LNP as HS111LNP,
     HS112 as HS112,
     HS113 as HS113,
     HS114 as HS114,
@@ -331,9 +354,12 @@ from ._constrained_minimisation import (
     HS117 as HS117,
     # HS118 as HS118,  # TODO: Human review - constraint Jacobian ordering mismatch
     HS119 as HS119,
+    HS268 as HS268,
     HYDROELL as HYDROELL,
     # JANNSON3 as JANNSON3,  # TODO: Human review - Jacobian tests hang
     JANNSON4 as JANNSON4,
+    LIPPERT1 as LIPPERT1,
+    LIPPERT2 as LIPPERT2,
     # KISSING as KISSING,  # TODO: Human review - runtime issue (5.37x)
     # KISSING2 as KISSING2,  # TODO: Human review needed
     # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
@@ -352,6 +378,8 @@ from ._constrained_minimisation import (
     LISWET11 as LISWET11,
     LISWET12 as LISWET12,
     LOOTSMA as LOOTSMA,
+    LSNNODOC as LSNNODOC,
+    LSQFIT as LSQFIT,
     LUKVLE1 as LUKVLE1,
     # LUKVLE2 as LUKVLE2,  # TODO: Human review - shape mismatch & objective
     LUKVLE3 as LUKVLE3,
@@ -576,6 +604,8 @@ from ._nonlinear_equations import (
     DRCAVTY3 as DRCAVTY3,
     ECKERLE4 as ECKERLE4,
     EGGCRATENE as EGGCRATENE,
+    EIGENB as EIGENB,
+    EIGENC as EIGENC,
     # EIGENA as EIGENA,  # TODO: Human review needed
     # EIGENAU as EIGENAU,  # TODO: Human review needed
     ELATVIDUNE as ELATVIDUNE,
@@ -642,6 +672,8 @@ from ._nonlinear_equations import (
     LEVYMONE10 as LEVYMONE10,
     LIARWHDNE as LIARWHDNE,
     # LINVERSENE as LINVERSENE,  # TODO: Human review - timeout and scaling issues
+    LSC1 as LSC1,
+    LSC2 as LSC2,
     LUKSAN11 as LUKSAN11,
     LUKSAN12 as LUKSAN12,
     LUKSAN13 as LUKSAN13,
@@ -667,6 +699,7 @@ from ._nonlinear_equations import (
     MSQRTA as MSQRTA,
     MSQRTB as MSQRTB,
     # MUONSINE as MUONSINE,  # TODO: Human review - hardcoded data values
+    NELSON as NELSON,
     NONDIANE as NONDIANE,
     nonlinear_equations_problems as nonlinear_equations_problems,
     # NONMSQRTNE as NONMSQRTNE,  # TODO: Human review - element structure
@@ -752,6 +785,10 @@ from ._quadratic_problems import (
     A0NSDSSL as A0NSDSSL,
     A0NSSSSL as A0NSSSSL,
     bounded_quadratic_problems as bounded_quadratic_problems,
+    BQP1VAR as BQP1VAR,
+    BQPGABIM as BQPGABIM,
+    BQPGASIM as BQPGASIM,
+    # BQPGAUSS as BQPGAUSS,  # TODO: Human review needed - see file
     # CHENHARK as CHENHARK,  # TODO: Human review needed - see file
     CMPC1 as CMPC1,
     CMPC2 as CMPC2,
@@ -790,6 +827,11 @@ from ._quadratic_problems import (
     HATFLDH as HATFLDH,
     HS44NEW as HS44NEW,
     HS76 as HS76,
+    HS88 as HS88,
+    HS89 as HS89,
+    HS90 as HS90,
+    HS91 as HS91,
+    HS92 as HS92,
     # MOSARQP1 as MOSARQP1,  # TODO: Human review needed - objective/constraint issues
     # MOSARQP2 as MOSARQP2,  # TODO: Human review needed - objective/constraint issues
     JUNKTURN as JUNKTURN,
@@ -1019,11 +1061,14 @@ from ._unconstrained_minimisation import (
     MISRA1BLS as MISRA1BLS,
     MISRA1CLS as MISRA1CLS,
     MISRA1DLS as MISRA1DLS,
+    MSQRTALS as MSQRTALS,
+    MSQRTBLS as MSQRTBLS,
     # MOREBV as MOREBV,  # TODO: Human review - minor gradient precision differences
     # MODBEALE as MODBEALE,  # TODO: Human review - SCALE interpretation issue
     # NCB20 as NCB20,  # TODO: Human review needed - test failures
     # NCB20B as NCB20B,  # TODO: Human review needed
     # NONDIA as NONDIA,  # TODO: Human review needed - SCALE interpretation issue
+    NELSONLS as NELSONLS,
     NONCVXU2 as NONCVXU2,
     NONCVXUN as NONCVXUN,
     NONDQUAR as NONDQUAR,
@@ -1120,6 +1165,7 @@ problems_dict = {
     "A0NSDSSL": A0NSDSSL(),
     "A0NSSSSL": A0NSSSSL(),
     # "ACOPP14": ACOPP14(),  # TODO: needs human review - complex AC OPF formulation
+    # "AGG": AGG(),  # TODO: needs human review - MPS format LP problem
     # "AIRPORT": AIRPORT(),  # TODO: Human review - constraints don't match pycutest
     # "ALLINITA": ALLINITA(),  # TODO: needs human review
     # "ALLINITC": ALLINITC(),  # Human review needed - dimension mismatch
@@ -1181,6 +1227,7 @@ problems_dict = {
     "HS1": HS1(),
     "HS2": HS2(),
     "HS3": HS3(),
+    "HS3MOD": HS3MOD(),
     "HS4": HS4(),
     "HS5": HS5(),
     "HS6": HS6(),
@@ -1199,6 +1246,7 @@ problems_dict = {
     "HS19": HS19(),
     "HS20": HS20(),
     "HS21": HS21(),
+    "HS21MOD": HS21MOD(),
     "HS22": HS22(),
     "HS23": HS23(),
     "HS24": HS24(),
@@ -1213,6 +1261,8 @@ problems_dict = {
     "HS33": HS33(),
     "HS34": HS34(),
     "HS35": HS35(),
+    "HS35MOD": HS35MOD(),
+    "HS35I": HS35I(),
     "HS36": HS36(),
     "HS37": HS37(),
     "HS38": HS38(),
@@ -1252,15 +1302,31 @@ problems_dict = {
     # "HS74": HS74(),  # TODO: Human review - constraint Jacobian issues
     # "HS75": HS75(),  # TODO: Human review - same issues as HS74
     "HS76": HS76(),
+    "HS76I": HS76I(),
     "HS77": HS77(),
     "HS78": HS78(),
     "HS79": HS79(),
     "HS80": HS80(),
     "HS81": HS81(),
     "HS83": HS83(),
+    # "HS85": HS85(),  # TODO: Human review - requires complex IFUN85 Fortran function
+    "HS86": HS86(),
+    "HS87": HS87(),
+    "HS88": HS88(),
+    "HS89": HS89(),
+    "HS90": HS90(),
+    "HS91": HS91(),
+    "HS92": HS92(),
     "HS93": HS93(),
+    "HS95": HS95(),
+    "HS96": HS96(),
+    "HS97": HS97(),
+    "HS98": HS98(),
     # "HS99": HS99(),  # TODO: Needs human review - complex recursive formulation
+    # "HS99EXP": HS99EXP(),  # TODO: Human review - constraint value discrepancies
     "HS100": HS100(),
+    # "HS100MOD": HS100MOD(),  # TODO: Human review - 610.67 objective discrepancy
+    # "HS100LNP": HS100LNP(),  # TODO: Human review - 610.67 objective discrepancy
     "HS101": HS101(),
     "HS102": HS102(),
     "HS103": HS103(),
@@ -1289,6 +1355,7 @@ problems_dict = {
     # "MINSURFO": MINSURFO(),  # TODO: Human review needed - dimension mismatch
     # "NOBNDTOR": NOBNDTOR(),  # TODO: Human review needed - complex bounds logic
     "HS111": HS111(),
+    "HS111LNP": HS111LNP(),
     "HS112": HS112(),
     "HS113": HS113(),
     "HS114": HS114(),
@@ -1296,6 +1363,7 @@ problems_dict = {
     "HS117": HS117(),
     # "HS118": HS118(),  # TODO: Human review - constraint Jacobian ordering mismatch
     "HS119": HS119(),
+    "HS268": HS268(),
     "HYDROELL": HYDROELL(),
     # "JANNSON3": JANNSON3(),  # TODO: Human review - Jacobian tests hang
     "JANNSON4": JANNSON4(),
@@ -1318,7 +1386,11 @@ problems_dict = {
     "LISWET10": LISWET10(),
     "LISWET11": LISWET11(),
     "LISWET12": LISWET12(),
+    "LIPPERT1": LIPPERT1(),
+    "LIPPERT2": LIPPERT2(),
     "LOOTSMA": LOOTSMA(),
+    "LSNNODOC": LSNNODOC(),
+    "LSQFIT": LSQFIT(),
     "MARATOS": MARATOS(),
     "MINMAXBD": MINMAXBD(),
     "MINMAXRB": MINMAXRB(),
@@ -1491,6 +1563,7 @@ problems_dict = {
     # "AUG2D": AUG2D(),  # TODO: needs human review - edge variable structure
     "AVGASA": AVGASA(),
     "AVGASB": AVGASB(),
+    "BATCH": BATCH(),
     # "DEGTRIDL": DEGTRIDL(),  # TODO: Human review - causes segfault
     # "AVION2": AVION2(),  # TODO: Human review - gradient discrepancies
     # "BA_L1LS": BA_L1LS(),  # TODO: BA_L family needs to be split into files
@@ -1560,6 +1633,10 @@ problems_dict = {
     "SCURLY10": SCURLY10(),
     "SCURLY20": SCURLY20(),
     "SCURLY30": SCURLY30(),
+    "BQP1VAR": BQP1VAR(),
+    "BQPGABIM": BQPGABIM(),
+    "BQPGASIM": BQPGASIM(),
+    # "BQPGAUSS": BQPGAUSS(),  # TODO: Human review needed - see file
     "CVXBQP1": CVXBQP1(),
     "CVXQP1": CVXQP1(),
     "CVXQP2": CVXQP2(),
@@ -1582,6 +1659,7 @@ problems_dict = {
     "DIPIGRI": DIPIGRI(),
     # "DISC2": DISC2(),  # TODO: Human review needed - see disc2.py for details
     # "DIXCHLNG": DIXCHLNG(),  # TODO: Human review needed - see dixchlng.py for details
+    # "DIXCHLNV": DIXCHLNV(),  # TODO: Human review needed - see dixchlnv.py for details
     # "DNIEPER": DNIEPER(),  # TODO: Human review needed - see dnieper.py for details
     # "DITTERT": DITTERT(),  # TODO: Human review needed
     # "DRUGDIS": DRUGDIS(),  # TODO: Human review needed - see drugdis.py for details
@@ -1598,6 +1676,10 @@ problems_dict = {
     "DTOC6": DTOC6(),
     # "EG3": EG3(),  # TODO: Human review - large-scale problem causing test timeouts
     # "EIGENACO": EIGENACO(),  # TODO: Human review needed
+    "EIGENB2": EIGENB2(),
+    "EIGENBCO": EIGENBCO(),
+    "EIGENC2": EIGENC2(),
+    "EIGENCCO": EIGENCCO(),
     "DENSCHNA": DENSCHNA(),
     "DENSCHNB": DENSCHNB(),
     "DENSCHNC": DENSCHNC(),
@@ -1644,7 +1726,9 @@ problems_dict = {
     "EG2": EG2(),
     "EGGCRATE": EGGCRATE(),
     "EIGENALS": EIGENALS(),
+    "EIGENB": EIGENB(),
     "EIGENBLS": EIGENBLS(),
+    "EIGENC": EIGENC(),
     "EIGENCLS": EIGENCLS(),
     "ELATVIDU": ELATVIDU(),
     "ENGVAL1": ENGVAL1(),
@@ -1764,6 +1848,8 @@ problems_dict = {
     "MISRA1BLS": MISRA1BLS(),
     "MISRA1CLS": MISRA1CLS(),
     "MISRA1DLS": MISRA1DLS(),
+    "MSQRTALS": MSQRTALS(),
+    "MSQRTBLS": MSQRTBLS(),
     "MARATOSB": MARATOSB(),
     # "METHANL8LS": METHANL8LS(),  # TODO: Human review needed
     "MEXHAT": MEXHAT(),
@@ -1787,6 +1873,7 @@ problems_dict = {
     "NCVXQP7": NCVXQP7(),
     "NCVXQP8": NCVXQP8(),
     "NCVXQP9": NCVXQP9(),
+    "NELSONLS": NELSONLS(),
     "NONCVXU2": NONCVXU2(),
     "NONCVXUN": NONCVXUN(),
     "NONDQUAR": NONDQUAR(),
@@ -2088,6 +2175,8 @@ problems_dict = {
     "LEVYMONE10": LEVYMONE10(),
     "LIARWHDNE": LIARWHDNE(),
     # "LINVERSENE": LINVERSENE(),  # TODO: Human review - timeout and scaling issues
+    "LSC1": LSC1(),
+    "LSC2": LSC2(),
     "LUKSAN11": LUKSAN11(),
     "LUKSAN12": LUKSAN12(),
     "LUKSAN13": LUKSAN13(),
@@ -2120,6 +2209,7 @@ problems_dict = {
     # "MODBEALENE": MODBEALENE(),  # TODO: Human review - constraint ordering issues
     # "MOREBVNE": MOREBVNE(),  # TODO: Human review - SIF file bug on line 64
     # "MUONSINE": MUONSINE(),  # TODO: Human review - hardcoded data values
+    "NELSON": NELSON(),
     "NONDIANE": NONDIANE(),
     # "NONMSQRTNE": NONMSQRTNE(),  # TODO: Human review - element structure
     "NONSCOMPNE": NONSCOMPNE(),

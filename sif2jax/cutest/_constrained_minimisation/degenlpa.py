@@ -3,6 +3,63 @@ import jax.numpy as jnp
 from ..._problem import AbstractConstrainedMinimisation
 
 
+# Constraint coefficient matrix for DEGENLPA
+# Rows: constraints C1-C15
+# Columns: variables X1-X20
+# fmt: off
+_A = jnp.array([
+    # C1
+    [1.0, 2.0, 2.0, 2.0, 1.0, 2.0, 2.0, 1.0, 2.0, 1.0,
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    # C2
+    [-1.0, 300.0, 0.09, 0.03, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    # C3
+    [0.326, -101.0, 0, 0, 200.0, 0.06, 0.02, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    # C4
+    [0.0066667, 0, -1.03, 0, 0, 200.0, 0, 0.06, 0.02, 0,
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    # C5
+    [6.6667e-4, 0, 0, -1.01, 0, 0, 200.0, 0, 0.06, 0.02,
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    # C6
+    [0, 0.978, 0, 0, -201.0, 0, 0, 0, 0, 0,
+     100.0, 0.03, 0.01, 0, 0, 0, 0, 0, 0, 0],
+    # C7
+    [0, 0.01, 0.489, 0, 0, -101.03, 0, 0, 0, 0,
+     0, 100.0, 0, 0.03, 0.01, 0, 0, 0, 0, 0],
+    # C8
+    [0, 0.001, 0, 0.489, 0, 0, -101.03, 0, 0, 0,
+     0, 0, 100.0, 0, 0.03, 0.01, 0, 0, 0, 0],
+    # C9
+    [0, 0, 0.001, 0.01, 0, 0, 0, 0, -1.04, 0,
+     0, 0, 0, 0, 100.0, 0, 0, 0.03, 0.01, 0],
+    # C10
+    [0, 0, 0.02, 0, 0, 0, 0, -1.06, 0, 0,
+     0, 0, 0, 100.0, 0, 0, 0.03, 0, 0.01, 0],
+    # C11
+    [0, 0, 0, 0.002, 0, 0, 0, 0, 0, -1.02,
+     0, 0, 0, 0, 0, 100.0, 0, 0, 0.03, 0.01],
+    # C12
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     -2.5742e-6, 0, 0.00252, 0, 0, -0.61975, 0, 0, 0, 1.03],
+    # C13
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     -0.00257, 0.25221, 0, -6.2, 0, 0, 1.09, 0, 0, 0],
+    # C14
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     0.00629, -0.20555, -4.1106, 0, 101.04, 505.1, 0, 0, -256.72, 0],
+    # C15
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0.00841, -0.08406, -0.20667, 0, 20.658, 0, 1.07, -10.5, 0],
+])
+# fmt: on
+
+# Right-hand side vector for constraints
+_B = jnp.array([0.70785, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
+
 class DEGENLPA(AbstractConstrainedMinimisation):
     """A small linear program with some degeneracy.
 
@@ -63,121 +120,8 @@ class DEGENLPA(AbstractConstrainedMinimisation):
 
         15 equality constraints from C1 to C15.
         """
-        # Build the constraint matrix A and vector b
-        # Constraint equations: A @ y = b
-
-        # Initialize constraints array
-        eq_constraints = jnp.zeros(15)
-
-        # C1: coefficients from the SIF file
-        eq_constraints = eq_constraints.at[0].set(
-            1.0 * y[0]
-            + 2.0 * y[1]
-            + 2.0 * y[2]
-            + 2.0 * y[3]
-            + 1.0 * y[4]
-            + 2.0 * y[5]
-            + 2.0 * y[6]
-            + 1.0 * y[7]
-            + 2.0 * y[8]
-            + 1.0 * y[9]
-            - 0.70785
-        )
-
-        # C2
-        eq_constraints = eq_constraints.at[1].set(
-            -1.0 * y[0] + 300.0 * y[1] + 0.09 * y[2] + 0.03 * y[3]
-        )
-
-        # C3
-        eq_constraints = eq_constraints.at[2].set(
-            0.326 * y[0] + (-101.0) * y[1] + 200.0 * y[4] + 0.06 * y[5] + 0.02 * y[6]
-        )
-
-        # C4
-        eq_constraints = eq_constraints.at[3].set(
-            0.0066667 * y[0] + (-1.03) * y[2] + 200.0 * y[5] + 0.06 * y[7] + 0.02 * y[8]
-        )
-
-        # C5
-        eq_constraints = eq_constraints.at[4].set(
-            6.6667e-4 * y[0] + (-1.01) * y[3] + 200.0 * y[6] + 0.06 * y[8] + 0.02 * y[9]
-        )
-
-        # C6
-        eq_constraints = eq_constraints.at[5].set(
-            0.978 * y[1] + (-201.0) * y[4] + 100.0 * y[10] + 0.03 * y[11] + 0.01 * y[12]
-        )
-
-        # C7
-        eq_constraints = eq_constraints.at[6].set(
-            0.01 * y[1]
-            + 0.489 * y[2]
-            + (-101.03) * y[5]
-            + 100.0 * y[11]
-            + 0.03 * y[13]
-            + 0.01 * y[14]
-        )
-
-        # C8
-        eq_constraints = eq_constraints.at[7].set(
-            0.001 * y[1]
-            + 0.489 * y[3]
-            + (-101.03) * y[6]
-            + 100.0 * y[12]
-            + 0.03 * y[14]
-            + 0.01 * y[15]
-        )
-
-        # C9
-        eq_constraints = eq_constraints.at[8].set(
-            0.001 * y[2]
-            + 0.01 * y[3]
-            + (-1.04) * y[8]
-            + 100.0 * y[14]
-            + 0.03 * y[17]
-            + 0.01 * y[18]
-        )
-
-        # C10
-        eq_constraints = eq_constraints.at[9].set(
-            0.02 * y[2] + (-1.06) * y[7] + 100.0 * y[13] + 0.03 * y[16] + 0.01 * y[18]
-        )
-
-        # C11
-        eq_constraints = eq_constraints.at[10].set(
-            0.002 * y[3] + (-1.02) * y[9] + 100.0 * y[15] + 0.03 * y[18] + 0.01 * y[19]
-        )
-
-        # C12
-        eq_constraints = eq_constraints.at[11].set(
-            (-2.5742e-6) * y[10] + 0.00252 * y[12] + (-0.61975) * y[15] + 1.03 * y[19]
-        )
-
-        # C13
-        eq_constraints = eq_constraints.at[12].set(
-            (-0.00257) * y[10] + 0.25221 * y[11] + (-6.2) * y[13] + 1.09 * y[16]
-        )
-
-        # C14
-        eq_constraints = eq_constraints.at[13].set(
-            0.00629 * y[10]
-            + (-0.20555) * y[11]
-            + (-4.1106) * y[12]
-            + 101.04 * y[14]
-            + 505.1 * y[15]
-            + (-256.72) * y[18]
-        )
-
-        # C15
-        eq_constraints = eq_constraints.at[14].set(
-            0.00841 * y[11]
-            + (-0.08406) * y[12]
-            + (-0.20667) * y[13]
-            + 20.658 * y[15]
-            + 1.07 * y[17]
-            + (-10.5) * y[18]
-        )
+        # Compute constraints using module-level matrix: A @ y - b
+        eq_constraints = _A @ y - _B
 
         # No inequality constraints
         ineq_constraints = None
@@ -191,5 +135,5 @@ class DEGENLPA(AbstractConstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        # From the SIF file comment: *LO SOLTN 3.06435
-        return jnp.array(3.06435)
+        # From the SIF file comment: *LO SOLTN               -3.06435
+        return jnp.array(-3.06435)

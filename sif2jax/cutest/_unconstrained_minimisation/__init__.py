@@ -223,6 +223,8 @@ from .misra1als import MISRA1ALS as MISRA1ALS
 from .misra1bls import MISRA1BLS as MISRA1BLS
 from .misra1cls import MISRA1CLS as MISRA1CLS
 from .misra1dls import MISRA1DLS as MISRA1DLS
+from .msqrtals import MSQRTALS as MSQRTALS
+from .msqrtbls import MSQRTBLS as MSQRTBLS
 
 # TODO: Human review needed - Minor gradient precision differences
 # from .morebv import MOREBV as MOREBV
@@ -234,6 +236,7 @@ from .misra1dls import MISRA1DLS as MISRA1DLS
 # from .ncb20b import NCB20B as NCB20B
 # TODO: Human review needed - SCALE interpretation issue
 # from .nondia import NONDIA as NONDIA
+from .nelsonls import NELSONLS as NELSONLS
 from .noncvxu2 import NONCVXU2 as NONCVXU2
 from .noncvxun import NONCVXUN as NONCVXUN
 from .nondquar import NONDQUAR as NONDQUAR
@@ -533,11 +536,14 @@ unconstrained_minimisation_problems = (
     MISRA1BLS(),
     MISRA1CLS(),
     MISRA1DLS(),
+    MSQRTALS(),
+    MSQRTBLS(),
     # MOREBV(),  # TODO: Human review - minor gradient precision differences
     # MODBEALE(),  # TODO: Human review - SCALE interpretation issue
     # NCB20(),  # TODO: Human review needed
     # NCB20B(),  # TODO: Human review needed
     # NONDIA(),  # TODO: Human review needed - SCALE interpretation issue
+    NELSONLS(),
     NONCVXU2(),
     NONCVXUN(),
     NONDQUAR(),

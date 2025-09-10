@@ -3,8 +3,8 @@ ZAMB2 - Zambezi hydropower system optimization (1 year, 1960 start)
 
 Optimal control of Zambezi hydropower system.
 
-Reference: Arnold, Tatjewski, and Wolochowicz. "Two methods for large-scale 
-nonlinear optimization and their comparison on a case study of hydropower 
+Reference: Arnold, Tatjewski, and Wolochowicz. "Two methods for large-scale
+nonlinear optimization and their comparison on a case study of hydropower
 optimization." JOTA 81(1994)2,221-248.
 
 Classification: OOR2-RN-66-24

@@ -27,9 +27,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Test problem runtime with pre-built image
+      - name: Test problem runtime for problems A-M with pre-built image
         run: |
           docker run --rm -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
-            bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py"
+            bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py --letters=A-M"
 
+      - name: Test problem runtime for problems N-Z with pre-built image
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/workspace \
+            johannahaffner/pycutest:latest \
+            bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py --letters=N-Z"

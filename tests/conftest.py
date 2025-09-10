@@ -40,12 +40,13 @@ def pytest_addoption(parser):
         help="Runtime ratio threshold for JAX/pycutest comparison (default: 5.0)",
     )
     parser.addoption(
-        "--start-at-letter",
+        "--letters",
         action="store",
         default=None,
         help=(
-            "Skip problems starting with letters before the specified letter "
-            "(e.g., --start-at-letter=M skips A-L)"
+            "Run problems starting with letters in the specified range "
+            "(e.g., --letters=A-M runs problems from A to M inclusive, "
+            "--letters=G runs only problems starting with G)"
         ),
     )
     parser.addoption(
@@ -64,7 +65,7 @@ def pytest_generate_tests(metafunc):
         import sif2jax
 
         requested = metafunc.config.getoption("--test-case")
-        start_at_letter = metafunc.config.getoption("--start-at-letter")
+        letters = metafunc.config.getoption("--letters")
 
         if requested is not None:
             # Split by comma and strip whitespace
@@ -88,11 +89,40 @@ def pytest_generate_tests(metafunc):
             all_problems = list(sif2jax.problems)
 
             # Apply letter filter if specified
-            if start_at_letter:
-                start_letter = start_at_letter.upper()
+            if letters:
+                letters = letters.upper()
+                if "-" in letters:
+                    # Range format: A-M
+                    parts = letters.split("-")
+                    if len(parts) != 2:
+                        raise ValueError(
+                            f"Invalid letters format '{letters}'. "
+                            "Use single letter (e.g., 'G') or range (e.g., 'A-M')"
+                        )
+                    start_letter, end_letter = parts[0].strip(), parts[1].strip()
+                    if len(start_letter) != 1 or len(end_letter) != 1:
+                        raise ValueError(
+                            f"Invalid letters format '{letters}'. "
+                            "Start and end must be single letters"
+                        )
+                    if start_letter > end_letter:
+                        raise ValueError(
+                            f"Invalid range '{letters}'. Start letter '{start_letter}' "
+                            f"must come before end letter '{end_letter}'"
+                        )
+                else:
+                    # Single letter format: G
+                    if len(letters) != 1:
+                        raise ValueError(
+                            f"Invalid letters format '{letters}'. "
+                            "Use single letter (e.g., 'G') or range (e.g., 'A-M')"
+                        )
+                    start_letter = end_letter = letters
+
                 filtered_problems = []
                 for problem in all_problems:
-                    if problem.name[0].upper() >= start_letter:
+                    first_letter = problem.name[0].upper()
+                    if start_letter <= first_letter <= end_letter:
                         filtered_problems.append(problem)
                 test_cases = tuple(filtered_problems)
             else:

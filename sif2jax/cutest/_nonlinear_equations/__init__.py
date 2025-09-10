@@ -234,6 +234,8 @@ from .pfit1 import PFIT1 as PFIT1
 from .pfit2 import PFIT2 as PFIT2
 from .pfit3 import PFIT3 as PFIT3
 from .pfit4 import PFIT4 as PFIT4
+from .porous1 import POROUS1 as POROUS1
+from .porous2 import POROUS2 as POROUS2
 from .powellbs import POWELLBS as POWELLBS
 from .powellse import POWELLSE as POWELLSE
 from .powellsq import POWELLSQ as POWELLSQ
@@ -477,6 +479,8 @@ nonlinear_equations_problems = (
     PFIT2(),
     PFIT3(),
     PFIT4(),
+    POROUS1(),
+    POROUS2(),
     POWERSUMNE(),
     QINGNE(),
     RAT42(),

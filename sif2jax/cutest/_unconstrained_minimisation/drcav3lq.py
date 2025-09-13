@@ -6,19 +6,6 @@ from ..._problem import AbstractUnconstrainedMinimisation
 class DRCAV3LQ(AbstractUnconstrainedMinimisation):
     """Driven cavity problem, least-squares formulation, Reynolds number = 5000.
 
-    TODO: Human review needed
-    Attempts made:
-    1. Tried adding Fortran column-major ordering for reshape - made error worse
-
-    Suspected issues:
-    - Large gradient error (48000) at element 68 with repeating_0123 pattern
-    - Element 68 corresponds to Y(1,1) in column-major ordering
-    - May be related to boundary condition handling or stencil computation
-
-    Resources needed:
-    - Check pycutest Fortran source for exact stencil implementation
-    - Verify boundary condition handling matches SIF file
-
     This system of nonlinear equations models the stream function corresponding
     to an incompressible fluid flow in a driven cavity (after elimination of
     the vorticity). The system is solved in the least-squares sense.

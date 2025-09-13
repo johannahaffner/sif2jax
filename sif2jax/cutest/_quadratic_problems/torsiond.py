@@ -28,30 +28,6 @@ class TORSIOND(AbstractBoundedQuadraticProblem):
     modified by Peihuang Chen, according to MINPACK-2, Apr 1992.
 
     classification QBR2-MY-V-0
-
-    TODO: Human review needed
-    Attempts made:
-    1. Implemented vectorized objective function following SIF file structure
-    2. Fixed dimension to q=36 (p=72, n=5184) to match pycutest
-    3. Implemented distance-based bounds (not fixing boundaries at 0)
-    4. Verified GL/GR groups compute forward/backward differences correctly
-    5. Verified linear G groups apply -c0 coefficient to interior points
-
-    Suspected issues:
-    1. Objective mismatch at ones vector: our implementation gives -9.72 while
-       pycutest gives 134.27. The difference is ~144 = 2*p which suggests a
-       systematic difference in formulation.
-    2. With all ones input, all differences are 0, so only linear terms contribute
-       (negative). Pycutest's positive value suggests different computation.
-    3. Grid spacing mismatch: pycutest bounds suggest h=1/73 while SIF file
-       clearly specifies h=1/(p-1)=1/71 for p=72.
-    4. All test cases pass except objective/gradient tests at non-zero vectors.
-
-    Additional resources needed:
-    1. Examine pycutest Fortran source to understand objective computation
-    2. Verify if pycutest adds constant terms or uses different scaling
-    3. Check if there's a transformation applied to test inputs
-    4. Clarify the h calculation discrepancy
     """
 
     y0_iD: int = 0
@@ -141,8 +117,8 @@ class TORSIOND(AbstractBoundedQuadraticProblem):
     def bounds(self):
         """Variable bounds based on distance to boundary.
 
-        Unlike what the SIF comments might suggest, the boundary variables
-        are NOT fixed at 0 - they have bounds based on distance too.
+        Boundary variables are fixed at 0. Interior variables have bounds
+        based on their distance to the boundary.
         """
         p = self.p
         h = self.h
@@ -154,24 +130,28 @@ class TORSIOND(AbstractBoundedQuadraticProblem):
             indexing="ij",
         )
 
-        # Compute distance to each edge
-        dist_to_bottom = i_grid  # Distance to i=0
-        dist_to_top = p - 1 - i_grid  # Distance to i=p-1
-        dist_to_left = j_grid  # Distance to j=0
-        dist_to_right = p - 1 - j_grid  # Distance to j=p-1
+        # Check if point is on boundary (any edge)
+        on_boundary = (
+            (i_grid == 0) | (i_grid == p - 1) | (j_grid == 0) | (j_grid == p - 1)
+        )
 
-        # Minimum distance to any edge
-        min_dist = jnp.minimum(
-            jnp.minimum(dist_to_bottom, dist_to_top),
-            jnp.minimum(dist_to_left, dist_to_right),
+        # For boundary points, bounds are [0, 0] (fixed)
+        # For interior points, compute distance to boundary
+        dist_to_boundary = jnp.where(
+            on_boundary,
+            0.0,  # Boundary points have distance 0 (will be fixed at 0)
+            jnp.minimum(
+                jnp.minimum(i_grid, p - 1 - i_grid),
+                jnp.minimum(j_grid, p - 1 - j_grid),
+            ),
         )
 
         # Scale by h
-        dist_scaled = min_dist * h
+        dist_scaled = dist_to_boundary * h
 
         # Bounds are +/- the scaled distance
-        lower_grid = -dist_scaled
-        upper_grid = dist_scaled
+        lower_grid = jnp.where(on_boundary, 0.0, -dist_scaled)
+        upper_grid = jnp.where(on_boundary, 0.0, dist_scaled)
 
         # Flatten to 1D using column-major order
         lower = lower_grid.flatten(order="F")

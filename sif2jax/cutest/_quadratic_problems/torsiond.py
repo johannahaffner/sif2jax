@@ -86,30 +86,43 @@ class TORSIOND(AbstractBoundedQuadraticProblem):
         # Reshape to grid using column-major (Fortran) order
         x = y.reshape((p, p), order="F")
 
-        # For interior points [1:-1, 1:-1], compute 4 neighbor differences
-        interior = x[1:-1, 1:-1]  # Shape: (p-2, p-2)
+        # GR groups: forward differences for points (I,J) where I,J in [1,P-1]
+        # These are points [0:p-1, 0:p-1] in 0-based indexing
+        gr_points = x[0 : p - 1, 0 : p - 1]  # Shape: (p-1, p-1)
 
-        # A terms: difference with point below (I+1,J)
-        diff_down = x[2:, 1:-1] - interior  # x[i+1,j] - x[i,j]
-        a_terms = 0.25 * diff_down**2
+        # A(I,J): (X(I+1,J) - X(I,J))^2 for forward difference in I direction
+        a_diff = x[1:p, 0 : p - 1] - gr_points  # x[i+1,j] - x[i,j]
+        a_terms = 0.25 * a_diff**2
 
-        # B terms: difference with point to the right (I,J+1)
-        diff_right = x[1:-1, 2:] - interior  # x[i,j+1] - x[i,j]
-        b_terms = 0.25 * diff_right**2
+        # B(I,J): (X(I,J+1) - X(I,J))^2 for forward difference in J direction
+        b_diff = x[0 : p - 1, 1:p] - gr_points  # x[i,j+1] - x[i,j]
+        b_terms = 0.25 * b_diff**2
 
-        # C terms: difference with point above (I-1,J)
-        diff_up = x[:-2, 1:-1] - interior  # x[i-1,j] - x[i,j]
-        c_terms = 0.25 * diff_up**2
+        # GL groups: backward differences for points (I,J) where I,J in [2,P]
+        # These are points [1:p, 1:p] in 0-based indexing
+        gl_points = x[1:p, 1:p]  # Shape: (p-1, p-1)
 
-        # D terms: difference with point to the left (I,J-1)
-        diff_left = x[1:-1, :-2] - interior  # x[i,j-1] - x[i,j]
-        d_terms = 0.25 * diff_left**2
+        # C(I,J): (X(I-1,J) - X(I,J))^2 for backward difference in I direction
+        c_diff = x[0 : p - 1, 1:p] - gl_points  # x[i-1,j] - x[i,j]
+        c_terms = 0.25 * c_diff**2
+
+        # D(I,J): (X(I,J-1) - X(I,J))^2 for backward difference in J direction
+        d_diff = x[1:p, 0 : p - 1] - gl_points  # x[i,j-1] - x[i,j]
+        d_terms = 0.25 * d_diff**2
 
         # Linear terms from G groups (coefficient -c0)
+        # Applied to interior points only [1:p-1, 1:p-1]
+        interior = x[1 : p - 1, 1 : p - 1]
         linear_terms = -c0 * interior
 
         # Sum all contributions
-        obj = jnp.sum(a_terms + b_terms + c_terms + d_terms + linear_terms)
+        obj = (
+            jnp.sum(a_terms)
+            + jnp.sum(b_terms)
+            + jnp.sum(c_terms)
+            + jnp.sum(d_terms)
+            + jnp.sum(linear_terms)
+        )
 
         return jnp.array(obj)
 

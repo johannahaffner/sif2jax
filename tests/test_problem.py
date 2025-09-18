@@ -8,13 +8,14 @@ import pycutest  # pyright: ignore[reportMissingImports]  - test runs in contain
 import pytest  # pyright: ignore[reportMissingImports]  - test runs in container
 import sif2jax
 
-from .helpers import (
+from tests.helpers import (
     check_hprod_allclose,
     constraints_allclose,
     has_constraints,
     jacobians_allclose,
     pycutest_jac_only,
     try_except_evaluate,
+    check_sparse_hprod_allclose,
 )
 
 
@@ -124,11 +125,17 @@ class TestProblem:
                 # is trivial and uninformative.
                 if problem.num_variables() <= 10_000:
                     check_hprod_allclose(problem, pycutest_problem, problem.y0)
-                else:
-                    pytest.skip(
-                        "Hessian-vector product test skipped for very large "
-                        "problems (n >= 10,000) due to memory constraints."
+                    check_sparse_hprod_allclose(
+                        problem, pycutest_problem, problem.y0
                     )
+                else:
+                    check_sparse_hprod_allclose(
+                        problem, pycutest_problem, problem.y0
+                    )
+                    # pytest.skip(
+                    #     "Hessian-vector product test skipped for very large "
+                    #     "problems (n >= 10,000) due to memory constraints."
+                    # )
             else:
                 # pycutest implements its hprod method for the Hessian only if the
                 # problem is unconstrained. Otherwise the Hessian used in this method
@@ -155,11 +162,17 @@ class TestProblem:
                     check_hprod_allclose(
                         problem, pycutest_problem, jnp.zeros_like(problem.y0)
                     )
-                else:
-                    pytest.skip(
-                        "Hessian-vector product test skipped for very large "
-                        "problems (n >= 10,000) due to memory constraints."
+                    check_sparse_hprod_allclose(
+                        problem, pycutest_problem, jnp.zeros_like(problem.y0)
                     )
+                else:
+                    check_sparse_hprod_allclose(
+                        problem, pycutest_problem, jnp.zeros_like(problem.y0)
+                    )
+                    # pytest.skip(
+                    #     "Hessian-vector product test skipped for very large "
+                    #     "problems (n >= 10,000) due to memory constraints."
+                    # )
             else:
                 # pycutest implements its hprod method for the Hessian only if the
                 # problem is unconstrained. Otherwise the Hessian used in this method
@@ -186,11 +199,17 @@ class TestProblem:
                     check_hprod_allclose(
                         problem, pycutest_problem, jnp.ones_like(problem.y0)
                     )
-                else:
-                    pytest.skip(
-                        "Hessian-vector product test skipped for very large "
-                        "problems (n >= 10,000) due to memory constraints."
+                    check_sparse_hprod_allclose(
+                        problem, pycutest_problem, jnp.ones_like(problem.y0)
                     )
+                else:
+                    check_sparse_hprod_allclose(
+                        problem, pycutest_problem, jnp.ones_like(problem.y0)
+                    )
+                    # pytest.skip(
+                    #     "Hessian-vector product test skipped for very large "
+                    #     "problems (n >= 10,000) due to memory constraints."
+                    # )
             else:
                 # pycutest implements its hprod method for the Hessian only if the
                 # problem is unconstrained. Otherwise the Hessian used in this method
@@ -463,3 +482,35 @@ class TestProblem:
         signature = inspect.signature(problem.objective)
         # No union types in return type hints of concrete implementations
         assert str(signature).split("->")[-1].strip().find("|") == -1
+
+
+if __name__ == "__main__":
+    # This block allows for manual debugging of a single problem.
+
+    # 1. CHOOSE A PROBLEM TO DEBUG
+    # ---------------------------
+    problem_name = "ROSENBR"
+    print(f"--- Running manual debug for: {problem_name} ---")
+
+    # 2. SETUP: Load problems and test class
+    # --------------------------------------
+    try:
+        problem = sif2jax.cutest.get_problem(problem_name)
+        pycutest_problem = pycutest.import_problem(
+            problem_name# , drop_fixed_variables=False
+        )
+    except Exception as e:
+        print(f"\nERROR: Failed to load problem '{problem_name}'.")
+        print(f"DETAILS: {e}")
+        exit(1)
+
+    test_suite = TestProblem()
+    print("Setup complete. Starting tests.\n")
+
+    # 3. RUN TESTS MANUALLY
+    # ---------------------
+    # Call the test methods you want to run. This is useful for setting
+    # breakpoints and inspecting values.
+    # Note: This bypasses pytest's fixture management.
+    test_suite.test_correct_hessian_at_start(problem, pycutest_problem)
+    print(f"--- Manual debug for {problem_name} finished ---")

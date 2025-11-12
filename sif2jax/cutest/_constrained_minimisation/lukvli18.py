@@ -1,3 +1,4 @@
+import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -44,22 +45,22 @@ class LUKVLI18(AbstractConstrainedMinimisation):
     def objective(self, y, args):
         del args
         n = len(y)
-        # Chained modified HS53 function - vectorized
+        # Chained modified HS53 function - fully vectorized
         num_groups = (n - 1) // 4
-        if num_groups == 0 or n < 5:
-            return jnp.array(0.0)
 
         # For each group i=1..num_groups, we have j = 4*(i-1)
         # We need y[j] through y[j+4]
-        i = jnp.arange(num_groups)
-        j = 4 * i  # j values in 0-based
+        j = 4 * jnp.arange(num_groups)  # j values in 0-based
 
-        # Extract elements for all groups
-        y_j = y[j]  # y[j]
-        y_j1 = y[j + 1]  # y[j+1]
-        y_j2 = y[j + 2]  # y[j+2]
-        y_j3 = y[j + 3]  # y[j+3]
-        y_j4 = y[j + 4]  # y[j+4]
+        # Pad y to ensure safe indexing
+        y_padded = jnp.pad(y, (0, 5), mode="constant", constant_values=0.0)
+
+        # Extract elements for all groups using advanced indexing
+        y_j = y_padded[j]  # y[j]
+        y_j1 = y_padded[j + 1]  # y[j+1]
+        y_j2 = y_padded[j + 2]  # y[j+2]
+        y_j3 = y_padded[j + 3]  # y[j+3]
+        y_j4 = y_padded[j + 4]  # y[j+4]
 
         # Compute all terms at once
         terms = (
@@ -100,42 +101,42 @@ class LUKVLI18(AbstractConstrainedMinimisation):
         if n_c == 0:
             return None, jnp.array([])
 
-        # Based on SIF file analysis:
-        # K loops as 1, 4, 7, 10, ... (increments by 3)
-        # For each K, we generate C(K), C(K+1), C(K+2)
-        # But the element definitions show:
-        # - E(K) uses X(K)
-        # - E(K+1) uses X(K+2)
-        # - E(K+2) uses X(K+1)
+        # Pad y to ensure safe indexing
+        y_padded = jnp.pad(y, (0, 10), mode="constant", constant_values=0.0)
 
-        # Extend y with zeros to safely access all indices
-        extended_length = n + 20
-        y_extended = jnp.zeros(extended_length)
-        y_extended = y_extended.at[:n].set(y)
+        def constraint_1(i):
+            # Type 1: constraint index i where i % 3 == 0
+            # Maps to k = i // 3 * 3 in 0-based indexing
+            # C(K): X(K)^2 + 3*X(K+1)
+            k = (i // 3) * 3
+            return y_padded[k] ** 2 + 3 * y_padded[k + 1]
 
-        constraints = []
+        def constraint_2(i):
+            # Type 2: constraint index i where i % 3 == 1
+            # Maps to k = (i - 1) // 3 * 3 in 0-based indexing
+            # C(K+1): X(K+2)^2 + X(K+3) - 2*X(K+4)
+            k = ((i - 1) // 3) * 3
+            return y_padded[k + 2] ** 2 + y_padded[k + 3] - 2 * y_padded[k + 4]
 
-        # Generate constraints in groups of 3
-        k = 0  # Start at 0 for 0-based indexing (corresponds to K=1 in SIF)
-        while len(constraints) < n_c:
-            # C(K): X(K)^2 + 3*X(K+1) using E(K) which is X(K)^2
-            c_k = y_extended[k] ** 2 + 3 * y_extended[k + 1]
-            constraints.append(c_k)
+        def constraint_0(i):
+            # Type 3: constraint index i where i % 3 == 2
+            # Maps to k = (i - 2) // 3 * 3 in 0-based indexing
+            # C(K+2): X(K+1)^2 - X(K+4)
+            k = ((i - 2) // 3) * 3
+            return y_padded[k + 1] ** 2 - y_padded[k + 4]
 
-            if len(constraints) >= n_c:
-                break
+        # Generate all constraint indices
+        indices = jnp.arange(n_c)
 
-            # C(K+1): X(K+2)^2 + X(K+3) - 2*X(K+4) using E(K+1) which is X(K+2)^2
-            c_k1 = y_extended[k + 2] ** 2 + y_extended[k + 3] - 2 * y_extended[k + 4]
-            constraints.append(c_k1)
+        # Compute all constraint types using vmap
+        c1_vals = jax.vmap(constraint_1)(indices)
+        c2_vals = jax.vmap(constraint_2)(indices)
+        c0_vals = jax.vmap(constraint_0)(indices)
 
-            if len(constraints) >= n_c:
-                break
+        # Select appropriate constraint based on index modulo 3
+        mod3 = indices % 3
+        inequalities = jnp.where(
+            mod3 == 0, c1_vals, jnp.where(mod3 == 1, c2_vals, c0_vals)
+        )
 
-            # C(K+2): X(K+1)^2 - X(K+4) using E(K+2) which is X(K+1)^2
-            c_k2 = y_extended[k + 1] ** 2 - y_extended[k + 4]
-            constraints.append(c_k2)
-
-            k += 3  # Move to next group (K increments by 3 in SIF)
-
-        return None, jnp.array(constraints[:n_c])
+        return None, inequalities

@@ -93,39 +93,46 @@ class LUKVLE17(AbstractConstrainedMinimisation):
     def constraint(self, y):
         n = len(y)
         n_c = 3 * (n - 1) // 4
-        # Equality constraints - vectorized
 
         if n_c == 0:
             return jnp.array([]), None
 
-        # Compute l values for all k
-        k_values = jnp.arange(1, n_c + 1)
-        l_values = 4 * ((k_values - 1) // 3)
+        # Based on LUKVLI17 (which passes all tests):
+        # K loops as 1, 4, 7, 10, ... (increments by 3)
+        # For each K, we generate C(K), C(K+1), C(K+2)
+        # Element definitions:
+        # - E(K) uses X(K)
+        # - E(K+1) uses X(K+2)
+        # - E(K+2) uses X(K+1)
 
         # Extend y with zeros to safely access all indices
-        # Maximum index needed is max(l_values) + 5
-        extended_length = n + 20  # Add sufficient padding
+        extended_length = n + 20
         y_extended = jnp.zeros(extended_length)
         y_extended = y_extended.at[:n].set(y)
 
-        # Type 1 constraints: k ≡ 1 (mod 3)
-        # c_k = x_{l+1}^2 + 3x_{l+2}
-        c1 = y_extended[l_values] ** 2 + 3 * y_extended[l_values + 1]
+        constraints = []
 
-        # Type 2 constraints: k ≡ 2 (mod 3)
-        # c_k = x_{l+3}^2 + x_{l+4} - 2x_{l+5}
-        c2 = (
-            y_extended[l_values + 2] ** 2
-            + y_extended[l_values + 3]
-            - 2 * y_extended[l_values + 4]
-        )
+        # Generate constraints in groups of 3
+        k = 0  # Start at 0 for 0-based indexing (corresponds to K=1 in SIF)
+        while len(constraints) < n_c:
+            # C(K): X(K)^2 + 3*X(K+1) using E(K) which is X(K)^2
+            c_k = y_extended[k] ** 2 + 3 * y_extended[k + 1]
+            constraints.append(c_k)
 
-        # Type 3 constraints: k ≡ 0 (mod 3)
-        # c_k = x_{l+2}^2 - x_{l+5}
-        c3 = y_extended[l_values + 1] ** 2 - y_extended[l_values + 4]
+            if len(constraints) >= n_c:
+                break
 
-        # Select constraints based on k modulo 3
-        k_mod3 = k_values % 3
-        constraints = jnp.where(k_mod3 == 1, c1, jnp.where(k_mod3 == 2, c2, c3))
+            # C(K+1): X(K+2)^2 + X(K+3) - 2*X(K+4) using E(K+1) which is X(K+2)^2
+            c_k1 = y_extended[k + 2] ** 2 + y_extended[k + 3] - 2 * y_extended[k + 4]
+            constraints.append(c_k1)
 
-        return constraints, None
+            if len(constraints) >= n_c:
+                break
+
+            # C(K+2): X(K+1)^2 - X(K+4) using E(K+2) which is X(K+1)^2
+            c_k2 = y_extended[k + 1] ** 2 - y_extended[k + 4]
+            constraints.append(c_k2)
+
+            k += 3  # Move to next group (K increments by 3 in SIF)
+
+        return jnp.array(constraints[:n_c]), None

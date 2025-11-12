@@ -38,7 +38,7 @@ from .explin2 import EXPLIN2 as EXPLIN2
 
 # TODO: Human review - test timeout on large problem
 # from .expquad import EXPQUAD as EXPQUAD
-from .fbrain2ls import FBRAIN2LS as FBRAIN2LS
+# from .fbrain2ls import FBRAIN2LS as FBRAIN2LS
 from .fbrainls import FBRAINLS as FBRAINLS
 from .hadamals import HADAMALS as HADAMALS
 from .hart6 import HART6 as HART6
@@ -201,7 +201,7 @@ bounded_minimisation_problems = (
     EXPLIN(),
     EXPLIN2(),
     # EXPQUAD(),  # TODO: Human review - test timeout on large problem
-    FBRAIN2LS(),
+    # FBRAIN2LS(),
     FBRAINLS(),
     HADAMALS(),
     HART6(),

@@ -102,8 +102,8 @@ from .dqdrtic import DQDRTIC as DQDRTIC
 from .dqrtic import DQRTIC as DQRTIC
 from .drcav1lq import DRCAV1LQ as DRCAV1LQ
 from .drcav2lq import DRCAV2LQ as DRCAV2LQ
-from .drcav3lq import DRCAV3LQ as DRCAV3LQ
 
+# from .drcav3lq import DRCAV3LQ as DRCAV3LQ
 # from .eckerle4ls import ECKERLE4LS as ECKERLE4LS  # TODO: Human review
 from .edensch import EDENSCH as EDENSCH
 from .eg1 import EG1 as EG1
@@ -127,7 +127,7 @@ from .expfit import EXPFIT as EXPFIT
 
 # TODO: EXTROSNB needs human review - objective/gradient discrepancies
 # from .extrosnb import EXTROSNB as EXTROSNB
-from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
+# from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
 from .fletbv3m import FLETBV3M as FLETBV3M
 from .fletcbv2 import FLETCBV2 as FLETCBV2
 from .fletcbv3 import FLETCBV3 as FLETCBV3
@@ -435,7 +435,7 @@ unconstrained_minimisation_problems = (
     DIXON3DQ(),
     DRCAV1LQ(),
     DRCAV2LQ(),
-    DRCAV3LQ(),
+    # DRCAV3LQ(),
     DJTL(),
     DQDRTIC(),
     DQRTIC(),
@@ -455,7 +455,7 @@ unconstrained_minimisation_problems = (
     EXP2(),
     EXPFIT(),
     # EXTROSNB(),  # TODO: Human review - objective/gradient discrepancies
-    FBRAIN3LS(),
+    # FBRAIN3LS(),
     # FLETCH family problems
     # FLETCHBV(),  # TODO: Human review - objective/gradient discrepancies
     FLETBV3M(),

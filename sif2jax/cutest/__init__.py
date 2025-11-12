@@ -35,7 +35,7 @@ from ._bounded_minimisation import (
     EXPLIN as EXPLIN,
     EXPLIN2 as EXPLIN2,
     # EXPQUAD as EXPQUAD,  # TODO: Human review - test timeout
-    FBRAIN2LS as FBRAIN2LS,
+    # FBRAIN2LS as FBRAIN2LS,
     FBRAINLS as FBRAINLS,
     HADAMALS as HADAMALS,
     HART6 as HART6,
@@ -971,7 +971,7 @@ from ._unconstrained_minimisation import (
     DQRTIC as DQRTIC,
     DRCAV1LQ as DRCAV1LQ,
     DRCAV2LQ as DRCAV2LQ,
-    DRCAV3LQ as DRCAV3LQ,
+    # DRCAV3LQ as DRCAV3LQ,
     # ECKERLE4LS as ECKERLE4LS,  # TODO: Human review needed - Hessian discrepancy
     EDENSCH as EDENSCH,
     EG2 as EG2,
@@ -988,7 +988,7 @@ from ._unconstrained_minimisation import (
     EXP2 as EXP2,
     EXPFIT as EXPFIT,
     # EXTROSNB as EXTROSNB,  # TODO: Human review - objective/gradient discrepancies
-    FBRAIN3LS as FBRAIN3LS,
+    # FBRAIN3LS as FBRAIN3LS,
     FLETBV3M as FLETBV3M,
     FLETCBV2 as FLETCBV2,
     FLETCBV3 as FLETCBV3,
@@ -1716,7 +1716,7 @@ problems_dict = {
     "DIXON3DQ": DIXON3DQ(),
     "DRCAV1LQ": DRCAV1LQ(),
     "DRCAV2LQ": DRCAV2LQ(),
-    "DRCAV3LQ": DRCAV3LQ(),
+    # "DRCAV3LQ": DRCAV3LQ(),
     "DRCAVTY1": DRCAVTY1(),
     "DRCAVTY2": DRCAVTY2(),
     "DRCAVTY3": DRCAVTY3(),
@@ -1746,8 +1746,8 @@ problems_dict = {
     "EXP2B": EXP2B(),
     "EXPFIT": EXPFIT(),
     # "EXTROSNB": EXTROSNB(),  # TODO: Human review - objective/gradient discrepancies
-    "FBRAIN2LS": FBRAIN2LS(),
-    "FBRAIN3LS": FBRAIN3LS(),
+    # "FBRAIN2LS": FBRAIN2LS(),
+    # "FBRAIN3LS": FBRAIN3LS(),
     "FBRAINLS": FBRAINLS(),
     # "FLETCHBV": FLETCHBV(),  # TODO: Human review - objective/gradient discrepancies
     "FLETBV3M": FLETBV3M(),

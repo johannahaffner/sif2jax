@@ -72,11 +72,11 @@ class LUKVLI14(AbstractConstrainedMinimisation):
 
     @property
     def expected_result(self):
-        return None  # Unknown exact solution
+        return None  # Exact solution not specified, only objective value
 
     @property
     def expected_objective_value(self):
-        return None  # Unknown exact objective value
+        return jnp.array(1.56415e04)  # From SIF file: LO SOLTN 1.56415E+04
 
     @property
     def bounds(self):
@@ -87,12 +87,12 @@ class LUKVLI14(AbstractConstrainedMinimisation):
         n_c = 2 * (n - 2) // 3
 
         def even(k):
-            s = 3 * (k // 2)
-            return y[s + 1] + y[s + 2] ** 2 + y[s + 3] + y[s + 4] + y[s + 5] - 5
+            i = 2 * (k // 2)  # Base index for this constraint pair
+            return y[i] ** 2 + y[i + 1] + y[i + 2] + 4 * y[i + 3] - 7
 
         def odd(k):
-            s = 3 * (k // 2)
-            return y[s + 3] ** 2 - 2 * (y[s + 4] + y[s + 5]) - 3
+            i = 2 * (k // 2)  # Base index for this constraint pair
+            return y[i + 2] ** 2 - 5 * y[i + 4] - 6
 
         ks = jnp.arange(0, n_c)
         even_elements = jax.vmap(even)(ks)

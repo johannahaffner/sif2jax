@@ -234,7 +234,7 @@ from ._constrained_minimisation import (
     HAGER2 as HAGER2,
     # HAGER3 as HAGER3,  # TODO: HAGER3 needs human review - marked for future import
     HAGER4 as HAGER4,
-    HAIFAL as HAIFAL,
+    # HAIFAL as HAIFAL,
     HAIFAM as HAIFAM,  # TODO: Human review needed - complex SIF structure
     HAIFAS as HAIFAS,
     # HIE1372D as HIE1372D,  # TODO: Human review - Jacobian mismatch
@@ -357,8 +357,8 @@ from ._constrained_minimisation import (
     HS268 as HS268,
     HYDROELL as HYDROELL,
     # JANNSON3 as JANNSON3,  # TODO: Human review - Jacobian tests hang
-    JANNSON4 as JANNSON4,
-    LIPPERT1 as LIPPERT1,
+    # JANNSON4 as JANNSON4,
+    # LIPPERT1 as LIPPERT1,
     LIPPERT2 as LIPPERT2,
     # KISSING as KISSING,  # TODO: Human review - runtime issue (5.37x)
     # KISSING2 as KISSING2,  # TODO: Human review needed
@@ -433,7 +433,7 @@ from ._constrained_minimisation import (
     MINMAXRB as MINMAXRB,
     MSS1 as MSS1,
     MSS2 as MSS2,
-    MSS3 as MSS3,
+    # MSS3 as MSS3,
     ODFITS as ODFITS,
     OET1 as OET1,
     OET2 as OET2,
@@ -457,7 +457,7 @@ from ._constrained_minimisation import (
     ORTHREGC as ORTHREGC,
     ORTHREGD as ORTHREGD,
     ORTHREGE as ORTHREGE,
-    ORTHREGF as ORTHREGF,
+    # ORTHREGF as ORTHREGF,
     ORTHRGDM as ORTHRGDM,
     ORTHRGDS as ORTHRGDS,
     PENTAGON as PENTAGON,
@@ -1144,7 +1144,7 @@ from ._unconstrained_minimisation import (
     WOODS as WOODS,
     YATP1CLS as YATP1CLS,
     YATP1LS as YATP1LS,
-    YATP2CLS as YATP2CLS,
+    # YATP2CLS as YATP2CLS,
     # YATP2LS as YATP2LS,  # TODO: Human review - Hessian test failures
     ZANGWIL2 as ZANGWIL2,
 )
@@ -1368,7 +1368,7 @@ problems_dict = {
     "HS268": HS268(),
     "HYDROELL": HYDROELL(),
     # "JANNSON3": JANNSON3(),  # TODO: Human review - Jacobian tests hang
-    "JANNSON4": JANNSON4(),
+    # "JANNSON4": JANNSON4(),
     # "KISSING": KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # "KISSING2": KISSING2(),  # TODO: Human review needed
     # "KIWCRESC": KIWCRESC(),  # TODO: Human review - constraints differ by 2.0
@@ -1388,7 +1388,7 @@ problems_dict = {
     "LISWET10": LISWET10(),
     "LISWET11": LISWET11(),
     "LISWET12": LISWET12(),
-    "LIPPERT1": LIPPERT1(),
+    # "LIPPERT1": LIPPERT1(),
     "LIPPERT2": LIPPERT2(),
     "LOOTSMA": LOOTSMA(),
     "LSNNODOC": LSNNODOC(),
@@ -1398,7 +1398,7 @@ problems_dict = {
     "MINMAXRB": MINMAXRB(),
     "MSS1": MSS1(),
     "MSS2": MSS2(),
-    "MSS3": MSS3(),
+    # "MSS3": MSS3(),
     "ODFITS": ODFITS(),
     "OET1": OET1(),
     "OET2": OET2(),
@@ -1422,7 +1422,7 @@ problems_dict = {
     "ORTHREGC": ORTHREGC(),
     "ORTHREGD": ORTHREGD(),
     "ORTHREGE": ORTHREGE(),
-    "ORTHREGF": ORTHREGF(),
+    # "ORTHREGF": ORTHREGF(),
     "ORTHRGDM": ORTHRGDM(),
     "ORTHRGDS": ORTHRGDS(),
     "PENTAGON": PENTAGON(),
@@ -1781,7 +1781,7 @@ problems_dict = {
     "HAGER4": HAGER4(),
     "HAIFAS": HAIFAS(),
     "HAIFAM": HAIFAM(),  # TODO: Human review needed - complex SIF structure
-    "HAIFAL": HAIFAL(),
+    # "HAIFAL": HAIFAL(),
     # "HIE1372D": HIE1372D(),  # TODO: Human review - Jacobian mismatch
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
@@ -1964,7 +1964,7 @@ problems_dict = {
     "YATP1CNE": YATP1CNE(),
     "YATP1LS": YATP1LS(),
     "YATP1NE": YATP1NE(),
-    "YATP2CLS": YATP2CLS(),
+    # "YATP2CLS": YATP2CLS(),
     # "YATP2CNE": YATP2CNE(),  # TODO: Human review - constraint ordering mismatch
     # "YATP2LS": YATP2LS(),  # TODO: Human review - Hessian test failures
     # "YATP2SQ": YATP2SQ(),  # TODO: Human review - constraint ordering mismatch

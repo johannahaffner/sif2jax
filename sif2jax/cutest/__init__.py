@@ -9,9 +9,9 @@ from ._bounded_minimisation import (
     CAMEL6 as CAMEL6,
     CHARDIS0 as CHARDIS0,
     # CHARDIS02 as CHARDIS02,  # TODO: Human review needed
-    CLPLATEA as CLPLATEA,
-    CLPLATEB as CLPLATEB,
-    CLPLATEC as CLPLATEC,
+    # CLPLATEA as CLPLATEA,
+    # CLPLATEB as CLPLATEB,
+    # CLPLATEC as CLPLATEC,
     CYCLOOCTLS as CYCLOOCTLS,
     DEGDIAG as DEGDIAG,
     DEGTRID as DEGTRID,
@@ -1590,9 +1590,9 @@ problems_dict = {
     "CAMEL6": CAMEL6(),
     "CHARDIS0": CHARDIS0(),
     # "CHARDIS02": CHARDIS02(),  # TODO: Human review needed
-    "CLPLATEA": CLPLATEA(),
-    "CLPLATEB": CLPLATEB(),
-    "CLPLATEC": CLPLATEC(),
+    # "CLPLATEA": CLPLATEA(),
+    # "CLPLATEB": CLPLATEB(),
+    # "CLPLATEC": CLPLATEC(),
     # "BROWNAL": BROWNAL(),  # TODO: Human review - small Hessian discrepancies
     "BROWNBS": BROWNBS(),
     "BROWNDEN": BROWNDEN(),

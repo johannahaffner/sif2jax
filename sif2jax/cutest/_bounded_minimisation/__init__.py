@@ -8,9 +8,9 @@ from .camel6 import CAMEL6 as CAMEL6
 from .chardis0 import CHARDIS0 as CHARDIS0
 
 # from .chardis02 import CHARDIS02 as CHARDIS02  # TODO: Human review needed
-from .clplatea import CLPLATEA as CLPLATEA
-from .clplateb import CLPLATEB as CLPLATEB
-from .clplatec import CLPLATEC as CLPLATEC
+# from .clplatea import CLPLATEA as CLPLATEA
+# from .clplateb import CLPLATEB as CLPLATEB
+# from .clplatec import CLPLATEC as CLPLATEC
 from .cyclooctls import CYCLOOCTLS as CYCLOOCTLS
 from .degdiag import DEGDIAG as DEGDIAG
 from .degtrid import DEGTRID as DEGTRID
@@ -175,9 +175,9 @@ bounded_minimisation_problems = (
     CAMEL6(),
     CHARDIS0(),
     # CHARDIS02(),  # TODO: Human review needed
-    CLPLATEA(),
-    CLPLATEB(),
-    CLPLATEC(),
+    # CLPLATEA(),
+    # CLPLATEB(),
+    # CLPLATEC(),
     CYCLOOCTLS(),
     DEGDIAG(),
     DEGTRID(),

@@ -478,8 +478,8 @@ from ._constrained_minimisation import (
     READING1 as READING1,
     READING2 as READING2,
     READING3 as READING3,
-    READING4 as READING4,
-    READING5 as READING5,
+    # READING4 as READING4,
+    # READING5 as READING5,
     # READING6 as READING6,  # TODO: Human review needed
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
@@ -1443,8 +1443,8 @@ problems_dict = {
     "READING1": READING1(),
     "READING2": READING2(),
     "READING3": READING3(),
-    "READING4": READING4(),
-    "READING5": READING5(),
+    # "READING4": READING4(),
+    # "READING5": READING5(),
     # "READING6": READING6(),  # TODO: Human review needed
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too

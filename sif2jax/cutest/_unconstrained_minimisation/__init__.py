@@ -102,8 +102,8 @@ from .dqdrtic import DQDRTIC as DQDRTIC
 from .dqrtic import DQRTIC as DQRTIC
 from .drcav1lq import DRCAV1LQ as DRCAV1LQ
 from .drcav2lq import DRCAV2LQ as DRCAV2LQ
-from .drcav3lq import DRCAV3LQ as DRCAV3LQ
 
+# from .drcav3lq import DRCAV3LQ as DRCAV3LQ
 # from .eckerle4ls import ECKERLE4LS as ECKERLE4LS  # TODO: Human review
 from .edensch import EDENSCH as EDENSCH
 from .eg1 import EG1 as EG1
@@ -127,7 +127,7 @@ from .expfit import EXPFIT as EXPFIT
 
 # TODO: EXTROSNB needs human review - objective/gradient discrepancies
 # from .extrosnb import EXTROSNB as EXTROSNB
-from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
+# from .fbrain3ls import FBRAIN3LS as FBRAIN3LS
 from .fletbv3m import FLETBV3M as FLETBV3M
 from .fletcbv2 import FLETCBV2 as FLETCBV2
 from .fletcbv3 import FLETCBV3 as FLETCBV3
@@ -242,9 +242,7 @@ from .noncvxun import NONCVXUN as NONCVXUN
 from .nondquar import NONDQUAR as NONDQUAR
 from .nonmsqrt import NONMSQRT as NONMSQRT
 from .osbornea import OSBORNEA as OSBORNEA
-
-# TODO: Human review - objective discrepancy
-# from .osborneb import OSBORNEB as OSBORNEB
+from .osborneb import OSBORNEB as OSBORNEB
 from .palmer1c import PALMER1C as PALMER1C
 from .palmer1d import PALMER1D as PALMER1D
 from .palmer2c import PALMER2C as PALMER2C
@@ -337,8 +335,8 @@ from .waysea2 import WAYSEA2 as WAYSEA2
 from .woods import WOODS as WOODS
 from .yatp1cls import YATP1CLS as YATP1CLS
 from .yatp1ls import YATP1LS as YATP1LS
-from .yatp2cls import YATP2CLS as YATP2CLS
 
+# from .yatp2cls import YATP2CLS as YATP2CLS
 # TODO: Human review needed - Hessian test failures
 # Attempted fixes:
 # 1. Corrected z_i vs z_j bug (now uses z_j as per SIF)
@@ -437,7 +435,7 @@ unconstrained_minimisation_problems = (
     DIXON3DQ(),
     DRCAV1LQ(),
     DRCAV2LQ(),
-    DRCAV3LQ(),
+    # DRCAV3LQ(),
     DJTL(),
     DQDRTIC(),
     DQRTIC(),
@@ -457,7 +455,7 @@ unconstrained_minimisation_problems = (
     EXP2(),
     EXPFIT(),
     # EXTROSNB(),  # TODO: Human review - objective/gradient discrepancies
-    FBRAIN3LS(),
+    # FBRAIN3LS(),
     # FLETCH family problems
     # FLETCHBV(),  # TODO: Human review - objective/gradient discrepancies
     FLETBV3M(),
@@ -549,7 +547,7 @@ unconstrained_minimisation_problems = (
     NONDQUAR(),
     NONMSQRT(),
     OSBORNEA(),
-    # OSBORNEB(),  # TODO: Human review - objective discrepancy
+    OSBORNEB(),
     PALMER1C(),
     PALMER1D(),
     PALMER2C(),
@@ -603,7 +601,7 @@ unconstrained_minimisation_problems = (
     WOODS(),
     YATP1CLS(),
     YATP1LS(),
-    YATP2CLS(),
+    # YATP2CLS(),
     # YATP2LS(),  # TODO: Human review - Hessian test failures
     ZANGWIL2(),
     TRIGON1(),

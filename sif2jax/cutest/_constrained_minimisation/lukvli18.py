@@ -1,3 +1,4 @@
+import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -44,22 +45,22 @@ class LUKVLI18(AbstractConstrainedMinimisation):
     def objective(self, y, args):
         del args
         n = len(y)
-        # Chained modified HS53 function - vectorized
+        # Chained modified HS53 function - fully vectorized
         num_groups = (n - 1) // 4
-        if num_groups == 0 or n < 5:
-            return jnp.array(0.0)
 
         # For each group i=1..num_groups, we have j = 4*(i-1)
         # We need y[j] through y[j+4]
-        i = jnp.arange(num_groups)
-        j = 4 * i  # j values in 0-based
+        j = 4 * jnp.arange(num_groups)  # j values in 0-based
 
-        # Extract elements for all groups
-        y_j = y[j]  # y[j]
-        y_j1 = y[j + 1]  # y[j+1]
-        y_j2 = y[j + 2]  # y[j+2]
-        y_j3 = y[j + 3]  # y[j+3]
-        y_j4 = y[j + 4]  # y[j+4]
+        # Pad y to ensure safe indexing
+        y_padded = jnp.pad(y, (0, 5), mode="constant", constant_values=0.0)
+
+        # Extract elements for all groups using advanced indexing
+        y_j = y_padded[j]  # y[j]
+        y_j1 = y_padded[j + 1]  # y[j+1]
+        y_j2 = y_padded[j + 2]  # y[j+2]
+        y_j3 = y_padded[j + 3]  # y[j+3]
+        y_j4 = y_padded[j + 4]  # y[j+4]
 
         # Compute all terms at once
         terms = (
@@ -100,34 +101,42 @@ class LUKVLI18(AbstractConstrainedMinimisation):
         if n_c == 0:
             return None, jnp.array([])
 
-        # Compute l values for all k
-        k_values = jnp.arange(1, n_c + 1)
-        l_values = 4 * ((k_values - 1) // 3)
+        # Pad y to ensure safe indexing
+        y_padded = jnp.pad(y, (0, 10), mode="constant", constant_values=0.0)
 
-        # Extend y with zeros to safely access all indices
-        # Maximum index needed is max(l_values) + 5
-        extended_length = n + 20  # Add sufficient padding
-        y_extended = jnp.zeros(extended_length)
-        y_extended = y_extended.at[:n].set(y)
+        def constraint_1(i):
+            # Type 1: constraint index i where i % 3 == 0
+            # Maps to k = i // 3 * 3 in 0-based indexing
+            # C(K): X(K)^2 + 3*X(K+1)
+            k = (i // 3) * 3
+            return y_padded[k] ** 2 + 3 * y_padded[k + 1]
 
-        # Type 1 constraints: k ≡ 1 (mod 3)
-        # c_k = x_{l+1}^2 + 3x_{l+2}
-        c1 = y_extended[l_values] ** 2 + 3 * y_extended[l_values + 1]
+        def constraint_2(i):
+            # Type 2: constraint index i where i % 3 == 1
+            # Maps to k = (i - 1) // 3 * 3 in 0-based indexing
+            # C(K+1): X(K+2)^2 + X(K+3) - 2*X(K+4)
+            k = ((i - 1) // 3) * 3
+            return y_padded[k + 2] ** 2 + y_padded[k + 3] - 2 * y_padded[k + 4]
 
-        # Type 2 constraints: k ≡ 2 (mod 3)
-        # c_k = x_{l+3}^2 + x_{l+4} - 2x_{l+5}
-        c2 = (
-            y_extended[l_values + 2] ** 2
-            + y_extended[l_values + 3]
-            - 2 * y_extended[l_values + 4]
+        def constraint_0(i):
+            # Type 3: constraint index i where i % 3 == 2
+            # Maps to k = (i - 2) // 3 * 3 in 0-based indexing
+            # C(K+2): X(K+1)^2 - X(K+4)
+            k = ((i - 2) // 3) * 3
+            return y_padded[k + 1] ** 2 - y_padded[k + 4]
+
+        # Generate all constraint indices
+        indices = jnp.arange(n_c)
+
+        # Compute all constraint types using vmap
+        c1_vals = jax.vmap(constraint_1)(indices)
+        c2_vals = jax.vmap(constraint_2)(indices)
+        c0_vals = jax.vmap(constraint_0)(indices)
+
+        # Select appropriate constraint based on index modulo 3
+        mod3 = indices % 3
+        inequalities = jnp.where(
+            mod3 == 0, c1_vals, jnp.where(mod3 == 1, c2_vals, c0_vals)
         )
 
-        # Type 3 constraints: k ≡ 0 (mod 3)
-        # c_k = x_{l+2}^2 - x_{l+5}
-        c3 = y_extended[l_values + 1] ** 2 - y_extended[l_values + 4]
-
-        # Select constraints based on k modulo 3
-        k_mod3 = k_values % 3
-        constraints = jnp.where(k_mod3 == 1, c1, jnp.where(k_mod3 == 2, c2, c3))
-
-        return None, constraints
+        return None, inequalities

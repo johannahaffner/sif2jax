@@ -97,29 +97,45 @@ class HS108(AbstractConstrainedMinimisation):
     def constraint(self, y):
         x1, x2, x3, x4, x5, x6, x7, x8, x9 = y
 
-        # Thirteen inequality constraints ordered as in AMPL file
-        # (c1-c13, c14 is handled as bound)
-        # Note: The SIF file formulation differs from AMPL/PDF. Through empirical
-        # testing, pycutest expects a specific sign pattern that doesn't match
-        # the documented conventions. These signs were determined by comparing
-        # with pycutest output.
-        c1 = -(1 - x3**2 - x4**2)  # Negated to match pycutest
-        c2 = -(1 - x5**2 - x6**2)  # Negated to match pycutest
-        c3 = -(1 - x9**2)  # Negated to match pycutest convention
-        c4 = -(1 - x1**2 - (x2 - x9) ** 2)  # Negated to match pycutest
-        c5 = (
-            1 - (x1 - x5) ** 2 - (x2 - x6) ** 2
-        )  # Negated to match pycutest (next line)
-        c5 = -c5
-        c6 = -(1 - (x1 - x7) ** 2 - (x2 - x8) ** 2)  # Negated to match pycutest
-        c7 = -(1 - (x3 - x7) ** 2 - (x4 - x8) ** 2)  # Negated to match pycutest
-        c8 = -(1 - (x3 - x5) ** 2 - (x4 - x6) ** 2)  # Negated to match pycutest
-        c9 = -(1 - x7**2 - (x8 - x9) ** 2)  # Negated to match pycutest
-        # Note: The SIF file has a different ordering for c10-c13 than the AMPL/PDF
-        c10 = x3 * x9  # SIF: CE26
-        c11 = x5 * x8 - x6 * x7  # SIF: CE21 - CE22
-        c12 = x1 * x4 - x2 * x3  # SIF: CE23 - CE24
-        c13 = x5 * x9  # SIF: CE25
+        # Thirteen inequality constraints as defined in SIF file
+        # C1: CE1 + CE2 where CE1=x3^2, CE2=x4^2 (L type, RHS=1)
+        c1 = -(1 - x3**2 - x4**2)  # Convert to <= 0 form
+
+        # C2: CE3 + CE4 where CE3=x5^2, CE4=x6^2 (L type, RHS=1)
+        c2 = -(1 - x5**2 - x6**2)  # Convert to <= 0 form
+
+        # C3: CE5 where CE5=x9^2 (L type, RHS=1)
+        c3 = -(1 - x9**2)  # Convert to <= 0 form
+
+        # C4: CE6 + CE7 where CE6=x1^2, CE7=(x2-x9)^2 (L type, RHS=1)
+        c4 = -(1 - x1**2 - (x2 - x9) ** 2)  # Convert to <= 0 form
+
+        # C5: CE8 + CE9 where CE8=(x1-x5)^2, CE9=(x2-x6)^2 (L type, RHS=1)
+        c5 = -(1 - (x1 - x5) ** 2 - (x2 - x6) ** 2)  # Convert to <= 0 form
+
+        # C6: CE10 + CE11 where CE10=(x1-x7)^2, CE11=(x2-x8)^2 (L type, RHS=1)
+        c6 = -(1 - (x1 - x7) ** 2 - (x2 - x8) ** 2)  # Convert to <= 0 form
+
+        # C7: CE12 + CE13 where CE12=(x3-x5)^2, CE13=(x4-x6)^2 (L type, RHS=1)
+        c7 = -(1 - (x3 - x5) ** 2 - (x4 - x6) ** 2)  # Convert to <= 0 form
+
+        # C8: CE16 + CE17 where CE16=(x3-x7)^2, CE17=(x4-x8)^2 (L type, RHS=1)
+        c8 = -(1 - (x3 - x7) ** 2 - (x4 - x8) ** 2)  # Convert to <= 0 form
+
+        # C9: CE18 + CE20 where CE18=x7^2, CE20=(x8-x9)^2 (L type, RHS=1)
+        c9 = -(1 - x7**2 - (x8 - x9) ** 2)  # Convert to <= 0 form
+
+        # C10: CE26 where CE26=x3*x9 (G type, RHS=0)
+        c10 = x3 * x9  # Already in >= 0 form
+
+        # C11: CE21 - CE22 where CE21=x5*x8, CE22=x6*x7 (G type, RHS=0)
+        c11 = x5 * x8 - x6 * x7  # Already in >= 0 form
+
+        # C12: CE23 - CE24 where CE23=x1*x4, CE24=x2*x3 (G type, RHS=0)
+        c12 = x1 * x4 - x2 * x3  # Already in >= 0 form
+
+        # C13: CE25 where CE25=x5*x9 (L type, RHS=0)
+        c13 = x5 * x9  # L type with RHS=0: x5*x9 <= 0, already in correct form
 
         inequality_constraints = jnp.array(
             [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13]

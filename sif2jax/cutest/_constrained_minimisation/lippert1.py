@@ -72,22 +72,26 @@ class LIPPERT1(AbstractConstrainedMinimisation):
     def constraint(self, y):
         """Compute all constraints."""
         nx, ny = self.nx, self.ny
-        dx, dy = self.dx, self.dy
         s = self.s
 
         # Extract variables: t, u, v (in SIF order)
+        # SIF uses column-major (Fortran) ordering
         t = y[0]
         u_size = (nx + 1) * ny
         v_size = nx * (ny + 1)
-        u = y[1 : 1 + u_size].reshape(nx + 1, ny)
-        v = y[1 + u_size : 1 + u_size + v_size].reshape(nx, ny + 1)
+        u = y[1 : 1 + u_size].reshape(ny, nx + 1).T  # Reshape with Fortran ordering
+        v = (
+            y[1 + u_size : 1 + u_size + v_size].reshape(ny + 1, nx).T
+        )  # Reshape with Fortran ordering
 
-        # Conservation constraints: dx*(u_ij - u_i-1,j) + dy*(v_ij - v_i,j-1) = t*s*nx
-        # Factor of nx accounts for the scaling difference
-        u_diff = (u[1:, :] - u[:-1, :]) * dx  # shape (nx, ny)
-        v_diff = (v[:, 1:] - v[:, :-1]) * dy  # shape (nx, ny)
-        conservation = u_diff + v_diff - t * s * nx  # shape (nx, ny)
-        eq_constraints = conservation.ravel()  # nx*ny constraints
+        # Conservation constraints: (u_ij - u_i-1,j) + (v_ij - v_i,j-1) = t*s*nx*nx
+        # Note: The SIF file formulation includes implicit scaling
+        u_diff = u[1:, :] - u[:-1, :]  # shape (nx, ny)
+        v_diff = v[:, 1:] - v[:, :-1]  # shape (nx, ny)
+        conservation = u_diff + v_diff - t * s * nx * nx  # shape (nx, ny)
+        eq_constraints = (
+            conservation.T.ravel()
+        )  # Flatten in column-major order for SIF compatibility
 
         # Capacity constraints: 4 per grid cell (inequality constraints)
         # Need to convert to g(x) >= 0 form: 1 - u^2 - v^2 >= 0
@@ -97,10 +101,11 @@ class LIPPERT1(AbstractConstrainedMinimisation):
         v_prev = v[:, :-1]  # v_i,j-1 for i=1:nx, j=1:ny, shape (nx, ny)
 
         # Compute capacity constraints (as g(x) <= 0 form: u^2 + v^2 - 1 <= 0)
-        cap_a = (u_curr**2 + v_curr**2 - 1.0).ravel()  # nx*ny constraints
-        cap_b = (u_prev**2 + v_curr**2 - 1.0).ravel()  # nx*ny constraints
-        cap_c = (u_curr**2 + v_prev**2 - 1.0).ravel()  # nx*ny constraints
-        cap_d = (u_prev**2 + v_prev**2 - 1.0).ravel()  # nx*ny constraints
+        # Flatten in column-major order for SIF compatibility
+        cap_a = (u_curr**2 + v_curr**2 - 1.0).T.ravel()  # nx*ny constraints
+        cap_b = (u_prev**2 + v_curr**2 - 1.0).T.ravel()  # nx*ny constraints
+        cap_c = (u_curr**2 + v_prev**2 - 1.0).T.ravel()  # nx*ny constraints
+        cap_d = (u_prev**2 + v_prev**2 - 1.0).T.ravel()  # nx*ny constraints
 
         ineq_constraints = jnp.concatenate([cap_a, cap_b, cap_c, cap_d])
 

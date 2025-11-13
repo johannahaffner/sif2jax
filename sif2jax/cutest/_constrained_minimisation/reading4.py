@@ -98,9 +98,9 @@ class READING4(AbstractConstrainedMinimisation):
         numerator = x[1:] - x[:-1]
         denominator = cos_2pi_ti - x[1:]
 
-        # Handle division by zero: when both num and denom are 0, return 0
-        # This occurs at t=1.0 when x=1.0 (cos(2π)=1)
-        uc = jnp.where(jnp.abs(denominator) < 1e-10, 0.0, numerator / denominator)
+        # UC element: direct division - JAX will handle edge cases
+        # Note: This can produce inf/nan when denominator is exactly 0
+        uc = numerator / denominator
 
         # Constraint value: UC * (2a/h)
         inequalities = jnp.asarray(uc) * self.two_a_over_h

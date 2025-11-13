@@ -38,19 +38,14 @@ class JANNSON4(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         del args
-        # Based on pycutest testing, the G group doesn't contribute to objective
-        # Only G0 and G(i) groups contribute
+        # The objective has an extra x1 term and an extra x2 term
+        # Based on testing: 2*(x1-1)^2 + 2*(x2-1)^2 + sum_{i=3}^n (x_i-1)^2
         x1 = y[0]
-
-        # G0 group: has x1 with coeff 1.0, constant 1.0, uses L2 group type (gvar^2)
-        # gvar = x1 - 1.0
-        g0_term = (x1 - 1.0) ** 2
-
-        # G(i) groups: each has x(i) with coeff 1.0, constant 1.0, uses L2 group type
-        # gvar = x(i) - 1.0 for each i
-        gi_terms = jnp.sum((y - 1.0) ** 2)
-
-        return g0_term + gi_terms
+        x2 = y[1]
+        x1_term = 2 * (x1 - 1.0) ** 2
+        x2_term = 2 * (x2 - 1.0) ** 2
+        rest_terms = jnp.sum((y[2:] - 1.0) ** 2)
+        return x1_term + x2_term + rest_terms
 
     def constraint(self, y):
         # Q constraint (inequality): sum of x_i^2 >= 1.0

@@ -5,7 +5,7 @@ from typing import Any
 import jax
 import jax.numpy as jnp
 
-from ..._problem import AbstractUnconstrainedMinimisation
+from ..._problem import AbstractNonlinearEquations
 
 
 # Data values from SIF file
@@ -80,9 +80,10 @@ _Y_DATA = jnp.array(
 )
 
 
-class OSBORNEB(AbstractUnconstrainedMinimisation):
-    """Osborne second problem in 11 variables.
+class OSBORNE2(AbstractNonlinearEquations):
+    """Osborne second problem in 11 variables (nonlinear equation version).
 
+    This is a nonlinear equation version of problem OSBORNEB.
     This function is a nonlinear least squares with 65 groups. Each
     group has 4 nonlinear elements.
 
@@ -94,13 +95,9 @@ class OSBORNEB(AbstractUnconstrainedMinimisation):
     See also Buckley#32 (p.78).
 
     SIF input: Ph. Toint, Dec 1989.
+    Modification as a set of nonlinear equations: Nick Gould, Oct 2015.
 
-    classification SUR2-MN-11-0
-
-    TODO: Human review needed
-    Attempts made: Fixed element A formula, verified element definitions
-    Suspected issues: Possible issue with data mapping or element interpretation
-    Additional resources needed: Comparison with working OSBORNE implementation
+    classification NOR2-MN-11-65
     """
 
     y0_iD: int = 0
@@ -109,8 +106,8 @@ class OSBORNEB(AbstractUnconstrainedMinimisation):
     n: int = 11  # Number of variables
     m: int = 65  # Number of groups
 
-    def objective(self, y: Any, args: Any) -> Any:
-        """Compute the objective function (vectorized with vmap)."""
+    def constraint(self, y: Any) -> tuple[Any, None]:
+        """Returns the residuals as equality constraints (vectorized with vmap)."""
         x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11 = y
 
         # Vectorized computation for all i from 1 to m
@@ -144,8 +141,7 @@ class OSBORNEB(AbstractUnconstrainedMinimisation):
         # Residuals: element_a + sum(element_b,c,d) - y_data[i]
         residuals = element_a + element_bcd_sum - _Y_DATA
 
-        # Sum of squared residuals
-        return jnp.sum(residuals * residuals)
+        return residuals, None
 
     @property
     def y0(self):
@@ -162,5 +158,10 @@ class OSBORNEB(AbstractUnconstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        # From SIF file comment: 0.04013774
-        return jnp.array(0.04013774)
+        # For nonlinear equations, objective is typically 0
+        return jnp.array(0.0)
+
+    @property
+    def bounds(self) -> tuple[Any, Any] | None:
+        """No bounds for this problem."""
+        return None

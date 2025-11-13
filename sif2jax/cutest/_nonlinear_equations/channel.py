@@ -121,8 +121,11 @@ class CHANNEL(AbstractNonlinearEquations):
             res, i, j, s, rh_pow = carry
             mask = k >= s
             ind = k - s
-            coef = jnp.where(mask, rh_pow / factorials[ind], 0.0)
-            res = res + jnp.where(mask, v[i, k - 1] * coef, 0.0)
+            fact_values: Array = factorials[ind]  # type: ignore
+            coef = jnp.where(mask, rh_pow / fact_values, 0.0)
+            # Use advanced indexing with explicit type conversion
+            v_values = v[i, k - 1]  # type: ignore[reportOperatorIssue]
+            res = res + jnp.where(mask, jnp.asarray(v_values * coef), 0.0)
             rh_pow = rh_pow * rh
             return (res, i, j, s, rh_pow), None
 
@@ -228,8 +231,13 @@ class CHANNEL(AbstractNonlinearEquations):
             mask = k >= s
             ind = k - s
             h_pow = jnp.where(mask, h**ind, 1.0)
-            coef = jnp.where(mask, h_pow / factorials[ind], 0.0)
-            res = res + jnp.where(mask, v[i, k - 1] * coef, 0.0)
+            # Ensure factorials indexing returns an array, not tuple
+            fact_values = factorials[ind]  # type: ignore[reportOperatorIssue]
+            h_div = jnp.asarray(h_pow) / jnp.asarray(fact_values)
+            coef = jnp.where(mask, h_div, 0.0)
+            # Use advanced indexing with explicit type conversion
+            v_values = v[i, k - 1]  # type: ignore[reportOperatorIssue]
+            res = res + jnp.where(mask, jnp.asarray(v_values * coef), 0.0)
             return (res, i, s), None
 
         init_carry = (residuals, i_flat, s_flat)

@@ -25,9 +25,9 @@ def _load_haifal_data():
     # Convert to JAX arrays
     element_x_indices = jnp.array(data["element_x_indices"], dtype=jnp.int32)
     element_y_indices = jnp.array(data["element_y_indices"], dtype=jnp.int32)
-    constraint_id_order = (
-        jnp.array(mapping_data["constraint_id_order"], dtype=jnp.int32) - 1
-    )  # Convert to 0-based
+    constraint_id_order = jnp.array(
+        mapping_data["constraint_id_order"], dtype=jnp.int32
+    )
 
     # Build vectorized sparse representation
     # Flatten all element indices and coefficients
@@ -42,7 +42,9 @@ def _load_haifal_data():
         zip(constraint_element_lists, constraint_coeff_lists)
     ):
         if elements:  # Only process non-empty constraints
-            constraint_id = constraint_id_order[constraint_idx]
+            constraint_id = (
+                constraint_id_order[constraint_idx] - 1
+            )  # Convert to 0-based
             for elem_idx, coeff in zip(elements, coeffs):
                 element_indices_flat.append(elem_idx - 1)  # Convert to 0-based
                 coefficients_flat.append(coeff)
@@ -53,12 +55,14 @@ def _load_haifal_data():
     coefficients_flat = jnp.array(coefficients_flat)
     constraint_indices_flat = jnp.array(constraint_indices_flat, dtype=jnp.int32)
 
+    # Also return the constraint_id_order for extracting constraints in correct order
     return (
         element_x_indices,
         element_y_indices,
         element_indices_flat,
         coefficients_flat,
         constraint_indices_flat,
+        constraint_id_order - 1,  # Convert to 0-based for indexing
     )
 
 
@@ -134,6 +138,7 @@ class HAIFAL(AbstractConstrainedMinimisation):
             element_indices_flat,
             coefficients_flat,
             constraint_indices_flat,
+            constraint_id_order,
         ) = _HAIFAL_DATA
 
         # Vectorized element computation: E(i) = 0.5 * X(idx1) * X(idx2)
@@ -141,7 +146,8 @@ class HAIFAL(AbstractConstrainedMinimisation):
         element_values = 0.5 * x[element_x_indices] * x[element_y_indices]
 
         # Initialize all constraints with base formula: -z - x333
-        constraints = jnp.full(8958, -z - x333)
+        # We need 8959 positions (0-8958) to handle constraint IDs from 0 to 8958
+        constraints = jnp.full(8959, -z - x333)
 
         # Fully vectorized constraint computation using scatter-add
         # Select relevant element values and multiply by coefficients
@@ -153,4 +159,10 @@ class HAIFAL(AbstractConstrainedMinimisation):
             weighted_contributions
         )
 
-        return None, constraints
+        # Return constraints starting from index 1
+        # Constraint IDs start at 1 in pycutest
+        # But we computed them with 0-based indexing
+        # The mapping starts at C2, so constraints[1] is C2
+        # pycutest expects all 8958 constraints starting from C1
+        # C1 stays at its initialized value of -z - x333
+        return None, constraints[1:]  # Return indices 1-8958

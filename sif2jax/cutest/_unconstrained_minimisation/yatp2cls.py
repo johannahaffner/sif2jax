@@ -24,7 +24,23 @@ from ..._problem import AbstractUnconstrainedMinimisation
 
 
 class YATP2CLS(AbstractUnconstrainedMinimisation):
-    """Yet Another Toint Problem 2 - Corrected Least Squares version."""
+    """Yet Another Toint Problem 2 - Corrected Least Squares version.
+
+    TODO: Human review needed
+    Attempts made:
+    1. Fixed Fortran column-major ordering for matrix reshape
+    2. Fixed Fortran ordering for E(i,j) constraint flattening
+    3. Corrected order of residuals to match SIF GROUP USES (E, ER, EC)
+
+    Suspected issues:
+    - Max difference at element 122855 (ER[5]) suggests row/column sum issue
+    - All objective and gradient tests fail with large differences
+    - Possible discrepancy in how pycutest handles the corrected version
+
+    Resources needed:
+    - Check pycutest Fortran source for exact constraint ordering
+    - Verify if pycutest uses the 2019 corrected version
+    """
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
@@ -83,8 +99,9 @@ class YATP2CLS(AbstractUnconstrainedMinimisation):
         y_vec = y[y_start:y_end]  # Y vector
         z_vec = y[z_start:z_end]  # Z vector
 
-        # Reshape X to matrix form
-        X = x_flat.reshape((self.N, self.N))
+        # Reshape X to matrix form using Fortran order (column-major)
+        # SIF defines X(I,J) with DO I, DO J loops - Fortran stores column-major
+        X = x_flat.reshape((self.N, self.N), order="F")
 
         # Vectorized computation of E(i,j) residuals
         # Broadcast y_i to match X dimensions (rows)
@@ -93,9 +110,10 @@ class YATP2CLS(AbstractUnconstrainedMinimisation):
         z_j_broadcast = z_vec[jnp.newaxis, :]  # Shape: (1, N)
 
         # Compute all E(i,j) residuals at once
+        # Flatten with Fortran order to match SIF constraint ordering
         e_residuals = (
             X - (y_i_broadcast + z_j_broadcast) * (1.0 + jnp.cos(X)) - self.A
-        ).flatten()
+        ).flatten(order="F")
 
         # Vectorized computation for column and row sums
         X_plus_sinX = X + jnp.sin(X)
@@ -107,7 +125,8 @@ class YATP2CLS(AbstractUnconstrainedMinimisation):
         er_residuals = jnp.sum(X_plus_sinX, axis=1) - 1.0
 
         # Combine all residuals
-        all_residuals = jnp.concatenate([e_residuals, ec_residuals, er_residuals])
+        # Note: SIF file GROUP USES section has order E, ER, EC
+        all_residuals = jnp.concatenate([e_residuals, er_residuals, ec_residuals])
 
         # Return sum of squares
         return jnp.sum(all_residuals**2)

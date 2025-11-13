@@ -20,7 +20,7 @@ repos:
         files: ^pyproject\.toml$
         additional_dependencies: ["toml-sort==0.23.1"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.7
+    rev: v0.14.4
     hooks:
       - id: ruff-format
         types_or: [ python, pyi, jupyter ]
@@ -28,7 +28,7 @@ repos:
         types_or: [ python, pyi, jupyter ]
         args: [ --fix ]
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.331
+    rev: v1.1.407
     hooks:
     - id: pyright
       additional_dependencies: ["equinox", "jax", "pytest", "pycutest"]

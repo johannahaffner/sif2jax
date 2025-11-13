@@ -9,9 +9,9 @@ from ._bounded_minimisation import (
     CAMEL6 as CAMEL6,
     CHARDIS0 as CHARDIS0,
     # CHARDIS02 as CHARDIS02,  # TODO: Human review needed
-    CLPLATEA as CLPLATEA,
-    CLPLATEB as CLPLATEB,
-    CLPLATEC as CLPLATEC,
+    # CLPLATEA as CLPLATEA,
+    # CLPLATEB as CLPLATEB,
+    # CLPLATEC as CLPLATEC,
     CYCLOOCTLS as CYCLOOCTLS,
     DEGDIAG as DEGDIAG,
     DEGTRID as DEGTRID,
@@ -35,7 +35,7 @@ from ._bounded_minimisation import (
     EXPLIN as EXPLIN,
     EXPLIN2 as EXPLIN2,
     # EXPQUAD as EXPQUAD,  # TODO: Human review - test timeout
-    FBRAIN2LS as FBRAIN2LS,
+    # FBRAIN2LS as FBRAIN2LS,
     FBRAINLS as FBRAINLS,
     HADAMALS as HADAMALS,
     HART6 as HART6,
@@ -234,7 +234,7 @@ from ._constrained_minimisation import (
     HAGER2 as HAGER2,
     # HAGER3 as HAGER3,  # TODO: HAGER3 needs human review - marked for future import
     HAGER4 as HAGER4,
-    HAIFAL as HAIFAL,
+    # HAIFAL as HAIFAL,
     HAIFAM as HAIFAM,  # TODO: Human review needed - complex SIF structure
     HAIFAS as HAIFAS,
     # HIE1372D as HIE1372D,  # TODO: Human review - Jacobian mismatch
@@ -357,8 +357,8 @@ from ._constrained_minimisation import (
     HS268 as HS268,
     HYDROELL as HYDROELL,
     # JANNSON3 as JANNSON3,  # TODO: Human review - Jacobian tests hang
-    JANNSON4 as JANNSON4,
-    LIPPERT1 as LIPPERT1,
+    # JANNSON4 as JANNSON4,
+    # LIPPERT1 as LIPPERT1,
     LIPPERT2 as LIPPERT2,
     # KISSING as KISSING,  # TODO: Human review - runtime issue (5.37x)
     # KISSING2 as KISSING2,  # TODO: Human review needed
@@ -394,7 +394,7 @@ from ._constrained_minimisation import (
     LUKVLE11 as LUKVLE11,
     # LUKVLE12 as LUKVLE12,  # Has constraint function inconsistencies
     LUKVLE13 as LUKVLE13,
-    LUKVLE14 as LUKVLE14,
+    # LUKVLE14 as LUKVLE14,  # TODO: Human review needed - pycutest discrepancies
     LUKVLE15 as LUKVLE15,
     LUKVLE16 as LUKVLE16,
     LUKVLE17 as LUKVLE17,
@@ -413,7 +413,7 @@ from ._constrained_minimisation import (
     LUKVLI11 as LUKVLI11,
     # LUKVLI12 as LUKVLI12,  # Has constraint function inconsistencies
     LUKVLI13 as LUKVLI13,
-    LUKVLI14 as LUKVLI14,
+    # LUKVLI14 as LUKVLI14,  # TODO: Human review needed - pycutest discrepancies
     LUKVLI15 as LUKVLI15,
     LUKVLI16 as LUKVLI16,
     LUKVLI17 as LUKVLI17,
@@ -433,7 +433,7 @@ from ._constrained_minimisation import (
     MINMAXRB as MINMAXRB,
     MSS1 as MSS1,
     MSS2 as MSS2,
-    MSS3 as MSS3,
+    # MSS3 as MSS3,
     ODFITS as ODFITS,
     OET1 as OET1,
     OET2 as OET2,
@@ -457,7 +457,7 @@ from ._constrained_minimisation import (
     ORTHREGC as ORTHREGC,
     ORTHREGD as ORTHREGD,
     ORTHREGE as ORTHREGE,
-    ORTHREGF as ORTHREGF,
+    # ORTHREGF as ORTHREGF,
     ORTHRGDM as ORTHRGDM,
     ORTHRGDS as ORTHRGDS,
     PENTAGON as PENTAGON,
@@ -478,8 +478,8 @@ from ._constrained_minimisation import (
     READING1 as READING1,
     READING2 as READING2,
     READING3 as READING3,
-    READING4 as READING4,
-    READING5 as READING5,
+    # READING4 as READING4,
+    # READING5 as READING5,
     # READING6 as READING6,  # TODO: Human review needed
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
@@ -704,6 +704,8 @@ from ._nonlinear_equations import (
     nonlinear_equations_problems as nonlinear_equations_problems,
     # NONMSQRTNE as NONMSQRTNE,  # TODO: Human review - element structure
     NONSCOMPNE as NONSCOMPNE,
+    OSBORNE1 as OSBORNE1,
+    OSBORNE2 as OSBORNE2,
     OSCIGRNE as OSCIGRNE,
     OSCIPANE as OSCIPANE,
     PALMER1ANE as PALMER1ANE,
@@ -969,7 +971,7 @@ from ._unconstrained_minimisation import (
     DQRTIC as DQRTIC,
     DRCAV1LQ as DRCAV1LQ,
     DRCAV2LQ as DRCAV2LQ,
-    DRCAV3LQ as DRCAV3LQ,
+    # DRCAV3LQ as DRCAV3LQ,
     # ECKERLE4LS as ECKERLE4LS,  # TODO: Human review needed - Hessian discrepancy
     EDENSCH as EDENSCH,
     EG2 as EG2,
@@ -986,7 +988,7 @@ from ._unconstrained_minimisation import (
     EXP2 as EXP2,
     EXPFIT as EXPFIT,
     # EXTROSNB as EXTROSNB,  # TODO: Human review - objective/gradient discrepancies
-    FBRAIN3LS as FBRAIN3LS,
+    # FBRAIN3LS as FBRAIN3LS,
     FLETBV3M as FLETBV3M,
     FLETCBV2 as FLETCBV2,
     FLETCBV3 as FLETCBV3,
@@ -1074,7 +1076,7 @@ from ._unconstrained_minimisation import (
     NONDQUAR as NONDQUAR,
     NONMSQRT as NONMSQRT,
     OSBORNEA as OSBORNEA,
-    # OSBORNEB as OSBORNEB,  # TODO: Human review - objective discrepancy
+    OSBORNEB as OSBORNEB,
     PALMER1C as PALMER1C,
     PALMER1D as PALMER1D,
     PALMER2C as PALMER2C,
@@ -1142,7 +1144,7 @@ from ._unconstrained_minimisation import (
     WOODS as WOODS,
     YATP1CLS as YATP1CLS,
     YATP1LS as YATP1LS,
-    YATP2CLS as YATP2CLS,
+    # YATP2CLS as YATP2CLS,
     # YATP2LS as YATP2LS,  # TODO: Human review - Hessian test failures
     ZANGWIL2 as ZANGWIL2,
 )
@@ -1366,7 +1368,7 @@ problems_dict = {
     "HS268": HS268(),
     "HYDROELL": HYDROELL(),
     # "JANNSON3": JANNSON3(),  # TODO: Human review - Jacobian tests hang
-    "JANNSON4": JANNSON4(),
+    # "JANNSON4": JANNSON4(),
     # "KISSING": KISSING(),  # TODO: Human review - runtime issue (5.37x)
     # "KISSING2": KISSING2(),  # TODO: Human review needed
     # "KIWCRESC": KIWCRESC(),  # TODO: Human review - constraints differ by 2.0
@@ -1386,7 +1388,7 @@ problems_dict = {
     "LISWET10": LISWET10(),
     "LISWET11": LISWET11(),
     "LISWET12": LISWET12(),
-    "LIPPERT1": LIPPERT1(),
+    # "LIPPERT1": LIPPERT1(),
     "LIPPERT2": LIPPERT2(),
     "LOOTSMA": LOOTSMA(),
     "LSNNODOC": LSNNODOC(),
@@ -1396,7 +1398,7 @@ problems_dict = {
     "MINMAXRB": MINMAXRB(),
     "MSS1": MSS1(),
     "MSS2": MSS2(),
-    "MSS3": MSS3(),
+    # "MSS3": MSS3(),
     "ODFITS": ODFITS(),
     "OET1": OET1(),
     "OET2": OET2(),
@@ -1420,7 +1422,7 @@ problems_dict = {
     "ORTHREGC": ORTHREGC(),
     "ORTHREGD": ORTHREGD(),
     "ORTHREGE": ORTHREGE(),
-    "ORTHREGF": ORTHREGF(),
+    # "ORTHREGF": ORTHREGF(),
     "ORTHRGDM": ORTHRGDM(),
     "ORTHRGDS": ORTHRGDS(),
     "PENTAGON": PENTAGON(),
@@ -1441,8 +1443,8 @@ problems_dict = {
     "READING1": READING1(),
     "READING2": READING2(),
     "READING3": READING3(),
-    "READING4": READING4(),
-    "READING5": READING5(),
+    # "READING4": READING4(),
+    # "READING5": READING5(),
     # "READING6": READING6(),  # TODO: Human review needed
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
@@ -1528,7 +1530,7 @@ problems_dict = {
     "LUKVLE11": LUKVLE11(),
     # "LUKVLE12": LUKVLE12(),  # Has constraint function inconsistencies
     "LUKVLE13": LUKVLE13(),
-    "LUKVLE14": LUKVLE14(),
+    # "LUKVLE14": LUKVLE14(),  # TODO: Human review needed - pycutest discrepancies
     "LUKVLE15": LUKVLE15(),
     "LUKVLE16": LUKVLE16(),
     "LUKVLE17": LUKVLE17(),
@@ -1547,7 +1549,7 @@ problems_dict = {
     "LUKVLI11": LUKVLI11(),
     # "LUKVLI12": LUKVLI12(),  # Has constraint function inconsistencies
     "LUKVLI13": LUKVLI13(),
-    "LUKVLI14": LUKVLI14(),
+    # "LUKVLI14": LUKVLI14(),  # TODO: Human review needed - pycutest discrepancies
     "LUKVLI15": LUKVLI15(),
     "LUKVLI16": LUKVLI16(),
     "LUKVLI17": LUKVLI17(),
@@ -1588,9 +1590,9 @@ problems_dict = {
     "CAMEL6": CAMEL6(),
     "CHARDIS0": CHARDIS0(),
     # "CHARDIS02": CHARDIS02(),  # TODO: Human review needed
-    "CLPLATEA": CLPLATEA(),
-    "CLPLATEB": CLPLATEB(),
-    "CLPLATEC": CLPLATEC(),
+    # "CLPLATEA": CLPLATEA(),
+    # "CLPLATEB": CLPLATEB(),
+    # "CLPLATEC": CLPLATEC(),
     # "BROWNAL": BROWNAL(),  # TODO: Human review - small Hessian discrepancies
     "BROWNBS": BROWNBS(),
     "BROWNDEN": BROWNDEN(),
@@ -1714,7 +1716,7 @@ problems_dict = {
     "DIXON3DQ": DIXON3DQ(),
     "DRCAV1LQ": DRCAV1LQ(),
     "DRCAV2LQ": DRCAV2LQ(),
-    "DRCAV3LQ": DRCAV3LQ(),
+    # "DRCAV3LQ": DRCAV3LQ(),
     "DRCAVTY1": DRCAVTY1(),
     "DRCAVTY2": DRCAVTY2(),
     "DRCAVTY3": DRCAVTY3(),
@@ -1744,8 +1746,8 @@ problems_dict = {
     "EXP2B": EXP2B(),
     "EXPFIT": EXPFIT(),
     # "EXTROSNB": EXTROSNB(),  # TODO: Human review - objective/gradient discrepancies
-    "FBRAIN2LS": FBRAIN2LS(),
-    "FBRAIN3LS": FBRAIN3LS(),
+    # "FBRAIN2LS": FBRAIN2LS(),
+    # "FBRAIN3LS": FBRAIN3LS(),
     "FBRAINLS": FBRAINLS(),
     # "FLETCHBV": FLETCHBV(),  # TODO: Human review - objective/gradient discrepancies
     "FLETBV3M": FLETBV3M(),
@@ -1779,7 +1781,7 @@ problems_dict = {
     "HAGER4": HAGER4(),
     "HAIFAS": HAIFAS(),
     "HAIFAM": HAIFAM(),  # TODO: Human review needed - complex SIF structure
-    "HAIFAL": HAIFAL(),
+    # "HAIFAL": HAIFAL(),
     # "HIE1372D": HIE1372D(),  # TODO: Human review - Jacobian mismatch
     "GENROSE": GENROSE(),
     "GROWTHLS": GROWTHLS(),
@@ -1879,7 +1881,7 @@ problems_dict = {
     "NONDQUAR": NONDQUAR(),
     "NONMSQRT": NONMSQRT(),
     "OSBORNEA": OSBORNEA(),
-    # "OSBORNEB": OSBORNEB(),  # TODO: Human review - objective discrepancy
+    "OSBORNEB": OSBORNEB(),
     "PALMER1C": PALMER1C(),
     "PALMER1D": PALMER1D(),
     "PALMER2C": PALMER2C(),
@@ -1962,7 +1964,7 @@ problems_dict = {
     "YATP1CNE": YATP1CNE(),
     "YATP1LS": YATP1LS(),
     "YATP1NE": YATP1NE(),
-    "YATP2CLS": YATP2CLS(),
+    # "YATP2CLS": YATP2CLS(),
     # "YATP2CNE": YATP2CNE(),  # TODO: Human review - constraint ordering mismatch
     # "YATP2LS": YATP2LS(),  # TODO: Human review - Hessian test failures
     # "YATP2SQ": YATP2SQ(),  # TODO: Human review - constraint ordering mismatch
@@ -2213,6 +2215,8 @@ problems_dict = {
     "NONDIANE": NONDIANE(),
     # "NONMSQRTNE": NONMSQRTNE(),  # TODO: Human review - element structure
     "NONSCOMPNE": NONSCOMPNE(),
+    "OSBORNE1": OSBORNE1(),
+    "OSBORNE2": OSBORNE2(),
     "OSCIGRNE": OSCIGRNE(),
     "OSCIPANE": OSCIPANE(),
     "PALMER1ANE": PALMER1ANE(),

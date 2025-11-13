@@ -105,17 +105,25 @@ class COSHFUN(AbstractConstrainedMinimisation):
         # From SIF: C(I/3) has X(I-5), X(I), X(I+3) terms
         # where I goes from 6 to N-3 in steps of 3
         middle_indices = jnp.arange(1, m - 1)
-        idx_base = 3 * (middle_indices + 1)  # This gives us 6, 9, 12, ...
+        # For constraint i, the corresponding I in SIF (1-based) is 3*(i+1)
+        # But we need 0-based indices for the array, so subtract 1
+        idx_base_1based = 3 * (
+            middle_indices + 1
+        )  # This gives us 6, 9, 12, ... (1-based I values)
+
+        # Convert to 0-based for array indexing
+        idx_i_minus_5 = idx_base_1based - 5 - 1  # X(I-5) in 0-based
+        idx_i = idx_base_1based - 1  # X(I) in 0-based
+        idx_i_plus_3 = idx_base_1based + 3 - 1  # X(I+3) in 0-based
 
         # Create mask for valid middle constraints
-        valid_mask = idx_base < n - 2
+        # All indices must be within bounds [0, n-1]
+        valid_mask = (idx_i_minus_5 >= 0) & (idx_i_plus_3 < n)
 
         # Compute linear terms for all middle indices, using 0 for invalid ones
         linear_terms = jnp.where(
             valid_mask,
-            x[jnp.minimum(idx_base - 5, n - 1)]
-            - 2.0 * x[jnp.minimum(idx_base, n - 1)]
-            - x[jnp.minimum(idx_base + 3, n - 1)],
+            x[idx_i_minus_5] - 2.0 * x[idx_i] - x[idx_i_plus_3],
             0.0,
         )
 

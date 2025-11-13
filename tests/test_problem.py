@@ -91,6 +91,50 @@ class TestProblem:
             jnp.ones_like(problem.y0),
         )
 
+    def test_correct_objective_alternating_01(self, problem, pycutest_problem):
+        """Test objective with alternating 0,1,0,1,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        n = problem.y0.size
+        alternating_01 = jnp.array([i % 2 for i in range(n)], dtype=problem.y0.dtype)
+        try_except_evaluate(
+            problem.__class__.__name__,
+            lambda x: problem.objective(x, problem.args),
+            pycutest_problem.obj,
+            alternating_01,
+        )
+
+    def test_correct_objective_alternating_10(self, problem, pycutest_problem):
+        """Test objective with alternating 1,0,1,0,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        n = problem.y0.size
+        alternating_10 = jnp.array(
+            [(i + 1) % 2 for i in range(n)], dtype=problem.y0.dtype
+        )
+        try_except_evaluate(
+            problem.__class__.__name__,
+            lambda x: problem.objective(x, problem.args),
+            pycutest_problem.obj,
+            alternating_10,
+        )
+
+    def test_correct_objective_repeating_0123(self, problem, pycutest_problem):
+        """Test objective with repeating 0,1,2,3,0,1,2,3,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        n = problem.y0.size
+        repeating_0123 = jnp.array([i % 4 for i in range(n)], dtype=problem.y0.dtype)
+        try_except_evaluate(
+            problem.__class__.__name__,
+            lambda x: problem.objective(x, problem.args),
+            pycutest_problem.obj,
+            repeating_0123,
+        )
+
     def test_correct_gradient_at_start(self, problem, pycutest_problem):
         pycutest_gradient = pycutest_problem.grad(pycutest_problem.x0)
         sif2jax_gradient = jax.grad(problem.objective)(problem.y0, problem.args)
@@ -110,6 +154,50 @@ class TestProblem:
             lambda x: jax.grad(problem.objective)(x, problem.args),
             pycutest_problem.grad,
             jnp.ones_like(problem.y0),
+        )
+
+    def test_correct_gradient_alternating_01(self, problem, pycutest_problem):
+        """Test gradient with alternating 0,1,0,1,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        n = problem.y0.size
+        alternating_01 = jnp.array([i % 2 for i in range(n)], dtype=problem.y0.dtype)
+        try_except_evaluate(
+            problem.__class__.__name__,
+            lambda x: jax.grad(problem.objective)(x, problem.args),
+            pycutest_problem.grad,
+            alternating_01,
+        )
+
+    def test_correct_gradient_alternating_10(self, problem, pycutest_problem):
+        """Test gradient with alternating 1,0,1,0,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        n = problem.y0.size
+        alternating_10 = jnp.array(
+            [(i + 1) % 2 for i in range(n)], dtype=problem.y0.dtype
+        )
+        try_except_evaluate(
+            problem.__class__.__name__,
+            lambda x: jax.grad(problem.objective)(x, problem.args),
+            pycutest_problem.grad,
+            alternating_10,
+        )
+
+    def test_correct_gradient_repeating_0123(self, problem, pycutest_problem):
+        """Test gradient with repeating 0,1,2,3,0,1,2,3,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        n = problem.y0.size
+        repeating_0123 = jnp.array([i % 4 for i in range(n)], dtype=problem.y0.dtype)
+        try_except_evaluate(
+            problem.__class__.__name__,
+            lambda x: jax.grad(problem.objective)(x, problem.args),
+            pycutest_problem.grad,
+            repeating_0123,
         )
 
     def test_correct_hessian_at_start(self, problem, pycutest_problem):
@@ -196,6 +284,101 @@ class TestProblem:
                 # problem is unconstrained. Otherwise the Hessian used in this method
                 # is the Hessian of the Lagrangian, and multiplier values must be
                 # provided. We only test the Hessians in this method here.
+                msg = (
+                    "Hessian-vector product test not implemented for constrained "
+                    "problems that require values for the dual variables to compute "
+                    "the Hessian of the Lagrangian. "
+                )
+                pytest.skip(msg)
+
+    def test_correct_hessian_alternating_01(self, problem, pycutest_problem):
+        """Test Hessian with alternating 0,1,0,1,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        n = problem.y0.size
+        alternating_01 = jnp.array([i % 2 for i in range(n)], dtype=problem.y0.dtype)
+        if problem.num_variables() <= 1000:
+            try_except_evaluate(
+                problem.__class__.__name__,
+                lambda x: jax.hessian(problem.objective)(x, problem.args),
+                pycutest_problem.ihess,
+                alternating_01,
+            )
+        else:
+            if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                if problem.num_variables() <= 10_000:
+                    check_hprod_allclose(problem, pycutest_problem, alternating_01)
+                else:
+                    pytest.skip(
+                        "Hessian-vector product test skipped for very large "
+                        "problems (n >= 10,000) due to memory constraints."
+                    )
+            else:
+                msg = (
+                    "Hessian-vector product test not implemented for constrained "
+                    "problems that require values for the dual variables to compute "
+                    "the Hessian of the Lagrangian. "
+                )
+                pytest.skip(msg)
+
+    def test_correct_hessian_alternating_10(self, problem, pycutest_problem):
+        """Test Hessian with alternating 1,0,1,0,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        n = problem.y0.size
+        alternating_10 = jnp.array(
+            [(i + 1) % 2 for i in range(n)], dtype=problem.y0.dtype
+        )
+        if problem.num_variables() <= 1000:
+            try_except_evaluate(
+                problem.__class__.__name__,
+                lambda x: jax.hessian(problem.objective)(x, problem.args),
+                pycutest_problem.ihess,
+                alternating_10,
+            )
+        else:
+            if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                if problem.num_variables() <= 10_000:
+                    check_hprod_allclose(problem, pycutest_problem, alternating_10)
+                else:
+                    pytest.skip(
+                        "Hessian-vector product test skipped for very large "
+                        "problems (n >= 10,000) due to memory constraints."
+                    )
+            else:
+                msg = (
+                    "Hessian-vector product test not implemented for constrained "
+                    "problems that require values for the dual variables to compute "
+                    "the Hessian of the Lagrangian. "
+                )
+                pytest.skip(msg)
+
+    def test_correct_hessian_repeating_0123(self, problem, pycutest_problem):
+        """Test Hessian with repeating 0,1,2,3,0,1,2,3,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        n = problem.y0.size
+        repeating_0123 = jnp.array([i % 4 for i in range(n)], dtype=problem.y0.dtype)
+        if problem.num_variables() <= 1000:
+            try_except_evaluate(
+                problem.__class__.__name__,
+                lambda x: jax.hessian(problem.objective)(x, problem.args),
+                pycutest_problem.ihess,
+                repeating_0123,
+            )
+        else:
+            if isinstance(problem, sif2jax.AbstractUnconstrainedMinimisation):
+                if problem.num_variables() <= 10_000:
+                    check_hprod_allclose(problem, pycutest_problem, repeating_0123)
+                else:
+                    pytest.skip(
+                        "Hessian-vector product test skipped for very large "
+                        "problems (n >= 10,000) due to memory constraints."
+                    )
+            else:
                 msg = (
                     "Hessian-vector product test not implemented for constrained "
                     "problems that require values for the dual variables to compute "
@@ -365,6 +548,72 @@ class TestProblem:
         else:
             pytest.skip("Problem has no constraints")
 
+    def test_correct_constraints_alternating_01(self, problem, pycutest_problem):
+        """Test constraints with alternating 0,1,0,1,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        if has_constraints(problem):
+            n = problem.y0.size
+            alternating_01 = jnp.array(
+                [i % 2 for i in range(n)], dtype=problem.y0.dtype
+            )
+            try_except_evaluate(
+                problem.__class__.__name__,
+                lambda x: problem.constraint(x),
+                pycutest_problem.cons,
+                alternating_01,
+                allclose_func=lambda p, s, **kwargs: constraints_allclose(
+                    p, s, pycutest_problem.is_eq_cons, **kwargs
+                ),
+            )
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraints_alternating_10(self, problem, pycutest_problem):
+        """Test constraints with alternating 1,0,1,0,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        if has_constraints(problem):
+            n = problem.y0.size
+            alternating_10 = jnp.array(
+                [(i + 1) % 2 for i in range(n)], dtype=problem.y0.dtype
+            )
+            try_except_evaluate(
+                problem.__class__.__name__,
+                lambda x: problem.constraint(x),
+                pycutest_problem.cons,
+                alternating_10,
+                allclose_func=lambda p, s, **kwargs: constraints_allclose(
+                    p, s, pycutest_problem.is_eq_cons, **kwargs
+                ),
+            )
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraints_repeating_0123(self, problem, pycutest_problem):
+        """Test constraints with repeating 0,1,2,3,0,1,2,3,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        if has_constraints(problem):
+            n = problem.y0.size
+            repeating_0123 = jnp.array(
+                [i % 4 for i in range(n)], dtype=problem.y0.dtype
+            )
+            try_except_evaluate(
+                problem.__class__.__name__,
+                lambda x: problem.constraint(x),
+                pycutest_problem.cons,
+                repeating_0123,
+                allclose_func=lambda p, s, **kwargs: constraints_allclose(
+                    p, s, pycutest_problem.is_eq_cons, **kwargs
+                ),
+            )
+        else:
+            pytest.skip("Problem has no constraints")
+
     def test_correct_constraint_jacobian_at_start(self, problem, pycutest_problem):
         if has_constraints(problem):
             constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
@@ -410,6 +659,90 @@ class TestProblem:
                     lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
                     pycutest_jac_only(pycutest_problem),
                     jnp.ones_like(problem.y0),
+                    allclose_func=lambda p, s, **kwargs: jacobians_allclose(
+                        p, s, pycutest_problem.is_eq_cons, **kwargs
+                    ),
+                )
+            else:
+                pytest.skip("Skip (dense) Jacobian test for large problems.")
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraint_jacobian_alternating_01(
+        self, problem, pycutest_problem
+    ):
+        """Test constraint Jacobian with alternating 0,1,0,1,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        if has_constraints(problem):
+            n = problem.y0.size
+            alternating_01 = jnp.array(
+                [i % 2 for i in range(n)], dtype=problem.y0.dtype
+            )
+            constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
+            if problem.y0.size * constraints.size < 1_000_000:
+                try_except_evaluate(
+                    problem.__class__.__name__,
+                    lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
+                    pycutest_jac_only(pycutest_problem),
+                    alternating_01,
+                    allclose_func=lambda p, s, **kwargs: jacobians_allclose(
+                        p, s, pycutest_problem.is_eq_cons, **kwargs
+                    ),
+                )
+            else:
+                pytest.skip("Skip (dense) Jacobian test for large problems.")
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraint_jacobian_alternating_10(
+        self, problem, pycutest_problem
+    ):
+        """Test constraint Jacobian with alternating 1,0,1,0,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        if has_constraints(problem):
+            n = problem.y0.size
+            alternating_10 = jnp.array(
+                [(i + 1) % 2 for i in range(n)], dtype=problem.y0.dtype
+            )
+            constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
+            if problem.y0.size * constraints.size < 1_000_000:
+                try_except_evaluate(
+                    problem.__class__.__name__,
+                    lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
+                    pycutest_jac_only(pycutest_problem),
+                    alternating_10,
+                    allclose_func=lambda p, s, **kwargs: jacobians_allclose(
+                        p, s, pycutest_problem.is_eq_cons, **kwargs
+                    ),
+                )
+            else:
+                pytest.skip("Skip (dense) Jacobian test for large problems.")
+        else:
+            pytest.skip("Problem has no constraints")
+
+    def test_correct_constraint_jacobian_repeating_0123(
+        self, problem, pycutest_problem
+    ):
+        """Test constraint Jacobian with repeating 0,1,2,3,0,1,2,3,... pattern.
+
+        This test helps catch ordering errors in indexing or element processing.
+        """
+        if has_constraints(problem):
+            n = problem.y0.size
+            repeating_0123 = jnp.array(
+                [i % 4 for i in range(n)], dtype=problem.y0.dtype
+            )
+            constraints, _ = jfu.ravel_pytree(problem.constraint(problem.y0))
+            if problem.y0.size * constraints.size < 1_000_000:
+                try_except_evaluate(
+                    problem.__class__.__name__,
+                    lambda p: jax.jacfwd(lambda x: problem.constraint(x))(p),
+                    pycutest_jac_only(pycutest_problem),
+                    repeating_0123,
                     allclose_func=lambda p, s, **kwargs: jacobians_allclose(
                         p, s, pycutest_problem.is_eq_cons, **kwargs
                     ),

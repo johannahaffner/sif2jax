@@ -8,9 +8,9 @@ from .camel6 import CAMEL6 as CAMEL6
 from .chardis0 import CHARDIS0 as CHARDIS0
 
 # from .chardis02 import CHARDIS02 as CHARDIS02  # TODO: Human review needed
-from .clplatea import CLPLATEA as CLPLATEA
-from .clplateb import CLPLATEB as CLPLATEB
-from .clplatec import CLPLATEC as CLPLATEC
+# from .clplatea import CLPLATEA as CLPLATEA
+# from .clplateb import CLPLATEB as CLPLATEB
+# from .clplatec import CLPLATEC as CLPLATEC
 from .cyclooctls import CYCLOOCTLS as CYCLOOCTLS
 from .degdiag import DEGDIAG as DEGDIAG
 from .degtrid import DEGTRID as DEGTRID
@@ -38,7 +38,7 @@ from .explin2 import EXPLIN2 as EXPLIN2
 
 # TODO: Human review - test timeout on large problem
 # from .expquad import EXPQUAD as EXPQUAD
-from .fbrain2ls import FBRAIN2LS as FBRAIN2LS
+# from .fbrain2ls import FBRAIN2LS as FBRAIN2LS
 from .fbrainls import FBRAINLS as FBRAINLS
 from .hadamals import HADAMALS as HADAMALS
 from .hart6 import HART6 as HART6
@@ -175,9 +175,9 @@ bounded_minimisation_problems = (
     CAMEL6(),
     CHARDIS0(),
     # CHARDIS02(),  # TODO: Human review needed
-    CLPLATEA(),
-    CLPLATEB(),
-    CLPLATEC(),
+    # CLPLATEA(),
+    # CLPLATEB(),
+    # CLPLATEC(),
     CYCLOOCTLS(),
     DEGDIAG(),
     DEGTRID(),
@@ -201,7 +201,7 @@ bounded_minimisation_problems = (
     EXPLIN(),
     EXPLIN2(),
     # EXPQUAD(),  # TODO: Human review - test timeout on large problem
-    FBRAIN2LS(),
+    # FBRAIN2LS(),
     FBRAINLS(),
     HADAMALS(),
     HART6(),

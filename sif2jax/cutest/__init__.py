@@ -628,6 +628,9 @@ from ._nonlinear_equations import (
     # FLOSP2TL as FLOSP2TL,  # TODO: Human review needed - CONSTANTS section
     # FLOSP2TM as FLOSP2TM,  # TODO: Human review needed - CONSTANTS section
     FREURONE as FREURONE,
+    GAUSS1 as GAUSS1,
+    GAUSS2 as GAUSS2,
+    GAUSS3 as GAUSS3,
     GENROSEBNE as GENROSEBNE,
     GENROSENE as GENROSENE,
     GOTTFR as GOTTFR,
@@ -737,6 +740,8 @@ from ._nonlinear_equations import (
     PFIT2 as PFIT2,
     PFIT3 as PFIT3,
     PFIT4 as PFIT4,
+    # POROUS1 as POROUS1,  # Human review needed - numerical discrepancy
+    POROUS2 as POROUS2,
     POWELLBS as POWELLBS,
     POWELLSE as POWELLSE,
     POWELLSQ as POWELLSQ,
@@ -998,9 +1003,9 @@ from ._unconstrained_minimisation import (
     FMINSURF as FMINSURF,
     # FREURONE as FREURONE,  # TODO: Human review - miscategorized (constrained)
     FREUROTH as FREUROTH,
-    # GAUSS1LS as GAUSS1LS,  # TODO: Human review - issues reported by user
-    # GAUSS2LS as GAUSS2LS,  # TODO: Human review - issues reported by user
-    # GAUSS3LS as GAUSS3LS,  # TODO: Human review - issues reported by user
+    GAUSS1LS as GAUSS1LS,
+    GAUSS2LS as GAUSS2LS,
+    GAUSS3LS as GAUSS3LS,
     GAUSSIAN as GAUSSIAN,
     # GBRAINLS as GBRAINLS,  # TODO: Human review - complex data dependencies
     GENHUMPS as GENHUMPS,
@@ -1758,9 +1763,9 @@ problems_dict = {
     "FMINSURF": FMINSURF(),
     # "FREURONE": FREURONE(),  # TODO: Human review - miscategorized (constrained)
     "FREUROTH": FREUROTH(),
-    # "GAUSS1LS": GAUSS1LS(),  # TODO: Human review - issues reported by user
-    # "GAUSS2LS": GAUSS2LS(),  # TODO: Human review - issues reported by user
-    # "GAUSS3LS": GAUSS3LS(),  # TODO: Human review - issues reported by user
+    "GAUSS1LS": GAUSS1LS(),
+    "GAUSS2LS": GAUSS2LS(),
+    "GAUSS3LS": GAUSS3LS(),
     "GAUSSIAN": GAUSSIAN(),
     # "GBRAINLS": GBRAINLS(),  # TODO: Human review - complex data dependencies
     "GENHUMPS": GENHUMPS(),
@@ -2139,6 +2144,9 @@ problems_dict = {
     "GOTTFR": GOTTFR(),
     "GROWTH": GROWTH(),
     "GULFNE": GULFNE(),
+    "GAUSS1": GAUSS1(),
+    "GAUSS2": GAUSS2(),
+    "GAUSS3": GAUSS3(),
     "HATFLDANE": HATFLDANE(),
     "HATFLDBNE": HATFLDBNE(),
     "HATFLDCNE": HATFLDCNE(),
@@ -2259,6 +2267,8 @@ problems_dict = {
     "PFIT2": PFIT2(),
     "PFIT3": PFIT3(),
     "PFIT4": PFIT4(),
+    # "POROUS1": POROUS1(),  # Human review needed - numerical discrepancy
+    "POROUS2": POROUS2(),
     "PFIT1LS": PFIT1LS(),
     "PFIT2LS": PFIT2LS(),
     "PFIT3LS": PFIT3LS(),

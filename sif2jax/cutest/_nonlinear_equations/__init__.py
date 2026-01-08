@@ -109,6 +109,9 @@ from .fbrainne import FBRAINNE as FBRAINNE
 # from .flosp2tl import FLOSP2TL as FLOSP2TL
 # from .flosp2tm import FLOSP2TM as FLOSP2TM
 from .freurone import FREURONE as FREURONE
+from .gauss1 import GAUSS1 as GAUSS1
+from .gauss2 import GAUSS2 as GAUSS2
+from .gauss3 import GAUSS3 as GAUSS3
 from .genrosebne import GENROSEBNE as GENROSEBNE
 from .genrosene import GENROSENE as GENROSENE
 from .gottfr import GOTTFR as GOTTFR
@@ -234,6 +237,13 @@ from .pfit1 import PFIT1 as PFIT1
 from .pfit2 import PFIT2 as PFIT2
 from .pfit3 import PFIT3 as PFIT3
 from .pfit4 import PFIT4 as PFIT4
+
+# TODO: Human review needed - minor numerical discrepancy
+# Attempts made: Implemented vectorized PDE discretization
+# Suspected issues: Constraint values differ by max 2.475e-05 at starting point
+# Resources needed: Review numerical precision in finite difference discretization
+# from .porous1 import POROUS1 as POROUS1
+from .porous2 import POROUS2 as POROUS2
 from .powellbs import POWELLBS as POWELLBS
 from .powellse import POWELLSE as POWELLSE
 from .powellsq import POWELLSQ as POWELLSQ
@@ -373,6 +383,9 @@ nonlinear_equations_problems = (
     # FLOSP2TL(),  # TODO: Human review needed - CONSTANTS section interpretation
     # FLOSP2TM(),  # TODO: Human review needed - CONSTANTS section interpretation
     FREURONE(),
+    GAUSS1(),
+    GAUSS2(),
+    GAUSS3(),
     GENROSEBNE(),
     GENROSENE(),
     GOTTFR(),
@@ -477,6 +490,8 @@ nonlinear_equations_problems = (
     PFIT2(),
     PFIT3(),
     PFIT4(),
+    # POROUS1(),  # Human review needed - numerical discrepancy
+    POROUS2(),
     POWERSUMNE(),
     QINGNE(),
     RAT42(),

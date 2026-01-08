@@ -1,6 +1,6 @@
 # sif2jax
 
-![Progress](https://img.shields.io/badge/CUTEst%20Problems-817%2F1539%20(53.1%25)-brightgreen)
+![Progress](https://img.shields.io/badge/CUTEst%20Problems-849%2F1539%20(55.2%25)-brightblue)
 
 Functionally pure definitions of optimisation problems extracted from Standard Input Format (SIF), written in [JAX](https://github.com/jax-ml/jax).
 
@@ -17,7 +17,7 @@ This is for you if you write optimisation software in JAX (or Python) and want t
 ```bash
 pip install sif2jax
 ```
-Requires TODO fix
+Requires Python 3.11+.
 
 ## Getting started
 
@@ -46,7 +46,7 @@ another_problem = sif2jax.cutest.get_problem("ROSENBR")
 The problems all have the following methods:
 
 - `objective` - a callable with signature `f(y, args)`, where `y` is the optimisation variable
-- `y0` - returns the initial guess provided by the SIF file
-- `args` - returns any arguments (frequently none)
+- `y0` - returns the initial guess provided by the SIF file (as a property)
+- `args` - returns any arguments (frequently `None`, this is also a property
 
 bounded problems also have a `bounds` method, and constrained problems additionally include a `constraint` method.

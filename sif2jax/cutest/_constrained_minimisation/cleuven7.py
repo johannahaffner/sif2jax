@@ -44,9 +44,8 @@ for i in range(len(_ineq_rows)):
 class CLEUVEN7(AbstractConstrainedMinimisation):
     """A convex quadratic program from model predictive control.
 
-    Problem from the OPTEC Workshop on Large Scale Convex Quadratic
-    Programming - Algorithms, Software, and Applications, Leuven,
-    25-26/10/2010.
+    Problem from the OPTEC Workshop on Large Scale Convex Quadratic Programming
+    - Algorithms, Software, and Applications. Leuven, 25-26/10/2010.
 
     References:
         SIF input: Nick Gould, December 2010
@@ -79,7 +78,7 @@ class CLEUVEN7(AbstractConstrainedMinimisation):
         """Upper bounds on variables."""
         return _upper_bounds
 
-    def objective(self, y: Float[Array, "360"], args=None) -> Float[Array, ""]:
+    def objective(self, y: Float[Array, "360"], args) -> Float[Array, ""]:
         """Quadratic objective function.
 
         f(x) = 0.5 * x^T * H * x + c^T * x
@@ -101,21 +100,9 @@ class CLEUVEN7(AbstractConstrainedMinimisation):
 
         return linear_term + quad_term + diag_adjustment
 
-    def constraint(self, y: Float[Array, "360"], args=None):
-        """Linear equality and inequality constraints.
-
-        Returns (equalities, inequalities) where:
-        - equalities: Ax = b (returned as Ax - b = 0)
-        - inequalities: Ax <= b (returned as Ax - b <= 0)
-        """
-        # No equality constraints in CLEUVEN7
-        equalities = None
-
-        # Inequality constraints: Ax <= b
-        # Use dense matrix multiplication (5x faster than sparse for 10.5% density)
+    def constraint(self, y: Float[Array, "360"]):
         inequalities = _ineq_matrix_dense @ y - _ineq_rhs
-
-        return equalities, inequalities
+        return None, inequalities
 
     @property
     def args(self):
@@ -123,7 +110,6 @@ class CLEUVEN7(AbstractConstrainedMinimisation):
 
     @property
     def bounds(self):
-        """Variable bounds."""
         return self.xlb, self.xub
 
     @property
@@ -132,5 +118,4 @@ class CLEUVEN7(AbstractConstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        # From SIF file
-        return jnp.array(706.5690133723616)
+        return jnp.array(706.5690133723616)  # from SIF file

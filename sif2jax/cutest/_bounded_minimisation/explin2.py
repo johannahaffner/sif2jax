@@ -61,11 +61,11 @@ class EXPLIN2(AbstractBoundedMinimisation):
         linear_part = jnp.dot(coefficients, y)
 
         # Exponential part: sum_{i=1}^M exp(0.1 * (i/M) * x_i * x_{i+1})
-        # Each term has a scaling factor P = i/M
-        exp_part = 0.0
-        for i in range(self.M):
-            p = (i + 1) / self.M  # i/M where i goes from 1 to M
-            exp_part += jnp.exp(0.1 * p * y[i] * y[i + 1])
+        # Vectorized computation over all M terms
+        i_vals = jnp.arange(1, self.M + 1, dtype=y.dtype)
+        p_vals = i_vals / self.M
+        exp_terms = jnp.exp(0.1 * p_vals * y[: self.M] * y[1 : self.M + 1])
+        exp_part = jnp.sum(exp_terms)
 
         return linear_part + exp_part
 

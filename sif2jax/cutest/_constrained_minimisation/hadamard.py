@@ -73,19 +73,36 @@ class HADAMARD(AbstractConstrainedMinimisation):
         QtQ = jnp.dot(Q.T, Q)
 
         # Orthogonality constraints: Q^T Q - RN*I = 0
-        # Store upper triangle including diagonal
-        orth_constraints = []
-        for j in range(n):
-            for i in range(j + 1):
-                if i == j:
-                    # Diagonal: QtQ[i,i] - RN = 0
-                    val = QtQ[i, j] - rn
-                else:
-                    # Off-diagonal: QtQ[i,j] = 0
-                    val = QtQ[i, j]
-                orth_constraints.append(val)
+        # Store upper triangle including diagonal in column-major order
+        # Fully vectorized extraction using JAX operations
 
-        equality_constraints = jnp.array(orth_constraints)
+        # Total number of upper triangle elements
+        n_upper = (n * (n + 1)) // 2
+
+        # Create flat indices for upper triangle in column-major order
+        flat_idx = jnp.arange(n_upper)
+
+        # Cumulative sizes: column j has j+1 elements
+        cumsum_sizes = jnp.cumsum(jnp.arange(1, n + 1))
+
+        # Find column index for each flat index
+        j_indices = jnp.searchsorted(cumsum_sizes, flat_idx, side="right")
+
+        # Find row index within each column
+        # Match dtype to searchsorted output to avoid int32/int64 mixing
+        offset = jnp.concatenate([jnp.array([0]), cumsum_sizes[:-1]])
+        flat_idx = flat_idx.astype(j_indices.dtype)
+        offset = offset.astype(j_indices.dtype)
+        i_indices = flat_idx - offset[j_indices]
+
+        # Extract upper triangle elements
+        QtQ_upper = QtQ[i_indices, j_indices]
+
+        # Create target: RN on diagonal (where i==j), 0 elsewhere
+        target = jnp.where(i_indices == j_indices, rn, 0.0)
+
+        # Constraint values: QtQ - target = 0
+        equality_constraints = QtQ_upper - target
 
         # Entry bound constraints
         # For each Q(i,j): -MAXABSQ <= Q(i,j) <= MAXABSQ
@@ -96,14 +113,16 @@ class HADAMARD(AbstractConstrainedMinimisation):
         Q_flat = Q.reshape(-1, order="F")
 
         # Build interleaved constraints
-        inequality_constraints = []
-        for i in range(self.n_squared):
-            # L constraint: MAXABSQ + Q[i] >= 0
-            inequality_constraints.append(maxabsq + Q_flat[i])
-            # U constraint: MAXABSQ - Q[i] >= 0
-            inequality_constraints.append(maxabsq - Q_flat[i])
+        # Vectorized: compute all L and U constraints, then interleave
+        # L constraints: MAXABSQ + Q[i] >= 0
+        L_constraints = maxabsq + Q_flat
+        # U constraints: MAXABSQ - Q[i] >= 0
+        U_constraints = maxabsq - Q_flat
 
-        inequality_constraints = jnp.array(inequality_constraints)
+        # Interleave: stack and reshape to alternate L, U for each entry
+        inequality_constraints = jnp.stack(
+            [L_constraints, U_constraints], axis=1
+        ).flatten()
 
         return equality_constraints, inequality_constraints
 

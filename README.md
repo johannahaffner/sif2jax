@@ -17,7 +17,7 @@ This is for you if you write optimisation software in JAX (or Python) and want t
 ```bash
 pip install sif2jax
 ```
-Requires Python 3.11+.
+Requires Python 3.11+ and JAX 0.7.2+.
 
 ## Getting started
 

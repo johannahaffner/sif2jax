@@ -21,7 +21,7 @@ class CVXBQP1(AbstractBoundedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return 10000  # Default size from SIF file
+        return 100000  # Default size from SIF file
 
     def objective(self, y, args):
         """Compute the objective."""

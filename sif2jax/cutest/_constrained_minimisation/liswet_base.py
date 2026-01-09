@@ -1,12 +1,8 @@
 from abc import abstractmethod
 
 import jax.numpy as jnp
-from jax import config
 
 from ..._problem import AbstractConstrainedMinimisation
-
-
-config.update("jax_enable_x64", True)
 
 
 class _AbstractLISWET(AbstractConstrainedMinimisation):
@@ -23,12 +19,16 @@ class _AbstractLISWET(AbstractConstrainedMinimisation):
 
     Source:
     W. Li and J. Swetits,
-    "A Newton method for convex regression, data smoothing and
-    quadratic programming with bounded constraints",
-    SIAM J. Optimization 3 (3) pp 466-488, 1993.
+    "A Newton method for convex regression, data smoothing and quadratic programming
+    with bounded constraints", SIAM J. Optimization 3 (3) pp 466-488, 1993.
 
     Classification: QLR2-AN-V-V
     """
+
+    # Pre-computed values as tuples (hashable for Equinox)
+    _perturbation: tuple
+    _t_values: tuple
+    _constraint_coeffs: tuple
 
     n: int = 2000
     k: int = 2
@@ -36,35 +36,46 @@ class _AbstractLISWET(AbstractConstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    @abstractmethod
-    def _g_function(self, t):
-        """The specific g(t) function for each LISWET variant."""
-        return jnp.array([])
+    def __init__(self, n: int = 2000, k: int = 2):
+        """Initialize with pre-computed values for performance."""
+        self.n = n
+        self.k = k
+        self.y0_iD = 0
+        self.provided_y0s = frozenset({0})
 
-    def _compute_c(self):
-        """Compute c_i values for the objective."""
-        n_plus_k = self.n + self.k
-        t = jnp.arange(n_plus_k) / (n_plus_k - 1)
-        g = self._g_function(t)
-        # Perturbation: 0.1 * sin(i)
+        # Pre-compute perturbation: 0.1 * sin(i)
+        n_plus_k = n + k
         perturbation = 0.1 * jnp.sin(jnp.arange(1, n_plus_k + 1).astype(float))
+        self._perturbation = tuple(float(x) for x in perturbation)
+
+        # Pre-compute t values for g(t)
+        t_values = jnp.arange(n_plus_k) / (n_plus_k - 1)
+        self._t_values = tuple(float(x) for x in t_values)
+
+        # Pre-compute constraint coefficients
+        # Vectorized computation of binomial coefficients C(k,i)
+        # C(k,i) = C(k,i-1) * (k-i+1) / i
+        i = jnp.arange(1.0, k + 1.0)
+        ratios = (k - i + 1.0) / i
+        binom = jnp.concatenate([jnp.array([1.0]), jnp.cumprod(ratios)])
+
+        # Vectorized computation of alternating signs: (-1)^(k-i)
+        i = jnp.arange(k + 1.0)
+        signs = (-1.0) ** (k - i)
+        constraint_coeffs = signs * binom
+        self._constraint_coeffs = tuple(float(x) for x in constraint_coeffs)
+
+    @abstractmethod
+    def _g_function(self, t) -> jnp.ndarray:
+        """The specific g(t) function for each LISWET variant."""
+        ...
+
+    def _compute_c(self, dtype):
+        """Compute c_i values for the objective using cached perturbation."""
+        t_values = jnp.asarray(self._t_values, dtype=dtype)
+        perturbation = jnp.asarray(self._perturbation, dtype=dtype)
+        g = self._g_function(t_values)
         return g + perturbation
-
-    def _compute_constraint_coeffs(self):
-        """Compute (-1)^(k-i) * C(k,i) coefficients for constraints."""
-        k = self.k
-        # Compute binomial coefficients C(k,i)
-        binom = jnp.zeros(k + 1)
-        binom = binom.at[0].set(1.0)
-        for i in range(1, k + 1):
-            binom = binom.at[i].set(binom[i - 1] * (k - i + 1) / i)
-
-        # Apply alternating signs
-        coeffs = jnp.zeros(k + 1)
-        for i in range(k + 1):
-            sign = (-1.0) ** (k - i)
-            coeffs = coeffs.at[i].set(sign * binom[i])
-        return coeffs
 
     @property
     def y0(self):
@@ -81,7 +92,7 @@ class _AbstractLISWET(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         del args
-        c = self._compute_c()
+        c = self._compute_c(y.dtype)
         # f(x) = 1/2 sum (x_i - c_i)^2
         return 0.5 * jnp.sum((y - c) ** 2)
 
@@ -89,9 +100,11 @@ class _AbstractLISWET(AbstractConstrainedMinimisation):
         # Inequality constraints: sum_{i=0}^k C(k,i) (-1)^{k-i} x_{j+i} >= 0
         n = self.n
         k = self.k
-        coeffs = self._compute_constraint_coeffs()
 
-        # Vectorized computation using convolution
+        # Convert cached coefficients to array with appropriate dtype
+        constraint_coeffs = jnp.asarray(self._constraint_coeffs, dtype=y.dtype)
+
+        # Vectorized computation using convolution with cached coefficients
         # Each constraint j computes sum_{i=0}^k coeffs[i] * y[j+i]
         # This is equivalent to a 1D convolution
 
@@ -100,7 +113,7 @@ class _AbstractLISWET(AbstractConstrainedMinimisation):
 
         # Use convolution to compute all constraints at once
         # We need to reverse coeffs for convolution
-        constraints = jnp.convolve(padded_y, coeffs[::-1], mode="valid")[:n]
+        constraints = jnp.convolve(padded_y, constraint_coeffs[::-1], mode="valid")[:n]
 
         # Return (equality_constraints, inequality_constraints)
         # Inequality constraints g(x) >= 0

@@ -25,16 +25,16 @@ class _AbstractLISWET(AbstractConstrainedMinimisation):
     Classification: QLR2-AN-V-V
     """
 
-    # Pre-computed values as tuples (hashable for Equinox)
-    _perturbation: tuple
-    _t_values: tuple
-    _constraint_coeffs: tuple
-
     n: int = 2000
     k: int = 2
 
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
+
+    # Pre-computed values as tuples (hashable for Equinox)
+    _perturbation: tuple = ()
+    _t_values: tuple = ()
+    _constraint_coeffs: tuple = ()
 
     def __init__(self, n: int = 2000, k: int = 2):
         """Initialize with pre-computed values for performance."""

@@ -54,25 +54,44 @@ class HADAMALS(AbstractBoundedMinimisation):
         # Compute orthogonality terms:
         # sum over (i,j) with i<=j of (QtQ[i,j] - RN*delta[i,j])^2
         QtQ = jnp.dot(Q.T, Q)
-        obj = 0.0
 
         # O(I,J) groups: orthogonality constraints
-        for j in range(n):
-            for i in range(j + 1):
-                if i == j:
-                    # Diagonal: QtQ[i,i] - RN where RN = N
-                    val = QtQ[i, j] - rn
-                else:
-                    # Off-diagonal: QtQ[i,j]
-                    val = QtQ[i, j]
-                obj = obj + val * val
+        # Fully vectorized extraction using JAX operations
+
+        # Total number of upper triangle elements
+        n_upper = (n * (n + 1)) // 2
+
+        # Create flat indices for upper triangle in column-major order
+        flat_idx = jnp.arange(n_upper)
+
+        # Cumulative sizes: column j has j+1 elements
+        cumsum_sizes = jnp.cumsum(jnp.arange(1, n + 1))
+
+        # Find column index for each flat index
+        j_indices = jnp.searchsorted(cumsum_sizes, flat_idx, side="right")
+
+        # Find row index within each column
+        # Match dtype to searchsorted output to avoid int32/int64 mixing
+        offset = jnp.concatenate([jnp.array([0]), cumsum_sizes[:-1]])
+        flat_idx = flat_idx.astype(j_indices.dtype)
+        offset = offset.astype(j_indices.dtype)
+        i_indices = flat_idx - offset[j_indices]
+
+        # Extract upper triangle elements
+        QtQ_upper = QtQ[i_indices, j_indices]
+
+        # Create target: RN on diagonal (where i==j), 0 elsewhere
+        target = jnp.where(i_indices == j_indices, rn, 0.0)
+
+        # Compute squared deviations
+        obj = jnp.sum((QtQ_upper - target) ** 2)
 
         # S(I,J) groups: entry constraints (Q[i,j]^2 - 1)^2 for i>=2
         # Using LARGEL2 group type with FACTOR=1.0
-        for j in range(n):
-            for i in range(1, n):  # i from 2 to N (0-indexed: 1 to n-1)
-                val = Q[i, j] * Q[i, j] - 1.0
-                obj = obj + val * val
+        # Vectorized: slice rows i=1 to n-1 (0-indexed)
+        Q_slice = Q[1:, :]  # All rows except first, all columns
+        entry_vals = Q_slice * Q_slice - 1.0
+        obj = obj + jnp.sum(entry_vals * entry_vals)
 
         return jnp.array(obj)
 

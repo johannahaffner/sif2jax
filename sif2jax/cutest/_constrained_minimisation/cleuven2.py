@@ -63,17 +63,7 @@ class CLEUVEN2(AbstractConstrainedMinimisation):
         """Initial point - zeros for QP problems."""
         return jnp.zeros(self.n_var)
 
-    @property
-    def xlb(self) -> Float[Array, "1530"]:
-        """Lower bounds on variables."""
-        return _lower_bounds
-
-    @property
-    def xub(self) -> Float[Array, "1530"]:
-        """Upper bounds on variables."""
-        return _upper_bounds
-
-    def objective(self, y: Float[Array, "1530"], args=None) -> Float[Array, ""]:
+    def objective(self, y: Float[Array, "1530"], args) -> Float[Array, ""]:
         """Quadratic objective function.
 
         f(x) = 0.5 * x^T * H * x + c^T * x
@@ -95,7 +85,7 @@ class CLEUVEN2(AbstractConstrainedMinimisation):
 
         return linear_term + quad_term + diag_adjustment
 
-    def constraint(self, y: Float[Array, "1530"], args=None):
+    def constraint(self, y: Float[Array, "1530"]):
         """Linear equality and inequality constraints.
 
         Returns (equalities, inequalities) where:
@@ -128,8 +118,7 @@ class CLEUVEN2(AbstractConstrainedMinimisation):
 
     @property
     def bounds(self):
-        """Variable bounds."""
-        return self.xlb, self.xub
+        return _lower_bounds, _upper_bounds
 
     @property
     def expected_result(self):

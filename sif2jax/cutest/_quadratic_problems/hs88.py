@@ -40,10 +40,7 @@ class HS88(AbstractConstrainedQuadraticProblem):
     def objective(self, y, args):
         """Quadratic objective function."""
         del args
-        x1, x2 = y[0], y[1]
-
-        # Simple quadratic objective: x1^2 + x2^2
-        return x1**2 + x2**2
+        return jnp.sum(y**2)
 
     @property
     def bounds(self):

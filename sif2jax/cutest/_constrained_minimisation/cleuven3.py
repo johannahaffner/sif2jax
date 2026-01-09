@@ -38,9 +38,8 @@ _n_ineq = int(_data["n_ineq"])
 class CLEUVEN3(AbstractConstrainedMinimisation):
     """A nonconvex quadratic program from model predictive control.
 
-    Problem from the OPTEC Workshop on Large Scale Convex Quadratic
-    Programming - Algorithms, Software, and Applications, Leuven,
-    25-26/10/2010.
+    Problem from the OPTEC Workshop on Large Scale Convex Quadratic Programming
+    - Algorithms, Software, and Applications. Leuven, 25-26/10/2010.
 
     References:
         SIF input: Nick Gould, December 2010
@@ -125,5 +124,4 @@ class CLEUVEN3(AbstractConstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        # Will be determined from test results
         return None

@@ -21,7 +21,7 @@ class CVXQP1(AbstractConstrainedQuadraticProblem):
     @property
     def n(self):
         """Number of variables."""
-        return 100  # Default size
+        return 10000  # Default size
 
     @property
     def m(self):

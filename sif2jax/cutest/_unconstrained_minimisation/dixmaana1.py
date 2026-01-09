@@ -28,7 +28,7 @@ class DIXMAANA1(AbstractUnconstrainedMinimisation):
     y0_iD: int = 0
     provided_y0s: frozenset = frozenset({0})
 
-    n: int = 3000  # Default dimension
+    n: int = 3  # Default dimension (M=1, N=3*M=3)
 
     def objective(self, y, args):
         del args
@@ -81,5 +81,5 @@ class DIXMAANA1(AbstractUnconstrainedMinimisation):
 
     @property
     def expected_objective_value(self):
-        # At the origin, all terms are zero
-        return jnp.array(0.0)
+        # At the origin, all terms are zero except the constant of 1.0
+        return jnp.array(1.0)

@@ -1,4 +1,5 @@
 import jax
+import numpy as np
 import pycutest  # pyright: ignore[reportMissingImports]
 import pytest
 import sif2jax
@@ -24,11 +25,11 @@ def test_sif2jax_objective_benchmark(benchmark, problem):
     _ = compiled_objective(problem.y0, problem.args).block_until_ready()
 
     # Define function to benchmark
-    def jax_obj():
-        return compiled_objective(problem.y0, problem.args).block_until_ready()
+    def jax_obj(y0, args):
+        return compiled_objective(y0, args).block_until_ready()
 
     # Run benchmark
-    benchmark(jax_obj)
+    benchmark(jax_obj, problem.y0, problem.args)
 
     # Store extra info for reporting
     benchmark.extra_info.update(
@@ -61,14 +62,14 @@ def test_pycutest_objective_benchmark(benchmark, problem):
         pytest.skip(f"Could not load pycutest problem {problem.name}: {e}")
 
     # Warm up
-    _ = pycutest_problem.obj(problem.y0)
+    _ = pycutest_problem.obj(np.asarray(problem.y0))
 
     # Define function to benchmark
-    def pycutest_obj():
-        return pycutest_problem.obj(problem.y0)
+    def pycutest_obj(y0):
+        return pycutest_problem.obj(y0)
 
     # Run benchmark
-    benchmark(pycutest_obj)
+    benchmark(pycutest_obj, np.asarray(problem.y0))
 
     # Store extra info for reporting
     benchmark.extra_info.update(

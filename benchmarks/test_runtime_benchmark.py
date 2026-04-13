@@ -29,7 +29,7 @@ def test_sif2jax_objective_benchmark(benchmark, problem):
         return compiled_objective(y0, args).block_until_ready()
 
     # Run benchmark
-    benchmark(jax_obj, problem.y0, problem.args)
+    benchmark(jax_obj, jax.device_put(problem.y0), jax.device_put(problem.args))
 
     # Store extra info for reporting
     benchmark.extra_info.update(

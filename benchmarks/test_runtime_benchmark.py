@@ -32,7 +32,7 @@ def _problem_class(problem):
 
 
 def _test_id(problem):
-    """Test ID includes class for -k filtering: 'AbstractUnconstrainedMinimisation-BDQRTIC'."""
+    """Test ID includes class for -k filtering."""
     return f"{_problem_class(problem)}-{problem.name}"
 
 
@@ -87,9 +87,11 @@ def test_sif2jax_val_and_grad_benchmark(benchmark, problem):
     benchmark.name = f"test_sif2jax_val_and_grad_benchmark[{problem.name}]"
 
     # Compile JAX function
-    compiled = jax.jit(jax.value_and_grad(problem.objective)).lower(
-        problem.y0, problem.args
-    ).compile()
+    compiled = (
+        jax.jit(jax.value_and_grad(problem.objective))
+        .lower(problem.y0, problem.args)
+        .compile()
+    )
 
     # Warm up
     jax.block_until_ready(compiled(problem.y0, problem.args))
@@ -169,9 +171,11 @@ def test_sif2jax_hessian_benchmark(benchmark, problem):
     benchmark.name = f"test_sif2jax_hessian_benchmark[{problem.name}]"
 
     # Compile JAX function
-    compiled = jax.jit(jax.hessian(problem.objective)).lower(
-        problem.y0, problem.args
-    ).compile()
+    compiled = (
+        jax.jit(jax.hessian(problem.objective))
+        .lower(problem.y0, problem.args)
+        .compile()
+    )
 
     # Warm up
     jax.block_until_ready(compiled(problem.y0, problem.args))
@@ -181,9 +185,7 @@ def test_sif2jax_hessian_benchmark(benchmark, problem):
         return jax.block_until_ready(compiled(y0, args))
 
     # Run benchmark
-    benchmark(
-        jax_hessian, jax.device_put(problem.y0), jax.device_put(problem.args)
-    )
+    benchmark(jax_hessian, jax.device_put(problem.y0), jax.device_put(problem.args))
 
     # Store extra info for reporting
     benchmark.extra_info.update(
@@ -377,7 +379,8 @@ def test_pycutest_hessian_benchmark(benchmark, problem):
     pycutest.clear_cache(problem.name)
 
 
-# TODO: Add constraint evaluation and Jacobian benchmarks for constrained problems
-# (AbstractConstrainedMinimisation, AbstractConstrainedQuadraticProblem) and nonlinear
-# equations (AbstractNonlinearEquations). These need constraint(y) and jac(constraint)(y)
-# benchmarks rather than grad/hvp/hessian of the objective.
+# TODO: Add constraint evaluation and Jacobian benchmarks for
+# constrained problems (AbstractConstrainedMinimisation,
+# AbstractConstrainedQuadraticProblem) and nonlinear equations
+# (AbstractNonlinearEquations). These need constraint(y) and
+# jac(constraint)(y) rather than grad/hvp/hessian of the objective.

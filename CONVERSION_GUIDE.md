@@ -116,10 +116,33 @@ JAX: jnp.prod or sequential multiplication
 
 | SIF Construct | JAX Equivalent | Notes |
 |--------------|----------------|--------|
-| DO loop | jnp.arange + vmap | Vectorize when possible |
+| DO loop | slices / broadcasting | Prefer over vmap+arange |
 | GROUP | Function composition | May need accumulation |
 | ELEMENT | Vectorized function | Batch evaluate |
 | IF-THEN | jnp.where / lax.cond | Avoid Python if |
 | Sum | jnp.sum | Check axis parameter |
 | Product | jnp.prod | Or reduce with * |
 | x(i) | y[i-1] | Mind 0-based indexing |
+
+## Performance: Avoiding Gather/Scatter in Objectives
+
+JAX's `jnp.arange` + indexing produces `gather` ops whose reverse-mode AD
+uses `scatter-add` — 2-5x slower than the `pad` VJP of slices. Patterns to
+avoid and their replacements:
+
+| Avoid | Use instead |
+|-------|-------------|
+| `y[jnp.arange(n-1)]` | `y[:n-1]` |
+| `y[jnp.arange(n-1) + 1]` | `y[1:]` |
+| `y[2*jnp.arange(s)]` | `y[:2*s:2]` |
+| `y[3*jnp.arange(s) + k]` | `y[k:3*s+k:3]` |
+| `vmap(f)(jnp.arange(n))` where f does `y[i]` | Rewrite f with slices |
+| `res.at[::2].set(a)` | `jnp.stack([a, b], axis=1).flatten()` |
+| `res.at[k:].add(v)` | `jnp.concatenate([zeros(k), v])` + add |
+| `(jnp.arange(p)+1) % p` (cyclic) | `jnp.roll(arr, -1, axis=0)` |
+
+For modular permutation indexing (`(k*i) % n`) that can't be expressed as
+slices, keep `jnp.arange` and set `EAGER_CONSTANT_FOLDING=TRUE` so JAX folds
+the index computation at trace time.
+
+Run `tests/test_jaxpr.py` to verify objectives are gather/scatter-free.

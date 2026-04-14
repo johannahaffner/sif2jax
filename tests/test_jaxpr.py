@@ -13,15 +13,21 @@ so the gather has constant (non-traced) index arrays.
 import jax
 import pytest
 import sif2jax
-from sif2jax._problem import AbstractUnconstrainedMinimisation
+from sif2jax._problem import (
+    AbstractBoundedMinimisation,
+    AbstractUnconstrainedMinimisation,
+)
 
 jax.config.update("jax_enable_x64", True)
 jax.config.update("eager_constant_folding", True)
 
-UNCONSTRAINED_PROBLEMS = [
+SCALAR_OBJECTIVE_PROBLEMS = [
     p
     for p in sif2jax.problems
-    if isinstance(p, AbstractUnconstrainedMinimisation)
+    if isinstance(
+        p,
+        (AbstractUnconstrainedMinimisation, AbstractBoundedMinimisation),
+    )
 ]
 
 # Problems where gather/scatter is accepted — either because the indexing
@@ -32,6 +38,10 @@ GATHER_ALLOWED = frozenset({
     "NONCVXUN",
     "NONCVXU2",
     "SPARSINE",
+    "CVXBQP1",
+    "NCVXBQP1",
+    "NCVXBQP2",
+    "NCVXBQP3",
 })
 
 
@@ -46,7 +56,7 @@ def _collect_primitives(jaxpr):
 
 
 @pytest.mark.parametrize(
-    "prob", UNCONSTRAINED_PROBLEMS, ids=lambda p: p.name
+    "prob", SCALAR_OBJECTIVE_PROBLEMS, ids=lambda p: p.name
 )
 def test_no_gather_in_objective(prob):
     """Check that objective jaxpr contains no gather or scatter operations."""

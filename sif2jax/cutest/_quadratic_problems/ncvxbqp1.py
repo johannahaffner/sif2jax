@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._problem import AbstractBoundedQuadraticProblem
@@ -34,25 +33,22 @@ class NCVXBQP1(AbstractBoundedQuadraticProblem):
         # OBJ(i) = 0.5 * p * (x[i] + x[mod(2i-1,n)+1] + x[mod(3i-1,n)+1])^2
         # where p = i for i <= n/4 and p = -i for i > n/4
 
-        def compute_term(i):
-            # Positions (0-indexed)
-            i1 = i
-            i2 = (2 * (i + 1) - 1) % n
-            i3 = (3 * (i + 1) - 1) % n
+        # Modular permutation indices (folded as constants by
+        # EAGER_CONSTANT_FOLDING)
+        i = jnp.arange(n)
+        i2 = (2 * (i + 1) - 1) % n
+        i3 = (3 * (i + 1) - 1) % n
 
-            # Sum the variables
-            sum_vars = x[i1] + x[i2] + x[i3]
+        # Identity permutation is just x itself
+        alpha = x + x[i2] + x[i3]
 
-            # Parameter p
-            nplus = n // 4
-            p = jnp.where(i < nplus, jnp.float64(i + 1), jnp.float64(-(i + 1)))
+        # Weight p: +i for i < n/4, -i otherwise
+        # (folded as constant by EAGER_CONSTANT_FOLDING)
+        nplus = n // 4
+        i_vals = jnp.arange(1, n + 1, dtype=x.dtype)
+        p = jnp.where(jnp.arange(n) < nplus, i_vals, -i_vals)
 
-            # Compute 0.5 * p * sum^2
-            return 0.5 * p * sum_vars * sum_vars
-
-        indices = jnp.arange(n)
-        terms = jax.vmap(compute_term)(indices)
-        return jnp.sum(terms)
+        return jnp.sum(0.5 * p * alpha**2)
 
     @property
     def y0(self):

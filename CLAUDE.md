@@ -131,7 +131,15 @@ JAX implementation must be within 5x of Fortran runtime. For larger problems JAX
 Production-ready problems must always be vectorised.
 If a sequential operation is needed, use a jax-native option such as a scan.
 Common vectorization patterns:
-- Replace Python for-loops with jnp operations (sum, dot, vmap)
+- Replace Python for-loops with jnp operations (sum, dot, slice/broadcast, vmap as a last resort)
 - Use array slicing and broadcasting instead of element-wise operations
 - Batch similar computations together
 - For problems with repeated structure, identify the pattern and vectorize it
+
+**AD-friendly patterns** (critical for gradient/HVP/Hessian performance):
+- **Use slices, not gathers**: `y[:n-1]` not `y[jnp.arange(n-1)]`. Gather's VJP is scatter-add (expensive); slice's VJP is pad (cheap). This can give 2-5x speedup on gradients.
+- **Never use `vmap(f)(jnp.arange(n))`** when `f` indexes into `y` — rewrite as vectorized slices instead.
+- **Use `y` not `y[arange(n)]`** for the identity permutation.
+- **Avoid `.at[].set()` / `.at[].add()` in objectives** — these produce scatter ops. Use `jnp.concatenate`, `jnp.pad`, or `jnp.stack` + `flatten` instead.
+- **Run `tests/test_jaxpr.py`** to verify no gather/scatter operations in the objective jaxpr.
+- **For modular/permutation indexing** (`(k*i) % n`): the gather is unavoidable, but use `jnp.arange` (not `np.arange`) and rely on `EAGER_CONSTANT_FOLDING=TRUE` to fold the index computation. Use `jnp.roll` for simple cyclic shifts.

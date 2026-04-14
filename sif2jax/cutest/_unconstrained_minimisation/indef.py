@@ -34,10 +34,9 @@ class INDEF(AbstractUnconstrainedMinimisation):
         # Each COS term is: ALPHA * cos(2*x_i - x_1 - x_n)
         cos_sum = 0.0
         if self.n > 2:
-            # Get indices 1 to n-2 (corresponding to i=2 to i=n-1 in 1-indexed SIF)
-            indices = jnp.arange(1, self.n - 1)
             # Calculate the arguments to the cosine functions
-            cos_args = 2 * y[indices] - y[0] - y[self.n - 1]
+            # for i=2 to i=n-1 (1-indexed), i.e. indices 1 to n-2 (0-indexed)
+            cos_args = 2 * y[1 : self.n - 1] - y[0] - y[self.n - 1]
             # Sum up alpha * cos(arg) for each argument
             cos_sum = jnp.sum(self.alpha * jnp.cos(cos_args))
 

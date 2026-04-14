@@ -1,3 +1,5 @@
+import numpy as np
+
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -21,22 +23,16 @@ class NONCVXU2(AbstractUnconstrainedMinimisation):
 
     def objective(self, y, args):
         del args
-        n = self.n
 
-        # Create index arrays for all elements
-        i_indices = jnp.arange(n)
-
-        # First variable indices (0-based)
-        i1 = i_indices
-
-        # Second variable indices: mod(3*(i+1) - 2, n)
-        i2 = (3 * (i_indices + 1) - 2) % n
-
-        # Third variable indices: mod(7*(i+1) - 3, n)
-        i3 = (7 * (i_indices + 1) - 3) % n
+        # Modular permutation indices as numpy arrays — folded as constants
+        # by XLA during tracing (no iota/modular arithmetic in the jaxpr).
+        i = np.arange(self.n)
+        i2 = (3 * (i + 1) - 2) % self.n
+        i3 = (7 * (i + 1) - 3) % self.n
 
         # Sum of the three variables for each element
-        v = y[i1] + y[i2] + y[i3]
+        # y itself covers the identity permutation (i1 = arange(n))
+        v = y + y[i2] + y[i3]
 
         # Square elements: v^2
         sq_values = v * v

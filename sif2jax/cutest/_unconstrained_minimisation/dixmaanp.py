@@ -58,27 +58,18 @@ class DIXMAANP(AbstractUnconstrainedMinimisation):
 
         # Compute the 2nd term (type 2): sum(beta * (i/n)^k2 * x_i^2 * (x_j + x_j^2)^2)
         # for i from 1 to n-1
-        indices1 = jnp.arange(n - 1)
-        indices2 = indices1 + 1
-        term2 = beta * jnp.sum(
-            ((indices1 + 1) / n) ** k2
-            * y[indices1] ** 2
-            * (y[indices2] + y[indices2] ** 2) ** 2
-        )
+        w2 = (jnp.arange(1, n) / n) ** k2
+        term2 = beta * jnp.sum(w2 * y[: n - 1] ** 2 * (y[1:n] + y[1:n] ** 2) ** 2)
 
         # Compute the 3rd term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        term3 = gamma * jnp.sum(
-            ((indices1 + 1) / n) ** k3 * (y[indices1] ** 2) * (y[indices2] ** 4)
-        )
+        w3 = (jnp.arange(1, 2 * m + 1) / n) ** k3
+        term3 = gamma * jnp.sum(w3 * y[: 2 * m] ** 2 * y[m : 3 * m] ** 4)
 
         # Compute the 4th term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        term4 = delta * jnp.sum(((indices1 + 1) / n) ** k4 * y[indices1] * y[indices2])
+        w4 = (jnp.arange(1, m + 1) / n) ** k4
+        term4 = delta * jnp.sum(w4 * y[:m] * y[2 * m : 3 * m])
 
         # Add the constant term
         constant = 1.0

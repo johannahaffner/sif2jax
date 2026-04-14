@@ -33,25 +33,14 @@ class POWERSUM(AbstractUnconstrainedMinimisation):
         n = self.n
         m = n
 
-        # Data values (for standard n=4 case)
-        if n == 4:
-            x_data = jnp.array([1.0, 2.0, 3.0, 2.0])
-        else:
-            # For other n, generate reasonable test data
-            x_data = jnp.ones(4)
-            x_data = x_data.at[0].set(1.0)
-            x_data = x_data.at[1].set(2.0)
-            x_data = x_data.at[2].set(3.0)
-            x_data = x_data.at[3].set(2.0)
+        # Data values
+        x_data = jnp.array([1.0, 2.0, 3.0, 2.0])
 
         # Compute target values y(i) = sum_j x_j^i
-        y = jnp.zeros(m)
-        for i in range(m):
-            power = i + 1
-            sum_val = 0.0
-            for j in range(min(4, n)):
-                sum_val += x_data[j] ** power
-            y = y.at[i].set(sum_val)
+        y = jnp.array([
+            sum(x_data[j] ** (i + 1) for j in range(min(4, n)))
+            for i in range(m)
+        ])
 
         return (y,)
 
@@ -65,13 +54,10 @@ class POWERSUM(AbstractUnconstrainedMinimisation):
         y_data = args[0]
         m = len(y_data)
 
-        # Compute residuals
-        residuals = jnp.zeros(m)
-        for i in range(m):
-            power = i + 1
-            # Compute sum_j y_j^power
-            sum_val = jnp.sum(y**power)
-            residuals = residuals.at[i].set(sum_val - y_data[i])
+        # Compute residuals: for each power i+1, sum_j y_j^(i+1) - y_data[i]
+        residuals = jnp.array([
+            jnp.sum(y ** (i + 1)) - y_data[i] for i in range(m)
+        ])
 
         # Return sum of squared residuals
         return jnp.sum(residuals**2)

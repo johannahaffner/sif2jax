@@ -56,38 +56,33 @@ class LUKSAN17LS(AbstractUnconstrainedMinimisation):
         # Data values
         Y = jnp.array([30.6, 72.2, 124.4, 187.4], dtype=x.dtype)
 
-        # Vectorized computation
-        # Create indices for all blocks
-        j_indices = jnp.arange(s)
+        # Vectorized computation using stride-2 slices
+        # For each block j, variables are x[2j+q-1] for q=1..4
+        x_q = jnp.stack([
+            x[: 2 * s : 2],  # q=1: x[2j]
+            x[1 : 2 * s + 1 : 2],  # q=2: x[2j+1]
+            x[2 : 2 * s + 2 : 2],  # q=3: x[2j+2]
+            x[3 : 2 * s + 3 : 2],  # q=4: x[2j+3]
+        ])  # shape: (4, s)
 
-        # Create arrays for l and q values
-        l_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)  # l = 1, 2, 3, 4
-        q_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)  # q = 1, 2, 3, 4
+        # Coefficients: l = 1..4, q = 1..4
+        l_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)
+        q_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)
+        L, Q = jnp.meshgrid(l_vals, q_vals, indexing="ij")  # (4, 4)
 
-        # Create meshgrids for vectorized computation
-        L, Q, J = jnp.meshgrid(
-            l_vals, q_vals, j_indices, indexing="ij"
-        )  # shapes: (4, 4, s)
+        # x_vals[l, q, j] = x_q[q, j], broadcast over l
+        x_vals = x_q[None, :, :]  # (1, 4, s) broadcasts to (4, 4, s)
 
-        # Variable indices for each combination: var_idx = i + q - 1 = 2*j + q - 1
-        var_indices = (2 * J.astype(x.dtype) + Q - 1).astype(
-            jnp.int32
-        )  # shape: (4, 4, s)
-
-        # Extract variables for all combinations
-        x_vals = x[var_indices]  # shape: (4, 4, s)
-
-        # Compute coefficients
         # For sine term: a = -l * q^2
-        a_sin = -L * (Q**2)  # shape: (4, 4, s)
-        sin_terms = a_sin * jnp.sin(x_vals)  # shape: (4, 4, s)
+        a_sin = (-L * Q**2)[:, :, None]  # (4, 4, 1)
+        sin_terms = a_sin * jnp.sin(x_vals)  # (4, 4, s)
 
         # For cosine term: a = l^2 * q
-        a_cos = (L**2) * Q  # shape: (4, 4, s)
-        cos_terms = a_cos * jnp.cos(x_vals)  # shape: (4, 4, s)
+        a_cos = (L**2 * Q)[:, :, None]  # (4, 4, 1)
+        cos_terms = a_cos * jnp.cos(x_vals)  # (4, 4, s)
 
         # Total terms for each (l, q, j) combination
-        total_terms = sin_terms + cos_terms  # shape: (4, 4, s)
+        total_terms = sin_terms + cos_terms  # (4, 4, s)
 
         # Sum over q (axis=1) to get equation sums for each (l, j)
         eq_sums = jnp.sum(total_terms, axis=1)  # shape: (4, s)

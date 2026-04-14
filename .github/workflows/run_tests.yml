@@ -17,7 +17,10 @@ jobs:
       
       - name: Test problem definition pre-built image
         run: |
-          docker run --rm -v ${{ github.workspace }}:/workspace \
+          docker run --rm \
+            -e EAGER_CONSTANT_FOLDING=TRUE \
+            -e JAX_USE_SIMPLIFIED_JAXPR_CONSTANTS=TRUE \
+            -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_problem.py"
 
@@ -29,12 +32,18 @@ jobs:
 
       - name: Test problem runtime for problems A-M with pre-built image
         run: |
-          docker run --rm -v ${{ github.workspace }}:/workspace \
+          docker run --rm \
+            -e EAGER_CONSTANT_FOLDING=TRUE \
+            -e JAX_USE_SIMPLIFIED_JAXPR_CONSTANTS=TRUE \
+            -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py --letters=A-M"
 
       - name: Test problem runtime for problems N-Z with pre-built image
         run: |
-          docker run --rm -v ${{ github.workspace }}:/workspace \
+          docker run --rm \
+            -e EAGER_CONSTANT_FOLDING=TRUE \
+            -e JAX_USE_SIMPLIFIED_JAXPR_CONSTANTS=TRUE \
+            -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py --letters=N-Z"

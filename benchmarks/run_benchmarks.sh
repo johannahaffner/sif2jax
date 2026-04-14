@@ -7,6 +7,8 @@ LOCAL_PATH="$(cd "$(dirname "$0")/.." && pwd)"
 
 # Run benchmarks in container
 docker run --rm \
+  -e EAGER_CONSTANT_FOLDING=TRUE \
+  -e JAX_USE_SIMPLIFIED_JAXPR_CONSTANTS=TRUE \
   -v ${LOCAL_PATH}:${MOUNT_PATH} \
   -w ${MOUNT_PATH} \
   ${CONTAINER_IMAGE} \

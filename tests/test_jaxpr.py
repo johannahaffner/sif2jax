@@ -16,6 +16,7 @@ import sif2jax
 from sif2jax._problem import AbstractUnconstrainedMinimisation
 
 jax.config.update("jax_enable_x64", True)
+jax.config.update("eager_constant_folding", True)
 
 UNCONSTRAINED_PROBLEMS = [
     p
@@ -23,10 +24,11 @@ UNCONSTRAINED_PROBLEMS = [
     if isinstance(p, AbstractUnconstrainedMinimisation)
 ]
 
-# Problems with modular permutation indexing that requires gather.
-# These use numpy (not jnp) index arrays so the indices are folded as
-# constants — no iota or modular arithmetic appears in the jaxpr.
+# Problems where gather/scatter is accepted — either because the indexing
+# pattern is inherently non-sequential (modular permutations) or because
+# the scatter-based formulation outperforms the pad-based alternative.
 GATHER_ALLOWED = frozenset({
+    # Modular permutation indexing (numpy constant indices)
     "NONCVXUN",
     "NONCVXU2",
     "SPARSINE",

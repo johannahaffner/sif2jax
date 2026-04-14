@@ -1,6 +1,5 @@
-import numpy as np
-
 import jax.numpy as jnp
+import numpy as np
 
 from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation

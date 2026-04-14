@@ -56,16 +56,12 @@ class LUKSAN15LS(AbstractUnconstrainedMinimisation):
         # Data values
         Y = jnp.array([35.8, 11.2, 6.2, 4.4], dtype=x.dtype)
 
-        # Vectorized computation
-        # Create indices for all blocks
-        j_indices = jnp.arange(s)
-        i_indices = 2 * j_indices  # Variable indices for each block
-
-        # Extract variables for all blocks
-        x1 = x[i_indices]  # x[i] for all blocks
-        x2 = x[i_indices + 1]  # x[i+1] for all blocks
-        x3 = x[i_indices + 2]  # x[i+2] for all blocks
-        x4 = x[i_indices + 3]  # x[i+3] for all blocks
+        # Vectorized computation using stride-2 slices
+        j_indices = jnp.arange(s)  # kept for meshgrid shape
+        x1 = x[: 2 * s : 2]  # x[i] for all blocks
+        x2 = x[1 : 2 * s + 1 : 2]  # x[i+1] for all blocks
+        x3 = x[2 : 2 * s + 2 : 2]  # x[i+2] for all blocks
+        x4 = x[3 : 2 * s + 3 : 2]  # x[i+3] for all blocks
 
         # Compute signomial term for all blocks: x1 * x2^2 * x3^3 * x4^4
         signom_vals = x1 * (x2**2) * (x3**3) * (x4**4)  # shape: (s,)

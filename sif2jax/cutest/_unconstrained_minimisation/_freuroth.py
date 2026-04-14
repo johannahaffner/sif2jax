@@ -42,47 +42,22 @@ class FREUROTH(AbstractUnconstrainedMinimisation):
         # Number of group sets (one less than the number of variables)
         ngs = self.n - 1
 
-        # Vectorized implementation using jax
-        def compute_residual_r(i):
-            xi = y[i]
-            xi_plus_1 = y[i + 1]
+        # Vectorized implementation using slices
+        xi = y[:ngs]
+        xi_plus_1 = y[1 : ngs + 1]
 
-            # The FRDRTH element used with coefficients 5.0 and -1.0
-            elv = xi_plus_1
-            coeff = 5.0
-            xcoeff = -1.0
+        # FRDRTH element with coefficients 5.0 and -1.0
+        elv2_r = xi_plus_1**2
+        element_r = (5.0 - xi_plus_1) * elv2_r
 
-            # Formula from the SIF file's ELEMENTS section
-            elv2 = elv * elv
-            xcelv = xcoeff * elv
-            element_result = (coeff + xcelv) * elv2
+        # Residual r_i = x_i - 2*x_{i+1} + element_r - 13
+        r_residuals = xi - 2.0 * xi_plus_1 + element_r - 13.0
 
-            # Residual r_i = x_i - 2*x_{i+1} + element_result - 13
-            residual = xi - 2.0 * xi_plus_1 + element_result - 13.0
-            return residual
+        # FRDRTH element with coefficients 1.0 and 1.0
+        element_s = (1.0 + xi_plus_1) * elv2_r
 
-        def compute_residual_s(i):
-            xi = y[i]
-            xi_plus_1 = y[i + 1]
-
-            # The FRDRTH element used with coefficients 1.0 and 1.0
-            elv = xi_plus_1
-            coeff = 1.0
-            xcoeff = 1.0
-
-            # Formula from the SIF file's ELEMENTS section
-            elv2 = elv * elv
-            xcelv = xcoeff * elv
-            element_result = (coeff + xcelv) * elv2
-
-            # Residual s_i = x_i - 14*x_{i+1} + element_result - 29
-            residual = xi - 14.0 * xi_plus_1 + element_result - 29.0
-            return residual
-
-        # Compute all residuals using vmap
-        indices = jnp.arange(ngs)
-        r_residuals = jax.vmap(compute_residual_r)(indices)
-        s_residuals = jax.vmap(compute_residual_s)(indices)
+        # Residual s_i = x_i - 14*x_{i+1} + element_s - 29
+        s_residuals = xi - 14.0 * xi_plus_1 + element_s - 29.0
 
         # Sum of squared residuals (least squares objective)
         return jnp.sum(r_residuals**2 + s_residuals**2)

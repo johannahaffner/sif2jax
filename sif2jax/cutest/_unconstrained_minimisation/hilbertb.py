@@ -1,6 +1,5 @@
 import jax.numpy as jnp
 
-from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
 
 
@@ -36,29 +35,25 @@ class HILBERTB(AbstractUnconstrainedMinimisation):
 
         d = 5.0  # Parameter D from AMPL
 
-        # Vectorized computation using JAX operations
-        # Create indices for the upper triangular part (j < i)
-        i_indices = jnp.arange(1, self.n + 1)
-        j_indices = jnp.arange(1, self.n + 1)
-        i_grid, j_grid = jnp.meshgrid(i_indices, j_indices, indexing="ij")
+        # Vectorized computation using broadcasting
+        n = self.n
+        i_indices = jnp.arange(1, n + 1, dtype=y.dtype)
 
-        # Mask for upper triangular part (j < i)
-        upper_triangular_mask = j_grid < i_grid
+        # Hilbert coefficients: 1/(i+j-1) for i,j in 1..n
+        i_grid = i_indices[:, None]  # (n, 1)
+        j_grid = i_indices[None, :]  # (1, n)
+        hilbert_coeffs = 1.0 / (i_grid + j_grid - 1)  # (n, n)
 
-        # Compute off-diagonal terms: x[i]*x[j]/(i+j-1) for j < i
-        y_i = y[i_grid - 1]  # Convert to 0-based indexing
-        y_j = y[j_grid - 1]  # Convert to 0-based indexing
-        hilbert_coeffs = 1.0 / inexact_asarray(i_grid + j_grid - 1)
+        # Off-diagonal: y[i]*y[j]/(i+j-1) for j < i (upper triangular)
+        y_outer = y[:, None] * y[None, :]  # (n, n)
+        upper_mask = j_grid < i_grid
+        off_diagonal = jnp.sum(jnp.where(upper_mask, y_outer * hilbert_coeffs, 0.0))
 
-        off_diagonal_terms = jnp.where(
-            upper_triangular_mask, y_i * y_j * hilbert_coeffs, 0.0
-        )
+        # Diagonal: y[i]^2 * (D + 1/(4i-2))
+        diagonal_coeffs = d + 1.0 / (4 * i_indices - 2)
+        diagonal = jnp.sum(y**2 * diagonal_coeffs)
 
-        # Diagonal terms: (x[i]^2)*(D+1/(4*i-2))
-        diagonal_coeffs = d + 1.0 / inexact_asarray(4 * i_indices - 2)
-        diagonal_terms = y**2 * diagonal_coeffs
-
-        return jnp.sum(jnp.asarray(off_diagonal_terms)) + jnp.sum(diagonal_terms)
+        return off_diagonal + diagonal
 
     @property
     def y0(self):

@@ -1,4 +1,5 @@
 import jax.numpy as jnp
+import numpy as np
 
 from ..._misc import inexact_asarray
 from ..._problem import AbstractUnconstrainedMinimisation
@@ -30,30 +31,20 @@ class NONMSQRT(AbstractUnconstrainedMinimisation):
         # Reshape x from flat array to p x p matrix
         X = y.reshape(p, p)
 
-        # Compute matrix B
-        k_vals = jnp.arange(1.0, p * p + 1.0).reshape(p, p)
-        B = jnp.sin(k_vals * k_vals)
-        # B[2,0] = 0.0 in 0-based indexing (B3,1 in 1-based)
-        B = B.at[2, 0].set(0.0)
-
-        # Compute A = B @ B
+        # Precompute constant matrix A = B @ B using numpy (no JAX tracing)
+        k_vals = np.arange(1.0, p * p + 1.0).reshape(p, p)
+        B = np.sin(k_vals * k_vals)
+        B[2, 0] = 0.0
         A = B @ B
 
-        # Objective function based on SIF structure
-        # For each (i,j), compute: (sum_k X[i,k]*X[i,j] - A[i,j])^2
-        # Note: Element E(I,J,K) has XIT=X(I,K) and XTJ=X(I,J)
-        # This is NOT standard matrix multiplication
+        # For each row i and position j:
+        #   sum_k X[i,k]*X[i,j] = X[i,j] * row_sum[i]
+        row_sums = jnp.sum(X, axis=1, keepdims=True)  # (p, 1)
+        products = X * row_sums  # (p, p)
 
-        # For each row i and position j, sum_k X[i,k]*X[i,j] = X[i,j] * sum_k X[i,k]
-        # = X[i,j] * row_sum[i]
-        row_sums = jnp.sum(X, axis=1, keepdims=True)  # Shape (p, 1)
-
-        # Compute X[i,j] * row_sum[i] for all i,j
-        products = X * row_sums  # Broadcasting: (p,p) * (p,1) = (p,p)
-
-        # Compute squared differences
+        # Squared Frobenius norm of residual
         diff = products - A
-        return jnp.sum(diff * diff)
+        return jnp.sum(diff**2)
 
     @property
     def y0(self):

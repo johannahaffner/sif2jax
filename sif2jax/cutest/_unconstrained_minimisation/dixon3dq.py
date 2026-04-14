@@ -39,9 +39,7 @@ class DIXON3DQ(AbstractUnconstrainedMinimisation):
         term1 = (y[0] - 1.0) ** 2
 
         # Middle terms: sum_{i=2}^{n-1} (x_i - x_{i+1})^2
-        indices1 = jnp.arange(1, self.n - 1)
-        indices2 = indices1 + 1
-        term2 = jnp.sum((y[indices1] - y[indices2]) ** 2)
+        term2 = jnp.sum((y[1 : self.n - 1] - y[2 : self.n]) ** 2)
 
         # Last term: (x_n - 1)^2
         term3 = (y[-1] - 1.0) ** 2

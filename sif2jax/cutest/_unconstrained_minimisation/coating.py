@@ -309,51 +309,20 @@ class COATING(AbstractUnconstrainedMinimisation):
         # Number of data points divided by 4
         m4 = len(eta1_data)
 
-        # Extract variable blocks as slices (no gather needed)
-        # y[0:8] are the 8 main parameters
-        x1, x2, x3, x4 = y[0], y[1], y[2], y[3]
-        x5, x6, x7, x8 = y[4], y[5], y[6], y[7]
-        # y[8:8+m4] and y[8+m4:8+2*m4] are the auxiliary variables
-        xa = y[8 : 8 + m4]  # X(IP8) for all i
-        xb = y[8 + m4 : 8 + 2 * m4]  # X(I2P8) for all i
+        # y[0:8] are the 8 main parameters, y[8:] are auxiliary
+        xa = y[8 : 8 + m4]
+        xb = y[8 + m4 : 8 + 2 * m4]
 
-        # First quarter residuals
-        f1 = (
-            x1
-            + x2 * eta1_data
-            + x3 * eta2_data
-            + x4 * eta1_data * eta2_data
-            + x2 * xa
-            + x3 * xb
-            + x4 * xa * eta2_data
-            + x4 * xb * eta1_data
-            + x4 * xa * xb
-        )
+        # Factored form: f = c0 + c1*(η1+xa) + c2*(η2+xb) + c3*(η1+xa)*(η2+xb)
+        a = eta1_data + xa  # η1 + xa
+        b = eta2_data + xb  # η2 + xb
+        ab = a * b
 
-        # Second quarter residuals
-        f2 = (
-            x5
-            + x6 * eta1_data
-            + x7 * eta2_data
-            + x8 * eta1_data * eta2_data
-            + x6 * xa
-            + x7 * xb
-            + x8 * xa * eta2_data
-            + x8 * xb * eta1_data
-            + x8 * xa * xb
-        )
+        r1 = y[0] + y[1] * a + y[2] * b + y[3] * ab - y_data[:m4]
+        r2 = y[4] + y[5] * a + y[6] * b + y[7] * ab - y_data[m4 : 2 * m4]
+        r3 = xa * scale1
+        r4 = xb * scale2
 
-        # Third and fourth quarter residuals
-        f3 = xa * scale1
-        f4 = xb * scale2
-
-        # Compute residuals (subtract data for first two quarters)
-        r1 = f1 - y_data[:m4]
-        r2 = f2 - y_data[m4 : 2 * m4]
-        r3 = f3
-        r4 = f4
-
-        # Stack and sum squares
         all_residuals = jnp.concatenate([r1, r2, r3, r4])
         return jnp.sum(all_residuals**2)
 

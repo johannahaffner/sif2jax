@@ -193,32 +193,89 @@ class TOINTGOR(AbstractUnconstrainedMinimisation):
 
         # GB terms: sum_j beta[j] * BBT(gb_expr[j] - d[j])
         # Each GB expression is a sparse linear combination of x variables
-        # with coefficients +1 or -1. We vectorise using index arrays into
-        # a zero-padded x, with index 50 as sentinel (maps to 0).
-        S = 50  # sentinel index (x_pad[50] = 0)
+        # with coefficients +1 or -1 (max 5 terms per expression).
+        # We use a (33,5) index array into zero-padded x and a matching
+        # (33,5) coefficient array of {-1, 0, +1}.
+        S = 50  # sentinel index (x_pad[50] = 0, coeff = 0)
         x_pad = jnp.concatenate([y, jnp.zeros(1, dtype=y.dtype)])
 
         # fmt: off
-        # Negative contribution indices (up to 4 per GB expression)
-        n1 = jnp.array([30, 0, 1, 3, 5, 7, 9,11,10,15, 8, 4,18,22, 6,27,28,31, 2,34,35,29,37,39,40,43,45,41,25,14,48,21,26])  # noqa: E501
-        n2 = jnp.array([ S, S, S, S, S, S, S, S,12, S,17,19, S, S,24, S, S, S,32, S, S,36,38, S, S, S, S,44,33,16, S, S, S])  # noqa: E501
-        n3 = jnp.array([ S, S, S, S, S, S, S, S,13, S, S,20, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S,47,42,23, S, S, S])  # noqa: E501
-        n4 = jnp.array([ S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S,49, S,46, S, S, S])  # noqa: E501
-        # Positive contribution indices (up to 3 per GB expression)
-        p1 = jnp.array([ 0, 1, 3, 5, 7, 9,11,13,15,17,19, S,21,24,26,28,30,32,34,20,36,38,39,40,42,44,47,48, S, S, S, S, S])  # noqa: E501
-        p2 = jnp.array([ S, 2, 4, 6, 8,10,12,14,16,18, S, S,22,25,27,29,31,33, S,35,37, S, S,41,43,45, S, S, S, S, S, S, S])  # noqa: E501
-        p3 = jnp.array([ S, S, S, S, S, S, S, S, S, S, S, S,23, S, S, S, S, S, S, S, S, S, S, S,49,46, S, S, S, S, S, S, S])  # noqa: E501
+        # indices[j, k] = which x variable participates in GB expression j
+        idx = jnp.array([
+            [30, 0, S, S, S],  # GB1:  -x30 +x0
+            [ 0, 1, 2, S, S],  # GB2:  -x0  +x1 +x2
+            [ 1, 3, 4, S, S],  # GB3:  -x1  +x3 +x4
+            [ 3, 5, 6, S, S],  # GB4:  -x3  +x5 +x6
+            [ 5, 7, 8, S, S],  # GB5:  -x5  +x7 +x8
+            [ 7, 9,10, S, S],  # GB6:  -x7  +x9 +x10
+            [ 9,11,12, S, S],  # GB7:  -x9  +x11+x12
+            [11,13,14, S, S],  # GB8:  -x11 +x13+x14
+            [10,12,13,15,16],  # GB9:  -x10-x12-x13+x15+x16
+            [15,17,18, S, S],  # GB10: -x15 +x17+x18
+            [ 8,17,19, S, S],  # GB11: -x8 -x17+x19
+            [ 4,19,20, S, S],  # GB12: -x4 -x19-x20
+            [18,21,22,23, S],  # GB13: -x18 +x21+x22+x23
+            [22,24,25, S, S],  # GB14: -x22 +x24+x25
+            [ 6,24,26,27, S],  # GB15: -x6 -x24+x26+x27
+            [27,28,29, S, S],  # GB16: -x27 +x28+x29
+            [28,30,31, S, S],  # GB17: -x28 +x30+x31
+            [31,32,33, S, S],  # GB18: -x31 +x32+x33
+            [ 2,32,34, S, S],  # GB19: -x2 -x32+x34
+            [34,20,35, S, S],  # GB20: -x34 +x20+x35
+            [35,36,37, S, S],  # GB21: -x35 +x36+x37
+            [29,36,38, S, S],  # GB22: -x29-x36+x38
+            [37,38,39, S, S],  # GB23: -x37-x38+x39
+            [39,40,41, S, S],  # GB24: -x39 +x40+x41
+            [40,42,43,49, S],  # GB25: -x40 +x42+x43+x49
+            [43,44,45,46, S],  # GB26: -x43 +x44+x45+x46
+            [45,47, S, S, S],  # GB27: -x45 +x47
+            [41,44,47,49,48],  # GB28: -x41-x44-x47-x49+x48
+            [25,33,42, S, S],  # GB29: -x25-x33-x42
+            [14,16,23,46, S],  # GB30: -x14-x16-x23-x46
+            [48, S, S, S, S],  # GB31: -x48
+            [21, S, S, S, S],  # GB32: -x21
+            [26, S, S, S, S],  # GB33: -x26
+        ])
+        # coefficients: sign of each term (+1, -1, or 0 for sentinel)
+        coeff = jnp.array([
+            [-1, 1, 0, 0, 0],  # GB1
+            [-1, 1, 1, 0, 0],  # GB2
+            [-1, 1, 1, 0, 0],  # GB3
+            [-1, 1, 1, 0, 0],  # GB4
+            [-1, 1, 1, 0, 0],  # GB5
+            [-1, 1, 1, 0, 0],  # GB6
+            [-1, 1, 1, 0, 0],  # GB7
+            [-1, 1, 1, 0, 0],  # GB8
+            [-1,-1,-1, 1, 1],  # GB9
+            [-1, 1, 1, 0, 0],  # GB10
+            [-1,-1, 1, 0, 0],  # GB11
+            [-1,-1,-1, 0, 0],  # GB12
+            [-1, 1, 1, 1, 0],  # GB13
+            [-1, 1, 1, 0, 0],  # GB14
+            [-1,-1, 1, 1, 0],  # GB15
+            [-1, 1, 1, 0, 0],  # GB16
+            [-1, 1, 1, 0, 0],  # GB17
+            [-1, 1, 1, 0, 0],  # GB18
+            [-1,-1, 1, 0, 0],  # GB19
+            [-1, 1, 1, 0, 0],  # GB20
+            [-1, 1, 1, 0, 0],  # GB21
+            [-1,-1, 1, 0, 0],  # GB22
+            [-1,-1, 1, 0, 0],  # GB23
+            [-1, 1, 1, 0, 0],  # GB24
+            [-1, 1, 1, 1, 0],  # GB25
+            [-1, 1, 1, 1, 0],  # GB26
+            [-1, 1, 0, 0, 0],  # GB27
+            [-1,-1,-1,-1, 1],  # GB28
+            [-1,-1,-1, 0, 0],  # GB29
+            [-1,-1,-1,-1, 0],  # GB30
+            [-1, 0, 0, 0, 0],  # GB31
+            [-1, 0, 0, 0, 0],  # GB32
+            [-1, 0, 0, 0, 0],  # GB33
+        ], dtype=y.dtype)
         # fmt: on
 
-        gb_expr = (
-            -x_pad[n1]
-            - x_pad[n2]
-            - x_pad[n3]
-            - x_pad[n4]
-            + x_pad[p1]
-            + x_pad[p2]
-            + x_pad[p3]
-        )
+        # Single batched gather + coefficient multiply + row sum
+        gb_expr = jnp.sum(coeff * x_pad[idx], axis=1)
         gb_terms = beta * self._bbt_function(gb_expr - d)
 
         return jnp.sum(ga_terms) + jnp.sum(gb_terms)

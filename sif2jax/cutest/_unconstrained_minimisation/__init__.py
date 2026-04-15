@@ -308,8 +308,7 @@ from .srosenbr import SROSENBR as SROSENBR
 # from .spmsrtls import SPMSRTLS as SPMSRTLS
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
 
-# TODO: TOINTGOR needs human review - runtime test fails (~8x slower than threshold)
-# from .tointgor import TOINTGOR as TOINTGOR
+from .tointgor import TOINTGOR as TOINTGOR
 from .tointgss import TOINTGSS as TOINTGSS
 
 # TODO: TOINTPSP needs human review - gradient test fails with small differences
@@ -608,7 +607,7 @@ unconstrained_minimisation_problems = (
     ZANGWIL2(),
     TRIGON1(),
     # TRIGON2(),  # TODO: Human review - Hessian test fails
-    # TOINTGOR(),  # TODO: Human review - runtime test fails
+    TOINTGOR(),
     TOINTGSS(),
     # TOINTPSP(),  # TODO: Human review - gradient test fails
     # TQUARTIC(),  # TODO: Human review - objective calculation incorrect

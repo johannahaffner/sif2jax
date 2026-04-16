@@ -50,29 +50,53 @@ class LUKSAN17LS(AbstractUnconstrainedMinimisation):
         """
         del args  # Not used
 
+        x = y
         s = self.s
-        Y = jnp.array([30.6, 72.2, 124.4, 187.4], dtype=y.dtype)
 
-        # Stride-2 slices for 4 variables per block
-        x1, x2 = y[: 2 * s : 2], y[1 : 2 * s + 1 : 2]
-        x3, x4 = y[2 : 2 * s + 2 : 2], y[3 : 2 * s + 3 : 2]
+        # Data values
+        Y = jnp.array([30.6, 72.2, 124.4, 187.4], dtype=x.dtype)
 
-        s1, c1 = jnp.sin(x1), jnp.cos(x1)
-        s2, c2 = jnp.sin(x2), jnp.cos(x2)
-        s3, c3 = jnp.sin(x3), jnp.cos(x3)
-        s4, c4 = jnp.sin(x4), jnp.cos(x4)
+        # Vectorized computation using stride-2 slices
+        # For each block j, variables are x[2j+q-1] for q=1..4
+        x_q = jnp.stack([
+            x[: 2 * s : 2],  # q=1: x[2j]
+            x[1 : 2 * s + 1 : 2],  # q=2: x[2j+1]
+            x[2 : 2 * s + 2 : 2],  # q=3: x[2j+2]
+            x[3 : 2 * s + 3 : 2],  # q=4: x[2j+3]
+        ])  # shape: (4, s)
 
-        # Factor: sum_q(q^2 * sin(xq)) and sum_q(q * cos(xq))
-        sq2s = s1 + 4.0 * s2 + 9.0 * s3 + 16.0 * s4
-        sqc = c1 + 2.0 * c2 + 3.0 * c3 + 4.0 * c4
+        # Coefficients: l = 1..4, q = 1..4
+        l_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)
+        q_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)
+        L, Q = jnp.meshgrid(l_vals, q_vals, indexing="ij")  # (4, 4)
 
-        # Residuals per l: -l*sq2s + l^2*sqc - Y[l]
-        eq1 = -sq2s + sqc - Y[0]
-        eq2 = -2.0 * sq2s + 4.0 * sqc - Y[1]
-        eq3 = -3.0 * sq2s + 9.0 * sqc - Y[2]
-        eq4 = -4.0 * sq2s + 16.0 * sqc - Y[3]
+        # x_vals[l, q, j] = x_q[q, j], broadcast over l
+        x_vals = x_q[None, :, :]  # (1, 4, s) broadcasts to (4, 4, s)
 
-        residuals = jnp.stack([eq1, eq2, eq3, eq4], axis=1).flatten()
+        # For sine term: a = -l * q^2
+        a_sin = (-L * Q**2)[:, :, None]  # (4, 4, 1)
+        sin_terms = a_sin * jnp.sin(x_vals)  # (4, 4, s)
+
+        # For cosine term: a = l^2 * q
+        a_cos = (L**2 * Q)[:, :, None]  # (4, 4, 1)
+        cos_terms = a_cos * jnp.cos(x_vals)  # (4, 4, s)
+
+        # Total terms for each (l, q, j) combination
+        total_terms = sin_terms + cos_terms  # (4, 4, s)
+
+        # Sum over q (axis=1) to get equation sums for each (l, j)
+        eq_sums = jnp.sum(total_terms, axis=1)  # shape: (4, s)
+
+        # Subtract Y values (broadcast Y to match shape)
+        Y_expanded = Y[:, None]  # shape: (4, 1)
+        residuals_matrix = eq_sums - Y_expanded  # shape: (4, s)
+
+        # Flatten in the correct order: for each j, then for each l
+        # The original order is: j=0,l=1; j=0,l=2; j=0,l=3; j=0,l=4; j=1,l=1; ...
+        # residuals_matrix is (l, j), so we need to transpose and flatten
+        residuals = residuals_matrix.T.flatten()  # shape: (4*s,)
+
+        # Sum of squares (L2 group type in SIF)
         return jnp.sum(residuals**2)
 
     @property

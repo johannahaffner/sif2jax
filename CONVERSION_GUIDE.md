@@ -146,3 +146,49 @@ slices, keep `jnp.arange` and set `EAGER_CONSTANT_FOLDING=TRUE` so JAX folds
 the index computation at trace time.
 
 Run `tests/test_jaxpr.py` to verify objectives are gather/scatter-free.
+
+## Performance: Keeping the AD Graph Compact
+
+Second-order transforms (Hessians, HVPs) are sensitive to the number of
+intermediate values in the computation graph. Patterns to keep it small:
+
+### Avoid meshgrid for coefficient arrays
+`jnp.meshgrid` creates `(p, l, s)` intermediates. With `eager_constant_folding`,
+these get materialized as large closure constants transferred to device each call.
+
+```python
+# Bad: creates (4, 4, s) coefficient arrays
+L, Q = jnp.meshgrid(l_vals, q_vals, indexing="ij")
+result = (L**2 * Q)[:,:,None] * f(x_vals)  # (4, 4, s)
+
+# Good: keep small vectors, use dot products
+l2 = l_vals**2                              # (4,)
+result = l2[:, None] * (q_vals @ f(x_q))   # (4, s)
+```
+
+### Factor separable sums before broadcasting
+When coefficients factor as `a[i,j] = g(i) * h(j)`, reduce over the inner
+dimension first via dot product, then scale:
+
+```python
+# Bad: (l, q, s) intermediate
+total = a_coeff[:, :, None] * sin_vals[None, :, :]  # (4, 4, s)
+result = jnp.sum(total, axis=1)                     # (4, s)
+
+# Good: reduce q first, then broadcast l
+q_sum = h_coeffs @ sin_vals    # (4,) @ (4, s) -> (s,)
+result = g_coeffs[:, None] * q_sum[None, :]  # (4, s)
+```
+
+### Keep expensive ops batched
+One call on a stacked array produces fewer AD nodes than multiple calls
+on slices. This matters most for Hessian computation.
+
+```python
+# Bad for Hessians: 4 separate sin ops, 4 intermediate buffers
+s1, s2, s3, s4 = jnp.sin(x1), jnp.sin(x2), jnp.sin(x3), jnp.sin(x4)
+
+# Good: 1 sin op on stacked (4, s) array, 1 intermediate buffer
+x_stacked = jnp.stack([x1, x2, x3, x4])  # (4, s)
+sin_all = jnp.sin(x_stacked)              # (4, s)
+```

@@ -143,3 +143,6 @@ Common vectorization patterns:
 - **Avoid `.at[].set()` / `.at[].add()` in objectives** — these produce scatter ops. Use `jnp.concatenate`, `jnp.pad`, or `jnp.stack` + `flatten` instead.
 - **Run `tests/test_jaxpr.py`** to verify no gather/scatter operations in the objective jaxpr.
 - **For modular/permutation indexing** (`(k*i) % n`): the gather is unavoidable, but use `jnp.arange` (not `np.arange`) and rely on `EAGER_CONSTANT_FOLDING=TRUE` to fold the index computation. Use `jnp.roll` for simple cyclic shifts.
+- **Avoid `jnp.meshgrid` for coefficient arrays** — creates large intermediates that eager folding materializes as closure constants. Instead, keep small 1D vectors and use `@` (dot) or `[:, None]` broadcasting. E.g. replace `L, Q = meshgrid(l, q); coeff = L**2 * Q` with `coeff = (l**2)[:, None] * q[None, :]`.
+- **Factor separable sums before broadcasting** — when `a[i,j] = g(i) * h(j)`, compute `h @ f(x)` first (dot product reduces inner dimension) then scale by `g`. This avoids `(i, j, n)` intermediates and produces a smaller AD graph. E.g. `sum_q(a[l,q] * sin(x_q))` where `a = l * q^2` → `l * (q^2 @ sin(x_q))`.
+- **Keep expensive ops (sin, cos, pow) batched** — one `sin((4,s))` is better than four `sin((s,))` for AD. Fewer ops = fewer intermediate buffers for second derivatives to track. Stack inputs first, then apply the expensive op once.

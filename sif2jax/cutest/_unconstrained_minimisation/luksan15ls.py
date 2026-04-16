@@ -56,52 +56,33 @@ class LUKSAN15LS(AbstractUnconstrainedMinimisation):
         # Data values
         Y = jnp.array([35.8, 11.2, 6.2, 4.4], dtype=x.dtype)
 
-        # Vectorized computation using stride-2 slices
-        j_indices = jnp.arange(s)  # kept for meshgrid shape
-        x1 = x[: 2 * s : 2]  # x[i] for all blocks
-        x2 = x[1 : 2 * s + 1 : 2]  # x[i+1] for all blocks
-        x3 = x[2 : 2 * s + 2 : 2]  # x[i+2] for all blocks
-        x4 = x[3 : 2 * s + 3 : 2]  # x[i+3] for all blocks
+        # Stride-2 slices for the 4 variables per block
+        x1 = x[: 2 * s : 2]
+        x2 = x[1 : 2 * s + 1 : 2]
+        x3 = x[2 : 2 * s + 2 : 2]
+        x4 = x[3 : 2 * s + 3 : 2]
 
-        # Compute signomial term for all blocks: x1 * x2^2 * x3^3 * x4^4
-        signom_vals = x1 * (x2**2) * (x3**3) * (x4**4)  # shape: (s,)
+        # Signomial: x1 * x2^2 * x3^3 * x4^4, shape (s,)
+        signom = x1 * (x2**2) * (x3**3) * (x4**4)
 
-        # Create arrays for p and l values
-        p_vals = jnp.array([1, 2, 3], dtype=x.dtype)  # p = 1, 2, 3
-        l_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)  # l = 1, 2, 3, 4
+        # |signom| for fractional powers
+        abs_signom = signom * jnp.where(signom > 0, 1.0, -1.0)  # (s,)
 
-        # Create meshgrids for vectorized computation
-        P, L, J = jnp.meshgrid(
-            p_vals, l_vals, j_indices, indexing="ij"
-        )  # shapes: (3, 4, s)
+        # p = [1,2,3], l = [1,2,3,4] — keep as small 1D vectors, broadcast
+        p = jnp.array([1.0, 2.0, 3.0], dtype=x.dtype)  # (3,)
+        l = jnp.array([1.0, 2.0, 3.0, 4.0], dtype=x.dtype)  # (4,)
 
-        # Compute p2ol and pli for all combinations
-        P2OL = P**2 / L  # shape: (3, 4, s)
-        PLI = 1.0 / (P * L)  # shape: (3, 4, s)
+        # p^2/l: (3,4) via outer ops, then broadcast over s
+        p2ol = (p[:, None] ** 2) / l[None, :]  # (3, 4)
+        pli = 1.0 / (p[:, None] * l[None, :])  # (3, 4)
 
-        # Expand signom_vals to match the shape
-        signom_expanded = signom_vals[None, None, :]  # shape: (1, 1, s)
+        # F[p,l,j] = p2ol[p,l] * |signom[j]|^pli[p,l]
+        # Broadcast: (3,4,1) * (1,1,s)^(3,4,1) -> (3,4,s)
+        F = p2ol[:, :, None] * (abs_signom[None, None, :] ** pli[:, :, None])
 
-        # Apply sign based on whether signom_val is positive
-        sign_p = jnp.where(signom_expanded > 0, 1.0, -1.0)
-        p_val = signom_expanded * sign_p  # This gives |signom_val|, shape: (1, 1, s)
+        # Sum over p -> (4, s), subtract Y -> residuals
+        residuals = (jnp.sum(F, axis=0) - Y[:, None]).T.flatten()
 
-        # Compute F = p2ol * p_val^pli for all combinations
-        F_vals = P2OL * (p_val**PLI)  # shape: (3, 4, s)
-
-        # Sum over p (axis=0) to get equation sums for each (l, j)
-        eq_sums = jnp.sum(F_vals, axis=0)  # shape: (4, s)
-
-        # Subtract Y values (broadcast Y to match shape)
-        Y_expanded = Y[:, None]  # shape: (4, 1)
-        residuals_matrix = eq_sums - Y_expanded  # shape: (4, s)
-
-        # Flatten in the correct order: for each j, then for each l
-        # The original order is: j=0,l=1; j=0,l=2; j=0,l=3; j=0,l=4; j=1,l=1; ...
-        # residuals_matrix is (l, j), so we need to transpose and flatten
-        residuals = residuals_matrix.T.flatten()  # shape: (4*s,)
-
-        # Sum of squares (L2 group type in SIF)
         return jnp.sum(residuals**2)
 
     @property

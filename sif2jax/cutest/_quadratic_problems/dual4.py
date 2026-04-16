@@ -16702,14 +16702,8 @@ class DUAL4(AbstractConstrainedQuadraticProblem):
     def objective(self, y, args):
         """Quadratic objective: 0.5 * y^T * Q * y + c^T * y"""
         del args
-
-        # Linear term
-        linear_term = jnp.dot(self.c, y)
-
-        # Quadratic term using sparse representation
-        quad_term = jnp.sum(self.Q_val * y[self.Q_row] * y[self.Q_col])
-
-        return 0.5 * quad_term + linear_term
+        Q = jnp.zeros((self.n, self.n)).at[self.Q_row, self.Q_col].add(self.Q_val)
+        return 0.5 * y @ Q @ y + jnp.dot(self.c, y)
 
     def constraint(self, y):
         """Linear equality constraint: sum(y) = 1"""

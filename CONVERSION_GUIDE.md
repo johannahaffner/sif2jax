@@ -147,6 +147,25 @@ the index computation at trace time.
 
 Run `tests/test_jaxpr.py` to verify objectives are gather/scatter-free.
 
+### Near-dense COO → dense matmul
+Some problems store a quadratic form as COO sparse (Q_row, Q_col, Q_val)
+even when the matrix is nearly dense. If density is >~50%, consider converting
+to dense (this threshold is a rule of thumb — even sparser matrices may benefit
+since matmul's AD is much cheaper than gather's):
+
+```python
+# Bad: two gathers per evaluation, scatter-add in VJP
+quad = jnp.sum(Q_val * y[Q_row] * y[Q_col])
+
+# Good: dense matmul, no gathers in jaxpr
+Q = jnp.zeros((n, n)).at[Q_row, Q_col].add(Q_val)
+quad = y @ Q @ y
+```
+
+The `.at[].add()` uses scatter, but since Q_row/Q_col/Q_val are all constants,
+`eager_constant_folding` materializes the dense Q at trace time — the final
+jaxpr contains only `dot_general` (matmul) with no gather or scatter.
+
 ## Performance: Keeping the AD Graph Compact
 
 Second-order transforms (Hessians, HVPs) are sensitive to the number of

@@ -56,32 +56,36 @@ class LUKSAN15LS(AbstractUnconstrainedMinimisation):
         # Data values
         Y = jnp.array([35.8, 11.2, 6.2, 4.4], dtype=x.dtype)
 
-        # Stride-2 slices for the 4 variables per block
-        x1 = x[: 2 * s : 2]
-        x2 = x[1 : 2 * s + 1 : 2]
-        x3 = x[2 : 2 * s + 2 : 2]
-        x4 = x[3 : 2 * s + 3 : 2]
-
         # Signomial: x1 * x2^2 * x3^3 * x4^4, shape (s,)
-        signom = x1 * (x2**2) * (x3**3) * (x4**4)
+        x1 = x[: 2 * s : 2]
+        x_sq = x**2
+        x2_2 = x_sq[1 : 2 * s + 1 : 2]
+        x3_3 = x[2 : 2 * s + 2 : 2] * x_sq[2 : 2 * s + 2 : 2]
+        x4_4 = x_sq[3 : 2 * s + 3 : 2] ** 2
+        signom = x1 * x2_2 * x3_3 * x4_4
 
-        # |signom| for fractional powers
-        abs_signom = signom * jnp.where(signom > 0, 1.0, -1.0)  # (s,)
+        a = jnp.abs(signom)  # (s,)
 
-        # p = [1,2,3], l = [1,2,3,4] — keep as small 1D vectors, broadcast
-        p = jnp.array([1.0, 2.0, 3.0], dtype=x.dtype)  # (3,)
-        l = jnp.array([1.0, 2.0, 3.0, 4.0], dtype=x.dtype)  # (4,)
+        # Compute roots via sqrt/cbrt chains instead of generic pow.
+        # Needed exponents: 1, 1/2, 1/3, 1/4, 1/6, 1/8, 1/9, 1/12
+        r2 = jnp.sqrt(a)  # a^(1/2)
+        r3 = jnp.cbrt(a)  # a^(1/3)
+        r4 = jnp.sqrt(r2)  # a^(1/4)
+        r6 = jnp.sqrt(r3)  # a^(1/6)
+        r8 = jnp.sqrt(r4)  # a^(1/8)
+        r9 = jnp.cbrt(r3)  # a^(1/9)
+        r12 = jnp.sqrt(r6)  # a^(1/12)
 
-        # p^2/l: (3,4) via outer ops, then broadcast over s
-        p2ol = (p[:, None] ** 2) / l[None, :]  # (3, 4)
-        pli = 1.0 / (p[:, None] * l[None, :])  # (3, 4)
+        # F[p,l] = (p^2/l) * a^(1/(p*l)), summed over p=1,2,3 for each l
+        eq1 = a + 4.0 * r2 + 9.0 * r3  # l=1
+        eq2 = 0.5 * r2 + 2.0 * r4 + 4.5 * r6  # l=2
+        eq3 = (1.0 / 3.0) * r3 + (4.0 / 3.0) * r6 + 3.0 * r9  # l=3
+        eq4 = 0.25 * r4 + r8 + 2.25 * r12  # l=4
 
-        # F[p,l,j] = p2ol[p,l] * |signom[j]|^pli[p,l]
-        # Broadcast: (3,4,1) * (1,1,s)^(3,4,1) -> (3,4,s)
-        F = p2ol[:, :, None] * (abs_signom[None, None, :] ** pli[:, :, None])
-
-        # Sum over p -> (4, s), subtract Y -> residuals
-        residuals = (jnp.sum(F, axis=0) - Y[:, None]).T.flatten()
+        # Residuals: eq_l - Y_l for each block j, flattened as (j, l)
+        residuals = jnp.stack(
+            [eq1 - Y[0], eq2 - Y[1], eq3 - Y[2], eq4 - Y[3]], axis=1
+        ).flatten()
 
         return jnp.sum(residuals**2)
 

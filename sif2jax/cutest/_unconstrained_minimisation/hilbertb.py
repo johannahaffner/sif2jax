@@ -47,7 +47,7 @@ class HILBERTB(AbstractUnconstrainedMinimisation):
         # Off-diagonal: y[i]*y[j]/(i+j-1) for j < i (upper triangular)
         y_outer = y[:, None] * y[None, :]  # (n, n)
         upper_mask = j_grid < i_grid
-        off_diagonal = jnp.sum(jnp.where(upper_mask, y_outer * hilbert_coeffs, 0.0))
+        off_diagonal = jnp.sum(jnp.where(upper_mask, y_outer * hilbert_coeffs, 0.0))  # pyright: ignore[reportArgumentType]
 
         # Diagonal: y[i]^2 * (D + 1/(4i-2))
         diagonal_coeffs = d + 1.0 / (4 * i_indices - 2)

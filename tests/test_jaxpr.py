@@ -64,7 +64,7 @@ def _collect_primitives(jaxpr):
     prims = set()
     for eqn in jaxpr.eqns:
         prims.add(eqn.primitive.name)
-        for subjaxpr in jax.core.jaxprs_in_params(eqn.params):
+        for subjaxpr in jax.core.jaxprs_in_params(eqn.params):  # pyright: ignore[reportAttributeAccessIssue]
             prims.update(_collect_primitives(subjaxpr))
     return prims
 

@@ -73,11 +73,13 @@ class SBRYBND(AbstractUnconstrainedMinimisation):
         lb = self.lb  # 5
         ub = self.ub  # 1
         k3 = self.kappa3
-        padded = jnp.concatenate([
-            jnp.zeros(lb, dtype=scaled_y.dtype),
-            scaled_y,
-            jnp.zeros(ub, dtype=scaled_y.dtype),
-        ])  # length n + lb + ub
+        padded = jnp.concatenate(
+            [
+                jnp.zeros(lb, dtype=scaled_y.dtype),
+                scaled_y,
+                jnp.zeros(ub, dtype=scaled_y.dtype),
+            ]
+        )  # length n + lb + ub
 
         # Lower band: offset k means neighbor at position i-k
         for k in range(1, lb + 1):
@@ -101,25 +103,27 @@ class SBRYBND(AbstractUnconstrainedMinimisation):
         # Lower band: neighbor j = i-k contributes SQ (upper/lower region) or
         # CB (middle region) based on the mask at position i.
         # Pad the neighbor terms and select per-equation.
-        nl_sq_padded = jnp.concatenate([
-            jnp.zeros(lb, dtype=scaled_y.dtype),
-            nl_sq,
-            jnp.zeros(ub, dtype=scaled_y.dtype),
-        ])
-        nl_cb_padded = jnp.concatenate([
-            jnp.zeros(lb, dtype=scaled_y.dtype),
-            nl_cb,
-            jnp.zeros(ub, dtype=scaled_y.dtype),
-        ])
+        nl_sq_padded = jnp.concatenate(
+            [
+                jnp.zeros(lb, dtype=scaled_y.dtype),
+                nl_sq,
+                jnp.zeros(ub, dtype=scaled_y.dtype),
+            ]
+        )
+        nl_cb_padded = jnp.concatenate(
+            [
+                jnp.zeros(lb, dtype=scaled_y.dtype),
+                nl_cb,
+                jnp.zeros(ub, dtype=scaled_y.dtype),
+            ]
+        )
 
         # Lower band nonlinear: for each offset k, select SQ or CB at each i
         sq_region = upper_mask | lower_mask
         for k in range(1, lb + 1):
             neighbor_sq = nl_sq_padded[lb - k : lb - k + n]
             neighbor_cb = nl_cb_padded[lb - k : lb - k + n]
-            residuals = residuals + jnp.where(
-                sq_region, neighbor_sq, neighbor_cb
-            )
+            residuals = residuals + jnp.where(sq_region, neighbor_sq, neighbor_cb)
 
         # Upper band nonlinear (always SQ since j > i)
         for k in range(1, ub + 1):
@@ -127,13 +131,9 @@ class SBRYBND(AbstractUnconstrainedMinimisation):
 
         # Diagonal nonlinear terms
         # Upper and lower regions: CB elements
-        residuals = residuals + jnp.where(
-            sq_region, self.kappa2 * scaled_y**3, 0.0
-        )
+        residuals = residuals + jnp.where(sq_region, self.kappa2 * scaled_y**3, 0.0)
         # Middle region: SQ elements
-        residuals = residuals + jnp.where(
-            middle_mask, self.kappa2 * scaled_y**2, 0.0
-        )
+        residuals = residuals + jnp.where(middle_mask, self.kappa2 * scaled_y**2, 0.0)
 
         return jnp.sum(residuals**2)
 

@@ -37,10 +37,9 @@ class POWERSUM(AbstractUnconstrainedMinimisation):
         x_data = jnp.array([1.0, 2.0, 3.0, 2.0])
 
         # Compute target values y(i) = sum_j x_j^i
-        y = jnp.array([
-            sum(x_data[j] ** (i + 1) for j in range(min(4, n)))
-            for i in range(m)
-        ])
+        y = jnp.array(
+            [sum(x_data[j] ** (i + 1) for j in range(min(4, n))) for i in range(m)]
+        )
 
         return (y,)
 
@@ -55,9 +54,7 @@ class POWERSUM(AbstractUnconstrainedMinimisation):
         m = len(y_data)
 
         # Compute residuals: for each power i+1, sum_j y_j^(i+1) - y_data[i]
-        residuals = jnp.array([
-            jnp.sum(y ** (i + 1)) - y_data[i] for i in range(m)
-        ])
+        residuals = jnp.array([jnp.sum(y ** (i + 1)) - y_data[i] for i in range(m)])
 
         # Return sum of squared residuals
         return jnp.sum(residuals**2)

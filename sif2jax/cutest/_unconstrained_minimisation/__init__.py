@@ -307,7 +307,6 @@ from .srosenbr import SROSENBR as SROSENBR
 # TODO: Human review needed - complex matrix multiplication formulation
 # from .spmsrtls import SPMSRTLS as SPMSRTLS
 from .tenfolds import TENFOLDTRLS as TENFOLDTRLS
-
 from .tointgor import TOINTGOR as TOINTGOR
 from .tointgss import TOINTGSS as TOINTGSS
 

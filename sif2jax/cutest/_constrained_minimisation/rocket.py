@@ -98,11 +98,7 @@ class ROCKET(AbstractConstrainedMinimisation):
         step, H, V, M, T, D, G = self._unpack_variables(y)
 
         # Drag constraints: DC * V^2 * exp(-HC*(H-H0)/H0) - D = 0
-        drag = (
-            self.DC * V**2
-            * jnp.exp(-self.HC_over_H0 * (H - self.H0) / self.H0)
-            - D
-        )
+        drag = self.DC * V**2 * jnp.exp(-self.HC_over_H0 * (H - self.H0) / self.H0) - D
 
         # Gravity constraints: G0*(H0/H)^2 - G = 0
         grav = self.G0H02 / H**2 - G
@@ -142,9 +138,7 @@ class ROCKET(AbstractConstrainedMinimisation):
         G_init = jnp.full(n_points, self.G0)
 
         # Interleave: [H0,V0,M0,T0,D0,G0, H1,V1,...]
-        vars_2d = jnp.stack(
-            [H_init, V_init, M_init, T_init, D_init, G_init], axis=1
-        )
+        vars_2d = jnp.stack([H_init, V_init, M_init, T_init, D_init, G_init], axis=1)
         return jnp.concatenate([jnp.array([1.0 / self.NH]), vars_2d.flatten()])
 
     @property

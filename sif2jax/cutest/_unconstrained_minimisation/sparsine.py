@@ -34,13 +34,15 @@ class SPARSINE(AbstractUnconstrainedMinimisation):
         # by XLA during tracing (no iota/modular arithmetic in the jaxpr).
         # SIF formula: (k*i-1) mod n, for k in {2, 3, 5, 7, 11}
         i = np.arange(1, n + 1)
-        perm_indices = np.stack([
-            (2 * i - 1) % n,
-            (3 * i - 1) % n,
-            (5 * i - 1) % n,
-            (7 * i - 1) % n,
-            (11 * i - 1) % n,
-        ])  # (5, n)
+        perm_indices = np.stack(
+            [
+                (2 * i - 1) % n,
+                (3 * i - 1) % n,
+                (5 * i - 1) % n,
+                (7 * i - 1) % n,
+                (11 * i - 1) % n,
+            ]
+        )  # (5, n)
 
         # Sum of sine values for each group (alpha values)
         # The identity permutation (pos_i = arange(n)) is just sine_values

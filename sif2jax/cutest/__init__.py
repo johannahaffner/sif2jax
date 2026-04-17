@@ -356,11 +356,11 @@ from ._constrained_minimisation import (
     HS119 as HS119,
     HS268 as HS268,
     HYDROELL as HYDROELL,
+    KISSING as KISSING,
     # JANNSON3 as JANNSON3,  # TODO: Human review - Jacobian tests hang
     # JANNSON4 as JANNSON4,
     # LIPPERT1 as LIPPERT1,
     LIPPERT2 as LIPPERT2,
-    KISSING as KISSING,
     # KISSING2 as KISSING2,  # TODO: Human review needed
     # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
     # KSIP as KSIP,  # TODO: Needs vectorization - dtype promotion errors

@@ -34,9 +34,7 @@ class GENHUMPS(AbstractUnconstrainedMinimisation):
         x_ip1 = y[1 : self.n]
 
         # The main hump term: (sin(zeta*x_i) * sin(zeta*x_{i+1}))^2
-        sine_term = (
-            jnp.sin(self.zeta * x_i) * jnp.sin(self.zeta * x_ip1)
-        ) ** 2
+        sine_term = (jnp.sin(self.zeta * x_i) * jnp.sin(self.zeta * x_ip1)) ** 2
 
         # The quadratic terms: 0.05 * (x_i^2 + x_{i+1}^2)
         quadratic_term = 0.05 * (x_i**2 + x_ip1**2)

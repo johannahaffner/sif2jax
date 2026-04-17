@@ -94,10 +94,14 @@ class SPIN2LS(AbstractUnconstrainedMinimisation):
 
         # Compute constraints using vectorized operations
         # r_i = -mu * x[i] + omega * y[i] + sum_{j!=i} (y[i] - y[j]) / dist_sq[i,j]
-        r_constraints = -mu * x + omega * y_coord + jnp.sum(y_diff * inv_dist_sq, axis=1)
+        r_constraints = (
+            -mu * x + omega * y_coord + jnp.sum(y_diff * inv_dist_sq, axis=1)
+        )
 
         # i_i = -mu * y[i] - omega * x[i] - sum_{j!=i} (x[i] - x[j]) / dist_sq[i,j]
-        i_constraints = -mu * y_coord - omega * x - jnp.sum(x_diff * inv_dist_sq, axis=1)
+        i_constraints = (
+            -mu * y_coord - omega * x - jnp.sum(x_diff * inv_dist_sq, axis=1)
+        )
 
         # Sum of squares
         return jnp.sum(jnp.concatenate([r_constraints, i_constraints]) ** 2)

@@ -10,4 +10,4 @@ docker run --rm \
   -v ${LOCAL_PATH}:${MOUNT_PATH} \
   -w ${MOUNT_PATH} \
   ${CONTAINER_IMAGE} \
-  bash -c "pip install -e . && pytest benchmarks/ --benchmark-only $*"
+  bash -c "pip install -e . && pytest --benchmark-only \"\$@\"" -- "$@"

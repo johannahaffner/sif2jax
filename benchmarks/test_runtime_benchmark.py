@@ -27,13 +27,31 @@ HESSIAN_PROBLEMS = [p for p in SCALAR_OBJECTIVE_PROBLEMS if p.y0.size <= 500]
 
 
 def _problem_class(problem):
-    """Return the base problem class name, e.g. 'AbstractUnconstrainedMinimisation'."""
-    return type(problem).__bases__[0].__name__
+    """Return the most specific Abstract* base class name for grouping.
+
+    Matches the grouping in sif2jax/cutest/__init__.py, e.g.
+    AbstractBoundedQuadraticProblem rather than AbstractBoundedMinimisation.
+    """
+    print(type(problem).__name__)
+    for cls in type(problem).__mro__:
+        if cls.__name__.startswith("Abstract"):
+            return cls.__name__
+    return type(problem).__name__
 
 
 def _test_id(problem):
     """Test ID includes class for -k filtering."""
     return f"{_problem_class(problem)}-{problem.name}"
+
+
+def _extra_info(problem, implementation):
+    return {
+        "problem_name": problem.name,
+        "dimensionality": problem.y0.size if problem.y0 is not None else 0,
+        "has_constraints": hasattr(problem, "constraint"),
+        "problem_type": _problem_class(problem),
+        "implementation": implementation,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -64,19 +82,7 @@ def test_sif2jax_objective_benchmark(benchmark, problem):
 
     # Run benchmark
     benchmark(jax_obj, jax.device_put(problem.y0), jax.device_put(problem.args))
-
-    # Store extra info for reporting
-    benchmark.extra_info.update(
-        {
-            "problem_name": problem.name,
-            "dimensionality": problem.y0.size if problem.y0 is not None else 0,
-            "has_constraints": hasattr(problem, "constraint"),
-            "problem_type": _problem_class(problem),
-            "implementation": "sif2jax",
-        }
-    )
-
-    # Clear caches after benchmark
+    benchmark.extra_info.update(_extra_info(problem, "sif2jax"))
     jax.clear_caches()
 
 
@@ -86,37 +92,20 @@ def test_sif2jax_val_and_grad_benchmark(benchmark, problem):
     benchmark.group = f"sif2jax-val_and_grad-{_problem_class(problem)}"
     benchmark.name = f"test_sif2jax_val_and_grad_benchmark[{problem.name}]"
 
-    # Compile JAX function
     compiled = (
         jax.jit(jax.value_and_grad(problem.objective))
         .lower(problem.y0, problem.args)
         .compile()
     )
-
-    # Warm up
     jax.block_until_ready(compiled(problem.y0, problem.args))
 
-    # Define function to benchmark
     def jax_val_and_grad(y0, args):
         return jax.block_until_ready(compiled(y0, args))
 
-    # Run benchmark
     benchmark(
         jax_val_and_grad, jax.device_put(problem.y0), jax.device_put(problem.args)
     )
-
-    # Store extra info for reporting
-    benchmark.extra_info.update(
-        {
-            "problem_name": problem.name,
-            "dimensionality": problem.y0.size if problem.y0 is not None else 0,
-            "has_constraints": hasattr(problem, "constraint"),
-            "problem_type": _problem_class(problem),
-            "implementation": "sif2jax",
-        }
-    )
-
-    # Clear caches after benchmark
+    benchmark.extra_info.update(_extra_info(problem, "sif2jax"))
     jax.clear_caches()
 
 
@@ -134,33 +123,16 @@ def test_sif2jax_hvp_benchmark(benchmark, problem):
         _, hv = jax.jvp(lambda y_: grad_fn(y_, args), (y,), (v,))
         return hv
 
-    # Compile JAX function
     y0 = problem.y0
     v = jnp.ones_like(y0)
     compiled = hvp_fn.lower(y0, v).compile()
-
-    # Warm up
     jax.block_until_ready(compiled(y0, v))
 
-    # Define function to benchmark
     def jax_hvp(y0, v):
         return jax.block_until_ready(compiled(y0, v))
 
-    # Run benchmark
     benchmark(jax_hvp, jax.device_put(y0), jax.device_put(v))
-
-    # Store extra info for reporting
-    benchmark.extra_info.update(
-        {
-            "problem_name": problem.name,
-            "dimensionality": y0.size if y0 is not None else 0,
-            "has_constraints": hasattr(problem, "constraint"),
-            "problem_type": _problem_class(problem),
-            "implementation": "sif2jax",
-        }
-    )
-
-    # Clear caches after benchmark
+    benchmark.extra_info.update(_extra_info(problem, "sif2jax"))
     jax.clear_caches()
 
 
@@ -170,213 +142,130 @@ def test_sif2jax_hessian_benchmark(benchmark, problem):
     benchmark.group = f"sif2jax-hessian-{_problem_class(problem)}"
     benchmark.name = f"test_sif2jax_hessian_benchmark[{problem.name}]"
 
-    # Compile JAX function
     compiled = (
         jax.jit(jax.hessian(problem.objective))
         .lower(problem.y0, problem.args)
         .compile()
     )
-
-    # Warm up
     jax.block_until_ready(compiled(problem.y0, problem.args))
 
-    # Define function to benchmark
     def jax_hessian(y0, args):
         return jax.block_until_ready(compiled(y0, args))
 
-    # Run benchmark
     benchmark(jax_hessian, jax.device_put(problem.y0), jax.device_put(problem.args))
-
-    # Store extra info for reporting
-    benchmark.extra_info.update(
-        {
-            "problem_name": problem.name,
-            "dimensionality": problem.y0.size if problem.y0 is not None else 0,
-            "has_constraints": hasattr(problem, "constraint"),
-            "problem_type": _problem_class(problem),
-            "implementation": "sif2jax",
-        }
-    )
-
-    # Clear caches after benchmark
+    benchmark.extra_info.update(_extra_info(problem, "sif2jax"))
     jax.clear_caches()
 
 
 # ---------------------------------------------------------------------------
 # pycutest benchmarks (Fortran baseline)
+#
+# Structured as a class so the pycutest problem fixture uses scope="class" —
+# the Fortran shared library is imported once per problem, shared across all
+# transform benchmarks (objective, val_and_grad, hvp, hessian), then cleared.
+# This prevents accumulating hundreds of dlopen'd .so files in memory.
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("problem", ALL_PROBLEMS, ids=_test_id)
-def test_pycutest_objective_benchmark(benchmark, problem):
-    """Benchmark pycutest objective function for all problems.
+def _pycutest_fixture(cls):
+    """Add a class-scoped pycutest fixture to a benchmark class."""
 
-    This provides a comparison baseline against the Fortran implementation.
-    """
-    benchmark.group = f"pycutest-objective-{_problem_class(problem)}"
-    benchmark.name = f"test_pycutest_objective_benchmark[{problem.name}]"
+    @pytest.fixture(autouse=True, scope="class")
+    def pycutest_setup(self, problem):
+        from .conftest import patch_pycutest_refcount_leak
 
-    # Load pycutest problem
-    try:
-        pycutest_problem = pycutest.import_problem(
-            problem.name, drop_fixed_variables=False
+        try:
+            self.__class__._pyc = pycutest.import_problem(
+                problem.name, drop_fixed_variables=False
+            )
+            patch_pycutest_refcount_leak(self.__class__._pyc)
+            self.__class__._y0_np = np.asarray(
+                problem.y0, dtype=np.float64
+            )
+        except Exception:
+            self.__class__._pyc = None
+            self.__class__._y0_np = None
+        yield
+        if self.__class__._pyc is not None:
+            pycutest.clear_cache(problem.name)
+
+    cls.pycutest_setup = pycutest_setup
+    return cls
+
+
+@_pycutest_fixture
+@pytest.mark.parametrize("problem", ALL_PROBLEMS, ids=_test_id, scope="class")
+class TestPycutestObjective:
+    """Pycutest objective benchmark — all problems."""
+
+    def test_pycutest_objective_benchmark(self, benchmark, problem):
+        if self._pyc is None:
+            pytest.skip(f"Could not load {problem.name}")
+        benchmark.group = f"pycutest-objective-{_problem_class(problem)}"
+        benchmark.name = (
+            f"test_pycutest_objective_benchmark[{problem.name}]"
         )
-    except Exception as e:
-        pytest.skip(f"Could not load pycutest problem {problem.name}: {e}")
+        pyc, y0 = self._pyc, self._y0_np
+        _ = pyc.obj(y0)
 
-    # Convert to numpy f64 — pycutest's Fortran module requires numpy arrays
-    y0_np = np.asarray(problem.y0, dtype=np.float64)
-
-    # Warm up
-    _ = pycutest_problem.obj(y0_np)
-
-    # Define function to benchmark
-    def pycutest_obj(y0):
-        return pycutest_problem.obj(y0)
-
-    # Run benchmark
-    benchmark(pycutest_obj, y0_np)
-
-    # Store extra info for reporting
-    benchmark.extra_info.update(
-        {
-            "problem_name": problem.name,
-            "dimensionality": y0_np.size if y0_np is not None else 0,
-            "has_constraints": hasattr(problem, "constraint"),
-            "problem_type": _problem_class(problem),
-            "implementation": "pycutest",
-        }
-    )
-
-    # Clear pycutest cache
-    pycutest.clear_cache(problem.name)
+        benchmark(lambda y: pyc.obj(y), y0)
+        benchmark.extra_info.update(_extra_info(problem, "pycutest"))
 
 
-@pytest.mark.parametrize("problem", SCALAR_OBJECTIVE_PROBLEMS, ids=_test_id)
-def test_pycutest_val_and_grad_benchmark(benchmark, problem):
-    """Benchmark pycutest objective+gradient for scalar-objective problems."""
-    benchmark.group = f"pycutest-val_and_grad-{_problem_class(problem)}"
-    benchmark.name = f"test_pycutest_val_and_grad_benchmark[{problem.name}]"
+@_pycutest_fixture
+@pytest.mark.parametrize(
+    "problem", SCALAR_OBJECTIVE_PROBLEMS, ids=_test_id, scope="class"
+)
+class TestPycutestDerivatives:
+    """Pycutest derivative benchmarks — scalar-objective problems only."""
 
-    # Load pycutest problem
-    try:
-        pycutest_problem = pycutest.import_problem(
-            problem.name, drop_fixed_variables=False
+    def test_pycutest_val_and_grad_benchmark(self, benchmark, problem):
+        if self._pyc is None:
+            pytest.skip(f"Could not load {problem.name}")
+        benchmark.group = (
+            f"pycutest-val_and_grad-{_problem_class(problem)}"
         )
-    except Exception as e:
-        pytest.skip(f"Could not load pycutest problem {problem.name}: {e}")
-
-    # Convert to numpy f64 — pycutest's Fortran module requires numpy arrays
-    y0_np = np.asarray(problem.y0, dtype=np.float64)
-
-    # Warm up
-    _ = pycutest_problem.obj(y0_np, gradient=True)
-
-    # Define function to benchmark
-    def pycutest_val_and_grad(y0):
-        return pycutest_problem.obj(y0, gradient=True)
-
-    # Run benchmark
-    benchmark(pycutest_val_and_grad, y0_np)
-
-    # Store extra info for reporting
-    benchmark.extra_info.update(
-        {
-            "problem_name": problem.name,
-            "dimensionality": y0_np.size,
-            "has_constraints": hasattr(problem, "constraint"),
-            "problem_type": _problem_class(problem),
-            "implementation": "pycutest",
-        }
-    )
-
-    # Clear pycutest cache
-    pycutest.clear_cache(problem.name)
-
-
-@pytest.mark.parametrize("problem", SCALAR_OBJECTIVE_PROBLEMS, ids=_test_id)
-def test_pycutest_hvp_benchmark(benchmark, problem):
-    """Benchmark pycutest Hessian-vector product."""
-    benchmark.group = f"pycutest-hvp-{_problem_class(problem)}"
-    benchmark.name = f"test_pycutest_hvp_benchmark[{problem.name}]"
-
-    # Load pycutest problem
-    try:
-        pycutest_problem = pycutest.import_problem(
-            problem.name, drop_fixed_variables=False
+        benchmark.name = (
+            f"test_pycutest_val_and_grad_benchmark[{problem.name}]"
         )
-    except Exception as e:
-        pytest.skip(f"Could not load pycutest problem {problem.name}: {e}")
+        pyc, y0 = self._pyc, self._y0_np
+        _ = pyc.obj(y0, gradient=True)
 
-    # Convert to numpy f64 — pycutest's Fortran module requires numpy arrays
-    y0_np = np.asarray(problem.y0, dtype=np.float64)
-    v_np = np.ones_like(y0_np)
+        benchmark(lambda y: pyc.obj(y, gradient=True), y0)
+        benchmark.extra_info.update(_extra_info(problem, "pycutest"))
 
-    # Warm up
-    _ = pycutest_problem.hprod(y0_np, v_np)
+    def test_pycutest_hvp_benchmark(self, benchmark, problem):
+        if self._pyc is None:
+            pytest.skip(f"Could not load {problem.name}")
+        benchmark.group = f"pycutest-hvp-{_problem_class(problem)}"
+        benchmark.name = f"test_pycutest_hvp_benchmark[{problem.name}]"
+        pyc, y0 = self._pyc, self._y0_np
+        v = np.ones_like(y0)
+        _ = pyc.hprod(y0, v)
 
-    # Define function to benchmark
-    def pycutest_hvp(y0, v):
-        return pycutest_problem.hprod(y0, v)
-
-    # Run benchmark
-    benchmark(pycutest_hvp, y0_np, v_np)
-
-    # Store extra info for reporting
-    benchmark.extra_info.update(
-        {
-            "problem_name": problem.name,
-            "dimensionality": y0_np.size,
-            "has_constraints": hasattr(problem, "constraint"),
-            "problem_type": _problem_class(problem),
-            "implementation": "pycutest",
-        }
-    )
-
-    # Clear pycutest cache
-    pycutest.clear_cache(problem.name)
+        benchmark(lambda y, v: pyc.hprod(y, v), y0, v)
+        benchmark.extra_info.update(_extra_info(problem, "pycutest"))
 
 
-@pytest.mark.parametrize("problem", HESSIAN_PROBLEMS, ids=_test_id)
-def test_pycutest_hessian_benchmark(benchmark, problem):
-    """Benchmark pycutest full Hessian for small problems (n <= 500)."""
-    benchmark.group = f"pycutest-hessian-{_problem_class(problem)}"
-    benchmark.name = f"test_pycutest_hessian_benchmark[{problem.name}]"
+@_pycutest_fixture
+@pytest.mark.parametrize(
+    "problem", HESSIAN_PROBLEMS, ids=_test_id, scope="class"
+)
+class TestPycutestHessian:
+    """Pycutest Hessian benchmark — small problems only (n <= 500)."""
 
-    # Load pycutest problem
-    try:
-        pycutest_problem = pycutest.import_problem(
-            problem.name, drop_fixed_variables=False
+    def test_pycutest_hessian_benchmark(self, benchmark, problem):
+        if self._pyc is None:
+            pytest.skip(f"Could not load {problem.name}")
+        benchmark.group = f"pycutest-hessian-{_problem_class(problem)}"
+        benchmark.name = (
+            f"test_pycutest_hessian_benchmark[{problem.name}]"
         )
-    except Exception as e:
-        pytest.skip(f"Could not load pycutest problem {problem.name}: {e}")
+        pyc, y0 = self._pyc, self._y0_np
+        _ = pyc.hess(y0)
 
-    # Convert to numpy f64 — pycutest's Fortran module requires numpy arrays
-    y0_np = np.asarray(problem.y0, dtype=np.float64)
-
-    # Warm up
-    _ = pycutest_problem.hess(y0_np)
-
-    # Define function to benchmark
-    def pycutest_hessian(y0):
-        return pycutest_problem.hess(y0)
-
-    # Run benchmark
-    benchmark(pycutest_hessian, y0_np)
-
-    # Store extra info for reporting
-    benchmark.extra_info.update(
-        {
-            "problem_name": problem.name,
-            "dimensionality": y0_np.size,
-            "has_constraints": hasattr(problem, "constraint"),
-            "problem_type": _problem_class(problem),
-            "implementation": "pycutest",
-        }
-    )
-
-    # Clear pycutest cache
-    pycutest.clear_cache(problem.name)
+        benchmark(lambda y: pyc.hess(y), y0)
+        benchmark.extra_info.update(_extra_info(problem, "pycutest"))
 
 
 # TODO: Add constraint evaluation and Jacobian benchmarks for

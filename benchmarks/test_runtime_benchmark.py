@@ -1,7 +1,8 @@
+# pyright: reportMissingImports=false, reportAttributeAccessIssue=false
 import jax
 import jax.numpy as jnp
 import numpy as np
-import pycutest  # pyright: ignore[reportMissingImports]
+import pycutest
 import pytest
 import sif2jax
 from sif2jax._problem import (
@@ -172,16 +173,11 @@ def _pycutest_fixture(cls):
 
     @pytest.fixture(autouse=True, scope="class")
     def pycutest_setup(self, problem):
-        from .conftest import patch_pycutest_refcount_leak
-
         try:
             self.__class__._pyc = pycutest.import_problem(
                 problem.name, drop_fixed_variables=False
             )
-            patch_pycutest_refcount_leak(self.__class__._pyc)
-            self.__class__._y0_np = np.asarray(
-                problem.y0, dtype=np.float64
-            )
+            self.__class__._y0_np = np.asarray(problem.y0, dtype=np.float64)
         except Exception:
             self.__class__._pyc = None
             self.__class__._y0_np = None
@@ -202,9 +198,7 @@ class TestPycutestObjective:
         if self._pyc is None:
             pytest.skip(f"Could not load {problem.name}")
         benchmark.group = f"pycutest-objective-{_problem_class(problem)}"
-        benchmark.name = (
-            f"test_pycutest_objective_benchmark[{problem.name}]"
-        )
+        benchmark.name = f"test_pycutest_objective_benchmark[{problem.name}]"
         pyc, y0 = self._pyc, self._y0_np
         _ = pyc.obj(y0)
 
@@ -222,12 +216,8 @@ class TestPycutestDerivatives:
     def test_pycutest_val_and_grad_benchmark(self, benchmark, problem):
         if self._pyc is None:
             pytest.skip(f"Could not load {problem.name}")
-        benchmark.group = (
-            f"pycutest-val_and_grad-{_problem_class(problem)}"
-        )
-        benchmark.name = (
-            f"test_pycutest_val_and_grad_benchmark[{problem.name}]"
-        )
+        benchmark.group = f"pycutest-val_and_grad-{_problem_class(problem)}"
+        benchmark.name = f"test_pycutest_val_and_grad_benchmark[{problem.name}]"
         pyc, y0 = self._pyc, self._y0_np
         _ = pyc.obj(y0, gradient=True)
 
@@ -248,9 +238,7 @@ class TestPycutestDerivatives:
 
 
 @_pycutest_fixture
-@pytest.mark.parametrize(
-    "problem", HESSIAN_PROBLEMS, ids=_test_id, scope="class"
-)
+@pytest.mark.parametrize("problem", HESSIAN_PROBLEMS, ids=_test_id, scope="class")
 class TestPycutestHessian:
     """Pycutest Hessian benchmark — small problems only (n <= 500)."""
 
@@ -258,9 +246,7 @@ class TestPycutestHessian:
         if self._pyc is None:
             pytest.skip(f"Could not load {problem.name}")
         benchmark.group = f"pycutest-hessian-{_problem_class(problem)}"
-        benchmark.name = (
-            f"test_pycutest_hessian_benchmark[{problem.name}]"
-        )
+        benchmark.name = f"test_pycutest_hessian_benchmark[{problem.name}]"
         pyc, y0 = self._pyc, self._y0_np
         _ = pyc.hess(y0)
 

@@ -14,12 +14,11 @@ jobs:
 
       - name: Checks with pre-commit
         uses: pre-commit/action@v3.0.1
-      
+
       - name: Test problem definition pre-built image
         run: |
           docker run --rm \
             -e EAGER_CONSTANT_FOLDING=TRUE \
-            -e JAX_USE_SIMPLIFIED_JAXPR_CONSTANTS=TRUE \
             -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_problem.py"
@@ -34,7 +33,6 @@ jobs:
         run: |
           docker run --rm \
             -e EAGER_CONSTANT_FOLDING=TRUE \
-            -e JAX_USE_SIMPLIFIED_JAXPR_CONSTANTS=TRUE \
             -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py --letters=A-M"
@@ -43,7 +41,6 @@ jobs:
         run: |
           docker run --rm \
             -e EAGER_CONSTANT_FOLDING=TRUE \
-            -e JAX_USE_SIMPLIFIED_JAXPR_CONSTANTS=TRUE \
             -v ${{ github.workspace }}:/workspace \
             johannahaffner/pycutest:latest \
             bash -c "cd /workspace && pip install -e . && pytest tests/test_runtime.py --letters=N-Z"

@@ -373,7 +373,7 @@ class BENNETT5LS(AbstractUnconstrainedMinimisation):
 
         # Compute sum of squared residuals
         residuals = predicted - y_data
-        return jnp.array(jnp.sum(residuals**2))
+        return jnp.sum(residuals**2)
 
     @property
     def expected_result(self):

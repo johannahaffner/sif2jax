@@ -37,22 +37,9 @@ class QUDLIN(AbstractBoundedMinimisation):
         Quadratic terms: x_i * x_{i+1} for i=1 to m
         """
         del args
-
-        # Linear terms - the SIF file has RM C RI -10.0 which means C = RI * (-10.0)
-        i_vals = jnp.arange(1, self.n + 1)
-        i_vals = jnp.asarray(i_vals, dtype=y.dtype)
-        coeffs = -10.0 * i_vals
-        linear_term = jnp.dot(coeffs, y)
-
-        # Quadratic terms: sum of x_i * x_{i+1} for i=1 to m
-        # From the SIF file: ELEMENT uses 2PR type which computes X*Y
-        quad_term = 0.0
-        if self.m > 0 and self.n > 1:
-            # Ensure we don't exceed array bounds
-            max_idx = min(self.m, self.n - 1)
-            quad_term = jnp.sum(y[:max_idx] * y[1 : max_idx + 1])
-
-        return linear_term + quad_term
+        coeffs = jnp.arange(-10, -10 * self.n - 1, -10, dtype=y.dtype)
+        m = min(self.m, self.n - 1)
+        return jnp.dot(coeffs, y) + jnp.sum(y[:m] * y[1 : m + 1])
 
     @property
     def bounds(self):

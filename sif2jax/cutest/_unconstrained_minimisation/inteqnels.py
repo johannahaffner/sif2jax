@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -35,45 +34,30 @@ class INTEQNELS(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         """Compute the objective function value as sum of squares of f_i(x)."""
         n = self.n
-        h = 1.0 / (n - 1)  # Match the starting point indexing
+        h = 1.0 / (n - 1)
 
-        # t_i = ih for i = 0, 1, ..., n-1 (to match starting point)
+        # t_i = ih for i = 0, 1, ..., n-1
         t = inexact_asarray(jnp.arange(n)) * h
 
-        # y represents x_0, x_1, ..., x_{n-1}
-        x = y
+        # Cubic term: g_j = (x_j + t_j + 1)^3
+        g = (y + t + 1.0) ** 3
 
-        def compute_f_i(i):
-            """Compute f_i(x) for the i-th equation (0-indexed)."""
-            t_i = t[i]
-            x_i = x[i]
+        # Weighted terms for the two kernel halves
+        # First kernel: t_j * g_j (used for j <= i)
+        a = t * g
+        # Second kernel: (1 - t_j) * g_j (used for j > i)
+        b = (1.0 - t) * g
 
-            # Use masking for both sums to avoid dynamic arange
-            all_j = jnp.arange(n)
-            t_j = t[all_j]
-            x_j = x[all_j]
+        # Cumulative sums for prefix/suffix structure
+        # first_sum[i] = sum_{j=0}^{i} a_j = cumsum(a)[i]
+        cum_a = jnp.cumsum(a)
+        # second_sum[i] = sum_{j=i+1}^{n-1} b_j = total_b - cumsum(b)[i]
+        total_b = jnp.sum(b)
+        cum_b = jnp.cumsum(b)
+        suffix_b = total_b - cum_b
 
-            # First sum: ∑_{j=0}^i t_j(x_j + t_j + 1)³
-            first_mask = all_j <= i
-            first_values = jnp.where(first_mask, t_j * (x_j + t_j + 1.0) ** 3, 0.0)
-            first_sum = jnp.sum(jnp.asarray(first_values))
-
-            # Second sum: ∑_{j=i+1}^{n-1} (1-t_j)(x_j + t_j + 1)³
-            second_mask = all_j > i
-            second_values = jnp.where(
-                second_mask, (1.0 - t_j) * (x_j + t_j + 1.0) ** 3, 0.0
-            )
-            second_sum = jnp.sum(jnp.asarray(second_values))
-
-            # Compute f_i(x)
-            integral_part = h * ((1.0 - t_i) * first_sum + t_i * second_sum) / 2.0
-            f_i = x_i + integral_part
-
-            return f_i
-
-        # Compute all f_i values and sum their squares
-        i_values = jnp.arange(n)
-        f_values = jax.vmap(compute_f_i)(i_values)
+        # f_i = x_i + h/2 * ((1-t_i) * cum_a[i] + t_i * suffix_b[i])
+        f_values = y + (h / 2.0) * ((1.0 - t) * cum_a + t * suffix_b)
 
         return jnp.sum(f_values**2)
 

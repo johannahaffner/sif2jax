@@ -1,4 +1,5 @@
 import jax.numpy as jnp
+import numpy as np
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
@@ -29,38 +30,29 @@ class SPARSINE(AbstractUnconstrainedMinimisation):
         # Compute sine of all variables
         sine_values = jnp.sin(y)
 
-        # Vectorized computation: for each group OBJ(i),
-        # compute the sum of sine elements
-        # Group i includes sine elements from positions:
-        # i, (2i-1) mod n + 1, (3i-1) mod n + 1, (5i-1) mod n + 1,
-        # (7i-1) mod n + 1, (11i-1) mod n + 1
-
-        # Create array of group indices (1 to n) using same dtype as y
-        i_values = jnp.arange(1, n + 1, dtype=y.dtype)
-
-        # Compute all position indices in vectorized form (convert to 0-based)
-        # SIF formula: (k*i-1) mod n + 1, convert to 0-based by subtracting 1
-        # Result: ((k*i-1) mod n + 1) - 1 = (k*i-1) mod n
-        pos_i = (i_values - 1).astype(jnp.int32)  # i (0-based)
-        pos_2i = ((2 * i_values - 1) % n).astype(jnp.int32)  # (2i-1) mod n
-        pos_3i = ((3 * i_values - 1) % n).astype(jnp.int32)  # (3i-1) mod n
-        pos_5i = ((5 * i_values - 1) % n).astype(jnp.int32)  # (5i-1) mod n
-        pos_7i = ((7 * i_values - 1) % n).astype(jnp.int32)  # (7i-1) mod n
-        pos_11i = ((11 * i_values - 1) % n).astype(jnp.int32)  # (11i-1) mod n
-
-        # Gather sine values at all positions
-        sine_i = sine_values[pos_i]
-        sine_2i = sine_values[pos_2i]
-        sine_3i = sine_values[pos_3i]
-        sine_5i = sine_values[pos_5i]
-        sine_7i = sine_values[pos_7i]
-        sine_11i = sine_values[pos_11i]
+        # Modular permutation indices as numpy arrays — folded as constants
+        # by XLA during tracing (no iota/modular arithmetic in the jaxpr).
+        # SIF formula: (k*i-1) mod n, for k in {2, 3, 5, 7, 11}
+        i = np.arange(1, n + 1)
+        perm_indices = np.stack(
+            [
+                (2 * i - 1) % n,
+                (3 * i - 1) % n,
+                (5 * i - 1) % n,
+                (7 * i - 1) % n,
+                (11 * i - 1) % n,
+            ]
+        )  # (5, n)
 
         # Sum of sine values for each group (alpha values)
-        alpha_values = sine_i + sine_2i + sine_3i + sine_5i + sine_7i + sine_11i
+        # The identity permutation (pos_i = arange(n)) is just sine_values
+        alpha_values = sine_values + sine_values[perm_indices].sum(axis=0)
 
-        # Group contributions: 0.5 * P * ALPHA^2 where P = i
-        group_contributions = 0.5 * i_values * alpha_values**2
+        # Group contributions: 0.5 * i * alpha^2 where i = 1..n
+        # Use jnp.arange for the weight so it's a traced iota, not a constant
+        group_contributions = (
+            0.5 * jnp.arange(1, n + 1, dtype=y.dtype) * alpha_values**2
+        )
 
         return jnp.sum(group_contributions)
 

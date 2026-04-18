@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -33,14 +32,11 @@ class DQDRTIC(AbstractUnconstrainedMinimisation):
         # From AMPL model: sum {i in 1..N-2} (100*x[i+1]^2+100*x[i+2]^2+x[i]^2)
         # Converting to 0-based indexing: i from 0 to n-3
 
-        # We'll compute the terms for indices 0 to n-3
-        def term(i):
-            return 100.0 * y[i + 1] ** 2 + 100.0 * y[i + 2] ** 2 + y[i] ** 2
-
-        indices = jnp.arange(self.n - 2)
-        terms = jax.vmap(term)(indices)
-
-        return jnp.sum(terms)
+        # Compute terms for indices 0 to n-3 using slices
+        n = self.n
+        return jnp.sum(
+            y[: n - 2] ** 2 + 100.0 * y[1 : n - 1] ** 2 + 100.0 * y[2:n] ** 2
+        )
 
     @property
     def y0(self):

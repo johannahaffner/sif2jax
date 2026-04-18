@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -30,31 +29,18 @@ class CVXBQP1(AbstractBoundedQuadraticProblem):
         n = self.n
         x = y
 
-        # The objective is a sum of quadratic terms
-        # For each i from 1 to n:
         # OBJ(i) = 0.5 * i * (x[i] + x[mod(2i-1,n)+1] + x[mod(3i-1,n)+1])^2
+        # Modular permutation indices (folded as constants by
+        # EAGER_CONSTANT_FOLDING)
+        i = jnp.arange(n)
+        i2 = (2 * (i + 1) - 1) % n
+        i3 = (3 * (i + 1) - 1) % n
 
-        def compute_term(i):
-            # Positions (0-indexed)
-            i1 = i
+        # Identity permutation is just x itself
+        alpha = x + x[i2] + x[i3]
+        p = jnp.arange(1, n + 1, dtype=x.dtype)
 
-            # For mod(2i-1, n) + 1 in SIF notation:
-            # i is 0-indexed here, so (i+1) is 1-indexed
-            i2 = (2 * (i + 1) - 1) % n  # This gives 0-indexed position
-
-            # For mod(3i-1, n) + 1 in SIF notation:
-            i3 = (3 * (i + 1) - 1) % n  # This gives 0-indexed position
-
-            alpha = x[i1] + x[i2] + x[i3]
-            p = inexact_asarray(i + 1)  # P parameter is i (1-indexed)
-
-            return 0.5 * p * alpha * alpha
-
-        # Use vmap to vectorize over all indices
-        terms = jax.vmap(compute_term)(jnp.arange(n))
-        obj = jnp.sum(terms)
-
-        return obj
+        return jnp.sum(0.5 * p * alpha**2)
 
     @property
     def y0(self):

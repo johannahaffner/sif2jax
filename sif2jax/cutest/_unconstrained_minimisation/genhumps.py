@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -30,28 +29,18 @@ class GENHUMPS(AbstractUnconstrainedMinimisation):
     def objective(self, y, args):
         del args
 
-        # Define the function to compute the terms for each pair of adjacent variables
-        def pair_term(i):
-            # Extract the two variables for this term
-            x_i = y[i]
-            x_i_plus_1 = y[i + 1]
+        # Extract adjacent variable pairs using slices
+        x_i = y[: self.n - 1]
+        x_ip1 = y[1 : self.n]
 
-            # The main hump term: (sin(zeta*x_i) * sin(zeta*x_{i+1}))^2
-            sine_term = (
-                jnp.sin(self.zeta * x_i) * jnp.sin(self.zeta * x_i_plus_1)
-            ) ** 2
+        # The main hump term: (sin(zeta*x_i) * sin(zeta*x_{i+1}))^2
+        sine_term = (jnp.sin(self.zeta * x_i) * jnp.sin(self.zeta * x_ip1)) ** 2
 
-            # The quadratic terms: 0.05 * (x_i^2 + x_{i+1}^2)
-            quadratic_term = 0.05 * (x_i**2 + x_i_plus_1**2)
-
-            return sine_term + quadratic_term
-
-        # Compute all the terms using vmap
-        indices = jnp.arange(0, self.n - 1)
-        terms = jax.vmap(pair_term)(indices)
+        # The quadratic terms: 0.05 * (x_i^2 + x_{i+1}^2)
+        quadratic_term = 0.05 * (x_i**2 + x_ip1**2)
 
         # Sum all terms
-        return jnp.sum(terms)
+        return jnp.sum(sine_term + quadratic_term)
 
     @property
     def y0(self):

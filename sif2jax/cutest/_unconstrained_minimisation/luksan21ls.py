@@ -70,14 +70,13 @@ class LUKSAN21LS(AbstractUnconstrainedMinimisation):
         # Case 2: Middle eqs (2 <= i <= n-1): 2*x(i) - x(i-1) - x(i+1) + cubic + 1
         # Case 3: Last equation (i=n): 2*x(n) - x(n-1) + cubic_term + 1
 
-        # Initialize residuals with 2*x(i) + cubic_term + 1 for all i
-        residuals = 2.0 * x + cubic_terms + 1.0
-
-        # Subtract x(i+1) from equations 1 to n-1
-        residuals = residuals.at[:-1].add(-x[1:])
-
-        # Subtract x(i-1) from equations 2 to n
-        residuals = residuals.at[1:].add(-x[:-1])
+        # Compute residuals directly:
+        # E(1)   = 2*x(1) - x(2) + cubic + 1
+        # E(i)   = 2*x(i) - x(i-1) - x(i+1) + cubic + 1  (i=2..n-1)
+        # E(n)   = 2*x(n) - x(n-1) + cubic + 1
+        x_prev = jnp.concatenate([jnp.zeros(1, dtype=x.dtype), x[:-1]])
+        x_next = jnp.concatenate([x[1:], jnp.zeros(1, dtype=x.dtype)])
+        residuals = 2.0 * x - x_prev - x_next + cubic_terms + 1.0
 
         # Sum of squares (L2 group type in SIF)
         return jnp.sum(residuals**2)

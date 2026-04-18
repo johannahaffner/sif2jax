@@ -1,11 +1,3 @@
-# TODO: Human review needed - performance issues
-# Runtime test failed: JAX constraint is 19.60x slower than pycutest (threshold: 5.0)
-# The problem uses non-vectorized loops for NH=400 time points (401 total points)
-# Needs vectorization using JAX operations (vmap, scan) to meet performance requirements
-# Attempts made: 1
-# Suspected issues: Non-vectorized loops in _unpack_variables and constraint methods
-# Resources needed: Vectorization expertise for time-series discretization
-
 import jax.numpy as jnp
 
 from ..._problem import AbstractConstrainedMinimisation
@@ -82,34 +74,16 @@ class ROCKET(AbstractConstrainedMinimisation):
         return 2 * (self.NH + 1) + 3 * self.NH
 
     def _unpack_variables(self, y):
-        """Unpack flat array into problem variables."""
+        """Unpack flat array into problem variables using reshape (no loops)."""
         step = y[0]
-        idx = 1
-
-        # Variables ordered by time point: H(0), V(0), M(0), T(0), D(0), G(0), H(1), ...
-        n_points = self.NH + 1
-        H = jnp.zeros(n_points)
-        V = jnp.zeros(n_points)
-        M = jnp.zeros(n_points)
-        T = jnp.zeros(n_points)
-        D = jnp.zeros(n_points)
-        G = jnp.zeros(n_points)
-
-        # Extract variables for each time point
-        for i in range(n_points):
-            H = H.at[i].set(y[idx])
-            idx += 1
-            V = V.at[i].set(y[idx])
-            idx += 1
-            M = M.at[i].set(y[idx])
-            idx += 1
-            T = T.at[i].set(y[idx])
-            idx += 1
-            D = D.at[i].set(y[idx])
-            idx += 1
-            G = G.at[i].set(y[idx])
-            idx += 1
-
+        # y[1:] has layout [H0,V0,M0,T0,D0,G0, H1,V1,...] — reshape to (n_points, 6)
+        vars_2d = y[1:].reshape(self.NH + 1, 6)
+        H = vars_2d[:, 0]
+        V = vars_2d[:, 1]
+        M = vars_2d[:, 2]
+        T = vars_2d[:, 3]
+        D = vars_2d[:, 4]
+        G = vars_2d[:, 5]
         return step, H, V, M, T, D, G
 
     def objective(self, y, args):
@@ -123,85 +97,49 @@ class ROCKET(AbstractConstrainedMinimisation):
         """Compute the constraints in pycutest order."""
         step, H, V, M, T, D, G = self._unpack_variables(y)
 
-        equality_constraints = []
+        # Drag constraints: DC * V^2 * exp(-HC*(H-H0)/H0) - D = 0
+        drag = self.DC * V**2 * jnp.exp(-self.HC_over_H0 * (H - self.H0) / self.H0) - D
 
-        # First: Interleaved drag and gravity constraints for i=0..NH
-        for i in range(self.NH + 1):
-            # Drag constraint: DC * V[i]^2 * exp(-HC * (H[i] - H0) / H0) - D[i] = 0
-            drag_val = (
-                self.DC
-                * V[i] ** 2
-                * jnp.exp(-self.HC_over_H0 * (H[i] - self.H0) / self.H0)
-                - D[i]
-            )
-            equality_constraints.append(drag_val)
+        # Gravity constraints: G0*(H0/H)^2 - G = 0
+        grav = self.G0H02 / H**2 - G
 
-            # Gravity constraint: G0 * (H0 / H[i])^2 - G[i] = 0
-            grav_val = self.G0H02 / (H[i] ** 2) - G[i]
-            equality_constraints.append(grav_val)
+        # Interleave drag and gravity: [drag0, grav0, drag1, grav1, ...]
+        dg = jnp.stack([drag, grav], axis=1).flatten()
 
-        # Then: Motion equations for j=1..NH
-        for j in range(1, self.NH + 1):
-            # Height equation: -H[j] + H[j-1] + 0.5 * step * (V[j] + V[j-1]) = 0
-            # From SIF: XE H(J) H(J) -1.0 H(J-1) 1.0 and XE H(J) H(J) 0.5
-            h_eq = -H[j] + H[j - 1] + 0.5 * step * (V[j] + V[j - 1])
-            equality_constraints.append(h_eq)
+        # Motion equations for j=1..NH (using slices)
+        # Height:
+        h_eq = -H[1:] + H[:-1] + 0.5 * step * (V[1:] + V[:-1])
 
-            # Velocity eq: -V[j] + V[j-1] + 0.5 * step * (accel_j + accel_j_minus_1) = 0
-            # From SIF: XE V(J) V(J) -1.0 V(J-1) 1.0 and XE V(J) V(J) 0.5 V(J-1) 0.5
-            accel_j = (T[j] - D[j] - M[j] * G[j]) / M[j]
-            accel_j_minus_1 = (T[j - 1] - D[j - 1] - M[j - 1] * G[j - 1]) / M[j - 1]
-            v_eq = -V[j] + V[j - 1] + 0.5 * step * (accel_j + accel_j_minus_1)
-            equality_constraints.append(v_eq)
+        # Acceleration:
+        accel = (T - D - M * G) / M
+        # Velocity:
+        v_eq = -V[1:] + V[:-1] + 0.5 * step * (accel[1:] + accel[:-1])
 
-            # Mass equation: -M[j] + M[j-1] - 0.5 * step * (T[j] + T[j-1]) / C = 0
-            # From SIF: XE M(J) M(J) -1.0 M(J-1) 1.0 and ZE M(J) M(J) -1/2C
-            m_eq = -M[j] + M[j - 1] - 0.5 * step * (T[j] + T[j - 1]) / self.C
-            equality_constraints.append(m_eq)
+        # Mass:
+        m_eq = -M[1:] + M[:-1] - 0.5 * step * (T[1:] + T[:-1]) / self.C
 
-        return jnp.array(equality_constraints), None
+        # Motion equations interleaved: [h_eq1, v_eq1, m_eq1, h_eq2, ...]
+        motion = jnp.stack([h_eq, v_eq, m_eq], axis=1).flatten()
+
+        return jnp.concatenate([dg, motion]), None
 
     @property
     def y0(self):
         """Initial guess."""
-        y0_list = []
+        n_points = self.NH + 1
+        t_frac = jnp.arange(n_points) / self.NH  # i/NH
 
-        # Step size
-        y0_list.append(1.0 / self.NH)
+        H_init = jnp.ones(n_points)
+        V_init = t_frac * (1.0 - t_frac)
+        M_init = self.M0 + (self.MF - self.M0) * t_frac
+        T_init = jnp.full(n_points, self.TMAX / 2.0)
+        # D = DC * V^2 * exp(0) = DC * V^2 since H=H0=1
+        D_init = self.DC * V_init**2
+        G_init = jnp.full(n_points, self.G0)
 
-        # Variables ordered by time point: H(i), V(i), M(i), T(i), D(i), G(i) for each i
-        for i in range(self.NH + 1):
-            ri = float(i)
-            i_over_nh = ri / self.NH if self.NH > 0 else 0.0
-
-            # H(i) = 1.0 (HI = ONE from SIF)
-            hi = 1.0
-            y0_list.append(hi)
-
-            # V(i) = i/nh * (1 - i/nh)
-            vi = i_over_nh * (1.0 - i_over_nh)
-            y0_list.append(vi)
-
-            # M(i) = M0 + (MF - M0) * i/nh
-            mi = self.M0 + (self.MF - self.M0) * i_over_nh
-            y0_list.append(mi)
-
-            # T(i) = TMAX/2
-            ti = self.TMAX / 2.0
-            y0_list.append(ti)
-
-            # D(i) = DC * vi^2 * exp(-HC * (hi - H0) / H0)
-            # From SIF: DI = DC * VI^2 * exp(-HC * (HI - H0) / H0)
-            # Since hi = H0 = 1.0, exp(-HC * 0 / H0) = exp(0) = 1
-            di = self.DC * vi**2
-            y0_list.append(di)
-
-            # G(i) = G0 * (H0 / hi)^2
-            # From SIF: GI = G0 * (H0 / HI)^2 = 1.0 * (1.0 / 1.0)^2 = 1.0
-            gi = self.G0
-            y0_list.append(gi)
-
-        return jnp.array(y0_list)
+        # Interleave: [H0,V0,M0,T0,D0,G0, H1,V1,...]
+        vars_2d = jnp.stack([H_init, V_init, M_init, T_init, D_init, G_init], axis=1)
+        return jnp.concatenate([jnp.array([1.0 / self.NH]), vars_2d.flatten()])
 
     @property
     def args(self):

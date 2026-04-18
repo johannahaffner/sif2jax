@@ -56,16 +56,12 @@ class LUKSAN13LS(AbstractUnconstrainedMinimisation):
         x = y
         s = self.s
 
-        # Vectorized computation
-        # Create indices for all blocks at once
-        i_indices = jnp.arange(s) * 3  # [0, 3, 6, ..., 3*(s-1)]
-
-        # Extract all variables needed for vectorized operations
-        x0 = x[i_indices]  # x[i] for each block
-        x1 = x[i_indices + 1]  # x[i+1] for each block
-        x2 = x[i_indices + 2]  # x[i+2] for each block
-        x3 = x[i_indices + 3]  # x[i+3] for each block
-        x4 = x[i_indices + 4]  # x[i+4] for each block
+        # Vectorized computation using stride-3 slices
+        x0 = x[: 3 * s : 3]  # x[i] for each block
+        x1 = x[1 : 3 * s + 1 : 3]  # x[i+1] for each block
+        x2 = x[2 : 3 * s + 2 : 3]  # x[i+2] for each block
+        x3 = x[3 : 3 * s + 3 : 3]  # x[i+3] for each block
+        x4 = x[4 : 3 * s + 4 : 3]  # x[i+4] for each block
 
         # Compute all 7 types of residuals for all blocks at once
         # E(k): -10*x(i+1) + 10*x(i)^2

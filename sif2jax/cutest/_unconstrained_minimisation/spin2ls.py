@@ -88,23 +88,20 @@ class SPIN2LS(AbstractUnconstrainedMinimisation):
         x_diff = x[:, None] - x[None, :]  # x[i] - x[j], shape (n, n)
         y_diff = y_coord[:, None] - y_coord[None, :]  # y[i] - y[j], shape (n, n)
 
-        # Compute distances squared
-        dist_sq = x_diff**2 + y_diff**2
-
-        # Avoid division by zero on diagonal
-        dist_sq_safe = jnp.where(jnp.eye(n, dtype=bool), 1.0, dist_sq)
-
-        # Mask for off-diagonal elements
-        mask = ~jnp.eye(n, dtype=bool)
+        # Distance squared with inf on diagonal (1/inf = 0 eliminates self-terms)
+        dist_sq = x_diff**2 + y_diff**2 + jnp.diag(jnp.full(n, jnp.inf))
+        inv_dist_sq = 1.0 / dist_sq
 
         # Compute constraints using vectorized operations
         # r_i = -mu * x[i] + omega * y[i] + sum_{j!=i} (y[i] - y[j]) / dist_sq[i,j]
-        r_terms = jnp.where(mask, y_diff / dist_sq_safe, 0.0)
-        r_constraints = -mu * x + omega * y_coord + jnp.sum(r_terms, axis=1)
+        r_constraints = (
+            -mu * x + omega * y_coord + jnp.sum(y_diff * inv_dist_sq, axis=1)
+        )
 
         # i_i = -mu * y[i] - omega * x[i] - sum_{j!=i} (x[i] - x[j]) / dist_sq[i,j]
-        i_terms = jnp.where(mask, -x_diff / dist_sq_safe, 0.0)
-        i_constraints = -mu * y_coord - omega * x + jnp.sum(i_terms, axis=1)
+        i_constraints = (
+            -mu * y_coord - omega * x - jnp.sum(x_diff * inv_dist_sq, axis=1)
+        )
 
         # Sum of squares
-        return jnp.sum(r_constraints**2) + jnp.sum(i_constraints**2)
+        return jnp.sum(jnp.concatenate([r_constraints, i_constraints]) ** 2)

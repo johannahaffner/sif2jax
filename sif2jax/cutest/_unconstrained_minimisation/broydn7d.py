@@ -30,27 +30,12 @@ class BROYDN7D(AbstractUnconstrainedMinimisation):
         n = self.n
         half_n = n // 2
 
-        # Compute g terms (tridiagonal structure)
-        g_terms = jnp.zeros(n)
-
-        # g₁ = -2x₂ + 1 + (3-2x₁)x₁
-        g_terms = g_terms.at[0].set(-2.0 * y[1] + 1.0 + (3.0 - 2.0 * y[0]) * y[0])
-
-        # gₙ = -xₙ₋₁ + 1 + (3-2xₙ)xₙ
-        g_terms = g_terms.at[n - 1].set(
-            -y[n - 2] + 1.0 + (3.0 - 2.0 * y[n - 1]) * y[n - 1]
-        )
-
-        # gᵢ = 1 - xᵢ₋₁ - 2xᵢ₊₁ + (3-2xᵢ)xᵢ for i = 2,...,N-1
-        # (1-indexed becomes 1,...,N-2 in 0-indexed)
-        if n > 2:
-            middle_indices = jnp.arange(1, n - 1)
-            g_terms = g_terms.at[middle_indices].set(
-                1.0
-                - y[middle_indices - 1]
-                - 2.0 * y[middle_indices + 1]
-                + (3.0 - 2.0 * y[middle_indices]) * y[middle_indices]
-            )
+        # Compute g terms (tridiagonal structure) using padded slices
+        # gᵢ = 1 - xᵢ₋₁ - 2xᵢ₊₁ + (3-2xᵢ)xᵢ
+        # with x₀ = 0 (no left neighbor for first) and xₙ₊₁ = 0 (none for last)
+        x_prev = jnp.concatenate([jnp.zeros(1, dtype=y.dtype), y[:-1]])
+        x_next = jnp.concatenate([y[1:], jnp.zeros(1, dtype=y.dtype)])
+        g_terms = 1.0 - x_prev - 2.0 * x_next + (3.0 - 2.0 * y) * y
 
         # Compute s terms (distant band)
         # sᵢ = xᵢ + x_{i+N/2} for i = 1,...,N/2

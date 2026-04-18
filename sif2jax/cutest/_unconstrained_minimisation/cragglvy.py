@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -39,49 +38,30 @@ class CRAGGLVY(AbstractUnconstrainedMinimisation):
         del args
         m = self.m
 
-        # Create an array to hold the sum of 5 groups for each set
-        terms = jnp.zeros(m)
+        # Extract variables using stride-2 slices
+        x0 = y[: 2 * m : 2]  # x[2*i-1] in AMPL, i=0..m-1
+        x1 = y[1 : 2 * m + 1 : 2]  # x[2*i] in AMPL
+        x2 = y[2 : 2 * m + 2 : 2]  # x[2*i+1] in AMPL
+        x3 = y[3 : 2 * m + 3 : 2]  # x[2*i+2] in AMPL
 
-        # Define function to compute the terms for each set i
-        def compute_set_terms(i):
-            # Convert from 1-based AMPL indices to 0-based Python indices
-            # For i in 1..m (AMPL), we have i in 0..m-1 (Python)
-            # x[2*i-1] (AMPL) = y[2*i] (Python) for i starting at 0
-            # x[2*i] (AMPL) = y[2*i+1] (Python)
-            # x[2*i+1] (AMPL) = y[2*i+2] (Python)
-            # x[2*i+2] (AMPL) = y[2*i+3] (Python)
-            i2_minus_1 = 2 * i  # x[2*i-1] in AMPL
-            i2 = 2 * i + 1  # x[2*i] in AMPL
-            i2_plus_1 = 2 * i + 2  # x[2*i+1] in AMPL
-            i2_plus_2 = 2 * i + 3  # x[2*i+2] in AMPL
+        # Group A(i) = (exp(x_{2i-1}) - x_{2i})^4
+        a = (jnp.exp(x0) - x1) ** 4
 
-            # Group A(i) = (exp(x_{2i-1}) - x_{2i})^4
-            a_i = (jnp.exp(y[i2_minus_1]) - y[i2]) ** 4
+        # Group B(i) = 100*(x_{2i} - x_{2i+1})^6
+        b = 100.0 * (x1 - x2) ** 6
 
-            # Group B(i) = 100*(x_{2i} - x_{2i+1})^6
-            b_i = 100.0 * (y[i2] - y[i2_plus_1]) ** 6
+        # Group C(i) = (tan(x_{2i+1} - x_{2i+2}) + x_{2i+1} - x_{2i+2})^4
+        c_arg = x2 - x3
+        c = (jnp.tan(c_arg) + c_arg) ** 4
 
-            # Group C(i) = (tan(x_{2i+1} - x_{2i+2}) + x_{2i+1} - x_{2i+2})^4
-            c_arg = y[i2_plus_1] - y[i2_plus_2]
-            c_i = (jnp.tan(c_arg) + c_arg) ** 4
+        # Group D(i) = (x_{2i-1})^8
+        d = x0**8
 
-            # Group D(i) = (x_{2i-1})^8
-            d_i = y[i2_minus_1] ** 8
-
-            # Group F(i) = (x_{2i+2} - 1)^2
-            f_i = (y[i2_plus_2] - 1.0) ** 2
-
-            # Sum all terms for this set
-            return a_i + b_i + c_i + d_i + f_i
-
-        # Create an array of indices (0 to m-1)
-        indices = jnp.arange(m)
-
-        # Compute terms for all sets using vmap
-        terms = jax.vmap(compute_set_terms)(indices)
+        # Group F(i) = (x_{2i+2} - 1)^2
+        f = (x3 - 1.0) ** 2
 
         # Sum all terms
-        return jnp.sum(terms)
+        return jnp.sum(a + b + c + d + f)
 
     @property
     def y0(self):

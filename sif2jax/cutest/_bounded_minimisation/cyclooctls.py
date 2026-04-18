@@ -54,14 +54,12 @@ class CYCLOOCTLS(AbstractBoundedMinimisation):
         positions = y.reshape(p, 3)
 
         # Residuals for nearest neighbor constraints: ||v_i - v_{i+1}||^2 = c^2
-        next_indices = (jnp.arange(p) + 1) % p
-        diff_next = positions - positions[next_indices]
+        diff_next = positions - jnp.roll(positions, -1, axis=0)
         dist_sq_next = jnp.sum(diff_next**2, axis=1)
         residuals_next = dist_sq_next - c2
 
         # Residuals for next-next neighbor: ||v_i - v_{i+2}||^2 = 2p/(p-2)*c^2
-        next2_indices = (jnp.arange(p) + 2) % p
-        diff_next2 = positions - positions[next2_indices]
+        diff_next2 = positions - jnp.roll(positions, -2, axis=0)
         dist_sq_next2 = jnp.sum(diff_next2**2, axis=1)
         residuals_next2 = dist_sq_next2 - sc2
 

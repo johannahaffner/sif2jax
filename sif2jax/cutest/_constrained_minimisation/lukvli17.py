@@ -110,14 +110,14 @@ class LUKVLI17(AbstractConstrainedMinimisation):
         stop = 3 * num_groups
 
         y0_ = y[0:stop:3]
-        y1_ = y[1:stop + 1:3]
-        y2_ = y[2:stop + 2:3]
-        y3_ = y[3:stop + 3:3]
-        y4_ = y[4:stop + 4:3]
+        y1_ = y[1 : stop + 1 : 3]
+        y2_ = y[2 : stop + 2 : 3]
+        y3_ = y[3 : stop + 3 : 3]
+        y4_ = y[4 : stop + 4 : 3]
 
-        c0 = y0_ ** 2 + 3.0 * y1_
-        c1 = y2_ ** 2 + y3_ - 2.0 * y4_
-        c2 = y1_ ** 2 - y4_
+        c0 = y0_**2 + 3.0 * y1_
+        c1 = y2_**2 + y3_ - 2.0 * y4_
+        c2 = y1_**2 - y4_
 
         constraints = jnp.stack([c0, c1, c2], axis=1).reshape(-1)
 

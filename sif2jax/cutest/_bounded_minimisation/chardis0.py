@@ -82,33 +82,18 @@ class CHARDIS0(AbstractBoundedMinimisation):
         The objective is the sum of reciprocals of squared distances.
         This is the "incorrectly decoded" version - we match pycutest's interpretation.
         """
-        n_charges = self.n_charges
         # Extract coordinates from interleaved format [x1,y1,x2,y2,...]
-        x = y[::2]  # x coordinates at even indices
-        y_coords = y[1::2]  # y coordinates at odd indices
+        x = y[::2]
+        y_coords = y[1::2]
 
-        # Compute pairwise squared distances
-        # Use broadcasting for vectorization
-        xi = x[:, None]
-        xj = x[None, :]
-        yi = y_coords[:, None]
-        yj = y_coords[None, :]
-
-        dx = xi - xj
-        dy = yi - yj
+        # Pairwise differences via subtract.outer (symmetric, so sum all and halve)
+        dx = jnp.subtract.outer(x, x)
+        dy = jnp.subtract.outer(y_coords, y_coords)
         dist_sq = dx**2 + dy**2
 
-        # Mask to get upper triangular (i < j)
-        mask = jnp.triu(jnp.ones((n_charges, n_charges)), k=1)
-
-        # CHARDIS0: Linear function (incorrectly decoded)
-        # SIF has no "XT O(I,J) REZIP" line, so uses default linear function
-        # SIF has "XN O(I,J) 'SCALE' 0.01"
-        # In CUTEst, we divide by the scaling factor: obj / 0.01 = obj * 100
-        masked_dist_sq = mask * dist_sq
-
-        # Divide by scaling factor 0.01 (multiply by 100)
-        return jnp.sum(masked_dist_sq) / 0.01
+        # Full sum = 2x upper-triangular; diagonal is zero, no correction
+        # SIF scaling: divide by 0.01
+        return 0.5 * jnp.sum(dist_sq) / 0.01
 
     @property
     def expected_result(self):

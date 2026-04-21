@@ -46,29 +46,24 @@ class HADAMALS(AbstractBoundedMinimisation):
         2. S(I,J): Entry constraints with LARGEL2 group type (scaled L2)
         """
         n = self.n
-        rn = float(n)  # RN in SIF is N, not sqrt(N)
 
         # Reshape flat vector to matrix (column-major for SIF compatibility)
         Q = y.reshape((n, n), order="F")
 
-        # Compute orthogonality terms:
-        # sum over (i,j) with i<=j of (QtQ[i,j] - RN*delta[i,j])^2
-        QtQ = jnp.dot(Q.T, Q)
-
-        # O(I,J) groups: orthogonality constraints
-        # (QtQ[i,j] - RN*delta[i,j])^2 for upper triangle (i <= j)
-        target = rn * jnp.eye(n, dtype=y.dtype)
-        diff = QtQ - target
-
-        # Upper triangle only (including diagonal)
-        obj = jnp.sum(jnp.triu(diff) ** 2)
+        # Q^T @ Q orthogonality: want Q^T Q = n*I
+        # sum_{i<=j} (QtQ[i,j] - n*delta_{ij})^2
+        # Correct diagonal so 0.5*sum(M^2) = triu_sum:
+        # need M[i,i] = sqrt(2)*(d[i]-n) so 0.5*M[i,i]^2 = (d[i]-n)^2
+        QtQ = Q.T @ Q
+        d = jnp.diagonal(QtQ)
+        diag_correction = (jnp.sqrt(2.0) - 1.0) * d - jnp.sqrt(2.0) * n
+        corrected = QtQ + jnp.diag(diag_correction)
+        obj = 0.5 * jnp.sum(corrected**2)
 
         # S(I,J) groups: entry constraints (Q[i,j]^2 - 1)^2 for i>=2
-        # Using LARGEL2 group type with FACTOR=1.0
-        # Vectorized: slice rows i=1 to n-1 (0-indexed)
-        Q_slice = Q[1:, :]  # All rows except first, all columns
-        entry_vals = Q_slice * Q_slice - 1.0
-        obj = obj + jnp.sum(entry_vals * entry_vals)
+        Q_slice = Q[1:, :]
+        entry_vals = Q_slice**2 - 1.0
+        obj = obj + jnp.sum(entry_vals**2)
 
         return jnp.array(obj)
 

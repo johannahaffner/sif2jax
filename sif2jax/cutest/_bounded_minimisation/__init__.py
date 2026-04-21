@@ -7,7 +7,7 @@ from .branin import BRANIN as BRANIN
 from .camel6 import CAMEL6 as CAMEL6
 from .chardis0 import CHARDIS0 as CHARDIS0
 
-# from .chardis02 import CHARDIS02 as CHARDIS02  # TODO: Human review needed
+# from .chardis02 import CHARDIS02 as CHARDIS02  # TODO: gradient ill-conditioned at y0
 # from .clplatea import CLPLATEA as CLPLATEA
 # from .clplateb import CLPLATEB as CLPLATEB
 # from .clplatec import CLPLATEC as CLPLATEC
@@ -174,7 +174,7 @@ bounded_minimisation_problems = (
     BRANIN(),
     CAMEL6(),
     CHARDIS0(),
-    # CHARDIS02(),  # TODO: Human review needed
+    # CHARDIS02(),  # TODO: gradient ill-conditioned at y0
     # CLPLATEA(),
     # CLPLATEB(),
     # CLPLATEC(),

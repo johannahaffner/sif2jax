@@ -6,11 +6,11 @@ from ..._problem import AbstractBoundedMinimisation
 class CHARDIS02(AbstractBoundedMinimisation):
     """Distribution of equal charges on [-R,R]x[-R,R] (2D).
 
-    Minimize the scaled sum of reciprocals of distances between charges.
-    This is the corrected version of CHARDIS0.
+    Minimize the scaled sum of reciprocals of squared distances between charges.
+    This is the corrected version of CHARDIS0 (uses REZIP group function).
 
     Problem:
-    min 0.01 * sum_{i=1}^{n-1} sum_{j=i+1}^{n} 1/sqrt[(x_i - x_j)^2 + (y_i - y_j)^2]
+    min sum_{i=1}^{n-1} sum_{j=i+1}^{n} 1/[(x_i - x_j)^2 + (y_i - y_j)^2] / 0.01
 
     Subject to:
     -R <= x_i <= R for all i
@@ -25,14 +25,10 @@ class CHARDIS02(AbstractBoundedMinimisation):
 
     classification: OBR2-AY-V-V
 
-    TODO: Human review needed
-    Attempts made: [SIF analysis, REZIP function implementation, scaling
-    interpretation, empirical scaling]
-    Suspected issues: Complex scaling interaction between REZIP function
-    and 0.01 scaling factor
-    Resources needed: Mathematical analysis of REZIP scaling in pycutest
-    vs SIF implementation
-    Error: Objective differs by factor ~1.87, gradient proportionally different
+    TODO: Gradient at y0 fails np.allclose with default rtol=1e-5.
+    The 1/dist_sq formulation is ill-conditioned for close charges
+    (dist_sq ~ 5e-4 at y0). Gradient is correct within rtol=1e-2.
+    All other gradient tests (zeros, ones, alternating) pass.
     """
 
     y0_iD: int = 0
@@ -81,42 +77,28 @@ class CHARDIS02(AbstractBoundedMinimisation):
     def objective(self, y, args):
         """Compute the objective function.
 
-        The objective is the sum of reciprocals of distances (not squared distances).
-        This is the corrected formulation.
+        REZIP group function: F = 1/ALPHA where ALPHA = (xi-xj)^2 + (yi-yj)^2
+        This is 1/dist_sq (reciprocal of SQUARED distance), not 1/dist.
+        Each group has SCALE 0.01, so CUTEst divides by 0.01.
         """
         n_charges = self.n_charges
         # Extract coordinates from interleaved format [x1,y1,x2,y2,...]
-        x = y[::2]  # x coordinates at even indices
-        y_coords = y[1::2]  # y coordinates at odd indices
+        x = y[::2]
+        y_coords = y[1::2]
 
-        # Compute pairwise squared distances
-        # Use broadcasting for vectorization
-        xi = x[:, None]
-        xj = x[None, :]
-        yi = y_coords[:, None]
-        yj = y_coords[None, :]
-
-        dx = xi - xj
-        dy = yi - yj
+        # Pairwise differences via subtract.outer
+        dx = jnp.subtract.outer(x, x)
+        dy = jnp.subtract.outer(y_coords, y_coords)
         dist_sq = dx**2 + dy**2
 
-        # Mask to get upper triangular (i < j)
-        mask = jnp.triu(jnp.ones((n_charges, n_charges)), k=1)
+        # Add identity to diagonal so 1/(0+1)=1 on diagonal (avoids 1/0),
+        # then subtract n_charges/2 to correct for diagonal after halving
+        dist_sq_safe = dist_sq + jnp.eye(n_charges)
+        reciprocals = 1.0 / dist_sq_safe
 
-        # CHARDIS02: REZIP function (corrected version of CHARDIS0)
-        # SIF has "XT O(I,J) REZIP" line, so uses REZIP function F = 1.0/ALPHA
-        # SIF has "XN O(I,J) 'SCALE' 0.01" scaling factor
-        # where ALPHA = sqrt(X(I,J) + Y(I,J)) = sqrt((xi-xj)^2 + (yi-yj)^2)
-        # In CUTEst, we divide by the scaling factor: obj / 0.01 = obj * 100
-
-        eps = 1e-8
-        dist = jnp.sqrt(dist_sq + eps)
-        reciprocals = mask / dist
-
-        # Divide by scaling factor 0.01 (multiply by 100)
-        # Note: The empirical factor of ~2727 suggests additional scaling in pycutest
-        # We use the empirical value to match pycutest's implementation
-        return 2727.0 * jnp.sum(reciprocals)
+        # Symmetric: sum all and halve, minus diagonal contribution (n * 1.0 / 2)
+        # SIF scaling: divide by 0.01
+        return (0.5 * jnp.sum(reciprocals) - 0.5 * n_charges) / 0.01
 
     @property
     def expected_result(self):

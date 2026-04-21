@@ -100,42 +100,25 @@ class LUKVLI17(AbstractConstrainedMinimisation):
         if n_c == 0:
             return None, jnp.array([])
 
-        # Based on SIF file analysis (same as LUKVLI18):
-        # K loops as 1, 4, 7, 10, ... (increments by 3)
-        # For each K, we generate C(K), C(K+1), C(K+2)
-        # Element definitions:
-        # - E(K) uses X(K)
-        # - E(K+1) uses X(K+2)
-        # - E(K+2) uses X(K+1)
+        # n_c is always divisible by 3 when (n-1) % 4 == 0.
+        # For group m (m = 0 .. n_c/3 - 1), k = 3m and the three constraints are:
+        #   c[3m]   = y[3m]^2   + 3*y[3m+1]
+        #   c[3m+1] = y[3m+2]^2 + y[3m+3] - 2*y[3m+4]
+        #   c[3m+2] = y[3m+1]^2 - y[3m+4]
+        # Using strided slices (stride 3) rather than gathers for AD-friendliness.
+        num_groups = n_c // 3
+        stop = 3 * num_groups
 
-        # Extend y with zeros to safely access all indices
-        extended_length = n + 20
-        y_extended = jnp.zeros(extended_length)
-        y_extended = y_extended.at[:n].set(y)
+        y0_ = y[0:stop:3]
+        y1_ = y[1 : stop + 1 : 3]
+        y2_ = y[2 : stop + 2 : 3]
+        y3_ = y[3 : stop + 3 : 3]
+        y4_ = y[4 : stop + 4 : 3]
 
-        constraints = []
+        c0 = y0_**2 + 3.0 * y1_
+        c1 = y2_**2 + y3_ - 2.0 * y4_
+        c2 = y1_**2 - y4_
 
-        # Generate constraints in groups of 3
-        k = 0  # Start at 0 for 0-based indexing (corresponds to K=1 in SIF)
-        while len(constraints) < n_c:
-            # C(K): X(K)^2 + 3*X(K+1) using E(K) which is X(K)^2
-            c_k = y_extended[k] ** 2 + 3 * y_extended[k + 1]
-            constraints.append(c_k)
+        constraints = jnp.stack([c0, c1, c2], axis=1).reshape(-1)
 
-            if len(constraints) >= n_c:
-                break
-
-            # C(K+1): X(K+2)^2 + X(K+3) - 2*X(K+4) using E(K+1) which is X(K+2)^2
-            c_k1 = y_extended[k + 2] ** 2 + y_extended[k + 3] - 2 * y_extended[k + 4]
-            constraints.append(c_k1)
-
-            if len(constraints) >= n_c:
-                break
-
-            # C(K+2): X(K+1)^2 - X(K+4) using E(K+2) which is X(K+1)^2
-            c_k2 = y_extended[k + 1] ** 2 - y_extended[k + 4]
-            constraints.append(c_k2)
-
-            k += 3  # Move to next group (K increments by 3 in SIF)
-
-        return None, jnp.array(constraints[:n_c])
+        return None, constraints

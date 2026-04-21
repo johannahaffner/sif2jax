@@ -48,7 +48,6 @@ class EIGEN(AbstractUnconstrainedMinimisation):
         a = self._matrix()
 
         # Eigenvalue equations: QᵀDQ - A
-        # More efficient: Q.T @ (d_diag[:, None] * Q)
         qtdq = q.T @ (d_diag[:, None] * q)
         e_residual = qtdq - a
 
@@ -57,17 +56,7 @@ class EIGEN(AbstractUnconstrainedMinimisation):
         o_residual = qtq - jnp.eye(self.n)
 
         # Only sum over upper triangular part (I <= J) as per SIF
-        # Create upper triangular mask
-        triu_mask = jnp.triu(jnp.ones((self.n, self.n), dtype=bool))
-
-        # Compute objective: sum of squared residuals for upper triangular part
-        # Use where to avoid boolean multiplication issues
-        e_squared = jnp.where(triu_mask, e_residual**2, 0.0)
-        o_squared = jnp.where(triu_mask, o_residual**2, 0.0)
-        # Cast to ensure pyright understands these are arrays
-        total_obj = jnp.sum(jnp.asarray(e_squared)) + jnp.sum(jnp.asarray(o_squared))
-
-        return total_obj
+        return jnp.sum(jnp.triu(e_residual**2 + o_residual**2))
 
     @property
     def y0(self):

@@ -8,7 +8,7 @@ from ._bounded_minimisation import (
     BRANIN as BRANIN,
     CAMEL6 as CAMEL6,
     CHARDIS0 as CHARDIS0,
-    # CHARDIS02 as CHARDIS02,  # TODO: Human review needed
+    # CHARDIS02 as CHARDIS02,  # TODO: gradient ill-conditioned at y0
     # CLPLATEA as CLPLATEA,
     # CLPLATEB as CLPLATEB,
     # CLPLATEC as CLPLATEC,
@@ -163,8 +163,8 @@ from ._constrained_minimisation import (
     CB3 as CB3,
     CHACONN1 as CHACONN1,
     CHACONN2 as CHACONN2,
-    # CHARDIS1 as CHARDIS1,  # TODO: Human review needed
-    # CHARDIS12 as CHARDIS12,  # TODO: Human review needed
+    # CHARDIS1 as CHARDIS1,  # TODO: starting value mismatch
+    # CHARDIS12 as CHARDIS12,  # TODO: starting value + gradient ill-conditioned
     CLEUVEN2 as CLEUVEN2,
     CLEUVEN3 as CLEUVEN3,
     CLEUVEN4 as CLEUVEN4,
@@ -1222,8 +1222,8 @@ problems_dict = {
     "CB3": CB3(),
     "CHACONN1": CHACONN1(),
     "CHACONN2": CHACONN2(),
-    # "CHARDIS1": CHARDIS1(),  # TODO: Human review needed
-    # "CHARDIS12": CHARDIS12(),  # TODO: Human review needed
+    # "CHARDIS1": CHARDIS1(),  # TODO: starting value mismatch
+    # "CHARDIS12": CHARDIS12(),  # TODO: starting value + gradient ill-conditioned
     "CLEUVEN2": CLEUVEN2(),
     "CLEUVEN3": CLEUVEN3(),
     "CLEUVEN4": CLEUVEN4(),
@@ -1594,7 +1594,7 @@ problems_dict = {
     # "BRKMCC": BRKMCC(),  # TODO: Human review - significant discrepancies
     "CAMEL6": CAMEL6(),
     "CHARDIS0": CHARDIS0(),
-    # "CHARDIS02": CHARDIS02(),  # TODO: Human review needed
+    # "CHARDIS02": CHARDIS02(),  # TODO: gradient ill-conditioned at y0
     # "CLPLATEA": CLPLATEA(),
     # "CLPLATEB": CLPLATEB(),
     # "CLPLATEC": CLPLATEC(),

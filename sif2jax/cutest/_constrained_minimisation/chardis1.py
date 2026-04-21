@@ -25,14 +25,6 @@ class CHARDIS1(AbstractConstrainedMinimisation):
 
     classification: OQR2-AY-V-V
 
-    TODO: Human review needed
-    Attempts made: [SIF analysis, starting value correction, constraint
-    implementation, linear vs REZIP analysis]
-    Suspected issues: Starting value precision, constraint formulation
-    vs pycutest implementation
-    Resources needed: Detailed comparison of SIF starting value computation
-    vs pycutest
-    Error: First constraint differs by 0.002, affecting all other computations
     """
 
     y0_iD: int = 0
@@ -109,30 +101,17 @@ class CHARDIS1(AbstractConstrainedMinimisation):
         where X(I,J), Y(I,J) are squared differences (xi-xj)^2, (yi-yj)^2
         No scaling factor in CHARDIS1 SIF.
         """
-        n_charges = self.n_charges
         # Extract coordinates from interleaved format [x1,y1,x2,y2,...]
-        x = y[::2]  # x coordinates at even indices
-        y_coords = y[1::2]  # y coordinates at odd indices
+        x = y[::2]
+        y_coords = y[1::2]
 
-        # Compute pairwise squared distances
-        # Use broadcasting for vectorization
-        xi = x[:, None]
-        xj = x[None, :]
-        yi = y_coords[:, None]
-        yj = y_coords[None, :]
-
-        dx = xi - xj
-        dy = yi - yj
+        # Pairwise differences via subtract.outer (symmetric, so sum all and halve)
+        dx = jnp.subtract.outer(x, x)
+        dy = jnp.subtract.outer(y_coords, y_coords)
         dist_sq = dx**2 + dy**2
 
-        # Mask to get upper triangular (i < j)
-        mask = jnp.triu(jnp.ones((n_charges, n_charges)), k=1)
-
-        # CHARDIS1: sum of squared distances (not reciprocals)
-        # This is X(I,J) + Y(I,J) = (xi-xj)^2 + (yi-yj)^2
-        masked_dist_sq = mask * dist_sq
-
-        return jnp.sum(masked_dist_sq)
+        # Full sum is 2x the upper-triangular sum; diagonal is zero so no correction
+        return 0.5 * jnp.sum(dist_sq)
 
     @property
     def expected_result(self):
@@ -164,16 +143,19 @@ class CHARDIS1(AbstractConstrainedMinimisation):
         return lower, upper
 
     def constraint(self, y):
-        """Circle constraints: x_i^2 + y_i^2 = R^2 for i = 2, ..., n as inequalities."""
-        r = 1.0  # R = 1.0 for CHARDIS1 (from SIF file)
-        r2 = r * r
+        """Inequality constraints: x_i^2 + y_i^2 >= R^2 for i = 2, ..., n.
+
+        SIF uses XL RES(I) with constant R^2, meaning RES(I) >= R^2,
+        i.e. x_i^2 + y_i^2 >= R^2 (charges on or outside the circle).
+        Convention: return c(y) where c(y) >= 0.
+        """
+        r2 = 1.0  # R^2 = 1.0 for CHARDIS1
 
         # Extract coordinates from interleaved format [x1,y1,x2,y2,...]
-        x = y[::2]  # x coordinates at even indices
-        y_coords = y[1::2]  # y coordinates at odd indices
+        x = y[::2]
+        y_coords = y[1::2]
 
-        # Based on test evidence: 999 inequality constraints for charges 2 to n
-        # These are circle constraints x_i^2 + y_i^2 - R^2 <= 0 (or >= 0)
+        # x_i^2 + y_i^2 - R^2 >= 0 for charges 2 to n
         inequality_constraints = x[1:] ** 2 + y_coords[1:] ** 2 - r2
 
         return None, inequality_constraints

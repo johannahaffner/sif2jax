@@ -115,16 +115,12 @@ class PALMER1A(AbstractBoundedMinimisation):
         """Compute the objective function (least squares)."""
         del args
 
-        # Extract variables
-        A0, A2, A4, A6, B, C = y
-
-        # Precompute powers of X
+        # Precompute X squared
         X_sqr = self.X_data * self.X_data
-        X_4 = X_sqr * X_sqr
-        X_6 = X_sqr * X_4
 
-        # Model predictions
-        predictions = A0 + A2 * X_sqr + A4 * X_4 + A6 * X_6 + B / (C + X_sqr)
+        # Model predictions: poly(X^2) + B / (C + X^2)
+        poly_part = jnp.polyval(y[:4][::-1], X_sqr)
+        predictions = poly_part + y[4] / (y[5] + X_sqr)
 
         # Residuals
         residuals = predictions - self.Y_data

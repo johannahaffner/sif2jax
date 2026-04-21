@@ -1,5 +1,6 @@
 import equinox as eqx
 import jax.numpy as jnp
+import numpy as np
 
 from ..._problem import AbstractUnconstrainedMinimisation
 
@@ -32,17 +33,11 @@ class MSQRTALS(AbstractUnconstrainedMinimisation):
         return self.p * self.p
 
     def _compute_matrices(self):
-        """Compute the B matrix and A = B * B."""
+        """Compute the B matrix and A = B * B using numpy (no JAX tracing)."""
         p = self.p
 
-        # Build B matrix using vectorized operations
-        # k values go from 1 to p*p
-        k_vals = jnp.arange(1, p * p + 1, dtype=jnp.float64)
-        k2_vals = k_vals * k_vals
-        B_flat = jnp.sin(k2_vals)
-        B = B_flat.reshape((p, p))
-
-        # Compute A = B * B
+        k_vals = np.arange(1, p * p + 1, dtype=np.float64)
+        B = np.sin(k_vals * k_vals).reshape((p, p))
         A = B @ B
 
         return B, A

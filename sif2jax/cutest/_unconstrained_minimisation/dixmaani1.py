@@ -56,17 +56,13 @@ class DIXMAANI1(AbstractUnconstrainedMinimisation):
 
         # Compute the third term (type 3): sum(gamma * (i/n)^k3 * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        term3 = gamma * jnp.sum(
-            ((indices1 + 1) / n) ** k3 * (y[indices1] ** 2) * (y[indices2] ** 4)
-        )
+        w3 = (jnp.arange(1, 2 * m + 1) / n) ** k3
+        term3 = gamma * jnp.sum(w3 * y[: 2 * m] ** 2 * y[m : 3 * m] ** 4)
 
         # Compute the fourth term (type 4): sum(delta * (i/n)^k4 * x_i * x_{i+2m})
         # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        term4 = delta * jnp.sum(((indices1 + 1) / n) ** k4 * y[indices1] * y[indices2])
+        w4 = (jnp.arange(1, m + 1) / n) ** k4
+        term4 = delta * jnp.sum(w4 * y[:m] * y[2 * m : 3 * m])
 
         # Add the constant term from GA group
         constant = 1.0

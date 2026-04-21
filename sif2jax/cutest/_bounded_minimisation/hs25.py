@@ -35,18 +35,12 @@ class HS25(AbstractBoundedMinimisation):
     def objective(self, y, args):
         x1, x2, x3 = y
 
-        # Compute sum of squared residuals
-        sum_val = 0.0
-        for i in range(1, 100):  # i = 1, ..., 99
-            # uᵢ = 25 + (-50 ln(0.01i))^(2/3)
-            ui = 25.0 + (-50.0 * jnp.log(0.01 * i)) ** (2.0 / 3.0)
+        # Vectorized over i = 1..99
+        i = jnp.arange(1, 100, dtype=y.dtype)
+        u = 25.0 + (-50.0 * jnp.log(0.01 * i)) ** (2.0 / 3.0)
+        f = -0.01 * i + jnp.exp(-(1.0 / x1) * (u - x2) ** x3)
 
-            # fᵢ(x) = -0.01i + exp(-1/x₁(uᵢ - x₂)^x₃)
-            fi = -0.01 * i + jnp.exp(-(1.0 / x1) * (ui - x2) ** x3)
-
-            sum_val += fi**2
-
-        return jnp.array(sum_val)
+        return jnp.sum(f**2)
 
     @property
     def y0(self):

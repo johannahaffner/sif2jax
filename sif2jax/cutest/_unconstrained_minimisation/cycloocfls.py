@@ -49,19 +49,14 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
     def _get_positions(self, y: Array) -> Array:
         """Convert variable vector to full position array (p, 3)"""
         p = self.p
-        positions = jnp.zeros((p, 3))
 
-        # v_1 = (0, 0, 0) - fixed
+        # v_1 = (0, 0, 0) — fixed
         # v_2 = (0, Y2, Z2) where X2=0 is fixed
-        positions = positions.at[1, 1].set(y[0])  # Y2
-        positions = positions.at[1, 2].set(y[1])  # Z2
-
-        # v_3 to v_p: X(i), Y(i), Z(i) for i = 3 to P
-        # Variables y[2:] contain [X3, Y3, Z3, X4, Y4, Z4, ...]
-        remaining_positions = y[2:].reshape(p - 2, 3)
-        positions = positions.at[2:].set(remaining_positions)
-
-        return positions
+        # v_3..v_p = y[2:] reshaped to (p-2, 3)
+        row_v1 = jnp.zeros((1, 3), dtype=y.dtype)
+        row_v2 = jnp.array([[0.0, y[0], y[1]]])
+        remaining = y[2:].reshape(p - 2, 3)
+        return jnp.concatenate([row_v1, row_v2, remaining], axis=0)
 
     def objective(self, y: Array, args) -> Array:
         """Compute the least-squares objective for cyclooctane configuration"""
@@ -73,14 +68,13 @@ class CYCLOOCFLS(AbstractUnconstrainedMinimisation):
         positions = self._get_positions(y)
 
         # Residuals for nearest neighbor constraints: ||v_i - v_{i+1}||^2 = c^2
-        next_indices = (jnp.arange(p) + 1) % p
-        diff_next = positions - positions[next_indices]
+        # Use jnp.roll for cyclic shift (no gather needed)
+        diff_next = positions - jnp.roll(positions, -1, axis=0)
         dist_sq_next = jnp.sum(diff_next**2, axis=1)
         residuals_a = dist_sq_next - c2
 
         # Residuals for next-next neighbor: ||v_i - v_{i+2}||^2 = 2p/(p-2)*c^2
-        next2_indices = (jnp.arange(p) + 2) % p
-        diff_next2 = positions - positions[next2_indices]
+        diff_next2 = positions - jnp.roll(positions, -2, axis=0)
         dist_sq_next2 = jnp.sum(diff_next2**2, axis=1)
         residuals_b = dist_sq_next2 - sc2
 

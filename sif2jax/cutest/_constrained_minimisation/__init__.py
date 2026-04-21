@@ -318,6 +318,7 @@ from .hs117 import HS117 as HS117
 from .hs119 import HS119 as HS119
 from .hs268 import HS268 as HS268
 from .hydroell import HYDROELL as HYDROELL
+from .kissing import KISSING as KISSING
 
 # TODO: JANNSON3 needs human review - Jacobian tests hang due to computational cost
 # from .jannson3 import JANNSON3 as JANNSON3
@@ -325,8 +326,6 @@ from .hydroell import HYDROELL as HYDROELL
 # from .lippert1 import LIPPERT1 as LIPPERT1
 from .lippert2 import LIPPERT2 as LIPPERT2
 
-# TODO: KISSING needs human review - runtime issue (5.37x, slightly over 5x threshold)
-# from .kissing import KISSING as KISSING
 # from .kissing2 import KISSING2 as KISSING2  # TODO: Human review needed
 # TODO: Human review needed - KIWCRESC constraint values differ by 2.0 from pycutest
 # from .kiwcresc import KIWCRESC as KIWCRESC
@@ -479,8 +478,8 @@ from .reading3 import READING3 as READING3
 from .reading9 import READING9 as READING9
 
 # from .rdw2d51f import RDW2D51F as RDW2D51F  # TODO: Human review needed
-# TODO: ROCKET needs human review - performance issues (19.60x slower than threshold)
-# from .rocket import ROCKET as ROCKET
+from .rocket import ROCKET as ROCKET
+
 # from .rdw2d51u import RDW2D51U as RDW2D51U  # TODO: Human review needed - times out
 # from .rdw2d52b import RDW2D52B as RDW2D52B  # TODO: Human review needed
 # from .rdw2d52f import RDW2D52F as RDW2D52F  # TODO: Human review needed
@@ -774,7 +773,7 @@ constrained_minimisation_problems = (
     # JANNSON3(),  # TODO: Human review - Jacobian tests hang due to computational cost
     # JANNSON4(),
     # KIWCRESC(),  # TODO: Human review - constraint values differ by 2.0 from pycutest
-    # KISSING(),  # TODO: Human review - runtime issue (5.37x)
+    KISSING(),
     # KISSING2(),  # TODO: Human review needed
     # KSIP(),  # TODO: Human review needed - needs vectorization, dtype promotion errors
     # NOTE: LEUVEN1 removed - superseded by CLEUVEN series
@@ -861,7 +860,7 @@ constrained_minimisation_problems = (
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     READING9(),
-    # ROCKET(),  # TODO: Human review - performance issues (19.60x slower)
+    ROCKET(),
     # RDW2D51F(),  # TODO: Human review needed
     # RDW2D51U(),  # TODO: Human review needed - times out
     # RDW2D52B(),  # TODO: Human review needed

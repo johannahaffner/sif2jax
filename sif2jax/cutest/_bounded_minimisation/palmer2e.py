@@ -91,26 +91,12 @@ class PALMER2E(AbstractBoundedMinimisation):
         """Compute the objective function (least squares)."""
         del args
 
-        # Extract variables
-        A0, A2, A4, A6, A8, A10, K, L = y
-
-        # Precompute powers of X
+        # Precompute X squared
         X_sqr = self.X_data * self.X_data
-        X_4 = X_sqr * X_sqr
-        X_6 = X_sqr * X_4
-        X_8 = X_sqr * X_6
-        X_10 = X_sqr * X_8
 
-        # Model predictions
-        predictions = (
-            A0
-            + A2 * X_sqr
-            + A4 * X_4
-            + A6 * X_6
-            + A8 * X_8
-            + A10 * X_10
-            + L * jnp.exp(-K * X_sqr)
-        )
+        # Model predictions: poly(X^2) + L * exp(-K * X^2)
+        poly_part = jnp.polyval(y[:6][::-1], X_sqr)
+        predictions = poly_part + y[7] * jnp.exp(-y[6] * X_sqr)
 
         # Residuals
         residuals = predictions - self.Y_data

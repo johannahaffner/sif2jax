@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
@@ -41,12 +40,7 @@ class GENROSE(AbstractUnconstrainedMinimisation):
         quadratic_terms = jnp.sum((y[1:] - 1.0) ** 2)
 
         # Compute the main Rosenbrock terms: (x_i - x_{i-1}^2)^2 for i=2,...,n
-        def rosenbrock_term(i):
-            return (y[i] - y[i - 1] ** 2) ** 2
-
-        indices = jnp.arange(1, self.n)
-        rosenbrock_terms = jax.vmap(rosenbrock_term)(indices)
-        rosenbrock_sum = 100.0 * jnp.sum(rosenbrock_terms)
+        rosenbrock_sum = 100.0 * jnp.sum((y[1:] - y[:-1] ** 2) ** 2)
 
         # Sum all terms
         return result + quadratic_terms + rosenbrock_sum

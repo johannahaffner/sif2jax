@@ -52,17 +52,12 @@ class LUKSAN12LS(AbstractUnconstrainedMinimisation):
 
         s = self.S
 
-        # Vectorized computation
-        # Extract variable indices for all blocks
-        j_indices = jnp.arange(s)
-        i_indices = 3 * j_indices  # Start indices for each block
-
-        # Extract all variables for vectorized operations
-        x0 = y[i_indices]  # X(I) for all blocks
-        x1 = y[i_indices + 1]  # X(I+1) for all blocks
-        x2 = y[i_indices + 2]  # X(I+2) for all blocks
-        x3 = y[i_indices + 3]  # X(I+3) for all blocks
-        x4 = y[i_indices + 4]  # X(I+4) for all blocks
+        # Vectorized computation using stride-3 slices
+        x0 = y[: 3 * s : 3]  # X(I) for all blocks
+        x1 = y[1 : 3 * s + 1 : 3]  # X(I+1) for all blocks
+        x2 = y[2 : 3 * s + 2 : 3]  # X(I+2) for all blocks
+        x3 = y[3 : 3 * s + 3 : 3]  # X(I+3) for all blocks
+        x4 = y[4 : 3 * s + 4 : 3]  # X(I+4) for all blocks
 
         # Compute all residuals for each type
         # E(k): 10*x0^2 - 10*x1

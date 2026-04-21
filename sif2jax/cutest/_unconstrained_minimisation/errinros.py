@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -91,15 +90,11 @@ class ERRINROS(AbstractUnconstrainedMinimisation):
         alphas = alphas[: self.n]
 
         # First sum: sum {i in 2..N} (x[i-1]-16*alpha[i]^2*x[i]^2)^2
-        # In 0-based indexing: i from 1 to n-1, but alphas need correct indexing
-        def compute_first_term(i):
-            alpha_i = alphas[
-                i + 1
-            ]  # alphas[i+1] corresponds to alpha[i+2] in AMPL (1-indexed)
-            return (y[i] - 16.0 * alpha_i**2 * y[i + 1] ** 2) ** 2
-
-        indices = jnp.arange(0, self.n - 1)
-        first_terms = jax.vmap(compute_first_term)(indices)
+        # In 0-based indexing: i from 0 to n-2
+        alpha_slice = alphas[1 : self.n]  # alpha[i+1] for i=0..n-2
+        first_terms = (
+            y[: self.n - 1] - 16.0 * alpha_slice**2 * y[1 : self.n] ** 2
+        ) ** 2
 
         # Second sum: sum {i in 2..N} (x[i]-1.0)^2
         # In 0-based indexing: i from 1 to n-1

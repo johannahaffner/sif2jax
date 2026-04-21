@@ -48,15 +48,11 @@ class DIXMAANA1(AbstractUnconstrainedMinimisation):
 
         # Compute the third term (type 3): sum(gamma * (x_i)^2 * (x_{i+m})^4)
         # for i from 1 to 2m
-        indices1 = jnp.arange(2 * m)
-        indices2 = indices1 + m
-        term3 = gamma * jnp.sum((y[indices1] ** 2) * (y[indices2] ** 4))
+        term3 = gamma * jnp.sum(y[: 2 * m] ** 2 * y[m : 3 * m] ** 4)
 
         # Compute the fourth term (type 4): sum(delta * x_i * x_{i+2m})
         # for i from 1 to m
-        indices1 = jnp.arange(m)
-        indices2 = indices1 + 2 * m
-        term4 = delta * jnp.sum(y[indices1] * y[indices2])
+        term4 = delta * jnp.sum(y[:m] * y[2 * m : 3 * m])
 
         # Add the constant term from GA group
         # In SIF format, CONSTANTS section subtracts the value from the group

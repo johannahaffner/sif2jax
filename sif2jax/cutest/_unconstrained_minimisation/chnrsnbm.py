@@ -41,16 +41,13 @@ class CHNRSNBM(AbstractUnconstrainedMinimisation):
 
         # Same formula as CHNROSNB but with alpha values from sin function
         # Vectorized computation for i in 2..n (0-based: 1..n-1)
-        i_indices = jnp.arange(1, self.n)  # 1 to n-1
-
         # Alpha values are determined by sin(i) + 1.5
-        # i_indices is [1, 2, ..., n-1], representing i=2..n in 1-based AMPL notation
-        # So we need sin(2), sin(3), ..., sin(n), which is sin(i_indices + 1)
-        alpha_vals = jnp.sin(i_indices + 1) + 1.5
+        # i=2..n in 1-based AMPL notation → sin(2), sin(3), ..., sin(n)
+        alpha_vals = jnp.sin(jnp.arange(2, self.n + 1)) + 1.5
 
         # Get x[i-1] and x[i] values
-        x_i_minus_1 = y[i_indices - 1]  # y[0] to y[n-2]
-        x_i = y[i_indices]  # y[1] to y[n-1]
+        x_i_minus_1 = y[: self.n - 1]  # y[0] to y[n-2]
+        x_i = y[1 : self.n]  # y[1] to y[n-1]
 
         # Compute terms
         # Based on the SIF file, the scaling SCL = 1/(16*alpha^2) is applied

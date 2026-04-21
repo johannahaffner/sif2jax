@@ -46,8 +46,6 @@ class LUKSAN11LS(AbstractUnconstrainedMinimisation):
         """
         del args  # Not used
 
-        s = self.S
-
         # Vectorized computation
         # Extract x[0:s] and x[1:s+1] for vectorized operations
         x_i = y[:-1]  # x[0] to x[s-1]
@@ -62,14 +60,11 @@ class LUKSAN11LS(AbstractUnconstrainedMinimisation):
         # In 0-based these are residuals at indices 1, 3, 5, ...
         res2 = x_i.copy()
 
-        # Create residuals array by interleaving res1 and res2
-        residuals = jnp.zeros(2 * s)
-        residuals = residuals.at[::2].set(res1)  # Even indices: 0, 2, 4, ...
-        residuals = residuals.at[1::2].set(res2)  # Odd indices: 1, 3, 5, ...
+        # Apply RHS: subtract 1.0 from second residuals
+        res2 = res2 - 1.0
 
-        # Apply RHS: subtract 1.0 from equations E(2), E(4), E(6), ...
-        # These are at 0-based indices 1, 3, 5, ...
-        residuals = residuals.at[1::2].add(-1.0)
+        # Interleave residuals: [res1[0], res2[0], res1[1], res2[1], ...]
+        residuals = jnp.stack([res1, res2], axis=1).flatten()
 
         # Sum of squares (L2 group type in SIF)
         return jnp.sum(residuals**2)

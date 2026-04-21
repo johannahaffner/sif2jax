@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -310,69 +309,21 @@ class COATING(AbstractUnconstrainedMinimisation):
         # Number of data points divided by 4
         m4 = len(eta1_data)
 
-        # Define function to compute residuals for a given index i (0-based)
-        def compute_residuals(i):
-            # Adjust for 0-based indexing
-            i_1 = i  # First quarter index
-            i_2 = i + m4  # Second quarter index
+        # y[0:8] are the 8 main parameters, y[8:] are auxiliary
+        xa = y[8 : 8 + m4]
+        xb = y[8 + m4 : 8 + 2 * m4]
 
-            # Get the corresponding data
-            eta1 = eta1_data[i]
-            eta2 = eta2_data[i]
+        # Factored form: f = c0 + c1*(η1+xa) + c2*(η2+xb) + c3*(η1+xa)*(η2+xb)
+        a = eta1_data + xa  # η1 + xa
+        b = eta2_data + xb  # η2 + xb
+        ab = a * b
 
-            # Compute intermediate products
-            i_p8 = i + 8  # IP8 in SIF
-            i2_p8 = i + m4 + 8  # I2P8 in SIF
+        r1 = y[0] + y[1] * a + y[2] * b + y[3] * ab - y_data[:m4]
+        r2 = y[4] + y[5] * a + y[6] * b + y[7] * ab - y_data[m4 : 2 * m4]
+        r3 = xa * scale1
+        r4 = xb * scale2
 
-            # First quarter residual (F(I) group)
-            # Linear terms + element contributions
-            f_i1 = (
-                y[0]  # X1
-                + y[1] * eta1  # X2 * ETA1
-                + y[2] * eta2  # X3 * ETA2
-                + y[3] * eta1 * eta2  # X4 * ETA1 * ETA2
-                + y[1] * y[i_p8]  # EA(I): X2 * X(IP8)
-                + y[2] * y[i2_p8]  # EB(I): X3 * X(I2P8)
-                + y[3] * y[i_p8] * eta2  # EC(I): X4 * X(IP8) * ETA2
-                + y[3] * y[i2_p8] * eta1  # ED(I): X4 * X(I2P8) * ETA1
-                + y[3] * y[i_p8] * y[i2_p8]  # EE(I): X4 * X(IP8) * X(I2P8)
-            )
-
-            # Second quarter residual (F(I2) group)
-            # Linear terms + element contributions
-            f_i2 = (
-                y[4]  # X5
-                + y[5] * eta1  # X6 * ETA1
-                + y[6] * eta2  # X7 * ETA2
-                + y[7] * eta1 * eta2  # X8 * ETA1 * ETA2
-                + y[5] * y[i_p8]  # EA(I2): X6 * X(IP8)
-                + y[6] * y[i2_p8]  # EB(I2): X7 * X(I2P8)
-                + y[7] * y[i_p8] * eta2  # EC(I2): X8 * X(IP8) * ETA2
-                + y[7] * y[i2_p8] * eta1  # ED(I2): X8 * X(I2P8) * ETA1
-                + y[7] * y[i_p8] * y[i2_p8]  # EE(I2): X8 * X(IP8) * X(I2P8)
-            )
-
-            # Third quarter residual (lines 323-326)
-            f_i3 = y[i_p8] * scale1
-
-            # Fourth quarter residual (lines 328-330)
-            f_i4 = y[i2_p8] * scale2
-
-            # Compute residuals
-            # F(I) and F(I2) have Y data constants to subtract
-            r_i1 = f_i1 - y_data[i_1]
-            r_i2 = f_i2 - y_data[i_2]
-            # F(I3) and F(I4) have no constants - they're just the function values
-            r_i3 = f_i3
-            r_i4 = f_i4
-
-            return jnp.array([r_i1, r_i2, r_i3, r_i4])
-
-        # Compute residuals for all indices
-        all_residuals = jax.vmap(compute_residuals)(jnp.arange(m4))
-
-        # Flatten and sum squares
-        all_residuals = all_residuals.reshape(-1)
+        all_residuals = jnp.concatenate([r1, r2, r3, r4])
         return jnp.sum(all_residuals**2)
 
     @property

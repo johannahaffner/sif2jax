@@ -67,90 +67,73 @@ class SBRYBND(AbstractUnconstrainedMinimisation):
         # Start with diagonal linear terms
         residuals = self.kappa1 * scaled_y
 
-        # Create banded matrix for off-diagonal linear contributions
-        # For efficiency, we manually handle the specific bandwidths lb=5, ub=1
+        # Off-diagonal linear contributions using a single pad + slices.
+        # Pad scaled_y with lb zeros on the left and ub zeros on the right,
+        # then each offset k is just a slice of the padded array.
+        lb = self.lb  # 5
+        ub = self.ub  # 1
+        k3 = self.kappa3
+        padded = jnp.concatenate(
+            [
+                jnp.zeros(lb, dtype=scaled_y.dtype),
+                scaled_y,
+                jnp.zeros(ub, dtype=scaled_y.dtype),
+            ]
+        )  # length n + lb + ub
 
-        # Lower band contributions (offsets 1-5)
-        if n > 1:
-            residuals = residuals.at[1:].add(-self.kappa3 * scaled_y[:-1])  # offset 1
-        if n > 2:
-            residuals = residuals.at[2:].add(-self.kappa3 * scaled_y[:-2])  # offset 2
-        if n > 3:
-            residuals = residuals.at[3:].add(-self.kappa3 * scaled_y[:-3])  # offset 3
-        if n > 4:
-            residuals = residuals.at[4:].add(-self.kappa3 * scaled_y[:-4])  # offset 4
-        if n > 5:
-            residuals = residuals.at[5:].add(-self.kappa3 * scaled_y[:-5])  # offset 5
+        # Lower band: offset k means neighbor at position i-k
+        for k in range(1, lb + 1):
+            residuals = residuals - k3 * padded[lb - k : lb - k + n]
 
-        # Upper band contributions (offset 1 only since ub=1)
-        if n > 1:
-            residuals = residuals.at[:-1].add(-self.kappa3 * scaled_y[1:])  # offset 1
+        # Upper band: offset k means neighbor at position i+k
+        for k in range(1, ub + 1):
+            residuals = residuals - k3 * padded[lb + k : lb + k + n]
 
         # Nonlinear contributions - depends on region
         i_vals = jnp.arange(n)
-        upper_mask = i_vals < self.lb  # i < 5
-        middle_mask = (i_vals >= self.lb) & (i_vals < n - self.ub - 1)  # 5 <= i < n-2
-        lower_mask = i_vals >= n - self.ub - 1  # i >= n-2
+        upper_mask = i_vals < lb  # i < 5
+        middle_mask = (i_vals >= lb) & (i_vals < n - ub - 1)  # 5 <= i < n-2
+        lower_mask = i_vals >= n - ub - 1  # i >= n-2
 
-        # Lower band nonlinear contributions
-        if n > 1:
-            # offset 1: apply to equations i >= 1
-            contrib = -self.kappa3 * (scaled_y[:-1] ** 2)  # SQ for j > i (upper band)
-            # For lower band in upper/lower regions: SQ, in middle: CB
-            sq_mask = upper_mask[1:] | lower_mask[1:]
-            cb_mask = middle_mask[1:]
-            residuals = residuals.at[1:].add(jnp.where(sq_mask, contrib, 0.0))
-            residuals = residuals.at[1:].add(
-                jnp.where(cb_mask, -self.kappa3 * (scaled_y[:-1] ** 3), 0.0)
-            )
+        # Precompute nonlinear terms for the neighbor value
+        nl_sq = -k3 * scaled_y**2  # SQ element
+        nl_cb = -k3 * scaled_y**3  # CB element
 
-        if n > 2:
-            contrib = -self.kappa3 * (scaled_y[:-2] ** 2)
-            sq_mask = upper_mask[2:] | lower_mask[2:]
-            cb_mask = middle_mask[2:]
-            residuals = residuals.at[2:].add(jnp.where(sq_mask, contrib, 0.0))
-            residuals = residuals.at[2:].add(
-                jnp.where(cb_mask, -self.kappa3 * (scaled_y[:-2] ** 3), 0.0)
-            )
+        # For each equation i, the nonlinear element type depends on i's region.
+        # Lower band: neighbor j = i-k contributes SQ (upper/lower region) or
+        # CB (middle region) based on the mask at position i.
+        # Pad the neighbor terms and select per-equation.
+        nl_sq_padded = jnp.concatenate(
+            [
+                jnp.zeros(lb, dtype=scaled_y.dtype),
+                nl_sq,
+                jnp.zeros(ub, dtype=scaled_y.dtype),
+            ]
+        )
+        nl_cb_padded = jnp.concatenate(
+            [
+                jnp.zeros(lb, dtype=scaled_y.dtype),
+                nl_cb,
+                jnp.zeros(ub, dtype=scaled_y.dtype),
+            ]
+        )
 
-        if n > 3:
-            contrib = -self.kappa3 * (scaled_y[:-3] ** 2)
-            sq_mask = upper_mask[3:] | lower_mask[3:]
-            cb_mask = middle_mask[3:]
-            residuals = residuals.at[3:].add(jnp.where(sq_mask, contrib, 0.0))
-            residuals = residuals.at[3:].add(
-                jnp.where(cb_mask, -self.kappa3 * (scaled_y[:-3] ** 3), 0.0)
-            )
+        # Lower band nonlinear: for each offset k, select SQ or CB at each i
+        sq_region = upper_mask | lower_mask
+        for k in range(1, lb + 1):
+            neighbor_sq = nl_sq_padded[lb - k : lb - k + n]
+            neighbor_cb = nl_cb_padded[lb - k : lb - k + n]
+            residuals = residuals + jnp.where(sq_region, neighbor_sq, neighbor_cb)
 
-        if n > 4:
-            contrib = -self.kappa3 * (scaled_y[:-4] ** 2)
-            sq_mask = upper_mask[4:] | lower_mask[4:]
-            cb_mask = middle_mask[4:]
-            residuals = residuals.at[4:].add(jnp.where(sq_mask, contrib, 0.0))
-            residuals = residuals.at[4:].add(
-                jnp.where(cb_mask, -self.kappa3 * (scaled_y[:-4] ** 3), 0.0)
-            )
-
-        if n > 5:
-            contrib = -self.kappa3 * (scaled_y[:-5] ** 2)
-            sq_mask = upper_mask[5:] | lower_mask[5:]
-            cb_mask = middle_mask[5:]
-            residuals = residuals.at[5:].add(jnp.where(sq_mask, contrib, 0.0))
-            residuals = residuals.at[5:].add(
-                jnp.where(cb_mask, -self.kappa3 * (scaled_y[:-5] ** 3), 0.0)
-            )
-
-        # Upper band nonlinear contributions (always SQ since j > i)
-        if n > 1:
-            residuals = residuals.at[:-1].add(-self.kappa3 * (scaled_y[1:] ** 2))
+        # Upper band nonlinear (always SQ since j > i)
+        for k in range(1, ub + 1):
+            residuals = residuals + nl_sq_padded[lb + k : lb + k + n]
 
         # Diagonal nonlinear terms
         # Upper and lower regions: CB elements
-        residuals = residuals + jnp.where(
-            upper_mask | lower_mask, self.kappa2 * (scaled_y**3), 0.0
-        )
+        residuals = residuals + jnp.where(sq_region, self.kappa2 * scaled_y**3, 0.0)
         # Middle region: SQ elements
-        residuals = residuals + jnp.where(middle_mask, self.kappa2 * (scaled_y**2), 0.0)
+        residuals = residuals + jnp.where(middle_mask, self.kappa2 * scaled_y**2, 0.0)
 
         return jnp.sum(residuals**2)
 

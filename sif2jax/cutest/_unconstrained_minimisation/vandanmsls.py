@@ -1,3 +1,4 @@
+import jax.lax as lax
 import jax.numpy as jnp
 
 from ..._problem import AbstractUnconstrainedMinimisation
@@ -28,49 +29,8 @@ class VANDANMSLS(AbstractUnconstrainedMinimisation):
     )
     m: int = 10  # Number of data points
 
-    def _cubic_bspline(self, x0, k, h, x):
-        """Compute the value of the k-th B-Spline at x.
-
-        This implements the cubic B-spline function from the SIF file.
-        """
-        xx = x - k * h
-        twoh = h + h  # 2*h
-
-        def case1():  # xx <= x0 - 2*h or xx >= x0 + 2*h
-            return 0.0
-
-        def case2():  # xx <= x0 - h
-            return (twoh + (xx - x0) ** 3) / 6.0
-
-        def case3():  # xx >= x0 + h
-            return (twoh - (xx - x0) ** 3) / 6.0
-
-        def case4():  # xx <= x0
-            return twoh * h * h / 3.0 - 0.5 * (twoh + xx - x0) * (xx - x0) ** 2
-
-        def case5():  # xx > x0
-            return twoh * h * h / 3.0 - 0.5 * (twoh - xx + x0) * (xx - x0) ** 2
-
-        # Use jnp.where for conditional logic
-        result = jnp.where(
-            (xx <= x0 - twoh) | (xx >= x0 + twoh),
-            case1(),
-            jnp.where(
-                xx <= x0 - h,
-                case2(),
-                jnp.where(xx >= x0 + h, case3(), jnp.where(xx <= x0, case4(), case5())),
-            ),
-        )
-
-        return result
-
     def objective(self, y, args=None):
         """Compute the least squares objective function."""
-        # Variables: A(-1), A(0), A(1), ..., A(20), A(21)
-        # Total: 23 variables indexed from -1 to 21
-        # But n=22 according to SIF, so we have 22 variables: A(-1) to A(20)
-        a_coeffs = y  # Shape: (22,)
-
         # Data points
         x_data = jnp.array(
             [
@@ -86,7 +46,6 @@ class VANDANMSLS(AbstractUnconstrainedMinimisation):
                 0.249147,
             ]
         )
-
         y_data = jnp.array(
             [
                 0.262172,
@@ -101,7 +60,6 @@ class VANDANMSLS(AbstractUnconstrainedMinimisation):
                 4.0,
             ]
         )
-
         e_data = jnp.array(
             [
                 0.512028,
@@ -117,33 +75,36 @@ class VANDANMSLS(AbstractUnconstrainedMinimisation):
             ]
         )
 
-        # B-spline parameters from SIF file
-        xl = 0.0  # Lower knot
-        xu = 5.5  # Upper knot
-        knots = 20  # Number of knots
-        n_vars = knots - 1  # n = 19 (but we have 22 variables from -1 to 20)
-        h = (xu - xl) / n_vars  # Knot spacing
+        # B-spline parameters
+        h = 5.5 / 19.0  # knot spacing: (xu - xl) / (knots - 1)
+        twoh = 2.0 * h
+        hh = h * h
 
-        # Compute B-spline approximation for each data point
-        def compute_bspline_value(x_val):
-            # Sum over all B-spline basis functions
-            # K ranges from -1 to N+1, where N = KNOTS - 1 = 19
-            # So K ranges from -1 to 20, giving us 22 terms
-            total = 0.0
-            for k_idx in range(22):  # Indices 0 to 21 in our array
-                k = k_idx - 1  # Convert to actual k values: -1 to 20
-                a_k = a_coeffs[k_idx]
-                basis_val = self._cubic_bspline(xl, k, h, x_val)
-                total += a_k * basis_val
-            return total
+        # Cubic B-spline basis matrix: d[k, j] = x_data[j] - k*h (xl=0)
+        # k ranges from -1 to 20 (22 basis functions)
+        k_vals = jnp.arange(-1, 21, dtype=y.dtype)
+        d = x_data[None, :] - k_vals[:, None] * h  # (22, 10)
+        d2 = d * d
+        d3 = d2 * d
 
-        # Vectorize the computation over all data points
-        bspline_values = jnp.array([compute_bspline_value(x) for x in x_data])
+        # Piecewise cubic B-spline via select_n
+        v0 = jnp.zeros_like(d)  # |d| >= 2h
+        v1 = (twoh + d3) / 6.0  # -2h < d <= -h
+        v2 = (twoh - d3) / 6.0  # h <= d < 2h
+        v3 = twoh * hh / 3.0 - 0.5 * (twoh + d) * d2  # -h < d <= 0
+        v4 = twoh * hh / 3.0 - 0.5 * (twoh - d) * d2  # 0 < d < h
 
-        # Compute scaled residuals: (model - observed) / e_data
-        residuals = (bspline_values - y_data) / e_data
+        # fmt: off
+        idx = jnp.where(d <= -twoh, 0,
+              jnp.where(d <= -h, 1,
+              jnp.where(d >= twoh, 0,
+              jnp.where(d >= h, 2,
+              jnp.where(d <= 0.0, 3, 4)))))
+        # fmt: on
+        basis = lax.select_n(idx, v0, v1, v2, v3, v4)  # (22, 10)
 
-        # Return sum of squared residuals for least squares
+        # Weighted sum of basis functions, then scaled residuals
+        residuals = (y @ basis - y_data) / e_data
         return jnp.sum(residuals**2)
 
     @property

@@ -131,7 +131,19 @@ JAX implementation must be within 5x of Fortran runtime. For larger problems JAX
 Production-ready problems must always be vectorised.
 If a sequential operation is needed, use a jax-native option such as a scan.
 Common vectorization patterns:
-- Replace Python for-loops with jnp operations (sum, dot, vmap)
+- Replace Python for-loops with jnp operations (sum, dot, slice/broadcast, vmap as a last resort)
 - Use array slicing and broadcasting instead of element-wise operations
 - Batch similar computations together
 - For problems with repeated structure, identify the pattern and vectorize it
+
+**AD-friendly patterns** (critical for gradient/HVP/Hessian performance):
+- **Use slices, not gathers**: `y[:n-1]` not `y[jnp.arange(n-1)]`. Gather's VJP is scatter-add (expensive); slice's VJP is pad (cheap). This can give 2-5x speedup on gradients.
+- **Never use `vmap(f)(jnp.arange(n))`** when `f` indexes into `y` — rewrite as vectorized slices instead.
+- **Use `y` not `y[arange(n)]`** for the identity permutation.
+- **Avoid `.at[].set()` / `.at[].add()` in objectives** — these produce scatter ops. Use `jnp.concatenate`, `jnp.pad`, or `jnp.stack` + `flatten` instead.
+- **Run `tests/test_jaxpr.py`** to verify no gather/scatter operations in the objective jaxpr.
+- **For modular/permutation indexing** (`(k*i) % n`): the gather is unavoidable, but use `jnp.arange` (not `np.arange`) and rely on `EAGER_CONSTANT_FOLDING=TRUE` to fold the index computation. Use `jnp.roll` for simple cyclic shifts.
+- **Avoid `jnp.meshgrid` for coefficient arrays** — creates large intermediates that eager folding materializes as closure constants. Instead, keep small 1D vectors and use `@` (dot) or `[:, None]` broadcasting. E.g. replace `L, Q = meshgrid(l, q); coeff = L**2 * Q` with `coeff = (l**2)[:, None] * q[None, :]`.
+- **Factor separable sums before broadcasting** — when `a[i,j] = g(i) * h(j)`, compute `h @ f(x)` first (dot product reduces inner dimension) then scale by `g`. This avoids `(i, j, n)` intermediates and produces a smaller AD graph. E.g. `sum_q(a[l,q] * sin(x_q))` where `a = l * q^2` → `l * (q^2 @ sin(x_q))`.
+- **Keep expensive ops (sin, cos, pow) batched** — one `sin((4,s))` is better than four `sin((s,))` for AD. Fewer ops = fewer intermediate buffers for second derivatives to track. Stack inputs first, then apply the expensive op once.
+- **Convert near-dense COO to dense matmul** — if a sparse COO matrix (Q_row, Q_col, Q_val) is >~50% dense, replace `jnp.sum(Q_val * y[Q_row] * y[Q_col])` with `y @ Q @ y` where `Q = jnp.zeros((n,n)).at[Q_row, Q_col].add(Q_val)`. The `.at[].add()` is fine here because Q_row/Q_col/Q_val are constants — eager folding materializes the dense Q at trace time, eliminating all gathers from the jaxpr. The 50% threshold is a rule of thumb; even lower densities may benefit since matmul's AD is much cheaper than gather's.

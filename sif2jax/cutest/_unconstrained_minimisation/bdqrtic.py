@@ -28,25 +28,16 @@ class BDQRTIC(AbstractUnconstrainedMinimisation):
         del args
         n = self.n
 
-        # Vectorized implementation for efficiency
-        # For each i from 1 to n-4 (0 to n-5 in 0-based indexing)
-        i = jnp.arange(n - 4)
+        x0 = y[: n - 4]
+        x1 = y[1 : n - 3]
+        x2 = y[2 : n - 2]
+        x3 = y[3 : n - 1]
+        xn = y[n - 1]
 
-        # First part: (-4*x[i] + 3.0)^2 for each group
-        # From L(I) group with coefficient -4.0 and constant -3.0
-        part1 = (-4 * y[i] + 3.0) ** 2
-
-        # Second part: (x[i]^2 + 2*x[i+1]^2 + 3*x[i+2]^2 + 4*x[i+3]^2 + 5*x[N]^2)^2
-        # From G(I) group with squared elements
-        part2 = (
-            y[i] ** 2
-            + 2 * y[i + 1] ** 2
-            + 3 * y[i + 2] ** 2
-            + 4 * y[i + 3] ** 2
-            + 5 * y[n - 1] ** 2
-        ) ** 2
-
-        return jnp.sum(part1 + part2)
+        r_lin = -4 * x0 + 3.0
+        r_quad = x0**2 + 2 * x1**2 + 3 * x2**2 + 4 * x3**2 + 5 * xn**2
+        r = jnp.concatenate([r_lin, r_quad])
+        return jnp.sum(r**2)
 
     @property
     def y0(self):

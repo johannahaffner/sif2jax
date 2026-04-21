@@ -1,4 +1,3 @@
-import jax
 import jax.numpy as jnp
 
 from ..._misc import inexact_asarray
@@ -35,15 +34,11 @@ class TRIGON1(AbstractUnconstrainedMinimisation):
         n = self.n
 
         # Compute residuals F(i) for i = 1, ..., n
-        def compute_residual(i):
-            # F(i) = sum cos(x_j) + (i+1) * (cos(x_i) + sin(x_i)) - (n + i + 1)
-            cos_sum = jnp.sum(jnp.cos(x))
-            i_float = inexact_asarray(i)
-            individual_term = (i_float + 1) * (jnp.cos(x[i]) + jnp.sin(x[i]))
-            target = float(n) + i_float + 1
-            return cos_sum + individual_term - target
-
-        residuals = jax.vmap(compute_residual)(jnp.arange(n))
+        # F(i) = sum cos(x_j) + (i+1)*(cos(x_i) + sin(x_i)) - (n + i + 1)
+        cos_sum = jnp.sum(jnp.cos(x))
+        i_vals = jnp.arange(1, n + 1, dtype=x.dtype)
+        individual = i_vals * (jnp.cos(x) + jnp.sin(x))
+        residuals = cos_sum + individual - (n + i_vals)
         return jnp.sum(residuals**2)
 
     @property

@@ -56,56 +56,37 @@ class LUKSAN15LS(AbstractUnconstrainedMinimisation):
         # Data values
         Y = jnp.array([35.8, 11.2, 6.2, 4.4], dtype=x.dtype)
 
-        # Vectorized computation
-        # Create indices for all blocks
-        j_indices = jnp.arange(s)
-        i_indices = 2 * j_indices  # Variable indices for each block
+        # Signomial: x1 * x2^2 * x3^3 * x4^4, shape (s,)
+        x1 = x[: 2 * s : 2]
+        x_sq = x**2
+        x2_2 = x_sq[1 : 2 * s + 1 : 2]
+        x3_3 = x[2 : 2 * s + 2 : 2] * x_sq[2 : 2 * s + 2 : 2]
+        x4_4 = x_sq[3 : 2 * s + 3 : 2] ** 2
+        signom = x1 * x2_2 * x3_3 * x4_4
 
-        # Extract variables for all blocks
-        x1 = x[i_indices]  # x[i] for all blocks
-        x2 = x[i_indices + 1]  # x[i+1] for all blocks
-        x3 = x[i_indices + 2]  # x[i+2] for all blocks
-        x4 = x[i_indices + 3]  # x[i+3] for all blocks
+        a = jnp.abs(signom)  # (s,)
 
-        # Compute signomial term for all blocks: x1 * x2^2 * x3^3 * x4^4
-        signom_vals = x1 * (x2**2) * (x3**3) * (x4**4)  # shape: (s,)
+        # Compute roots via sqrt/cbrt chains instead of generic pow.
+        # Needed exponents: 1, 1/2, 1/3, 1/4, 1/6, 1/8, 1/9, 1/12
+        r2 = jnp.sqrt(a)  # a^(1/2)
+        r3 = jnp.cbrt(a)  # a^(1/3)
+        r4 = jnp.sqrt(r2)  # a^(1/4)
+        r6 = jnp.sqrt(r3)  # a^(1/6)
+        r8 = jnp.sqrt(r4)  # a^(1/8)
+        r9 = jnp.cbrt(r3)  # a^(1/9)
+        r12 = jnp.sqrt(r6)  # a^(1/12)
 
-        # Create arrays for p and l values
-        p_vals = jnp.array([1, 2, 3], dtype=x.dtype)  # p = 1, 2, 3
-        l_vals = jnp.array([1, 2, 3, 4], dtype=x.dtype)  # l = 1, 2, 3, 4
+        # F[p,l] = (p^2/l) * a^(1/(p*l)), summed over p=1,2,3 for each l
+        eq1 = a + 4.0 * r2 + 9.0 * r3  # l=1
+        eq2 = 0.5 * r2 + 2.0 * r4 + 4.5 * r6  # l=2
+        eq3 = (1.0 / 3.0) * r3 + (4.0 / 3.0) * r6 + 3.0 * r9  # l=3
+        eq4 = 0.25 * r4 + r8 + 2.25 * r12  # l=4
 
-        # Create meshgrids for vectorized computation
-        P, L, J = jnp.meshgrid(
-            p_vals, l_vals, j_indices, indexing="ij"
-        )  # shapes: (3, 4, s)
+        # Residuals: eq_l - Y_l for each block j, flattened as (j, l)
+        residuals = jnp.stack(
+            [eq1 - Y[0], eq2 - Y[1], eq3 - Y[2], eq4 - Y[3]], axis=1
+        ).flatten()
 
-        # Compute p2ol and pli for all combinations
-        P2OL = P**2 / L  # shape: (3, 4, s)
-        PLI = 1.0 / (P * L)  # shape: (3, 4, s)
-
-        # Expand signom_vals to match the shape
-        signom_expanded = signom_vals[None, None, :]  # shape: (1, 1, s)
-
-        # Apply sign based on whether signom_val is positive
-        sign_p = jnp.where(signom_expanded > 0, 1.0, -1.0)
-        p_val = signom_expanded * sign_p  # This gives |signom_val|, shape: (1, 1, s)
-
-        # Compute F = p2ol * p_val^pli for all combinations
-        F_vals = P2OL * (p_val**PLI)  # shape: (3, 4, s)
-
-        # Sum over p (axis=0) to get equation sums for each (l, j)
-        eq_sums = jnp.sum(F_vals, axis=0)  # shape: (4, s)
-
-        # Subtract Y values (broadcast Y to match shape)
-        Y_expanded = Y[:, None]  # shape: (4, 1)
-        residuals_matrix = eq_sums - Y_expanded  # shape: (4, s)
-
-        # Flatten in the correct order: for each j, then for each l
-        # The original order is: j=0,l=1; j=0,l=2; j=0,l=3; j=0,l=4; j=1,l=1; ...
-        # residuals_matrix is (l, j), so we need to transpose and flatten
-        residuals = residuals_matrix.T.flatten()  # shape: (4*s,)
-
-        # Sum of squares (L2 group type in SIF)
         return jnp.sum(residuals**2)
 
     @property

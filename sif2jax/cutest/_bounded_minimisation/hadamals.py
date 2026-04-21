@@ -56,35 +56,12 @@ class HADAMALS(AbstractBoundedMinimisation):
         QtQ = jnp.dot(Q.T, Q)
 
         # O(I,J) groups: orthogonality constraints
-        # Fully vectorized extraction using JAX operations
+        # (QtQ[i,j] - RN*delta[i,j])^2 for upper triangle (i <= j)
+        target = rn * jnp.eye(n, dtype=y.dtype)
+        diff = QtQ - target
 
-        # Total number of upper triangle elements
-        n_upper = (n * (n + 1)) // 2
-
-        # Create flat indices for upper triangle in column-major order
-        flat_idx = jnp.arange(n_upper)
-
-        # Cumulative sizes: column j has j+1 elements
-        cumsum_sizes = jnp.cumsum(jnp.arange(1, n + 1))
-
-        # Find column index for each flat index
-        j_indices = jnp.searchsorted(cumsum_sizes, flat_idx, side="right")
-
-        # Find row index within each column
-        # Match dtype to searchsorted output to avoid int32/int64 mixing
-        offset = jnp.concatenate([jnp.array([0]), cumsum_sizes[:-1]])
-        flat_idx = flat_idx.astype(j_indices.dtype)
-        offset = offset.astype(j_indices.dtype)
-        i_indices = flat_idx - offset[j_indices]
-
-        # Extract upper triangle elements
-        QtQ_upper = QtQ[i_indices, j_indices]
-
-        # Create target: RN on diagonal (where i==j), 0 elsewhere
-        target = jnp.where(i_indices == j_indices, rn, 0.0)
-
-        # Compute squared deviations
-        obj = jnp.sum((QtQ_upper - target) ** 2)
+        # Upper triangle only (including diagonal)
+        obj = jnp.sum(jnp.triu(diff) ** 2)
 
         # S(I,J) groups: entry constraints (Q[i,j]^2 - 1)^2 for i>=2
         # Using LARGEL2 group type with FACTOR=1.0

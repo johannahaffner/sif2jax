@@ -356,11 +356,11 @@ from ._constrained_minimisation import (
     HS119 as HS119,
     HS268 as HS268,
     HYDROELL as HYDROELL,
+    KISSING as KISSING,
     # JANNSON3 as JANNSON3,  # TODO: Human review - Jacobian tests hang
     # JANNSON4 as JANNSON4,
     # LIPPERT1 as LIPPERT1,
     LIPPERT2 as LIPPERT2,
-    # KISSING as KISSING,  # TODO: Human review - runtime issue (5.37x)
     # KISSING2 as KISSING2,  # TODO: Human review needed
     # KIWCRESC as KIWCRESC,  # TODO: Human review - constraints differ by 2.0
     # KSIP as KSIP,  # TODO: Needs vectorization - dtype promotion errors
@@ -484,7 +484,7 @@ from ._constrained_minimisation import (
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     READING9 as READING9,
-    # ROCKET as ROCKET,  # TODO: Human review - performance issues
+    ROCKET as ROCKET,
     # RDW2D51F as RDW2D51F,  # TODO: Human review needed
     # RDW2D51U as RDW2D51U,  # TODO: Human review needed - times out
     # RDW2D52B as RDW2D52B,  # TODO: Human review needed
@@ -1129,7 +1129,7 @@ from ._unconstrained_minimisation import (
     # SPINLS as SPINLS,  # TODO: Human review - gradient/Hessian issues
     # SPMSRTLS as SPMSRTLS,  # TODO: Human review - complex matrix multiplication
     TENFOLDTRLS as TENFOLDTRLS,
-    # TOINTGOR as TOINTGOR,  # TODO: Human review - runtime test fails
+    TOINTGOR as TOINTGOR,
     TOINTGSS as TOINTGSS,
     # TOINTPSP as TOINTPSP,  # TODO: Human review - gradient test fails
     # TQUARTIC as TQUARTIC,  # TODO: Human review - objective calculation incorrect
@@ -1374,7 +1374,7 @@ problems_dict = {
     "HYDROELL": HYDROELL(),
     # "JANNSON3": JANNSON3(),  # TODO: Human review - Jacobian tests hang
     # "JANNSON4": JANNSON4(),
-    # "KISSING": KISSING(),  # TODO: Human review - runtime issue (5.37x)
+    "KISSING": KISSING(),
     # "KISSING2": KISSING2(),  # TODO: Human review needed
     # "KIWCRESC": KIWCRESC(),  # TODO: Human review - constraints differ by 2.0
     "HIMMELBC": HIMMELBC(),
@@ -1454,7 +1454,7 @@ problems_dict = {
     # Note: READING7 and READING8 exist but are not implemented due to a CUTEst bug:
     # the starting point is the solution too
     "READING9": READING9(),
-    # "ROCKET": ROCKET(),  # TODO: Human review - performance issues
+    "ROCKET": ROCKET(),
     # "RDW2D51F": RDW2D51F(),  # TODO: Human review needed
     # "RDW2D51U": RDW2D51U(),  # TODO: Human review needed - times out
     # "RDW2D52B": RDW2D52B(),  # TODO: Human review needed
@@ -1989,7 +1989,7 @@ problems_dict = {
     "VESUVIO": VESUVIO(),
     "VESUVIOU": VESUVIOU(),
     "VIBRBEAMNE": VIBRBEAMNE(),
-    # "TOINTGOR": TOINTGOR(),  # TODO: Human review - runtime test fails
+    "TOINTGOR": TOINTGOR(),
     "TOINTGSS": TOINTGSS(),
     # "TORSIOND": TORSIOND(),  # TODO: Human review - objective mismatch
     # "TQUARTIC": TQUARTIC(),  # TODO: Human review - objective calculation incorrect

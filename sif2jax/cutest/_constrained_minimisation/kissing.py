@@ -58,37 +58,31 @@ class KISSING(AbstractConstrainedMinimisation):
 
     def objective(self, y, args):
         """Objective function: minimize z"""
-        # z is the last variable
-        z = y[-1]
-        return z
+        del args
+        return y[-1]
 
     @property
     def y0(self):
-        """Starting point from SIF file"""
-        # Initialize points with the provided starting values for first 12 points
-        x = jnp.zeros((self.NP, self.MDIM))
-
-        # First 12 points from SIF file
-        x = x.at[0, :].set(jnp.array([-0.10890604, 0.85395078, -0.45461680]))
-        x = x.at[1, :].set(jnp.array([0.49883922, -0.18439316, -0.04798594]))
-        x = x.at[2, :].set(jnp.array([0.28262888, -0.48054070, 0.46715332]))
-        x = x.at[3, :].set(jnp.array([-0.00580106, -0.49987584, -0.44130302]))
-        x = x.at[4, :].set(jnp.array([0.81712540, -0.36874258, -0.68321896]))
-        x = x.at[5, :].set(jnp.array([0.29642426, 0.82315508, 0.35938150]))
-        x = x.at[6, :].set(jnp.array([0.09215152, -0.53564686, 0.00191436]))
-        x = x.at[7, :].set(jnp.array([0.11700318, 0.96722760, -0.14916438]))
-        x = x.at[8, :].set(jnp.array([0.01791524, 0.17759446, -0.61875872]))
-        x = x.at[9, :].set(jnp.array([-0.63833630, 0.80830972, 0.45846734]))
-        x = x.at[10, :].set(jnp.array([0.28446456, 0.45686938, 0.16368980]))
-        x = x.at[11, :].set(jnp.array([0.76557382, 0.16700944, -0.31647534]))
-
-        # Remaining points default to zero (as in SIF file)
-        # They are already initialized to zero above
-
-        # Flatten x and append initial z = 0.0 (default value)
-        y_flat = jnp.concatenate([x.flatten(), jnp.array([0.0])])
-
-        return y_flat
+        """Starting point from SIF file."""
+        # fmt: off
+        x = jnp.array([
+            [-0.10890604,  0.85395078, -0.45461680],
+            [ 0.49883922, -0.18439316, -0.04798594],
+            [ 0.28262888, -0.48054070,  0.46715332],
+            [-0.00580106, -0.49987584, -0.44130302],
+            [ 0.81712540, -0.36874258, -0.68321896],
+            [ 0.29642426,  0.82315508,  0.35938150],
+            [ 0.09215152, -0.53564686,  0.00191436],
+            [ 0.11700318,  0.96722760, -0.14916438],
+            [ 0.01791524,  0.17759446, -0.61875872],
+            [-0.63833630,  0.80830972,  0.45846734],
+            [ 0.28446456,  0.45686938,  0.16368980],
+            [ 0.76557382,  0.16700944, -0.31647534],
+        ])
+        # fmt: on
+        # Remaining 30 points are zero; pad and append z=0
+        padding = jnp.zeros((self.NP - 12, self.MDIM))
+        return jnp.concatenate([x.flatten(), padding.flatten(), jnp.zeros(1)])
 
     @property
     def args(self):
@@ -96,42 +90,28 @@ class KISSING(AbstractConstrainedMinimisation):
 
     @property
     def expected_result(self):
-        # The target is to achieve z < 0.5
         return None
 
     @property
     def expected_objective_value(self):
-        # Should be less than 0.5
-        return jnp.array(0.447214)  # Approximately sqrt(2) - 1
+        return jnp.array(0.447214)
 
     @property
     def bounds(self):
-        # All variables are free (XR in SIF file means free/unconstrained)
         return None
 
     def constraint(self, y):
         """Constraints: equality (sphere) and inequality (pairwise distances)"""
-        # Extract variables
-        x_flat = y[:-1]  # All x variables
-        z = y[-1]  # z variable
+        x = y[:-1].reshape(self.NP, self.MDIM)
+        z = y[-1]
 
-        # Reshape x into (NP, MDIM)
-        x = x_flat.reshape((self.NP, self.MDIM))
+        # Equality: ||x_i||^2 = 1
+        equality = jnp.sum(x**2, axis=1) - 1.0
 
-        # Equality constraints: ||x_i||^2 = 1 for all i
-        equality_constraints = jnp.sum(x**2, axis=1) - 1.0
+        # Inequality: <x_i, x_j> - z >= 0 for all i < j
+        # x @ x.T gives all dot products; extract upper triangle
+        gram = x @ x.T
+        i_idx, j_idx = jnp.triu_indices(self.NP, k=1)
+        inequality = gram[i_idx, j_idx] - z
 
-        # Inequality constraints: z >= <x_i, x_j> for all different pairs i, j
-        # From SIF: XL IC(I,J) Z -1.0 means IC(I,J) + Z >= 0
-        # where IC(I,J) is the dot product <x_i, x_j>
-        inequality_constraints = []
-        for i in range(self.NP - 1):
-            for j in range(i + 1, self.NP):
-                # Inner product <x_i, x_j>
-                dot_product = jnp.dot(x[i], x[j])
-                # Constraint: dot_product - z >= 0 (from SIF formulation)
-                inequality_constraints.append(dot_product - z)
-
-        inequality_constraints = jnp.array(inequality_constraints)
-
-        return equality_constraints, inequality_constraints
+        return equality, inequality
